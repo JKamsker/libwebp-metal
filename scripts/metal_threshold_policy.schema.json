@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://chromium.googlesource.com/webm/libwebp/metal-threshold-policy.schema.json",
+  "title": "libwebp Metal crossover policy",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "status", "fallback", "source", "entries"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "status": {"enum": ["untuned", "candidate", "validated"]},
+    "fallback": {"const": "cpu"},
+    "source": {"type": "object"},
+    "decision": {"type": "object"},
+    "entries": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "operation", "method", "execution", "minimum_pixels",
+          "content_rule", "margin"
+        ],
+        "properties": {
+          "operation": {"enum": ["transform", "hash", "lossy"]},
+          "method": {"type": "integer", "minimum": 0, "maximum": 6},
+          "execution": {"enum": ["cold", "warm"]},
+          "minimum_pixels": {"type": "integer", "minimum": 1},
+          "content_rule": {"const": "worst_case_across_classes"},
+          "margin": {"type": "number", "minimum": 0, "maximum": 1}
+        }
+      }
+    }
+  }
+}

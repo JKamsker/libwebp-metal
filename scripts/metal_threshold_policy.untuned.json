@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "status": "untuned",
+  "fallback": "cpu",
+  "source": {
+    "note": "No benchmark results have been collected for this policy."
+  },
+  "entries": []
+}

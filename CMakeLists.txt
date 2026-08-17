@@ -32,6 +32,8 @@ option(WEBP_ENABLE_SIMD "Enable any SIMD optimization."
        ${WEBP_ENABLE_SIMD_DEFAULT})
 option(WEBP_ENABLE_METAL "Enable Metal encoder acceleration on Apple platforms."
        ${APPLE})
+option(WEBP_BUILD_METAL_BENCHMARK
+       "Build the internal Metal crossover experiment runner." OFF)
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
 option(WEBP_BUILD_CWEBP "Build the cwebp command line tool." ON)
 option(WEBP_BUILD_DWEBP "Build the dwebp command line tool." ON)
@@ -70,6 +72,11 @@ if(WEBP_ENABLE_METAL)
   if(NOT WEBP_FOUNDATION_FRAMEWORK OR NOT WEBP_METAL_FRAMEWORK)
     message(FATAL_ERROR "Metal acceleration requires Foundation and Metal.")
   endif()
+endif()
+
+if(WEBP_BUILD_METAL_BENCHMARK AND NOT WEBP_ENABLE_METAL)
+  message(FATAL_ERROR
+          "WEBP_BUILD_METAL_BENCHMARK requires WEBP_ENABLE_METAL=ON.")
 endif()
 
 if(WEBP_LINK_STATIC)
@@ -594,6 +601,15 @@ if(WEBP_BUILD_CWEBP)
   target_link_libraries(cwebp exampleutil imagedec webp)
   target_include_directories(cwebp PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
   install(TARGETS cwebp RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+endif()
+
+if(WEBP_BUILD_METAL_BENCHMARK)
+  # Internal, deliberately non-installed experiment runner. The Python harness
+  # owns the matrix, randomized ordering, validation, and result metadata.
+  add_executable(webp_metal_benchmark tools/metal_benchmark.c)
+  target_link_libraries(webp_metal_benchmark webp)
+  target_include_directories(webp_metal_benchmark
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
 endif()
 
 if(WEBP_BUILD_LIBWEBPMUX)

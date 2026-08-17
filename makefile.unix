@@ -403,6 +403,7 @@ OTHER_EXAMPLES = extras/get_disto extras/webp_quality extras/vwebp_sdl
 OUTPUT = $(OUT_LIBS) $(OUT_EXAMPLES)
 ifeq ($(MAKECMDGOALS),clean)
   OUTPUT += $(EXTRA_EXAMPLES) $(OTHER_EXAMPLES)
+  OUTPUT += tools/webp_metal_benchmark
   OUTPUT += src/demux/libwebpdemux.a src/mux/libwebpmux.a $(EXTRA_LIB)
   OUTPUT += examples/libgifdec.a examples/libanim_util.a
 endif
@@ -455,6 +456,12 @@ examples/vwebp: examples/vwebp.o
 examples/webpmux: examples/webpmux.o
 examples/img2webp: examples/img2webp.o
 examples/webpinfo: examples/webpinfo.o
+
+# Internal, non-installed runner for scripts/benchmark_metal.py.
+tools/webp_metal_benchmark: tools/metal_benchmark.o
+tools/webp_metal_benchmark: src/libwebp.a sharpyuv/libsharpyuv.a
+tools/webp_metal_benchmark:
+	$(LINK) -o $@ $^ $(LDFLAGS)
 
 examples/anim_diff: examples/libanim_util.a examples/libgifdec.a
 examples/anim_diff: src/demux/libwebpdemux.a examples/libexample_util.a
@@ -566,6 +573,7 @@ clean:
               src/enc/*.o src/enc/*~ \
               src/mux/*.o src/mux/*~ \
               src/utils/*.o src/utils/*~ \
+              tools/*.o tools/*~ \
               src/webp/*~ man/*~ doc/*~ swig/*~ \
 
 .PHONY: all clean dist ex
