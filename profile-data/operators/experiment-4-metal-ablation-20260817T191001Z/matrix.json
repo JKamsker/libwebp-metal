@@ -1,0 +1,495 @@
+{
+  "baseline": "all optimization flags disabled; 256 threads per stage",
+  "schema": 1,
+  "suites": [
+    {
+      "baseline_environment": {
+        "WEBP_METAL": "1",
+        "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+        "WEBP_METAL_HASH": "1",
+        "WEBP_METAL_HASH_MATCH4": "0",
+        "WEBP_METAL_HASH_MIN_PIXELS": "4000000",
+        "WEBP_METAL_HASH_THREADS": "256",
+        "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+        "WEBP_METAL_LOSSY": "0",
+        "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+        "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+        "WEBP_METAL_LOSSY_THREADS": "256",
+        "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+        "WEBP_METAL_MIN_PIXELS": "0",
+        "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+        "WEBP_METAL_TRANSFORM_THREADS": "256",
+        "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+        "WEBP_METAL_VERBOSE": "0",
+        "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+      },
+      "name": "recorded",
+      "runner": "cwebp",
+      "variants": []
+    },
+    {
+      "baseline_environment": {
+        "WEBP_METAL": "1",
+        "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+        "WEBP_METAL_HASH": "0",
+        "WEBP_METAL_HASH_MATCH4": "0",
+        "WEBP_METAL_HASH_THREADS": "256",
+        "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+        "WEBP_METAL_LOSSY": "0",
+        "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+        "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+        "WEBP_METAL_LOSSY_THREADS": "256",
+        "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+        "WEBP_METAL_MIN_PIXELS": "0",
+        "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+        "WEBP_METAL_TRANSFORM_THREADS": "256",
+        "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+        "WEBP_METAL_VERBOSE": "0",
+        "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+      },
+      "name": "transform",
+      "runner": "cwebp",
+      "variants": [
+        {
+          "delta": {
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "1"
+          },
+          "environment": {
+            "WEBP_METAL": "1",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH": "0",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "0",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_MIN_PIXELS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "1",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "dispatch_2d",
+          "rationale": "Replace tile-index division/modulo with a native 2D grid."
+        },
+        {
+          "delta": {
+            "WEBP_METAL_TRANSFORM_THREADS": "128"
+          },
+          "environment": {
+            "WEBP_METAL": "1",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH": "0",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "0",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_MIN_PIXELS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "128",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "threads_128",
+          "rationale": "Test occupancy against the fixed 256-thread baseline."
+        },
+        {
+          "delta": {
+            "WEBP_METAL_TRANSFORM_THREADS": "512"
+          },
+          "environment": {
+            "WEBP_METAL": "1",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH": "0",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "0",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_MIN_PIXELS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "512",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "threads_512",
+          "rationale": "Test larger per-tile groups where the device permits them."
+        },
+        {
+          "delta": {
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "1"
+          },
+          "environment": {
+            "WEBP_METAL": "1",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH": "0",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "0",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_MIN_PIXELS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "1",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "unretained_commands",
+          "rationale": "Avoid command-buffer resource retain/release traffic."
+        }
+      ]
+    },
+    {
+      "baseline_environment": {
+        "WEBP_METAL": "1",
+        "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+        "WEBP_METAL_HASH": "1",
+        "WEBP_METAL_HASH_MATCH4": "0",
+        "WEBP_METAL_HASH_MIN_PIXELS": "0",
+        "WEBP_METAL_HASH_THREADS": "256",
+        "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+        "WEBP_METAL_LOSSY": "0",
+        "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+        "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+        "WEBP_METAL_LOSSY_THREADS": "256",
+        "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+        "WEBP_METAL_MIN_PIXELS": "0",
+        "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+        "WEBP_METAL_TRANSFORM_THREADS": "256",
+        "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+        "WEBP_METAL_VERBOSE": "0",
+        "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+      },
+      "name": "hash",
+      "runner": "cwebp",
+      "variants": [
+        {
+          "delta": {
+            "WEBP_METAL_HASH_MATCH4": "1"
+          },
+          "environment": {
+            "WEBP_METAL": "1",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH": "1",
+            "WEBP_METAL_HASH_MATCH4": "1",
+            "WEBP_METAL_HASH_MIN_PIXELS": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "0",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_MIN_PIXELS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "match4",
+          "rationale": "Compare four pixels per match-loop iteration."
+        },
+        {
+          "delta": {
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "1"
+          },
+          "environment": {
+            "WEBP_METAL": "1",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH": "1",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_MIN_PIXELS": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "0",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_MIN_PIXELS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "1"
+          },
+          "name": "write_combined_inputs",
+          "rationale": "Use write-combined CPU caching for upload-only buffers."
+        },
+        {
+          "delta": {
+            "WEBP_METAL_HASH_THREADS": "128"
+          },
+          "environment": {
+            "WEBP_METAL": "1",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH": "1",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_MIN_PIXELS": "0",
+            "WEBP_METAL_HASH_THREADS": "128",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "0",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_MIN_PIXELS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "threads_128",
+          "rationale": "Test divergent-kernel occupancy below the fixed baseline."
+        },
+        {
+          "delta": {
+            "WEBP_METAL_HASH_THREADS": "512"
+          },
+          "environment": {
+            "WEBP_METAL": "1",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH": "1",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_MIN_PIXELS": "0",
+            "WEBP_METAL_HASH_THREADS": "512",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "0",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_MIN_PIXELS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "threads_512",
+          "rationale": "Test divergent-kernel occupancy above the fixed baseline."
+        },
+        {
+          "delta": {
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "1"
+          },
+          "environment": {
+            "WEBP_METAL": "1",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH": "1",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_MIN_PIXELS": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "1",
+            "WEBP_METAL_LOSSY": "0",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_MIN_PIXELS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "unretained_commands",
+          "rationale": "Avoid retain/release traffic for synchronously owned inputs."
+        }
+      ]
+    },
+    {
+      "baseline_environment": {
+        "WEBP_METAL": "0",
+        "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+        "WEBP_METAL_HASH_MATCH4": "0",
+        "WEBP_METAL_HASH_THREADS": "256",
+        "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+        "WEBP_METAL_LOSSY": "1",
+        "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+        "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+        "WEBP_METAL_LOSSY_MIN_PIXELS": "0",
+        "WEBP_METAL_LOSSY_THREADS": "256",
+        "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+        "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+        "WEBP_METAL_TRANSFORM_THREADS": "256",
+        "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+        "WEBP_METAL_VERBOSE": "0",
+        "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+      },
+      "name": "lossy",
+      "runner": "import",
+      "variants": [
+        {
+          "delta": {
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "1"
+          },
+          "environment": {
+            "WEBP_METAL": "0",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "1",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "1",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_MIN_PIXELS": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "block_2x2",
+          "rationale": "Reuse four RGB loads for luma and chroma in a 2x2 block."
+        },
+        {
+          "delta": {
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "1"
+          },
+          "environment": {
+            "WEBP_METAL": "0",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "1",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_MIN_PIXELS": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "1"
+          },
+          "name": "write_combined_inputs",
+          "rationale": "Use write-combined CPU caching for the source upload."
+        },
+        {
+          "delta": {
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "1"
+          },
+          "environment": {
+            "WEBP_METAL": "0",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "1",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "1",
+            "WEBP_METAL_LOSSY_MIN_PIXELS": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "contiguous_copy",
+          "rationale": "Collapse row-wise Y/U/V readback into one copy when contiguous."
+        },
+        {
+          "delta": {
+            "WEBP_METAL_LOSSY_THREADS": "128"
+          },
+          "environment": {
+            "WEBP_METAL": "0",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "1",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_MIN_PIXELS": "0",
+            "WEBP_METAL_LOSSY_THREADS": "128",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "threads_128",
+          "rationale": "Test occupancy against the fixed 256-thread baseline."
+        },
+        {
+          "delta": {
+            "WEBP_METAL_LOSSY_THREADS": "512"
+          },
+          "environment": {
+            "WEBP_METAL": "0",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "1",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_MIN_PIXELS": "0",
+            "WEBP_METAL_LOSSY_THREADS": "512",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "threads_512",
+          "rationale": "Test larger threadgroups where the device permits them."
+        },
+        {
+          "delta": {
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "1"
+          },
+          "environment": {
+            "WEBP_METAL": "0",
+            "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+            "WEBP_METAL_HASH_MATCH4": "0",
+            "WEBP_METAL_HASH_THREADS": "256",
+            "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_LOSSY": "1",
+            "WEBP_METAL_LOSSY_BLOCK_2X2": "0",
+            "WEBP_METAL_LOSSY_CONTIGUOUS_COPY": "0",
+            "WEBP_METAL_LOSSY_MIN_PIXELS": "0",
+            "WEBP_METAL_LOSSY_THREADS": "256",
+            "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS": "1",
+            "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
+            "WEBP_METAL_TRANSFORM_THREADS": "256",
+            "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS": "0",
+            "WEBP_METAL_VERBOSE": "0",
+            "WEBP_METAL_WRITE_COMBINED_INPUTS": "0"
+          },
+          "name": "unretained_commands",
+          "rationale": "Avoid command-buffer resource retain/release traffic."
+        }
+      ]
+    }
+  ]
+}

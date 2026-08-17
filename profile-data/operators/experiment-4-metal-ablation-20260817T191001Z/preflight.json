@@ -1,0 +1,270 @@
+{
+  "schema": "libwebp-metal-ablation-operator-preflight-v1",
+  "status": "completed-valid",
+  "experiment": "4 kernel/memory ablations",
+  "protocol_files": [
+    "benchmarks/metal/README.md",
+    "doc/experiment-guard-matrix.md",
+    "scripts/benchmark_metal_ablation.py",
+    "scripts/test_metal.sh",
+    "scripts/test_experiment_guards.py",
+    "extras/metal_import_bench.c"
+  ],
+  "protocol_file_sha256": {
+    "benchmarks/metal/README.md": "e3ac5ba4d6a24d62a442b415a09e062def67e12c6a3c3e9d8828bd13758b7dbd",
+    "doc/experiment-guard-matrix.md": "04ecc416de3433761c2536112e4912b29dbbb06dc56218a74a1943e13173eded",
+    "scripts/benchmark_metal_ablation.py": "9e38b57204551ab611924898fab1a50ce830a2c8e8e60ed277711c184e373d17",
+    "scripts/test_metal.sh": "f33b059f05edc48ca0cece0d673b833e2576efb1b080671073ab644ef962686a",
+    "scripts/test_experiment_guards.py": "727f8eda2a3426ebbf1b770d4f6a2eb998987fead14f007881acce278c05b5be",
+    "extras/metal_import_bench.c": "a27de6888245d62365e6d51777410df25065050414ad74ea6eea8604098cbc1b",
+    "makefile.unix": "ee3be6066a9a75a5eb71ad41debeab6e21004c398f2f710cf8f61c524dfe88d1"
+  },
+  "repository": "/Users/jonaskamsker/.codex/worktrees/29f1/libwebp-metal",
+  "required_source_base": "18fd520d5d7faf0645d461bded27c0ba7ee4a48e",
+  "head_before_build": "fbec692e7ec83336d65eb7c1b9441016d4495815",
+  "head_matches_required_artifact_base": true,
+  "preserved_verified_artifact_commits": [
+    "0d925e3dd33daab83d3717e3763d36d91bcfdca7",
+    "64309ffce345333c1a252e54e088e696dc3018c0",
+    "fbec692e7ec83336d65eb7c1b9441016d4495815"
+  ],
+  "git_status_before_build": "",
+  "worktree_clean_before_build": true,
+  "operator_scope": {
+    "sole_operator": true,
+    "other_agent_used": false,
+    "other_experiment_run": false,
+    "codec_algorithms_modified": false,
+    "matrix_or_trial_selection_changed": false,
+    "performance_interpretation_made": false
+  },
+  "timestamps": {
+    "preflight_recorded_utc": "2026-08-17T19:10:01Z",
+    "preflight_recorded_local": "2026-08-17T21:10:01+0200",
+    "build_clean_started_utc": "2026-08-17T19:12:57Z",
+    "build_completed_utc": "2026-08-17T19:13:22Z",
+    "preflight_manifest_started_utc": "2026-08-17T19:13:32Z",
+    "preflight_manifest_checked_utc": "2026-08-17T19:13:59Z",
+    "correctness_completed_utc": "2026-08-17T19:17:08Z",
+    "guards_completed_utc": "2026-08-17T19:17:48Z",
+    "untimed_gates_completed_utc": "2026-08-17T19:18:05Z",
+    "planned_preflight_output": "/tmp/libwebp-metal-experiment-4-preflight-20260817T191001Z",
+    "resolved_preflight_output": "/private/tmp/libwebp-metal-experiment-4-preflight-20260817T191001Z",
+    "planned_run_output": "/tmp/libwebp-metal-experiment-4-run-20260817T191001Z",
+    "resolved_run_output": "/private/tmp/libwebp-metal-experiment-4-run-20260817T191001Z"
+  },
+  "exact_commands": {
+    "clean": "make -f makefile.unix clean",
+    "build": "make -f makefile.unix -j8 examples/cwebp examples/dwebp WEBP_BUILD_METAL_ABLATION_EXPERIMENT=1 metal-ablation-tools",
+    "preflight": "python3 scripts/benchmark_metal_ablation.py --output /tmp/libwebp-metal-experiment-4-preflight-20260817T191001Z",
+    "correctness": "WEBP_METAL_ABLATION_EXPERIMENT=1 WEBP_TEST_REQUIRE_METAL=1 scripts/test_metal.sh <fixed-canonical-inputs: mitski, corgi, siamese>",
+    "guards": "scripts/test_experiment_guards.py",
+    "timed_full_matrix": "WEBP_BENCHMARK_SESSION=exclusive WEBP_METAL_ABLATION_EXPERIMENT=1 python3 scripts/benchmark_metal_ablation.py --run --output /tmp/libwebp-metal-experiment-4-run-20260817T191001Z --input mitski=<fixed-canonical-mitski.png> --input corgi=<fixed-canonical-corgi.jpeg> --input siamese=<fixed-canonical-siamese.jpg>"
+  },
+  "effective_flags": {
+    "build_external": {
+      "WEBP_BUILD_METAL_ABLATION_EXPERIMENT": "1"
+    },
+    "build_effective": {
+      "WEBP_ENABLE_METAL": "1",
+      "WEBP_BUILD_METAL_ABLATION_EXPERIMENT": "1",
+      "WEBP_USE_METAL_ABLATION_EXPERIMENT": "1"
+    },
+    "runtime_correctness": {
+      "WEBP_METAL_ABLATION_EXPERIMENT": "1",
+      "WEBP_TEST_REQUIRE_METAL": "1"
+    },
+    "runtime_timed": {
+      "WEBP_BENCHMARK_SESSION": "exclusive",
+      "WEBP_METAL_ABLATION_EXPERIMENT": "1"
+    },
+    "makefile_default_evidence": "Darwin makefile.unix line 54: WEBP_ENABLE_METAL ?= 1"
+  },
+  "forbidden_external_experiment_flags": {
+    "checked_absent_before_build_and_timing": [
+      "WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT",
+      "WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT",
+      "WEBP_BUILD_METAL_BATCH_EXPERIMENT",
+      "WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT",
+      "WEBP_BUILD_METAL_BENCHMARK",
+      "WEBP_BUILD_METAL_ABLATION",
+      "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT",
+      "WEBP_METAL_CROSSOVER_EXPERIMENT",
+      "WEBP_METAL_BATCH_EXPERIMENT",
+      "WEBP_METAL_PREDICTOR",
+      "WEBP_METAL_BENCHMARK",
+      "WEBP_METAL_EXPERIMENT_STAGE",
+      "WEBP_EXPERIMENTAL_FEATURES"
+    ],
+    "inherited_webp_environment_before_build": {},
+    "all_forbidden_flags_absent": true,
+    "internal_variant_knobs_inherited_externally": false
+  },
+  "exclusive_session_lease": {
+    "required_value": "WEBP_BENCHMARK_SESSION=exclusive",
+    "preflight_state": "active at final pre-timed check",
+    "lease_activation_check_utc": "2026-08-17T19:19:08Z",
+    "active_at_final_pre_timed_check": true,
+    "activation_contract": "timed harness and metal_import_bench both fail closed unless exact value is present",
+    "competing_experiment_process_check": "passed immediately before timed launch",
+    "inherited_lease_variable_before_activation": false
+  },
+  "fixed_default_matrix": {
+    "suite_selection": ["recorded", "transform", "hash", "lossy"],
+    "suite_override": false,
+    "methods": [4, 6],
+    "methods_override": false,
+    "cwebp_trials": 7,
+    "trials_override": false,
+    "import_processes": 3,
+    "import_processes_override": false,
+    "canonical_inputs": {
+      "mitski": {
+        "path": "<fixed-canonical-path>/mitski.png",
+        "sha256": "4dc95f6926a01f4c6ab32ac0559d8a4c3db1722bd26bde96efeff685ca7fdab0",
+        "size_bytes": 2427106
+      },
+      "corgi": {
+        "path": "<fixed-canonical-path>/corgi.jpeg",
+        "sha256": "7991a0293e31ae253247be6e1fe3b9df1bf106c0ea4ec536bba40b5c7d0fd8d0",
+        "size_bytes": 2684521
+      },
+      "siamese": {
+        "path": "<fixed-canonical-path>/siamese.jpg",
+        "sha256": "5c449f30fb52754c83c5aca1c10716bb7fbae9bfdac1c057da491d6174713c8e",
+        "size_bytes": 3879655
+      }
+    },
+    "import_dimensions_iterations": [[3000, 2000, 50], [4000, 3000, 30]],
+    "import_warmups_per_invocation": 1,
+    "committed_variants": {
+      "recorded": [],
+      "transform": ["dispatch_2d", "threads_128", "threads_512", "unretained_commands"],
+      "hash": ["match4", "write_combined_inputs", "threads_128", "threads_512", "unretained_commands"],
+      "lossy": ["block_2x2", "write_combined_inputs", "contiguous_copy", "threads_128", "threads_512", "unretained_commands"]
+    },
+    "no_cli_matrix_overrides": ["--suite", "--methods", "--trials", "--import-processes"]
+  },
+  "derived_exact_counts": {
+    "candidate_variant_count": 15,
+    "case_entries_including_suite_baselines": 19,
+    "recorded_singleton_invocations": 42,
+    "transform_pair_blocks": 168,
+    "hash_pair_blocks": 210,
+    "lossy_pair_blocks": 36,
+    "total_pair_blocks": 414,
+    "cwebp_pair_records": 756,
+    "lossy_process_pair_records": 72,
+    "top_level_timed_invocation_records": 870,
+    "raw_record_count": 3822,
+    "raw_cwebp_record_count": 798,
+    "raw_import_process_wall_record_count": 72,
+    "raw_import_sample_record_count": 2952,
+    "raw_import_measure_sample_count": 2880,
+    "raw_import_warmup_sample_count": 72,
+    "summary_group_count": 138
+  },
+  "enforceable_contracts": {
+    "cpu_metal_dispatch": "scripts/test_metal.sh with WEBP_TEST_REQUIRE_METAL=1 must observe transformed, hash candidates, and lossy RGB->YUV messages",
+    "bitstream_equality": "harness compares each transform/hash candidate lossless SHA-256 against its paired baseline and aborts on mismatch",
+    "decode_equality": "scripts/test_metal.sh compares CPU and forced-Metal decoded PAM files",
+    "import_checksum_equality": "harness compares baseline/candidate checksum sets for each lossy pair and aborts on mismatch",
+    "deterministic_pair_order": "cwebp order alternates by trial parity; import order alternates by process parity",
+    "variant_isolation_reset": "harness rebuilds BASE_ENV and applies exactly one suite baseline plus one candidate delta per pair",
+    "exit_success": "harness raises on nonzero runner exits and writes summary only after all pairs complete"
+  },
+  "output_safety": {
+    "preflight_output_directory": "/private/tmp/libwebp-metal-experiment-4-preflight-20260817T191001Z",
+    "run_output_directory": "/private/tmp/libwebp-metal-experiment-4-run-20260817T191001Z",
+    "preflight_directory_absent_before_invocation": true,
+    "run_directory_absent_before_invocation": true,
+    "non_overwriting_harness_contract": "args.output.mkdir(exist_ok=False)",
+    "raw_output_immutability_plan": "hash original raw_results.jsonl before any sanitized copy; do not edit original"
+  },
+  "machine_power_thermal_memory_disk_contention_preconditions": {
+    "os": "macOS 26.5.1 / Darwin 25.5.0",
+    "architecture": "arm64",
+    "processor_class": "Apple M4 Pro",
+    "physical_memory_bytes": 25769803776,
+    "ac_power": true,
+    "battery_state": "100%; charged",
+    "thermal_warning": "none recorded",
+    "performance_warning": "none recorded",
+    "cpu_power_warning": "none recorded",
+    "sleep_settings_ac": {
+      "sleep": 1,
+      "displaysleep": 10,
+      "disksleep": 10,
+      "powernap": 1,
+      "standby": 1,
+      "hibernatemode": 3
+    },
+    "sleep_assertions": {
+      "prevent_system_sleep": 0,
+      "prevent_user_idle_system_sleep": 1,
+      "prevent_user_idle_display_sleep": 1,
+      "owner_redacted": true
+    },
+    "memory_snapshot": {
+      "system_free_percentage": 77,
+      "unused_mib_approx": 1898,
+      "swapins": 295295,
+      "swapouts": 831184
+    },
+    "disk_snapshot": {
+      "filesystem_capacity": "460Gi",
+      "available": "344Gi",
+      "capacity_used": "22%"
+    },
+    "contention_snapshot": {
+      "load_average": [2.26, 2.34, 2.43],
+      "cpu_idle_percent": 83.65,
+      "running_processes": 3,
+      "relevant_other_experiment_or_benchmark_processes": [],
+      "relevant_process_check": "passed"
+    }
+  },
+  "untimed_gates": {
+    "clean": "pass; exact command exit 0",
+    "build": "pass; exact command exit 0; WEBP_ENABLE_METAL=1 effective; ablation guard executable built",
+    "preflight_harness": "pass; exact command exit 0; no --run; no raw_results.jsonl or summary.json created",
+    "metal_correctness_and_forced_dispatch": "pass; three canonical inputs; decoded equality and all committed variants; forced transformed/hash/lossy dispatch evidence observed",
+    "independent_guard_validation": "pass; PASS: five independent build/runtime guards and fail-closed leases",
+    "ablation_guard_probe": "pass; extras/metal_import_bench --guard-check returned WEBP_METAL_ABLATION_EXPERIMENT=1"
+  },
+  "timed_full_matrix": {
+    "command_started_utc": "2026-08-17T19:19:40Z",
+    "command_completed_utc": "2026-08-17T19:37:08Z",
+    "elapsed_wall_seconds": 1048,
+    "exit_code": 0,
+    "resolved_output_directory": "/private/tmp/libwebp-metal-experiment-4-run-20260817T191001Z",
+    "second_matrix_run": false,
+    "early_stop": false,
+    "summary_written": true
+  },
+  "mechanical_validation": {
+    "status": "pass",
+    "checks_passed": 85,
+    "checks_total": 85,
+    "failure_count": 0,
+    "metadata_matrix_raw_summary_validated": true,
+    "all_default_suites": true,
+    "methods": [4, 6],
+    "trials": 7,
+    "import_processes": 3,
+    "canonical_input_hashes_valid": true,
+    "raw_records": 3822,
+    "summary_groups": 138,
+    "pair_blocks": 414,
+    "all_exit_codes_zero": true,
+    "lossless_bitstream_equality": true,
+    "import_checksum_equality": true,
+    "deterministic_outputs": true,
+    "exact_variant_isolation": true,
+    "deterministic_pair_order": true,
+    "ablation_guard_probe": true,
+    "forced_metal_dispatch_evidence": true,
+    "forbidden_external_experiment_flags_present": false,
+    "all_forbidden_external_experiment_flags_absent": true
+  }
+}

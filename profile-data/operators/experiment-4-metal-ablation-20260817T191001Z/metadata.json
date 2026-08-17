@@ -1,0 +1,146 @@
+{
+  "argv": [
+    "scripts/benchmark_metal_ablation.py",
+    "--run",
+    "--output",
+    "/tmp/libwebp-metal-experiment-4-run-20260817T191001Z",
+    "--input",
+    "mitski=<fixed-canonical-path>/mitski.png",
+    "--input",
+    "corgi=<fixed-canonical-path>/corgi.jpeg",
+    "--input",
+    "siamese=<fixed-canonical-path>/siamese.jpg"
+  ],
+  "commands": [
+    {
+      "argv": [
+        "sw_vers"
+      ],
+      "exit_code": 0,
+      "output": "ProductName:\t\tmacOS\nProductVersion:\t\t26.5.1\nBuildVersion:\t\t25F80"
+    },
+    {
+      "argv": [
+        "uname",
+        "-a"
+      ],
+      "exit_code": 0,
+      "output": "Darwin <redacted-host> 25.5.0 Darwin Kernel Version 25.5.0: Mon Apr 27 20:41:15 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6041 arm64"
+    },
+    {
+      "argv": [
+        "sysctl",
+        "-n",
+        "hw.model",
+        "hw.memsize",
+        "machdep.cpu.brand_string"
+      ],
+      "exit_code": 0,
+      "output": "<redacted-machine-model>\n25769803776\nApple M4 Pro"
+    },
+    {
+      "argv": [
+        "system_profiler",
+        "SPHardwareDataType",
+        "SPDisplaysDataType",
+        "-json"
+      ],
+      "exit_code": 0,
+      "output": "<hardware-identifiers-redacted; Apple M4 Pro / Metal display capability retained>"
+    },
+    {
+      "argv": [
+        "pmset",
+        "-g",
+        "batt"
+      ],
+      "exit_code": 0,
+      "output": "Now drawing from 'AC Power'\n -InternalBattery-0 (id=<redacted>)\t100%; charged; 0:00 remaining present: true"
+    },
+    {
+      "argv": [
+        "pmset",
+        "-g",
+        "therm"
+      ],
+      "exit_code": 0,
+      "output": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded"
+    },
+    {
+      "argv": [
+        "xcodebuild",
+        "-version"
+      ],
+      "exit_code": 0,
+      "output": "Xcode 26.3\nBuild version 17C529"
+    },
+    {
+      "argv": [
+        "clang",
+        "--version"
+      ],
+      "exit_code": 0,
+      "output": "Apple clang version 17.0.0 (clang-1700.6.4.2)\nTarget: arm64-apple-darwin25.5.0\nThread model: posix\nInstalledDir: <developer-toolchain>/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+    },
+    {
+      "argv": [
+        "git",
+        "rev-parse",
+        "HEAD"
+      ],
+      "exit_code": 0,
+      "output": "fbec692e7ec83336d65eb7c1b9441016d4495815"
+    },
+    {
+      "argv": [
+        "git",
+        "status",
+        "--short"
+      ],
+      "exit_code": 0,
+      "output": "?? extras/metal_import_bench"
+    }
+  ],
+  "created_local": "2026-08-17T21:19:47.939439+02:00",
+  "created_utc": "2026-08-17T19:19:47.939287+00:00",
+  "cwd": "<worktree>",
+  "inputs": {
+    "corgi": {
+      "exists": true,
+      "path": "<fixed-canonical-path>/corgi.jpeg",
+      "sha256": "7991a0293e31ae253247be6e1fe3b9df1bf106c0ea4ec536bba40b5c7d0fd8d0",
+      "size": 2684521
+    },
+    "mitski": {
+      "exists": true,
+      "path": "<fixed-canonical-path>/mitski.png",
+      "sha256": "4dc95f6926a01f4c6ab32ac0559d8a4c3db1722bd26bde96efeff685ca7fdab0",
+      "size": 2427106
+    },
+    "siamese": {
+      "exists": true,
+      "path": "<fixed-canonical-path>/siamese.jpg",
+      "sha256": "5c449f30fb52754c83c5aca1c10716bb7fbae9bfdac1c057da491d6174713c8e",
+      "size": 3879655
+    }
+  },
+  "parameters": {
+    "import_processes": 3,
+    "methods": [
+      4,
+      6
+    ],
+    "suites": [
+      "all"
+    ],
+    "trials": 7
+  },
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "python": "3.9.6 (default, Jan  9 2026, 11:03:41) \n[Clang 17.0.0 (clang-1700.6.4.2)]",
+  "repository": "<worktree>",
+  "schema": 1,
+  "timezone": [
+    "CET",
+    "CEST"
+  ]
+}

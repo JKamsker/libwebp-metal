@@ -1,0 +1,74 @@
+{
+  "schema": "libwebp-metal-ablation-validation-v1",
+  "status": "pass",
+  "validation_scope": "metadata.json, matrix.json, raw_results.jsonl, summary.json",
+  "original_output_directory": "/private/tmp/libwebp-metal-experiment-4-run-20260817T191001Z",
+  "checks_passed": 85,
+  "checks_total": 85,
+  "failure_count": 0,
+  "original_sha256": {
+    "metadata.json": "c2f746e69552c745c561688f0dfc677a9d2ba8dfe99998e47fa3f71558a9c2fb",
+    "matrix.json": "73196aa185db07aa1a70eb40d3349fec137cb37e1d19dcdfd2e63fad22138b80",
+    "raw_results.jsonl": "8f873f89b541a109a08f6ecbc2c1d4dd7dfef1c1e6dafe2d085b17458396d1da",
+    "summary.json": "e8cb44c5708214cb767664305c39ade6a8388a84f445227c76fff8cbc257589d"
+  },
+  "committed_sanitized_sha256": {
+    "profile-data/operators/experiment-4-metal-ablation-20260817T191001Z/metadata.json": "59e634300af0cadc0e3b2a3166d806f2454844fba87bb8ffae19127c6ebcfc78",
+    "profile-data/operators/experiment-4-metal-ablation-20260817T191001Z/matrix.json": "73196aa185db07aa1a70eb40d3349fec137cb37e1d19dcdfd2e63fad22138b80",
+    "profile-data/operators/experiment-4-metal-ablation-20260817T191001Z/raw_results.jsonl": "284571cc0186d62405e73f1dd16e651ae7a1588cadf4be908ef376fa3f4c1c1c",
+    "profile-data/operators/experiment-4-metal-ablation-20260817T191001Z/summary.json": "e8cb44c5708214cb767664305c39ade6a8388a84f445227c76fff8cbc257589d"
+  },
+  "mechanical_counts": {
+    "suites": ["recorded", "transform", "hash", "lossy"],
+    "methods": [4, 6],
+    "trials": 7,
+    "import_processes": 3,
+    "canonical_inputs": 3,
+    "candidate_variants": 15,
+    "case_entries_including_baselines": 19,
+    "pair_blocks": {
+      "transform": 168,
+      "hash": 210,
+      "lossy": 36,
+      "total": 414
+    },
+    "top_level_timed_invocation_records": 870,
+    "raw_cwebp_records": 798,
+    "raw_import_process_wall_records": 72,
+    "raw_import_sample_records": 2952,
+    "raw_import_measure_samples": 2880,
+    "raw_import_warmup_samples": 72,
+    "raw_records": 3822,
+    "summary_groups": 138
+  },
+  "results": {
+    "metadata_valid": true,
+    "matrix_valid": true,
+    "raw_schema_and_record_count_valid": true,
+    "summary_complete": true,
+    "canonical_input_hashes_valid": true,
+    "all_default_suites_present": true,
+    "fixed_methods_trials_import_processes": true,
+    "all_timed_exit_codes_zero": true,
+    "lossless_bitstream_equality": true,
+    "import_checksum_equality": true,
+    "deterministic_outputs": true,
+    "deterministic_pair_order": true,
+    "exact_variant_isolation_and_reset": true,
+    "forbidden_external_experiment_flags_absent": true,
+    "ablation_guard_probe_passed": true,
+    "forced_metal_dispatch_evidence_passed": true,
+    "timed_harness_exit_success": true,
+    "no_second_matrix_or_timed_workload": true
+  },
+  "sanitization": {
+    "original_raw_untouched": true,
+    "committed_matrix_byte_identical": true,
+    "committed_summary_byte_identical": true,
+    "committed_raw_record_count_unchanged": true,
+    "committed_raw_sample_semantics_unchanged_except_paths": true,
+    "absolute_corpus_paths_removed": true,
+    "sensitive_hardware_identifiers_removed": true
+  },
+  "failures": []
+}
