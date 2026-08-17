@@ -1,0 +1,12 @@
+{
+  "entries": [],
+  "fallback": "cpu",
+  "schema_version": 1,
+  "source": {
+    "note": "Sol interpretation and confirmation are required before entries may be added.",
+    "preset_sha256": "cfdbb656e6b4fcbc2b4d99ae2234f1250550fe2ee44c39e831fd15ee919f8ea7",
+    "raw": "ORIGINAL_OUTPUT_DIR/raw.jsonl",
+    "summary": "ORIGINAL_OUTPUT_DIR/summary.json"
+  },
+  "status": "untuned"
+}

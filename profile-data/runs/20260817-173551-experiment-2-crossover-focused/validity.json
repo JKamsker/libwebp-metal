@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "fixed preset and randomized paired CPU/Metal ordering",
+    "exact sample counts",
+    "operation-specific dispatch proof",
+    "within-backend determinism",
+    "CPU/Metal decoded equality or required bitstream equality",
+    "item-1 reference bitstream hashes where specified",
+    "separate tune and holdout roles for policy evidence"
+  ],
+  "completed_pair_blocks": 424,
+  "expected_pair_blocks": 424,
+  "measured_records": 1648,
+  "preset_sha256": "cfdbb656e6b4fcbc2b4d99ae2234f1250550fe2ee44c39e831fd15ee919f8ea7",
+  "reference_bitstream_checks": 36,
+  "schema": "libwebp-metal-crossover-validity-v1",
+  "summary_groups": 248,
+  "valid": true
+}

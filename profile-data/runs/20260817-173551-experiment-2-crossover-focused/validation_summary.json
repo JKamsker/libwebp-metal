@@ -1,0 +1,156 @@
+{
+  "schema": "libwebp-metal-crossover-validation-summary-v1",
+  "operator_status": "completed-valid",
+  "experiment": "2 CPU/Metal crossover focused operator",
+  "source_head_at_run": "0d925e3dd33daab83d3717e3763d36d91bcfdca7",
+  "required_source_base": "18fd520d5d7faf0645d461bded27c0ba7ee4a48e",
+  "worktree_clean_at_run": true,
+  "run": {
+    "start_utc": "2026-08-17T17:35:50Z",
+    "start_local": "2026-08-17T19:35:50+0200",
+    "end_observed_utc": "2026-08-17T18:24:26Z",
+    "end_observed_local": "2026-08-17T20:24:26+0200",
+    "elapsed_wall_seconds_observed": 2916,
+    "elapsed_wall_observed": "00:48:36",
+    "phase_boundaries": {
+      "build_correctness_smoke_combined_start_utc": "2026-08-17T17:35:50Z",
+      "operator_timed_phase_start_utc": "2026-08-17T17:35:56.286669Z",
+      "operator_timed_phase_end_observed_utc": "2026-08-17T18:24:26Z",
+      "build_correctness_smoke_combined_duration_observed_seconds": 6.286669,
+      "operator_timed_phase_duration_observed_seconds": 2909.713331,
+      "phase_note": "The committed wrapper emitted no separate build/correctness/smoke timestamps; the operator metadata creation timestamp marks the start of its timed matrix phase."
+    },
+    "exact_command": "WEBP_METAL_CROSSOVER_EXPERIMENT=1 WEBP_BENCHMARK_SESSION=exclusive scripts/run_metal_crossover_operator.sh",
+    "build_commands": [
+      "make -f makefile.unix clean",
+      "make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT=1 CFLAGS='-O3 -DNDEBUG' CXXFLAGS='-O3 -DNDEBUG' tools/webp_metal_benchmark examples/cwebp examples/dwebp"
+    ],
+    "effective_build_flags": {
+      "WEBP_ENABLE_METAL": "1",
+      "WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT": "1",
+      "CFLAGS": "-O3 -DNDEBUG",
+      "CXXFLAGS": "-O3 -DNDEBUG"
+    },
+    "effective_runtime_flags": {
+      "WEBP_METAL_CROSSOVER_EXPERIMENT": "1",
+      "WEBP_BENCHMARK_SESSION": "exclusive"
+    },
+    "other_experiment_flags_absent": true,
+    "focused_preset": "scripts/metal_crossover_focused_v1.json",
+    "focused_preset_sha256": "cfdbb656e6b4fcbc2b4d99ae2234f1250550fe2ee44c39e831fd15ee919f8ea7",
+    "runner_metadata_created_at_utc": "2026-08-17T17:35:56.286669+00:00"
+  },
+  "original_output": {
+    "directory": "/private/var/folders/g_/y0l39t0x5q39xs0msnnn7hb80000gn/T/libwebp-metal-crossover-20260817T173551Z",
+    "immutable_recheck_passed": true,
+    "files": {
+      "raw.jsonl": {
+        "sha256": "a4415fea51c105068e67c0d0de4c40527485d713f317d37abae65149fd9326e4",
+        "bytes": 880618,
+        "lines": 1649
+      },
+      "summary.json": {
+        "sha256": "85132eaf03efbb11f73ab1a39a88197a08cd967afe021775cd6661d1612db6d9",
+        "bytes": 180755
+      },
+      "validity.json": {
+        "sha256": "1b3428e3f6f409a9025629b2892d5e668055f35a57b45322df32f68defa09641",
+        "bytes": 672
+      },
+      "policy-untuned.json": {
+        "sha256": "eb4febb7688cd57b1e27a76ae19cd745450b77cd01613c7d5795d12e3c540d06",
+        "bytes": 538
+      }
+    }
+  },
+  "committed_sanitized_artifacts": {
+    "preflight": {
+      "path": "profile-data/operators/experiment-2-crossover-focused-20260817T173310Z/preflight.json",
+      "sha256": "5d997a0083879cc09dc7ad15bbcd4ebc522f54794d3afb75ee48846f0f58fb30"
+    },
+    "raw.jsonl": {
+      "path": "profile-data/runs/20260817-173551-experiment-2-crossover-focused/raw.jsonl",
+      "sha256": "ab39ee2857a79f9699c3b54fd69fac7705c91cdf35cb06ab174916aef12a2184",
+      "sanitization": "metadata hardware, machine, and power fields removed; local absolute preset and runner paths replaced; every sample record is identical to the original"
+    },
+    "summary.json": {
+      "path": "profile-data/runs/20260817-173551-experiment-2-crossover-focused/summary.json",
+      "sha256": "6e0beb8e014439b5692f5e02334e9257ee9070158af5bfd1cd5d85740bb58f6c",
+      "sanitization": "source path replaced with ORIGINAL_OUTPUT_DIR/raw.jsonl"
+    },
+    "validity.json": {
+      "path": "profile-data/runs/20260817-173551-experiment-2-crossover-focused/validity.json",
+      "sha256": "1b3428e3f6f409a9025629b2892d5e668055f35a57b45322df32f68defa09641"
+    },
+    "policy-untuned.json": {
+      "path": "profile-data/runs/20260817-173551-experiment-2-crossover-focused/policy-untuned.json",
+      "sha256": "22c186267c07399d471387695bb068a12dfb097b4b892a8d3b668e06a9336cfa",
+      "sanitization": "source paths replaced with ORIGINAL_OUTPUT_DIR/raw.jsonl and ORIGINAL_OUTPUT_DIR/summary.json"
+    }
+  },
+  "mechanical_validation": {
+    "validity_json": {
+      "valid": true,
+      "expected_pair_blocks": 424,
+      "completed_pair_blocks": 424,
+      "measured_records": 1648,
+      "summary_groups": 248,
+      "reference_bitstream_checks": 36
+    },
+    "counts": {
+      "metadata_records": 1,
+      "sample_records": 1648,
+      "pair_blocks": 424,
+      "runner_invocations": 848,
+      "warmup_encodes_expected_and_enforced_by_fixed_preset": 400,
+      "item1_warm_guard_pair_blocks": 18,
+      "item1_reference_hashes_expected_and_verified": 36
+    },
+    "section_pair_blocks": {
+      "item1-warm-end-to-end-guards": 18,
+      "transform-photo-crossover": 96,
+      "hash-photo-texture-crossover": 160,
+      "hash-palette-forced-dispatch-guards": 6,
+      "lossy-import-crossover": 144
+    },
+    "dispatch": {
+      "cpu_records_with_metal_markers": 0,
+      "metal_marker_mismatches": 0,
+      "all_declared_metal_marker_sets_verified": true
+    },
+    "reference_hashes": {
+      "expected": 36,
+      "verified": 36,
+      "mismatches": 0
+    },
+    "equality": {
+      "input_hash_pair_mismatches": 0,
+      "decoded_pixel_contract_failures": 0,
+      "required_bitstream_contract_failures": 0,
+      "lossless_decode_to_input_failures": 0
+    },
+    "determinism": {
+      "within_backend_repeated_hash_failures": 0,
+      "randomized_pair_order_contract_failures": 0,
+      "sequence_count_contract_failures": 0
+    },
+    "policy_untuned": {
+      "status": "untuned",
+      "fallback": "cpu",
+      "entries": 0,
+      "empty_cpu_fallback_policy": true
+    },
+    "committed_copy_integrity": {
+      "sample_records_identical_to_original": true,
+      "summary_validity_policy_contracts_preserved": true,
+      "original_output_modified": false
+    }
+  },
+  "interpretation": {
+    "performance_ratios_interpreted": false,
+    "thresholds_calibrated": false,
+    "threshold_recommendation_made": false,
+    "remaining_owner": "Sol",
+    "remaining_work": "Sol may later inspect ratios, tune versus holdout behavior, noise, crossover candidates, and missing-combination CPU fallback; this operator supplied no performance conclusion or policy entry."
+  }
+}

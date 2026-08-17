@@ -1,0 +1,135 @@
+{
+  "artifact_kind": "experiment-2-crossover-focused-operator-preflight",
+  "protocol": "doc/metal-crossover-benchmark.md",
+  "guard_matrix": "doc/experiment-guard-matrix.md",
+  "preflight_utc": "2026-08-17T17:33:10Z",
+  "preflight_local": "2026-08-17T19:33:10+0200",
+  "required_source_base": "18fd520d5d7faf0645d461bded27c0ba7ee4a48e",
+  "head": "0d925e3dd33daab83d3717e3763d36d91bcfdca7",
+  "head_expected": "0d925e3dd33daab83d3717e3763d36d91bcfdca7",
+  "git_status": "",
+  "worktree_clean": true,
+  "existing_experiment_1_artifacts_preserved": true,
+  "operator": {
+    "exact_command": "WEBP_METAL_CROSSOVER_EXPERIMENT=1 WEBP_BENCHMARK_SESSION=exclusive scripts/run_metal_crossover_operator.sh",
+    "runner_script": "scripts/run_metal_crossover_operator.sh",
+    "runner_sha256": "b081eaccf3a75a2afc65c30cd34bde86c716a65cbfefd95bcb7777df3ab54cd9",
+    "focused_preset": "scripts/metal_crossover_focused_v1.json",
+    "focused_preset_sha256": "cfdbb656e6b4fcbc2b4d99ae2234f1250550fe2ee44c39e831fd15ee919f8ea7",
+    "build_commands": [
+      "make -f makefile.unix clean",
+      "make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT=1 CFLAGS='-O3 -DNDEBUG' CXXFLAGS='-O3 -DNDEBUG' tools/webp_metal_benchmark examples/cwebp examples/dwebp"
+    ],
+    "effective_build_flags": {
+      "WEBP_ENABLE_METAL": "1",
+      "WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT": "1",
+      "CFLAGS": "-O3 -DNDEBUG",
+      "CXXFLAGS": "-O3 -DNDEBUG"
+    },
+    "effective_runtime_flags": {
+      "WEBP_METAL_CROSSOVER_EXPERIMENT": "1",
+      "WEBP_BENCHMARK_SESSION": "exclusive"
+    },
+    "absent_experiment_flags": [
+      "WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT",
+      "WEBP_BUILD_METAL_BATCH_EXPERIMENT",
+      "WEBP_BUILD_METAL_ABLATION_EXPERIMENT",
+      "WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT",
+      "WEBP_BUILD_METAL_BENCHMARK",
+      "WEBP_BUILD_METAL_ABLATION",
+      "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT",
+      "WEBP_METAL_BATCH_EXPERIMENT",
+      "WEBP_METAL_ABLATION_EXPERIMENT",
+      "WEBP_METAL_PREDICTOR",
+      "WEBP_METAL_BENCHMARK",
+      "WEBP_METAL_EXPERIMENT_STAGE"
+    ],
+    "environment_absence_check": "passed; all listed non-crossover build/runtime and legacy umbrella names were absent",
+    "exclusive_session_lease_check": "passed; WEBP_BENCHMARK_SESSION=exclusive was mechanically asserted immediately before launch and is required by the wrapper, Python operator, and C runner"
+  },
+  "untimed_guards": {
+    "scripts/test_experiment_guards.py": "passed",
+    "focused_plan": {
+      "pair_blocks": 424,
+      "runner_invocations": 848,
+      "measured_records": 1648,
+      "untimed_warmup_encodes": 400,
+      "total_encodes": 2048,
+      "maximum_input_mib": 400.0,
+      "note": "plan only; no runner or timing clock was invoked"
+    },
+    "exhaustive_preset_used": false
+  },
+  "fixed_matrix": {
+    "item1_warm_guard_blocks": 18,
+    "item1_warm_guard_case_count": 9,
+    "item1_reference_hash_count": 36,
+    "transform": {
+      "content": ["photo"],
+      "methods": [4, 6],
+      "sizes": ["192x192", "256x256", "384x384", "512x512", "768x768", "1024x1024"],
+      "roles": ["tune", "holdout"],
+      "dispatch": ["transform"]
+    },
+    "hash": {
+      "content_strata": ["photo", "texture"],
+      "methods": [4, 6],
+      "sizes": ["512x512", "1024x1024", "1600x1200", "2048x2048", "3000x2000"],
+      "roles": ["tune", "holdout"],
+      "dispatch": ["hash"]
+    },
+    "palette_guard": {
+      "content": ["graphic"],
+      "sizes": ["512x512", "1600x1200", "3000x2000"],
+      "methods": [4, 6],
+      "execution": "warm",
+      "dispatch": ["hash"]
+    },
+    "lossy": {
+      "content_ladders": {
+        "photo": ["2048x2048", "4096x4096", "6144x6144", "8192x8192", "10240x10240"],
+        "graphic": ["2048x2048", "4096x4096", "6144x6144", "8192x8192"],
+        "texture": ["2048x2048", "4096x4096", "6144x6144"]
+      },
+      "methods": [4, 6],
+      "roles": ["tune", "holdout"],
+      "dispatch": ["lossy"]
+    }
+  },
+  "contract_enforcement": {
+    "operator_script_sha256": "f4c189b8104fd9c37e345ddafb5468f06ccbf556f04a9d811b567c7a2b36c2d3",
+    "harness_script_sha256": "439946e0592d6ff60e8469049977df551030dbab5e3539a26513f31c44f1e100",
+    "untuned_policy_sha256": "6ff1d24b3678d32bd49e48a5e97387d7a6ce5960cd1132f6a9d06f54957c76a2",
+    "dispatch": "validate_dispatch rejects any CPU Metal marker and requires the exact declared Metal marker set",
+    "reference_hashes": "operator checks every declared item-1 CPU/Metal artifact SHA-256 and aborts on mismatch",
+    "equality": "harness.verify_pair requires decoded-pixel equality unless the case contract requires encoded-bitstream equality",
+    "determinism": "tools/metal_benchmark rejects repeated encoded/decoded hash changes within each process; smoke and operator paths require these repeated samples",
+    "lease_and_refusal": "wrapper, Python operator, and C runner require exact runtime opt-in and exclusive session; output creation refuses overwrite",
+    "policy": "scripts/metal_threshold_policy.untuned.json is status=untuned, fallback=cpu, entries=[]"
+  },
+  "output_preflight": {
+    "output_override_used": false,
+    "run_id_candidate": "20260817T173310Z",
+    "candidate_output_dir": "/var/folders/g_/y0l39t0x5q39xs0msnnn7hb80000gn/T//libwebp-metal-crossover-20260817T173310Z",
+    "candidate_output_dir_exists": false,
+    "non_overwriting_contract": true
+  },
+  "process_and_machine_preconditions": {
+    "other_experiment_operator_processes": "none matched the crossover, stage-profile, batch, ablation, predictor, or metal benchmark process patterns",
+    "load_average": [2.87, 2.43, 2.39],
+    "architecture": "arm64",
+    "logical_cpu_count": 14,
+    "memory_bytes": 25769803776,
+    "os_version": "26.5.1",
+    "power_source": "AC Power",
+    "battery": "100%; charged",
+    "thermal": "no thermal, performance, or CPU power warning recorded",
+    "memory_pressure_free_percent": 78,
+    "temporary_disk_available_kib": 360397052,
+    "worktree_disk_available_kib": 360397052,
+    "sleep": "AC sleep settings and assertions recorded; PreventUserIdleSystemSleep assertion active, with no PreventSystemSleep assertion",
+    "contention_result": "no competing experiment operator; system load and memory/disk headroom recorded"
+  },
+  "preflight_passed": true,
+  "timed_run_authorized": true
+}

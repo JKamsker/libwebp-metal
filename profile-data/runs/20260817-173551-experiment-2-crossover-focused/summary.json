@@ -1,0 +1,7695 @@
+{
+  "aggregation": "paired sequence ratios; median/MAD/min/max; no pooling across content",
+  "groups": [
+    {
+      "case_id": "graphic-large",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 133000,
+        "max": 45402000,
+        "median": 45134000,
+        "min": 45001000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 324000,
+        "max": 98566000,
+        "median": 98242000,
+        "min": 96634000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.022778721088004605,
+        "max": 2.1903068820692875,
+        "median": 2.1638253821417557,
+        "min": 2.141046661053751,
+        "n": 3
+      },
+      "method": 4,
+      "role": "guard",
+      "section_id": "hash-palette-forced-dispatch-guards",
+      "width": 3000
+    },
+    {
+      "case_id": "graphic-large",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 110000,
+        "max": 45598000,
+        "median": 45484000,
+        "min": 45374000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 1956000,
+        "max": 104528000,
+        "median": 101832000,
+        "min": 99876000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.04810037909742837,
+        "max": 2.292381244791438,
+        "median": 2.2442808656940096,
+        "min": 2.1958490897898164,
+        "n": 3
+      },
+      "method": 6,
+      "role": "guard",
+      "section_id": "hash-palette-forced-dispatch-guards",
+      "width": 3000
+    },
+    {
+      "case_id": "graphic-medium",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 15000,
+        "max": 14904000,
+        "median": 14823000,
+        "min": 14808000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 44000,
+        "max": 34490000,
+        "median": 34183000,
+        "min": 34139000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.017821241249235786,
+        "max": 2.3267894488295218,
+        "median": 2.308414370610481,
+        "min": 2.290593129361245,
+        "n": 3
+      },
+      "method": 4,
+      "role": "guard",
+      "section_id": "hash-palette-forced-dispatch-guards",
+      "width": 1600
+    },
+    {
+      "case_id": "graphic-medium",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 1000,
+        "max": 14909000,
+        "median": 14908000,
+        "min": 14594000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 253000,
+        "max": 36299000,
+        "median": 35678000,
+        "min": 35425000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.016810232681973236,
+        "max": 2.487255036316294,
+        "median": 2.393051177141324,
+        "min": 2.376240944459351,
+        "n": 3
+      },
+      "method": 6,
+      "role": "guard",
+      "section_id": "hash-palette-forced-dispatch-guards",
+      "width": 1600
+    },
+    {
+      "case_id": "graphic-small",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 42000,
+        "max": 3844000,
+        "median": 3787000,
+        "min": 3745000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 1090000,
+        "max": 13496000,
+        "median": 12406000,
+        "min": 11300000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.2100108504019924,
+        "max": 3.563770794824399,
+        "median": 3.227367325702393,
+        "min": 3.0173564753004007,
+        "n": 3
+      },
+      "method": 4,
+      "role": "guard",
+      "section_id": "hash-palette-forced-dispatch-guards",
+      "width": 512
+    },
+    {
+      "case_id": "graphic-small",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 7000,
+        "max": 3860000,
+        "median": 3784000,
+        "min": 3777000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 66000,
+        "max": 10789000,
+        "median": 10424000,
+        "min": 10358000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.02254731402541621,
+        "max": 2.795077720207254,
+        "median": 2.7598623245962406,
+        "min": 2.7373150105708244,
+        "n": 3
+      },
+      "method": 6,
+      "role": "guard",
+      "section_id": "hash-palette-forced-dispatch-guards",
+      "width": 512
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 2067000,
+        "max": 171285000,
+        "median": 169218000,
+        "min": 166070000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 9304000,
+        "max": 235784000,
+        "median": 226480000,
+        "min": 214652000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.029611958405318717,
+        "max": 1.393374227328062,
+        "median": 1.3637622689227433,
+        "min": 1.25318621011764,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 635000,
+        "max": 175843000,
+        "median": 167754000,
+        "min": 167119000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 3546000,
+        "max": 220220000,
+        "median": 216674000,
+        "min": 210972000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.005260071446948622,
+        "max": 1.2965252305243569,
+        "median": 1.2576272398869774,
+        "min": 1.2523671684400288,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 830000,
+        "max": 170128000,
+        "median": 169208000,
+        "min": 167507000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 4923000,
+        "max": 189128000,
+        "median": 184196000,
+        "min": 176579000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.018093273078868544,
+        "max": 1.1177249302633445,
+        "median": 1.099631657184476,
+        "min": 1.0379185084171918,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 365000,
+        "max": 168009000,
+        "median": 167442000,
+        "min": 166963000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 2619000,
+        "max": 190174000,
+        "median": 187189000,
+        "min": 182469000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.02153951714435265,
+        "max": 1.1373362837150889,
+        "median": 1.1152872049437748,
+        "min": 1.089744508546243,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 393000,
+        "max": 461980000,
+        "median": 460044000,
+        "min": 459651000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 4114000,
+        "max": 557851000,
+        "median": 543279000,
+        "min": 539165000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.007940579178612017,
+        "max": 1.20752197064808,
+        "median": 1.1809283459842972,
+        "min": 1.1729877668056852,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 4904000,
+        "max": 468468000,
+        "median": 458812000,
+        "min": 453908000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 1739000,
+        "max": 529471000,
+        "median": 515778000,
+        "min": 514039000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.006087081822693463,
+        "max": 1.1363051543484584,
+        "median": 1.130218072525765,
+        "min": 1.120369563132612,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1123000,
+        "max": 459638000,
+        "median": 458515000,
+        "min": 456364000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 1424000,
+        "max": 504649000,
+        "median": 503225000,
+        "min": 500036000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.001917781704974697,
+        "max": 1.1045744186658017,
+        "median": 1.0975104413159875,
+        "min": 1.0878909054516814,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 780000,
+        "max": 455424000,
+        "median": 454644000,
+        "min": 452412000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 3192000,
+        "max": 480960000,
+        "median": 475868000,
+        "min": 471245000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.006785026519658288,
+        "max": 1.0569295072672693,
+        "median": 1.050144480747611,
+        "min": 1.0396618013214736,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1600x1200",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 3420000,
+        "max": 309992000,
+        "median": 306572000,
+        "min": 302203000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 4608000,
+        "max": 386669000,
+        "median": 380694000,
+        "min": 376086000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0015371342044390168,
+        "max": 1.2612665214044336,
+        "median": 1.2597293871999946,
+        "min": 1.2132119538568737,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "photo-1600x1200",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1533000,
+        "max": 304874000,
+        "median": 300540000,
+        "min": 299007000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 5132000,
+        "max": 384899000,
+        "median": 378797000,
+        "min": 373665000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.004364454160709075,
+        "max": 1.2668499399679607,
+        "median": 1.2624854858072516,
+        "min": 1.2433120383310041,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "photo-1600x1200",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 646000,
+        "max": 303360000,
+        "median": 302714000,
+        "min": 299748000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 1232000,
+        "max": 329729000,
+        "median": 327422000,
+        "min": 325221000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.0017578864998082366,
+        "max": 1.1000206840412614,
+        "median": 1.0816215966225546,
+        "min": 1.0773937500621151,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "photo-1600x1200",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 351000,
+        "max": 292337000,
+        "median": 290469000,
+        "min": 288742000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 2369000,
+        "max": 321961000,
+        "median": 318209000,
+        "min": 312588000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.009176896579743854,
+        "max": 1.115047343303018,
+        "median": 1.0944796037696911,
+        "min": 1.06927279133329,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "photo-1600x1200",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 828000,
+        "max": 446485000,
+        "median": 445657000,
+        "min": 442635000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 7738000,
+        "max": 531202000,
+        "median": 510945000,
+        "min": 503207000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.009654189318829998,
+        "max": 1.18974209659899,
+        "median": 1.1464983159694564,
+        "min": 1.1368441266506264,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "photo-1600x1200",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1714000,
+        "max": 448719000,
+        "median": 441937000,
+        "min": 440223000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 1147000,
+        "max": 524837000,
+        "median": 514480000,
+        "min": 513333000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.019522178757377162,
+        "max": 1.1875832980718972,
+        "median": 1.1660749211195236,
+        "min": 1.1465527423621464,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "photo-1600x1200",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 481000,
+        "max": 444357000,
+        "median": 443734000,
+        "min": 441007000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 2938000,
+        "max": 478848000,
+        "median": 471645000,
+        "min": 468707000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.007010854168308267,
+        "max": 1.0858058942375064,
+        "median": 1.0618091357302055,
+        "min": 1.0547982815618973,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "photo-1600x1200",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 531000,
+        "max": 443207000,
+        "median": 442676000,
+        "min": 440916000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 836000,
+        "max": 480025000,
+        "median": 472078000,
+        "min": 471242000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.004576637172839071,
+        "max": 1.0830717926386542,
+        "median": 1.0702106523691588,
+        "min": 1.0656340151963197,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 986000,
+        "max": 684905000,
+        "median": 673050000,
+        "min": 672064000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 13836000,
+        "max": 785017000,
+        "median": 771181000,
+        "min": 743771000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.02089243193909196,
+        "max": 1.1680688148747738,
+        "median": 1.1259678349552127,
+        "min": 1.1050754030161207,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1770000,
+        "max": 670006000,
+        "median": 666183000,
+        "min": 664413000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 4257000,
+        "max": 751361000,
+        "median": 745735000,
+        "min": 741478000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0009724765021374981,
+        "max": 1.1223967622548023,
+        "median": 1.1214242857526648,
+        "min": 1.1130244992742235,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 714000,
+        "max": 668038000,
+        "median": 666389000,
+        "min": 665675000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 1984000,
+        "max": 709956000,
+        "median": 707972000,
+        "min": 702450000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.0013826831134318152,
+        "max": 1.0627479275131055,
+        "median": 1.0613652443996737,
+        "min": 1.0552446764562287,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1195000,
+        "max": 672266000,
+        "median": 667750000,
+        "min": 665306000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 7206000,
+        "max": 721713000,
+        "median": 710943000,
+        "min": 703737000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.014190059224407081,
+        "max": 1.0815339107117627,
+        "median": 1.064692360107526,
+        "min": 1.0468133149675873,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 3174000,
+        "max": 999837000,
+        "median": 996663000,
+        "min": 987028000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 1070000,
+        "max": 1102179000,
+        "median": 1066634000,
+        "min": 1065564000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.01152052814796578,
+        "max": 1.102358684465568,
+        "median": 1.0806522206056972,
+        "min": 1.0691316924577314,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 7433000,
+        "max": 1012356000,
+        "median": 999475000,
+        "min": 992042000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 13800000,
+        "max": 1101304000,
+        "median": 1086099000,
+        "min": 1072299000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.006949137471472522,
+        "max": 1.0948115099965525,
+        "median": 1.08786237252508,
+        "min": 1.0728622526826583,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 518000,
+        "max": 1017108000,
+        "median": 1009327000,
+        "min": 1006974000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 6470000,
+        "max": 1063260000,
+        "median": 1056790000,
+        "min": 1042533000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.006645215257131465,
+        "max": 1.0558961800403983,
+        "median": 1.0390145392623005,
+        "min": 1.032369324005169,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1626000,
+        "max": 991894000,
+        "median": 988803000,
+        "min": 987177000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 3018000,
+        "max": 1049268000,
+        "median": 1025648000,
+        "min": 1018311000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.0034080446716402424,
+        "max": 1.06259721952168,
+        "median": 1.0349464617944055,
+        "min": 1.0315384171227653,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-3000x2000",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 6482000,
+        "max": 975728000,
+        "median": 960783000,
+        "min": 954301000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 1018000,
+        "max": 1101549000,
+        "median": 1100531000,
+        "min": 1074477000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.001976655627367707,
+        "max": 1.146511751352803,
+        "median": 1.1279075726022005,
+        "min": 1.1259309169748328,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "photo-3000x2000",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1876000,
+        "max": 953274000,
+        "median": 951398000,
+        "min": 943326000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 11911000,
+        "max": 1081218000,
+        "median": 1053300000,
+        "min": 1041389000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0009743897884679775,
+        "max": 1.1364518319357408,
+        "median": 1.1049289081628157,
+        "min": 1.1039545183743478,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "photo-3000x2000",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 6775000,
+        "max": 970515000,
+        "median": 959316000,
+        "min": 952541000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 3659000,
+        "max": 1059222000,
+        "median": 1048065000,
+        "min": 1038571000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.00659432208649724,
+        "max": 1.1041429518531953,
+        "median": 1.097548629766698,
+        "min": 1.071740290242722,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "photo-3000x2000",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 160000,
+        "max": 947437000,
+        "median": 937896000,
+        "min": 936195000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 3630000,
+        "max": 1014676000,
+        "median": 1006248000,
+        "min": 1002618000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.0077335819162116515,
+        "max": 1.081864087276201,
+        "median": 1.072840268293229,
+        "min": 1.0582423950088502,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "photo-3000x2000",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 8011000,
+        "max": 1204078000,
+        "median": 1196067000,
+        "min": 1187431000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 4911000,
+        "max": 1374869000,
+        "median": 1323876000,
+        "min": 1318965000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.003914183917585579,
+        "max": 1.1418438008168905,
+        "median": 1.1107719101151983,
+        "min": 1.1068577261976127,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "photo-3000x2000",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 6516000,
+        "max": 1208606000,
+        "median": 1202090000,
+        "min": 1195196000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 2611000,
+        "max": 1310449000,
+        "median": 1307838000,
+        "min": 1288267000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.004103460949893778,
+        "max": 1.0942456300054553,
+        "median": 1.0901421690555615,
+        "min": 1.0659114715631066,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "photo-3000x2000",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 326000,
+        "max": 1211525000,
+        "median": 1209626000,
+        "min": 1203952000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 5868000,
+        "max": 1284133000,
+        "median": 1276890000,
+        "min": 1269588000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.00438196921447398,
+        "max": 1.066598170026712,
+        "median": 1.0539526629660965,
+        "min": 1.0495706937516225,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "photo-3000x2000",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 2014000,
+        "max": 1181287000,
+        "median": 1176394000,
+        "min": 1173806000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 5108000,
+        "max": 1275795000,
+        "median": 1266288000,
+        "min": 1260661000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.002420534828168952,
+        "max": 1.0826428537484472,
+        "median": 1.076414874608337,
+        "min": 1.0676321672887283,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 159000,
+        "max": 62409000,
+        "median": 61100000,
+        "min": 60941000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 512,
+      "metal_ns": {
+        "mad": 3761000,
+        "max": 110403000,
+        "median": 106642000,
+        "min": 101037000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.05512656660503579,
+        "max": 1.8116374854367339,
+        "median": 1.7087599544937428,
+        "min": 1.653633387888707,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 395000,
+        "max": 63179000,
+        "median": 60769000,
+        "min": 60374000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 512,
+      "metal_ns": {
+        "mad": 1490000,
+        "max": 106511000,
+        "median": 95753000,
+        "min": 94263000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.09399835990590089,
+        "max": 1.7527193141239776,
+        "median": 1.5859972835989002,
+        "min": 1.4919989236929994,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 165000,
+        "max": 61392000,
+        "median": 60766000,
+        "min": 60601000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 1090000,
+        "max": 68827000,
+        "median": 67210000,
+        "min": 65968000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.026465451637070148,
+        "max": 1.1350473300570598,
+        "median": 1.1062929927920218,
+        "min": 1.074537399009643,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 103000,
+        "max": 60485000,
+        "median": 60350000,
+        "min": 59598000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 113000,
+        "max": 66473000,
+        "median": 64561000,
+        "min": 64448000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.011748039990743253,
+        "max": 1.1004006091908356,
+        "median": 1.0815243448788956,
+        "min": 1.069729613092768,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 121000,
+        "max": 323757000,
+        "median": 318583000,
+        "min": 318462000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 512,
+      "metal_ns": {
+        "mad": 2795000,
+        "max": 368195000,
+        "median": 363764000,
+        "min": 360969000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.009904820146444449,
+        "max": 1.155727078971571,
+        "median": 1.1334758935131979,
+        "min": 1.1235710733667534,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1763000,
+        "max": 321142000,
+        "median": 319379000,
+        "min": 317595000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 512,
+      "metal_ns": {
+        "mad": 2632000,
+        "max": 370821000,
+        "median": 366092000,
+        "min": 363460000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0018484820450852535,
+        "max": 1.1546948079042916,
+        "median": 1.1462619646251007,
+        "min": 1.1444134825800154,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1173000,
+        "max": 322698000,
+        "median": 320533000,
+        "min": 318764000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 1162000,
+        "max": 338121000,
+        "median": 329115000,
+        "min": 327264000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.008690278497089032,
+        "max": 1.0517179169751223,
+        "median": 1.0296896763749985,
+        "min": 1.0198854656675902,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1191000,
+        "max": 320861000,
+        "median": 317366000,
+        "min": 314489000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 2332000,
+        "max": 331410000,
+        "median": 326083000,
+        "min": 323584000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.0026110671586807577,
+        "max": 1.0481853403969321,
+        "median": 1.0261539720302606,
+        "min": 1.0235429048715798,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "texture-1024x1024",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 220000,
+        "max": 65836000,
+        "median": 65359000,
+        "min": 65139000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 819000,
+        "max": 94407000,
+        "median": 93588000,
+        "min": 89446000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0027706702508605296,
+        "max": 1.436742965043983,
+        "median": 1.4339722947931224,
+        "min": 1.3685337902966692,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "texture-1024x1024",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 250000,
+        "max": 65747000,
+        "median": 65497000,
+        "min": 64444000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 1277000,
+        "max": 94579000,
+        "median": 91279000,
+        "min": 90002000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0221214704612529,
+        "max": 1.438529514654661,
+        "median": 1.4164080441934082,
+        "min": 1.374139273554514,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "texture-1024x1024",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 298000,
+        "max": 65367000,
+        "median": 64532000,
+        "min": 64000000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 1510000,
+        "max": 62128000,
+        "median": 60618000,
+        "min": 56750000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.03812142330110113,
+        "max": 0.9654700854700855,
+        "median": 0.9273486621689844,
+        "min": 0.8753663427425574,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "texture-1024x1024",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 378000,
+        "max": 64615000,
+        "median": 64237000,
+        "min": 62823000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 683000,
+        "max": 63902000,
+        "median": 56567000,
+        "min": 55884000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.021880997486394826,
+        "max": 1.0074412738451837,
+        "median": 0.8953184245144317,
+        "min": 0.8685057113994872,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "texture-1024x1024",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 567000,
+        "max": 66938000,
+        "median": 65149000,
+        "min": 64582000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 1986000,
+        "max": 96769000,
+        "median": 88092000,
+        "min": 86106000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.018880247818390483,
+        "max": 1.4456511996175565,
+        "median": 1.3521619671829193,
+        "min": 1.3332817193645288,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "texture-1024x1024",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 238000,
+        "max": 67569000,
+        "median": 64988000,
+        "min": 64750000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 3743000,
+        "max": 101107000,
+        "median": 97218000,
+        "min": 93475000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0543432350920503,
+        "max": 1.5557795285283438,
+        "median": 1.5014362934362935,
+        "min": 1.3834006719057557,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "texture-1024x1024",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 316000,
+        "max": 67482000,
+        "median": 64884000,
+        "min": 63736000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 657000,
+        "max": 60043000,
+        "median": 56906000,
+        "min": 55924000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.0042739411082483025,
+        "max": 0.8897631961115556,
+        "median": 0.8854892550033073,
+        "min": 0.8661256349894685,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "texture-1024x1024",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 423000,
+        "max": 64572000,
+        "median": 63790000,
+        "min": 63242000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 582000,
+        "max": 57600000,
+        "median": 56568000,
+        "min": 55922000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.006018095056443018,
+        "max": 0.9029628468411977,
+        "median": 0.8885279187817259,
+        "min": 0.8670321501579632,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "texture-1600x1200",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1163000,
+        "max": 123832000,
+        "median": 122018000,
+        "min": 120855000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 1028000,
+        "max": 140037000,
+        "median": 139009000,
+        "min": 137453000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.00191181425637299,
+        "max": 1.139249946729171,
+        "median": 1.137338132472798,
+        "min": 1.1308627818334518,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "texture-1600x1200",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 24000,
+        "max": 123257000,
+        "median": 121430000,
+        "min": 121406000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 634000,
+        "max": 136742000,
+        "median": 134434000,
+        "min": 133800000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.002096192322398327,
+        "max": 1.1094055510031884,
+        "median": 1.10730935868079,
+        "min": 1.101869389771885,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "texture-1600x1200",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1431000,
+        "max": 130237000,
+        "median": 124407000,
+        "min": 122607000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 2193000,
+        "max": 107385000,
+        "median": 105192000,
+        "min": 100510000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.016510011079730935,
+        "max": 0.8732191647150663,
+        "median": 0.8244227491089415,
+        "min": 0.8079127380292106,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "texture-1600x1200",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 100000,
+        "max": 120272000,
+        "median": 117814000,
+        "min": 116750000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 593000,
+        "max": 103487000,
+        "median": 102894000,
+        "min": 98062000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.015579364575199817,
+        "max": 0.8791392697555092,
+        "median": 0.8555108420912598,
+        "min": 0.83993147751606,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "texture-1600x1200",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1075000,
+        "max": 130818000,
+        "median": 125531000,
+        "min": 124456000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 570000,
+        "max": 146016000,
+        "median": 145446000,
+        "min": 142916000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.02667221292803834,
+        "max": 1.1732339139937007,
+        "median": 1.1384916873122974,
+        "min": 1.111819474384259,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "texture-1600x1200",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 606000,
+        "max": 123014000,
+        "median": 122408000,
+        "min": 119926000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 2293000,
+        "max": 143772000,
+        "median": 137924000,
+        "min": 135631000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.004199334900619522,
+        "max": 1.168745020891931,
+        "median": 1.130955756049564,
+        "min": 1.1267564211489445,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "texture-1600x1200",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 37000,
+        "max": 120851000,
+        "median": 120814000,
+        "min": 117794000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 1188000,
+        "max": 109278000,
+        "median": 104627000,
+        "min": 101539000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.02553127986784165,
+        "max": 0.911515940143136,
+        "median": 0.8659885116456157,
+        "min": 0.8404572317777741,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "texture-1600x1200",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 108000,
+        "max": 117834000,
+        "median": 117255000,
+        "min": 116883000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 1886000,
+        "max": 105542000,
+        "median": 103354000,
+        "min": 97056000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.01755356073838865,
+        "max": 0.9029713474157919,
+        "median": 0.8822590420582687,
+        "min": 0.8236671928305922,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 1600
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1338000,
+        "max": 471794000,
+        "median": 460548000,
+        "min": 459210000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 2836000,
+        "max": 442836000,
+        "median": 440000000,
+        "min": 435607000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.007223432911194205,
+        "max": 0.9581672872977505,
+        "median": 0.9458449499292148,
+        "min": 0.9386215170180205,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1064000,
+        "max": 379894000,
+        "median": 378293000,
+        "min": 377229000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 2888000,
+        "max": 368207000,
+        "median": 357361000,
+        "min": 354473000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.011583263313910352,
+        "max": 0.9760834930506403,
+        "median": 0.9446672288411364,
+        "min": 0.9330839655272261,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 3088000,
+        "max": 467276000,
+        "median": 461591000,
+        "min": 458503000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 2913000,
+        "max": 416092000,
+        "median": 412298000,
+        "min": 405629000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.010617236986766088,
+        "max": 0.9027090470064238,
+        "median": 0.8886091584784762,
+        "min": 0.8680715465806076,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1895000,
+        "max": 377990000,
+        "median": 375179000,
+        "min": 372645000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 1060000,
+        "max": 323517000,
+        "median": 317583000,
+        "min": 315437000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.0016034614417129722,
+        "max": 0.8681640703618726,
+        "median": 0.8410222492658536,
+        "min": 0.8394187878241406,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 2292000,
+        "max": 468287000,
+        "median": 461436000,
+        "min": 459144000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 2782000,
+        "max": 453128000,
+        "median": 448969000,
+        "min": 446187000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.010215241164438615,
+        "max": 0.9819953362979915,
+        "median": 0.9717800951335529,
+        "min": 0.9587475202173026,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1044000,
+        "max": 379713000,
+        "median": 378669000,
+        "min": 377146000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 2476000,
+        "max": 370157000,
+        "median": 367681000,
+        "min": 358158000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0038510511718317098,
+        "max": 0.9748336243425956,
+        "median": 0.9709825731707639,
+        "min": 0.9496534498576148,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1838000,
+        "max": 458695000,
+        "median": 456109000,
+        "min": 454052000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 459000,
+        "max": 411568000,
+        "median": 411109000,
+        "min": 397684000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.00940182761491326,
+        "max": 0.9064336243425863,
+        "median": 0.8970317967276731,
+        "min": 0.8719056190515864,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 383000,
+        "max": 374724000,
+        "median": 371991000,
+        "min": 370335000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 4191000,
+        "max": 326215000,
+        "median": 322024000,
+        "min": 315121000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.00998773821978971,
+        "max": 0.8765568110061668,
+        "median": 0.8665690727863771,
+        "min": 0.8424413701817871,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-3000x2000",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1160000,
+        "max": 417719000,
+        "median": 409965000,
+        "min": 408805000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 8596000,
+        "max": 360490000,
+        "median": 351894000,
+        "min": 342699000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.004123447719389217,
+        "max": 0.8793189662532167,
+        "median": 0.8424179891266617,
+        "min": 0.8382945414072724,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "texture-3000x2000",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 7488000,
+        "max": 422466000,
+        "median": 414978000,
+        "min": 404197000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 905000,
+        "max": 353761000,
+        "median": 352856000,
+        "min": 331055000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.016185659755746262,
+        "max": 0.8524813363599998,
+        "median": 0.8352293438998641,
+        "min": 0.8190436841441179,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "texture-3000x2000",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1041000,
+        "max": 401643000,
+        "median": 399163000,
+        "min": 395665000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 4719000,
+        "max": 304193000,
+        "median": 297540000,
+        "min": 292448000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.010077348620150084,
+        "max": 0.7620771464289025,
+        "median": 0.7519997978087524,
+        "min": 0.7332022945164266,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "texture-3000x2000",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1215000,
+        "max": 427692000,
+        "median": 422201000,
+        "min": 420986000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 1194000,
+        "max": 309734000,
+        "median": 304897000,
+        "min": 303703000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.0008905582167991755,
+        "max": 0.7241987224451241,
+        "median": 0.7222993461574908,
+        "min": 0.7205359532544925,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "texture-3000x2000",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1742000,
+        "max": 413530000,
+        "median": 411788000,
+        "min": 406122000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 8067000,
+        "max": 355951000,
+        "median": 343978000,
+        "min": 335911000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.017421586641914955,
+        "max": 0.8644035280289858,
+        "median": 0.8469819413870708,
+        "min": 0.8123014049766644,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "texture-3000x2000",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 9717000,
+        "max": 442679000,
+        "median": 413339000,
+        "min": 403622000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 4692000,
+        "max": 350521000,
+        "median": 345829000,
+        "min": 340885000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.008790997491345265,
+        "max": 0.8568140487882226,
+        "median": 0.8480230512968774,
+        "min": 0.7700500814359841,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "texture-3000x2000",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 355000,
+        "max": 398254000,
+        "median": 397899000,
+        "min": 395653000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 2754000,
+        "max": 302619000,
+        "median": 297243000,
+        "min": 294489000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.007581081684155722,
+        "max": 0.762068687641966,
+        "median": 0.747031281807695,
+        "min": 0.7394502001235392,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "texture-3000x2000",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1008000,
+        "max": 404888000,
+        "median": 403880000,
+        "min": 401050000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 2319000,
+        "max": 305485000,
+        "median": 300418000,
+        "min": 298099000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.007579331788677868,
+        "max": 0.7580002493454682,
+        "median": 0.7438298504506289,
+        "min": 0.736250518661951,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 3000
+    },
+    {
+      "case_id": "texture-512x512",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 17000,
+        "max": 21850000,
+        "median": 21833000,
+        "min": 21673000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 512,
+      "metal_ns": {
+        "mad": 2150000,
+        "max": 54410000,
+        "median": 51337000,
+        "min": 49187000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.11583351886443571,
+        "max": 2.4901601830663616,
+        "median": 2.3687076085451944,
+        "min": 2.2528740896807586,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "texture-512x512",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 146000,
+        "max": 21822000,
+        "median": 21519000,
+        "min": 21373000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 512,
+      "metal_ns": {
+        "mad": 1381000,
+        "max": 55928000,
+        "median": 54514000,
+        "min": 53133000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.012134169194948807,
+        "max": 2.599005529996747,
+        "median": 2.4981211621299604,
+        "min": 2.4859869929350116,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "texture-512x512",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 107000,
+        "max": 20989000,
+        "median": 20756000,
+        "min": 20481000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 694000,
+        "max": 22380000,
+        "median": 21332000,
+        "min": 20638000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.026645644649209932,
+        "max": 1.08129485864948,
+        "median": 1.0261129312006168,
+        "min": 0.9994672865514068,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "texture-512x512",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 91000,
+        "max": 20996000,
+        "median": 20842000,
+        "min": 20684000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 172000,
+        "max": 22564000,
+        "median": 20724000,
+        "min": 20064000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.002160935090906979,
+        "max": 1.0908915103461614,
+        "median": 0.9878548294913316,
+        "min": 0.9643835616438357,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "texture-512x512",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 23000,
+        "max": 21776000,
+        "median": 21753000,
+        "min": 21693000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 512,
+      "metal_ns": {
+        "mad": 42000,
+        "max": 55149000,
+        "median": 49182000,
+        "min": 49140000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.008184203453994954,
+        "max": 2.5325587803085967,
+        "median": 2.2671829622458857,
+        "min": 2.2589987587918907,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "texture-512x512",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 228000,
+        "max": 21588000,
+        "median": 21360000,
+        "min": 20986000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 512,
+      "metal_ns": {
+        "mad": 3009000,
+        "max": 58223000,
+        "median": 55214000,
+        "min": 48009000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.11208250318008561,
+        "max": 2.6970075968130445,
+        "median": 2.584925093632959,
+        "min": 2.287667969122272,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "texture-512x512",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 51000,
+        "max": 21189000,
+        "median": 21138000,
+        "min": 20688000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 581000,
+        "max": 21986000,
+        "median": 21047000,
+        "min": 20466000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.034644391226792415,
+        "max": 1.056167826759474,
+        "median": 1.00052291310135,
+        "min": 0.9658785218745576,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "texture-512x512",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 32000,
+        "max": 21327000,
+        "median": 21156000,
+        "min": 21040000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 592000,
+        "max": 22001000,
+        "median": 20437000,
+        "min": 19845000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.029300893284178064,
+        "max": 1.0415167581897369,
+        "median": 0.9648286280804457,
+        "min": 0.9355277347962676,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "hash-photo-texture-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "graphic-large",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 145000,
+        "max": 44997000,
+        "median": 44318000,
+        "min": 44173000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 710000,
+        "max": 98441000,
+        "median": 97731000,
+        "min": 96369000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.008781833239115855,
+        "max": 2.2212419333002393,
+        "median": 2.2124601000611235,
+        "min": 2.1416761117407828,
+        "n": 3
+      },
+      "method": 4,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 3000
+    },
+    {
+      "case_id": "graphic-large",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 244000,
+        "max": 48507000,
+        "median": 45646000,
+        "min": 45402000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 1307000,
+        "max": 102407000,
+        "median": 100370000,
+        "min": 99063000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.061596073658616746,
+        "max": 2.243504359637208,
+        "median": 2.1819082859785914,
+        "min": 2.069185890696188,
+        "n": 3
+      },
+      "method": 6,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 3000
+    },
+    {
+      "case_id": "graphic-medium",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 143000,
+        "max": 15149000,
+        "median": 15006000,
+        "min": 14788000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 297000,
+        "max": 36022000,
+        "median": 34693000,
+        "min": 34396000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0020316471294732352,
+        "max": 2.4358939680822287,
+        "median": 2.292149806743969,
+        "min": 2.290118159614496,
+        "n": 3
+      },
+      "method": 4,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 1600
+    },
+    {
+      "case_id": "graphic-medium",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 54000,
+        "max": 15423000,
+        "median": 15369000,
+        "min": 15088000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 18000,
+        "max": 35692000,
+        "median": 35674000,
+        "min": 32917000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.05018949023882113,
+        "max": 2.364395546129374,
+        "median": 2.314206055890553,
+        "min": 2.141778905589173,
+        "n": 3
+      },
+      "method": 6,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 1600
+    },
+    {
+      "case_id": "graphic-small",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 37000,
+        "max": 4108000,
+        "median": 3848000,
+        "min": 3811000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 512000,
+        "max": 11857000,
+        "median": 11345000,
+        "min": 10519000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.001516583088415402,
+        "max": 3.081340956340956,
+        "median": 2.761684518013632,
+        "min": 2.7601679349252164,
+        "n": 3
+      },
+      "method": 4,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 512
+    },
+    {
+      "case_id": "graphic-small",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 14000,
+        "max": 3965000,
+        "median": 3951000,
+        "min": 3902000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 246000,
+        "max": 15325000,
+        "median": 14857000,
+        "min": 14611000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.057534759230400745,
+        "max": 3.8650693568726355,
+        "median": 3.807534597642235,
+        "min": 3.69805112629714,
+        "n": 3
+      },
+      "method": 6,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 512
+    },
+    {
+      "case_id": "photo-large",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 229000,
+        "max": 998329000,
+        "median": 993301000,
+        "min": 993072000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 583000,
+        "max": 567141000,
+        "median": 566558000,
+        "min": 560066000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.003459597535537373,
+        "max": 0.5709659005679044,
+        "median": 0.567506303032367,
+        "min": 0.5639732063737574,
+        "n": 3
+      },
+      "method": 4,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 3000
+    },
+    {
+      "case_id": "photo-large",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 2914000,
+        "max": 1248530000,
+        "median": 1245616000,
+        "min": 1240629000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 1451000,
+        "max": 575527000,
+        "median": 569685000,
+        "min": 568234000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.002229601051568275,
+        "max": 0.46389936072750193,
+        "median": 0.4573520250221577,
+        "min": 0.45512242397058944,
+        "n": 3
+      },
+      "method": 6,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 3000
+    },
+    {
+      "case_id": "photo-medium",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 178000,
+        "max": 329532000,
+        "median": 329354000,
+        "min": 327350000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 2679000,
+        "max": 173438000,
+        "median": 169729000,
+        "min": 167050000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.007855739374645898,
+        "max": 0.5298243470291737,
+        "median": 0.5150607528252188,
+        "min": 0.5072050134505729,
+        "n": 3
+      },
+      "method": 4,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 1600
+    },
+    {
+      "case_id": "photo-medium",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1757000,
+        "max": 478119000,
+        "median": 472896000,
+        "min": 471139000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 553000,
+        "max": 248340000,
+        "median": 247787000,
+        "min": 245122000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 8.847552508417511e-05,
+        "max": 0.5271055887965123,
+        "median": 0.5183422993639193,
+        "min": 0.5182538238388351,
+        "n": 3
+      },
+      "method": 6,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 1600
+    },
+    {
+      "case_id": "photo-small",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 748000,
+        "max": 73265000,
+        "median": 72440000,
+        "min": 71692000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 999000,
+        "max": 43601000,
+        "median": 42339000,
+        "min": 41340000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.007836530020300048,
+        "max": 0.595113628608476,
+        "median": 0.5844699061292103,
+        "min": 0.5766333761089103,
+        "n": 3
+      },
+      "method": 4,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 512
+    },
+    {
+      "case_id": "photo-small",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 396000,
+        "max": 330439000,
+        "median": 329876000,
+        "min": 329480000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 4188000,
+        "max": 310954000,
+        "median": 302648000,
+        "min": 298460000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.013798369032764102,
+        "max": 0.9410329894473716,
+        "median": 0.9185625834648538,
+        "min": 0.9047642144320897,
+        "n": 3
+      },
+      "method": 6,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 512
+    },
+    {
+      "case_id": "texture-large",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 812000,
+        "max": 401030000,
+        "median": 400218000,
+        "min": 399148000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 5622000,
+        "max": 307314000,
+        "median": 296870000,
+        "min": 291248000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.010594601760958389,
+        "max": 0.767866512750551,
+        "median": 0.7402688078198638,
+        "min": 0.7296742060589054,
+        "n": 3
+      },
+      "method": 4,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 3000
+    },
+    {
+      "case_id": "texture-large",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 383000,
+        "max": 411678000,
+        "median": 408396000,
+        "min": 408013000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2000,
+      "metal_ns": {
+        "mad": 1825000,
+        "max": 304403000,
+        "median": 297913000,
+        "min": 296088000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.00202737896073224,
+        "max": 0.7453623443912282,
+        "median": 0.7256827601081338,
+        "min": 0.7236553811474016,
+        "n": 3
+      },
+      "method": 6,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 3000
+    },
+    {
+      "case_id": "texture-medium",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 485000,
+        "max": 121842000,
+        "median": 121357000,
+        "min": 120615000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 2760000,
+        "max": 106297000,
+        "median": 103537000,
+        "min": 100429000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.017494339275386017,
+        "max": 0.8759033265489424,
+        "median": 0.8584089872735564,
+        "min": 0.824256003676893,
+        "n": 3
+      },
+      "method": 4,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 1600
+    },
+    {
+      "case_id": "texture-medium",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 329000,
+        "max": 119968000,
+        "median": 119639000,
+        "min": 118908000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 1200,
+      "metal_ns": {
+        "mad": 1651000,
+        "max": 102249000,
+        "median": 100598000,
+        "min": 97349000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.011456068252659324,
+        "max": 0.8523022806081622,
+        "median": 0.8408462123555028,
+        "min": 0.8186917616981195,
+        "n": 3
+      },
+      "method": 6,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 1600
+    },
+    {
+      "case_id": "texture-small",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 24000,
+        "max": 21164000,
+        "median": 21140000,
+        "min": 21106000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 188000,
+        "max": 22262000,
+        "median": 22074000,
+        "min": 21633000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.01177361212422312,
+        "max": 1.0547711551217662,
+        "median": 1.042997542997543,
+        "min": 1.0233207190160833,
+        "n": 3
+      },
+      "method": 4,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 512
+    },
+    {
+      "case_id": "texture-small",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 27000,
+        "max": 21745000,
+        "median": 21508000,
+        "min": 21481000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 92000,
+        "max": 22420000,
+        "median": 22328000,
+        "min": 22148000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.005587700033289789,
+        "max": 1.0437130487407476,
+        "median": 1.0381253487074578,
+        "min": 1.0185329960910554,
+        "n": 3
+      },
+      "method": 6,
+      "role": "guard",
+      "section_id": "item1-warm-end-to-end-guards",
+      "width": 512
+    },
+    {
+      "case_id": "graphic-2048x2048",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 608500.0,
+        "max": 94283000,
+        "median": 93674500.0,
+        "min": 93066000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 3584000.0,
+        "max": 132492000,
+        "median": 128908000.0,
+        "min": 125324000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.047201317310786695,
+        "max": 1.423634839791116,
+        "median": 1.3764335224803292,
+        "min": 1.3292322051695427,
+        "n": 2
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "graphic-2048x2048",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 526000.0,
+        "max": 93057000,
+        "median": 92531000.0,
+        "min": 92005000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 2547500.0,
+        "max": 123738000,
+        "median": 121190500.0,
+        "min": 118643000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.03497770311176829,
+        "max": 1.3449051681973805,
+        "median": 1.3099274650856123,
+        "min": 1.274949761973844,
+        "n": 2
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "graphic-2048x2048",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 188000,
+        "max": 94182000,
+        "median": 93485000,
+        "min": 93297000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 1370000,
+        "max": 95355000,
+        "median": 91928000,
+        "min": 90558000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.012702778811009008,
+        "max": 1.0124546091609863,
+        "median": 0.9833449216451837,
+        "min": 0.9706421428341747,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "graphic-2048x2048",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 78000,
+        "max": 92099000,
+        "median": 92021000,
+        "min": 91027000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 299000,
+        "max": 92153000,
+        "median": 91854000,
+        "min": 90465000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0024011287271863413,
+        "max": 1.0005863255844254,
+        "median": 0.998185196857239,
+        "min": 0.9938260076680545,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "graphic-2048x2048",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 450000.0,
+        "max": 104964000,
+        "median": 104514000.0,
+        "min": 104064000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 3106500.0,
+        "max": 136414000,
+        "median": 133307500.0,
+        "min": 130201000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.02423189631015288,
+        "max": 1.299626538622766,
+        "median": 1.275394642312613,
+        "min": 1.2511627460024601,
+        "n": 2
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "graphic-2048x2048",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 213000.0,
+        "max": 105502000,
+        "median": 105289000.0,
+        "min": 105076000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 3260000.0,
+        "max": 145356000,
+        "median": 142096000.0,
+        "min": 138836000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.028232308036846065,
+        "max": 1.3777558719265985,
+        "median": 1.3495235638897525,
+        "min": 1.3212912558529064,
+        "n": 2
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "graphic-2048x2048",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 40000,
+        "max": 103887000,
+        "median": 103794000,
+        "min": 103754000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 871000,
+        "max": 101756000,
+        "median": 100885000,
+        "min": 98825000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.007513995785260463,
+        "max": 0.9794873275770789,
+        "median": 0.9719733317918184,
+        "min": 0.9524933978449024,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "graphic-2048x2048",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 327000,
+        "max": 105439000,
+        "median": 105112000,
+        "min": 103446000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 2598000,
+        "max": 111672000,
+        "median": 103935000,
+        "min": 101337000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.02770643112539095,
+        "max": 1.0795197494344875,
+        "median": 0.9888024202755157,
+        "min": 0.9610959891501247,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "graphic-4096x4096",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 4130000.0,
+        "max": 381858000,
+        "median": 377728000.0,
+        "min": 373598000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 10784000.0,
+        "max": 420448000,
+        "median": 409664000.0,
+        "min": 398880000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.016693420091202338,
+        "max": 1.1010585086602873,
+        "median": 1.084365088569085,
+        "min": 1.0676716684778826,
+        "n": 2
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "graphic-4096x4096",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 1061500.0,
+        "max": 375515000,
+        "median": 374453500.0,
+        "min": 373392000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 2702500.0,
+        "max": 396261000,
+        "median": 393558500.0,
+        "min": 390856000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.010196698648523683,
+        "max": 1.0612466255302737,
+        "median": 1.05104992688175,
+        "min": 1.0408532282332263,
+        "n": 2
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "graphic-4096x4096",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 4330000,
+        "max": 381340000,
+        "median": 375515000,
+        "min": 371185000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 187000,
+        "max": 369756000,
+        "median": 369544000,
+        "min": 369357000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.010915295457296192,
+        "max": 0.9955790239368509,
+        "median": 0.9846637284795547,
+        "min": 0.9685765983112183,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "graphic-4096x4096",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 890000,
+        "max": 364584000,
+        "median": 363180000,
+        "min": 362290000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 1081000,
+        "max": 356879000,
+        "median": 351609000,
+        "min": 350528000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0006054696756438993,
+        "max": 0.9788663243587211,
+        "median": 0.968139765405584,
+        "min": 0.9675342957299401,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "graphic-4096x4096",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 2402500.0,
+        "max": 405311000,
+        "median": 402908500.0,
+        "min": 400506000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 4761000.0,
+        "max": 434624000,
+        "median": 429863000.0,
+        "min": 425102000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.01817903372876717,
+        "max": 1.0851872381437482,
+        "median": 1.067008204414981,
+        "min": 1.0488291706862138,
+        "n": 2
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "graphic-4096x4096",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 1383000.0,
+        "max": 408595000,
+        "median": 407212000.0,
+        "min": 405829000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 1778000.0,
+        "max": 444727000,
+        "median": 442949000.0,
+        "min": 441171000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.008060691226341121,
+        "max": 1.0958482513570986,
+        "median": 1.0877875601307574,
+        "min": 1.0797268689044164,
+        "n": 2
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "graphic-4096x4096",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 999000,
+        "max": 403556000,
+        "median": 401717000,
+        "min": 400718000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 2721000,
+        "max": 402259000,
+        "median": 393466000,
+        "min": 390745000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.004348491446778069,
+        "max": 0.9967860718215068,
+        "median": 0.9794606650950793,
+        "min": 0.9751121736483013,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "graphic-4096x4096",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 84000,
+        "max": 406192000,
+        "median": 406108000,
+        "min": 402727000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 3322000,
+        "max": 404584000,
+        "median": 395518000,
+        "min": 392196000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 7.24204858134625e-05,
+        "max": 0.9960412809705755,
+        "median": 0.973923192845253,
+        "min": 0.9738507723594395,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "graphic-6144x6144",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 3630000.0,
+        "max": 811404000,
+        "median": 807774000.0,
+        "min": 804144000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 6998500.0,
+        "max": 831270000,
+        "median": 824271500.0,
+        "min": 817273000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.004078405035658594,
+        "max": 1.0244834878802669,
+        "median": 1.0204050828446083,
+        "min": 1.0163266778089497,
+        "n": 2
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "graphic-6144x6144",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 2456500.0,
+        "max": 824772000,
+        "median": 822315500.0,
+        "min": 819859000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 1077500.0,
+        "max": 842309000,
+        "median": 841231500.0,
+        "min": 840154000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0017457052750974311,
+        "max": 1.0247542565245975,
+        "median": 1.0230085512495002,
+        "min": 1.0212628459744026,
+        "n": 2
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "graphic-6144x6144",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 2954000,
+        "max": 810423000,
+        "median": 807469000,
+        "min": 804230000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 5345000,
+        "max": 806184000,
+        "median": 785759000,
+        "min": 780414000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.002726937955875086,
+        "max": 0.9947693982031606,
+        "median": 0.973113518909085,
+        "min": 0.97038658095321,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "graphic-6144x6144",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 8000,
+        "max": 818006000,
+        "median": 814113000,
+        "min": 814105000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 6065000,
+        "max": 804093000,
+        "median": 798028000,
+        "min": 790970000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0027396341945652436,
+        "max": 0.9829915672990174,
+        "median": 0.9802519331044521,
+        "min": 0.9715727423588617,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "graphic-6144x6144",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 8810000.0,
+        "max": 891340000,
+        "median": 882530000.0,
+        "min": 873720000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 676000.0,
+        "max": 904816000,
+        "median": 904140000.0,
+        "min": 903464000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.00946206646872938,
+        "max": 1.0340429428192097,
+        "median": 1.0245808763504805,
+        "min": 1.015118809881751,
+        "n": 2
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "graphic-6144x6144",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 2730000.0,
+        "max": 893552000,
+        "median": 890822000.0,
+        "min": 888092000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 4547500.0,
+        "max": 914841000,
+        "median": 910293500.0,
+        "min": 905746000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.001973283592662134,
+        "max": 1.0238251383243504,
+        "median": 1.0218518547316884,
+        "min": 1.0198785711390261,
+        "n": 2
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "graphic-6144x6144",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 369000,
+        "max": 872951000,
+        "median": 867976000,
+        "min": 867607000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 2503000,
+        "max": 861059000,
+        "median": 858556000,
+        "min": 852518000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.002463028310279114,
+        "max": 0.9920308856466077,
+        "median": 0.9895678573363286,
+        "min": 0.9765931879338016,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "graphic-6144x6144",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 1587000,
+        "max": 882836000,
+        "median": 879536000,
+        "min": 877949000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 7284000,
+        "max": 879083000,
+        "median": 866585000,
+        "min": 859301000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.004598726469266068,
+        "max": 1.0012916467813051,
+        "median": 0.9815922776144154,
+        "min": 0.9769935511451493,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "graphic-8192x8192",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 401000.0,
+        "max": 1569624000,
+        "median": 1569223000.0,
+        "min": 1568822000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 11380000.0,
+        "max": 1590222000,
+        "median": 1578842000.0,
+        "min": 1567462000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.006994890256447395,
+        "max": 1.0131228880292351,
+        "median": 1.0061279977727877,
+        "min": 0.9991331075163403,
+        "n": 2
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "graphic-8192x8192",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 13525500.0,
+        "max": 1579626000,
+        "median": 1566100500.0,
+        "min": 1552575000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 17366500.0,
+        "max": 1600420000,
+        "median": 1583053500.0,
+        "min": 1565687000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.002359275398566618,
+        "max": 1.0131638754996435,
+        "median": 1.0108046001010769,
+        "min": 1.0084453247025102,
+        "n": 2
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "graphic-8192x8192",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 305000,
+        "max": 1564210000,
+        "median": 1563905000,
+        "min": 1555334000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 3183000,
+        "max": 1548406000,
+        "median": 1545223000,
+        "min": 1536951000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.003409594045841513,
+        "max": 0.9934991455211549,
+        "median": 0.9900895514753134,
+        "min": 0.9825733117676015,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "graphic-8192x8192",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 1477000,
+        "max": 1543215000,
+        "median": 1541738000,
+        "min": 1537690000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 1244000,
+        "max": 1528894000,
+        "median": 1522484000,
+        "min": 1521240000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0006088820724446942,
+        "max": 0.9907200228095243,
+        "median": 0.9901111407370796,
+        "min": 0.9867046151810489,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "graphic-8192x8192",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 5793500.0,
+        "max": 1551288000,
+        "median": 1545494500.0,
+        "min": 1539701000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 6374500.0,
+        "max": 1574138000,
+        "median": 1567763500.0,
+        "min": 1561389000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0003219219242214244,
+        "max": 1.0147296955819938,
+        "median": 1.0144077736577723,
+        "min": 1.014085851733551,
+        "n": 2
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "graphic-8192x8192",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 13153000.0,
+        "max": 1579736000,
+        "median": 1566583000.0,
+        "min": 1553430000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 12220500.0,
+        "max": 1593504000,
+        "median": 1581283500.0,
+        "min": 1569063000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0006740782635669129,
+        "max": 1.0100635368185242,
+        "median": 1.0093894585549572,
+        "min": 1.0087153802913904,
+        "n": 2
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "graphic-8192x8192",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 1376000,
+        "max": 1535315000,
+        "median": 1529591000,
+        "min": 1528215000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 4089000,
+        "max": 1513624000,
+        "median": 1509535000,
+        "min": 1504361000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.00029673707256960835,
+        "max": 0.9904522596624166,
+        "median": 0.9835053945793353,
+        "min": 0.9832086575067657,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "graphic-8192x8192",
+      "content": "graphic",
+      "cpu_ns": {
+        "mad": 1020000,
+        "max": 1557438000,
+        "median": 1551493000,
+        "min": 1550473000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 5686000,
+        "max": 1528952000,
+        "median": 1523266000,
+        "min": 1516384000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.004313162943040849,
+        "max": 0.9861197195952461,
+        "median": 0.9818065566522053,
+        "min": 0.9736400421718232,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "photo-10240x10240",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 30913000.0,
+        "max": 4512551000,
+        "median": 4481638000.0,
+        "min": 4450725000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 10240,
+      "metal_ns": {
+        "mad": 22468000.0,
+        "max": 4499083000,
+        "median": 4476615000.0,
+        "min": 4454147000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.001876714053174855,
+        "max": 1.000768863499767,
+        "median": 0.9988921494465921,
+        "min": 0.9970154353934172,
+        "n": 2
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 10240
+    },
+    {
+      "case_id": "photo-10240x10240",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 73284500.0,
+        "max": 17262339000,
+        "median": 17189054500.0,
+        "min": 17115770000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 10240,
+      "metal_ns": {
+        "mad": 92113500.0,
+        "max": 17302208000,
+        "median": 17210094500.0,
+        "min": 17117981000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0010902076000961491,
+        "max": 1.002309594313957,
+        "median": 1.0012193867138608,
+        "min": 1.0001291791137648,
+        "n": 2
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 10240
+    },
+    {
+      "case_id": "photo-10240x10240",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 232000,
+        "max": 4395972000,
+        "median": 4376284000,
+        "min": 4376052000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 10240,
+      "metal_ns": {
+        "mad": 2767000,
+        "max": 4360639000,
+        "median": 4353964000,
+        "min": 4351197000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0005795596694113669,
+        "max": 0.9948997825552455,
+        "median": 0.9943202228858341,
+        "min": 0.9919624146832601,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 10240
+    },
+    {
+      "case_id": "photo-10240x10240",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 6932000,
+        "max": 17252818000,
+        "median": 17239392000,
+        "min": 17232460000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 10240,
+      "metal_ns": {
+        "mad": 1002000,
+        "max": 17228176000,
+        "median": 17227174000,
+        "min": 17212364000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0002621171268951672,
+        "max": 0.999291274309442,
+        "median": 0.9988338287162715,
+        "min": 0.9985717115893763,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 10240
+    },
+    {
+      "case_id": "photo-10240x10240",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 5625500.0,
+        "max": 8002043000,
+        "median": 7996417500.0,
+        "min": 7990792000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 10240,
+      "metal_ns": {
+        "mad": 9815500.0,
+        "max": 8002699000,
+        "median": 7992883500.0,
+        "min": 7983068000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0005242958178328094,
+        "max": 1.0000819790645963,
+        "median": 0.9995576832467634,
+        "min": 0.9990333874289307,
+        "n": 2
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 10240
+    },
+    {
+      "case_id": "photo-10240x10240",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 23457500.0,
+        "max": 7796174000,
+        "median": 7772716500.0,
+        "min": 7749259000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 10240,
+      "metal_ns": {
+        "mad": 533500.0,
+        "max": 7776033000,
+        "median": 7775499500.0,
+        "min": 7774966000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0029503980701913735,
+        "max": 1.0033173494394754,
+        "median": 1.0003669513692839,
+        "min": 0.9974165532990926,
+        "n": 2
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 10240
+    },
+    {
+      "case_id": "photo-10240x10240",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1724000,
+        "max": 7975647000,
+        "median": 7964267000,
+        "min": 7962543000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 10240,
+      "metal_ns": {
+        "mad": 14828000,
+        "max": 7942288000,
+        "median": 7913840000,
+        "min": 7899012000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.00022926708136217222,
+        "max": 0.9972402984480555,
+        "median": 0.9922505346588183,
+        "min": 0.9920212675774561,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 10240
+    },
+    {
+      "case_id": "photo-10240x10240",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 12145000,
+        "max": 7749816000,
+        "median": 7733099000,
+        "min": 7720954000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 10240,
+      "metal_ns": {
+        "mad": 855000,
+        "max": 7719614000,
+        "median": 7688770000,
+        "min": 7687915000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0022550434665373764,
+        "max": 0.9998264463173852,
+        "median": 0.9942676280233836,
+        "min": 0.9920125845568463,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 10240
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 452000.0,
+        "max": 180814000,
+        "median": 180362000.0,
+        "min": 179910000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 1336500.0,
+        "max": 215929000,
+        "median": 214592500.0,
+        "min": 213256000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.010391855484585877,
+        "max": 1.200205658384748,
+        "median": 1.1898138029001621,
+        "min": 1.1794219474155763,
+        "n": 2
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 264000.0,
+        "max": 213176000,
+        "median": 212912000.0,
+        "min": 212648000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 2657000.0,
+        "max": 243677000,
+        "median": 241020000.0,
+        "min": 238363000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.01388299874223331,
+        "max": 1.145917196493736,
+        "median": 1.1320341977515027,
+        "min": 1.1181511990092694,
+        "n": 2
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 93000,
+        "max": 182071000,
+        "median": 181482000,
+        "min": 181389000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 1860000,
+        "max": 183209000,
+        "median": 181349000,
+        "min": 177860000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.010766539561276822,
+        "max": 1.0100336845122913,
+        "median": 0.9992671449510144,
+        "min": 0.97687165995683,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 0,
+        "max": 215738000,
+        "median": 212493000,
+        "min": 212493000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 252000,
+        "max": 211905000,
+        "median": 211653000,
+        "min": 210830000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.005058990178499978,
+        "max": 0.9972328500232949,
+        "median": 0.9921738598447949,
+        "min": 0.9810649955038055,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 5119000.0,
+        "max": 331061000,
+        "median": 325942000.0,
+        "min": 320823000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 4541500.0,
+        "max": 362819000,
+        "median": 358277500.0,
+        "min": 353736000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.03120446502882357,
+        "max": 1.1309008394036588,
+        "median": 1.0996963743748354,
+        "min": 1.0684919093460117,
+        "n": 2
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1261500.0,
+        "max": 328703000,
+        "median": 327441500.0,
+        "min": 326180000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 1387000.0,
+        "max": 360891000,
+        "median": 359504000.0,
+        "min": 358117000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.008465832895108383,
+        "max": 1.1064167024342388,
+        "median": 1.0979508695391305,
+        "min": 1.089485036644022,
+        "n": 2
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1215000,
+        "max": 320632000,
+        "median": 319359000,
+        "min": 318144000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 879000,
+        "max": 326443000,
+        "median": 322359000,
+        "min": 321480000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.008933215623052382,
+        "max": 1.0221819331849111,
+        "median": 1.0132487175618587,
+        "min": 1.0026447765662816,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-2048x2048",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1186000,
+        "max": 327916000,
+        "median": 326538000,
+        "min": 325352000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 2388000,
+        "max": 332420000,
+        "median": 326346000,
+        "min": 323958000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0005032212842749351,
+        "max": 1.018013217450955,
+        "median": 0.9957154097715705,
+        "min": 0.9952121884872955,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "photo-4096x4096",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 4998000.0,
+        "max": 724723000,
+        "median": 719725000.0,
+        "min": 714727000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 4107000.0,
+        "max": 756910000,
+        "median": 752803000.0,
+        "min": 748696000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0015572034196341678,
+        "max": 1.047527237672566,
+        "median": 1.0459700342529317,
+        "min": 1.0444128308332976,
+        "n": 2
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "photo-4096x4096",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 586500.0,
+        "max": 848260000,
+        "median": 847673500.0,
+        "min": 847087000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 594500.0,
+        "max": 876114000,
+        "median": 875519500.0,
+        "min": 874925000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0014159544306379113,
+        "max": 1.0342668462625444,
+        "median": 1.0328508918319064,
+        "min": 1.0314349374012686,
+        "n": 2
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "photo-4096x4096",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 313000,
+        "max": 712374000,
+        "median": 712061000,
+        "min": 709761000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 825000,
+        "max": 707119000,
+        "median": 706294000,
+        "min": 704633000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.00015177583755632273,
+        "max": 0.9927750327222826,
+        "median": 0.9926232568847263,
+        "min": 0.9919009747760374,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "photo-4096x4096",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 482000,
+        "max": 844281000,
+        "median": 842917000,
+        "min": 842435000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 6930000,
+        "max": 844467000,
+        "median": 837537000,
+        "min": 829462000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.007411545808276854,
+        "max": 1.0018388524611557,
+        "median": 0.9920121381388424,
+        "min": 0.9846005923305655,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "photo-4096x4096",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 5172000.0,
+        "max": 1286887000,
+        "median": 1281715000.0,
+        "min": 1276543000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 3505000.0,
+        "max": 1311494000,
+        "median": 1307989000.0,
+        "min": 1304484000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0013833420064441881,
+        "max": 1.0218880210067347,
+        "median": 1.0205046790002905,
+        "min": 1.0191213369938463,
+        "n": 2
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "photo-4096x4096",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1701500.0,
+        "max": 1280428000,
+        "median": 1278726500.0,
+        "min": 1277025000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 9418500.0,
+        "max": 1320357000,
+        "median": 1310938500.0,
+        "min": 1301520000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.006001401888712454,
+        "max": 1.0311841040652032,
+        "median": 1.0251827021764908,
+        "min": 1.0191813002877783,
+        "n": 2
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "photo-4096x4096",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1587000,
+        "max": 1269469000,
+        "median": 1267882000,
+        "min": 1265487000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 3860000,
+        "max": 1273039000,
+        "median": 1269179000,
+        "min": 1263248000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0015408373661104369,
+        "max": 1.0040674132135325,
+        "median": 0.9997715580293808,
+        "min": 0.9982307206632703,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "photo-4096x4096",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1624000,
+        "max": 1278600000,
+        "median": 1276976000,
+        "min": 1274411000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 854000,
+        "max": 1282971000,
+        "median": 1276413000,
+        "min": 1275559000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0026112728655933726,
+        "max": 1.0046946849431782,
+        "median": 1.0009008082949693,
+        "min": 0.9982895354293759,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "photo-6144x6144",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 13724500.0,
+        "max": 1628574000,
+        "median": 1614849500.0,
+        "min": 1601125000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 16386000.0,
+        "max": 1658771000,
+        "median": 1642385000.0,
+        "min": 1625999000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0015033307718193,
+        "max": 1.0185419882670361,
+        "median": 1.0170386574952168,
+        "min": 1.0155353267233975,
+        "n": 2
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "photo-6144x6144",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 34723500.0,
+        "max": 6278528000,
+        "median": 6243804500.0,
+        "min": 6209081000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 8000000.0,
+        "max": 6243677000,
+        "median": 6235677000.0,
+        "min": 6227677000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0042728957770794,
+        "max": 1.0029949681764498,
+        "median": 0.9987220723993704,
+        "min": 0.994449176622291,
+        "n": 2
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "photo-6144x6144",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1372000,
+        "max": 1609519000,
+        "median": 1608147000,
+        "min": 1605933000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 2010000,
+        "max": 1602901000,
+        "median": 1593325000,
+        "min": 1591315000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0034593233853695837,
+        "max": 0.9967378604070399,
+        "median": 0.9921491120737914,
+        "min": 0.9886897886884218,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "photo-6144x6144",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 2323000,
+        "max": 6313573000,
+        "median": 6308842000,
+        "min": 6306519000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 3888000,
+        "max": 6304659000,
+        "median": 6294314000,
+        "min": 6290426000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.001363428514126297,
+        "max": 0.9997050670901015,
+        "median": 0.99769720021519,
+        "min": 0.9963337717010637,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "photo-6144x6144",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1543500.0,
+        "max": 2854327000,
+        "median": 2852783500.0,
+        "min": 2851240000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 2744500.0,
+        "max": 2879191000,
+        "median": 2876446500.0,
+        "min": 2873702000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0015075816785555807,
+        "max": 1.0098031032112345,
+        "median": 1.0082955215326788,
+        "min": 1.0067879398541233,
+        "n": 2
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "photo-6144x6144",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 6165000.0,
+        "max": 2824310000,
+        "median": 2818145000.0,
+        "min": 2811980000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 6618000.0,
+        "max": 2842070000,
+        "median": 2835452000.0,
+        "min": 2828834000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.00014731003332058012,
+        "max": 1.0062882615576902,
+        "median": 1.0061409515243698,
+        "min": 1.005993641491049,
+        "n": 2
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "photo-6144x6144",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 243000,
+        "max": 2861263000,
+        "median": 2844375000,
+        "min": 2844132000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 2324000,
+        "max": 2852386000,
+        "median": 2837439000,
+        "min": 2835115000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 6.791123535410115e-05,
+        "max": 0.997561502966381,
+        "median": 0.996897523925623,
+        "min": 0.9968296126902689,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "photo-6144x6144",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 3929000,
+        "max": 2820193000,
+        "median": 2806314000,
+        "min": 2802385000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 1083000,
+        "max": 2804468000,
+        "median": 2800110000,
+        "min": 2799027000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.00015400614316429806,
+        "max": 0.9993421976300585,
+        "median": 0.9991881914868942,
+        "min": 0.9924948398921634,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "photo-8192x8192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 26219000.0,
+        "max": 2887487000,
+        "median": 2861268000.0,
+        "min": 2835049000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 29692000.0,
+        "max": 2912679000,
+        "median": 2882987000.0,
+        "min": 2853295000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0011443369225309086,
+        "max": 1.0087245414438228,
+        "median": 1.0075802045212918,
+        "min": 1.006435867598761,
+        "n": 2
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "photo-8192x8192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 83219500.0,
+        "max": 11224567000,
+        "median": 11141347500.0,
+        "min": 11058128000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 91147000.0,
+        "max": 11230585000,
+        "median": 11139438000.0,
+        "min": 11048291000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0007128586545225857,
+        "max": 1.0005361454032036,
+        "median": 0.9998232867486809,
+        "min": 0.9991104280941584,
+        "n": 2
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "photo-8192x8192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1525000,
+        "max": 2824684000,
+        "median": 2823159000,
+        "min": 2815069000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 3650000,
+        "max": 2812147000,
+        "median": 2805610000,
+        "min": 2801960000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.00021835164690930942,
+        "max": 0.995561627424519,
+        "median": 0.9953432757776097,
+        "min": 0.9937839136938443,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "photo-8192x8192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1955000,
+        "max": 11071012000,
+        "median": 11017651000,
+        "min": 11015696000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 13057000,
+        "max": 11016034000,
+        "median": 10933362000,
+        "min": 10920305000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.006138513328100448,
+        "max": 0.9998532355036477,
+        "median": 0.9925257559758367,
+        "min": 0.9863872426477363,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "photo-8192x8192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 26875000.0,
+        "max": 5131971000,
+        "median": 5105096000.0,
+        "min": 5078221000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 32512000.0,
+        "max": 5139374000,
+        "median": 5106862000.0,
+        "min": 5074350000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0011024002543651434,
+        "max": 1.0014425256884734,
+        "median": 1.0003401254341082,
+        "min": 0.9992377251797431,
+        "n": 2
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "photo-8192x8192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 41987500.0,
+        "max": 5058030000,
+        "median": 5016042500.0,
+        "min": 4974055000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 46867500.0,
+        "max": 5074375000,
+        "median": 5027507500.0,
+        "min": 4980640000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0009538128534004597,
+        "max": 1.0032314952659434,
+        "median": 1.0022776824125428,
+        "min": 1.0013238695591424,
+        "n": 2
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "photo-8192x8192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 2112000,
+        "max": 5045363000,
+        "median": 5043251000,
+        "min": 5030339000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 385000,
+        "max": 5012479000,
+        "median": 5005705000,
+        "min": 5005320000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0009271331754870937,
+        "max": 0.9950263789378807,
+        "median": 0.9934823321929462,
+        "min": 0.9925551990174591,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "photo-8192x8192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 445000,
+        "max": 4982749000,
+        "median": 4981706000,
+        "min": 4981261000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 8192,
+      "metal_ns": {
+        "mad": 3988000,
+        "max": 4963615000,
+        "median": 4953240000,
+        "min": 4949252000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0008893533157752209,
+        "max": 0.9961599510631581,
+        "median": 0.9943747175664958,
+        "min": 0.9934853642507205,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 8192
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 4874000.0,
+        "max": 382286000,
+        "median": 377412000.0,
+        "min": 372538000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 917500.0,
+        "max": 406739000,
+        "median": 405821500.0,
+        "min": 404904000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.01145726443771744,
+        "max": 1.0868797277056301,
+        "median": 1.0754224632679126,
+        "min": 1.0639651988301952,
+        "n": 2
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 787000.0,
+        "max": 382043000,
+        "median": 381256000.0,
+        "min": 380469000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 1676000.0,
+        "max": 410872000,
+        "median": 409196000.0,
+        "min": 407520000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0021805006648309977,
+        "max": 1.0754600921885755,
+        "median": 1.0732795915237445,
+        "min": 1.0710990908589135,
+        "n": 2
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1038000,
+        "max": 378073000,
+        "median": 376595000,
+        "min": 375557000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 94000,
+        "max": 378859000,
+        "median": 374664000,
+        "min": 374570000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.002999327771312177,
+        "max": 1.0020789635863974,
+        "median": 0.9976221984945028,
+        "min": 0.9946228707231907,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 495000,
+        "max": 373475000,
+        "median": 370464000,
+        "min": 369969000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 1483000,
+        "max": 373009000,
+        "median": 371526000,
+        "min": 368332000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0031769542293790254,
+        "max": 1.002866675304483,
+        "median": 0.998752259187362,
+        "min": 0.995575304957983,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1778500.0,
+        "max": 950604000,
+        "median": 948825500.0,
+        "min": 947047000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 8094000.0,
+        "max": 987929000,
+        "median": 979835000.0,
+        "min": 971741000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.010466265714695555,
+        "max": 1.0431678681205896,
+        "median": 1.032701602405894,
+        "min": 1.0222353366911985,
+        "n": 2
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 6823000.0,
+        "max": 955007000,
+        "median": 948184000.0,
+        "min": 941361000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 372000.0,
+        "max": 981948000,
+        "median": 981576000.0,
+        "min": 981204000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.007057312374517344,
+        "max": 1.0423248891764159,
+        "median": 1.0352675768018984,
+        "min": 1.0282102644273812,
+        "n": 2
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 3901000,
+        "max": 940506000,
+        "median": 931368000,
+        "min": 927467000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 644000,
+        "max": 939025000,
+        "median": 936554000,
+        "min": 935910000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.006893745402100082,
+        "max": 1.0124618989139236,
+        "median": 1.0055681535118235,
+        "min": 0.9951132688148719,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-2048x2048",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1620000,
+        "max": 943765000,
+        "median": 942145000,
+        "min": 938014000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 2048,
+      "metal_ns": {
+        "mad": 277000,
+        "max": 942007000,
+        "median": 941730000,
+        "min": 941282000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0012402622350775605,
+        "max": 1.0042568661022118,
+        "median": 0.9990840051159854,
+        "min": 0.9978437428809078,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 2048
+    },
+    {
+      "case_id": "texture-4096x4096",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 21035000.0,
+        "max": 1546010000,
+        "median": 1524975000.0,
+        "min": 1503940000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 21110000.0,
+        "max": 1571801000,
+        "median": 1550691000.0,
+        "min": 1529581000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.00018345954280851728,
+        "max": 1.0170492173889916,
+        "median": 1.016865757846183,
+        "min": 1.0166822983033745,
+        "n": 2
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "texture-4096x4096",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 13317500.0,
+        "max": 1531644000,
+        "median": 1518326500.0,
+        "min": 1505009000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 12045000.0,
+        "max": 1562565000,
+        "median": 1550520000.0,
+        "min": 1538475000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0010241501387717733,
+        "max": 1.0222364118752778,
+        "median": 1.021212261736506,
+        "min": 1.0201881115977343,
+        "n": 2
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "texture-4096x4096",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 300000,
+        "max": 1504106000,
+        "median": 1503806000,
+        "min": 1499901000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 2410000,
+        "max": 1510787000,
+        "median": 1501356000,
+        "min": 1498946000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0034717771757961646,
+        "max": 1.0044418412000218,
+        "median": 1.0009700640242256,
+        "min": 0.9967682001534772,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "texture-4096x4096",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 2626000,
+        "max": 1477575000,
+        "median": 1468270000,
+        "min": 1465644000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 1906000,
+        "max": 1475857000,
+        "median": 1469924000,
+        "min": 1468018000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.00099108537817294,
+        "max": 1.0029202180065555,
+        "median": 0.9998283694415877,
+        "min": 0.9988372840634148,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "texture-4096x4096",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 657000.0,
+        "max": 3752683000,
+        "median": 3752026000.0,
+        "min": 3751369000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 6881500.0,
+        "max": 3780432000,
+        "median": 3773550500.0,
+        "min": 3766669000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0016579658921965779,
+        "max": 1.0073944428559514,
+        "median": 1.005736476963755,
+        "min": 1.0040785110715582,
+        "n": 2
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "texture-4096x4096",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1634000.0,
+        "max": 3748932000,
+        "median": 3747298000.0,
+        "min": 3745664000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 8128000.0,
+        "max": 3786802000,
+        "median": 3778674000.0,
+        "min": 3770546000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0017293313222382922,
+        "max": 1.0101015435862801,
+        "median": 1.008372212264042,
+        "min": 1.0066428809418035,
+        "n": 2
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "texture-4096x4096",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 285000,
+        "max": 3739493000,
+        "median": 3736062000,
+        "min": 3735777000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 5798000,
+        "max": 3747993000,
+        "median": 3735668000,
+        "min": 3729870000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0014757385292835101,
+        "max": 1.0022730354088107,
+        "median": 0.9998945413646776,
+        "min": 0.9984188028353941,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "texture-4096x4096",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 1479000,
+        "max": 3781917000,
+        "median": 3776568000,
+        "min": 3775089000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 4096,
+      "metal_ns": {
+        "mad": 1922000,
+        "max": 3784970000,
+        "median": 3783048000,
+        "min": 3777488000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.00011647660844182894,
+        "max": 1.0022247712738126,
+        "median": 1.0021082946653708,
+        "min": 0.9988289007929048,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 4096
+    },
+    {
+      "case_id": "texture-6144x6144",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 32025500.0,
+        "max": 9097420000,
+        "median": 9065394500.0,
+        "min": 9033369000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 31637500.0,
+        "max": 9130546000,
+        "median": 9098908500.0,
+        "min": 9067271000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 5.5860988326328354e-05,
+        "max": 1.0037529741118734,
+        "median": 1.003697113123547,
+        "min": 1.0036412521352207,
+        "n": 2
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "texture-6144x6144",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 14408500.0,
+        "max": 9161527000,
+        "median": 9147118500.0,
+        "min": 9132710000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 35912000.0,
+        "max": 9226726000,
+        "median": 9190814000.0,
+        "min": 9154902000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.002343330769057239,
+        "max": 1.0071166083994514,
+        "median": 1.0047732776303941,
+        "min": 1.002429946861337,
+        "n": 2
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "texture-6144x6144",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 25867000,
+        "max": 9192893000,
+        "median": 9143912000,
+        "min": 9118045000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 4124000,
+        "max": 9038389000,
+        "median": 9030533000,
+        "min": 9026409000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0036633143161407533,
+        "max": 0.9912639167716325,
+        "median": 0.9876006024554917,
+        "min": 0.9818899230090027,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "texture-6144x6144",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 10175000,
+        "max": 9192741000,
+        "median": 9182566000,
+        "min": 9167197000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 2121000,
+        "max": 9194763000,
+        "median": 9175520000,
+        "min": 9173399000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0006879549506924043,
+        "max": 1.000907911109579,
+        "median": 1.0002199561588867,
+        "min": 0.9990016951688667,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "texture-6144x6144",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 18905500.0,
+        "max": 28875223000,
+        "median": 28856317500.0,
+        "min": 28837412000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 49983500.0,
+        "max": 28920926000,
+        "median": 28870942500.0,
+        "min": 28820959000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0010766596126882688,
+        "max": 1.0015827756551006,
+        "median": 1.0005061160424122,
+        "min": 0.999429456429724,
+        "n": 2
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "texture-6144x6144",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 42900500.0,
+        "max": 28920115000,
+        "median": 28877214500.0,
+        "min": 28834314000,
+        "n": 2
+      },
+      "execution": "cold",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 107300000.0,
+        "max": 29069354000,
+        "median": 28962054000.0,
+        "min": 28854754000,
+        "n": 2
+      },
+      "metal_over_cpu": {
+        "mad": 0.0022257549389235187,
+        "max": 1.0051603875019168,
+        "median": 1.0029346325629933,
+        "min": 1.0007088776240698,
+        "n": 2
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "texture-6144x6144",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 5155000,
+        "max": 29232272000,
+        "median": 29222459000,
+        "min": 29217304000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 7738000,
+        "max": 29214886000,
+        "median": 29207148000,
+        "min": 29194701000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 8.845223769471389e-05,
+        "max": 0.99974085000855,
+        "median": 0.9996523977708552,
+        "min": 0.9987147423915596,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "texture-6144x6144",
+      "content": "texture",
+      "cpu_ns": {
+        "mad": 12525000,
+        "max": 28860759000,
+        "median": 28848234000,
+        "min": 28820770000,
+        "n": 3
+      },
+      "execution": "warm",
+      "height": 6144,
+      "metal_ns": {
+        "mad": 14613000,
+        "max": 28959595000,
+        "median": 28929163000,
+        "min": 28914550000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 9.930277609959681e-05,
+        "max": 1.0038602362973068,
+        "median": 1.0037609335212072,
+        "min": 1.0018638109967932,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "lossy-import-crossover",
+      "width": 6144
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1259000,
+        "max": 171222000,
+        "median": 168891000,
+        "min": 167632000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 48000,
+        "max": 120799000,
+        "median": 120751000,
+        "min": 114867000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.005085530238642666,
+        "max": 0.7203338264770449,
+        "median": 0.7152482962384022,
+        "min": 0.6708658934015489,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1778000,
+        "max": 170329000,
+        "median": 167410000,
+        "min": 165632000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 425000,
+        "max": 122520000,
+        "median": 122095000,
+        "min": 116786000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.010394887834262234,
+        "max": 0.7397121329211747,
+        "median": 0.7293172450869124,
+        "min": 0.6856495370723718,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 854000,
+        "max": 172019000,
+        "median": 170105000,
+        "min": 169251000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 1792000,
+        "max": 91909000,
+        "median": 84179000,
+        "min": 82387000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.018101649547232423,
+        "max": 0.5403074571588137,
+        "median": 0.49736190628120364,
+        "min": 0.47894127974235406,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 223000,
+        "max": 168067000,
+        "median": 166654000,
+        "min": 166431000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 1268000,
+        "max": 85456000,
+        "median": 83547000,
+        "min": 81042000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.006250980687076191,
+        "max": 0.5084638864262466,
+        "median": 0.5013983244112634,
+        "min": 0.486288957960805,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 655000,
+        "max": 456505000,
+        "median": 454586000,
+        "min": 453931000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 1895000,
+        "max": 375124000,
+        "median": 373229000,
+        "min": 370027000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.005359349811906,
+        "max": 0.8263899138855906,
+        "median": 0.8210305640736846,
+        "min": 0.8105650540519819,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1765000,
+        "max": 463340000,
+        "median": 455166000,
+        "min": 453401000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 396000,
+        "max": 377922000,
+        "median": 377526000,
+        "min": 370403000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.004102185249001633,
+        "max": 0.8335270544176127,
+        "median": 0.829424869168611,
+        "min": 0.7994194328139164,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 502000,
+        "max": 461045000,
+        "median": 460543000,
+        "min": 458398000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 2235000,
+        "max": 350226000,
+        "median": 347010000,
+        "min": 342221000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.0040334300263839,
+        "max": 0.7640216580351572,
+        "median": 0.7534801310626803,
+        "min": 0.7456509992243265,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-1024x1024",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 947000,
+        "max": 456919000,
+        "median": 455377000,
+        "min": 453586000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 1024,
+      "metal_ns": {
+        "mad": 4791000,
+        "max": 351928000,
+        "median": 345964000,
+        "min": 335479000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.007488894829378534,
+        "max": 0.7702196669431562,
+        "median": 0.7627307721137777,
+        "min": 0.7362436713097179,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 1024
+    },
+    {
+      "case_id": "photo-192x192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 236000,
+        "max": 21691000,
+        "median": 21118000,
+        "min": 20882000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 192,
+      "metal_ns": {
+        "mad": 3726000,
+        "max": 49760000,
+        "median": 45067000,
+        "min": 41341000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.1358644979933854,
+        "max": 2.2940390023512056,
+        "median": 2.15817450435782,
+        "min": 1.9576190927171133,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 192
+    },
+    {
+      "case_id": "photo-192x192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 183000,
+        "max": 21577000,
+        "median": 21394000,
+        "min": 21069000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 192,
+      "metal_ns": {
+        "mad": 547000,
+        "max": 49820000,
+        "median": 49273000,
+        "min": 47713000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.005817704321789741,
+        "max": 2.308940075079946,
+        "median": 2.3031223707581563,
+        "min": 2.2646067682376954,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 192
+    },
+    {
+      "case_id": "photo-192x192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 46000,
+        "max": 21150000,
+        "median": 20494000,
+        "min": 20216000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 192,
+      "metal_ns": {
+        "mad": 61000,
+        "max": 13850000,
+        "median": 12955000,
+        "min": 12043000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.021874547532665822,
+        "max": 0.6773278560250391,
+        "median": 0.6315199376035878,
+        "min": 0.5957162643450732,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 192
+    },
+    {
+      "case_id": "photo-192x192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 95000,
+        "max": 21427000,
+        "median": 21272000,
+        "min": 20914000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 192,
+      "metal_ns": {
+        "mad": 963000,
+        "max": 15621000,
+        "median": 14470000,
+        "min": 13503000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.037501579663621776,
+        "max": 0.7311148553777029,
+        "median": 0.6753161898539226,
+        "min": 0.6378146101903008,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 192
+    },
+    {
+      "case_id": "photo-192x192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 295000,
+        "max": 68259000,
+        "median": 67964000,
+        "min": 66211000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 192,
+      "metal_ns": {
+        "mad": 5411000,
+        "max": 80739000,
+        "median": 73258000,
+        "min": 67847000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.07495726339950981,
+        "max": 1.2194197338810773,
+        "median": 1.0732357637820653,
+        "min": 0.9982785003825555,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 192
+    },
+    {
+      "case_id": "photo-192x192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 118000,
+        "max": 65859000,
+        "median": 65290000,
+        "min": 65172000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 192,
+      "metal_ns": {
+        "mad": 5359000,
+        "max": 80362000,
+        "median": 75003000,
+        "min": 65424000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.08430851455601829,
+        "max": 1.233075553918861,
+        "median": 1.1487670393628426,
+        "min": 0.9933949801849405,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 192
+    },
+    {
+      "case_id": "photo-192x192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 415000,
+        "max": 67661000,
+        "median": 66755000,
+        "min": 66340000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 192,
+      "metal_ns": {
+        "mad": 597000,
+        "max": 39570000,
+        "median": 38538000,
+        "min": 37726000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.013168703757111877,
+        "max": 0.5964727163099186,
+        "median": 0.5730795173499214,
+        "min": 0.5575737869673815,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 192
+    },
+    {
+      "case_id": "photo-192x192",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 357000,
+        "max": 66886000,
+        "median": 66004000,
+        "min": 65647000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 192,
+      "metal_ns": {
+        "mad": 482000,
+        "max": 40070000,
+        "median": 39588000,
+        "min": 37845000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.010408075283855345,
+        "max": 0.6094871052751839,
+        "median": 0.5990790299913286,
+        "min": 0.5733743409490334,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 192
+    },
+    {
+      "case_id": "photo-256x256",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 428000,
+        "max": 37073000,
+        "median": 36645000,
+        "min": 36125000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 256,
+      "metal_ns": {
+        "mad": 485000,
+        "max": 56170000,
+        "median": 55685000,
+        "min": 53446000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.03529914106212173,
+        "max": 1.554878892733564,
+        "median": 1.5195797516714422,
+        "min": 1.441642165457341,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 256
+    },
+    {
+      "case_id": "photo-256x256",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 230000,
+        "max": 37184000,
+        "median": 36591000,
+        "min": 36361000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 256,
+      "metal_ns": {
+        "mad": 3140000,
+        "max": 61395000,
+        "median": 58255000,
+        "min": 51575000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.07574295344496429,
+        "max": 1.677871607772403,
+        "median": 1.6021286543274387,
+        "min": 1.3870212994836488,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 256
+    },
+    {
+      "case_id": "photo-256x256",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 221000,
+        "max": 36250000,
+        "median": 35951000,
+        "min": 35712000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 256,
+      "metal_ns": {
+        "mad": 333000,
+        "max": 24214000,
+        "median": 21929000,
+        "min": 21596000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.01829957514522318,
+        "max": 0.6694128054849054,
+        "median": 0.6140512992831542,
+        "min": 0.595751724137931,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 256
+    },
+    {
+      "case_id": "photo-256x256",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 215000,
+        "max": 35923000,
+        "median": 35708000,
+        "min": 35204000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 256,
+      "metal_ns": {
+        "mad": 442000,
+        "max": 25473000,
+        "median": 22053000,
+        "min": 21456000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.022133841754170214,
+        "max": 0.7133695530413353,
+        "median": 0.6264344960799909,
+        "min": 0.5972775102302146,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 256
+    },
+    {
+      "case_id": "photo-256x256",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 516000,
+        "max": 86919000,
+        "median": 85658000,
+        "min": 85142000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 256,
+      "metal_ns": {
+        "mad": 2351000,
+        "max": 109376000,
+        "median": 107025000,
+        "min": 100688000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.045573011563894594,
+        "max": 1.276891825632165,
+        "median": 1.2313188140682705,
+        "min": 1.1825890864673134,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 256
+    },
+    {
+      "case_id": "photo-256x256",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 661000,
+        "max": 87958000,
+        "median": 87297000,
+        "min": 86615000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 256,
+      "metal_ns": {
+        "mad": 357000,
+        "max": 108144000,
+        "median": 105653000,
+        "min": 105296000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.014503016550342585,
+        "max": 1.2388054572322074,
+        "median": 1.2156785776135772,
+        "min": 1.2011755610632346,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 256
+    },
+    {
+      "case_id": "photo-256x256",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 589000,
+        "max": 87368000,
+        "median": 86257000,
+        "min": 85668000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 256,
+      "metal_ns": {
+        "mad": 1274000,
+        "max": 75829000,
+        "median": 73328000,
+        "min": 71577000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.015657287287688337,
+        "max": 0.8851496474763039,
+        "median": 0.8502191405978248,
+        "min": 0.8221193604704585,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 256
+    },
+    {
+      "case_id": "photo-256x256",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 420000,
+        "max": 87195000,
+        "median": 86579000,
+        "min": 85472000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 256,
+      "metal_ns": {
+        "mad": 1114000,
+        "max": 76689000,
+        "median": 74782000,
+        "min": 72724000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.009270457661918918,
+        "max": 0.8900869322995857,
+        "median": 0.860146536156704,
+        "min": 0.8508517409210034,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 256
+    },
+    {
+      "case_id": "photo-384x384",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 181000,
+        "max": 82923000,
+        "median": 82157000,
+        "min": 81976000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 384,
+      "metal_ns": {
+        "mad": 1115000,
+        "max": 83954000,
+        "median": 81446000,
+        "min": 80331000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.02479260704928199,
+        "max": 1.0218727558211718,
+        "median": 0.9935346930809017,
+        "min": 0.9687420860316197,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 384
+    },
+    {
+      "case_id": "photo-384x384",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 509000,
+        "max": 81998000,
+        "median": 81489000,
+        "min": 80643000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 384,
+      "metal_ns": {
+        "mad": 2647000,
+        "max": 84018000,
+        "median": 80098000,
+        "min": 77451000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.03139292830820983,
+        "max": 1.0246347471889559,
+        "median": 0.993241818880746,
+        "min": 0.9504472996355336,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 384
+    },
+    {
+      "case_id": "photo-384x384",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 150000,
+        "max": 81338000,
+        "median": 80629000,
+        "min": 80365000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 384,
+      "metal_ns": {
+        "mad": 682000,
+        "max": 45464000,
+        "median": 43968000,
+        "min": 43286000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.002995344290986246,
+        "max": 0.5638665988664129,
+        "median": 0.5405591482455925,
+        "min": 0.5375638039546062,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 384
+    },
+    {
+      "case_id": "photo-384x384",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 444000,
+        "max": 82454000,
+        "median": 81842000,
+        "min": 81374000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 384,
+      "metal_ns": {
+        "mad": 806000,
+        "max": 45948000,
+        "median": 43643000,
+        "min": 42837000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.013005489540103832,
+        "max": 0.5589509026324753,
+        "median": 0.5332592067642531,
+        "min": 0.5202537172241493,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 384
+    },
+    {
+      "case_id": "photo-384x384",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 738000,
+        "max": 196442000,
+        "median": 195704000,
+        "min": 194641000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 384,
+      "metal_ns": {
+        "mad": 3905000,
+        "max": 202085000,
+        "median": 198180000,
+        "min": 192501000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.010543844353620768,
+        "max": 1.028726036183708,
+        "median": 1.0181821918300873,
+        "min": 0.9836334464293014,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 384
+    },
+    {
+      "case_id": "photo-384x384",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 2869000,
+        "max": 202376000,
+        "median": 199507000,
+        "min": 195471000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 384,
+      "metal_ns": {
+        "mad": 1978000,
+        "max": 204941000,
+        "median": 202963000,
+        "min": 194833000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.02565350831552271,
+        "max": 1.0383279361132853,
+        "median": 1.0126744277977626,
+        "min": 0.9765722505977233,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 384
+    },
+    {
+      "case_id": "photo-384x384",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 855000,
+        "max": 194589000,
+        "median": 193076000,
+        "min": 192221000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 384,
+      "metal_ns": {
+        "mad": 2030000,
+        "max": 170551000,
+        "median": 156309000,
+        "min": 154279000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.013734657008210527,
+        "max": 0.8764678373392124,
+        "median": 0.8131733785590545,
+        "min": 0.7990584018728376,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 384
+    },
+    {
+      "case_id": "photo-384x384",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 111000,
+        "max": 194767000,
+        "median": 194150000,
+        "min": 194024000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 384,
+      "metal_ns": {
+        "mad": 2278000,
+        "max": 168326000,
+        "median": 160738000,
+        "min": 157199000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.01485638645437004,
+        "max": 0.8664940466691718,
+        "median": 0.8284439038469468,
+        "min": 0.8099200379201615,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 384
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 234000,
+        "max": 62208000,
+        "median": 61417000,
+        "min": 61183000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 512,
+      "metal_ns": {
+        "mad": 737000,
+        "max": 71539000,
+        "median": 69479000,
+        "min": 68742000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.002384579510213758,
+        "max": 1.169262703692202,
+        "median": 1.1192666525554813,
+        "min": 1.1168820730452675,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 4000,
+        "max": 61336000,
+        "median": 61332000,
+        "min": 60772000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 512,
+      "metal_ns": {
+        "mad": 2580000,
+        "max": 70759000,
+        "median": 67887000,
+        "min": 65307000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.03662748502797353,
+        "max": 1.1537044283571383,
+        "median": 1.1170769433291647,
+        "min": 1.06474175035868,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 254000,
+        "max": 62144000,
+        "median": 61809000,
+        "min": 61513000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 283000,
+        "max": 36168000,
+        "median": 33453000,
+        "min": 33130000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.007830178997023651,
+        "max": 0.5845805721674479,
+        "median": 0.5438362622535073,
+        "min": 0.533760298661174,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 314000,
+        "max": 60520000,
+        "median": 60085000,
+        "min": 59662000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 631000,
+        "max": 35221000,
+        "median": 33614000,
+        "min": 32983000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.003596905651900739,
+        "max": 0.5861862361654323,
+        "median": 0.5554196959682749,
+        "min": 0.5518227903163742,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1060000,
+        "max": 320177000,
+        "median": 318735000,
+        "min": 317675000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 512,
+      "metal_ns": {
+        "mad": 2058000,
+        "max": 334011000,
+        "median": 329446000,
+        "min": 327388000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0018016680287438191,
+        "max": 1.0514236247737467,
+        "median": 1.0289496122457267,
+        "min": 1.0271479442169829,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 536000,
+        "max": 323933000,
+        "median": 317911000,
+        "min": 317375000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 512,
+      "metal_ns": {
+        "mad": 1184000,
+        "max": 330955000,
+        "median": 326494000,
+        "min": 325310000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.001996152836694298,
+        "max": 1.026998122115938,
+        "median": 1.0250019692792438,
+        "min": 1.021677322162299,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1019000,
+        "max": 321222000,
+        "median": 319032000,
+        "min": 317847000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 1009000,
+        "max": 296100000,
+        "median": 292026000,
+        "min": 291017000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.0033038399219676995,
+        "max": 0.9281200631911533,
+        "median": 0.9124134276837026,
+        "min": 0.9091095877617349,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-512x512",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1166000,
+        "max": 321328000,
+        "median": 320122000,
+        "min": 318422000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 512,
+      "metal_ns": {
+        "mad": 577000,
+        "max": 299279000,
+        "median": 294118000,
+        "min": 293203000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.0037754290209677244,
+        "max": 0.9383081051931927,
+        "median": 0.920570907341576,
+        "min": 0.91532017128915,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 512
+    },
+    {
+      "case_id": "photo-768x768",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 992000,
+        "max": 142822000,
+        "median": 139938000,
+        "min": 138946000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 768,
+      "metal_ns": {
+        "mad": 1370000,
+        "max": 116638000,
+        "median": 115268000,
+        "min": 111779000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.012921573162397837,
+        "max": 0.829588473219812,
+        "median": 0.8166669000574142,
+        "min": 0.7987751718618246,
+        "n": 3
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 768
+    },
+    {
+      "case_id": "photo-768x768",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 764000,
+        "max": 140238000,
+        "median": 139474000,
+        "min": 137845000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 768,
+      "metal_ns": {
+        "mad": 1788000,
+        "max": 114570000,
+        "median": 108984000,
+        "min": 107196000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.0037368848202750105,
+        "max": 0.8169682967526634,
+        "median": 0.7813929477895522,
+        "min": 0.7776560629692771,
+        "n": 3
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 768
+    },
+    {
+      "case_id": "photo-768x768",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 467000,
+        "max": 138452000,
+        "median": 136919000,
+        "min": 135620000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 768,
+      "metal_ns": {
+        "mad": 2352000,
+        "max": 77023000,
+        "median": 71621000,
+        "min": 69269000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.024943810307659908,
+        "max": 0.5625442780037833,
+        "median": 0.5252543872585165,
+        "min": 0.5003105769508566,
+        "n": 5
+      },
+      "method": 4,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 768
+    },
+    {
+      "case_id": "photo-768x768",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 307000,
+        "max": 138279000,
+        "median": 136296000,
+        "min": 135833000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 768,
+      "metal_ns": {
+        "mad": 355000,
+        "max": 74557000,
+        "median": 71091000,
+        "min": 70736000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.00768973548639007,
+        "max": 0.5470226565709926,
+        "median": 0.5218025074908159,
+        "min": 0.5141127720044258,
+        "n": 5
+      },
+      "method": 4,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 768
+    },
+    {
+      "case_id": "photo-768x768",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 1367000,
+        "max": 266051000,
+        "median": 257919000,
+        "min": 256552000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 768,
+      "metal_ns": {
+        "mad": 2308000,
+        "max": 237028000,
+        "median": 234720000,
+        "min": 232121000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 0.00528141404254312,
+        "max": 0.9100531562234655,
+        "median": 0.9047717421809224,
+        "min": 0.8909118928325772,
+        "n": 3
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 768
+    },
+    {
+      "case_id": "photo-768x768",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 2499000,
+        "max": 258672000,
+        "median": 254885000,
+        "min": 252386000,
+        "n": 3
+      },
+      "execution": "cold",
+      "height": 768,
+      "metal_ns": {
+        "mad": 2256000,
+        "max": 235753000,
+        "median": 229942000,
+        "min": 227686000,
+        "n": 3
+      },
+      "metal_over_cpu": {
+        "mad": 6.148074838341344e-06,
+        "max": 0.9113974454134967,
+        "median": 0.9021401808658807,
+        "min": 0.9021340327910423,
+        "n": 3
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 768
+    },
+    {
+      "case_id": "photo-768x768",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 592000,
+        "max": 256994000,
+        "median": 256082000,
+        "min": 255490000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 768,
+      "metal_ns": {
+        "mad": 1697000,
+        "max": 199288000,
+        "median": 194307000,
+        "min": 192010000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.005997571766684584,
+        "max": 0.7755483258355256,
+        "median": 0.7598614427179146,
+        "min": 0.747138065480128,
+        "n": 5
+      },
+      "method": 6,
+      "role": "holdout",
+      "section_id": "transform-photo-crossover",
+      "width": 768
+    },
+    {
+      "case_id": "photo-768x768",
+      "content": "photo",
+      "cpu_ns": {
+        "mad": 44000,
+        "max": 255260000,
+        "median": 254902000,
+        "min": 253610000,
+        "n": 5
+      },
+      "execution": "warm",
+      "height": 768,
+      "metal_ns": {
+        "mad": 141000,
+        "max": 197017000,
+        "median": 196876000,
+        "min": 190102000,
+        "n": 5
+      },
+      "metal_over_cpu": {
+        "mad": 0.0010957563125966185,
+        "max": 0.7729127272441958,
+        "median": 0.7718169709315992,
+        "min": 0.7458051354479296,
+        "n": 5
+      },
+      "method": 6,
+      "role": "tune",
+      "section_id": "transform-photo-crossover",
+      "width": 768
+    }
+  ],
+  "schema": "libwebp-metal-crossover-summary-v1",
+  "source": "ORIGINAL_OUTPUT_DIR/raw.jsonl"
+}
