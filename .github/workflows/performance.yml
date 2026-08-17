@@ -1,0 +1,108 @@
+name: Metal performance signal
+
+on:
+  workflow_dispatch:
+    inputs:
+      samples:
+        description: Timed samples per variant (minimum 5)
+        required: false
+        default: "9"
+  schedule:
+    - cron: "41 3 * * 6"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: metal-performance
+  cancel-in-progress: false
+
+jobs:
+  benchmark:
+    # Performance numbers are meaningful only on the characterized, otherwise
+    # idle physical runner represented by all of these labels.
+    runs-on: [self-hosted, macOS, ARM64, metal, performance]
+    timeout-minutes: 90
+    env:
+      SAMPLE_COUNT: ${{ inputs.samples || '9' }}
+      WEBP_BENCHMARK_SESSION: exclusive
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore last accepted same-runner baseline
+        id: baseline
+        uses: actions/cache/restore@v4
+        with:
+          path: perf-baseline
+          key: metal-perf-v1-${{ runner.name }}-${{ github.run_id }}
+          restore-keys: |
+            metal-perf-v1-${{ runner.name }}-
+      - name: Configure release build
+        run: >-
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DWEBP_ENABLE_METAL=ON
+          -DWEBP_BUILD_ANIM_UTILS=OFF
+          -DWEBP_BUILD_EXTRAS=OFF
+          -DWEBP_BUILD_GIF2WEBP=OFF
+          -DWEBP_BUILD_IMG2WEBP=OFF
+          -DWEBP_BUILD_VWEBP=OFF
+          -DWEBP_BUILD_WEBPMUX=OFF
+      - name: Build and run correctness preflight
+        env:
+          WEBP_TEST_BIN_DIR: ${{ github.workspace }}/build
+          WEBP_TEST_REQUIRE_METAL: "1"
+        run: |
+          cmake --build build --target cwebp dwebp --parallel 2
+          scripts/test_metal.sh
+      - name: Generate versioned deterministic corpus
+        run: >-
+          scripts/generate_performance_corpus.py
+          --output perf-results/corpus
+      - name: Collect raw performance samples
+        run: >-
+          scripts/run_performance.py
+          --bin-dir build
+          --corpus perf-results/corpus
+          --output perf-results
+          --samples "$SAMPLE_COUNT"
+      - name: Compare with accepted baseline
+        id: compare
+        run: >-
+          scripts/analyze_performance.py
+          --current perf-results
+          --baseline perf-baseline
+          --markdown perf-results/comparison.md
+          --json perf-results/comparison.json
+          --github-output "$GITHUB_OUTPUT"
+          --fail-level critical
+      - name: Publish comparison summary
+        if: always()
+        run: >-
+          test ! -f perf-results/comparison.md ||
+          cat perf-results/comparison.md >> "$GITHUB_STEP_SUMMARY"
+      - name: Preserve raw samples and environment
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: metal-performance-${{ runner.name }}-${{ github.run_id }}
+          path: perf-results/
+          if-no-files-found: error
+          retention-days: 90
+      - name: Stage accepted baseline
+        if: >-
+          steps.compare.outputs.status == 'pass' ||
+          steps.compare.outputs.status == 'baseline_missing' ||
+          steps.compare.outputs.status == 'incompatible'
+        run: |
+          mkdir -p perf-baseline
+          cp perf-results/samples.jsonl perf-results/environment.json \
+            perf-results/corpus/manifest.json perf-baseline/
+      - name: Save accepted baseline
+        if: >-
+          steps.compare.outputs.status == 'pass' ||
+          steps.compare.outputs.status == 'baseline_missing' ||
+          steps.compare.outputs.status == 'incompatible'
+        uses: actions/cache/save@v4
+        with:
+          path: perf-baseline
+          key: metal-perf-v1-${{ runner.name }}-${{ github.run_id }}

@@ -1,0 +1,68 @@
+name: Metal correctness
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * 1"
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/metal-correctness.yml"
+      - "CMakeLists.txt"
+      - "makefile.unix"
+      - "scripts/test_metal.sh"
+      - "src/dsp/**"
+      - "src/enc/**"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: metal-correctness-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  real-metal:
+    # These labels intentionally select a project-owned physical Mac. Do not
+    # replace them with a generic hosted macOS image and call it GPU coverage.
+    runs-on: [self-hosted, macOS, ARM64, metal]
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - name: Record runner environment
+        run: |
+          mkdir -p artifacts
+          sw_vers > artifacts/sw_vers.txt
+          uname -a > artifacts/uname.txt
+          system_profiler SPHardwareDataType SPDisplaysDataType | \
+            sed -E '/(Serial Number|Hardware UUID|Provisioning UDID)/d' \
+            > artifacts/system_profiler.txt
+          xcodebuild -version > artifacts/xcode.txt 2>&1 || true
+          pmset -g batt > artifacts/power.txt 2>&1 || true
+          pmset -g therm > artifacts/thermal.txt 2>&1 || true
+      - name: Configure Metal build
+        run: >-
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DWEBP_ENABLE_METAL=ON
+          -DWEBP_BUILD_ANIM_UTILS=OFF
+          -DWEBP_BUILD_EXTRAS=OFF
+          -DWEBP_BUILD_GIF2WEBP=OFF
+          -DWEBP_BUILD_IMG2WEBP=OFF
+          -DWEBP_BUILD_VWEBP=OFF
+          -DWEBP_BUILD_WEBPMUX=OFF
+      - name: Build encoder and decoder
+        run: cmake --build build --target cwebp dwebp --parallel 2
+      - name: Forced Metal correctness
+        env:
+          WEBP_TEST_BIN_DIR: ${{ github.workspace }}/build
+          WEBP_TEST_REQUIRE_METAL: "1"
+        run: scripts/test_metal.sh
+      - name: Preserve diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: metal-correctness-${{ github.run_id }}
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 30

@@ -54,6 +54,11 @@ both experimental build and runtime flags are explicitly enabled.
 
 See https://developers.google.com/speed/webp for details on the image format.
 
+CI runner requirements, raw performance artifacts, and alert thresholds are
+documented in [doc/ci-performance.md](doc/ci-performance.md). The monthly
+upstream maintenance checklist is in
+[doc/upstream-rebase.md](doc/upstream-rebase.md).
+
 The latest source tree is available at
 https://chromium.googlesource.com/webm/libwebp
 

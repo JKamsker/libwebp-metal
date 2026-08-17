@@ -1,0 +1,51 @@
+name: Correctness
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: correctness-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  cmake:
+    name: CMake (${{ matrix.os }}, Metal ${{ matrix.metal }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            metal: OFF
+          # This verifies Objective-C++ and framework linkage. The smoke test
+          # explicitly disables runtime Metal because hosted runners are not
+          # stable, characterized GPU hosts.
+          - os: macos-14
+            metal: ON
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure
+        run: >-
+          cmake -S . -B build -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DWEBP_ENABLE_METAL=${{ matrix.metal }}
+          -DWEBP_BUILD_ANIM_UTILS=OFF
+          -DWEBP_BUILD_EXTRAS=OFF
+          -DWEBP_BUILD_GIF2WEBP=OFF
+          -DWEBP_BUILD_IMG2WEBP=OFF
+          -DWEBP_BUILD_VWEBP=OFF
+          -DWEBP_BUILD_WEBPMUX=OFF
+      - name: Build encoder and decoder
+        run: cmake --build build --target cwebp dwebp --parallel 2
+      - name: Lossless round-trip smoke test
+        env:
+          WEBP_METAL: "0"
+          WEBP_TEST_BIN_DIR: ${{ github.workspace }}/build
+        run: scripts/test_roundtrip.sh

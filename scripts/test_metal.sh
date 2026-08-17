@@ -2,13 +2,20 @@
 set -eu
 
 root_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
-encoder="$root_dir/examples/cwebp"
-decoder="$root_dir/examples/dwebp"
+binary_dir=${WEBP_TEST_BIN_DIR:-"$root_dir/examples"}
+encoder="$binary_dir/cwebp"
+decoder="$binary_dir/dwebp"
 temporary_dir=$(mktemp -d "${TMPDIR:-/tmp}/libwebp-metal-test.XXXXXX")
 trap 'rm -rf "$temporary_dir"' EXIT HUP INT TERM
+metal_log="$temporary_dir/metal.log"
+require_metal=${WEBP_TEST_REQUIRE_METAL:-0}
+metal_verbose=0
+if [ "$require_metal" = 1 ]; then
+  metal_verbose=1
+fi
 
 if [ ! -x "$encoder" ] || [ ! -x "$decoder" ]; then
-  echo "build cwebp and dwebp before running this test" >&2
+  echo "cwebp and dwebp not found in $binary_dir" >&2
   exit 2
 fi
 
@@ -23,9 +30,10 @@ for input do
   # but a lossless decode must remain pixel-exact.
   WEBP_METAL=0 "$encoder" -quiet -lossless -exact -m 4 "$input" \
     -o "$temporary_dir/$name-transform-cpu.webp"
-  WEBP_METAL_MIN_PIXELS=0 WEBP_METAL_HASH=0 \
+  WEBP_METAL_VERBOSE="$metal_verbose" WEBP_METAL_MIN_PIXELS=0 \
+    WEBP_METAL_HASH=0 \
     "$encoder" -quiet -lossless -exact -m 4 "$input" \
-    -o "$temporary_dir/$name-transform-metal-baseline.webp"
+    -o "$temporary_dir/$name-transform-metal-baseline.webp" 2>>"$metal_log"
   "$decoder" -quiet "$temporary_dir/$name-transform-cpu.webp" -pam \
     -o "$temporary_dir/$name-transform-cpu.pam"
   "$decoder" -quiet "$temporary_dir/$name-transform-metal-baseline.webp" -pam \
@@ -53,10 +61,11 @@ for input do
     WEBP_METAL_MIN_PIXELS=0 WEBP_METAL_HASH=0 \
       "$encoder" -quiet -lossless -exact -m "$method" "$input" \
       -o "$temporary_dir/$name-hash-cpu.webp"
-    WEBP_METAL_MIN_PIXELS=0 WEBP_METAL_HASH=1 \
+    WEBP_METAL_VERBOSE="$metal_verbose" WEBP_METAL_MIN_PIXELS=0 \
+      WEBP_METAL_HASH=1 \
       WEBP_METAL_HASH_MIN_PIXELS=0 \
       "$encoder" -quiet -lossless -exact -m "$method" "$input" \
-      -o "$temporary_dir/$name-hash-metal-baseline.webp"
+      -o "$temporary_dir/$name-hash-metal-baseline.webp" 2>>"$metal_log"
     cmp "$temporary_dir/$name-hash-cpu.webp" \
         "$temporary_dir/$name-hash-metal-baseline.webp"
     for variant in match4 write_combined threads_128 threads_512 \
@@ -86,9 +95,10 @@ for input do
     WEBP_METAL_LOSSY=0 \
       "$encoder" -quiet -q "$quality" -m "$method" "$input" \
       -o "$temporary_dir/$name-lossy-cpu.webp"
-    WEBP_METAL_LOSSY=1 WEBP_METAL_LOSSY_MIN_PIXELS=0 \
+    WEBP_METAL_VERBOSE="$metal_verbose" WEBP_METAL_LOSSY=1 \
+      WEBP_METAL_LOSSY_MIN_PIXELS=0 \
       "$encoder" -quiet -q "$quality" -m "$method" "$input" \
-      -o "$temporary_dir/$name-lossy-metal-baseline.webp"
+      -o "$temporary_dir/$name-lossy-metal-baseline.webp" 2>>"$metal_log"
     cmp "$temporary_dir/$name-lossy-cpu.webp" \
         "$temporary_dir/$name-lossy-metal-baseline.webp"
     for variant in block_2x2 write_combined contiguous_copy threads_128 \
@@ -112,3 +122,10 @@ for input do
 
   printf 'PASS: Metal correctness checks: %s\n' "$input"
 done
+
+if [ "$require_metal" = 1 ]; then
+  grep -q "WebP-Metal: transformed" "$metal_log"
+  grep -q "WebP-Metal: hash candidates" "$metal_log"
+  grep -q "WebP-Metal: lossy RGB->YUV" "$metal_log"
+  printf 'PASS: observed all forced Metal operations\n'
+fi
