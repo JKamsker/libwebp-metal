@@ -363,6 +363,7 @@ HDRS = \
     src/enc/backward_references_enc.h \
     src/enc/cost_enc.h \
     src/enc/histogram_enc.h \
+    src/enc/metal_enc.h \
     src/enc/vp8i_enc.h \
     src/enc/vp8li_enc.h \
     src/mux/animi.h \
@@ -411,6 +412,19 @@ endif
 ex: $(OUT_EXAMPLES)
 all: ex $(EXTRA_EXAMPLES) $(OTHER_EXAMPLES)
 extras: $(EXTRA_LIB)
+
+ifeq ($(WEBP_ENABLE_METAL),1)
+metal-experiment: extras/metal_encode_batch_experiment
+
+extras/metal_encode_batch_experiment: extras/metal_encode_batch_experiment.o
+extras/metal_encode_batch_experiment: src/libwebp.a sharpyuv/libsharpyuv.a
+	$(LINK) -o $@ extras/metal_encode_batch_experiment.o \
+	              src/libwebp.a sharpyuv/libsharpyuv.a $(LDFLAGS)
+else
+metal-experiment:
+	@echo "metal-experiment requires WEBP_ENABLE_METAL=1" >&2
+	@false
+endif
 
 $(EX_FORMAT_DEC_OBJS): %.o: %.h
 
@@ -562,7 +576,7 @@ dist: all
 	done
 
 clean:
-	$(RM) $(OUTPUT) *~ \
+	$(RM) $(OUTPUT) extras/metal_encode_batch_experiment *~ \
               examples/*.o examples/*~ \
               extras/*.o extras/*~ \
               imageio/*.o imageio/*~ \
@@ -576,5 +590,5 @@ clean:
               tools/*.o tools/*~ \
               src/webp/*~ man/*~ doc/*~ swig/*~ \
 
-.PHONY: all clean dist ex
+.PHONY: all clean dist ex metal-experiment
 .SUFFIXES:

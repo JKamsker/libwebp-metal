@@ -30,6 +30,16 @@ int WebPImportRGBToYUVAMetal(const uint8_t* red, const uint8_t* green,
                              uint8_t* y, uint8_t* u, uint8_t* v, int y_stride,
                              int uv_stride);
 
+// Experimental batched form of WebPImportRGBToYUVAMetal(). It deliberately
+// reuses the backend-neutral request shape and does not extend descriptor ABI
+// v1. The implementation submits the array in one command buffer and updates
+// caller-owned planes only when every dispatch succeeds. Returns 0 without
+// modifying output when Metal is disabled, unavailable, or fails.
+//
+// This is an internal experiment hook, not a stable libwebp API.
+int WebPImportRGBToYUVAMetalBatch(
+    const WebPAcceleratorRGBToYUVRequest* requests, size_t request_count);
+
 #ifdef __cplusplus
 }  // extern "C"
 #endif

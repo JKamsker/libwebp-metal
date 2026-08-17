@@ -15,7 +15,10 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cstring>
+#include <limits>
+#include <memory>
 #include <mutex>
+#include <new>
 
 extern "C" {
 #include "src/enc/metal_enc.h"
@@ -28,6 +31,7 @@ namespace {
 // conservative 80 MP. Persistent/batch encoders should set the threshold to 0.
 constexpr size_t kDefaultMinimumPixels = 80u * 1000u * 1000u;
 constexpr NSUInteger kPreferredThreads = 256;
+constexpr size_t kBufferOffsetAlignment = 256u;
 
 constexpr const char* kMetalSource = R"METAL(
 #include <metal_stdlib>
@@ -159,6 +163,18 @@ struct MetalState {
   size_t source_capacity = 0;
   size_t output_capacity = 0;
   std::mutex mutex;
+
+  ~MetalState() {
+#if !__has_feature(objc_arc)
+    [linear_to_gamma release];
+    [gamma_to_linear release];
+    [output release];
+    [source release];
+    [pipeline release];
+    [queue release];
+    [device release];
+#endif
+  }
 };
 
 bool EnvironmentFlag(const char* name, bool default_value) {
@@ -178,9 +194,14 @@ size_t EnvironmentSize(const char* name, size_t default_value) {
   return static_cast<size_t>(parsed);
 }
 
-size_t RoundedBufferLength(size_t length) {
+bool RoundedBufferLength(size_t length, size_t* rounded_length) {
   constexpr size_t kPage = 16u * 1024u;
-  return std::max(kPage, (length + kPage - 1u) & ~(kPage - 1u));
+  if (length > std::numeric_limits<size_t>::max() - (kPage - 1u)) {
+    return false;
+  }
+  *rounded_length =
+      std::max(kPage, (length + kPage - 1u) & ~(kPage - 1u));
+  return true;
 }
 
 void BuildGammaTables(uint16_t gamma_to_linear[256],
@@ -228,12 +249,19 @@ MetalState* InitializeState() {
       if (EnvironmentFlag("WEBP_METAL_VERBOSE", false)) {
         std::fprintf(stderr, "WebP-Metal: lossy function not found\n");
       }
+#if !__has_feature(objc_arc)
+      [library release];
+#endif
       delete state;
       return nullptr;
     }
     state->pipeline = [state->device newComputePipelineStateWithFunction:
         function error:&error];
     state->queue = [state->device newCommandQueue];
+#if !__has_feature(objc_arc)
+    [function release];
+    [library release];
+#endif
     if (state->pipeline == nil || state->queue == nil) {
       if (EnvironmentFlag("WEBP_METAL_VERBOSE", false)) {
         std::fprintf(stderr, "WebP-Metal: lossy pipeline failed: %s\n",
@@ -261,111 +289,252 @@ MetalState* InitializeState() {
 }
 
 MetalState* GetState() {
-  static MetalState* state = InitializeState();
-  return state;
+  static std::unique_ptr<MetalState> state(InitializeState());
+  return state.get();
 }
 
 bool EnsureBuffers(MetalState* state, size_t source_size, size_t output_size) {
   if (source_size > state->source_capacity) {
-    state->source_capacity = RoundedBufferLength(source_size);
-    state->source = [state->device newBufferWithLength:state->source_capacity
+    size_t capacity;
+    if (!RoundedBufferLength(source_size, &capacity)) return false;
+    id<MTLBuffer> source = [state->device newBufferWithLength:capacity
         options:MTLResourceStorageModeShared];
+    if (source == nil) return false;
+#if !__has_feature(objc_arc)
+    [state->source release];
+#endif
+    state->source = source;
+    state->source_capacity = capacity;
   }
   if (output_size > state->output_capacity) {
-    state->output_capacity = RoundedBufferLength(output_size);
-    state->output = [state->device newBufferWithLength:state->output_capacity
+    size_t capacity;
+    if (!RoundedBufferLength(output_size, &capacity)) return false;
+    id<MTLBuffer> output = [state->device newBufferWithLength:capacity
         options:MTLResourceStorageModeShared];
+    if (output == nil) return false;
+#if !__has_feature(objc_arc)
+    [state->output release];
+#endif
+    state->output = output;
+    state->output_capacity = capacity;
   }
   return state->source != nil && state->output != nil;
 }
 
+bool AddSize(size_t value, size_t* total) {
+  if (value > std::numeric_limits<size_t>::max() - *total) return false;
+  *total += value;
+  return true;
+}
+
+bool AlignSize(size_t* value) {
+  const size_t remainder = *value % kBufferOffsetAlignment;
+  return remainder == 0 ||
+         AddSize(kBufferOffsetAlignment - remainder, value);
+}
+
+struct BatchItem {
+  const uint8_t* source;
+  uint8_t* y;
+  uint8_t* u;
+  uint8_t* v;
+  int width;
+  int height;
+  int y_stride;
+  int uv_stride;
+  size_t source_size;
+  size_t source_offset;
+  size_t output_offset;
+  size_t y_size;
+  size_t uv_size;
+  uint32_t uv_width;
+  uint32_t uv_height;
+  KernelParams params;
+};
+
+bool PrepareBatchItem(const WebPAcceleratorRGBToYUVRequest& request,
+                      BatchItem* item) {
+  if (request.red == nullptr || request.green == nullptr ||
+      request.blue == nullptr || request.y == nullptr ||
+      request.u == nullptr || request.v == nullptr ||
+      (request.step != 3 && request.step != 4) ||
+      request.source_stride <= 0 || request.width <= 0 ||
+      request.height <= 0 || request.y_stride < request.width) {
+    return false;
+  }
+
+  const uintptr_t red = reinterpret_cast<uintptr_t>(request.red);
+  const uintptr_t green = reinterpret_cast<uintptr_t>(request.green);
+  const uintptr_t blue = reinterpret_cast<uintptr_t>(request.blue);
+  const uintptr_t base = std::min(red, std::min(green, blue));
+  const uintptr_t red_offset = red - base;
+  const uintptr_t green_offset = green - base;
+  const uintptr_t blue_offset = blue - base;
+  if (red_offset >= static_cast<uintptr_t>(request.step) ||
+      green_offset >= static_cast<uintptr_t>(request.step) ||
+      blue_offset >= static_cast<uintptr_t>(request.step)) {
+    return false;
+  }
+
+  const uint32_t width = static_cast<uint32_t>(request.width);
+  const uint32_t height = static_cast<uint32_t>(request.height);
+  const uint32_t uv_width = (width + 1u) >> 1;
+  const uint32_t uv_height = (height + 1u) >> 1;
+  if (request.uv_stride < static_cast<int>(uv_width)) return false;
+
+  const size_t pixel_count = static_cast<size_t>(width) * height;
+  const size_t uv_size = static_cast<size_t>(uv_width) * uv_height;
+  const size_t last_row_size = static_cast<size_t>(width) * request.step;
+  if (static_cast<size_t>(request.source_stride) < last_row_size) return false;
+  const size_t source_rows = static_cast<size_t>(height - 1u);
+  if (source_rows >
+      (std::numeric_limits<size_t>::max() - last_row_size) /
+          static_cast<size_t>(request.source_stride)) {
+    return false;
+  }
+  const size_t source_size =
+      source_rows * static_cast<size_t>(request.source_stride) +
+      last_row_size;
+  if (pixel_count > std::numeric_limits<uint32_t>::max() ||
+      uv_size > std::numeric_limits<uint32_t>::max() ||
+      uv_size > (std::numeric_limits<size_t>::max() - pixel_count) / 2u) {
+    return false;
+  }
+
+  item->source = reinterpret_cast<const uint8_t*>(base);
+  item->y = request.y;
+  item->u = request.u;
+  item->v = request.v;
+  item->width = request.width;
+  item->height = request.height;
+  item->y_stride = request.y_stride;
+  item->uv_stride = request.uv_stride;
+  item->source_size = source_size;
+  item->y_size = pixel_count;
+  item->uv_size = uv_size;
+  item->uv_width = uv_width;
+  item->uv_height = uv_height;
+  item->params = {
+      width, height, static_cast<uint32_t>(request.step),
+      static_cast<uint32_t>(request.source_stride),
+      static_cast<uint32_t>(red_offset),
+      static_cast<uint32_t>(green_offset),
+      static_cast<uint32_t>(blue_offset), uv_width,
+      static_cast<uint32_t>(pixel_count), static_cast<uint32_t>(uv_size)};
+  return true;
+}
+
 }  // namespace
 
-extern "C" int WebPImportRGBToYUVAMetal(
-    const uint8_t* red, const uint8_t* green, const uint8_t* blue, int step,
-    int source_stride, int width, int height, uint8_t* y_plane,
-    uint8_t* u_plane, uint8_t* v_plane, int y_stride, int uv_stride) {
-  if (red == nullptr || green == nullptr || blue == nullptr ||
-      y_plane == nullptr || u_plane == nullptr || v_plane == nullptr ||
-      width <= 0 || height <= 0 || (step != 3 && step != 4) ||
-      source_stride <= 0 || y_stride <= 0 || uv_stride <= 0) {
-    return 0;
-  }
-  const size_t pixel_count = static_cast<size_t>(width) * height;
-  if (pixel_count < EnvironmentSize("WEBP_METAL_LOSSY_MIN_PIXELS",
-                                     kDefaultMinimumPixels) ||
+extern "C" int WebPImportRGBToYUVAMetalBatch(
+    const WebPAcceleratorRGBToYUVRequest* requests, size_t request_count) {
+  if (requests == nullptr || request_count == 0 ||
+      request_count > std::numeric_limits<size_t>::max() / sizeof(BatchItem) ||
       !EnvironmentFlag("WEBP_METAL_LOSSY", true)) {
     return 0;
+  }
+  std::unique_ptr<BatchItem[]> items(
+      new (std::nothrow) BatchItem[request_count]);
+  if (items == nullptr) return 0;
+  size_t total_source_size = 0;
+  size_t total_output_size = 0;
+  for (size_t i = 0; i < request_count; ++i) {
+    BatchItem& item = items[i];
+    if (!PrepareBatchItem(requests[i], &item) ||
+        !AlignSize(&total_source_size) || !AlignSize(&total_output_size)) {
+      return 0;
+    }
+    item.source_offset = total_source_size;
+    item.output_offset = total_output_size;
+    if (!AddSize(item.source_size, &total_source_size) ||
+        !AddSize(item.y_size, &total_output_size) ||
+        !AddSize(2u * item.uv_size, &total_output_size)) {
+      return 0;
+    }
   }
   MetalState* state = GetState();
   if (state == nullptr) return 0;
 
-  const uint8_t* base = std::min(red, std::min(green, blue));
-  const ptrdiff_t red_offset = red - base;
-  const ptrdiff_t green_offset = green - base;
-  const ptrdiff_t blue_offset = blue - base;
-  if (red_offset < 0 || green_offset < 0 || blue_offset < 0 ||
-      red_offset >= step || green_offset >= step || blue_offset >= step) {
-    return 0;
-  }
-  const uint32_t uv_width = (width + 1u) >> 1;
-  const uint32_t uv_height = (height + 1u) >> 1;
-  const size_t y_size = pixel_count;
-  const size_t uv_size = static_cast<size_t>(uv_width) * uv_height;
-  const size_t source_size = static_cast<size_t>(source_stride) *
-                                 (height - 1u) +
-                             static_cast<size_t>(width) * step;
-  const size_t output_size = y_size + 2u * uv_size;
-  const KernelParams params = {
-      static_cast<uint32_t>(width), static_cast<uint32_t>(height),
-      static_cast<uint32_t>(step),
-      static_cast<uint32_t>(source_stride),
-      static_cast<uint32_t>(red_offset), static_cast<uint32_t>(green_offset),
-      static_cast<uint32_t>(blue_offset), uv_width,
-      static_cast<uint32_t>(y_size), static_cast<uint32_t>(uv_size)};
-
   std::lock_guard<std::mutex> lock(state->mutex);
   @autoreleasepool {
-    if (!EnsureBuffers(state, source_size, output_size)) return 0;
-    std::memcpy(state->source.contents, base, source_size);
+    if (!EnsureBuffers(state, total_source_size, total_output_size)) return 0;
+    uint8_t* const source = static_cast<uint8_t*>(state->source.contents);
+    for (size_t i = 0; i < request_count; ++i) {
+      const BatchItem& item = items[i];
+      std::memcpy(source + item.source_offset, item.source, item.source_size);
+    }
+
     id<MTLCommandBuffer> command = [state->queue commandBuffer];
     id<MTLComputeCommandEncoder> encoder = [command computeCommandEncoder];
     if (command == nil || encoder == nil) return 0;
     [encoder setComputePipelineState:state->pipeline];
-    [encoder setBuffer:state->source offset:0 atIndex:0];
-    [encoder setBuffer:state->output offset:0 atIndex:1];
     [encoder setBuffer:state->gamma_to_linear offset:0 atIndex:2];
     [encoder setBuffer:state->linear_to_gamma offset:0 atIndex:3];
-    [encoder setBytes:&params length:sizeof(params) atIndex:4];
     const NSUInteger threads = std::min(
         kPreferredThreads, state->pipeline.maxTotalThreadsPerThreadgroup);
-    [encoder dispatchThreads:MTLSizeMake(pixel_count, 1, 1)
-        threadsPerThreadgroup:MTLSizeMake(threads, 1, 1)];
+    for (size_t i = 0; i < request_count; ++i) {
+      const BatchItem& item = items[i];
+      [encoder setBuffer:state->source
+                  offset:static_cast<NSUInteger>(item.source_offset)
+                 atIndex:0];
+      [encoder setBuffer:state->output
+                  offset:static_cast<NSUInteger>(item.output_offset)
+                 atIndex:1];
+      [encoder setBytes:&item.params length:sizeof(item.params) atIndex:4];
+      [encoder dispatchThreads:MTLSizeMake(item.y_size, 1, 1)
+          threadsPerThreadgroup:MTLSizeMake(threads, 1, 1)];
+    }
     [encoder endEncoding];
     const CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     [command commit];
     [command waitUntilCompleted];
     if (command.status != MTLCommandBufferStatusCompleted) return 0;
 
-    const uint8_t* output = static_cast<const uint8_t*>(state->output.contents);
-    for (int y = 0; y < height; ++y) {
-      std::memcpy(y_plane + static_cast<size_t>(y) * y_stride,
-                  output + static_cast<size_t>(y) * width, width);
-    }
-    const uint8_t* u = output + y_size;
-    const uint8_t* v = u + uv_size;
-    for (uint32_t y = 0; y < uv_height; ++y) {
-      std::memcpy(u_plane + static_cast<size_t>(y) * uv_stride,
-                  u + static_cast<size_t>(y) * uv_width, uv_width);
-      std::memcpy(v_plane + static_cast<size_t>(y) * uv_stride,
-                  v + static_cast<size_t>(y) * uv_width, uv_width);
+    const uint8_t* const output =
+        static_cast<const uint8_t*>(state->output.contents);
+    for (size_t i = 0; i < request_count; ++i) {
+      const BatchItem& item = items[i];
+      const uint8_t* const item_output = output + item.output_offset;
+      for (int y = 0; y < item.height; ++y) {
+        std::memcpy(item.y + static_cast<size_t>(y) * item.y_stride,
+                    item_output + static_cast<size_t>(y) * item.width,
+                    item.width);
+      }
+      const uint8_t* const u = item_output + item.y_size;
+      const uint8_t* const v = u + item.uv_size;
+      for (uint32_t y = 0; y < item.uv_height; ++y) {
+        std::memcpy(item.u + static_cast<size_t>(y) * item.uv_stride,
+                    u + static_cast<size_t>(y) * item.uv_width,
+                    item.uv_width);
+        std::memcpy(item.v + static_cast<size_t>(y) * item.uv_stride,
+                    v + static_cast<size_t>(y) * item.uv_width,
+                    item.uv_width);
+      }
     }
     if (EnvironmentFlag("WEBP_METAL_VERBOSE", false)) {
       std::fprintf(stderr,
-                   "WebP-Metal: lossy RGB->YUV %dx%d in %.3f ms\n",
-                   width, height,
+                   "WebP-Metal: lossy RGB->YUV batch of %zu in %.3f ms\n",
+                   request_count,
                    (CFAbsoluteTimeGetCurrent() - start) * 1000.0);
     }
   }
   return 1;
+}
+
+extern "C" int WebPImportRGBToYUVAMetal(
+    const uint8_t* red, const uint8_t* green, const uint8_t* blue, int step,
+    int source_stride, int width, int height, uint8_t* y, uint8_t* u,
+    uint8_t* v, int y_stride, int uv_stride) {
+  if (width <= 0 || height <= 0) {
+    return 0;
+  }
+  const size_t pixel_count = static_cast<size_t>(width) * height;
+  if (pixel_count < EnvironmentSize("WEBP_METAL_LOSSY_MIN_PIXELS",
+                                     kDefaultMinimumPixels)) {
+    return 0;
+  }
+  const WebPAcceleratorRGBToYUVRequest request = {
+      red, green, blue, step, source_stride, width, height,
+      y, u, v, y_stride, uv_stride};
+  return WebPImportRGBToYUVAMetalBatch(&request, 1);
 }

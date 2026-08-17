@@ -34,6 +34,8 @@ option(WEBP_ENABLE_METAL "Enable Metal encoder acceleration on Apple platforms."
        ${APPLE})
 option(WEBP_BUILD_METAL_BENCHMARK
        "Build the internal Metal crossover experiment runner." OFF)
+option(WEBP_BUILD_METAL_EXPERIMENTS
+       "Build non-installed Metal lifecycle/batching experiment tools." OFF)
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
 option(WEBP_BUILD_CWEBP "Build the cwebp command line tool." ON)
 option(WEBP_BUILD_DWEBP "Build the dwebp command line tool." ON)
@@ -77,6 +79,15 @@ endif()
 if(WEBP_BUILD_METAL_BENCHMARK AND NOT WEBP_ENABLE_METAL)
   message(FATAL_ERROR
           "WEBP_BUILD_METAL_BENCHMARK requires WEBP_ENABLE_METAL=ON.")
+endif()
+if(WEBP_BUILD_METAL_EXPERIMENTS AND NOT WEBP_ENABLE_METAL)
+  message(FATAL_ERROR
+          "WEBP_BUILD_METAL_EXPERIMENTS requires WEBP_ENABLE_METAL.")
+endif()
+if(WEBP_BUILD_METAL_EXPERIMENTS AND BUILD_SHARED_LIBS)
+  message(FATAL_ERROR
+          "WEBP_BUILD_METAL_EXPERIMENTS uses a private static-library hook; "
+          "configure with BUILD_SHARED_LIBS=OFF.")
 endif()
 
 if(WEBP_LINK_STATIC)
@@ -479,6 +490,16 @@ target_include_directories(
   webp PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
               $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+if(WEBP_BUILD_METAL_EXPERIMENTS)
+  add_executable(
+    metal_encode_batch_experiment
+    ${CMAKE_CURRENT_SOURCE_DIR}/extras/metal_encode_batch_experiment.c)
+  target_link_libraries(metal_encode_batch_experiment PRIVATE webp)
+  target_include_directories(
+    metal_encode_batch_experiment
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
 set_target_properties(
   webp
   PROPERTIES PUBLIC_HEADER "${CMAKE_CURRENT_SOURCE_DIR}/src/webp/decode.h;\
