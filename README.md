@@ -30,6 +30,9 @@ opt-in stage profiling protocol is in
 The five-experiment interpretation, including deliberately rejected default
 changes, is in
 [doc/experiment-series-analysis-20260817.md](doc/experiment-series-analysis-20260817.md).
+The self-contained publication report, with the one-device/one-day boundary,
+corpus-provenance audit, reproducibility notes, and unresolved blockers, is in
+[doc/metal-research-report-20260817.md](doc/metal-research-report-20260817.md).
 
 Project home: https://github.com/JKamsker/libwebp-metal
 
