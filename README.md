@@ -15,6 +15,33 @@ contains the library that can be used in other programs to add WebP support, as
 well as the command line tools 'cwebp' and 'dwebp' to compress and decompress
 images respectively.
 
+## Metal acceleration
+
+This fork adds optional Metal acceleration for lossless cross-color search,
+lossless backward-reference candidate search, and opaque RGB/BGR to YUV420
+conversion. It is based on current libwebp rather than the legacy libwebp 1.0.3
+tree. See [METAL_MIGRATION_TASK.md](METAL_MIGRATION_TASK.md) for the migration
+scope and maintenance strategy. Current CPU-versus-Metal measurements are in
+[BENCHMARK_RESULTS.md](BENCHMARK_RESULTS.md).
+
+Project home: https://github.com/JKamsker/libwebp-metal
+
+Metal is enabled by default in CMake builds on Apple platforms and can be
+controlled explicitly with `-DWEBP_ENABLE_METAL=ON` or `OFF`. The simple Unix
+makefile also enables it by default on macOS:
+
+```sh
+make -f makefile.unix -j8 ex
+scripts/test_metal.sh /path/to/image.png [/path/to/another.jpg]
+```
+
+At runtime, `WEBP_METAL=0` disables lossless Metal acceleration,
+`WEBP_METAL_HASH=0` disables hash candidate search, and
+`WEBP_METAL_LOSSY=0` disables lossy import acceleration. The corresponding
+`*_MIN_PIXELS` variables set crossover thresholds; setting them to `0` forces
+the relevant path for correctness testing. `WEBP_METAL_VERBOSE=1` reports which
+Metal operations were selected.
+
 See https://developers.google.com/speed/webp for details on the image format.
 
 The latest source tree is available at
@@ -42,7 +69,9 @@ See the [APIs documentation](doc/api.md), and API usage examples in the
 
 ## Bugs
 
-Please report all bugs in the WebP component of the
+Please report Metal integration and accelerator bugs in the
+[libwebp-metal issue tracker](https://github.com/JKamsker/libwebp-metal/issues).
+For bugs in upstream libwebp, use the WebP component of the
 [issue tracker](https://issues.webmproject.org/issues/new?component=1618983&template=2023995).
 For security reports, select 'Security report' from the Template dropdown.
 

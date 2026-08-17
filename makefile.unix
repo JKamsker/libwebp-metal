@@ -29,7 +29,17 @@ ifeq ($(strip $(shell uname)), Darwin)
   EXTRA_FLAGS += -Wno-deprecated-declarations
   EXTRA_FLAGS += -I/opt/local/include
   EXTRA_LIBS  += -L/opt/local/lib
+  HOMEBREW_PREFIX := $(shell brew --prefix 2> /dev/null)
+  ifneq ($(HOMEBREW_PREFIX),)
+    EXTRA_FLAGS += -I$(HOMEBREW_PREFIX)/opt/libpng/include
+    EXTRA_FLAGS += -I$(HOMEBREW_PREFIX)/opt/jpeg-turbo/include
+    EXTRA_FLAGS += -I$(HOMEBREW_PREFIX)/opt/libtiff/include
+    EXTRA_LIBS += -L$(HOMEBREW_PREFIX)/opt/libpng/lib
+    EXTRA_LIBS += -L$(HOMEBREW_PREFIX)/opt/jpeg-turbo/lib
+    EXTRA_LIBS += -L$(HOMEBREW_PREFIX)/opt/libtiff/lib
+  endif
   GL_LIBS = -framework GLUT -framework OpenGL
+  WEBP_ENABLE_METAL ?= 1
 else
   EXTRA_FLAGS += -I/usr/local/include
   EXTRA_LIBS  += -L/usr/local/lib
@@ -114,6 +124,14 @@ else
 endif
 CFLAGS += $(EXTRA_FLAGS)
 CC = gcc
+CXX = g++
+LINK = $(CC)
+
+ifeq ($(WEBP_ENABLE_METAL),1)
+  override EXTRA_FLAGS += -DWEBP_USE_METAL=1 -fblocks
+  override EXTRA_LIBS += -framework Foundation -framework Metal
+  LINK = $(CXX)
+endif
 INSTALL = install
 GROFF = /usr/bin/groff
 COL = /usr/bin/col
@@ -219,6 +237,10 @@ DSP_ENC_OBJS = \
     src/dsp/ssim.o \
     src/dsp/ssim_sse2.o \
 
+ifeq ($(WEBP_ENABLE_METAL),1)
+DSP_ENC_OBJS += src/dsp/lossless_enc_metal.o
+endif
+
 ENC_OBJS = \
     src/enc/alpha_enc.o \
     src/enc/analysis_enc.o \
@@ -243,6 +265,10 @@ ENC_OBJS = \
     src/enc/tree_enc.o \
     src/enc/vp8l_enc.o \
     src/enc/webp_enc.o \
+
+ifeq ($(WEBP_ENABLE_METAL),1)
+ENC_OBJS += src/enc/picture_csp_enc_metal.o
+endif
 
 EX_FORMAT_DEC_OBJS = \
     imageio/image_dec.o \
@@ -397,6 +423,9 @@ src/utils/bit_writer_utils.o: src/utils/endian_inl_utils.h
 %.o: %.c $(HDRS)
 	$(CC) $(CPPFLAGS) $(CFLAGS) -c $< -o $@
 
+%.o: %.mm $(HDRS)
+	$(CXX) $(CPPFLAGS) $(CFLAGS) -std=c++11 -c $< -o $@
+
 examples/libanim_util.a: $(ANIM_UTIL_OBJS)
 examples/libexample_util.a: $(EX_UTIL_OBJS)
 examples/libgifdec.a: $(GIFDEC_OBJS)
@@ -496,7 +525,7 @@ extras/vwebp_sdl: EXTRA_FLAGS += -DWEBP_HAVE_SDL $(SDL_FLAGS)
 extras/vwebp_sdl: override EXTRA_LIBS += $(SDL_LIBS)
 
 $(OUT_EXAMPLES) $(EXTRA_EXAMPLES) $(OTHER_EXAMPLES):
-	$(CC) -o $@ $^ $(LDFLAGS)
+	$(LINK) -o $@ $^ $(LDFLAGS)
 
 dist: DESTDIR := dist
 dist: OUT_EXAMPLES += $(EXTRA_EXAMPLES)

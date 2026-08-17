@@ -22,6 +22,9 @@
 #include "src/dsp/dsp.h"
 #include "src/dsp/lossless.h"
 #include "src/dsp/yuv.h"
+#if defined(WEBP_USE_METAL)
+#include "src/enc/metal_enc.h"
+#endif
 #include "src/enc/vp8i_enc.h"
 #include "src/utils/random_utils.h"
 #include "src/utils/utils.h"
@@ -145,6 +148,17 @@ static int ImportYUVAFromRGBA(const uint8_t* r_ptr, const uint8_t* g_ptr,
   if (has_alpha) {
     assert(step == 4);
   }
+
+#if defined(WEBP_USE_METAL)
+  // Metal currently covers the opaque, non-dithered regular conversion.
+  // Sharp-YUV, alpha-weighted, dithered, and negative-stride imports retain
+  // the existing implementation below.
+  if (!has_alpha && !use_iterative_conversion && dithering == 0.f &&
+      WebPImportRGBToYUVAMetal(r_ptr, g_ptr, b_ptr, step, rgb_stride,
+                               picture)) {
+    return 1;
+  }
+#endif
 
   if (use_iterative_conversion) {
     SharpYuvInit(VP8GetCPUInfo);

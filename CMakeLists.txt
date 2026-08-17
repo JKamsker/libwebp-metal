@@ -30,6 +30,8 @@ if(NOT EMSCRIPTEN)
 endif()
 option(WEBP_ENABLE_SIMD "Enable any SIMD optimization."
        ${WEBP_ENABLE_SIMD_DEFAULT})
+option(WEBP_ENABLE_METAL "Enable Metal encoder acceleration on Apple platforms."
+       ${APPLE})
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
 option(WEBP_BUILD_CWEBP "Build the cwebp command line tool." ON)
 option(WEBP_BUILD_DWEBP "Build the dwebp command line tool." ON)
@@ -54,6 +56,21 @@ set(WEBP_BITTRACE "0" CACHE STRING "Bit trace mode (0=none, 1=bit, 2=bytes)")
 set_property(CACHE WEBP_BITTRACE PROPERTY STRINGS 0 1 2)
 option(WEBP_ENABLE_WUNUSED_RESULT "Add [[nodiscard]] to some functions. \
        CMake must be at least 3.21 to force C23" OFF)
+
+if(WEBP_ENABLE_METAL)
+  if(NOT APPLE)
+    message(FATAL_ERROR "WEBP_ENABLE_METAL is only supported on Apple platforms.")
+  endif()
+  enable_language(OBJCXX)
+  set(CMAKE_OBJCXX_STANDARD 11)
+  set(CMAKE_OBJCXX_STANDARD_REQUIRED ON)
+  add_definitions(-DWEBP_USE_METAL=1)
+  find_library(WEBP_FOUNDATION_FRAMEWORK Foundation)
+  find_library(WEBP_METAL_FRAMEWORK Metal)
+  if(NOT WEBP_FOUNDATION_FRAMEWORK OR NOT WEBP_METAL_FRAMEWORK)
+    message(FATAL_ERROR "Metal acceleration requires Foundation and Metal.")
+  endif()
+endif()
 
 if(WEBP_LINK_STATIC)
   if(WIN32)
@@ -268,6 +285,17 @@ parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_COMMON_SRCS" "COMMON")
 parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_ENC_SRCS" "ENC")
 parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_DEC_SRCS" "decode_[^ ]*")
 
+if(WEBP_ENABLE_METAL)
+  list(APPEND WEBP_DSP_ENC_SRCS
+       ${WEBP_SRC_DIR}/dsp/lossless_enc_metal.mm)
+  list(APPEND WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/picture_csp_enc_metal.mm)
+  set_source_files_properties(
+    ${WEBP_SRC_DIR}/dsp/lossless_enc_metal.mm
+    ${WEBP_SRC_DIR}/enc/picture_csp_enc_metal.mm
+    PROPERTIES COMPILE_OPTIONS "-fblocks")
+endif()
+
 # Remove the files specific to SIMD we don't use.
 foreach(FILE ${WEBP_SIMD_FILES_NOT_TO_INCLUDE})
   list(REMOVE_ITEM WEBP_DSP_ENC_SRCS ${FILE})
@@ -435,6 +463,10 @@ if(XCODE)
   libwebp_add_stub_file(webp)
 endif()
 target_link_libraries(webp ${WEBP_DEP_LIBRARIES})
+if(WEBP_ENABLE_METAL)
+  target_link_libraries(webp PRIVATE ${WEBP_FOUNDATION_FRAMEWORK}
+                                     ${WEBP_METAL_FRAMEWORK} "-lc++")
+endif()
 target_include_directories(
   webp PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
               $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
