@@ -1,0 +1,266 @@
+{
+  "checks": {
+    "cpu_metal_decoded_pixels_equal": true,
+    "repeated_cpu_bitstream_hash_equal": true,
+    "repeated_metal_bitstream_hash_equal": true
+  },
+  "decoder": "/Users/jonaskamsker/.codex/worktrees/29f1/libwebp-metal/examples/dwebp",
+  "encoder": "/Users/jonaskamsker/.codex/worktrees/29f1/libwebp-metal/examples/cwebp",
+  "entries": [
+    {
+      "case_id": "photo-small",
+      "cpu": {
+        "bitstream_sha256": "b5b9df591b5460706593d464d08fbc70389cec19231bc602708eced19e269403",
+        "decoded_sha256": "7a89fca944718c1f7177ad43713716d6abbedba3c5e8695123396fbe1950f41f",
+        "output_bytes": 35012
+      },
+      "metal": {
+        "bitstream_sha256": "72befc53eae73f1b739e0d0cbe751adec72fe3d05ccfe89aa6fb364e2894691d",
+        "decoded_sha256": "7a89fca944718c1f7177ad43713716d6abbedba3c5e8695123396fbe1950f41f",
+        "output_bytes": 36774
+      },
+      "method": 4
+    },
+    {
+      "case_id": "photo-small",
+      "cpu": {
+        "bitstream_sha256": "b5b9df591b5460706593d464d08fbc70389cec19231bc602708eced19e269403",
+        "decoded_sha256": "7a89fca944718c1f7177ad43713716d6abbedba3c5e8695123396fbe1950f41f",
+        "output_bytes": 35012
+      },
+      "metal": {
+        "bitstream_sha256": "72befc53eae73f1b739e0d0cbe751adec72fe3d05ccfe89aa6fb364e2894691d",
+        "decoded_sha256": "7a89fca944718c1f7177ad43713716d6abbedba3c5e8695123396fbe1950f41f",
+        "output_bytes": 36774
+      },
+      "method": 6
+    },
+    {
+      "case_id": "graphic-small",
+      "cpu": {
+        "bitstream_sha256": "1dc7528be6a7fe377aa08fba7b0e0a9d3490bb4ec72cae1200c3e3246b0818cd",
+        "decoded_sha256": "46b18e67f85ff13df43b23092f172ef40d5329e71ba4515cc284840188927912",
+        "output_bytes": 212
+      },
+      "metal": {
+        "bitstream_sha256": "1dc7528be6a7fe377aa08fba7b0e0a9d3490bb4ec72cae1200c3e3246b0818cd",
+        "decoded_sha256": "46b18e67f85ff13df43b23092f172ef40d5329e71ba4515cc284840188927912",
+        "output_bytes": 212
+      },
+      "method": 4
+    },
+    {
+      "case_id": "graphic-small",
+      "cpu": {
+        "bitstream_sha256": "1dc7528be6a7fe377aa08fba7b0e0a9d3490bb4ec72cae1200c3e3246b0818cd",
+        "decoded_sha256": "46b18e67f85ff13df43b23092f172ef40d5329e71ba4515cc284840188927912",
+        "output_bytes": 212
+      },
+      "metal": {
+        "bitstream_sha256": "1dc7528be6a7fe377aa08fba7b0e0a9d3490bb4ec72cae1200c3e3246b0818cd",
+        "decoded_sha256": "46b18e67f85ff13df43b23092f172ef40d5329e71ba4515cc284840188927912",
+        "output_bytes": 212
+      },
+      "method": 6
+    },
+    {
+      "case_id": "texture-small",
+      "cpu": {
+        "bitstream_sha256": "d45edae7ef6176f0784f38fbdc4cb8c8c433c1478cfd33198ae4f1a531893dd4",
+        "decoded_sha256": "db9f2f88814f00f581144ee4e611bea834edd9eb711e03ee1f8eef60f9a2a3b0",
+        "output_bytes": 786512
+      },
+      "metal": {
+        "bitstream_sha256": "d45edae7ef6176f0784f38fbdc4cb8c8c433c1478cfd33198ae4f1a531893dd4",
+        "decoded_sha256": "db9f2f88814f00f581144ee4e611bea834edd9eb711e03ee1f8eef60f9a2a3b0",
+        "output_bytes": 786512
+      },
+      "method": 4
+    },
+    {
+      "case_id": "texture-small",
+      "cpu": {
+        "bitstream_sha256": "d45edae7ef6176f0784f38fbdc4cb8c8c433c1478cfd33198ae4f1a531893dd4",
+        "decoded_sha256": "db9f2f88814f00f581144ee4e611bea834edd9eb711e03ee1f8eef60f9a2a3b0",
+        "output_bytes": 786512
+      },
+      "metal": {
+        "bitstream_sha256": "d45edae7ef6176f0784f38fbdc4cb8c8c433c1478cfd33198ae4f1a531893dd4",
+        "decoded_sha256": "db9f2f88814f00f581144ee4e611bea834edd9eb711e03ee1f8eef60f9a2a3b0",
+        "output_bytes": 786512
+      },
+      "method": 6
+    },
+    {
+      "case_id": "photo-medium",
+      "cpu": {
+        "bitstream_sha256": "c3a7275a566db42b96ca287acb623a16b042912e01b99585c2b7f14a4f43587a",
+        "decoded_sha256": "7d69ca1a243eed9d612c8686d22ccfe2aecfabdb63af5c328ee1f50f32404b25",
+        "output_bytes": 129340
+      },
+      "metal": {
+        "bitstream_sha256": "51c1e7291daaa4887da5226198ed5dceef25314b5e2cbf1b64263140d7977a85",
+        "decoded_sha256": "7d69ca1a243eed9d612c8686d22ccfe2aecfabdb63af5c328ee1f50f32404b25",
+        "output_bytes": 137718
+      },
+      "method": 4
+    },
+    {
+      "case_id": "photo-medium",
+      "cpu": {
+        "bitstream_sha256": "37a5c7db4627702812695a3d76ea44cbf52e412c960a76395d2f40425b881152",
+        "decoded_sha256": "7d69ca1a243eed9d612c8686d22ccfe2aecfabdb63af5c328ee1f50f32404b25",
+        "output_bytes": 128808
+      },
+      "metal": {
+        "bitstream_sha256": "d632cd62c21b8303911c17c0c3877e5f66135c6615bdf21a3f47e1b67d9d8d3b",
+        "decoded_sha256": "7d69ca1a243eed9d612c8686d22ccfe2aecfabdb63af5c328ee1f50f32404b25",
+        "output_bytes": 137298
+      },
+      "method": 6
+    },
+    {
+      "case_id": "graphic-medium",
+      "cpu": {
+        "bitstream_sha256": "be9d2ac71ab6b8c5ac3254431fde2c94b7c22f69af68acc60263715720429628",
+        "decoded_sha256": "ad1f3a87839d54dc5d1aac9c23f7a9f9d99f7aa0a30ec5b6bb8e1631c217c2fa",
+        "output_bytes": 548
+      },
+      "metal": {
+        "bitstream_sha256": "be9d2ac71ab6b8c5ac3254431fde2c94b7c22f69af68acc60263715720429628",
+        "decoded_sha256": "ad1f3a87839d54dc5d1aac9c23f7a9f9d99f7aa0a30ec5b6bb8e1631c217c2fa",
+        "output_bytes": 548
+      },
+      "method": 4
+    },
+    {
+      "case_id": "graphic-medium",
+      "cpu": {
+        "bitstream_sha256": "be9d2ac71ab6b8c5ac3254431fde2c94b7c22f69af68acc60263715720429628",
+        "decoded_sha256": "ad1f3a87839d54dc5d1aac9c23f7a9f9d99f7aa0a30ec5b6bb8e1631c217c2fa",
+        "output_bytes": 548
+      },
+      "metal": {
+        "bitstream_sha256": "be9d2ac71ab6b8c5ac3254431fde2c94b7c22f69af68acc60263715720429628",
+        "decoded_sha256": "ad1f3a87839d54dc5d1aac9c23f7a9f9d99f7aa0a30ec5b6bb8e1631c217c2fa",
+        "output_bytes": 548
+      },
+      "method": 6
+    },
+    {
+      "case_id": "texture-medium",
+      "cpu": {
+        "bitstream_sha256": "aa578b4802eca8c086546d4a67b1f65524ece9fbd073255e21e6c62f760feb75",
+        "decoded_sha256": "4fabd0216235803273b8c2e77682c02e6506c1dd0cd43314556a6febe9c4fd6a",
+        "output_bytes": 5760080
+      },
+      "metal": {
+        "bitstream_sha256": "aa578b4802eca8c086546d4a67b1f65524ece9fbd073255e21e6c62f760feb75",
+        "decoded_sha256": "4fabd0216235803273b8c2e77682c02e6506c1dd0cd43314556a6febe9c4fd6a",
+        "output_bytes": 5760080
+      },
+      "method": 4
+    },
+    {
+      "case_id": "texture-medium",
+      "cpu": {
+        "bitstream_sha256": "aa578b4802eca8c086546d4a67b1f65524ece9fbd073255e21e6c62f760feb75",
+        "decoded_sha256": "4fabd0216235803273b8c2e77682c02e6506c1dd0cd43314556a6febe9c4fd6a",
+        "output_bytes": 5760080
+      },
+      "metal": {
+        "bitstream_sha256": "aa578b4802eca8c086546d4a67b1f65524ece9fbd073255e21e6c62f760feb75",
+        "decoded_sha256": "4fabd0216235803273b8c2e77682c02e6506c1dd0cd43314556a6febe9c4fd6a",
+        "output_bytes": 5760080
+      },
+      "method": 6
+    },
+    {
+      "case_id": "photo-large",
+      "cpu": {
+        "bitstream_sha256": "d21aa8d0755b8c6bc377afcf1142499c66a42d2de1d00561fdd65a126a7ce83c",
+        "decoded_sha256": "28016dcf426fc67dc235632a12f53df5e0ef5922220a894f233d7750009d8285",
+        "output_bytes": 283992
+      },
+      "metal": {
+        "bitstream_sha256": "c179cdf00f2ca578bd1d82338f605b1a9d3b1173a2cc33abca81733c2509d645",
+        "decoded_sha256": "28016dcf426fc67dc235632a12f53df5e0ef5922220a894f233d7750009d8285",
+        "output_bytes": 311282
+      },
+      "method": 4
+    },
+    {
+      "case_id": "photo-large",
+      "cpu": {
+        "bitstream_sha256": "7c72ce50697d343dafe98a21b39e9255a669b7b84c1ca820b2fcd7206579a521",
+        "decoded_sha256": "28016dcf426fc67dc235632a12f53df5e0ef5922220a894f233d7750009d8285",
+        "output_bytes": 286706
+      },
+      "metal": {
+        "bitstream_sha256": "a5fa7d230b352103548ab93fdbecaf6c7a8d4e286b948a136b50d87f2b69a76c",
+        "decoded_sha256": "28016dcf426fc67dc235632a12f53df5e0ef5922220a894f233d7750009d8285",
+        "output_bytes": 328428
+      },
+      "method": 6
+    },
+    {
+      "case_id": "graphic-large",
+      "cpu": {
+        "bitstream_sha256": "f4bd94160601ce53fad92579816fce9866267fdc00eebee62dd2d2ef9f71074a",
+        "decoded_sha256": "eb10f61d301390e978cb471249aa98d36dd7ccba80fbc70e4d192b10e641c96f",
+        "output_bytes": 1274
+      },
+      "metal": {
+        "bitstream_sha256": "f4bd94160601ce53fad92579816fce9866267fdc00eebee62dd2d2ef9f71074a",
+        "decoded_sha256": "eb10f61d301390e978cb471249aa98d36dd7ccba80fbc70e4d192b10e641c96f",
+        "output_bytes": 1274
+      },
+      "method": 4
+    },
+    {
+      "case_id": "graphic-large",
+      "cpu": {
+        "bitstream_sha256": "f4bd94160601ce53fad92579816fce9866267fdc00eebee62dd2d2ef9f71074a",
+        "decoded_sha256": "eb10f61d301390e978cb471249aa98d36dd7ccba80fbc70e4d192b10e641c96f",
+        "output_bytes": 1274
+      },
+      "metal": {
+        "bitstream_sha256": "f4bd94160601ce53fad92579816fce9866267fdc00eebee62dd2d2ef9f71074a",
+        "decoded_sha256": "eb10f61d301390e978cb471249aa98d36dd7ccba80fbc70e4d192b10e641c96f",
+        "output_bytes": 1274
+      },
+      "method": 6
+    },
+    {
+      "case_id": "texture-large",
+      "cpu": {
+        "bitstream_sha256": "fe3ab825aeb1dd6154a358c5e17e5081cae805497da8b4de30cd962a484cf52c",
+        "decoded_sha256": "f6e053d1e50f28f0cfa7150eee56d8b338921c0445a932773b5cb3de97037fe8",
+        "output_bytes": 18000080
+      },
+      "metal": {
+        "bitstream_sha256": "fe3ab825aeb1dd6154a358c5e17e5081cae805497da8b4de30cd962a484cf52c",
+        "decoded_sha256": "f6e053d1e50f28f0cfa7150eee56d8b338921c0445a932773b5cb3de97037fe8",
+        "output_bytes": 18000080
+      },
+      "method": 4
+    },
+    {
+      "case_id": "texture-large",
+      "cpu": {
+        "bitstream_sha256": "fe3ab825aeb1dd6154a358c5e17e5081cae805497da8b4de30cd962a484cf52c",
+        "decoded_sha256": "f6e053d1e50f28f0cfa7150eee56d8b338921c0445a932773b5cb3de97037fe8",
+        "output_bytes": 18000080
+      },
+      "metal": {
+        "bitstream_sha256": "fe3ab825aeb1dd6154a358c5e17e5081cae805497da8b4de30cd962a484cf52c",
+        "decoded_sha256": "f6e053d1e50f28f0cfa7150eee56d8b338921c0445a932773b5cb3de97037fe8",
+        "output_bytes": 18000080
+      },
+      "method": 6
+    }
+  ],
+  "manifest": "/Users/jonaskamsker/.codex/worktrees/29f1/libwebp-metal/profile-data/runs/20260817-191358/dataset_manifest.json",
+  "quality": 75,
+  "schema": "libwebp-encoder-stage-output-validation-v1"
+}

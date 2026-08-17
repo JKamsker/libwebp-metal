@@ -1,0 +1,149 @@
+{
+  "schema": "libwebp-experiment-1-stage-profile-preflight-v1",
+  "status": "preflight-pass",
+  "experiment": "1 encoder stage profiling",
+  "repository": "/Users/jonaskamsker/.codex/worktrees/29f1/libwebp-metal",
+  "required_commit": "18fd520d5d7faf0645d461bded27c0ba7ee4a48e",
+  "head": "18fd520d5d7faf0645d461bded27c0ba7ee4a48e",
+  "head_matches_required": true,
+  "git_status_porcelain": "",
+  "tracked_worktree_clean_before_timed_run": true,
+  "preflight_created_at_local": "2026-08-17T19:11:38.220063+02:00",
+  "exact_pipeline_commands": [
+    "make -f makefile.unix -j8 clean",
+    "make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT=1 CFLAGS='-O3 -DNDEBUG' CXXFLAGS='-O3 -DNDEBUG' ex",
+    "scripts/test_metal.sh examples/test_ref.ppm",
+    "python3 scripts/encoder_stage_profile.py prepare --dataset-dir profile-data/dataset",
+    "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT=1 WEBP_BENCHMARK_SESSION=exclusive python3 scripts/encoder_stage_profile.py run --encoder examples/cwebp --dataset-dir profile-data/dataset --output-dir profile-data/runs --methods 4 6 --backends cpu metal --quality 75 --cold-repetitions 3 --warm-repetitions 3"
+  ],
+  "build_flags": {
+    "WEBP_ENABLE_METAL": "1",
+    "WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT": "1",
+    "CFLAGS": "-O3 -DNDEBUG",
+    "CXXFLAGS": "-O3 -DNDEBUG",
+    "observed_private_macro": "WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT=1",
+    "observed_other_experiment_private_macros": []
+  },
+  "runtime_flags": {
+    "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT": "1",
+    "WEBP_BENCHMARK_SESSION": "exclusive"
+  },
+  "other_experiment_flags": {
+    "checked_absent_from_inherited_environment": [
+      "WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT",
+      "WEBP_METAL_CROSSOVER_EXPERIMENT",
+      "WEBP_BUILD_METAL_BATCH_EXPERIMENT",
+      "WEBP_METAL_BATCH_EXPERIMENT",
+      "WEBP_BUILD_METAL_ABLATION_EXPERIMENT",
+      "WEBP_METAL_ABLATION_EXPERIMENT",
+      "WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT",
+      "WEBP_METAL_PREDICTOR",
+      "WEBP_BUILD_METAL_BENCHMARK",
+      "WEBP_BUILD_METAL_ABLATION",
+      "WEBP_EXPERIMENTAL_FEATURES",
+      "WEBP_METAL_EXPERIMENT_STAGE"
+    ],
+    "inherited_experiment_flags": {},
+    "all_checked_absent": true
+  },
+  "untimed_prechecks": {
+    "guard_command": "python3 scripts/test_experiment_guards.py",
+    "guard_result": "PASS: five independent build/runtime guards and fail-closed leases",
+    "clean_build_result": "exit 0",
+    "metal_correctness_gate": "PASS: Metal correctness checks: examples/test_ref.ppm",
+    "dataset_prepare_result": "exit 0",
+    "cwebp_longhelp_profile_hook": "PASS; -profile_repetitions present",
+    "validator_contract": {
+      "validator": "scripts/validate_stage_profile_outputs.py",
+      "repeats_cpu_and_metal_encodes": true,
+      "checks_repeated_bitstream_hashes": true,
+      "checks_cpu_metal_decoded_pixel_equality": true
+    }
+  },
+  "dataset": {
+    "manifest": "/Users/jonaskamsker/.codex/worktrees/29f1/libwebp-metal/profile-data/dataset/manifest.json",
+    "manifest_schema": "libwebp-stage-profile-dataset-v1",
+    "manifest_sha256": "4711e88382816a1d1546bde24f044e37c3c6f9d5a47b2b3b625f40be8d973b",
+    "case_count": 9,
+    "total_ppm_bytes": 73639443,
+    "all_cases_expected": true,
+    "all_input_hashes_match": true,
+    "cases": [
+      {"case_id": "photo-small", "dimensions": [512, 512], "sha256": "18a612146faf5cdc2d9f786ddcd946615235db992c83011d37c89b1728b90922"},
+      {"case_id": "graphic-small", "dimensions": [512, 512], "sha256": "ddd376ba50104a0d7aea5498def73c9299d5304cd4ffe4c02f18d1107b6f79cf"},
+      {"case_id": "texture-small", "dimensions": [512, 512], "sha256": "51c73a488d129f60eca7a110cc3dbf7117045a8e13104ee1bf87922707c651e6"},
+      {"case_id": "photo-medium", "dimensions": [1600, 1200], "sha256": "a1a6ab156ae4b18666a780bcdf7eaf7d2124415eb192e091dc21e7adbf383c70"},
+      {"case_id": "graphic-medium", "dimensions": [1600, 1200], "sha256": "c42deaa474e253db740384e7e93a208c82ff11cd66dc2930c34678a9e8279234"},
+      {"case_id": "texture-medium", "dimensions": [1600, 1200], "sha256": "91d90466139f54ad441448bc7d352c637a4020ce928434dbff3a358c5a829385"},
+      {"case_id": "photo-large", "dimensions": [3000, 2000], "sha256": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612"},
+      {"case_id": "graphic-large", "dimensions": [3000, 2000], "sha256": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc"},
+      {"case_id": "texture-large", "dimensions": [3000, 2000], "sha256": "dd02badce31b757f9374f0f5de187e9de3158fe6878929207eeed24ea72d79e2"}
+    ]
+  },
+  "benchmark_matrix": {
+    "content_classes": ["photo", "graphic", "texture"],
+    "sizes": {"small": [512, 512], "medium": [1600, 1200], "large": [3000, 2000]},
+    "methods": [4, 6],
+    "backends": ["cpu", "metal"],
+    "quality": 75,
+    "cold_repetitions": 3,
+    "warm_repetitions": 3,
+    "expected_measured_records": 216,
+    "expected_warmup_records": 36,
+    "expected_total_records": 252
+  },
+  "dispatch_contract": {
+    "cpu_backend_sets_WEBP_METAL": "0",
+    "metal_backend_sets_WEBP_METAL": "1",
+    "metal_backend_sets_WEBP_METAL_MIN_PIXELS": "0",
+    "metal_backend_sets_WEBP_METAL_HASH": "1",
+    "metal_backend_sets_WEBP_METAL_HASH_MIN_PIXELS": "0",
+    "runner_source_contract_checks_passed": true,
+    "correctness_and_determinism_validator_is_committed": true
+  },
+  "exclusive_session": {
+    "lease_value_required": "WEBP_BENCHMARK_SESSION=exclusive",
+    "lease_active_for_exact_timed_prefix": true,
+    "other_experiment_process_scan_patterns_checked": true,
+    "matching_processes": [],
+    "no_other_experiment_operator_or_process": true
+  },
+  "output_directory": {
+    "parent": "/Users/jonaskamsker/.codex/worktrees/29f1/libwebp-metal/profile-data/runs",
+    "existing_children_before_timed_run": ["calibration-20260817", "stage-profile-20260817"],
+    "candidate_runner_run_id_at_preflight": "20260817-191137",
+    "candidate_exists_at_preflight": false,
+    "runner_creation_mode": "mkdir(exist_ok=False)",
+    "non_overwriting_check_passed": true
+  },
+  "machine_preconditions": {
+    "uname": "Darwin Mac.lan 25.5.0 Darwin Kernel Version 25.5.0: Mon Apr 27 20:41:15 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6041 arm64",
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "model": "MacBook Pro Mac16,7",
+    "chip": "Apple M4 Pro",
+    "cpu_cores": 14,
+    "memory_gb": 24,
+    "gpu": "Apple M4 Pro integrated GPU; 20 cores; Metal 4",
+    "power": "AC Power; internal battery 100%; charged",
+    "thermal": "No thermal warning, performance warning, or CPU power status recorded",
+    "sleep_prevention": "Amphetamine single-use system/display assertions active; PreventSystemSleep 0; no experiment process matched",
+    "load_average_at_final_preflight": [2.89306640625, 2.44091796875, 2.298828125],
+    "contention_snapshot": {
+      "observed_background_processes": [
+        "WindowServer 43.4% CPU",
+        "Codex (Service) 22.3% CPU",
+        "codex 16.1% CPU",
+        "sysmond 6.7% CPU",
+        "Codex (Renderer) 6.4% CPU",
+        "Activity Monitor 2.4% CPU"
+      ],
+      "experiment_process_matches": [],
+      "recorded_for_later_interpretation": true
+    },
+    "ac_power": true,
+    "thermal_warning_absent": true,
+    "performance_warning_absent": true,
+    "integrated_metal_gpu_present": true
+  },
+  "preflight_conclusion": "PASS; prerequisites satisfied and timed command may be launched exactly as specified"
+}

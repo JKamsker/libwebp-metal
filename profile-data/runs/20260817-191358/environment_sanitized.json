@@ -1,0 +1,37 @@
+{
+  "schema": "libwebp-stage-profile-environment-v1-sanitized",
+  "created_at_utc": "2026-08-17T17:13:58.378812+00:00",
+  "repository": "/Users/jonaskamsker/.codex/worktrees/29f1/libwebp-metal",
+  "git_commit": "18fd520d5d7faf0645d461bded27c0ba7ee4a48e",
+  "git_status": "",
+  "encoder": "/Users/jonaskamsker/.codex/worktrees/29f1/libwebp-metal/examples/cwebp",
+  "encoder_sha256": "b0654df664b9ac106eb2677a1d6c733be8d09ad0aef6e107b88c75f4df289f46",
+  "encoder_version": "1.6.0\nlibsharpyuv: 0.4.2",
+  "build_command": "make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT=1 CFLAGS='-O3 -DNDEBUG' CXXFLAGS='-O3 -DNDEBUG' ex",
+  "timed_command": "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT=1 WEBP_BENCHMARK_SESSION=exclusive python3 scripts/encoder_stage_profile.py run --encoder examples/cwebp --dataset-dir profile-data/dataset --output-dir profile-data/runs --methods 4 6 --backends cpu metal --quality 75 --cold-repetitions 3 --warm-repetitions 3",
+  "runtime_flags": {
+    "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT": "1",
+    "WEBP_BENCHMARK_SESSION": "exclusive"
+  },
+  "platform": "macOS-26.5.1-arm64-arm-64bit",
+  "machine": "arm64",
+  "uname": "Darwin Mac.lan 25.5.0 Darwin Kernel Version 25.5.0: Mon Apr 27 20:41:15 PDT 2026; root:xnu-12377.121.6~2/RELEASE_ARM64_T6041 arm64",
+  "hardware": {
+    "model": "MacBook Pro Mac16,7",
+    "chip": "Apple M4 Pro",
+    "cpu_cores": 14,
+    "memory_gb": 24,
+    "serial_number": "REDACTED",
+    "hardware_uuid": "REDACTED",
+    "provisioning_udid": "REDACTED"
+  },
+  "gpu": {
+    "chipset": "Apple M4 Pro",
+    "gpu_cores": 20,
+    "metal_support": "Metal 4",
+    "display": "Built-in Liquid Retina XDR; 3456 x 2234"
+  },
+  "power": "AC Power; internal battery 100%; charged",
+  "thermal": "No thermal warning, performance warning, or CPU power status recorded",
+  "privacy": "Sensitive hardware identifiers from the committed runner environment.json were redacted; raw environment.json remains local-only and is not committed."
+}
