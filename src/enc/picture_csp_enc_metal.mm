@@ -2,7 +2,8 @@
 //
 // Metal implementation of libwebp's opaque RGB/BGR to YUV420 conversion.
 // The integer conversion and gamma lookup/interpolation match
-// ImportYUVAFromRGBA() byte-for-byte.
+// ImportYUVAFromRGBA() byte-for-byte. The production grid assigns one thread
+// to each 2x2 chroma block and emits its one-to-four luma samples as well.
 
 #import <Foundation/Foundation.h>
 #import <Metal/Metal.h>
@@ -32,6 +33,7 @@ namespace {
 constexpr size_t kDefaultMinimumPixels = 80u * 1000u * 1000u;
 constexpr NSUInteger kPreferredThreads = 256;
 constexpr size_t kBufferOffsetAlignment = 256u;
+constexpr bool kDefaultBlock2x2 = true;
 
 constexpr const char* kMetalSource = R"METAL(
 #include <metal_stdlib>
@@ -223,7 +225,7 @@ struct MetalState {
   id<MTLBuffer> linear_to_gamma = nil;
   size_t source_capacity = 0;
   size_t output_capacity = 0;
-  bool block_2x2 = false;
+  bool block_2x2 = kDefaultBlock2x2;
   bool write_combined_inputs = false;
   bool unretained_command_buffers = false;
   bool contiguous_copy = false;
@@ -328,7 +330,8 @@ MetalState* InitializeState() {
     auto* state = new MetalState();
     const bool ablation_experiment = AblationExperimentEnabled();
     if (ablation_experiment) {
-      state->block_2x2 = EnvironmentFlag("WEBP_METAL_LOSSY_BLOCK_2X2", false);
+      state->block_2x2 = EnvironmentFlag("WEBP_METAL_LOSSY_BLOCK_2X2",
+                                         kDefaultBlock2x2);
       state->write_combined_inputs = EnvironmentFlag(
           "WEBP_METAL_WRITE_COMBINED_INPUTS", false);
       state->unretained_command_buffers = EnvironmentFlag(

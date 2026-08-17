@@ -14,6 +14,8 @@ import sys
 import tempfile
 from pathlib import Path
 
+import benchmark_metal_ablation as metal_ablation
+
 
 ROOT = Path(__file__).resolve().parents[1]
 MATRIX = (
@@ -134,6 +136,31 @@ def check_omitted_targets() -> None:
     )
 
 
+def check_promoted_ablation_control() -> None:
+    source = (ROOT / "src/enc/picture_csp_enc_metal.mm").read_text(
+        encoding="utf-8"
+    )
+    correctness = (ROOT / "scripts/test_metal.sh").read_text(encoding="utf-8")
+    assert "constexpr bool kDefaultBlock2x2 = true;" in source
+    assert "legacy_per_pixel) set -- WEBP_METAL_LOSSY_BLOCK_2X2=0" in correctness
+
+    # The released timed matrix remains the historical experiment. Reversing
+    # it here would create a follow-up that improperly reused item 4's gate.
+    matrix = metal_ablation.matrix_document(
+        [metal_ablation.SUITES["lossy"]]
+    )
+    suite = matrix["suites"][0]
+    assert matrix["baseline"] == (
+        "all optimization flags disabled; 256 threads per stage"
+    )
+    assert suite["baseline_environment"]["WEBP_METAL_LOSSY_BLOCK_2X2"] == "0"
+    variants = {variant["name"]: variant for variant in suite["variants"]}
+    assert "legacy_per_pixel" not in variants
+    assert variants["block_2x2"]["delta"] == {
+        "WEBP_METAL_LOSSY_BLOCK_2X2": "1"
+    }
+
+
 def check_runtime_and_lease_refusals() -> None:
     python = sys.executable
     with tempfile.TemporaryDirectory(prefix="webp-guard-test-") as temporary:
@@ -195,6 +222,7 @@ def check_runtime_and_lease_refusals() -> None:
 def main() -> int:
     check_build_matrix()
     check_omitted_targets()
+    check_promoted_ablation_control()
     check_runtime_and_lease_refusals()
     print("PASS: five independent build/runtime guards and fail-closed leases")
     return 0

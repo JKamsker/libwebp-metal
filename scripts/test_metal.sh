@@ -115,10 +115,10 @@ for input do
     cmp "$temporary_dir/$name-lossy-cpu.webp" \
         "$temporary_dir/$name-lossy-metal-baseline.webp"
     if [ "$run_ablation" = 1 ]; then
-      for variant in block_2x2 write_combined contiguous_copy threads_128 \
-                     threads_512 unretained_commands; do
+      for variant in legacy_per_pixel write_combined contiguous_copy \
+                     threads_128 threads_512 unretained_commands; do
         case "$variant" in
-          block_2x2) set -- WEBP_METAL_LOSSY_BLOCK_2X2=1 ;;
+          legacy_per_pixel) set -- WEBP_METAL_LOSSY_BLOCK_2X2=0 ;;
           write_combined) set -- WEBP_METAL_WRITE_COMBINED_INPUTS=1 ;;
           contiguous_copy) set -- WEBP_METAL_LOSSY_CONTIGUOUS_COPY=1 ;;
           threads_128) set -- WEBP_METAL_LOSSY_THREADS=128 ;;
