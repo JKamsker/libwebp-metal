@@ -1,0 +1,98 @@
+{
+  "cases": [
+    {
+      "case_id": "photo-small",
+      "content_class": "photo",
+      "height": 512,
+      "path": "<repo>/profile-data/dataset/photo-small.ppm",
+      "pixels": 262144,
+      "sha256": "18a612146faf5cdc2d9f786ddcd946615235db992c83011d37c89b1728b90922",
+      "size_class": "small",
+      "width": 512
+    },
+    {
+      "case_id": "graphic-small",
+      "content_class": "graphic",
+      "height": 512,
+      "path": "<repo>/profile-data/dataset/graphic-small.ppm",
+      "pixels": 262144,
+      "sha256": "ddd376ba50104a0d7aea5498def73c9299d5304cd4ffe4c02f18d1107b6f79cf",
+      "size_class": "small",
+      "width": 512
+    },
+    {
+      "case_id": "texture-small",
+      "content_class": "texture",
+      "height": 512,
+      "path": "<repo>/profile-data/dataset/texture-small.ppm",
+      "pixels": 262144,
+      "sha256": "51c73a488d129f60eca7a110cc3dbf7117045a8e13104ee1bf87922707c651e6",
+      "size_class": "small",
+      "width": 512
+    },
+    {
+      "case_id": "photo-medium",
+      "content_class": "photo",
+      "height": 1200,
+      "path": "<repo>/profile-data/dataset/photo-medium.ppm",
+      "pixels": 1920000,
+      "sha256": "a1a6ab156ae4b18666a780bcdf7eaf7d2124415eb192e091dc21e7adbf383c70",
+      "size_class": "medium",
+      "width": 1600
+    },
+    {
+      "case_id": "graphic-medium",
+      "content_class": "graphic",
+      "height": 1200,
+      "path": "<repo>/profile-data/dataset/graphic-medium.ppm",
+      "pixels": 1920000,
+      "sha256": "c42deaa474e253db740384e7e93a208c82ff11cd66dc2930c34678a9e8279234",
+      "size_class": "medium",
+      "width": 1600
+    },
+    {
+      "case_id": "texture-medium",
+      "content_class": "texture",
+      "height": 1200,
+      "path": "<repo>/profile-data/dataset/texture-medium.ppm",
+      "pixels": 1920000,
+      "sha256": "91d90466139f54ad441448bc7d352c637a4020ce928434dbff3a358c5a829385",
+      "size_class": "medium",
+      "width": 1600
+    },
+    {
+      "case_id": "photo-large",
+      "content_class": "photo",
+      "height": 2000,
+      "path": "<repo>/profile-data/dataset/photo-large.ppm",
+      "pixels": 6000000,
+      "sha256": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612",
+      "size_class": "large",
+      "width": 3000
+    },
+    {
+      "case_id": "graphic-large",
+      "content_class": "graphic",
+      "height": 2000,
+      "path": "<repo>/profile-data/dataset/graphic-large.ppm",
+      "pixels": 6000000,
+      "sha256": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc",
+      "size_class": "large",
+      "width": 3000
+    },
+    {
+      "case_id": "texture-large",
+      "content_class": "texture",
+      "height": 2000,
+      "path": "<repo>/profile-data/dataset/texture-large.ppm",
+      "pixels": 6000000,
+      "sha256": "dd02badce31b757f9374f0f5de187e9de3158fe6878929207eeed24ea72d79e2",
+      "size_class": "large",
+      "width": 3000
+    }
+  ],
+  "format": "binary PPM (P6), opaque RGB",
+  "generator": "<repo>/scripts/encoder_stage_profile.py",
+  "schema": "libwebp-stage-profile-dataset-v1",
+  "seed_policy": "fixed formulas embedded in generator"
+}

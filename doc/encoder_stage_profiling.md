@@ -15,7 +15,8 @@ On macOS, build an optimized Metal-enabled encoder:
 
 ```sh
 make -f makefile.unix -j8 clean
-make -f makefile.unix -j8 CFLAGS='-O3 -DNDEBUG' CXXFLAGS='-O3 -DNDEBUG' ex
+make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 \
+  CFLAGS='-O3 -DNDEBUG' CXXFLAGS='-O3 -DNDEBUG' ex
 scripts/test_metal.sh examples/test_ref.ppm
 ```
 

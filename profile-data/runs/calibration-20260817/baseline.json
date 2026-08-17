@@ -1,0 +1,1508 @@
+{
+  "aggregation": "median; MAD is median absolute deviation; warmups excluded",
+  "dataset_schema": "libwebp-stage-profile-dataset-v1",
+  "groups": [
+    {
+      "backend": "cpu",
+      "case_id": "photo-medium",
+      "exact": true,
+      "height": 1200,
+      "metal_cross_color_rate": 0.0,
+      "metal_hash_rate": 0.0,
+      "method": 4,
+      "output_bytes": {
+        "mad": 0,
+        "max": 129340,
+        "median": 129340,
+        "min": 129340,
+        "n": 1
+      },
+      "pixels": 1920000,
+      "quality": 75.0,
+      "sample_role": "cold",
+      "stages": {
+        "lossless_analyze": {
+          "mad": 0,
+          "max": 4242000,
+          "median": 4242000,
+          "median_calls": 1,
+          "median_share_total": 0.013666809499109176,
+          "min": 4242000,
+          "n": 1
+        },
+        "lossless_backward_refs": {
+          "mad": 0,
+          "max": 44200041,
+          "median": 44200041,
+          "median_calls": 4,
+          "median_share_total": 0.142403003347434,
+          "min": 44200041,
+          "n": 1
+        },
+        "lossless_bitstream": {
+          "mad": 0,
+          "max": 710915,
+          "median": 710915,
+          "median_calls": 4,
+          "median_share_total": 0.002290414869179444,
+          "min": 710915,
+          "n": 1
+        },
+        "lossless_container_setup": {
+          "mad": 0,
+          "max": 486750,
+          "median": 486750,
+          "median_calls": 1,
+          "median_share_total": 0.0015682035652266363,
+          "min": 486750,
+          "n": 1
+        },
+        "lossless_cross_color": {
+          "mad": 0,
+          "max": 147505417,
+          "median": 147505417,
+          "median_calls": 1,
+          "median_share_total": 0.4752306539900189,
+          "min": 147505417,
+          "n": 1
+        },
+        "lossless_encoder_init": {
+          "mad": 0,
+          "max": 3291,
+          "median": 3291,
+          "median_calls": 1,
+          "median_share_total": 1.0602892518050048e-05,
+          "min": 3291,
+          "n": 1
+        },
+        "lossless_hash_chain": {
+          "mad": 0,
+          "max": 21188375,
+          "median": 21188375,
+          "median_calls": 4,
+          "median_share_total": 0.06826437640751706,
+          "min": 21188375,
+          "n": 1
+        },
+        "lossless_histogram": {
+          "mad": 0,
+          "max": 10825208,
+          "median": 10825208,
+          "median_calls": 4,
+          "median_share_total": 0.03487648645078563,
+          "min": 10825208,
+          "n": 1
+        },
+        "lossless_huffman": {
+          "mad": 0,
+          "max": 487251,
+          "median": 487251,
+          "median_calls": 5,
+          "median_share_total": 0.0015698176792198126,
+          "min": 487251,
+          "n": 1
+        },
+        "lossless_input_copy": {
+          "mad": 0,
+          "max": 434583,
+          "median": 434583,
+          "median_calls": 1,
+          "median_share_total": 0.0014001327375180016,
+          "min": 434583,
+          "n": 1
+        },
+        "lossless_predictor": {
+          "mad": 0,
+          "max": 79650083,
+          "median": 79650083,
+          "median_calls": 1,
+          "median_share_total": 0.25661539626337443,
+          "min": 79650083,
+          "n": 1
+        },
+        "lossless_prepare": {
+          "mad": 0,
+          "max": 41,
+          "median": 41,
+          "median_calls": 1,
+          "median_share_total": 1.3209316111821694e-07,
+          "min": 41,
+          "n": 1
+        },
+        "lossless_riff_write": {
+          "mad": 0,
+          "max": 333,
+          "median": 333,
+          "median_calls": 1,
+          "median_share_total": 1.0728542110333229e-06,
+          "min": 333,
+          "n": 1
+        },
+        "lossless_stream_finalize": {
+          "mad": 0,
+          "max": 5334,
+          "median": 5334,
+          "median_calls": 1,
+          "median_share_total": 1.7184998083038272e-05,
+          "min": 5334,
+          "n": 1
+        },
+        "lossless_subtract_green": {
+          "mad": 0,
+          "max": 197417,
+          "median": 197417,
+          "median_calls": 1,
+          "median_share_total": 0.0006360350143530495,
+          "min": 197417,
+          "n": 1
+        },
+        "metal_init": {
+          "mad": 0,
+          "max": 1792,
+          "median": 1792,
+          "median_calls": 5,
+          "median_share_total": 5.773437676191335e-06,
+          "min": 1792,
+          "n": 1
+        }
+      },
+      "thread_level": 0,
+      "total_ns": {
+        "mad": 0,
+        "max": 310387000,
+        "median": 310387000,
+        "min": 310387000,
+        "n": 1
+      },
+      "width": 1600
+    },
+    {
+      "backend": "cpu",
+      "case_id": "photo-medium",
+      "exact": true,
+      "height": 1200,
+      "metal_cross_color_rate": 0.0,
+      "metal_hash_rate": 0.0,
+      "method": 4,
+      "output_bytes": {
+        "mad": 0,
+        "max": 129340,
+        "median": 129340,
+        "min": 129340,
+        "n": 1
+      },
+      "pixels": 1920000,
+      "quality": 75.0,
+      "sample_role": "warm",
+      "stages": {
+        "lossless_analyze": {
+          "mad": 0,
+          "max": 4242834,
+          "median": 4242834,
+          "median_calls": 1,
+          "median_share_total": 0.013400008251923492,
+          "min": 4242834,
+          "n": 1
+        },
+        "lossless_backward_refs": {
+          "mad": 0,
+          "max": 43923416,
+          "median": 43923416,
+          "median_calls": 4,
+          "median_share_total": 0.13872193370107536,
+          "min": 43923416,
+          "n": 1
+        },
+        "lossless_bitstream": {
+          "mad": 0,
+          "max": 657334,
+          "median": 657334,
+          "median_calls": 4,
+          "median_share_total": 0.0020760371544750224,
+          "min": 657334,
+          "n": 1
+        },
+        "lossless_container_setup": {
+          "mad": 0,
+          "max": 440291,
+          "median": 440291,
+          "median_calls": 1,
+          "median_share_total": 0.0013905571213126996,
+          "min": 440291,
+          "n": 1
+        },
+        "lossless_cross_color": {
+          "mad": 0,
+          "max": 147841834,
+          "median": 147841834,
+          "median_calls": 1,
+          "median_share_total": 0.46692418218094395,
+          "min": 147841834,
+          "n": 1
+        },
+        "lossless_encoder_init": {
+          "mad": 0,
+          "max": 500,
+          "median": 500,
+          "median_calls": 1,
+          "median_share_total": 1.5791341650325576e-06,
+          "min": 500,
+          "n": 1
+        },
+        "lossless_hash_chain": {
+          "mad": 0,
+          "max": 20932417,
+          "median": 20932417,
+          "median_calls": 4,
+          "median_share_total": 0.06611018968281662,
+          "min": 20932417,
+          "n": 1
+        },
+        "lossless_histogram": {
+          "mad": 0,
+          "max": 10178832,
+          "median": 10178832,
+          "median_calls": 4,
+          "median_share_total": 0.032147482742653354,
+          "min": 10178832,
+          "n": 1
+        },
+        "lossless_huffman": {
+          "mad": 0,
+          "max": 529167,
+          "median": 529167,
+          "median_calls": 5,
+          "median_share_total": 0.0016712513774155668,
+          "min": 529167,
+          "n": 1
+        },
+        "lossless_input_copy": {
+          "mad": 0,
+          "max": 95708,
+          "median": 95708,
+          "median_calls": 1,
+          "median_share_total": 0.00030227154533387203,
+          "min": 95708,
+          "n": 1
+        },
+        "lossless_predictor": {
+          "mad": 0,
+          "max": 87683708,
+          "median": 87683708,
+          "median_calls": 1,
+          "median_share_total": 0.27692867803907717,
+          "min": 87683708,
+          "n": 1
+        },
+        "lossless_prepare": {
+          "mad": 0,
+          "max": 0,
+          "median": 0,
+          "median_calls": 1,
+          "median_share_total": 0.0,
+          "min": 0,
+          "n": 1
+        },
+        "lossless_riff_write": {
+          "mad": 0,
+          "max": 125,
+          "median": 125,
+          "median_calls": 1,
+          "median_share_total": 3.947835412581394e-07,
+          "min": 125,
+          "n": 1
+        },
+        "lossless_stream_finalize": {
+          "mad": 0,
+          "max": 4000,
+          "median": 4000,
+          "median_calls": 1,
+          "median_share_total": 1.2633073320260461e-05,
+          "min": 4000,
+          "n": 1
+        },
+        "lossless_subtract_green": {
+          "mad": 0,
+          "max": 210042,
+          "median": 210042,
+          "median_calls": 1,
+          "median_share_total": 0.000663368996583537,
+          "min": 210042,
+          "n": 1
+        },
+        "metal_init": {
+          "mad": 0,
+          "max": 0,
+          "median": 0,
+          "median_calls": 5,
+          "median_share_total": 0.0,
+          "min": 0,
+          "n": 1
+        }
+      },
+      "thread_level": 0,
+      "total_ns": {
+        "mad": 0,
+        "max": 316629208,
+        "median": 316629208,
+        "min": 316629208,
+        "n": 1
+      },
+      "width": 1600
+    },
+    {
+      "backend": "metal",
+      "case_id": "photo-medium",
+      "exact": true,
+      "height": 1200,
+      "metal_cross_color_rate": 1.0,
+      "metal_hash_rate": 1.0,
+      "method": 4,
+      "output_bytes": {
+        "mad": 0,
+        "max": 137718,
+        "median": 137718,
+        "min": 137718,
+        "n": 1
+      },
+      "pixels": 1920000,
+      "quality": 75.0,
+      "sample_role": "cold",
+      "stages": {
+        "lossless_analyze": {
+          "mad": 0,
+          "max": 4278792,
+          "median": 4278792,
+          "median_calls": 1,
+          "median_share_total": 0.018810863922897648,
+          "min": 4278792,
+          "n": 1
+        },
+        "lossless_backward_refs": {
+          "mad": 0,
+          "max": 47883499,
+          "median": 47883499,
+          "median_calls": 4,
+          "median_share_total": 0.210510345873603,
+          "min": 47883499,
+          "n": 1
+        },
+        "lossless_bitstream": {
+          "mad": 0,
+          "max": 656875,
+          "median": 656875,
+          "median_calls": 4,
+          "median_share_total": 0.0028878211979814377,
+          "min": 656875,
+          "n": 1
+        },
+        "lossless_container_setup": {
+          "mad": 0,
+          "max": 478416,
+          "median": 478416,
+          "median_calls": 1,
+          "median_share_total": 0.0021032614519558325,
+          "min": 478416,
+          "n": 1
+        },
+        "lossless_cross_color": {
+          "mad": 0,
+          "max": 20075041,
+          "median": 20075041,
+          "median_calls": 1,
+          "median_share_total": 0.08825595273095563,
+          "min": 20075041,
+          "n": 1
+        },
+        "lossless_encoder_init": {
+          "mad": 0,
+          "max": 3750,
+          "median": 3750,
+          "median_calls": 1,
+          "median_share_total": 1.6486134336716106e-05,
+          "min": 3750,
+          "n": 1
+        },
+        "lossless_hash_chain": {
+          "mad": 0,
+          "max": 62982583,
+          "median": 62982583,
+          "median_calls": 4,
+          "median_share_total": 0.2768904864563659,
+          "min": 62982583,
+          "n": 1
+        },
+        "lossless_histogram": {
+          "mad": 0,
+          "max": 10642750,
+          "median": 10642750,
+          "median_calls": 4,
+          "median_share_total": 0.04678874832322275,
+          "min": 10642750,
+          "n": 1
+        },
+        "lossless_huffman": {
+          "mad": 0,
+          "max": 566250,
+          "median": 566250,
+          "median_calls": 5,
+          "median_share_total": 0.002489406284844132,
+          "min": 566250,
+          "n": 1
+        },
+        "lossless_input_copy": {
+          "mad": 0,
+          "max": 541209,
+          "median": 541209,
+          "median_calls": 1,
+          "median_share_total": 0.0023793184741972766,
+          "min": 541209,
+          "n": 1
+        },
+        "lossless_predictor": {
+          "mad": 0,
+          "max": 107278416,
+          "median": 107278416,
+          "median_calls": 1,
+          "median_share_total": 0.4716283673616305,
+          "min": 107278416,
+          "n": 1
+        },
+        "lossless_prepare": {
+          "mad": 0,
+          "max": 42,
+          "median": 42,
+          "median_calls": 1,
+          "median_share_total": 1.8464470457122037e-07,
+          "min": 42,
+          "n": 1
+        },
+        "lossless_riff_write": {
+          "mad": 0,
+          "max": 333,
+          "median": 333,
+          "median_calls": 1,
+          "median_share_total": 1.4639687291003902e-06,
+          "min": 333,
+          "n": 1
+        },
+        "lossless_stream_finalize": {
+          "mad": 0,
+          "max": 8916,
+          "median": 8916,
+          "median_calls": 1,
+          "median_share_total": 3.919743299897621e-05,
+          "min": 8916,
+          "n": 1
+        },
+        "lossless_subtract_green": {
+          "mad": 0,
+          "max": 188375,
+          "median": 188375,
+          "median_calls": 1,
+          "median_share_total": 0.0008281534815143723,
+          "min": 188375,
+          "n": 1
+        },
+        "metal_cross_color_dispatch": {
+          "mad": 0,
+          "max": 19172417,
+          "median": 19172417,
+          "median_calls": 1,
+          "median_share_total": 0.08428774459241055,
+          "min": 19172417,
+          "n": 1
+        },
+        "metal_hash_dispatch": {
+          "mad": 0,
+          "max": 30996460,
+          "median": 30996460,
+          "median_calls": 4,
+          "median_share_total": 0.13626981427270593,
+          "min": 30996460,
+          "n": 1
+        },
+        "metal_hash_pipeline_init": {
+          "mad": 0,
+          "max": 71833,
+          "median": 71833,
+          "median_calls": 4,
+          "median_share_total": 0.0003157995967491541,
+          "min": 71833,
+          "n": 1
+        },
+        "metal_init": {
+          "mad": 0,
+          "max": 25794709,
+          "median": 25794709,
+          "median_calls": 5,
+          "median_share_total": 0.11340134340013332,
+          "min": 25794709,
+          "n": 1
+        }
+      },
+      "thread_level": 0,
+      "total_ns": {
+        "mad": 0,
+        "max": 227463875,
+        "median": 227463875,
+        "min": 227463875,
+        "n": 1
+      },
+      "width": 1600
+    },
+    {
+      "backend": "metal",
+      "case_id": "photo-medium",
+      "exact": true,
+      "height": 1200,
+      "metal_cross_color_rate": 1.0,
+      "metal_hash_rate": 1.0,
+      "method": 4,
+      "output_bytes": {
+        "mad": 0,
+        "max": 137718,
+        "median": 137718,
+        "min": 137718,
+        "n": 1
+      },
+      "pixels": 1920000,
+      "quality": 75.0,
+      "sample_role": "warm",
+      "stages": {
+        "lossless_analyze": {
+          "mad": 0,
+          "max": 4236083,
+          "median": 4236083,
+          "median_calls": 1,
+          "median_share_total": 0.025186744516520303,
+          "min": 4236083,
+          "n": 1
+        },
+        "lossless_backward_refs": {
+          "mad": 0,
+          "max": 44925209,
+          "median": 44925209,
+          "median_calls": 4,
+          "median_share_total": 0.2671146343058619,
+          "min": 44925209,
+          "n": 1
+        },
+        "lossless_bitstream": {
+          "mad": 0,
+          "max": 614209,
+          "median": 614209,
+          "median_calls": 4,
+          "median_share_total": 0.0036519409942504474,
+          "min": 614209,
+          "n": 1
+        },
+        "lossless_container_setup": {
+          "mad": 0,
+          "max": 502417,
+          "median": 502417,
+          "median_calls": 1,
+          "median_share_total": 0.0029872522846593375,
+          "min": 502417,
+          "n": 1
+        },
+        "lossless_cross_color": {
+          "mad": 0,
+          "max": 7039500,
+          "median": 7039500,
+          "median_calls": 1,
+          "median_share_total": 0.041855196893933536,
+          "min": 7039500,
+          "n": 1
+        },
+        "lossless_encoder_init": {
+          "mad": 0,
+          "max": 584,
+          "median": 584,
+          "median_calls": 1,
+          "median_share_total": 3.472325447270003e-06,
+          "min": 584,
+          "n": 1
+        },
+        "lossless_hash_chain": {
+          "mad": 0,
+          "max": 21145209,
+          "median": 21145209,
+          "median_calls": 4,
+          "median_share_total": 0.12572439605914845,
+          "min": 21145209,
+          "n": 1
+        },
+        "lossless_histogram": {
+          "mad": 0,
+          "max": 9977168,
+          "median": 9977168,
+          "median_calls": 4,
+          "median_share_total": 0.05932187386658898,
+          "min": 9977168,
+          "n": 1
+        },
+        "lossless_huffman": {
+          "mad": 0,
+          "max": 454876,
+          "median": 454876,
+          "median_calls": 5,
+          "median_share_total": 0.002704584777658202,
+          "min": 454876,
+          "n": 1
+        },
+        "lossless_input_copy": {
+          "mad": 0,
+          "max": 100417,
+          "median": 100417,
+          "median_calls": 1,
+          "median_share_total": 0.0005970556582851231,
+          "min": 100417,
+          "n": 1
+        },
+        "lossless_predictor": {
+          "mad": 0,
+          "max": 79724333,
+          "median": 79724333,
+          "median_calls": 1,
+          "median_share_total": 0.4740219695933693,
+          "min": 79724333,
+          "n": 1
+        },
+        "lossless_prepare": {
+          "mad": 0,
+          "max": 0,
+          "median": 0,
+          "median_calls": 1,
+          "median_share_total": 0.0,
+          "min": 0,
+          "n": 1
+        },
+        "lossless_riff_write": {
+          "mad": 0,
+          "max": 208,
+          "median": 208,
+          "median_calls": 1,
+          "median_share_total": 1.2367186524523298e-06,
+          "min": 208,
+          "n": 1
+        },
+        "lossless_stream_finalize": {
+          "mad": 0,
+          "max": 4333,
+          "median": 4333,
+          "median_calls": 1,
+          "median_share_total": 2.5762990005172813e-05,
+          "min": 4333,
+          "n": 1
+        },
+        "lossless_subtract_green": {
+          "mad": 0,
+          "max": 210208,
+          "median": 210208,
+          "median_calls": 1,
+          "median_share_total": 0.0012498468966091315,
+          "min": 210208,
+          "n": 1
+        },
+        "metal_cross_color_dispatch": {
+          "mad": 0,
+          "max": 6676750,
+          "median": 6676750,
+          "median_calls": 1,
+          "median_share_total": 0.03969837145558218,
+          "min": 6676750,
+          "n": 1
+        },
+        "metal_hash_dispatch": {
+          "mad": 0,
+          "max": 16435667,
+          "median": 16435667,
+          "median_calls": 4,
+          "median_share_total": 0.09772257665574628,
+          "min": 16435667,
+          "n": 1
+        },
+        "metal_hash_pipeline_init": {
+          "mad": 0,
+          "max": 41,
+          "median": 41,
+          "median_calls": 4,
+          "median_share_total": 2.4377627283916116e-07,
+          "min": 41,
+          "n": 1
+        },
+        "metal_init": {
+          "mad": 0,
+          "max": 249,
+          "median": 249,
+          "median_calls": 5,
+          "median_share_total": 1.480494925291491e-06,
+          "min": 249,
+          "n": 1
+        }
+      },
+      "thread_level": 0,
+      "total_ns": {
+        "mad": 0,
+        "max": 168187000,
+        "median": 168187000,
+        "min": 168187000,
+        "n": 1
+      },
+      "width": 1600
+    },
+    {
+      "backend": "cpu",
+      "case_id": "photo-medium",
+      "exact": true,
+      "height": 1200,
+      "metal_cross_color_rate": 0.0,
+      "metal_hash_rate": 0.0,
+      "method": 6,
+      "output_bytes": {
+        "mad": 0,
+        "max": 128808,
+        "median": 128808,
+        "min": 128808,
+        "n": 1
+      },
+      "pixels": 1920000,
+      "quality": 75.0,
+      "sample_role": "cold",
+      "stages": {
+        "lossless_analyze": {
+          "mad": 0,
+          "max": 4281917,
+          "median": 4281917,
+          "median_calls": 1,
+          "median_share_total": 0.009341015025143753,
+          "min": 4281917,
+          "n": 1
+        },
+        "lossless_backward_refs": {
+          "mad": 0,
+          "max": 45768584,
+          "median": 45768584,
+          "median_calls": 4,
+          "median_share_total": 0.09984430590867455,
+          "min": 45768584,
+          "n": 1
+        },
+        "lossless_bitstream": {
+          "mad": 0,
+          "max": 646918,
+          "median": 646918,
+          "median_calls": 4,
+          "median_share_total": 0.0014112535946016577,
+          "min": 646918,
+          "n": 1
+        },
+        "lossless_container_setup": {
+          "mad": 0,
+          "max": 475667,
+          "median": 475667,
+          "median_calls": 1,
+          "median_share_total": 0.0010376690145944103,
+          "min": 475667,
+          "n": 1
+        },
+        "lossless_cross_color": {
+          "mad": 0,
+          "max": 228993250,
+          "median": 228993250,
+          "median_calls": 1,
+          "median_share_total": 0.49954947489792534,
+          "min": 228993250,
+          "n": 1
+        },
+        "lossless_encoder_init": {
+          "mad": 0,
+          "max": 2583,
+          "median": 2583,
+          "median_calls": 1,
+          "median_share_total": 5.63482239612452e-06,
+          "min": 2583,
+          "n": 1
+        },
+        "lossless_hash_chain": {
+          "mad": 0,
+          "max": 20256250,
+          "median": 20256250,
+          "median_calls": 4,
+          "median_share_total": 0.04418907129752122,
+          "min": 20256250,
+          "n": 1
+        },
+        "lossless_histogram": {
+          "mad": 0,
+          "max": 10505083,
+          "median": 10505083,
+          "median_calls": 4,
+          "median_share_total": 0.022916870678105675,
+          "min": 10505083,
+          "n": 1
+        },
+        "lossless_huffman": {
+          "mad": 0,
+          "max": 469498,
+          "median": 469498,
+          "median_calls": 5,
+          "median_share_total": 0.0010242113222360316,
+          "min": 469498,
+          "n": 1
+        },
+        "lossless_input_copy": {
+          "mad": 0,
+          "max": 433334,
+          "median": 433334,
+          "median_calls": 1,
+          "median_share_total": 0.0009453194456841745,
+          "min": 433334,
+          "n": 1
+        },
+        "lossless_predictor": {
+          "mad": 0,
+          "max": 145947208,
+          "median": 145947208,
+          "median_calls": 1,
+          "median_share_total": 0.3183842804065984,
+          "min": 145947208,
+          "n": 1
+        },
+        "lossless_prepare": {
+          "mad": 0,
+          "max": 0,
+          "median": 0,
+          "median_calls": 1,
+          "median_share_total": 0.0,
+          "min": 0,
+          "n": 1
+        },
+        "lossless_riff_write": {
+          "mad": 0,
+          "max": 416,
+          "median": 416,
+          "median_calls": 1,
+          "median_share_total": 9.07505271694851e-07,
+          "min": 416,
+          "n": 1
+        },
+        "lossless_stream_finalize": {
+          "mad": 0,
+          "max": 14000,
+          "median": 14000,
+          "median_calls": 1,
+          "median_share_total": 3.054104279742287e-05,
+          "min": 14000,
+          "n": 1
+        },
+        "lossless_subtract_green": {
+          "mad": 0,
+          "max": 204625,
+          "median": 204625,
+          "median_calls": 1,
+          "median_share_total": 0.00044639006303018964,
+          "min": 204625,
+          "n": 1
+        },
+        "metal_init": {
+          "mad": 0,
+          "max": 1833,
+          "median": 1833,
+          "median_calls": 5,
+          "median_share_total": 3.9986951034054375e-06,
+          "min": 1833,
+          "n": 1
+        }
+      },
+      "thread_level": 0,
+      "total_ns": {
+        "mad": 0,
+        "max": 458399541,
+        "median": 458399541,
+        "min": 458399541,
+        "n": 1
+      },
+      "width": 1600
+    },
+    {
+      "backend": "cpu",
+      "case_id": "photo-medium",
+      "exact": true,
+      "height": 1200,
+      "metal_cross_color_rate": 0.0,
+      "metal_hash_rate": 0.0,
+      "method": 6,
+      "output_bytes": {
+        "mad": 0,
+        "max": 128808,
+        "median": 128808,
+        "min": 128808,
+        "n": 1
+      },
+      "pixels": 1920000,
+      "quality": 75.0,
+      "sample_role": "warm",
+      "stages": {
+        "lossless_analyze": {
+          "mad": 0,
+          "max": 4113583,
+          "median": 4113583,
+          "median_calls": 1,
+          "median_share_total": 0.009012584177201615,
+          "min": 4113583,
+          "n": 1
+        },
+        "lossless_backward_refs": {
+          "mad": 0,
+          "max": 45090166,
+          "median": 45090166,
+          "median_calls": 4,
+          "median_share_total": 0.09878952646366787,
+          "min": 45090166,
+          "n": 1
+        },
+        "lossless_bitstream": {
+          "mad": 0,
+          "max": 730791,
+          "median": 730791,
+          "median_calls": 4,
+          "median_share_total": 0.0016011140174979686,
+          "min": 730791,
+          "n": 1
+        },
+        "lossless_container_setup": {
+          "mad": 0,
+          "max": 478791,
+          "median": 478791,
+          "median_calls": 1,
+          "median_share_total": 0.0010489989361553028,
+          "min": 478791,
+          "n": 1
+        },
+        "lossless_cross_color": {
+          "mad": 0,
+          "max": 228763583,
+          "median": 228763583,
+          "median_calls": 1,
+          "median_share_total": 0.5012056517312884,
+          "min": 228763583,
+          "n": 1
+        },
+        "lossless_encoder_init": {
+          "mad": 0,
+          "max": 1167,
+          "median": 1167,
+          "median_calls": 1,
+          "median_share_total": 2.5568186505035356e-06,
+          "min": 1167,
+          "n": 1
+        },
+        "lossless_hash_chain": {
+          "mad": 0,
+          "max": 20044750,
+          "median": 20044750,
+          "median_calls": 4,
+          "median_share_total": 0.04391670149501349,
+          "min": 20044750,
+          "n": 1
+        },
+        "lossless_histogram": {
+          "mad": 0,
+          "max": 10233625,
+          "median": 10233625,
+          "median_calls": 4,
+          "median_share_total": 0.022421185314703725,
+          "min": 10233625,
+          "n": 1
+        },
+        "lossless_huffman": {
+          "mad": 0,
+          "max": 476916,
+          "median": 476916,
+          "median_calls": 5,
+          "median_share_total": 0.0010448909370381699,
+          "min": 476916,
+          "n": 1
+        },
+        "lossless_input_copy": {
+          "mad": 0,
+          "max": 93166,
+          "median": 93166,
+          "median_calls": 1,
+          "median_share_total": 0.0002041204510649635,
+          "min": 93166,
+          "n": 1
+        },
+        "lossless_predictor": {
+          "mad": 0,
+          "max": 146366000,
+          "median": 146366000,
+          "median_calls": 1,
+          "median_share_total": 0.3206780793484152,
+          "min": 146366000,
+          "n": 1
+        },
+        "lossless_prepare": {
+          "mad": 0,
+          "max": 0,
+          "median": 0,
+          "median_calls": 1,
+          "median_share_total": 0.0,
+          "min": 0,
+          "n": 1
+        },
+        "lossless_riff_write": {
+          "mad": 0,
+          "max": 167,
+          "median": 167,
+          "median_calls": 1,
+          "median_share_total": 3.6588578803263964e-07,
+          "min": 167,
+          "n": 1
+        },
+        "lossless_stream_finalize": {
+          "mad": 0,
+          "max": 4916,
+          "median": 4916,
+          "median_calls": 1,
+          "median_share_total": 1.0770625951906925e-05,
+          "min": 4916,
+          "n": 1
+        },
+        "lossless_subtract_green": {
+          "mad": 0,
+          "max": 205500,
+          "median": 205500,
+          "median_calls": 1,
+          "median_share_total": 0.00045023670323776914,
+          "min": 205500,
+          "n": 1
+        },
+        "metal_init": {
+          "mad": 0,
+          "max": 293,
+          "median": 293,
+          "median_calls": 5,
+          "median_share_total": 6.419433287039726e-07,
+          "min": 293,
+          "n": 1
+        }
+      },
+      "thread_level": 0,
+      "total_ns": {
+        "mad": 0,
+        "max": 456426583,
+        "median": 456426583,
+        "min": 456426583,
+        "n": 1
+      },
+      "width": 1600
+    },
+    {
+      "backend": "metal",
+      "case_id": "photo-medium",
+      "exact": true,
+      "height": 1200,
+      "metal_cross_color_rate": 1.0,
+      "metal_hash_rate": 1.0,
+      "method": 6,
+      "output_bytes": {
+        "mad": 0,
+        "max": 137298,
+        "median": 137298,
+        "min": 137298,
+        "n": 1
+      },
+      "pixels": 1920000,
+      "quality": 75.0,
+      "sample_role": "cold",
+      "stages": {
+        "lossless_analyze": {
+          "mad": 0,
+          "max": 4183541,
+          "median": 4183541,
+          "median_calls": 1,
+          "median_share_total": 0.014033628423861487,
+          "min": 4183541,
+          "n": 1
+        },
+        "lossless_backward_refs": {
+          "mad": 0,
+          "max": 48315542,
+          "median": 48315542,
+          "median_calls": 4,
+          "median_share_total": 0.16207379431096133,
+          "min": 48315542,
+          "n": 1
+        },
+        "lossless_bitstream": {
+          "mad": 0,
+          "max": 619666,
+          "median": 619666,
+          "median_calls": 4,
+          "median_share_total": 0.002078660730443553,
+          "min": 619666,
+          "n": 1
+        },
+        "lossless_container_setup": {
+          "mad": 0,
+          "max": 440250,
+          "median": 440250,
+          "median_calls": 1,
+          "median_share_total": 0.0014768123256363496,
+          "min": 440250,
+          "n": 1
+        },
+        "lossless_cross_color": {
+          "mad": 0,
+          "max": 31237250,
+          "median": 31237250,
+          "median_calls": 1,
+          "median_share_total": 0.10478490816350725,
+          "min": 31237250,
+          "n": 1
+        },
+        "lossless_encoder_init": {
+          "mad": 0,
+          "max": 2792,
+          "median": 2792,
+          "median_calls": 1,
+          "median_share_total": 9.365724050372942e-06,
+          "min": 2792,
+          "n": 1
+        },
+        "lossless_hash_chain": {
+          "mad": 0,
+          "max": 55876792,
+          "median": 55876792,
+          "median_calls": 4,
+          "median_share_total": 0.18743789924501664,
+          "min": 55876792,
+          "n": 1
+        },
+        "lossless_histogram": {
+          "mad": 0,
+          "max": 10329749,
+          "median": 10329749,
+          "median_calls": 4,
+          "median_share_total": 0.03465099521619479,
+          "min": 10329749,
+          "n": 1
+        },
+        "lossless_huffman": {
+          "mad": 0,
+          "max": 456999,
+          "median": 456999,
+          "median_calls": 5,
+          "median_share_total": 0.001532996606481513,
+          "min": 456999,
+          "n": 1
+        },
+        "lossless_input_copy": {
+          "mad": 0,
+          "max": 425625,
+          "median": 425625,
+          "median_calls": 1,
+          "median_share_total": 0.0014277529723997076,
+          "min": 425625,
+          "n": 1
+        },
+        "lossless_predictor": {
+          "mad": 0,
+          "max": 178435792,
+          "median": 178435792,
+          "median_calls": 1,
+          "median_share_total": 0.5985603110966131,
+          "min": 178435792,
+          "n": 1
+        },
+        "lossless_prepare": {
+          "mad": 0,
+          "max": 125,
+          "median": 125,
+          "median_calls": 1,
+          "median_share_total": 4.193107114242901e-07,
+          "min": 125,
+          "n": 1
+        },
+        "lossless_riff_write": {
+          "mad": 0,
+          "max": 208,
+          "median": 208,
+          "median_calls": 1,
+          "median_share_total": 6.977330238100187e-07,
+          "min": 208,
+          "n": 1
+        },
+        "lossless_stream_finalize": {
+          "mad": 0,
+          "max": 5875,
+          "median": 5875,
+          "median_calls": 1,
+          "median_share_total": 1.9707603436941633e-05,
+          "min": 5875,
+          "n": 1
+        },
+        "lossless_subtract_green": {
+          "mad": 0,
+          "max": 188458,
+          "median": 188458,
+          "median_calls": 1,
+          "median_share_total": 0.0006321796644287908,
+          "min": 188458,
+          "n": 1
+        },
+        "metal_cross_color_dispatch": {
+          "mad": 0,
+          "max": 30043291,
+          "median": 30043291,
+          "median_calls": 1,
+          "median_share_total": 0.10077978978189576,
+          "min": 30043291,
+          "n": 1
+        },
+        "metal_hash_dispatch": {
+          "mad": 0,
+          "max": 19634708,
+          "median": 19634708,
+          "median_calls": 4,
+          "median_share_total": 0.0658643470407056,
+          "min": 19634708,
+          "n": 1
+        },
+        "metal_hash_pipeline_init": {
+          "mad": 0,
+          "max": 76042,
+          "median": 76042,
+          "median_calls": 4,
+          "median_share_total": 0.0002550818009450069,
+          "min": 76042,
+          "n": 1
+        },
+        "metal_init": {
+          "mad": 0,
+          "max": 29951168,
+          "median": 29951168,
+          "median_calls": 5,
+          "median_share_total": 0.10047076449654745,
+          "min": 29951168,
+          "n": 1
+        }
+      },
+      "thread_level": 0,
+      "total_ns": {
+        "mad": 0,
+        "max": 298108292,
+        "median": 298108292,
+        "min": 298108292,
+        "n": 1
+      },
+      "width": 1600
+    },
+    {
+      "backend": "metal",
+      "case_id": "photo-medium",
+      "exact": true,
+      "height": 1200,
+      "metal_cross_color_rate": 1.0,
+      "metal_hash_rate": 1.0,
+      "method": 6,
+      "output_bytes": {
+        "mad": 0,
+        "max": 137298,
+        "median": 137298,
+        "min": 137298,
+        "n": 1
+      },
+      "pixels": 1920000,
+      "quality": 75.0,
+      "sample_role": "warm",
+      "stages": {
+        "lossless_analyze": {
+          "mad": 0,
+          "max": 4105875,
+          "median": 4105875,
+          "median_calls": 1,
+          "median_share_total": 0.01684781498339855,
+          "min": 4105875,
+          "n": 1
+        },
+        "lossless_backward_refs": {
+          "mad": 0,
+          "max": 44874666,
+          "median": 44874666,
+          "median_calls": 4,
+          "median_share_total": 0.18413616347546027,
+          "min": 44874666,
+          "n": 1
+        },
+        "lossless_bitstream": {
+          "mad": 0,
+          "max": 649750,
+          "median": 649750,
+          "median_calls": 4,
+          "median_share_total": 0.0026661473584712655,
+          "min": 649750,
+          "n": 1
+        },
+        "lossless_container_setup": {
+          "mad": 0,
+          "max": 540583,
+          "median": 540583,
+          "median_calls": 1,
+          "median_share_total": 0.00221819767215771,
+          "min": 540583,
+          "n": 1
+        },
+        "lossless_cross_color": {
+          "mad": 0,
+          "max": 17703542,
+          "median": 17703542,
+          "median_calls": 1,
+          "median_share_total": 0.07264371179512906,
+          "min": 17703542,
+          "n": 1
+        },
+        "lossless_encoder_init": {
+          "mad": 0,
+          "max": 416,
+          "median": 416,
+          "median_calls": 1,
+          "median_share_total": 1.706990844361749e-06,
+          "min": 416,
+          "n": 1
+        },
+        "lossless_hash_chain": {
+          "mad": 0,
+          "max": 21143832,
+          "median": 21143832,
+          "median_calls": 4,
+          "median_share_total": 0.08676040297769945,
+          "min": 21143832,
+          "n": 1
+        },
+        "lossless_histogram": {
+          "mad": 0,
+          "max": 9986583,
+          "median": 9986583,
+          "median_calls": 4,
+          "median_share_total": 0.04097837920062185,
+          "min": 9986583,
+          "n": 1
+        },
+        "lossless_huffman": {
+          "mad": 0,
+          "max": 426750,
+          "median": 426750,
+          "median_calls": 5,
+          "median_share_total": 0.0017511017856523471,
+          "min": 426750,
+          "n": 1
+        },
+        "lossless_input_copy": {
+          "mad": 0,
+          "max": 128292,
+          "median": 128292,
+          "median_calls": 1,
+          "median_share_total": 0.0005264261283770613,
+          "min": 128292,
+          "n": 1
+        },
+        "lossless_predictor": {
+          "mad": 0,
+          "max": 145494458,
+          "median": 145494458,
+          "median_calls": 1,
+          "median_share_total": 0.5970137204600362,
+          "min": 145494458,
+          "n": 1
+        },
+        "lossless_prepare": {
+          "mad": 0,
+          "max": 42,
+          "median": 42,
+          "median_calls": 1,
+          "median_share_total": 1.7234042178652275e-07,
+          "min": 42,
+          "n": 1
+        },
+        "lossless_riff_write": {
+          "mad": 0,
+          "max": 333,
+          "median": 333,
+          "median_calls": 1,
+          "median_share_total": 1.3664133441645733e-06,
+          "min": 333,
+          "n": 1
+        },
+        "lossless_stream_finalize": {
+          "mad": 0,
+          "max": 4083,
+          "median": 4083,
+          "median_calls": 1,
+          "median_share_total": 1.6753951003675532e-05,
+          "min": 4083,
+          "n": 1
+        },
+        "lossless_subtract_green": {
+          "mad": 0,
+          "max": 213125,
+          "median": 213125,
+          "median_calls": 1,
+          "median_share_total": 0.0008745250569822062,
+          "min": 213125,
+          "n": 1
+        },
+        "metal_cross_color_dispatch": {
+          "mad": 0,
+          "max": 16573167,
+          "median": 16573167,
+          "median_calls": 1,
+          "median_share_total": 0.06800539502663047,
+          "min": 16573167,
+          "n": 1
+        },
+        "metal_hash_dispatch": {
+          "mad": 0,
+          "max": 16239667,
+          "median": 16239667,
+          "median_calls": 4,
+          "median_share_total": 0.06663693001077796,
+          "min": 16239667,
+          "n": 1
+        },
+        "metal_hash_pipeline_init": {
+          "mad": 0,
+          "max": 0,
+          "median": 0,
+          "median_calls": 4,
+          "median_share_total": 0.0,
+          "min": 0,
+          "n": 1
+        },
+        "metal_init": {
+          "mad": 0,
+          "max": 292,
+          "median": 292,
+          "median_calls": 5,
+          "median_share_total": 1.19817626575392e-06,
+          "min": 292,
+          "n": 1
+        }
+      },
+      "thread_level": 0,
+      "total_ns": {
+        "mad": 0,
+        "max": 243703709,
+        "median": 243703709,
+        "min": 243703709,
+        "n": 1
+      },
+      "width": 1600
+    }
+  ],
+  "schema": "libwebp-encoder-stage-baseline-v1",
+  "source": "<repo>/profile-data/runs/calibration-20260817/records.jsonl"
+}

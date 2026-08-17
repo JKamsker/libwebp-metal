@@ -1,0 +1,100 @@
+{
+  "schema": "libwebp-encoder-stage-execution-log-v1",
+  "interpretation_status": "pending_sol_review",
+  "source_revision": "f9e63f26aa3fd66e306561a1bc6e0eab7a582a2a",
+  "encoder": {
+    "path": "examples/cwebp",
+    "sha256": "ce590e18fe005f0358cece1cc39df9dc26b6449ed9673ef0833bb5b57f28e10a",
+    "version": "libwebp 1.6.0; libsharpyuv 0.4.2"
+  },
+  "build": {
+    "command": "make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 CFLAGS='-O3 -DNDEBUG' CXXFLAGS='-O3 -DNDEBUG' ex",
+    "makefile_fix": "CFLAGS now appends EXTRA_FLAGS with override, preserving WEBP_USE_METAL when CFLAGS is passed on the command line.",
+    "pre_calibration_check": [
+      "scripts/test_stage_profile.sh",
+      "scripts/test_metal.sh examples/test_ref.ppm",
+      "binary string and symbol checks for the Metal entry points"
+    ]
+  },
+  "dataset": {
+    "generator_command": "python3 scripts/encoder_stage_profile.py prepare --dataset-dir profile-data/dataset",
+    "generation_elapsed_seconds": 14.7,
+    "manifest_sha256": "d89d22b0f25aa046a89343a840f48e567cc43624e5e279b3b57a3cca61bff89c",
+    "cases": 9,
+    "content_classes": ["photo", "graphic", "texture"],
+    "sizes": ["512x512", "1600x1200", "3000x2000"]
+  },
+  "calibration": {
+    "command": "python3 scripts/encoder_stage_profile.py run --run-id calibration-20260817 --encoder examples/cwebp --dataset-dir profile-data/dataset --output-dir profile-data/runs --methods 4 6 --backends cpu metal --quality 75 --cold-repetitions 1 --warm-repetitions 1 --cases photo-medium",
+    "elapsed_seconds": 4.23,
+    "records": 12,
+    "valid_records": 12,
+    "forced_metal_hash_dispatch_records": 6,
+    "forced_metal_cross_color_dispatch_records": 6,
+    "artifact_sha256": {
+      "records.jsonl": "87111f0d2d9453959fdd05d76808584975254ee28f76ca82aaf65c935211479e",
+      "commands.jsonl": "cea58b7457f1a82bf9e7ed1190534bb90af2fddce163abb573226e866cc3e41a",
+      "baseline.json": "0769188aeda68b119e9ad68e2f1138279e64bbd2280367c35aa6c32062523818"
+    }
+  },
+  "matrix": {
+    "command": "python3 scripts/encoder_stage_profile.py run --run-id stage-profile-20260817 --encoder examples/cwebp --dataset-dir profile-data/dataset --output-dir profile-data/runs --methods 4 6 --backends cpu metal --quality 75 --cold-repetitions 3 --warm-repetitions 3",
+    "elapsed_seconds": 56.82,
+    "subprocess_commands": 144,
+    "records": 252,
+    "roles": {"cold": 108, "warmup": 36, "warm": 108},
+    "backends": {"cpu": 126, "metal": 126},
+    "case_method_backend_groups": 36,
+    "records_per_case_method_backend_group": 7,
+    "valid_records": 252,
+    "single_threaded_records": 252,
+    "output_bytes_stable_within_each_case_method_backend_group": true
+  },
+  "forced_dispatch_validation": {
+    "metal_hash_dispatch_records": 126,
+    "metal_cross_color_dispatch_records": 42,
+    "metal_cross_color_dispatch_groups": [
+      "photo-small-m4", "photo-small-m6", "photo-medium-m4",
+      "photo-medium-m6", "photo-large-m4", "photo-large-m6"
+    ],
+    "metal_cross_color_not_selected_groups": [
+      "graphic-small-m4", "graphic-small-m6", "texture-small-m4",
+      "texture-small-m6", "graphic-medium-m4", "graphic-medium-m6",
+      "texture-medium-m6", "texture-medium-m4", "graphic-large-m4",
+      "graphic-large-m6", "texture-large-m4", "texture-large-m6"
+    ]
+  },
+  "output_validation": {
+    "command": "python3 scripts/validate_stage_profile_outputs.py --manifest profile-data/runs/stage-profile-20260817/dataset_manifest.json --encoder examples/cwebp --decoder examples/dwebp --output profile-data/runs/stage-profile-20260817/output_validation.json --methods 4 6 --quality 75",
+    "elapsed_seconds": 18.21,
+    "entries": 18,
+    "output_encodes": 72,
+    "decodes": 36,
+    "repeated_cpu_bitstream_hash_equal": true,
+    "repeated_metal_bitstream_hash_equal": true,
+    "cpu_metal_decoded_pixels_equal": true,
+    "cpu_metal_identical_bitstreams": 12,
+    "cpu_metal_different_bitstreams": 6
+  },
+  "environment_deviation": {
+    "power_source": "battery",
+    "battery_charge_percent": 91,
+    "load_average_at_pre_run_snapshot": [2.76, 2.69, 2.37],
+    "thermal_warning": false,
+    "performance_warning": false
+  },
+  "artifacts": {
+    "committed": {
+      "records.jsonl": "84434068f6b544157b43426fce12c9cc1a6af32714f36d30f05c0b097a68af0b",
+      "commands.jsonl": "f3afbdd9ff15c4655083b65a686f916cf6faef2f92d44167c25db7aff7301bcc",
+      "dataset_manifest.json": "d89d22b0f25aa046a89343a840f48e567cc43624e5e279b3b57a3cca61bff89c",
+      "baseline.json": "3833005998d076a6cf95abb9e95345fffbd31355f2e5f8fd99c333aa9647b33a",
+      "output_validation.json": "3fda78c8ebcbe4d4d250df248e60b1da214f009602a6c7bb860f895083a940f4"
+    },
+    "local_only_sensitive": {
+      "path": "profile-data/runs/stage-profile-20260817/environment.json",
+      "sha256": "dba6e696b9eb100b0ac71f70adb8f22ee465fd94022f2d1623acb10e01bf670b",
+      "reason": "Contains serial number, hardware UUID, and provisioning UDID."
+    }
+  }
+}
