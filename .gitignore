@@ -47,6 +47,7 @@ cmake_install.cmake
 extras/get_disto
 extras/vwebp_sdl
 extras/webp_quality
+tools/webp_metal_benchmark
 tests/fuzzer/advanced_api_fuzzer
 tests/fuzzer/animation_api_fuzzer
 tests/fuzzer/animdecoder_fuzzer

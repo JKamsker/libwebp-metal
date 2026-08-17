@@ -5,30 +5,95 @@ or Metal. It does not contain benchmark results, and the runtime defaults in
 the encoder remain unchanged. The checked-in policy is deliberately untuned:
 an absent policy entry means CPU.
 
+## Released operator pipeline
+
+The normal operator workflow is the fixed
+`scripts/metal_crossover_focused_v1.json` preset. It incorporates the item-1
+operator commit `c723ce39` and Sol interpretation commit `26291748`; the
+operator does not choose cases, dimensions, methods, repetition counts,
+stopping rules, or a calibration outcome. There is no calibration phase.
+
+After the exclusive benchmark session is released, the exact command is:
+
+```sh
+WEBP_BENCHMARK_SESSION=exclusive scripts/run_metal_crossover_operator.sh
+```
+
+The entry point performs a clean optimized Metal build, runs the existing
+correctness suite and the untimed harness smoke gate, then executes the fixed
+matrix and writes the resulting directory under `${TMPDIR:-/tmp}`. It refuses
+to enter the timed phase unless `WEBP_BENCHMARK_SESSION` is exactly
+`exclusive`, refuses to overwrite an output directory, and aborts on the first
+correctness, determinism, reference-hash, or dispatch-proof failure.
+
+The fixed matrix contains 424 randomized CPU/Metal pair blocks, 848 runner
+processes, 1,648 measured records, and 400 discarded warmup encodes:
+
+* all 18 item-1 case/method warm Metal groups are retained as end-to-end
+  guards, with item-1 CPU and Metal bitstream SHA-256 references;
+* transform evidence is restricted to photo content at methods 4 and 6, six
+  sizes, and separate tune/holdout formulas;
+* hash evidence keeps photos and textures as separate strata at methods 4 and
+  6, emphasizing the medium/large back-reference sensitivity region;
+* palette graphics are a separate warm forced-dispatch guard and are never
+  pooled into hash threshold evidence; and
+* lossy import uses methods 4 and 6 and bounded photo/graphic/texture size
+  ladders. It remains a separate exploratory stratum because item 1 contains no
+  lossy baseline.
+
+Cold evidence uses a new process for every encode. Warm evidence uses one
+process, discards fixed warmups, and measures fixed subsequent repetitions.
+The largest input is 10,240 square: 400 MiB of source RGBA plus encoder and
+Metal allocations. Provisionally reserve 45--150 minutes, 2 GiB of memory,
+and 1 GiB of temporary disk headroom. The item-1 lossless portion should be
+only minutes; high-resolution lossy method-6 cases dominate uncertainty. The
+operator may not shorten or extend the run based on observed timings.
+
+Successful output contains:
+
+* `raw.jsonl`: immutable metadata and all paired sample records;
+* `summary.json`: per-section/content/case/method/execution/role median, MAD,
+  min/max, and paired Metal/CPU ratios without cross-content pooling;
+* `validity.json`: the mechanical gate result and exact counts; and
+* `policy-untuned.json`: an empty, CPU-fallback policy proving that the
+  operator does not install or infer thresholds.
+
+Sol must later inspect all four files. In particular, Sol decides whether any
+size ladder supports a candidate, checks tune versus holdout direction and
+noise, confirms the full 18-group warm guard outcome, and documents why every
+missing combination remains CPU. Operator output is invalid unless
+`validity.json` has `"valid": true`, all 424 pair blocks completed, all 1,648
+records are present, CPU records have no Metal markers, each Metal record has
+exactly its declared operation markers, repeated hashes are deterministic,
+CPU/Metal decoded or bitstream equality matches the case contract, and all 36
+item-1 backend/method reference hashes match.
+
 ## Scope and definitions
 
-The matrix covers the three current Metal operations independently:
+The threshold matrix covers the three current Metal operations independently,
+plus a combined lossless mode used only for item-1 end-to-end guards:
 
 * `transform`: lossless cross-color transform search;
 * `hash`: lossless hash-chain candidate search plus its CPU replay; and
 * `lossy`: opaque, regular RGB-to-YUV import followed by lossy encode.
 
-Each operation is crossed with square image size, deterministic content class
-(`flat`, `gradient`, `graphic`, `photo`, and `noise`), encoder method 0 through
-6, and execution mode:
+The focused operation ladders use explicit rectangular or square dimensions,
+deterministic content classes, methods 4 and 6, and execution mode:
 
 * **cold** is the first encode in a new process. The timed region includes
   import, runtime shader/pipeline creation reached by the encode, buffer setup,
   and the encode, but excludes process launch and deterministic input creation.
-* **warm** discards three in-process encodes and measures nine subsequent
-  encodes. Pipelines and capacity-sufficient buffers are therefore reusable.
+* **warm** discards the preset's fixed in-process warmups and measures its fixed
+  subsequent repetitions. Pipelines and capacity-sufficient buffers are
+  therefore reusable.
 
-The synthetic classes make the workload distributable and reproducible. They
-are deliberately different in spatial frequency and compressibility. Before a
-policy is promoted beyond `candidate`, repeat the confirmation matrix on a
-versioned real-image corpus owned by item 1, preserving its class labels and
-holdout split. Synthetic-only results are not sufficient to claim a generally
-representative speedup.
+The `photo`, `graphic`, and `texture` formulas reproduce the item-1 generator
+when seed zero is used; nonzero fixed seeds provide tune/holdout variation.
+They are deliberately different in spatial frequency and compressibility.
+Before a policy is promoted beyond `candidate`, repeat the confirmation matrix
+on a versioned real-image corpus owned by item 1, preserving its class labels
+and holdout split. Synthetic-only results are not sufficient to claim a
+generally representative speedup.
 
 ## Build and untimed checks
 
@@ -66,50 +131,30 @@ that the requested Metal path was reached.
 The matrix can be counted without running an encoder or reading a clock:
 
 ```sh
-python3 scripts/benchmark_metal.py plan
+python3 scripts/metal_crossover_operator.py plan
 ```
 
-## Later exclusive benchmark session
+## Separately reserved exhaustive preset
 
-Do not run these commands until the benchmark orchestrator grants the exclusive
-session. Record power source, thermal state, background workload, and whether
-the machine was allowed to cool before cold blocks. Use a Release build and
-avoid running other builds or benchmarks concurrently.
+The focused operator is the only released item-2 command. A separate inherited
+`scripts/metal_crossover_exhaustive_v1.json` preset preserves the broader
+methods 0--6, content, size, repetition, and holdout study for a later multi-day
+reservation. It is fully predefined but must not be substituted for the
+focused command without a new serialized benchmark release.
 
-The default full synthetic sweep is:
+Its scale can be inspected without encoding:
 
 ```sh
-python3 scripts/benchmark_metal.py run \
-  --runner build-metal-bench/webp_metal_benchmark \
-  --output results/metal-crossover-raw.jsonl \
-  --acknowledge-exclusive-session
-python3 scripts/benchmark_metal.py analyze \
-  --input results/metal-crossover-raw.jsonl \
-  --output results/metal-crossover-candidate.json
+python3 scripts/metal_crossover_operator.py plan \
+  --preset scripts/metal_crossover_exhaustive_v1.json
 ```
 
-For a short calibration pass, retain every dimension but reduce the methods,
-sizes, and samples explicitly; do not use calibration output as policy:
-
-```sh
-python3 scripts/benchmark_metal.py run \
-  --runner build-metal-bench/webp_metal_benchmark \
-  --output results/metal-crossover-calibration.jsonl \
-  --operations transform,hash,lossy \
-  --contents flat,gradient,graphic,photo,noise \
-  --methods 0,3,6 --seeds 101,202,303 \
-  --sides 256,1024,4096 --cold-trials 3 --warm-samples 5 \
-  --acknowledge-exclusive-session
-```
-
-The default matrix has 18,480 paired blocks (73,920 timed encodes) and includes 100 MP lossy
-inputs (about 400 MiB for the source RGBA buffer, with additional encoder and
-Metal allocations). Provisionally budget 2--7 wall-clock days and up to roughly
-2 GiB peak resident memory on an Apple-silicon workstation; method 6 and
-incompressible content dominate and may push the run beyond that range. Use the calibration
-pass to replace this estimate with a machine-specific one before reserving the
-full session. The controller writes and flushes each JSONL record immediately,
-but intentionally refuses to overwrite an existing result file.
+The exhaustive preset currently expands to 15,984 pair blocks, 31,968 runner
+processes, and 63,888 measured records, plus 12,070 warmups. It has the same
+400 MiB maximum source allocation and approximately 2--3 GiB peak memory, but
+should be budgeted in days. There is intentionally no operator calibration or
+runtime-dependent branch table: focused and exhaustive are two immutable,
+separately released matrices.
 
 ## Output contract and correctness gates
 
@@ -119,14 +164,15 @@ hardware strings. Every later record is one sample with:
 
 * operation, CPU/Metal variant, content, dimensions, method, and seed;
 * tune/holdout role, cold/warm mode, randomized pair ID, and trial;
-* elapsed nanoseconds and whether the requested Metal dispatch was observed;
+* elapsed nanoseconds and the exact set of observed Metal operation markers;
 * input, encoded-stream, and decoded-pixel hashes plus encoded size.
 
 CPU and Metal order is randomized reproducibly inside each close pair, and the
-pair blocks are also randomized. A missing Metal marker makes a pair ineligible
-rather than silently treating CPU fallback as Metal performance. Any lossless
-decode mismatch, hash/lossy bitstream mismatch, or repeated-output mismatch
-aborts the run. Raw data is immutable; analysis writes a separate candidate.
+pair blocks are also randomized. A missing or extra Metal marker invalidates
+the operator run rather than silently treating CPU fallback as Metal
+performance. Any reference hash, decode, required bitstream, or repeated-output
+mismatch aborts the run. Raw data is immutable; operator aggregation never
+creates a candidate threshold.
 
 The policy representation is specified by
 `scripts/metal_threshold_policy.schema.json`. Its status progresses from
@@ -135,22 +181,22 @@ machine confirmation. Missing combinations always select CPU.
 
 ## Conservative decision rule
 
-For each operation/content/method/execution/size and for tune and holdout seeds
-separately, analysis uses the median paired log time ratio and a deterministic
-2,000-resample 95% bootstrap interval. A size wins only when there are at least
-five eligible pairs and the upper confidence bound says Metal is at least 5%
-faster. The per-content crossover is the smallest tested size for which that
-condition holds on both tune and holdout data at that size and every larger
-tested size, with at least two consecutive winning size buckets.
+For each operation/content/method/execution/size, Sol reviews tune and holdout
+records separately. A focused size may become a candidate only when every
+observed paired Metal/CPU ratio is at most 0.95 at that bucket and every larger
+tested bucket in both roles, with at least two consecutive buckets. This
+all-observations rule is deliberately conservative for the focused cold sample
+count; medians, MAD, and ranges are still reported, but no small-sample interval
+is labeled a confidence interval. Thresholds are never interpolated below a
+tested bucket.
 
-The installable candidate for an operation/method/execution combination is the
-largest crossover across all content classes. If any class has no stable
-crossover, no entry is emitted and CPU remains the fallback. Thresholds are
-never interpolated below a tested bucket. This worst-class aggregation avoids
-requiring a runtime content classifier and prevents a favorable class from
-hiding a regression. A content-specific table should only be considered after
-item 1 supplies a stable, cheap classifier and a new holdout experiment shows
-that classification cost and mistakes preserve the margin.
+Transform interpretation uses only the photo eligibility stratum. Hash photos
+and textures remain separate, and palette graphics remain a forced-dispatch
+regression guard. Without a runtime eligibility classifier, disagreement
+between hash strata or a palette regression means no hash entry. Lossy import
+uses the worst crossover across its tested content classes. If any required
+stratum has no stable crossover, no entry is emitted and CPU remains the
+fallback.
 
 Before promotion, repeat the neighborhoods immediately below, at, and above
 each candidate on a different day and on each supported Apple GPU family. A

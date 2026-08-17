@@ -1,0 +1,80 @@
+{
+  "schema": "libwebp-metal-crossover-preset-v1",
+  "status": "predefined",
+  "name": "item2-exhaustive-later-v1",
+  "matrix_seed": 1296389185,
+  "quality": 75,
+  "thread_level": 0,
+  "include_presets": ["metal_crossover_focused_v1.json"],
+  "sections": [
+    {
+      "id": "exhaustive-transform-photo",
+      "kind": "policy_evidence",
+      "operation": "transform",
+      "methods": [4, 6],
+      "seed_variants": [
+        {"seed": 101, "role": "tune"},
+        {"seed": 202, "role": "tune"},
+        {"seed": 303, "role": "tune"},
+        {"seed": 404, "role": "holdout"},
+        {"seed": 505, "role": "holdout"}
+      ],
+      "expected_dispatches": ["transform"],
+      "require_bitstream_equal": false,
+      "executions": {
+        "cold": {"blocks": 7, "warmups": 0, "samples": 1},
+        "warm": {"blocks": 1, "warmups": 3, "samples": 9}
+      },
+      "case_grids": [{
+        "contents": ["photo"],
+        "dimensions": [[128, 128], [192, 192], [256, 256], [384, 384], [512, 512], [768, 768], [1024, 1024], [1536, 1536], [2048, 2048]]
+      }]
+    },
+    {
+      "id": "exhaustive-hash-photo-texture",
+      "kind": "policy_evidence",
+      "operation": "hash",
+      "methods": [0, 1, 2, 3, 4, 5, 6],
+      "seed_variants": [
+        {"seed": 101, "role": "tune"},
+        {"seed": 202, "role": "tune"},
+        {"seed": 303, "role": "tune"},
+        {"seed": 404, "role": "holdout"},
+        {"seed": 505, "role": "holdout"}
+      ],
+      "expected_dispatches": ["hash"],
+      "require_bitstream_equal": true,
+      "executions": {
+        "cold": {"blocks": 7, "warmups": 0, "samples": 1},
+        "warm": {"blocks": 1, "warmups": 3, "samples": 9}
+      },
+      "case_grids": [{
+        "contents": ["photo", "texture"],
+        "dimensions": [[384, 384], [512, 512], [768, 768], [1024, 1024], [1600, 1200], [2048, 1536], [2048, 2048], [3000, 2000], [4096, 4096]]
+      }]
+    },
+    {
+      "id": "exhaustive-lossy-import",
+      "kind": "policy_evidence",
+      "operation": "lossy",
+      "methods": [0, 1, 2, 3, 4, 5, 6],
+      "seed_variants": [
+        {"seed": 101, "role": "tune"},
+        {"seed": 202, "role": "tune"},
+        {"seed": 303, "role": "tune"},
+        {"seed": 404, "role": "holdout"},
+        {"seed": 505, "role": "holdout"}
+      ],
+      "expected_dispatches": ["lossy"],
+      "require_bitstream_equal": true,
+      "executions": {
+        "cold": {"blocks": 7, "warmups": 0, "samples": 1},
+        "warm": {"blocks": 1, "warmups": 3, "samples": 9}
+      },
+      "case_grids": [{
+        "contents": ["photo", "graphic", "texture", "gradient", "noise"],
+        "dimensions": [[1024, 1024], [2048, 2048], [3072, 3072], [4096, 4096], [6144, 6144], [8192, 8192], [10240, 10240]]
+      }]
+    }
+  ]
+}

@@ -23,7 +23,7 @@ from typing import Any
 
 
 SCHEMA_VERSION = 1
-CONTENTS = ("flat", "gradient", "graphic", "photo", "noise")
+CONTENTS = ("flat", "gradient", "graphic", "photo", "texture", "noise")
 METHODS = tuple(range(7))
 OPERATIONS = ("transform", "hash", "lossy")
 DEFAULT_SIDES = {
@@ -31,7 +31,7 @@ DEFAULT_SIDES = {
     "hash": (512, 768, 1024, 1536, 2048, 3072, 4096),
     "lossy": (1024, 2048, 3072, 4096, 6144, 8192, 10240),
 }
-DISPATCH_MARKER = {
+DISPATCH_MARKERS = {
     "transform": "WebP-Metal: transformed ",
     "hash": "WebP-Metal: hash candidates for ",
     "lossy": "WebP-Metal: lossy RGB->YUV ",
@@ -56,14 +56,17 @@ def runner_command(
     warmups: int,
     samples: int,
     measure: bool,
+    artifact: Path | None = None,
 ) -> list[str]:
+    width = case.get("width", case.get("side"))
+    height = case.get("height", case.get("side"))
     command = [
         str(runner),
         "--operation", case["operation"],
         "--variant", variant,
         "--content", case["content"],
-        "--width", str(case["side"]),
-        "--height", str(case["side"]),
+        "--width", str(width),
+        "--height", str(height),
         "--method", str(case["method"]),
         "--seed", str(case["seed"]),
         "--warmups", str(warmups),
@@ -71,6 +74,8 @@ def runner_command(
     ]
     if measure:
         command.append("--measure")
+    if artifact is not None:
+        command.extend(("--artifact", str(artifact)))
     return command
 
 
@@ -87,18 +92,28 @@ def invoke_runner(command: list[str], operation: str, variant: str) -> dict[str,
         raise RuntimeError(f"invalid runner JSON: {error}\n{completed.stdout}") from error
     if not samples:
         raise RuntimeError("runner returned no samples")
-    dispatched = variant == "cpu" or DISPATCH_MARKER[operation] in completed.stderr
-    return {"samples": samples, "dispatched": dispatched}
+    dispatches = sorted(
+        name for name, marker in DISPATCH_MARKERS.items()
+        if marker in completed.stderr
+    )
+    return {"samples": samples, "dispatches": dispatches}
 
 
-def verify_pair(operation: str, cpu: dict[str, Any], metal: dict[str, Any]) -> None:
+def verify_pair(
+    operation: str,
+    cpu: dict[str, Any],
+    metal: dict[str, Any],
+    require_bitstream_equal: bool | None = None,
+) -> None:
     cpu_first = cpu["samples"][0]
     metal_first = metal["samples"][0]
     if cpu_first["input_hash"] != metal_first["input_hash"]:
         raise RuntimeError("CPU and Metal inputs differ")
-    if operation == "transform":
+    if require_bitstream_equal is None:
+        require_bitstream_equal = operation in ("hash", "lossy")
+    if not require_bitstream_equal:
         if cpu_first["decoded_hash"] != metal_first["decoded_hash"]:
-            raise RuntimeError("lossless transform decoded pixels differ")
+            raise RuntimeError(f"{operation} CPU and Metal decoded pixels differ")
     elif cpu_first["encoded_hash"] != metal_first["encoded_hash"]:
         raise RuntimeError(f"{operation} CPU and Metal bitstreams differ")
 
@@ -205,7 +220,7 @@ def run_experiment(args: argparse.Namespace) -> int:
                     command, case["operation"], variant
                 )
             verify_pair(case["operation"], results["cpu"], results["metal"])
-            eligible = results["metal"]["dispatched"]
+            eligible = case["operation"] in results["metal"]["dispatches"]
             for variant in variants:
                 for sample in results[variant]["samples"]:
                     sample.update({
@@ -213,7 +228,7 @@ def run_experiment(args: argparse.Namespace) -> int:
                         "execution": case["execution"],
                         "trial": case["trial"],
                         "role": case["role"],
-                        "dispatched": results[variant]["dispatched"],
+                        "dispatches": results[variant]["dispatches"],
                         "eligible": eligible,
                     })
                     write_jsonl(output, sample)
@@ -238,7 +253,7 @@ def smoke(args: argparse.Namespace) -> int:
             for variant in ("cpu", "metal")
         }
         verify_pair(case["operation"], results["cpu"], results["metal"])
-        if results["metal"]["dispatched"]:
+        if case["operation"] in results["metal"]["dispatches"]:
             observed_operations.add(case["operation"])
     missing = set(OPERATIONS) - observed_operations
     if missing:

@@ -15,13 +15,14 @@
 #include "webp/decode.h"
 #include "webp/encode.h"
 
-typedef enum { OP_TRANSFORM, OP_HASH, OP_LOSSY } Operation;
+typedef enum { OP_TRANSFORM, OP_HASH, OP_LOSSLESS, OP_LOSSY } Operation;
 
 typedef enum {
   CONTENT_FLAT,
   CONTENT_GRADIENT,
   CONTENT_GRAPHIC,
   CONTENT_PHOTO,
+  CONTENT_TEXTURE,
   CONTENT_NOISE
 } Content;
 
@@ -38,13 +39,17 @@ typedef struct {
   int warmups;
   int samples;
   int measure;
+  const char* artifact_path;
 } Options;
 
 static void Usage(const char* program) {
   fprintf(stderr,
-          "Usage: %s --operation transform|hash|lossy --variant cpu|metal "
-          "--content flat|gradient|graphic|photo|noise --width N --height N "
-          "--method 0..6 --seed N [--warmups N] [--samples N] [--measure]\n",
+          "Usage: %s --operation transform|hash|lossless|lossy "
+          "--variant cpu|metal "
+          "--content flat|gradient|graphic|photo|texture|noise "
+          "--width N --height N "
+          "--method 0..6 --seed N [--warmups N] [--samples N] [--measure] "
+          "[--artifact PATH]\n",
           program);
 }
 
@@ -81,6 +86,8 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
         options->operation = OP_TRANSFORM;
       else if (!strcmp(value, "hash"))
         options->operation = OP_HASH;
+      else if (!strcmp(value, "lossless"))
+        options->operation = OP_LOSSLESS;
       else if (!strcmp(value, "lossy"))
         options->operation = OP_LOSSY;
       else
@@ -102,6 +109,8 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
         options->content = CONTENT_GRAPHIC;
       else if (!strcmp(value, "photo"))
         options->content = CONTENT_PHOTO;
+      else if (!strcmp(value, "texture"))
+        options->content = CONTENT_TEXTURE;
       else if (!strcmp(value, "noise"))
         options->content = CONTENT_NOISE;
       else
@@ -127,6 +136,9 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
     } else if (!strcmp(flag, "--samples")) {
       ++i;
       if (!ParseInt(value, 1, 1000, &options->samples)) return 0;
+    } else if (!strcmp(flag, "--artifact")) {
+      ++i;
+      options->artifact_path = value;
     } else {
       return 0;
     }
@@ -149,10 +161,14 @@ static uint8_t ClampByte(int value) {
   return (uint8_t)(value < 0 ? 0 : value > 255 ? 255 : value);
 }
 
+static int MaxInt(int a, int b) { return a > b ? a : b; }
+
 static void GeneratePixels(const Options* options, uint8_t* rgba) {
   uint32_t random_state = options->seed ^ 0xa5a5a5a5u;
   int x, y;
   for (y = 0; y < options->height; ++y) {
+    uint32_t texture_state =
+        (0x9e3779b9u ^ ((uint32_t)y * 0x85ebca6bu) ^ options->seed);
     for (x = 0; x < options->width; ++x) {
       uint8_t r, g, b;
       const size_t offset = ((size_t)y * options->width + x) * 4u;
@@ -168,20 +184,36 @@ static void GeneratePixels(const Options* options, uint8_t* rgba) {
                                                      : 1));
         b = (uint8_t)(((uint32_t)r + g + (options->seed & 255u)) / 3u);
       } else if (options->content == CONTENT_GRAPHIC) {
-        const unsigned cell = ((unsigned)x / 24u) + ((unsigned)y / 24u);
-        const unsigned edge =
-            ((unsigned)x % 97u < 3u) || ((unsigned)y % 61u < 3u);
-        r = edge ? 250u : (cell & 1u) ? 24u : 210u;
-        g = edge ? 35u : (cell & 2u) ? 190u : 48u;
-        b = edge ? 80u : (cell & 4u) ? 225u : 72u;
+        static const uint8_t palette[6][3] = {{238, 238, 232}, {38, 62, 96},
+                                              {225, 82, 65},   {247, 190, 66},
+                                              {50, 150, 105},  {103, 78, 167}};
+        unsigned index =
+            ((unsigned)x / (unsigned)MaxInt(8, options->width / 12) +
+             3u * ((unsigned)y / (unsigned)MaxInt(8, options->height / 9)) +
+             options->seed) %
+            6u;
+        if (abs(x - options->width / 2) < MaxInt(2, options->width / 150) ||
+            abs(y - options->height / 2) < MaxInt(2, options->height / 150)) {
+          index = 1;
+        }
+        r = palette[index][0];
+        g = palette[index][1];
+        b = palette[index][2];
       } else if (options->content == CONTENT_PHOTO) {
-        const int wave = ((x * 5 + y * 3 + (int)options->seed) & 255);
-        const int low_frequency =
-            ((x / 32) * 19 + (y / 32) * 11 + (int)options->seed) & 255;
-        const int noise = (int)(Random32(&random_state) & 31u) - 15;
-        r = ClampByte((3 * wave + low_frequency) / 4 + noise);
-        g = ClampByte((wave + 3 * low_frequency) / 4 + noise / 2);
-        b = ClampByte((wave + low_frequency) / 2 - noise);
+        const int noise =
+            ((x * 17 + y * 29 + ((x ^ y) * 7) + (int)options->seed * 13) & 31) -
+            16;
+        r = ClampByte(180 * x / MaxInt(1, options->width - 1) + 35 + noise);
+        g = ClampByte(150 * y / MaxInt(1, options->height - 1) + 45 +
+                      noise / 2);
+        b = ClampByte(((int)r + g) / 2 + ((x / 64 + y / 64) & 15));
+      } else if (options->content == CONTENT_TEXTURE) {
+        texture_state ^= texture_state << 13;
+        texture_state ^= texture_state >> 17;
+        texture_state ^= texture_state << 5;
+        r = (uint8_t)texture_state;
+        g = (uint8_t)(texture_state >> 8);
+        b = (uint8_t)(texture_state >> 16);
       } else {
         const uint32_t random = Random32(&random_state);
         r = (uint8_t)random;
@@ -233,6 +265,11 @@ static void ConfigureDispatch(const Options* options) {
     setenv("WEBP_METAL", "1", 1);
     setenv("WEBP_METAL_HASH", "1", 1);
     setenv("WEBP_METAL_HASH_MIN_PIXELS", "0", 1);
+  } else if (options->operation == OP_LOSSLESS) {
+    setenv("WEBP_METAL", "1", 1);
+    setenv("WEBP_METAL_MIN_PIXELS", "0", 1);
+    setenv("WEBP_METAL_HASH", "1", 1);
+    setenv("WEBP_METAL_HASH_MIN_PIXELS", "0", 1);
   } else {
     setenv("WEBP_METAL_LOSSY", "1", 1);
     setenv("WEBP_METAL_LOSSY_MIN_PIXELS", "0", 1);
@@ -240,8 +277,9 @@ static void ConfigureDispatch(const Options* options) {
 }
 
 static int EncodeOnce(const Options* options, const uint8_t* rgba,
-                      uint64_t* elapsed_ns, uint64_t* encoded_hash,
-                      uint64_t* decoded_hash, size_t* encoded_size) {
+                      const char* artifact_path, uint64_t* elapsed_ns,
+                      uint64_t* encoded_hash, uint64_t* decoded_hash,
+                      size_t* encoded_size) {
   WebPConfig config;
   WebPPicture picture;
   WebPMemoryWriter writer;
@@ -271,6 +309,18 @@ static int EncodeOnce(const Options* options, const uint8_t* rgba,
   if (options->measure) {
     end = MonotonicNanoseconds();
     if (start == 0 || end < start) goto cleanup;
+  }
+
+  if (artifact_path != NULL) {
+    FILE* artifact = fopen(artifact_path, "wb");
+    size_t written;
+    int close_result;
+    if (artifact == NULL) goto cleanup;
+    written = fwrite(writer.mem, 1, writer.size, artifact);
+    close_result = fclose(artifact);
+    if (written != writer.size || close_result != 0) {
+      goto cleanup;
+    }
   }
 
   decoded =
@@ -319,8 +369,9 @@ int main(int argc, const char* const argv[]) {
   for (sequence = -options.warmups; sequence < options.samples; ++sequence) {
     uint64_t elapsed_ns, encoded_hash, decoded_hash;
     size_t encoded_size;
-    if (!EncodeOnce(&options, rgba, &elapsed_ns, &encoded_hash, &decoded_hash,
-                    &encoded_size)) {
+    if (!EncodeOnce(&options, rgba,
+                    sequence == 0 ? options.artifact_path : NULL, &elapsed_ns,
+                    &encoded_hash, &decoded_hash, &encoded_size)) {
       fprintf(stderr, "encode failed at sequence %d\n", sequence);
       free(rgba);
       return 1;
