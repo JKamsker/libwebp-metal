@@ -15,6 +15,10 @@
 #include "webp/decode.h"
 #include "webp/encode.h"
 
+#if !defined(WEBP_USE_METAL_CROSSOVER_EXPERIMENT)
+#error "metal_benchmark.c requires WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT"
+#endif
+
 typedef enum { OP_TRANSFORM, OP_HASH, OP_LOSSLESS, OP_LOSSY } Operation;
 
 typedef enum {
@@ -351,6 +355,13 @@ int main(int argc, const char* const argv[]) {
   int sequence;
   if (!ParseOptions(argc, argv, &options)) {
     Usage(argv[0]);
+    return 2;
+  }
+  if (getenv("WEBP_METAL_CROSSOVER_EXPERIMENT") == NULL ||
+      strcmp(getenv("WEBP_METAL_CROSSOVER_EXPERIMENT"), "1") != 0) {
+    fprintf(stderr,
+            "runner requires WEBP_METAL_CROSSOVER_EXPERIMENT=1; rebuild "
+            "with WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT if unavailable\n");
     return 2;
   }
   if (options.measure &&

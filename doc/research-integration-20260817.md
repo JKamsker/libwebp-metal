@@ -32,7 +32,9 @@ Included the full three-commit logical history: opt-in encoder stage
 instrumentation, `cwebp -profile_repetitions`, collection/validation/analysis
 scripts, protocol documentation, sanitized raw records and aggregate analysis,
 and the Unix makefile fix that preserves platform flags when callers override
-`CFLAGS`. Profiling remains inactive unless `WEBP_STAGE_PROFILE` is set.
+`CFLAGS`. Profiling is now omitted unless
+`WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT` is selected and remains inactive
+without `WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT=1` plus the exclusive lease.
 
 Seven recorded absolute checkout paths were replaced with `<repo>` before the
 data commit was created. Machine records already omitted serial number,
@@ -71,7 +73,8 @@ matrix/metadata harness, recorded aggregate baseline transcription, study
 documentation, and expanded bitstream/decode correctness loops. Every variant
 keeps its recorded baseline value unless an explicit environment flag changes
 it. The import driver no longer joins the default Unix `all` target; CMake and
-simple-make builds require `WEBP_BUILD_METAL_ABLATION`. Timed execution is
+simple-make builds require `WEBP_BUILD_METAL_ABLATION_EXPERIMENT`. Variant
+knobs remain inactive without `WEBP_METAL_ABLATION_EXPERIMENT=1`. Timed execution is
 exclusive-session gated in both the Python harness and driver.
 
 The item 3 batch packing and item 4 lossy variants were reconciled in one Metal
@@ -90,6 +93,26 @@ descriptor v1 bit or request was reused or added; a future
 `LOSSLESS_PREDICTOR_RESIDUAL` request is explicitly a versioned extension.
 Local corpus paths in the memo were replaced with portable placeholders, and
 the timed script gained the common session gate.
+
+## Independent experiment guards (post-integration hardening)
+
+The exact five-row build/macro/runtime matrix and independent build commands
+are durable in [experiment-guard-matrix.md](experiment-guard-matrix.md). The
+build options are, respectively:
+
+1. `WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT`;
+2. `WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT`;
+3. `WEBP_BUILD_METAL_BATCH_EXPERIMENT`;
+4. `WEBP_BUILD_METAL_ABLATION_EXPERIMENT`; and
+5. `WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT`.
+
+All default to off in both CMake and `makefile.unix`. Their exact runtime
+opt-ins are `WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT=1`,
+`WEBP_METAL_CROSSOVER_EXPERIMENT=1`, `WEBP_METAL_BATCH_EXPERIMENT=1`,
+`WEBP_METAL_ABLATION_EXPERIMENT=1`, and `WEBP_METAL_PREDICTOR=1`. Timed
+launchers additionally require `WEBP_BENCHMARK_SESSION=exclusive`. The
+non-timed static gate command is `scripts/test_experiment_guards.py`; ordinary
+CPU and Metal correctness commands are recorded in the linked matrix.
 
 ### Item 7: CI, performance signal, and rebase groundwork
 

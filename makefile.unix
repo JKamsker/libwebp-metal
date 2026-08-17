@@ -19,8 +19,18 @@ EXTRA_FLAGS= -DWEBP_HAVE_PNG -DWEBP_HAVE_JPEG -DWEBP_HAVE_TIFF
 DWEBP_LIBS= -lpng -lz
 CWEBP_LIBS= $(DWEBP_LIBS) -ljpeg -ltiff
 GIF_LIBS = -lgif
-WEBP_BUILD_METAL_ABLATION ?= 0
+WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT ?= 0
+WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT ?= 0
+WEBP_BUILD_METAL_ABLATION_EXPERIMENT ?= 0
 WEBP_BUILD_METAL_BATCH_EXPERIMENT ?= 0
+WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT ?= 0
+
+ifneq ($(origin WEBP_BUILD_METAL_BENCHMARK),undefined)
+  $(error WEBP_BUILD_METAL_BENCHMARK was replaced by WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT)
+endif
+ifneq ($(origin WEBP_BUILD_METAL_ABLATION),undefined)
+  $(error WEBP_BUILD_METAL_ABLATION was replaced by WEBP_BUILD_METAL_ABLATION_EXPERIMENT)
+endif
 
 ifeq ($(strip $(shell uname)), Darwin)
   # Work around a problem linking tables marked as common symbols,
@@ -42,7 +52,6 @@ ifeq ($(strip $(shell uname)), Darwin)
   endif
   GL_LIBS = -framework GLUT -framework OpenGL
   WEBP_ENABLE_METAL ?= 1
-  WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT ?= 0
 else
   EXTRA_FLAGS += -I/usr/local/include
   EXTRA_LIBS  += -L/usr/local/lib
@@ -137,11 +146,25 @@ ifeq ($(WEBP_ENABLE_METAL),1)
   override EXTRA_LIBS += -framework Foundation -framework Metal
   LINK = $(CXX)
 endif
+ifeq ($(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT),1)
+  override EXTRA_FLAGS += -DWEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT=1
+endif
+ifeq ($(WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT),1)
+  ifneq ($(WEBP_ENABLE_METAL),1)
+    $(error WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT requires WEBP_ENABLE_METAL=1)
+  endif
+endif
 ifeq ($(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT),1)
   ifneq ($(WEBP_ENABLE_METAL),1)
     $(error WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT requires WEBP_ENABLE_METAL=1)
   endif
   override EXTRA_FLAGS += -DWEBP_USE_METAL_PREDICTOR_EXPERIMENT=1
+endif
+ifeq ($(WEBP_BUILD_METAL_ABLATION_EXPERIMENT),1)
+  ifneq ($(WEBP_ENABLE_METAL),1)
+    $(error WEBP_BUILD_METAL_ABLATION_EXPERIMENT requires WEBP_ENABLE_METAL=1)
+  endif
+  override EXTRA_FLAGS += -DWEBP_USE_METAL_ABLATION_EXPERIMENT=1
 endif
 ifeq ($(WEBP_BUILD_METAL_BATCH_EXPERIMENT),1)
   ifneq ($(WEBP_ENABLE_METAL),1)
@@ -276,7 +299,6 @@ ENC_OBJS = \
     src/enc/picture_psnr_enc.o \
     src/enc/picture_rescale_enc.o \
     src/enc/picture_tools_enc.o \
-    src/enc/profile_enc.o \
     src/enc/predictor_enc.o \
     src/enc/quant_enc.o \
     src/enc/syntax_enc.o \
@@ -285,6 +307,9 @@ ENC_OBJS = \
     src/enc/vp8l_enc.o \
     src/enc/webp_enc.o \
 
+ifeq ($(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT),1)
+ENC_OBJS += src/enc/profile_enc.o
+endif
 ifeq ($(WEBP_ENABLE_METAL),1)
 ENC_OBJS += src/enc/metal_enc.o src/enc/picture_csp_enc_metal.o
 endif
@@ -442,6 +467,10 @@ else
 metal-experiment:
 	@echo "metal-experiment requires WEBP_BUILD_METAL_BATCH_EXPERIMENT=1" >&2
 	@false
+extras/metal_encode_batch_experiment:
+	@echo "extras/metal_encode_batch_experiment requires WEBP_BUILD_METAL_BATCH_EXPERIMENT=1" >&2
+	@false
+.PHONY: extras/metal_encode_batch_experiment
 endif
 
 $(EX_FORMAT_DEC_OBJS): %.o: %.h
@@ -490,10 +519,19 @@ examples/img2webp: examples/img2webp.o
 examples/webpinfo: examples/webpinfo.o
 
 # Internal, non-installed runner for scripts/benchmark_metal.py.
+ifeq ($(WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT),1)
 tools/webp_metal_benchmark: tools/metal_benchmark.o
 tools/webp_metal_benchmark: src/libwebp.a sharpyuv/libsharpyuv.a
 tools/webp_metal_benchmark:
 	$(LINK) -o $@ $^ $(LDFLAGS)
+tools/metal_benchmark.o: override EXTRA_FLAGS += \
+  -DWEBP_USE_METAL_CROSSOVER_EXPERIMENT=1
+else
+tools/webp_metal_benchmark:
+	@echo "tools/webp_metal_benchmark requires WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT=1" >&2
+	@false
+.PHONY: tools/webp_metal_benchmark
+endif
 
 examples/anim_diff: examples/libanim_util.a examples/libgifdec.a
 examples/anim_diff: src/demux/libwebpdemux.a examples/libexample_util.a
@@ -567,19 +605,19 @@ extras/vwebp_sdl: sharpyuv/libsharpyuv.a
 extras/vwebp_sdl: EXTRA_FLAGS += -DWEBP_HAVE_SDL $(SDL_FLAGS)
 extras/vwebp_sdl: override EXTRA_LIBS += $(SDL_LIBS)
 
+ifeq ($(WEBP_BUILD_METAL_ABLATION_EXPERIMENT),1)
 extras/metal_import_bench: extras/metal_import_bench.o
 extras/metal_import_bench: src/libwebp.a sharpyuv/libsharpyuv.a
 	$(LINK) -o $@ extras/metal_import_bench.o \
 	              src/libwebp.a sharpyuv/libsharpyuv.a $(LDFLAGS)
-
-ifeq ($(WEBP_BUILD_METAL_ABLATION),1)
-  ifneq ($(WEBP_ENABLE_METAL),1)
-    $(error WEBP_BUILD_METAL_ABLATION requires WEBP_ENABLE_METAL=1)
-  endif
 metal-ablation-tools: extras/metal_import_bench
 else
+extras/metal_import_bench:
+	@echo "extras/metal_import_bench requires WEBP_BUILD_METAL_ABLATION_EXPERIMENT=1" >&2
+	@false
+.PHONY: extras/metal_import_bench
 metal-ablation-tools:
-	@echo "metal-ablation-tools requires WEBP_BUILD_METAL_ABLATION=1" >&2
+	@echo "metal-ablation-tools requires WEBP_BUILD_METAL_ABLATION_EXPERIMENT=1" >&2
 	@false
 endif
 

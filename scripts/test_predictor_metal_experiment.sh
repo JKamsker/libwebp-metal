@@ -1,6 +1,11 @@
 #!/bin/sh
 set -eu
 
+if [ "${WEBP_METAL_PREDICTOR:-}" != 1 ]; then
+  echo "set WEBP_METAL_PREDICTOR=1 for this guarded test" >&2
+  exit 2
+fi
+
 root_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 encoder="$root_dir/examples/cwebp"
 decoder="$root_dir/examples/dwebp"

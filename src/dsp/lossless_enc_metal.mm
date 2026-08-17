@@ -424,6 +424,7 @@ struct MetalState {
   size_t hash_minimum_pixels = kDefaultHashMinimumPixels;
   bool verbose = false;
   bool hash_pipeline_attempted = false;
+  bool ablation_experiment = false;
   bool transform_dispatch_2d = false;
   bool hash_match4 = false;
   bool write_combined_inputs = false;
@@ -474,6 +475,20 @@ id<MTLCommandBuffer> NewCommandBuffer(MetalState* state, bool unretained) {
       : [state->queue commandBuffer];
 }
 
+bool AblationExperimentEnabled() {
+  const char* const value = std::getenv("WEBP_METAL_ABLATION_EXPERIMENT");
+#if defined(WEBP_USE_METAL_ABLATION_EXPERIMENT)
+  return value != nullptr && std::strcmp(value, "1") == 0;
+#else
+  if (value != nullptr && std::strcmp(value, "1") == 0) {
+    std::fprintf(stderr,
+                 "WebP-Metal: ignoring ablation opt-in; rebuild with "
+                 "WEBP_BUILD_METAL_ABLATION_EXPERIMENT=1\n");
+  }
+  return false;
+#endif
+}
+
 size_t RoundedBufferLength(size_t length) {
   constexpr size_t kPage = 16u * 1024u;
   return std::max(kPage, (length + kPage - 1u) & ~(kPage - 1u));
@@ -484,20 +499,24 @@ void InitializeMetal() {
 
   @autoreleasepool {
     auto* state = new MetalState();
+    const bool ablation_experiment = AblationExperimentEnabled();
+    state->ablation_experiment = ablation_experiment;
     state->verbose = EnvironmentFlag("WEBP_METAL_VERBOSE", false);
     state->minimum_pixels = EnvironmentSize("WEBP_METAL_MIN_PIXELS",
                                              kDefaultMinimumPixels);
     state->hash_minimum_pixels = EnvironmentSize(
         "WEBP_METAL_HASH_MIN_PIXELS", kDefaultHashMinimumPixels);
-    state->transform_dispatch_2d = EnvironmentFlag(
-        "WEBP_METAL_TRANSFORM_DISPATCH_2D", false);
-    state->hash_match4 = EnvironmentFlag("WEBP_METAL_HASH_MATCH4", false);
-    state->write_combined_inputs = EnvironmentFlag(
-        "WEBP_METAL_WRITE_COMBINED_INPUTS", false);
-    state->transform_unretained_command_buffers = EnvironmentFlag(
-        "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS", false);
-    state->hash_unretained_command_buffers = EnvironmentFlag(
-        "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS", false);
+    if (ablation_experiment) {
+      state->transform_dispatch_2d = EnvironmentFlag(
+          "WEBP_METAL_TRANSFORM_DISPATCH_2D", false);
+      state->hash_match4 = EnvironmentFlag("WEBP_METAL_HASH_MATCH4", false);
+      state->write_combined_inputs = EnvironmentFlag(
+          "WEBP_METAL_WRITE_COMBINED_INPUTS", false);
+      state->transform_unretained_command_buffers = EnvironmentFlag(
+          "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS", false);
+      state->hash_unretained_command_buffers = EnvironmentFlag(
+          "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS", false);
+    }
     state->device = MTLCreateSystemDefaultDevice();
     if (state->device == nil) {
       delete state;
@@ -536,8 +555,10 @@ void InitializeMetal() {
       delete state;
       return;
     }
-    state->transform_threads = ThreadgroupSize(
-        "WEBP_METAL_TRANSFORM_THREADS", state->pipeline);
+    state->transform_threads = ablation_experiment
+        ? ThreadgroupSize("WEBP_METAL_TRANSFORM_THREADS", state->pipeline)
+        : std::min(kPreferredThreads,
+                   state->pipeline.maxTotalThreadsPerThreadgroup);
     if (state->verbose) {
       std::fprintf(stderr,
                    "WebP-Metal: using %s (transform minimum %zu, hash minimum "
@@ -588,8 +609,10 @@ bool EnsureHashPipeline(MetalState* state) {
                  error.localizedDescription.UTF8String);
   }
   if (state->hash_pipeline != nil) {
-    state->hash_threads = ThreadgroupSize("WEBP_METAL_HASH_THREADS",
-                                          state->hash_pipeline);
+    state->hash_threads = state->ablation_experiment
+        ? ThreadgroupSize("WEBP_METAL_HASH_THREADS", state->hash_pipeline)
+        : std::min(kPreferredThreads,
+                   state->hash_pipeline.maxTotalThreadsPerThreadgroup);
   }
   return state->hash_pipeline != nil;
 }

@@ -14,6 +14,10 @@
 #include "src/enc/metal_enc.h"
 #include "src/webp/encode.h"
 
+#if !defined(WEBP_USE_METAL_BATCH_EXPERIMENT)
+#error "metal_encode_batch_experiment.c requires WEBP_BUILD_METAL_BATCH_EXPERIMENT"
+#endif
+
 typedef enum Lifecycle { LIFECYCLE_COLD, LIFECYCLE_WARM } Lifecycle;
 typedef enum Submission { SUBMISSION_SINGLE, SUBMISSION_BATCH } Submission;
 typedef enum Stage { STAGE_IMPORT, STAGE_ENCODE } Stage;
@@ -411,7 +415,13 @@ int main(int argc, char** argv) {
     PrintUsage(argv[0]);
     return 2;
   }
-  setenv("WEBP_METAL_BATCH_EXPERIMENT", "1", 1);
+  if (getenv("WEBP_METAL_BATCH_EXPERIMENT") == NULL ||
+      strcmp(getenv("WEBP_METAL_BATCH_EXPERIMENT"), "1") != 0) {
+    fprintf(stderr,
+            "experiment requires WEBP_METAL_BATCH_EXPERIMENT=1; rebuild "
+            "with WEBP_BUILD_METAL_BATCH_EXPERIMENT if unavailable\n");
+    return 2;
+  }
   if (!InitWorkload(&options, &workload)) {
     fprintf(stderr, "failed to allocate the experiment workload\n");
     return 1;

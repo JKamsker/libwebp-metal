@@ -149,6 +149,7 @@ Build and smoke validation:
 make -f makefile.unix clean
 make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 \
   WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT=1 examples/cwebp examples/dwebp
+WEBP_METAL_PREDICTOR=1 \
 scripts/test_predictor_metal_experiment.sh examples/test_ref.ppm
 ```
 
@@ -174,12 +175,12 @@ After the orchestrator releases a Terra/Luna measurement slot:
 make -f makefile.unix clean
 make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 \
   WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT=1 examples/cwebp examples/dwebp
-scripts/test_predictor_metal_experiment.sh \
+WEBP_METAL_PREDICTOR=1 scripts/test_predictor_metal_experiment.sh \
   /absolute/path/to/corpus/mitski.png \
   /absolute/path/to/corpus/corgi.jpeg \
   /absolute/path/to/corpus/siamese.jpg
 mkdir -p benchmark-results/item5
-WEBP_BENCHMARK_SESSION=exclusive RUNS=7 \
+WEBP_METAL_PREDICTOR=1 WEBP_BENCHMARK_SESSION=exclusive RUNS=7 \
 scripts/benchmark_predictor_metal_experiment.sh \
   benchmark-results/item5/predictor-cold.csv \
   /absolute/path/to/corpus/mitski.png \

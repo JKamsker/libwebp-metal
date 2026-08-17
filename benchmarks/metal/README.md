@@ -39,7 +39,7 @@ Build before taking the exclusive benchmark lease:
 
 ```sh
 make -f makefile.unix -j8 examples/cwebp examples/dwebp \
-  WEBP_BUILD_METAL_ABLATION=1 metal-ablation-tools
+  WEBP_BUILD_METAL_ABLATION_EXPERIMENT=1 metal-ablation-tools
 ```
 
 Prepare metadata and inspect the matrix without timing anything:
@@ -54,6 +54,7 @@ lease is granted, run the full matrix:
 
 ```sh
 WEBP_BENCHMARK_SESSION=exclusive \
+WEBP_METAL_ABLATION_EXPERIMENT=1 \
 python3 scripts/benchmark_metal_ablation.py --run \
   --output /absolute/path/to/results \
   --input mitski=/absolute/path/to/mitski.png \

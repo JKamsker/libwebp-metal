@@ -56,7 +56,8 @@ already allocated. It:
 The hook is compiled only with `WEBP_BUILD_METAL_BATCH_EXPERIMENT=ON` (CMake)
 or `WEBP_BUILD_METAL_BATCH_EXPERIMENT=1` (the Unix makefile), and additionally
 requires `WEBP_METAL_BATCH_EXPERIMENT=1` at runtime. The experiment harness sets
-the runtime flag itself. Normal builds do not expose the batch symbol.
+no runtime flags itself: the caller must opt in explicitly. Normal builds do
+not expose the batch symbol.
 
 The mutex covers the entire batch, so concurrent behavior matches the old
 single-operation serialization. A validation, allocation, pipeline, command,
@@ -108,6 +109,7 @@ Build and correctness smoke commands:
 make -f makefile.unix clean
 make -f makefile.unix -j8 WEBP_BUILD_METAL_BATCH_EXPERIMENT=1 \
   metal-experiment
+WEBP_METAL_BATCH_EXPERIMENT=1 \
 extras/metal_encode_batch_experiment --verify-only \
   --width=97 --height=65 --batch-size=3 --quality=75 --method=4
 ```
@@ -130,6 +132,7 @@ one warmed process:
 
 ```sh
 WEBP_BENCHMARK_SESSION=exclusive \
+WEBP_METAL_BATCH_EXPERIMENT=1 \
 WEBP_METAL_BATCH_SIZES="1 2 4 8" \
 WEBP_METAL_COLD_REPETITIONS=5 WEBP_METAL_WARM_ITERATIONS=20 \
 scripts/run_metal_batch_experiment.sh \

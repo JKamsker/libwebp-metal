@@ -21,6 +21,10 @@ extern "C" {
 #include "src/enc/predictor_enc_metal.h"
 }
 
+#if !defined(WEBP_USE_METAL_PREDICTOR_EXPERIMENT)
+#error "predictor_enc_metal.mm requires WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT"
+#endif
+
 namespace {
 
 constexpr size_t kDefaultMinimumPixels = 1024u * 1024u;
@@ -222,8 +226,9 @@ bool GrowBuffer(id<MTLDevice> device, size_t required, id<MTLBuffer>* buffer,
 }
 
 PredictorMetalState* InitializeState() {
-  if (!EnvironmentFlag("WEBP_METAL", true) ||
-      !EnvironmentFlag("WEBP_METAL_PREDICTOR", false)) {
+  const char* const predictor_opt_in = std::getenv("WEBP_METAL_PREDICTOR");
+  if (!EnvironmentFlag("WEBP_METAL", true) || predictor_opt_in == nullptr ||
+      std::strcmp(predictor_opt_in, "1") != 0) {
     return nullptr;
   }
   @autoreleasepool {

@@ -13,6 +13,10 @@
 
 #include "webp/encode.h"
 
+#if !defined(WEBP_USE_METAL_ABLATION_EXPERIMENT)
+#error "metal_import_bench.c requires WEBP_BUILD_METAL_ABLATION_EXPERIMENT"
+#endif
+
 static double SecondsBetween(const struct timespec* const start,
                              const struct timespec* const end) {
   return (double)(end->tv_sec - start->tv_sec) +
@@ -62,6 +66,18 @@ int main(int argc, const char* argv[]) {
   size_t rgb_size;
   uint8_t* rgb;
   int sample;
+
+  if (getenv("WEBP_METAL_ABLATION_EXPERIMENT") == NULL ||
+      strcmp(getenv("WEBP_METAL_ABLATION_EXPERIMENT"), "1") != 0) {
+    fprintf(stderr,
+            "driver requires WEBP_METAL_ABLATION_EXPERIMENT=1; rebuild "
+            "with WEBP_BUILD_METAL_ABLATION_EXPERIMENT if unavailable\n");
+    return 2;
+  }
+  if (argc == 2 && strcmp(argv[1], "--guard-check") == 0) {
+    puts("WEBP_METAL_ABLATION_EXPERIMENT=1");
+    return 0;
+  }
 
   if ((argc > 1 && !ParsePositiveInt(argv[1], &width)) ||
       (argc > 2 && !ParsePositiveInt(argv[2], &height)) ||

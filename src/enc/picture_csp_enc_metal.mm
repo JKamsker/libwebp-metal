@@ -280,6 +280,20 @@ id<MTLCommandBuffer> NewCommandBuffer(MetalState* state) {
       : [state->queue commandBuffer];
 }
 
+bool AblationExperimentEnabled() {
+  const char* const value = std::getenv("WEBP_METAL_ABLATION_EXPERIMENT");
+#if defined(WEBP_USE_METAL_ABLATION_EXPERIMENT)
+  return value != nullptr && std::strcmp(value, "1") == 0;
+#else
+  if (value != nullptr && std::strcmp(value, "1") == 0) {
+    std::fprintf(stderr,
+                 "WebP-Metal: ignoring ablation opt-in; rebuild with "
+                 "WEBP_BUILD_METAL_ABLATION_EXPERIMENT=1\n");
+  }
+  return false;
+#endif
+}
+
 bool RoundedBufferLength(size_t length, size_t* rounded_length) {
   constexpr size_t kPage = 16u * 1024u;
   if (length > std::numeric_limits<size_t>::max() - (kPage - 1u)) {
@@ -312,13 +326,16 @@ MetalState* InitializeState() {
   if (!EnvironmentFlag("WEBP_METAL_LOSSY", true)) return nullptr;
   @autoreleasepool {
     auto* state = new MetalState();
-    state->block_2x2 = EnvironmentFlag("WEBP_METAL_LOSSY_BLOCK_2X2", false);
-    state->write_combined_inputs = EnvironmentFlag(
-        "WEBP_METAL_WRITE_COMBINED_INPUTS", false);
-    state->unretained_command_buffers = EnvironmentFlag(
-        "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS", false);
-    state->contiguous_copy = EnvironmentFlag(
-        "WEBP_METAL_LOSSY_CONTIGUOUS_COPY", false);
+    const bool ablation_experiment = AblationExperimentEnabled();
+    if (ablation_experiment) {
+      state->block_2x2 = EnvironmentFlag("WEBP_METAL_LOSSY_BLOCK_2X2", false);
+      state->write_combined_inputs = EnvironmentFlag(
+          "WEBP_METAL_WRITE_COMBINED_INPUTS", false);
+      state->unretained_command_buffers = EnvironmentFlag(
+          "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS", false);
+      state->contiguous_copy = EnvironmentFlag(
+          "WEBP_METAL_LOSSY_CONTIGUOUS_COPY", false);
+    }
     state->device = MTLCreateSystemDefaultDevice();
     if (state->device == nil) {
       delete state;
@@ -371,8 +388,10 @@ MetalState* InitializeState() {
       delete state;
       return nullptr;
     }
-    state->threads = ThreadgroupSize("WEBP_METAL_LOSSY_THREADS",
-                                     state->pipeline);
+    state->threads = ablation_experiment
+        ? ThreadgroupSize("WEBP_METAL_LOSSY_THREADS", state->pipeline)
+        : std::min(kPreferredThreads,
+                   state->pipeline.maxTotalThreadsPerThreadgroup);
 
     uint16_t gamma_to_linear[256];
     int32_t linear_to_gamma[33];
@@ -638,7 +657,8 @@ static int ImportRGBToYUVAMetalBatchImpl(
 #if defined(WEBP_USE_METAL_BATCH_EXPERIMENT)
 extern "C" int WebPImportRGBToYUVAMetalBatch(
     const WebPAcceleratorRGBToYUVRequest* requests, size_t request_count) {
-  if (!EnvironmentFlag("WEBP_METAL_BATCH_EXPERIMENT", false)) return 0;
+  const char* const opt_in = std::getenv("WEBP_METAL_BATCH_EXPERIMENT");
+  if (opt_in == nullptr || std::strcmp(opt_in, "1") != 0) return 0;
   return ImportRGBToYUVAMetalBatchImpl(requests, request_count);
 }
 #endif

@@ -16,6 +16,7 @@ stopping rules, or a calibration outcome. There is no calibration phase.
 After the exclusive benchmark session is released, the exact command is:
 
 ```sh
+WEBP_METAL_CROSSOVER_EXPERIMENT=1 \
 WEBP_BENCHMARK_SESSION=exclusive scripts/run_metal_crossover_operator.sh
 ```
 
@@ -103,12 +104,13 @@ The runner is opt-in and is never installed:
 cmake -S . -B build-metal-bench \
   -DCMAKE_BUILD_TYPE=Release \
   -DWEBP_ENABLE_METAL=ON \
-  -DWEBP_BUILD_METAL_BENCHMARK=ON \
+  -DWEBP_BUILD_METAL_CROSSOVER_EXPERIMENT=ON \
   -DWEBP_BUILD_CWEBP=ON \
   -DWEBP_BUILD_DWEBP=ON
 cmake --build build-metal-bench -j --target \
   webp_metal_benchmark cwebp dwebp
 scripts/test_metal.sh
+WEBP_METAL_CROSSOVER_EXPERIMENT=1 \
 python3 scripts/benchmark_metal.py smoke \
   --runner build-metal-bench/webp_metal_benchmark
 ```
@@ -117,8 +119,10 @@ The repository's simple Make build is also supported on macOS:
 
 ```sh
 make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 \
+  WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT=1 \
   tools/webp_metal_benchmark examples/cwebp examples/dwebp
 scripts/test_metal.sh
+WEBP_METAL_CROSSOVER_EXPERIMENT=1 \
 python3 scripts/benchmark_metal.py smoke \
   --runner tools/webp_metal_benchmark
 ```

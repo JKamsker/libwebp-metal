@@ -2,6 +2,10 @@
 # Prepared measurement harness. Do not run as part of ordinary tests.
 set -eu
 
+if [ "${WEBP_METAL_PREDICTOR:-}" != 1 ]; then
+  echo "refusing run without WEBP_METAL_PREDICTOR=1" >&2
+  exit 2
+fi
 if [ "${WEBP_BENCHMARK_SESSION:-}" != exclusive ]; then
   echo "refusing timed run without WEBP_BENCHMARK_SESSION=exclusive" >&2
   exit 2
@@ -25,6 +29,20 @@ trap 'rm -rf "$temporary_dir"' EXIT HUP INT TERM
   echo "build cwebp with WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT=1 first" >&2
   exit 2
 }
+
+probe_input=$1
+probe_output="$temporary_dir/probe.webp"
+probe_log="$temporary_dir/probe.log"
+if ! env WEBP_METAL=1 WEBP_METAL_MIN_PIXELS=999999999999 \
+    WEBP_METAL_HASH=0 WEBP_METAL_VERBOSE=1 \
+    WEBP_METAL_PREDICTOR=1 WEBP_METAL_PREDICTOR_MIN_PIXELS=0 \
+    WEBP_METAL_PREDICTOR_VALIDATE=1 \
+    "$encoder" -quiet -lossless -exact -m 4 "$probe_input" \
+    -o "$probe_output" 2>"$probe_log" ||
+   ! grep -q 'applied predictor residuals' "$probe_log"; then
+  echo "predictor dispatch unavailable; rebuild with WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT=1" >&2
+  exit 2
+fi
 
 printf 'input,method,run,variant,real_seconds\n' >"$output"
 

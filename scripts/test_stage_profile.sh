@@ -1,6 +1,15 @@
 #!/bin/sh
 set -eu
 
+if [ "${WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT:-}" != 1 ]; then
+  echo "set WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT=1 for this guarded test" >&2
+  exit 2
+fi
+if [ "${WEBP_BENCHMARK_SESSION:-}" != exclusive ]; then
+  echo "stage profiling requires WEBP_BENCHMARK_SESSION=exclusive" >&2
+  exit 2
+fi
+
 root_dir=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 encoder="$root_dir/examples/cwebp"
 input="$root_dir/examples/test_ref.ppm"
@@ -12,7 +21,7 @@ if [ ! -x "$encoder" ]; then
   exit 2
 fi
 
-WEBP_STAGE_PROFILE=1 \
+WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT=1 \
   WEBP_STAGE_PROFILE_OUTPUT="$temporary_dir/cpu.jsonl" \
   WEBP_STAGE_PROFILE_RUN_ID=smoke \
   WEBP_STAGE_PROFILE_CASE_ID=test-ref \
@@ -50,7 +59,7 @@ assert len(baseline["groups"]) == 1
 assert baseline["groups"][0]["sample_role"] == "warm"
 PY
 
-WEBP_STAGE_PROFILE=1 \
+WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT=1 \
   WEBP_STAGE_PROFILE_OUTPUT="$temporary_dir/metal.jsonl" \
   WEBP_STAGE_PROFILE_RUN_ID=smoke \
   WEBP_STAGE_PROFILE_CASE_ID=test-ref \

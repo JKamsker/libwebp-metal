@@ -4,6 +4,12 @@ This is a collection of tests for the libwebp libraries, currently covering
 fuzzing through the APIs. Additional test vector coverage can be found at:
 https://chromium.googlesource.com/webm/libwebp-test-data
 
+The repository-level `scripts/test_experiment_guards.py` test verifies that the
+five prepared encoder experiments are default-off, independently selectable,
+and fail closed at their runtime and timed-launch boundaries. It never grants a
+benchmark lease or runs timed work. See
+`doc/experiment-guard-matrix.md` for the exact flag matrix.
+
 ## Building
 
 ### Fuzzers

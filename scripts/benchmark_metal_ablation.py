@@ -31,6 +31,7 @@ IMPORT_BENCH = ROOT / "extras" / "metal_import_bench"
 
 BASE_ENV = {
     "WEBP_METAL": "1",
+    "WEBP_METAL_ABLATION_EXPERIMENT": "1",
     "WEBP_METAL_VERBOSE": "0",
     "WEBP_METAL_TRANSFORM_DISPATCH_2D": "0",
     "WEBP_METAL_HASH_MATCH4": "0",
@@ -510,6 +511,8 @@ def main() -> int:
         args.suite = ["all"]
     if args.trials <= 0 or args.import_processes <= 0:
         parser.error("trial counts must be positive")
+    if args.run and os.environ.get("WEBP_METAL_ABLATION_EXPERIMENT") != "1":
+        parser.error("--run requires WEBP_METAL_ABLATION_EXPERIMENT=1")
     if args.run and os.environ.get("WEBP_BENCHMARK_SESSION") != "exclusive":
         parser.error("--run requires WEBP_BENCHMARK_SESSION=exclusive")
     try:
@@ -537,6 +540,19 @@ def main() -> int:
         parser.error(f"missing encoder: {ENCODER}")
     if import_needed and not IMPORT_BENCH.is_file():
         parser.error(f"missing import benchmark: {IMPORT_BENCH}")
+    if not IMPORT_BENCH.is_file():
+        parser.error(
+            "missing ablation guard probe; build with "
+            "WEBP_BUILD_METAL_ABLATION_EXPERIMENT=1")
+    guard = subprocess.run(
+        [str(IMPORT_BENCH), "--guard-check"], text=True,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+    )
+    if guard.returncode != 0:
+        parser.error(
+            "ablation build guard check failed; build with "
+            "WEBP_BUILD_METAL_ABLATION_EXPERIMENT=1: " + guard.stderr.strip()
+        )
     if cwebp_needed and not inputs:
         parser.error("at least one --input NAME=PATH is required for cwebp suites")
     missing = [path for path in inputs.values() if not path.is_file()]

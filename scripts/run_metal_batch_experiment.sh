@@ -1,6 +1,10 @@
 #!/bin/sh
 set -eu
 
+if [ "${WEBP_METAL_BATCH_EXPERIMENT:-}" != 1 ]; then
+  echo "refusing run without WEBP_METAL_BATCH_EXPERIMENT=1" >&2
+  exit 2
+fi
 if [ "${WEBP_BENCHMARK_SESSION:-}" != exclusive ]; then
   echo "refusing timed run without WEBP_BENCHMARK_SESSION=exclusive" >&2
   exit 2

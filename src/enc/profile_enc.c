@@ -1,7 +1,10 @@
 // Copyright 2026
 //
-// Internal, opt-in encoder stage profiling.
+// Internal, independently guarded encoder stage profiling experiment.
 
+#if !defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT)
+#define WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT 1
+#endif
 #include "src/enc/profile_enc.h"
 
 #include <stdio.h>
@@ -78,10 +81,9 @@ static const char* const kStageNames[WEBP_PROFILE_STAGE_COUNT] = {
     "lossy_alpha",
     "lossy_write"};
 
-static int EnvironmentFlag(const char* name) {
+static int EnvironmentOptIn(const char* name) {
   const char* const value = getenv(name);
-  return value != NULL && value[0] != '\0' && strcmp(value, "0") != 0 &&
-         strcmp(value, "false") != 0 && strcmp(value, "no") != 0;
+  return value != NULL && strcmp(value, "1") == 0;
 }
 
 static uint64_t ProfileNowNs(void) {
@@ -128,7 +130,14 @@ void WebPProfileBeginSession(const WebPConfig* config,
                              const WebPPicture* picture) {
   WebPProfileContext* const ctx = &profile_context;
   memset(ctx, 0, sizeof(*ctx));
-  if (!EnvironmentFlag("WEBP_STAGE_PROFILE")) return;
+  if (!EnvironmentOptIn("WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT")) return;
+  if (getenv("WEBP_BENCHMARK_SESSION") == NULL ||
+      strcmp(getenv("WEBP_BENCHMARK_SESSION"), "exclusive") != 0) {
+    fprintf(stderr,
+            "encoder stage profiling requires "
+            "WEBP_BENCHMARK_SESSION=exclusive\n");
+    return;
+  }
   ctx->active = 1;
   ctx->method = config != NULL ? config->method : -1;
   ctx->quality = config != NULL ? config->quality : -1.f;

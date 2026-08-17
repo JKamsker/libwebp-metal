@@ -134,9 +134,22 @@ def environment_metadata(encoder, argv):
 
 
 def run_profiles(args):
+    if os.environ.get("WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT") != "1":
+        raise SystemExit(
+            "run requires WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT=1")
+    if os.environ.get("WEBP_BENCHMARK_SESSION") != "exclusive":
+        raise SystemExit("run requires WEBP_BENCHMARK_SESSION=exclusive")
     encoder = args.encoder.resolve()
     if not os.access(encoder, os.X_OK):
         raise SystemExit(f"encoder is not executable: {encoder}")
+    help_result = subprocess.run(
+        [str(encoder), "-longhelp"], check=False, text=True,
+        stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+    )
+    if "-profile_repetitions" not in help_result.stdout:
+        raise SystemExit(
+            "encoder lacks the profiling hook; rebuild with "
+            "WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT=1")
     manifest = prepare_dataset(args.dataset_dir.resolve())
     run_id = args.run_id or dt.datetime.now().strftime("%Y%m%d-%H%M%S")
     output_dir = args.output_dir.resolve() / run_id
@@ -157,7 +170,7 @@ def run_profiles(args):
                                 "-q", str(args.quality), "-m", str(method)]
                 common_env = os.environ.copy()
                 common_env.update({
-                    "WEBP_STAGE_PROFILE": "1",
+                    "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT": "1",
                     "WEBP_STAGE_PROFILE_OUTPUT": str(records_path),
                     "WEBP_STAGE_PROFILE_RUN_ID": run_id,
                     "WEBP_STAGE_PROFILE_CASE_ID": case["case_id"],

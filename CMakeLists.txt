@@ -32,11 +32,13 @@ option(WEBP_ENABLE_SIMD "Enable any SIMD optimization."
        ${WEBP_ENABLE_SIMD_DEFAULT})
 option(WEBP_ENABLE_METAL "Enable Metal encoder acceleration on Apple platforms."
        ${APPLE})
-option(WEBP_BUILD_METAL_BENCHMARK
+option(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT
+       "Build the internal encoder stage profiling experiment." OFF)
+option(WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT
        "Build the internal Metal crossover experiment runner." OFF)
 option(WEBP_BUILD_METAL_BATCH_EXPERIMENT
        "Build non-installed Metal lifecycle/batching experiment tools." OFF)
-option(WEBP_BUILD_METAL_ABLATION
+option(WEBP_BUILD_METAL_ABLATION_EXPERIMENT
        "Build the non-installed Metal ablation benchmark tool." OFF)
 option(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT
        "Build the opt-in experimental Metal predictor-residual stage." OFF)
@@ -84,12 +86,22 @@ if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
     message(FATAL_ERROR
             "WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT requires WEBP_ENABLE_METAL.")
   endif()
-  add_definitions(-DWEBP_USE_METAL_PREDICTOR_EXPERIMENT=1)
 endif()
 
-if(WEBP_BUILD_METAL_BENCHMARK AND NOT WEBP_ENABLE_METAL)
+if(DEFINED WEBP_BUILD_METAL_BENCHMARK)
   message(FATAL_ERROR
-          "WEBP_BUILD_METAL_BENCHMARK requires WEBP_ENABLE_METAL=ON.")
+          "WEBP_BUILD_METAL_BENCHMARK was replaced by the dedicated "
+          "WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT option.")
+endif()
+if(DEFINED WEBP_BUILD_METAL_ABLATION)
+  message(FATAL_ERROR
+          "WEBP_BUILD_METAL_ABLATION was replaced by the dedicated "
+          "WEBP_BUILD_METAL_ABLATION_EXPERIMENT option.")
+endif()
+if(WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT AND NOT WEBP_ENABLE_METAL)
+  message(FATAL_ERROR
+          "WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT requires "
+          "WEBP_ENABLE_METAL=ON.")
 endif()
 if(WEBP_BUILD_METAL_BATCH_EXPERIMENT AND NOT WEBP_ENABLE_METAL)
   message(FATAL_ERROR
@@ -100,13 +112,11 @@ if(WEBP_BUILD_METAL_BATCH_EXPERIMENT AND BUILD_SHARED_LIBS)
           "WEBP_BUILD_METAL_BATCH_EXPERIMENT uses a private static-library hook; "
           "configure with BUILD_SHARED_LIBS=OFF.")
 endif()
-if(WEBP_BUILD_METAL_BATCH_EXPERIMENT)
-  add_definitions(-DWEBP_USE_METAL_BATCH_EXPERIMENT=1)
-endif()
-if(WEBP_BUILD_METAL_ABLATION AND
+if(WEBP_BUILD_METAL_ABLATION_EXPERIMENT AND
    (NOT WEBP_ENABLE_METAL OR NOT WEBP_BUILD_EXTRAS))
   message(FATAL_ERROR
-          "WEBP_BUILD_METAL_ABLATION requires WEBP_ENABLE_METAL=ON and "
+          "WEBP_BUILD_METAL_ABLATION_EXPERIMENT requires "
+          "WEBP_ENABLE_METAL=ON and "
           "WEBP_BUILD_EXTRAS=ON.")
 endif()
 
@@ -323,6 +333,10 @@ parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_COMMON_SRCS" "COMMON")
 parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_ENC_SRCS" "ENC")
 parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_DEC_SRCS" "decode_[^ ]*")
 
+if(NOT WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT)
+  list(REMOVE_ITEM WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/profile_enc.c)
+endif()
+
 if(WEBP_ENABLE_METAL)
   list(APPEND WEBP_DSP_ENC_SRCS
        ${WEBP_SRC_DIR}/dsp/lossless_enc_metal.mm)
@@ -493,6 +507,26 @@ add_library(webputils OBJECT ${WEBP_UTILS_COMMON_SRCS} ${WEBP_UTILS_DEC_SRCS}
                              ${WEBP_UTILS_ENC_SRCS})
 target_include_directories(webputils PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
                                              ${CMAKE_CURRENT_SOURCE_DIR})
+if(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT=1)
+  target_compile_definitions(
+    webpdsp PRIVATE WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT=1)
+endif()
+if(WEBP_BUILD_METAL_BATCH_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_METAL_BATCH_EXPERIMENT=1)
+endif()
+if(WEBP_BUILD_METAL_ABLATION_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_METAL_ABLATION_EXPERIMENT=1)
+  target_compile_definitions(
+    webpdsp PRIVATE WEBP_USE_METAL_ABLATION_EXPERIMENT=1)
+endif()
+if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_METAL_PREDICTOR_EXPERIMENT=1)
+endif()
 add_library(webp $<TARGET_OBJECTS:webpdecode> $<TARGET_OBJECTS:webpdsp>
                  $<TARGET_OBJECTS:webpencode> $<TARGET_OBJECTS:webputils>)
 if(WEBP_ENABLE_FBOUNDS_SAFETY)
@@ -526,6 +560,8 @@ if(WEBP_BUILD_METAL_BATCH_EXPERIMENT)
   target_include_directories(
     metal_encode_batch_experiment
     PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+  target_compile_definitions(
+    metal_encode_batch_experiment PRIVATE WEBP_USE_METAL_BATCH_EXPERIMENT=1)
 endif()
 set_target_properties(
   webp
@@ -648,16 +684,22 @@ if(WEBP_BUILD_CWEBP)
   add_executable(cwebp ${CWEBP_SRCS})
   target_link_libraries(cwebp exampleutil imagedec webp)
   target_include_directories(cwebp PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
+  if(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT)
+    target_compile_definitions(
+      cwebp PRIVATE WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT=1)
+  endif()
   install(TARGETS cwebp RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 endif()
 
-if(WEBP_BUILD_METAL_BENCHMARK)
+if(WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT)
   # Internal, deliberately non-installed experiment runner. The Python harness
   # owns the matrix, randomized ordering, validation, and result metadata.
   add_executable(webp_metal_benchmark tools/metal_benchmark.c)
   target_link_libraries(webp_metal_benchmark webp)
   target_include_directories(webp_metal_benchmark
                              PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
+  target_compile_definitions(
+    webp_metal_benchmark PRIVATE WEBP_USE_METAL_CROSSOVER_EXPERIMENT=1)
 endif()
 
 if(WEBP_BUILD_LIBWEBPMUX)
@@ -767,12 +809,14 @@ if(WEBP_BUILD_EXTRAS)
   target_link_libraries(webp_quality exampleutil imagedec extras)
   target_include_directories(webp_quality PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 
-  if(WEBP_BUILD_METAL_ABLATION)
+  if(WEBP_BUILD_METAL_ABLATION_EXPERIMENT)
     # Isolated RGB-to-YUV import benchmark used by the ablation harness.
     add_executable(metal_import_bench extras/metal_import_bench.c)
     target_link_libraries(metal_import_bench webp)
     target_include_directories(metal_import_bench
                                PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
+    target_compile_definitions(
+      metal_import_bench PRIVATE WEBP_USE_METAL_ABLATION_EXPERIMENT=1)
   endif()
 
   # vwebp_sdl

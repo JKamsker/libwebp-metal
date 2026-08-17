@@ -3,7 +3,10 @@
 This experiment profiles the modern encoder at methods 4 and 6 without using
 sampling-profiler symbol attribution as the primary measurement. Coarse
 monotonic-clock probes follow encoder phase boundaries, are disabled unless
-`WEBP_STAGE_PROFILE=1`, and execute no per-pixel probes. The supported
+the build flag `WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT` and runtime flag
+`WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT=1` are both present, and execute no
+per-pixel probes. Default builds omit `profile_enc.c`, compile its coarse call
+sites to no-ops, and do not expose `cwebp -profile_repetitions`. The supported
 experiment is single-threaded; do not add `cwebp -mt`, because worker-thread
 events intentionally do not inherit the calling thread's trace context.
 
@@ -16,6 +19,7 @@ On macOS, build an optimized Metal-enabled encoder:
 ```sh
 make -f makefile.unix -j8 clean
 make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 \
+  WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT=1 \
   CFLAGS='-O3 -DNDEBUG' CXXFLAGS='-O3 -DNDEBUG' ex
 scripts/test_metal.sh examples/test_ref.ppm
 ```
@@ -43,6 +47,8 @@ The formulas and seeds are fixed in the generator.
 Run only after the orchestrator releases the serialized benchmark phase:
 
 ```sh
+WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT=1 \
+WEBP_BENCHMARK_SESSION=exclusive \
 python3 scripts/encoder_stage_profile.py run \
   --encoder examples/cwebp \
   --dataset-dir profile-data/dataset \

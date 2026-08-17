@@ -189,6 +189,11 @@ def metadata(root: Path, args: argparse.Namespace, case_count: int) -> dict[str,
 
 
 def run_experiment(args: argparse.Namespace) -> int:
+    if os.environ.get("WEBP_METAL_CROSSOVER_EXPERIMENT") != "1":
+        raise SystemExit(
+            "refusing to collect timings without "
+            "WEBP_METAL_CROSSOVER_EXPERIMENT=1"
+        )
     if not args.acknowledge_exclusive_session:
         raise SystemExit(
             "refusing to collect timings without --acknowledge-exclusive-session"

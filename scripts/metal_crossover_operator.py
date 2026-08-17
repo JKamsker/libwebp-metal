@@ -271,6 +271,8 @@ def plan(preset_path: Path) -> int:
 
 
 def run(args: argparse.Namespace) -> int:
+    if os.environ.get("WEBP_METAL_CROSSOVER_EXPERIMENT") != "1":
+        raise ValueError("WEBP_METAL_CROSSOVER_EXPERIMENT=1 is required")
     if not args.acknowledge_exclusive_session:
         raise ValueError("--acknowledge-exclusive-session is required")
     if os.environ.get("WEBP_BENCHMARK_SESSION") != "exclusive":
