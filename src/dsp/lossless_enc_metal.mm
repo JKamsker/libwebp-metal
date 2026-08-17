@@ -20,6 +20,7 @@ extern "C" {
 #include "src/dsp/lossless.h"
 #include "src/enc/backward_references_enc.h"
 #include "src/enc/metal_enc.h"
+#include "src/enc/profile_enc.h"
 }
 
 namespace {
@@ -544,7 +545,10 @@ bool EnsureHashBuffers(MetalState* state, size_t bytes) {
 extern "C" int VP8LColorSpaceTransformMetal(int width, int height, int bits,
                                              int quality, uint32_t* argb,
                                              uint32_t* image) {
+  const uint64_t init_start =
+      WebPProfileStageBegin(WEBP_PROFILE_METAL_INIT);
   MetalState* state = GetMetalState();
+  WebPProfileStageEnd(WEBP_PROFILE_METAL_INIT, init_start);
   const size_t pixel_count = static_cast<size_t>(width) * height;
   if (state == nullptr || width <= 0 || height <= 0 || bits < 0 || bits > 8 ||
       pixel_count < state->minimum_pixels) {
@@ -565,8 +569,12 @@ extern "C" int VP8LColorSpaceTransformMetal(int width, int height, int bits,
       tile_columns};
 
   std::lock_guard<std::mutex> lock(state->operation_mutex);
+  const uint64_t dispatch_start =
+      WebPProfileStageBegin(WEBP_PROFILE_METAL_CROSS_COLOR_DISPATCH);
   @autoreleasepool {
     if (!EnsureBuffers(state, pixel_bytes, transform_bytes)) {
+      WebPProfileStageEnd(WEBP_PROFILE_METAL_CROSS_COLOR_DISPATCH,
+                          dispatch_start);
       return 0;
     }
     std::memcpy(state->pixel_buffer.contents, argb, pixel_bytes);
@@ -575,6 +583,8 @@ extern "C" int VP8LColorSpaceTransformMetal(int width, int height, int bits,
     id<MTLComputeCommandEncoder> encoder =
         [command_buffer computeCommandEncoder];
     if (command_buffer == nil || encoder == nil) {
+      WebPProfileStageEnd(WEBP_PROFILE_METAL_CROSS_COLOR_DISPATCH,
+                          dispatch_start);
       return 0;
     }
     [encoder setComputePipelineState:state->pipeline];
@@ -596,6 +606,8 @@ extern "C" int VP8LColorSpaceTransformMetal(int width, int height, int bits,
         std::fprintf(stderr, "WebP-Metal: command failed: %s\n",
                      command_buffer.error.localizedDescription.UTF8String);
       }
+      WebPProfileStageEnd(WEBP_PROFILE_METAL_CROSS_COLOR_DISPATCH,
+                          dispatch_start);
       return 0;
     }
 
@@ -609,6 +621,9 @@ extern "C" int VP8LColorSpaceTransformMetal(int width, int height, int bits,
                    width, height, milliseconds, tile_count);
     }
   }
+  WebPProfileStageEnd(WEBP_PROFILE_METAL_CROSS_COLOR_DISPATCH,
+                      dispatch_start);
+  WebPProfileMarkMetalCrossColor();
   return 1;
 }
 
@@ -616,7 +631,10 @@ extern "C" int VP8LHashChainFillMetalCandidates(
     const uint32_t* pixels, const int32_t* chain, int size, int xsize,
     int iter_max, uint32_t window_size, int low_effort,
     uint32_t* candidates) {
+  const uint64_t init_start =
+      WebPProfileStageBegin(WEBP_PROFILE_METAL_INIT);
   MetalState* state = GetMetalState();
+  WebPProfileStageEnd(WEBP_PROFILE_METAL_INIT, init_start);
   if (state == nullptr || pixels == nullptr || chain == nullptr ||
       candidates == nullptr || size <= 2 || xsize <= 0 || iter_max <= 0 ||
       static_cast<size_t>(size) < state->hash_minimum_pixels ||
@@ -631,7 +649,13 @@ extern "C" int VP8LHashChainFillMetalCandidates(
       static_cast<uint32_t>(low_effort != 0)};
   std::lock_guard<std::mutex> lock(state->operation_mutex);
   @autoreleasepool {
-    if (!EnsureHashPipeline(state) || !EnsureHashBuffers(state, bytes)) return 0;
+    const uint64_t pipeline_start =
+        WebPProfileStageBegin(WEBP_PROFILE_METAL_HASH_PIPELINE_INIT);
+    const bool pipeline_ok = EnsureHashPipeline(state);
+    WebPProfileStageEnd(WEBP_PROFILE_METAL_HASH_PIPELINE_INIT, pipeline_start);
+    if (!pipeline_ok || !EnsureHashBuffers(state, bytes)) return 0;
+    const uint64_t dispatch_start =
+        WebPProfileStageBegin(WEBP_PROFILE_METAL_HASH_DISPATCH);
     const CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
     std::memcpy(state->pixel_buffer.contents, pixels, bytes);
     std::memcpy(state->chain_buffer.contents, chain, bytes);
@@ -639,7 +663,10 @@ extern "C" int VP8LHashChainFillMetalCandidates(
     id<MTLCommandBuffer> command_buffer = [state->queue commandBuffer];
     id<MTLComputeCommandEncoder> encoder =
         [command_buffer computeCommandEncoder];
-    if (command_buffer == nil || encoder == nil) return 0;
+    if (command_buffer == nil || encoder == nil) {
+      WebPProfileStageEnd(WEBP_PROFILE_METAL_HASH_DISPATCH, dispatch_start);
+      return 0;
+    }
     [encoder setComputePipelineState:state->hash_pipeline];
     [encoder setBuffer:state->pixel_buffer offset:0 atIndex:0];
     [encoder setBuffer:state->chain_buffer offset:0 atIndex:1];
@@ -657,6 +684,7 @@ extern "C" int VP8LHashChainFillMetalCandidates(
         std::fprintf(stderr, "WebP-Metal: hash command failed: %s\n",
                      command_buffer.error.localizedDescription.UTF8String);
       }
+      WebPProfileStageEnd(WEBP_PROFILE_METAL_HASH_DISPATCH, dispatch_start);
       return 0;
     }
     std::memcpy(candidates, state->transform_buffer.contents, bytes);
@@ -665,6 +693,8 @@ extern "C" int VP8LHashChainFillMetalCandidates(
                    "WebP-Metal: hash candidates for %d pixels in %.3f ms\n",
                    size, (CFAbsoluteTimeGetCurrent() - start) * 1000.0);
     }
+    WebPProfileStageEnd(WEBP_PROFILE_METAL_HASH_DISPATCH, dispatch_start);
+    WebPProfileMarkMetalHash();
     return 1;
   }
 }

@@ -21,6 +21,7 @@
 #include "src/dsp/lossless_common.h"
 #include "src/enc/backward_references_enc.h"
 #include "src/enc/histogram_enc.h"
+#include "src/enc/profile_enc.h"
 #include "src/enc/vp8i_enc.h"
 #include "src/enc/vp8li_enc.h"
 #include "src/utils/bit_writer_utils.h"
@@ -761,23 +762,30 @@ static int EncodeImageNoHuffman(VP8LBitWriter* const bw,
   VP8LHistogramSet* histogram_image = NULL;
   HuffmanTree* const huff_tree = (HuffmanTree*)WebPSafeMalloc(
       3ULL * CODE_LENGTH_CODES, sizeof(*huff_tree));
+  uint64_t profile_start;
   if (huff_tree == NULL) {
     WebPEncodingSetError(pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
     goto Error;
   }
 
   // Calculate backward references from ARGB image.
+  profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_HASH_CHAIN);
   if (!VP8LHashChainFill(hash_chain, quality, argb, width, height, low_effort,
                          pic, percent_range / 2, percent)) {
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HASH_CHAIN, profile_start);
     goto Error;
   }
+  WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HASH_CHAIN, profile_start);
+  profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_BACKWARD_REFS);
   if (!VP8LGetBackwardReferences(width, height, argb, quality, /*low_effort=*/0,
                                  kLZ77Standard | kLZ77RLE, cache_bits,
                                  /*do_no_cache=*/0, hash_chain, refs_array,
                                  &cache_bits, pic,
                                  percent_range - percent_range / 2, percent)) {
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_BACKWARD_REFS, profile_start);
     goto Error;
   }
+  WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_BACKWARD_REFS, profile_start);
   refs = &refs_array[0];
   histogram_image = VP8LAllocateHistogramSet(1, cache_bits);
   if (histogram_image == NULL) {
@@ -787,13 +795,17 @@ static int EncodeImageNoHuffman(VP8LBitWriter* const bw,
   VP8LHistogramSetClear(histogram_image);
 
   // Build histogram image and symbols from backward references.
+  profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_HISTOGRAM);
   VP8LHistogramStoreRefs(refs, /*distance_modifier=*/NULL,
                          /*distance_modifier_arg0=*/0,
                          histogram_image->histograms[0]);
+  WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HISTOGRAM, profile_start);
 
   // Create Huffman bit lengths and codes for each histogram image.
+  profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_HUFFMAN);
   assert(histogram_image->size == 1);
   if (!GetHuffBitLengthsAndCodes(histogram_image, huffman_codes)) {
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HUFFMAN, profile_start);
     WebPEncodingSetError(pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
     goto Error;
   }
@@ -821,12 +833,16 @@ static int EncodeImageNoHuffman(VP8LBitWriter* const bw,
     StoreHuffmanCode(bw, huff_tree, tokens, codes);
     ClearHuffmanTreeIfOnlyOneSymbol(codes);
   }
+  WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HUFFMAN, profile_start);
 
   // Store actual literals.
+  profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_BITSTREAM);
   if (!StoreImageToBitMask(bw, width, 0, refs, histogram_symbols, huffman_codes,
                            pic)) {
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_BITSTREAM, profile_start);
     goto Error;
   }
+  WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_BITSTREAM, profile_start);
 
 Error:
   WebPSafeFree(tokens);
@@ -865,6 +881,7 @@ static int EncodeImageInternal(
   int hdr_size_tmp;
   VP8LHashChain hash_chain_histogram;  // histogram image hash chain
   size_t bw_size_best = ~(size_t)0;
+  uint64_t profile_start;
   assert(histogram_bits_in >= MIN_HUFFMAN_BITS);
   assert(histogram_bits_in <= MAX_HUFFMAN_BITS);
   assert(hdr_size != NULL);
@@ -884,10 +901,13 @@ static int EncodeImageInternal(
   }
 
   percent_range = remaining_percent / 5;
+  profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_HASH_CHAIN);
   if (!VP8LHashChainFill(hash_chain, quality, argb, width, height, low_effort,
                          pic, percent_range, percent)) {
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HASH_CHAIN, profile_start);
     goto Error;
   }
+  WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HASH_CHAIN, profile_start);
   percent_start += percent_range;
   remaining_percent -= percent_range;
 
@@ -910,12 +930,16 @@ static int EncodeImageInternal(
     int i_percent_range = i_remaining_percent / 4;
     i_remaining_percent -= i_percent_range;
 
+    profile_start =
+        WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_BACKWARD_REFS);
     if (!VP8LGetBackwardReferences(
             width, height, argb, quality, low_effort, sub_config->lz77,
             cache_bits_init, sub_config->do_no_cache, hash_chain,
             &refs_array[0], &cache_bits_best, pic, i_percent_range, percent)) {
+      WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_BACKWARD_REFS, profile_start);
       goto Error;
     }
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_BACKWARD_REFS, profile_start);
 
     for (i_cache = 0; i_cache < (sub_config->do_no_cache ? 2 : 1); ++i_cache) {
       const int cache_bits_tmp = (i_cache == 0) ? cache_bits_best : 0;
@@ -938,13 +962,17 @@ static int EncodeImageInternal(
 
       i_percent_range = i_remaining_percent / 3;
       i_remaining_percent -= i_percent_range;
+      profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_HISTOGRAM);
       if (!VP8LGetHistoImageSymbols(
               width, height, &refs_array[i_cache], quality, low_effort,
               histogram_bits, cache_bits_tmp, histogram_image, tmp_histo,
               histogram_argb, pic, i_percent_range, percent)) {
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HISTOGRAM, profile_start);
         goto Error;
       }
+      WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HISTOGRAM, profile_start);
       // Create Huffman bit lengths and codes for each histogram image.
+      profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_HUFFMAN);
       histogram_image_size = histogram_image->size;
       bit_array_size = 5 * histogram_image_size;
       huffman_codes = (HuffmanTreeCode*)WebPSafeCalloc(bit_array_size,
@@ -954,9 +982,11 @@ static int EncodeImageInternal(
       // GetHuffBitLengthsAndCodes().
       if (huffman_codes == NULL ||
           !GetHuffBitLengthsAndCodes(histogram_image, huffman_codes)) {
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HUFFMAN, profile_start);
         WebPEncodingSetError(pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
         goto Error;
       }
+      WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HUFFMAN, profile_start);
       // Free combined histograms.
       VP8LFreeHistogramSet(histogram_image);
       histogram_image = NULL;
@@ -1000,6 +1030,7 @@ static int EncodeImageInternal(
       }
 
       // Store Huffman codes.
+      profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_HUFFMAN);
       {
         int max_tokens = 0;
         // Find maximum number of symbols for the huffman tree-set.
@@ -1020,12 +1051,16 @@ static int EncodeImageInternal(
           ClearHuffmanTreeIfOnlyOneSymbol(codes);
         }
       }
+      WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HUFFMAN, profile_start);
       // Store actual literals.
       hdr_size_tmp = (int)(VP8LBitWriterNumBytes(bw) - init_byte_position);
+      profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_BITSTREAM);
       if (!StoreImageToBitMask(bw, width, histogram_bits, &refs_array[i_cache],
                                histogram_argb, huffman_codes, pic)) {
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_BITSTREAM, profile_start);
         goto Error;
       }
+      WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_BITSTREAM, profile_start);
       // Keep track of the smallest image so far.
       if (VP8LBitWriterNumBytes(bw) < bw_size_best) {
         bw_size_best = VP8LBitWriterNumBytes(bw);
@@ -1515,6 +1550,7 @@ static int EncodeStreamHook(void* input, void* data2) {
   int idx;
   size_t best_size = ~(size_t)0;
   VP8LBitWriter bw_init = *bw, bw_best;
+  uint64_t profile_start;
   (void)data2;
 
   if (!VP8LBitWriterInit(&bw_best, 0) ||
@@ -1566,54 +1602,77 @@ static int EncodeStreamHook(void* input, void* data2) {
 
     // Encode palette
     if (enc->use_palette) {
+      profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_PALETTE);
       if (!PaletteSort(crunch_configs[idx].palette_sorting_type, enc->pic,
                        enc->palette_sorted, enc->palette_size, enc->palette)) {
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_PALETTE, profile_start);
         WebPEncodingSetError(enc->pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
         goto Error;
       }
       percent_range = remaining_percent / 4;
       if (!EncodePalette(bw, low_effort, enc, percent_range, &percent)) {
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_PALETTE, profile_start);
         goto Error;
       }
       remaining_percent -= percent_range;
-      if (!MapImageFromPalette(enc)) goto Error;
+      if (!MapImageFromPalette(enc)) {
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_PALETTE, profile_start);
+        goto Error;
+      }
       // If using a color cache, do not have it bigger than the number of
       // colors.
       if (enc->palette_size < (1 << MAX_COLOR_CACHE_BITS)) {
         enc->cache_bits = BitsLog2Floor(enc->palette_size) + 1;
       }
+      WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_PALETTE, profile_start);
     }
     // In case image is not packed.
     if (enc->argb_content != kEncoderNearLossless &&
         enc->argb_content != kEncoderPalette) {
-      if (!MakeInputImageCopy(enc)) goto Error;
+      profile_start =
+          WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_INPUT_COPY);
+      if (!MakeInputImageCopy(enc)) {
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_INPUT_COPY, profile_start);
+        goto Error;
+      }
+      WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_INPUT_COPY, profile_start);
     }
 
     // -------------------------------------------------------------------------
     // Apply transforms and write transform data.
 
     if (enc->use_subtract_green) {
+      profile_start =
+          WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_SUBTRACT_GREEN);
       ApplySubtractGreen(enc, enc->current_width, height, bw);
+      WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_SUBTRACT_GREEN, profile_start);
     }
 
     if (enc->use_predict) {
+      profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_PREDICTOR);
       percent_range = remaining_percent / 3;
       if (!ApplyPredictFilter(enc, enc->current_width, height, quality,
                               low_effort, enc->use_subtract_green, bw,
                               percent_range, &percent,
                               &predictor_transform_bits)) {
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_PREDICTOR, profile_start);
         goto Error;
       }
+      WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_PREDICTOR, profile_start);
       remaining_percent -= percent_range;
     }
 
     if (enc->use_cross_color) {
+      profile_start =
+          WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_CROSS_COLOR);
       percent_range = remaining_percent / 2;
       if (!ApplyCrossColorFilter(enc, enc->current_width, height, quality,
                                  low_effort, bw, percent_range, &percent,
                                  &cross_color_transform_bits)) {
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_CROSS_COLOR, profile_start);
         goto Error;
       }
+      WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_CROSS_COLOR, profile_start);
       remaining_percent -= percent_range;
     }
 
@@ -1681,6 +1740,7 @@ int VP8LEncodeStream(const WebPConfig* const config,
   WebPPicture picture_side;
   const WebPWorkerInterface* const worker_interface = WebPGetWorkerInterface();
   int ok_main;
+  uint64_t profile_start;
 
   if (enc_main == NULL || !VP8LBitWriterInit(&bw_side, 0)) {
     VP8LEncoderDelete(enc_main);
@@ -1693,12 +1753,21 @@ int VP8LEncodeStream(const WebPConfig* const config,
   }
 
   // Analyze image (entropy, num_palettes etc)
+  profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_ANALYZE);
   if (!EncoderAnalyze(enc_main, crunch_configs, &num_crunch_configs_main,
-                      &red_and_blue_always_zero) ||
-      !EncoderInit(enc_main)) {
+                      &red_and_blue_always_zero)) {
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_ANALYZE, profile_start);
     WebPEncodingSetError(picture, VP8_ENC_ERROR_OUT_OF_MEMORY);
     goto Error;
   }
+  WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_ANALYZE, profile_start);
+  profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_ENCODER_INIT);
+  if (!EncoderInit(enc_main)) {
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_ENCODER_INIT, profile_start);
+    WebPEncodingSetError(picture, VP8_ENC_ERROR_OUT_OF_MEMORY);
+    goto Error;
+  }
+  WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_ENCODER_INIT, profile_start);
 
   // Split the configs between the main and side threads (if any).
   if (config->thread_level > 0) {
@@ -1812,9 +1881,12 @@ int VP8LEncodeStream(const WebPConfig* const config,
   }
 
 Error:
+  profile_start =
+      WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_STREAM_FINALIZE);
   VP8LBitWriterWipeOut(&bw_side);
   VP8LEncoderDelete(enc_main);
   VP8LEncoderDelete(enc_side);
+  WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_STREAM_FINALIZE, profile_start);
   return (picture->error_code == VP8_ENC_OK);
 }
 
@@ -1829,6 +1901,7 @@ int VP8LEncodeImage(const WebPConfig* const config,
   int percent = 0;
   int initial_size;
   VP8LBitWriter bw;
+  uint64_t profile_start;
 
   if (picture == NULL) return 0;
 
@@ -1842,7 +1915,10 @@ int VP8LEncodeImage(const WebPConfig* const config,
   // 8 bpp for graphical images.
   initial_size = (config->image_hint == WEBP_HINT_GRAPH) ? width * height
                                                          : width * height * 2;
+  profile_start =
+      WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_CONTAINER_SETUP);
   if (!VP8LBitWriterInit(&bw, initial_size)) {
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_CONTAINER_SETUP, profile_start);
     WebPEncodingSetError(picture, VP8_ENC_ERROR_OUT_OF_MEMORY);
     goto Error;
   }
@@ -1865,6 +1941,7 @@ int VP8LEncodeImage(const WebPConfig* const config,
 
   // Write image size.
   if (!WriteImageSize(picture, &bw)) {
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_CONTAINER_SETUP, profile_start);
     WebPEncodingSetError(picture, VP8_ENC_ERROR_OUT_OF_MEMORY);
     goto Error;
   }
@@ -1872,9 +1949,11 @@ int VP8LEncodeImage(const WebPConfig* const config,
   has_alpha = WebPPictureHasTransparency(picture);
   // Write the non-trivial Alpha flag and lossless version.
   if (!WriteRealAlphaAndVersion(&bw, has_alpha)) {
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_CONTAINER_SETUP, profile_start);
     WebPEncodingSetError(picture, VP8_ENC_ERROR_OUT_OF_MEMORY);
     goto Error;
   }
+  WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_CONTAINER_SETUP, profile_start);
 
   if (!WebPReportProgress(picture, 2, &percent)) goto UserAbort;
 
@@ -1884,7 +1963,13 @@ int VP8LEncodeImage(const WebPConfig* const config,
   if (!WebPReportProgress(picture, 99, &percent)) goto UserAbort;
 
   // Finish the RIFF chunk.
-  if (!WriteImage(picture, &bw, &coded_size)) goto Error;
+  profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_RIFF_WRITE);
+  if (!WriteImage(picture, &bw, &coded_size)) {
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_RIFF_WRITE, profile_start);
+    goto Error;
+  }
+  WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_RIFF_WRITE, profile_start);
+  WebPProfileSetOutputSize(coded_size);
 
   if (!WebPReportProgress(picture, 100, &percent)) goto UserAbort;
 

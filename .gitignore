@@ -43,6 +43,7 @@ CMakeFiles/
 cmake_install.cmake
 .gradle
 /build
+/profile-data
 extras/get_disto
 extras/vwebp_sdl
 extras/webp_quality

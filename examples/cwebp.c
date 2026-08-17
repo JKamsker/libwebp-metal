@@ -682,6 +682,7 @@ static void HelpLong(void) {
   printf("  -jpeg_like ............. roughly match expected JPEG size\n");
   printf("  -af .................... auto-adjust filter strength\n");
   printf("  -pre <int> ............. pre-processing filter\n");
+  printf("  -profile_repetitions <n> repeat a discarded lossless encode in-process\n");
   printf("\n");
   printf("Supported input formats:\n  %s\n", WebPGetEnabledInputFileFormats());
 }
@@ -727,6 +728,7 @@ int main(int argc, const char* argv[]) {
   int use_lossless_preset = -1;  // -1=unset, 0=don't use, 1=use it
   int show_progress = 0;
   int keep_metadata = 0;
+  int profile_repetitions = 1;
   int metadata_written = 0;
   WebPPicture picture;
   int print_distortion = -1;     // -1=off, 0=PSNR, 1=SSIM, 2=LSIM
@@ -854,6 +856,9 @@ int main(int argc, const char* argv[]) {
       config.emulate_jpeg_size = 1;
     } else if (!strcmp(argv[c], "-mt")) {
       ++config.thread_level;  // increase thread level
+    } else if (!strcmp(argv[c], "-profile_repetitions") && c + 1 < argc) {
+      profile_repetitions = ExUtilGetInt(argv[++c], 0, &parse_error);
+      if (profile_repetitions < 1) parse_error = 1;
     } else if (!strcmp(argv[c], "-low_memory")) {
       config.low_memory = 1;
     } else if (!strcmp(argv[c], "-strong")) {
@@ -1040,6 +1045,14 @@ int main(int argc, const char* argv[]) {
     fprintf(stderr, "Error! Invalid configuration.\n");
     goto Error;
   }
+  if (profile_repetitions > 1 &&
+      (!config.lossless || out_file != NULL || print_distortion >= 0 ||
+       dump_file != NULL || keep_metadata != 0 || config.thread_level != 0)) {
+    fprintf(stderr,
+            "Error! -profile_repetitions requires single-threaded lossless "
+            "encoding with discarded output and no distortion/metadata.\n");
+    goto Error;
+  }
 
   // Read the input. We need to decide if we prefer ARGB or YUVA
   // samples, depending on the expected compression mode (this saves
@@ -1192,11 +1205,17 @@ int main(int argc, const char* argv[]) {
   if (verbose) {
     StopwatchReset(&stop_watch);
   }
-  if (!WebPEncode(&config, &picture)) {
-    fprintf(stderr, "Error! Cannot encode picture as WebP\n");
-    fprintf(stderr, "Error code: %d (%s)\n", picture.error_code,
-            kErrorMessages[picture.error_code]);
-    goto Error;
+  {
+    int profile_iteration;
+    for (profile_iteration = 0; profile_iteration < profile_repetitions;
+         ++profile_iteration) {
+      if (!WebPEncode(&config, &picture)) {
+        fprintf(stderr, "Error! Cannot encode picture as WebP\n");
+        fprintf(stderr, "Error code: %d (%s)\n", picture.error_code,
+                kErrorMessages[picture.error_code]);
+        goto Error;
+      }
+    }
   }
   if (verbose) {
     const double encode_time = StopwatchReadAndReset(&stop_watch);

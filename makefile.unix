@@ -259,6 +259,7 @@ ENC_OBJS = \
     src/enc/picture_psnr_enc.o \
     src/enc/picture_rescale_enc.o \
     src/enc/picture_tools_enc.o \
+    src/enc/profile_enc.o \
     src/enc/predictor_enc.o \
     src/enc/quant_enc.o \
     src/enc/syntax_enc.o \

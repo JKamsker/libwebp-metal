@@ -19,6 +19,7 @@
 #include "src/dec/common_dec.h"
 #include "src/dsp/dsp.h"
 #include "src/enc/cost_enc.h"
+#include "src/enc/profile_enc.h"
 #include "src/enc/vp8i_enc.h"
 #include "src/enc/vp8li_enc.h"
 #include "src/utils/utils.h"
@@ -349,14 +350,19 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
   }
 
   if (pic->stats != NULL) memset(pic->stats, 0, sizeof(*pic->stats));
+  WebPProfileBeginSession(config, pic);
 
   if (!config->lossless) {
     VP8Encoder* enc = NULL;
+    uint64_t profile_start;
 
+    profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_IMPORT);
     if (pic->use_argb || pic->y == NULL || pic->u == NULL || pic->v == NULL) {
       // Make sure we have YUVA samples.
       if (config->use_sharp_yuv || (config->preprocessing & 4)) {
         if (!WebPPictureSharpARGBToYUVA(pic)) {
+          WebPProfileStageEnd(WEBP_PROFILE_LOSSY_IMPORT, profile_start);
+          WebPProfileEndSession(0, pic->error_code);
           return 0;
         }
       } else {
@@ -369,47 +375,71 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
           dithering = 1.0f + (0.5f - 1.0f) * x2 * x2;
         }
         if (!WebPPictureARGBToYUVADithered(pic, WEBP_YUV420, dithering)) {
+          WebPProfileStageEnd(WEBP_PROFILE_LOSSY_IMPORT, profile_start);
+          WebPProfileEndSession(0, pic->error_code);
           return 0;
         }
       }
     }
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSY_IMPORT, profile_start);
 
     if (!config->exact) {
       WebPCleanupTransparentArea(pic);
     }
 
+    profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_ENCODER_INIT);
     enc = InitVP8Encoder(config, pic);
-    if (enc == NULL) return 0;  // pic->error is already set.
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSY_ENCODER_INIT, profile_start);
+    if (enc == NULL) {
+      WebPProfileEndSession(0, pic->error_code);
+      return 0;  // pic->error is already set.
+    }
     // Note: each of the tasks below account for 20% in the progress report.
+    profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_ANALYZE);
     ok = VP8EncAnalyze(enc);
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSY_ANALYZE, profile_start);
 
     // Analysis is done, proceed to actual coding.
+    profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_ALPHA);
     ok = ok && VP8EncStartAlpha(enc);  // possibly done in parallel
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSY_ALPHA, profile_start);
+    profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_ENCODE_LOOP);
     if (!enc->use_tokens) {
       ok = ok && VP8EncLoop(enc);
     } else {
       ok = ok && VP8EncTokenLoop(enc);
     }
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSY_ENCODE_LOOP, profile_start);
+    profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_ALPHA);
     ok = ok && VP8EncFinishAlpha(enc);
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSY_ALPHA, profile_start);
 
+    profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_WRITE);
     ok = ok && VP8EncWrite(enc);
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSY_WRITE, profile_start);
     StoreStats(enc);
     if (!ok) {
       VP8EncFreeBitWriters(enc);
     }
     ok &= DeleteVP8Encoder(enc);  // must always be called, even if !ok
   } else {
+    uint64_t profile_start =
+        WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_PREPARE);
     // Make sure we have ARGB samples.
     if (pic->argb == NULL && !WebPPictureYUVAToARGB(pic)) {
+      WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_PREPARE, profile_start);
+      WebPProfileEndSession(0, pic->error_code);
       return 0;
     }
 
     if (!config->exact) {
       WebPReplaceTransparentPixels(pic, 0x000000);
     }
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_PREPARE, profile_start);
 
     ok = VP8LEncodeImage(config, pic);  // Sets pic->error in case of problem.
   }
 
+  WebPProfileEndSession(ok, pic->error_code);
   return ok;
 }

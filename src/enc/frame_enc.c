@@ -19,6 +19,7 @@
 #include "src/dsp/dsp.h"
 #include "src/enc/cost_enc.h"
 #include "src/enc/vp8i_enc.h"
+#include "src/enc/profile_enc.h"
 #include "src/utils/bit_writer_utils.h"
 #include "src/webp/encode.h"
 #include "src/webp/format_constants.h"  // RIFF constants
@@ -751,9 +752,12 @@ static void ResetAfterSkip(VP8EncIterator* const it) {
 int VP8EncLoop(VP8Encoder* const enc) {
   VP8EncIterator it;
   int ok = PreLoopInitialize(enc);
+  uint64_t profile_start;
   if (!ok) return 0;
 
+  profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_STAT_LOOP);
   StatLoop(enc);  // stats-collection loop
+  WebPProfileStageEnd(WEBP_PROFILE_LOSSY_STAT_LOOP, profile_start);
 
   VP8IteratorInit(enc, &it);
   VP8InitFilter(&it);

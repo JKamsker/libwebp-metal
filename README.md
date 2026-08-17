@@ -24,7 +24,9 @@ tree. See [METAL_MIGRATION_TASK.md](METAL_MIGRATION_TASK.md) for the migration
 scope and maintenance strategy. Current CPU-versus-Metal measurements are in
 [BENCHMARK_RESULTS.md](BENCHMARK_RESULTS.md). The private backend contract and
 CUDA revival plan are in
-[ACCELERATOR_BACKEND_DESIGN.md](ACCELERATOR_BACKEND_DESIGN.md).
+[ACCELERATOR_BACKEND_DESIGN.md](ACCELERATOR_BACKEND_DESIGN.md). The reproducible
+opt-in stage profiling protocol is in
+[doc/encoder_stage_profiling.md](doc/encoder_stage_profiling.md).
 
 Project home: https://github.com/JKamsker/libwebp-metal
 
