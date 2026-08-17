@@ -20,9 +20,7 @@
 
 #include "src/dsp/lossless.h"
 #include "src/dsp/lossless_common.h"
-#if defined(WEBP_USE_METAL)
-#include "src/enc/metal_enc.h"
-#endif
+#include "src/enc/accelerator_enc.h"
 #include "src/enc/vp8i_enc.h"
 #include "src/enc/vp8li_enc.h"
 #include "src/utils/utils.h"
@@ -1056,16 +1054,18 @@ int VP8LColorSpaceTransform(int width, int height, int bits, int quality,
   int tile_x, tile_y;
   VP8LMultipliers prev_x, prev_y;
 
-#if defined(WEBP_USE_METAL)
-  if (VP8LColorSpaceTransformMetal(width, height, bits, quality, argb, image)) {
-    if (!WebPReportProgress(pic, percent_start + percent_range, percent)) {
-      return 0;
+  {
+    const WebPAcceleratorColorTransformRequest request = {
+        width, height, bits, quality, argb, image};
+    if (WebPAccelerateColorTransform(&request) == WEBP_ACCELERATOR_SUCCESS) {
+      if (!WebPReportProgress(pic, percent_start + percent_range, percent)) {
+        return 0;
+      }
+      VP8LOptimizeSampling(image, width, height, bits, MAX_TRANSFORM_BITS,
+                           best_bits);
+      return 1;
     }
-    VP8LOptimizeSampling(image, width, height, bits, MAX_TRANSFORM_BITS,
-                         best_bits);
-    return 1;
   }
-#endif
 
   MultipliersClear(&prev_y);
   MultipliersClear(&prev_x);

@@ -242,6 +242,7 @@ DSP_ENC_OBJS += src/dsp/lossless_enc_metal.o
 endif
 
 ENC_OBJS = \
+    src/enc/accelerator_enc.o \
     src/enc/alpha_enc.o \
     src/enc/analysis_enc.o \
     src/enc/backward_references_cost_enc.o \
@@ -267,7 +268,7 @@ ENC_OBJS = \
     src/enc/webp_enc.o \
 
 ifeq ($(WEBP_ENABLE_METAL),1)
-ENC_OBJS += src/enc/picture_csp_enc_metal.o
+ENC_OBJS += src/enc/metal_enc.o src/enc/picture_csp_enc_metal.o
 endif
 
 EX_FORMAT_DEC_OBJS = \

@@ -19,7 +19,6 @@
 
 extern "C" {
 #include "src/enc/metal_enc.h"
-#include "src/enc/vp8i_enc.h"
 }
 
 namespace {
@@ -284,13 +283,15 @@ bool EnsureBuffers(MetalState* state, size_t source_size, size_t output_size) {
 
 extern "C" int WebPImportRGBToYUVAMetal(
     const uint8_t* red, const uint8_t* green, const uint8_t* blue, int step,
-    int source_stride, WebPPicture* picture) {
+    int source_stride, int width, int height, uint8_t* y_plane,
+    uint8_t* u_plane, uint8_t* v_plane, int y_stride, int uv_stride) {
   if (red == nullptr || green == nullptr || blue == nullptr ||
-      picture == nullptr || (step != 3 && step != 4) || source_stride <= 0) {
+      y_plane == nullptr || u_plane == nullptr || v_plane == nullptr ||
+      width <= 0 || height <= 0 || (step != 3 && step != 4) ||
+      source_stride <= 0 || y_stride <= 0 || uv_stride <= 0) {
     return 0;
   }
-  const size_t pixel_count =
-      static_cast<size_t>(picture->width) * picture->height;
+  const size_t pixel_count = static_cast<size_t>(width) * height;
   if (pixel_count < EnvironmentSize("WEBP_METAL_LOSSY_MIN_PIXELS",
                                      kDefaultMinimumPixels) ||
       !EnvironmentFlag("WEBP_METAL_LOSSY", true)) {
@@ -307,17 +308,17 @@ extern "C" int WebPImportRGBToYUVAMetal(
       red_offset >= step || green_offset >= step || blue_offset >= step) {
     return 0;
   }
-  const uint32_t uv_width = (picture->width + 1u) >> 1;
-  const uint32_t uv_height = (picture->height + 1u) >> 1;
+  const uint32_t uv_width = (width + 1u) >> 1;
+  const uint32_t uv_height = (height + 1u) >> 1;
   const size_t y_size = pixel_count;
   const size_t uv_size = static_cast<size_t>(uv_width) * uv_height;
   const size_t source_size = static_cast<size_t>(source_stride) *
-                                 (picture->height - 1u) +
-                             static_cast<size_t>(picture->width) * step;
+                                 (height - 1u) +
+                             static_cast<size_t>(width) * step;
   const size_t output_size = y_size + 2u * uv_size;
   const KernelParams params = {
-      static_cast<uint32_t>(picture->width),
-      static_cast<uint32_t>(picture->height), static_cast<uint32_t>(step),
+      static_cast<uint32_t>(width), static_cast<uint32_t>(height),
+      static_cast<uint32_t>(step),
       static_cast<uint32_t>(source_stride),
       static_cast<uint32_t>(red_offset), static_cast<uint32_t>(green_offset),
       static_cast<uint32_t>(blue_offset), uv_width,
@@ -347,23 +348,22 @@ extern "C" int WebPImportRGBToYUVAMetal(
     if (command.status != MTLCommandBufferStatusCompleted) return 0;
 
     const uint8_t* output = static_cast<const uint8_t*>(state->output.contents);
-    for (int y = 0; y < picture->height; ++y) {
-      std::memcpy(picture->y + static_cast<size_t>(y) * picture->y_stride,
-                  output + static_cast<size_t>(y) * picture->width,
-                  picture->width);
+    for (int y = 0; y < height; ++y) {
+      std::memcpy(y_plane + static_cast<size_t>(y) * y_stride,
+                  output + static_cast<size_t>(y) * width, width);
     }
     const uint8_t* u = output + y_size;
     const uint8_t* v = u + uv_size;
     for (uint32_t y = 0; y < uv_height; ++y) {
-      std::memcpy(picture->u + static_cast<size_t>(y) * picture->uv_stride,
+      std::memcpy(u_plane + static_cast<size_t>(y) * uv_stride,
                   u + static_cast<size_t>(y) * uv_width, uv_width);
-      std::memcpy(picture->v + static_cast<size_t>(y) * picture->uv_stride,
+      std::memcpy(v_plane + static_cast<size_t>(y) * uv_stride,
                   v + static_cast<size_t>(y) * uv_width, uv_width);
     }
     if (EnvironmentFlag("WEBP_METAL_VERBOSE", false)) {
       std::fprintf(stderr,
                    "WebP-Metal: lossy RGB->YUV %dx%d in %.3f ms\n",
-                   picture->width, picture->height,
+                   width, height,
                    (CFAbsoluteTimeGetCurrent() - start) * 1000.0);
     }
   }

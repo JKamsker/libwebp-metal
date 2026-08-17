@@ -289,6 +289,7 @@ if(WEBP_ENABLE_METAL)
   list(APPEND WEBP_DSP_ENC_SRCS
        ${WEBP_SRC_DIR}/dsp/lossless_enc_metal.mm)
   list(APPEND WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/metal_enc.c
        ${WEBP_SRC_DIR}/enc/picture_csp_enc_metal.mm)
   set_source_files_properties(
     ${WEBP_SRC_DIR}/dsp/lossless_enc_metal.mm

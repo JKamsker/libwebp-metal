@@ -22,7 +22,9 @@ lossless backward-reference candidate search, and opaque RGB/BGR to YUV420
 conversion. It is based on current libwebp rather than the legacy libwebp 1.0.3
 tree. See [METAL_MIGRATION_TASK.md](METAL_MIGRATION_TASK.md) for the migration
 scope and maintenance strategy. Current CPU-versus-Metal measurements are in
-[BENCHMARK_RESULTS.md](BENCHMARK_RESULTS.md).
+[BENCHMARK_RESULTS.md](BENCHMARK_RESULTS.md). The private backend contract and
+CUDA revival plan are in
+[ACCELERATOR_BACKEND_DESIGN.md](ACCELERATOR_BACKEND_DESIGN.md).
 
 Project home: https://github.com/JKamsker/libwebp-metal
 
@@ -40,7 +42,8 @@ At runtime, `WEBP_METAL=0` disables lossless Metal acceleration,
 `WEBP_METAL_LOSSY=0` disables lossy import acceleration. The corresponding
 `*_MIN_PIXELS` variables set crossover thresholds; setting them to `0` forces
 the relevant path for correctness testing. `WEBP_METAL_VERBOSE=1` reports which
-Metal operations were selected.
+Metal operations were selected. `WEBP_ACCELERATOR=none` is a backend-neutral
+CPU-only override; `auto` (the default) or `metal` selects the Metal descriptor.
 
 See https://developers.google.com/speed/webp for details on the image format.
 

@@ -18,10 +18,8 @@
 #include "src/dsp/cpu.h"
 #include "src/dsp/lossless.h"
 #include "src/dsp/lossless_common.h"
+#include "src/enc/accelerator_enc.h"
 #include "src/enc/histogram_enc.h"
-#if defined(WEBP_USE_METAL)
-#include "src/enc/metal_enc.h"
-#endif
 #include "src/enc/vp8i_enc.h"
 #include "src/utils/color_cache_utils.h"
 #include "src/utils/utils.h"
@@ -255,7 +253,6 @@ static WEBP_INLINE int MaxFindCopyLength(int len) {
   return (len < MAX_LENGTH) ? len : MAX_LENGTH;
 }
 
-#if defined(WEBP_USE_METAL)
 static WEBP_INLINE void StoreMatchAndExtendLeft(
     VP8LHashChain* const hash_chain, const uint32_t* const argb,
     uint32_t* const base_position, uint32_t best_distance, int best_length) {
@@ -281,7 +278,6 @@ static WEBP_INLINE void StoreMatchAndExtendLeft(
     }
   }
 }
-#endif
 
 int VP8LHashChainFill(VP8LHashChain* const p, int quality,
                       const uint32_t* const argb, int xsize, int ysize,
@@ -377,30 +373,31 @@ int VP8LHashChainFill(VP8LHashChain* const p, int quality,
   if (!WebPReportProgress(pic, percent_start, percent)) return 0;
   percent_range = remaining_percent;
 
-#if defined(WEBP_USE_METAL)
-  if (VP8LHashChainFillMetalCandidates(
-          argb, chain, size, xsize, iter_max, window_size, low_effort,
-          p->offset_length)) {
-    base_position = size - 2;
-    p->offset_length[0] = p->offset_length[size - 1] = 0;
-    while (base_position > 0) {
-      const uint32_t candidate = p->offset_length[base_position];
-      const uint32_t best_distance = candidate >> MAX_LENGTH_BITS;
-      const int best_length =
-          candidate & ((1U << MAX_LENGTH_BITS) - 1U);
-      StoreMatchAndExtendLeft(p, argb, &base_position, best_distance,
-                              best_length);
-      if (!WebPReportProgress(pic,
-                              percent_start + percent_range *
-                                                  (size - 2 - base_position) /
-                                                  (size - 2),
-                              percent)) {
-        return 0;
+  {
+    const WebPAcceleratorHashChainRequest request = {
+        argb, chain, size, xsize, iter_max, window_size, low_effort,
+        p->offset_length};
+    if (WebPAccelerateHashChain(&request) == WEBP_ACCELERATOR_SUCCESS) {
+      base_position = size - 2;
+      p->offset_length[0] = p->offset_length[size - 1] = 0;
+      while (base_position > 0) {
+        const uint32_t candidate = p->offset_length[base_position];
+        const uint32_t best_distance = candidate >> MAX_LENGTH_BITS;
+        const int best_length =
+            candidate & ((1U << MAX_LENGTH_BITS) - 1U);
+        StoreMatchAndExtendLeft(p, argb, &base_position, best_distance,
+                                best_length);
+        if (!WebPReportProgress(pic,
+                                percent_start + percent_range *
+                                                    (size - 2 - base_position) /
+                                                    (size - 2),
+                                percent)) {
+          return 0;
+        }
       }
+      return WebPReportProgress(pic, percent_start + percent_range, percent);
     }
-    return WebPReportProgress(pic, percent_start + percent_range, percent);
   }
-#endif
 
   // Find the best match interval at each pixel, defined by an offset to the
   // pixel and a length. The right-most pixel cannot match anything to the right
