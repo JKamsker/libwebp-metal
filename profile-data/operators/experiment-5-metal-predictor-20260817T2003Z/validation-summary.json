@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "operator_status": "completed-valid",
+  "experiment": "5-metal-predictor-residual",
+  "required_source_base": "18fd520d5d7faf0645d461bded27c0ba7ee4a48e",
+  "head_before_artifact_commit": "12d2c86b9dc6c270611f7b9209dee2edf5c0f4c9",
+  "timeline_utc": {
+    "experiment_start": "2026-08-17T19:58:23Z",
+    "clean_start": "2026-08-17T19:58:23Z",
+    "build_start": "2026-08-17T19:58:36Z",
+    "correctness_start": "2026-08-17T19:59:02Z",
+    "correctness_end": "2026-08-17T20:02:46Z",
+    "guard_validation_start": "2026-08-17T20:02:58Z",
+    "guard_validation_end": "2026-08-17T20:02:58Z",
+    "preflight_recorded": "2026-08-17T20:06:31Z",
+    "timed_start": "2026-08-17T20:08:24Z",
+    "timed_end": "2026-08-17T20:11:40Z",
+    "experiment_wall_elapsed_seconds": 797,
+    "correctness_wall_elapsed_seconds": 224,
+    "timed_wall_elapsed_seconds": 196,
+    "guard_wall_elapsed_seconds": 1,
+    "build_primary_tool_wall_seconds": 1.5,
+    "build_timing_note": "The make completed; a zsh wrapper attempted to assign the read-only variable status afterward. The exact build command was re-run successfully at 19:58:49Z and was up to date."
+  },
+  "commands_sanitized_for_repository": {
+    "clean": "make -f makefile.unix clean",
+    "build": "make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT=1 examples/cwebp examples/dwebp",
+    "correctness": "WEBP_METAL_PREDICTOR=1 scripts/test_predictor_metal_experiment.sh <CANONICAL_INPUT_DIR>/mitski.png <CANONICAL_INPUT_DIR>/corgi.jpeg <CANONICAL_INPUT_DIR>/siamese.jpg",
+    "guards": "scripts/test_experiment_guards.py",
+    "benchmark": "WEBP_METAL_PREDICTOR=1 WEBP_BENCHMARK_SESSION=exclusive RUNS=7 scripts/benchmark_predictor_metal_experiment.sh <NEW_OUTPUT_DIRECTORY>/predictor-cold.csv <CANONICAL_INPUT_DIR>/mitski.png <CANONICAL_INPUT_DIR>/corgi.jpeg <CANONICAL_INPUT_DIR>/siamese.jpg"
+  },
+  "effective_flags": {
+    "build": [
+      "WEBP_ENABLE_METAL=1",
+      "WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT=1"
+    ],
+    "runtime_correctness": [
+      "WEBP_METAL_PREDICTOR=1"
+    ],
+    "runtime_timing": [
+      "WEBP_METAL_PREDICTOR=1",
+      "WEBP_BENCHMARK_SESSION=exclusive",
+      "RUNS=7"
+    ],
+    "other_experiment_flags_absent": true,
+    "dry_run_macro_isolation_passed": true,
+    "exclusive_lease_active": true
+  },
+  "gate_results": {
+    "clean": true,
+    "build": true,
+    "cwebp_executable": true,
+    "dwebp_executable": true,
+    "independent_guard_validation": true,
+    "guard_refusal_outcomes": {
+      "default_off_and_independent_build_macros": "pass",
+      "omitted_experiment_targets": "refused as expected",
+      "runtime_opt_in_refusal": "refused as expected for all five rows",
+      "exclusive_lease_refusal": "refused as expected for all timed launchers",
+      "overall": "pass"
+    }
+  },
+  "correctness_validation": {
+    "command_result": "pass",
+    "inputs": {
+      "mitski.png": {
+        "methods_checked": [0, 1, 2, 3, 4, 5, 6],
+        "dispatch_observed": true,
+        "cpu_reference_equality": true,
+        "byte_identical_cpu_accelerated_streams": true,
+        "three_repetition_determinism": true,
+        "decoded_equality": true,
+        "injected_post_dispatch_failure_fallback_equality": true
+      },
+      "corgi.jpeg": {
+        "methods_checked": [0, 1, 2, 3, 4, 5, 6],
+        "dispatch_observed": true,
+        "cpu_reference_equality": true,
+        "byte_identical_cpu_accelerated_streams": true,
+        "three_repetition_determinism": true,
+        "decoded_equality": true,
+        "injected_post_dispatch_failure_fallback_equality": true
+      },
+      "siamese.jpg": {
+        "methods_checked": [0, 1, 2, 3, 4, 5, 6],
+        "dispatch_observed": true,
+        "cpu_reference_equality": true,
+        "byte_identical_cpu_accelerated_streams": true,
+        "three_repetition_determinism": true,
+        "decoded_equality": true,
+        "injected_post_dispatch_failure_fallback_equality": true
+      }
+    },
+    "decline_contract_enforceable": true,
+    "decline_scenario_executed_by_committed_script": false,
+    "failure_fallback_scenario_executed": true,
+    "all_required_correctness_contracts_passed": true
+  },
+  "csv_validation": {
+    "original_output_path": "/tmp/libwebp-metal-experiment-5-20260817T2003Z.Ak0u74/predictor-cold.csv",
+    "committed_sanitized_path": "profile-data/operators/experiment-5-metal-predictor-20260817T2003Z/predictor-cold.csv",
+    "original_sha256": "63911fe077d49ef6c0605c9c5c93c1aec64a40522642484b01ba3b240094d9d9",
+    "committed_sha256": "b8f0d259ad841079f926693b79dd0ca2571c0d0473eee053bc161870e142f149",
+    "original_hash_unchanged_after_run": true,
+    "header_exact": true,
+    "data_rows": 84,
+    "rows_per_input": {
+      "mitski.png": 28,
+      "corgi.jpeg": 28,
+      "siamese.jpg": 28
+    },
+    "rows_per_method": {
+      "4": 42,
+      "6": 42
+    },
+    "rows_per_variant": {
+      "cpu": 42,
+      "predictor_metal": 42
+    },
+    "input_identities_exact": ["mitski.png", "corgi.jpeg", "siamese.jpg"],
+    "methods_exact": [4, 6],
+    "runs_exact": [1, 2, 3, 4, 5, 6, 7],
+    "cpu_and_predictor_once_per_input_method_run": true,
+    "alternation_exact": true,
+    "positive_numeric_real_seconds_cells": 84,
+    "missing_rows": 0,
+    "duplicate_rows": 0,
+    "sanitized_row_semantics_preserved": true,
+    "absolute_corpus_paths_removed_from_committed_csv": true,
+    "valid": true
+  },
+  "artifact_scope": {
+    "preflight": "profile-data/operators/experiment-5-metal-predictor-20260817T2003Z/preflight.json",
+    "csv": "profile-data/operators/experiment-5-metal-predictor-20260817T2003Z/predictor-cold.csv",
+    "validation_summary": "profile-data/operators/experiment-5-metal-predictor-20260817T2003Z/validation-summary.json",
+    "operator_report": "profile-data/operators/experiment-5-metal-predictor-20260817T2003Z/operator-report.md"
+  },
+  "interpretation_boundary": "No speedups, comparisons, performance conclusions, corpus changes, matrix changes, method changes, repetition changes, stopping-rule changes, or codec-algorithm changes were made. Sol must interpret the raw observations later."
+}
