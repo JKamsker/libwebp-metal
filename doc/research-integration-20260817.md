@@ -210,3 +210,19 @@ locally. The committed GitHub workflows provide the intended CMake coverage.
 * The standard Autotools path still does not compile the Metal translation
   units. Cross-device determinism, installed-library ABI/symbol comparison,
   memory-pressure/failure injection, and CUDA implementation work remain open.
+
+## Release/build hardening follow-up (2026-08-18)
+
+The standard Autotools path now has an explicit `--enable-metal` policy:
+native Darwin defaults on, non-Darwin defaults off, and an unsupported explicit
+enable fails configuration. Its installed static metadata carries Foundation,
+Metal, and C++ dependencies. CMake now configures, builds, installs, and links
+external static and shared consumers with Metal both off and on; installed
+headers and exported dylib symbols are compared between those variants.
+
+The physical-Metal workflow additionally covers odd/minimal dimensions, padded
+strides, every supported packed RGB import format, cancellation and fallback,
+and a bounded forced-Metal UBSan mutation harness. These checks close the
+locally actionable build, ABI-comparison, and adversarial-test gaps above; they
+do not provide cross-device determinism, memory-pressure/concurrency evidence,
+or CUDA coverage, and they do not change any experimental disposition.

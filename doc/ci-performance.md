@@ -7,13 +7,18 @@ runtime coverage.
 
 ## Workflow inventory
 
-- `Correctness` runs on GitHub-hosted Linux and macOS. It checks a CMake
-  Metal-off build, a Metal-on compile/link, and a lossless smoke test with
-  runtime Metal disabled. This is the required branch-protection check.
+- `Correctness` runs on GitHub-hosted Linux and macOS. It checks static and
+  shared CMake configure/build/install/external-link paths with Metal off and,
+  on macOS, on; compares installed Metal-off/on headers and dylib exports; and
+  checks Autotools with its explicit Metal policy. The existing lossless smoke
+  test keeps runtime Metal disabled on hosted runners. This is the required
+  branch-protection check.
 - `Metal correctness` runs on physical Apple silicon labeled `self-hosted`,
   `macOS`, `ARM64`, and `metal`. It forces all three Metal operations, verifies
   pixel/bitstream promises, and proves that each GPU operation logged actual
-  execution. It is a trusted-branch, scheduled, and manual release gate.
+  execution. It also covers odd dimensions, padded strides, supported packed
+  RGB formats, cancellation/fallback, and a bounded forced-Metal UBSan
+  mutation harness. It is a trusted-branch, scheduled, and manual release gate.
 - `Metal performance signal` runs on the same class of physical Mac with an
   additional `performance` label. It provides weekly/manual alternating
   CPU/Metal measurements against the last accepted same-runner baseline. It is
