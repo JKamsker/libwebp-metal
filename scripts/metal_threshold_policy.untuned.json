@@ -3,7 +3,7 @@
   "status": "untuned",
   "fallback": "cpu",
   "source": {
-    "note": "No benchmark results have been collected for this policy."
+    "note": "Results exist, but no cross-device policy is validated for production. The empty CPU fallback remains intentional; see doc/experiment-series-analysis-20260817.md."
   },
   "entries": []
 }

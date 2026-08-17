@@ -1,5 +1,13 @@
 # Metal crossover experiment
 
+The focused operator run is complete. Its Sol interpretation and the
+machine-local, unvalidated transform candidate are recorded in
+[experiment-series-analysis-20260817.md](experiment-series-analysis-20260817.md)
+and `scripts/metal_threshold_policy.m4pro-20260817.candidate.json`. No compiled
+threshold or eligibility rule was changed. Forced palette regressions occurred
+below the existing packed-pixel threshold and remain a guard against lowering
+it, not evidence for extrapolating a new categorical rule.
+
 This experiment determines when an eligible encoder operation should use CPU
 or Metal. It does not contain benchmark results, and the runtime defaults in
 the encoder remain unchanged. The checked-in policy is deliberately untuned:

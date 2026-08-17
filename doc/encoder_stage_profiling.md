@@ -11,6 +11,10 @@ experiment is single-threaded; do not add `cwebp -mt`, because worker-thread
 events intentionally do not inherit the calling thread's trace context.
 
 This document defines the experiment but contains no performance results.
+The completed-series interpretation is in
+[experiment-series-analysis-20260817.md](experiment-series-analysis-20260817.md);
+it uses the later `20260817-191358` operator run and supersedes threshold or
+promotion inferences from the older profile analysis.
 
 ## Build and correctness gate
 

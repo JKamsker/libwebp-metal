@@ -1,5 +1,10 @@
 # Modern Metal migration benchmark results
 
+These are historical migration-baseline measurements. The later five-item
+experiment series is interpreted in
+[doc/experiment-series-analysis-20260817.md](doc/experiment-series-analysis-20260817.md);
+it changes the selected lossy kernel without rewriting these recorded numbers.
+
 Measured on 2026-08-17 on a 14-core Apple M4 Pro MacBook Pro with 24 GB of
 memory. macOS reported no thermal or power warnings. The migrated encoder was
 built at `-O3` from `v1.6.0-221-g4fe551df` plus the local Metal changes.

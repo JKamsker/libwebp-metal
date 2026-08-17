@@ -118,6 +118,15 @@ designed.
 
 ## Predictor-residual experiment
 
+The released cold end-to-end matrix is now complete. All six input/method
+median strata regressed by 0.8--3.9%, with a 30--40 ms median absolute penalty
+and 37/42 slower close pairs. Correctness and transactional fallback passed,
+but the standalone stage is rejected for promotion and retained only as a
+default-off correctness/reference path. The inclusive predictor profile still
+motivates selector/fused research; it does not overturn the residual result.
+See
+[doc/experiment-series-analysis-20260817.md](doc/experiment-series-analysis-20260817.md).
+
 The experiment is isolated from the normal Metal build and disabled twice:
 
 - build with `WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT=1` (CMake) or
@@ -166,10 +175,11 @@ dimension, single-row/column, and alpha-bearing corpora. Acceptance requires:
 7. later performance results showing positive end-to-end median speedup with
    no material p95 regression above the selected crossover threshold.
 
-## Deferred benchmark protocol
+## Historical benchmark protocol
 
-No performance command in this section was run during the engineering phase.
-After the orchestrator releases a Terra/Luna measurement slot:
+The operator later ran this cold protocol under the serialized benchmark lease.
+It is retained for provenance, not as an instruction to rerun without a new
+release:
 
 ```sh
 make -f makefile.unix clean

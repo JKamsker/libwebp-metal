@@ -1,5 +1,11 @@
 # Persistent and batched Metal encoding experiment
 
+The fixed operator matrix is complete. Warm batch submission reduced isolated
+import time, but full serial encode time showed no practical batch break-even.
+The prototype therefore remains opt-in and private; see
+[experiment-series-analysis-20260817.md](experiment-series-analysis-20260817.md)
+for the stratified result and disposition.
+
 This document records the engineering prototype for research item 3. No
 performance measurements in this document were executed as part of the
 prototype turn.

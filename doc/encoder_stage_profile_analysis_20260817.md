@@ -1,5 +1,12 @@
 # Encoder stage profile analysis: methods 4 and 6
 
+> Historical note: this report analyzes the earlier
+> `stage-profile-20260817` run. The completed operator series was interpreted
+> from `profile-data/runs/20260817-191358` in
+> [experiment-series-analysis-20260817.md](experiment-series-analysis-20260817.md).
+> The architectural findings agree, but the later report owns final
+> dispositions and production changes.
+
 This report interprets the serialized Apple M4 Pro experiment in
 `profile-data/runs/stage-profile-20260817`. It does not contain measurements
 made during the analysis phase. All quantities below were reconstructed from

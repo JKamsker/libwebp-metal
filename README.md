@@ -27,6 +27,9 @@ CUDA revival plan are in
 [ACCELERATOR_BACKEND_DESIGN.md](ACCELERATOR_BACKEND_DESIGN.md). The reproducible
 opt-in stage profiling protocol is in
 [doc/encoder_stage_profiling.md](doc/encoder_stage_profiling.md).
+The five-experiment interpretation, including deliberately rejected default
+changes, is in
+[doc/experiment-series-analysis-20260817.md](doc/experiment-series-analysis-20260817.md).
 
 Project home: https://github.com/JKamsker/libwebp-metal
 
@@ -46,6 +49,7 @@ At runtime, `WEBP_METAL=0` disables lossless Metal acceleration,
 the relevant path for correctness testing. `WEBP_METAL_VERBOSE=1` reports which
 Metal operations were selected. `WEBP_ACCELERATOR=none` is a backend-neutral
 CPU-only override; `auto` (the default) or `metal` selects the Metal descriptor.
+Selected lossy imports use the exact 2x2 Metal kernel by default.
 
 Additional encoder-stage research is documented in
 [GPU_STAGE_EVALUATION.md](GPU_STAGE_EVALUATION.md). Its predictor-residual

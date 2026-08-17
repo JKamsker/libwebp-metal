@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "status": "candidate",
+  "fallback": "cpu",
+  "source": {
+    "results": "profile-data/runs/20260817-173551-experiment-2-crossover-focused/summary.json",
+    "results_sha256": "6e0beb8e014439b5692f5e02334e9257ee9070158af5bfd1cd5d85740bb58f6c",
+    "validity": "profile-data/runs/20260817-173551-experiment-2-crossover-focused/validity.json",
+    "validity_sha256": "1b3428e3f6f409a9025629b2892d5e668055f35a57b45322df32f68defa09641",
+    "measured_commit": "0d925e3dd33daab83d3717e3763d36d91bcfdca7"
+  },
+  "decision": {
+    "rule": "every paired Metal/CPU ratio at and above the threshold is at most 0.95 in tune and holdout roles, across at least two consecutive tested sizes",
+    "actual_pixel_counts_used": true,
+    "eligible_content_classes": ["photo"],
+    "transform_scope": "The predefined transform policy stratum contains synthetic photos only; worst_case_across_classes therefore ranges over that one eligible class and is not a claim about unmeasured content.",
+    "promotion": "blocked",
+    "promotion_blockers": [
+      "one Apple M4 Pro on one day",
+      "runtime policy cannot distinguish cold/warm lifecycle or methods 4/6",
+      "neighborhood confirmation and additional Apple GPU families are missing"
+    ],
+    "missing_hash_entries": "photo and texture strata do not share a stable crossover",
+    "missing_lossy_entries": "no content stratum clears the required five-percent end-to-end margin",
+    "missing_entry_means": "cpu"
+  },
+  "entries": [
+    {
+      "operation": "transform",
+      "method": 4,
+      "execution": "cold",
+      "minimum_pixels": 589824,
+      "content_rule": "worst_case_across_classes",
+      "margin": 0.05
+    },
+    {
+      "operation": "transform",
+      "method": 6,
+      "execution": "cold",
+      "minimum_pixels": 589824,
+      "content_rule": "worst_case_across_classes",
+      "margin": 0.05
+    },
+    {
+      "operation": "transform",
+      "method": 4,
+      "execution": "warm",
+      "minimum_pixels": 36864,
+      "content_rule": "worst_case_across_classes",
+      "margin": 0.05
+    },
+    {
+      "operation": "transform",
+      "method": 6,
+      "execution": "warm",
+      "minimum_pixels": 36864,
+      "content_rule": "worst_case_across_classes",
+      "margin": 0.05
+    }
+  ]
+}

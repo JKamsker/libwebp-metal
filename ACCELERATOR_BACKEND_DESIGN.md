@@ -142,7 +142,8 @@ the modern hash chain, progress/cancellation, left extension, and skip decisions
 This boundary avoids coupling kernels to mutable encoder policy. RGB-to-YUV is
 eligible only after the caller has excluded alpha, Sharp-YUV, dithering, and
 negative stride; output strides are explicit because WebP plane padding is not
-part of the device result.
+part of the device result. The exact 2x2 Metal grid is the production
+specialization selected after the item-4 ablation matrix.
 
 New work such as predictor residual/final-transform or subtract-green/fused
 transforms must receive a new stage bit and typed request only after its modern

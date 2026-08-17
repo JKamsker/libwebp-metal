@@ -18,6 +18,17 @@ launcher additionally requires `WEBP_BENCHMARK_SESSION=exclusive`. Correctness,
 plan, schema, and guard-probe modes do not bypass a build or runtime guard, but
 may remain untimed and therefore do not all require the lease.
 
+## Post-series status
+
+The completed-series dispositions are in
+[experiment-series-analysis-20260817.md](experiment-series-analysis-20260817.md).
+All five guard rows remain independent and default-off. The proposed production
+changes were assessed independently; only the exact 2x2 lossy kernel is
+promoted as a supported default. Under row 4 only,
+`WEBP_METAL_LOSSY_BLOCK_2X2=0` now selects the superseded per-pixel grid as the
+`legacy_per_pixel` regression control. The historical operator matrix and raw
+evidence retain their original `block_2x2` candidate name and values.
+
 ## Default and isolation guarantees
 
 - Default CMake and Unix make builds define none of the five private macros.
@@ -72,8 +83,9 @@ non-installed.
 
 The focused test does not grant the benchmark lease, read benchmark clocks, or
 run an encoder. It verifies default-off make commands, forced dry-run macro
-isolation for all five rows, omitted driver targets, runtime refusal, and lease
-refusal:
+isolation for all five rows, omitted driver targets, runtime refusal, lease
+refusal, the promoted item-4 default/legacy correctness mapping, and the fact
+that item 4's released timed matrix was not repurposed as a follow-up:
 
 ```sh
 scripts/test_experiment_guards.py

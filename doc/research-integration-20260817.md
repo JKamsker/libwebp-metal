@@ -1,5 +1,10 @@
 # Research integration record (2026-08-17)
 
+Post-integration operator results and the final Sol dispositions are in
+[experiment-series-analysis-20260817.md](experiment-series-analysis-20260817.md).
+That report promotes only the exact 2x2 lossy kernel; it leaves the recorded
+experiment guards and public compatibility boundary unchanged.
+
 ## Scope and ancestry
 
 This branch integrates the completed Metal research work onto clean main
