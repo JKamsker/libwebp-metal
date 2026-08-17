@@ -9,8 +9,11 @@ on:
     paths:
       - ".github/workflows/metal-correctness.yml"
       - "CMakeLists.txt"
+      - "configure.ac"
       - "makefile.unix"
       - "scripts/test_metal.sh"
+      - "tests/metal_adversarial_test.c"
+      - "tests/metal_api_fuzzer.c"
       - "src/dsp/**"
       - "src/enc/**"
 
@@ -58,6 +61,59 @@ jobs:
           WEBP_TEST_BIN_DIR: ${{ github.workspace }}/build
           WEBP_TEST_REQUIRE_METAL: "1"
         run: scripts/test_metal.sh
+      - name: Public API adversarial coverage
+        run: |
+          cc -std=c99 -Wall -Wextra -Werror \
+            -I"${{ github.workspace }}/src" \
+            tests/metal_adversarial_test.c \
+            build/libwebp.a build/libsharpyuv.a \
+            -framework Foundation -framework Metal -lc++ -lm \
+            -o build/metal_adversarial_test
+          : > artifacts/adversarial-metal.log
+          for mode in matrix transform cancellation; do
+            build/metal_adversarial_test "$mode" \
+              2>> artifacts/adversarial-metal.log
+          done
+          grep -q "WebP-Metal: transformed" artifacts/adversarial-metal.log
+          grep -q "WebP-Metal: hash candidates" artifacts/adversarial-metal.log
+          grep -q "WebP-Metal: lossy RGB->YUV" artifacts/adversarial-metal.log
+      - name: Configure sanitizer build
+        run: >-
+          cmake -S . -B build-sanitized -G Ninja
+          -DCMAKE_BUILD_TYPE=Debug
+          -DWEBP_ENABLE_METAL=ON
+          -DWEBP_BUILD_ANIM_UTILS=OFF
+          -DWEBP_BUILD_CWEBP=OFF
+          -DWEBP_BUILD_DWEBP=OFF
+          -DWEBP_BUILD_EXTRAS=OFF
+          -DWEBP_BUILD_GIF2WEBP=OFF
+          -DWEBP_BUILD_IMG2WEBP=OFF
+          -DWEBP_BUILD_VWEBP=OFF
+          -DWEBP_BUILD_WEBPINFO=OFF
+          -DWEBP_BUILD_WEBPMUX=OFF
+          -DCMAKE_C_FLAGS="-fsanitize=undefined -fno-omit-frame-pointer"
+          -DCMAKE_OBJCXX_FLAGS="-fsanitize=undefined -fno-omit-frame-pointer"
+          -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=undefined"
+      - name: Forced Metal sanitizer fuzz replay
+        env:
+          WEBP_ACCELERATOR: metal
+          WEBP_METAL: "1"
+          WEBP_METAL_MIN_PIXELS: "0"
+          WEBP_METAL_HASH: "1"
+          WEBP_METAL_HASH_MIN_PIXELS: "0"
+          WEBP_METAL_LOSSY: "1"
+          WEBP_METAL_LOSSY_MIN_PIXELS: "0"
+        run: |
+          cmake --build build-sanitized --target webp --parallel 2
+          clang -std=c99 -Wall -Wextra -Werror \
+            -DWEBP_FUZZ_STANDALONE \
+            -fsanitize=undefined -fno-omit-frame-pointer \
+            -I"${{ github.workspace }}/src" \
+            tests/metal_api_fuzzer.c \
+            build-sanitized/libwebp.a build-sanitized/libsharpyuv.a \
+            -framework Foundation -framework Metal -lc++ -lm \
+            -o build-sanitized/metal_api_fuzzer_replay
+          build-sanitized/metal_api_fuzzer_replay
       - name: Preserve diagnostics
         if: always()
         uses: actions/upload-artifact@v4
