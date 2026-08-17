@@ -353,6 +353,13 @@ int main(int argc, const char* const argv[]) {
     Usage(argv[0]);
     return 2;
   }
+  if (options.measure &&
+      (getenv("WEBP_BENCHMARK_SESSION") == NULL ||
+       strcmp(getenv("WEBP_BENCHMARK_SESSION"), "exclusive") != 0)) {
+    fprintf(stderr,
+            "timed mode requires WEBP_BENCHMARK_SESSION=exclusive\n");
+    return 2;
+  }
   if ((size_t)options.width > SIZE_MAX / (size_t)options.height / 4u) {
     fprintf(stderr, "image dimensions overflow\n");
     return 2;

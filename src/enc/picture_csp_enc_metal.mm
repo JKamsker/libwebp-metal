@@ -343,6 +343,9 @@ MetalState* InitializeState() {
     id<MTLFunction> function = [library
         newFunctionWithName:@"rgb_to_yuv420"
              constantValues:constants error:&error];
+#if !__has_feature(objc_arc)
+    [constants release];
+#endif
     if (function == nil) {
       if (EnvironmentFlag("WEBP_METAL_VERBOSE", false)) {
         std::fprintf(stderr, "WebP-Metal: lossy function not found\n");
@@ -526,7 +529,7 @@ bool PrepareBatchItem(const WebPAcceleratorRGBToYUVRequest& request,
 
 }  // namespace
 
-extern "C" int WebPImportRGBToYUVAMetalBatch(
+static int ImportRGBToYUVAMetalBatchImpl(
     const WebPAcceleratorRGBToYUVRequest* requests, size_t request_count) {
   if (requests == nullptr || request_count == 0 ||
       request_count > std::numeric_limits<size_t>::max() / sizeof(BatchItem) ||
@@ -632,6 +635,14 @@ extern "C" int WebPImportRGBToYUVAMetalBatch(
   return 1;
 }
 
+#if defined(WEBP_USE_METAL_BATCH_EXPERIMENT)
+extern "C" int WebPImportRGBToYUVAMetalBatch(
+    const WebPAcceleratorRGBToYUVRequest* requests, size_t request_count) {
+  if (!EnvironmentFlag("WEBP_METAL_BATCH_EXPERIMENT", false)) return 0;
+  return ImportRGBToYUVAMetalBatchImpl(requests, request_count);
+}
+#endif
+
 extern "C" int WebPImportRGBToYUVAMetal(
     const uint8_t* red, const uint8_t* green, const uint8_t* blue, int step,
     int source_stride, int width, int height, uint8_t* y, uint8_t* u,
@@ -647,5 +658,5 @@ extern "C" int WebPImportRGBToYUVAMetal(
   const WebPAcceleratorRGBToYUVRequest request = {
       red, green, blue, step, source_stride, width, height,
       y, u, v, y_stride, uv_stride};
-  return WebPImportRGBToYUVAMetalBatch(&request, 1);
+  return ImportRGBToYUVAMetalBatchImpl(&request, 1);
 }

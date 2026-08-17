@@ -13,6 +13,7 @@ import collections
 import hashlib
 import json
 import math
+import os
 import platform
 import random
 import statistics
@@ -191,6 +192,11 @@ def run_experiment(args: argparse.Namespace) -> int:
     if not args.acknowledge_exclusive_session:
         raise SystemExit(
             "refusing to collect timings without --acknowledge-exclusive-session"
+        )
+    if os.environ.get("WEBP_BENCHMARK_SESSION") != "exclusive":
+        raise SystemExit(
+            "refusing to collect timings without "
+            "WEBP_BENCHMARK_SESSION=exclusive"
         )
     if args.output.exists():
         raise SystemExit(f"refusing to overwrite existing output: {args.output}")

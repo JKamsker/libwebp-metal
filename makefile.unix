@@ -20,6 +20,7 @@ DWEBP_LIBS= -lpng -lz
 CWEBP_LIBS= $(DWEBP_LIBS) -ljpeg -ltiff
 GIF_LIBS = -lgif
 WEBP_BUILD_METAL_ABLATION ?= 0
+WEBP_BUILD_METAL_BATCH_EXPERIMENT ?= 0
 
 ifeq ($(strip $(shell uname)), Darwin)
   # Work around a problem linking tables marked as common symbols,
@@ -141,6 +142,12 @@ ifeq ($(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT),1)
     $(error WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT requires WEBP_ENABLE_METAL=1)
   endif
   override EXTRA_FLAGS += -DWEBP_USE_METAL_PREDICTOR_EXPERIMENT=1
+endif
+ifeq ($(WEBP_BUILD_METAL_BATCH_EXPERIMENT),1)
+  ifneq ($(WEBP_ENABLE_METAL),1)
+    $(error WEBP_BUILD_METAL_BATCH_EXPERIMENT requires WEBP_ENABLE_METAL=1)
+  endif
+  override EXTRA_FLAGS += -DWEBP_USE_METAL_BATCH_EXPERIMENT=1
 endif
 INSTALL = install
 GROFF = /usr/bin/groff
@@ -424,7 +431,7 @@ ex: $(OUT_EXAMPLES)
 all: ex $(EXTRA_EXAMPLES) $(OTHER_EXAMPLES)
 extras: $(EXTRA_LIB)
 
-ifeq ($(WEBP_ENABLE_METAL),1)
+ifeq ($(WEBP_BUILD_METAL_BATCH_EXPERIMENT),1)
 metal-experiment: extras/metal_encode_batch_experiment
 
 extras/metal_encode_batch_experiment: extras/metal_encode_batch_experiment.o
@@ -433,7 +440,7 @@ extras/metal_encode_batch_experiment: src/libwebp.a sharpyuv/libsharpyuv.a
 	              src/libwebp.a sharpyuv/libsharpyuv.a $(LDFLAGS)
 else
 metal-experiment:
-	@echo "metal-experiment requires WEBP_ENABLE_METAL=1" >&2
+	@echo "metal-experiment requires WEBP_BUILD_METAL_BATCH_EXPERIMENT=1" >&2
 	@false
 endif
 
@@ -562,6 +569,8 @@ extras/vwebp_sdl: override EXTRA_LIBS += $(SDL_LIBS)
 
 extras/metal_import_bench: extras/metal_import_bench.o
 extras/metal_import_bench: src/libwebp.a sharpyuv/libsharpyuv.a
+	$(LINK) -o $@ extras/metal_import_bench.o \
+	              src/libwebp.a sharpyuv/libsharpyuv.a $(LDFLAGS)
 
 ifeq ($(WEBP_BUILD_METAL_ABLATION),1)
   ifneq ($(WEBP_ENABLE_METAL),1)

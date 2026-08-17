@@ -42,8 +42,8 @@ encoder-owned accelerator context.
 ## Prototype
 
 `WebPImportRGBToYUVAMetalBatch()` is a private experiment hook. It accepts an
-array of opaque RGB requests whose `WebPPicture` Y/U/V planes are already
-allocated. It:
+array of backend-neutral RGB requests whose caller-owned Y/U/V planes are
+already allocated. It:
 
 1. validates every request and calculates overflow-checked, 256-byte-aligned
    offsets;
@@ -51,7 +51,12 @@ allocated. It:
 3. records one dispatch per image into one compute encoder and one command
    buffer;
 4. commits and waits once; and
-5. copies results into caller pictures only after all dispatches complete.
+5. copies results into caller planes only after all dispatches complete.
+
+The hook is compiled only with `WEBP_BUILD_METAL_BATCH_EXPERIMENT=ON` (CMake)
+or `WEBP_BUILD_METAL_BATCH_EXPERIMENT=1` (the Unix makefile), and additionally
+requires `WEBP_METAL_BATCH_EXPERIMENT=1` at runtime. The experiment harness sets
+the runtime flag itself. Normal builds do not expose the batch symbol.
 
 The mutex covers the entire batch, so concurrent behavior matches the old
 single-operation serialization. A validation, allocation, pipeline, command,
@@ -100,7 +105,9 @@ batch size are independent schema dimensions, rather than mixed averages.
 Build and correctness smoke commands:
 
 ```sh
-make -f makefile.unix -j8 metal-experiment
+make -f makefile.unix clean
+make -f makefile.unix -j8 WEBP_BUILD_METAL_BATCH_EXPERIMENT=1 \
+  metal-experiment
 extras/metal_encode_batch_experiment --verify-only \
   --width=97 --height=65 --batch-size=3 --quality=75 --method=4
 ```
@@ -110,7 +117,7 @@ available:
 
 ```sh
 cmake -S . -B build-metal-item3 -DWEBP_ENABLE_METAL=ON \
-  -DWEBP_BUILD_METAL_EXPERIMENTS=ON -DBUILD_SHARED_LIBS=OFF
+  -DWEBP_BUILD_METAL_BATCH_EXPERIMENT=ON -DBUILD_SHARED_LIBS=OFF
 cmake --build build-metal-item3 -j8 --target metal_encode_batch_experiment
 ```
 

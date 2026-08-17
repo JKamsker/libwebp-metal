@@ -8,6 +8,7 @@ import collections
 import datetime as dt
 import hashlib
 import json
+import os
 import platform
 import random
 import statistics
@@ -272,6 +273,8 @@ def plan(preset_path: Path) -> int:
 def run(args: argparse.Namespace) -> int:
     if not args.acknowledge_exclusive_session:
         raise ValueError("--acknowledge-exclusive-session is required")
+    if os.environ.get("WEBP_BENCHMARK_SESSION") != "exclusive":
+        raise ValueError("WEBP_BENCHMARK_SESSION=exclusive is required")
     if args.output_dir.exists():
         raise ValueError(f"refusing to overwrite output directory: {args.output_dir}")
     preset, preset_sha256 = load_preset(args.preset)

@@ -411,6 +411,7 @@ int main(int argc, char** argv) {
     PrintUsage(argv[0]);
     return 2;
   }
+  setenv("WEBP_METAL_BATCH_EXPERIMENT", "1", 1);
   if (!InitWorkload(&options, &workload)) {
     fprintf(stderr, "failed to allocate the experiment workload\n");
     return 1;

@@ -37,8 +37,10 @@ int WebPImportRGBToYUVAMetal(const uint8_t* red, const uint8_t* green,
 // modifying output when Metal is disabled, unavailable, or fails.
 //
 // This is an internal experiment hook, not a stable libwebp API.
+#if defined(WEBP_USE_METAL_BATCH_EXPERIMENT)
 int WebPImportRGBToYUVAMetalBatch(
     const WebPAcceleratorRGBToYUVRequest* requests, size_t request_count);
+#endif
 
 #ifdef __cplusplus
 }  // extern "C"
