@@ -21,6 +21,9 @@
 #include "src/dsp/lossless.h"
 #include "src/dsp/lossless_common.h"
 #include "src/enc/accelerator_enc.h"
+#if defined(WEBP_USE_METAL_PREDICTOR_EXPERIMENT)
+#include "src/enc/predictor_enc_metal.h"
+#endif
 #include "src/enc/vp8i_enc.h"
 #include "src/enc/vp8li_enc.h"
 #include "src/utils/utils.h"
@@ -826,8 +829,17 @@ int VP8LResidualImage(int width, int height, int min_bits, int max_bits,
     WebPSafeFree(modes_raw);
   }
 
-  CopyImageWithPrediction(width, height, *best_bits, image, argb_scratch, argb,
-                          low_effort, max_quantization, exact,
+#if defined(WEBP_USE_METAL_PREDICTOR_EXPERIMENT)
+  // Near-lossless residual quantization updates the source in scan order and
+  // is intentionally outside the independent-pixel experiment.
+  if (max_quantization == 1 &&
+      VP8LResidualImageMetalExperimental(width, height, *best_bits, image,
+                                         exact, argb)) {
+    return WebPReportProgress(pic, percent_start + percent_range, percent);
+  }
+#endif
+  CopyImageWithPrediction(width, height, *best_bits, image, argb_scratch,
+                          argb, low_effort, max_quantization, exact,
                           used_subtract_green);
   return WebPReportProgress(pic, percent_start + percent_range, percent);
 }

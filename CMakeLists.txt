@@ -38,6 +38,8 @@ option(WEBP_BUILD_METAL_EXPERIMENTS
        "Build non-installed Metal lifecycle/batching experiment tools." OFF)
 option(WEBP_BUILD_METAL_ABLATION
        "Build the non-installed Metal ablation benchmark tool." OFF)
+option(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT
+       "Build the opt-in experimental Metal predictor-residual stage." OFF)
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
 option(WEBP_BUILD_CWEBP "Build the cwebp command line tool." ON)
 option(WEBP_BUILD_DWEBP "Build the dwebp command line tool." ON)
@@ -76,6 +78,13 @@ if(WEBP_ENABLE_METAL)
   if(NOT WEBP_FOUNDATION_FRAMEWORK OR NOT WEBP_METAL_FRAMEWORK)
     message(FATAL_ERROR "Metal acceleration requires Foundation and Metal.")
   endif()
+endif()
+if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
+  if(NOT WEBP_ENABLE_METAL)
+    message(FATAL_ERROR
+            "WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT requires WEBP_ENABLE_METAL.")
+  endif()
+  add_definitions(-DWEBP_USE_METAL_PREDICTOR_EXPERIMENT=1)
 endif()
 
 if(WEBP_BUILD_METAL_BENCHMARK AND NOT WEBP_ENABLE_METAL)
@@ -320,6 +329,13 @@ if(WEBP_ENABLE_METAL)
   set_source_files_properties(
     ${WEBP_SRC_DIR}/dsp/lossless_enc_metal.mm
     ${WEBP_SRC_DIR}/enc/picture_csp_enc_metal.mm
+    PROPERTIES COMPILE_OPTIONS "-fblocks")
+endif()
+if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
+  list(APPEND WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/predictor_enc_metal.mm)
+  set_source_files_properties(
+    ${WEBP_SRC_DIR}/enc/predictor_enc_metal.mm
     PROPERTIES COMPILE_OPTIONS "-fblocks")
 endif()
 

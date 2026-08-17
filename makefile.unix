@@ -41,6 +41,7 @@ ifeq ($(strip $(shell uname)), Darwin)
   endif
   GL_LIBS = -framework GLUT -framework OpenGL
   WEBP_ENABLE_METAL ?= 1
+  WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT ?= 0
 else
   EXTRA_FLAGS += -I/usr/local/include
   EXTRA_LIBS  += -L/usr/local/lib
@@ -134,6 +135,12 @@ ifeq ($(WEBP_ENABLE_METAL),1)
   override EXTRA_FLAGS += -DWEBP_USE_METAL=1 -fblocks
   override EXTRA_LIBS += -framework Foundation -framework Metal
   LINK = $(CXX)
+endif
+ifeq ($(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT),1)
+  ifneq ($(WEBP_ENABLE_METAL),1)
+    $(error WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT requires WEBP_ENABLE_METAL=1)
+  endif
+  override EXTRA_FLAGS += -DWEBP_USE_METAL_PREDICTOR_EXPERIMENT=1
 endif
 INSTALL = install
 GROFF = /usr/bin/groff
@@ -273,6 +280,9 @@ ENC_OBJS = \
 
 ifeq ($(WEBP_ENABLE_METAL),1)
 ENC_OBJS += src/enc/metal_enc.o src/enc/picture_csp_enc_metal.o
+endif
+ifeq ($(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT),1)
+ENC_OBJS += src/enc/predictor_enc_metal.o
 endif
 
 EX_FORMAT_DEC_OBJS = \

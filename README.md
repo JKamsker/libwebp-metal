@@ -47,6 +47,11 @@ the relevant path for correctness testing. `WEBP_METAL_VERBOSE=1` reports which
 Metal operations were selected. `WEBP_ACCELERATOR=none` is a backend-neutral
 CPU-only override; `auto` (the default) or `metal` selects the Metal descriptor.
 
+Additional encoder-stage research is documented in
+[GPU_STAGE_EVALUATION.md](GPU_STAGE_EVALUATION.md). Its predictor-residual
+prototype is excluded from normal builds and remains disabled at runtime unless
+both experimental build and runtime flags are explicitly enabled.
+
 See https://developers.google.com/speed/webp for details on the image format.
 
 The latest source tree is available at
