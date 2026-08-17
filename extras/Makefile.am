@@ -15,6 +15,7 @@ libwebpextras_la_LIBADD = ../src/libwebp.la
 
 noinst_PROGRAMS =
 noinst_PROGRAMS += webp_quality
+EXTRA_DIST = metal_import_bench.c
 if BUILD_DEMUX
   noinst_PROGRAMS += get_disto
 endif

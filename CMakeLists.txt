@@ -36,6 +36,8 @@ option(WEBP_BUILD_METAL_BENCHMARK
        "Build the internal Metal crossover experiment runner." OFF)
 option(WEBP_BUILD_METAL_EXPERIMENTS
        "Build non-installed Metal lifecycle/batching experiment tools." OFF)
+option(WEBP_BUILD_METAL_ABLATION
+       "Build the non-installed Metal ablation benchmark tool." OFF)
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
 option(WEBP_BUILD_CWEBP "Build the cwebp command line tool." ON)
 option(WEBP_BUILD_DWEBP "Build the dwebp command line tool." ON)
@@ -88,6 +90,12 @@ if(WEBP_BUILD_METAL_EXPERIMENTS AND BUILD_SHARED_LIBS)
   message(FATAL_ERROR
           "WEBP_BUILD_METAL_EXPERIMENTS uses a private static-library hook; "
           "configure with BUILD_SHARED_LIBS=OFF.")
+endif()
+if(WEBP_BUILD_METAL_ABLATION AND
+   (NOT WEBP_ENABLE_METAL OR NOT WEBP_BUILD_EXTRAS))
+  message(FATAL_ERROR
+          "WEBP_BUILD_METAL_ABLATION requires WEBP_ENABLE_METAL=ON and "
+          "WEBP_BUILD_EXTRAS=ON.")
 endif()
 
 if(WEBP_LINK_STATIC)
@@ -739,6 +747,14 @@ if(WEBP_BUILD_EXTRAS)
   add_executable(webp_quality ${WEBP_QUALITY_SRCS})
   target_link_libraries(webp_quality exampleutil imagedec extras)
   target_include_directories(webp_quality PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
+
+  if(WEBP_BUILD_METAL_ABLATION)
+    # Isolated RGB-to-YUV import benchmark used by the ablation harness.
+    add_executable(metal_import_bench extras/metal_import_bench.c)
+    target_link_libraries(metal_import_bench webp)
+    target_include_directories(metal_import_bench
+                               PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
+  endif()
 
   # vwebp_sdl
   find_package(SDL2 QUIET)

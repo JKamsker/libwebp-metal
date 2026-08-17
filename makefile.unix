@@ -19,6 +19,7 @@ EXTRA_FLAGS= -DWEBP_HAVE_PNG -DWEBP_HAVE_JPEG -DWEBP_HAVE_TIFF
 DWEBP_LIBS= -lpng -lz
 CWEBP_LIBS= $(DWEBP_LIBS) -ljpeg -ltiff
 GIF_LIBS = -lgif
+WEBP_BUILD_METAL_ABLATION ?= 0
 
 ifeq ($(strip $(shell uname)), Darwin)
   # Work around a problem linking tables marked as common symbols,
@@ -549,6 +550,20 @@ extras/vwebp_sdl: sharpyuv/libsharpyuv.a
 extras/vwebp_sdl: EXTRA_FLAGS += -DWEBP_HAVE_SDL $(SDL_FLAGS)
 extras/vwebp_sdl: override EXTRA_LIBS += $(SDL_LIBS)
 
+extras/metal_import_bench: extras/metal_import_bench.o
+extras/metal_import_bench: src/libwebp.a sharpyuv/libsharpyuv.a
+
+ifeq ($(WEBP_BUILD_METAL_ABLATION),1)
+  ifneq ($(WEBP_ENABLE_METAL),1)
+    $(error WEBP_BUILD_METAL_ABLATION requires WEBP_ENABLE_METAL=1)
+  endif
+metal-ablation-tools: extras/metal_import_bench
+else
+metal-ablation-tools:
+	@echo "metal-ablation-tools requires WEBP_BUILD_METAL_ABLATION=1" >&2
+	@false
+endif
+
 $(OUT_EXAMPLES) $(EXTRA_EXAMPLES) $(OTHER_EXAMPLES):
 	$(LINK) -o $@ $^ $(LDFLAGS)
 
@@ -576,7 +591,8 @@ dist: all
 	done
 
 clean:
-	$(RM) $(OUTPUT) extras/metal_encode_batch_experiment *~ \
+	$(RM) $(OUTPUT) extras/metal_encode_batch_experiment \
+              extras/metal_import_bench *~ \
               examples/*.o examples/*~ \
               extras/*.o extras/*~ \
               imageio/*.o imageio/*~ \
@@ -590,5 +606,5 @@ clean:
               tools/*.o tools/*~ \
               src/webp/*~ man/*~ doc/*~ swig/*~ \
 
-.PHONY: all clean dist ex metal-experiment
+.PHONY: all clean dist ex metal-ablation-tools metal-experiment
 .SUFFIXES:

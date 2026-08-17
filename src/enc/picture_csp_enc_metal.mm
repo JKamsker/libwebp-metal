@@ -37,6 +37,8 @@ constexpr const char* kMetalSource = R"METAL(
 #include <metal_stdlib>
 using namespace metal;
 
+constant bool kLossyBlock2x2 [[function_constant(0)]];
+
 struct Params {
   uint width;
   uint height;
@@ -88,7 +90,66 @@ kernel void rgb_to_yuv420(
     device const ushort* gamma_to_linear [[buffer(2)]],
     device const int* linear_to_gamma [[buffer(3)]],
     constant Params& params [[buffer(4)]],
-    uint index [[thread_position_in_grid]]) {
+    uint2 position [[thread_position_in_grid]]) {
+  if (kLossyBlock2x2) {
+    const uint uv_x = position.x;
+    const uint uv_y = position.y;
+    const uint uv_height = (params.height + 1u) >> 1;
+    if (uv_x >= params.uv_width || uv_y >= uv_height) return;
+
+    const uint x0 = uv_x << 1;
+    const uint y0 = uv_y << 1;
+    const uint x1 = min(x0 + 1u, params.width - 1u);
+    const uint y1 = min(y0 + 1u, params.height - 1u);
+    const uint p00 = source_index(x0, y0, params);
+    const uint p01 = source_index(x1, y0, params);
+    const uint p10 = source_index(x0, y1, params);
+    const uint p11 = source_index(x1, y1, params);
+
+    const int r00 = source[p00 + params.red_offset];
+    const int g00 = source[p00 + params.green_offset];
+    const int b00 = source[p00 + params.blue_offset];
+    const int r01 = source[p01 + params.red_offset];
+    const int g01 = source[p01 + params.green_offset];
+    const int b01 = source[p01 + params.blue_offset];
+    const int r10 = source[p10 + params.red_offset];
+    const int g10 = source[p10 + params.green_offset];
+    const int b10 = source[p10 + params.blue_offset];
+    const int r11 = source[p11 + params.red_offset];
+    const int g11 = source[p11 + params.green_offset];
+    const int b11 = source[p11 + params.blue_offset];
+
+    output[y0 * params.width + x0] = rgb_to_y(r00, g00, b00);
+    if (x1 != x0) {
+      output[y0 * params.width + x1] = rgb_to_y(r01, g01, b01);
+    }
+    if (y1 != y0) {
+      output[y1 * params.width + x0] = rgb_to_y(r10, g10, b10);
+      if (x1 != x0) {
+        output[y1 * params.width + x1] = rgb_to_y(r11, g11, b11);
+      }
+    }
+
+    const uint red_linear = uint(gamma_to_linear[r00]) +
+        uint(gamma_to_linear[r01]) + uint(gamma_to_linear[r10]) +
+        uint(gamma_to_linear[r11]);
+    const uint green_linear = uint(gamma_to_linear[g00]) +
+        uint(gamma_to_linear[g01]) + uint(gamma_to_linear[g10]) +
+        uint(gamma_to_linear[g11]);
+    const uint blue_linear = uint(gamma_to_linear[b00]) +
+        uint(gamma_to_linear[b01]) + uint(gamma_to_linear[b10]) +
+        uint(gamma_to_linear[b11]);
+    const int red = interpolate_gamma(red_linear, linear_to_gamma);
+    const int green = interpolate_gamma(green_linear, linear_to_gamma);
+    const int blue = interpolate_gamma(blue_linear, linear_to_gamma);
+    const uint uv_index = uv_y * params.uv_width + uv_x;
+    output[params.y_size + uv_index] = rgb_to_u(red, green, blue);
+    output[params.y_size + params.uv_size + uv_index] =
+        rgb_to_v(red, green, blue);
+    return;
+  }
+
+  const uint index = position.x;
   const uint pixel_count = params.width * params.height;
   if (index < pixel_count) {
     const uint x = index % params.width;
@@ -162,6 +223,11 @@ struct MetalState {
   id<MTLBuffer> linear_to_gamma = nil;
   size_t source_capacity = 0;
   size_t output_capacity = 0;
+  bool block_2x2 = false;
+  bool write_combined_inputs = false;
+  bool unretained_command_buffers = false;
+  bool contiguous_copy = false;
+  NSUInteger threads = kPreferredThreads;
   std::mutex mutex;
 
   ~MetalState() {
@@ -192,6 +258,26 @@ size_t EnvironmentSize(const char* name, size_t default_value) {
   const unsigned long long parsed = std::strtoull(value, &end, 10);
   if (errno != 0 || end == value || *end != '\0') return default_value;
   return static_cast<size_t>(parsed);
+}
+
+NSUInteger ThreadgroupSize(const char* name,
+                           id<MTLComputePipelineState> pipeline) {
+  size_t requested = EnvironmentSize(name, kPreferredThreads);
+  if (requested == 0u) requested = kPreferredThreads;
+  return static_cast<NSUInteger>(std::min(
+      requested, static_cast<size_t>(pipeline.maxTotalThreadsPerThreadgroup)));
+}
+
+MTLResourceOptions SharedBufferOptions(bool write_combined) {
+  return MTLResourceStorageModeShared |
+      (write_combined ? MTLResourceCPUCacheModeWriteCombined
+                      : MTLResourceCPUCacheModeDefaultCache);
+}
+
+id<MTLCommandBuffer> NewCommandBuffer(MetalState* state) {
+  return state->unretained_command_buffers
+      ? [state->queue commandBufferWithUnretainedReferences]
+      : [state->queue commandBuffer];
 }
 
 bool RoundedBufferLength(size_t length, size_t* rounded_length) {
@@ -226,6 +312,13 @@ MetalState* InitializeState() {
   if (!EnvironmentFlag("WEBP_METAL_LOSSY", true)) return nullptr;
   @autoreleasepool {
     auto* state = new MetalState();
+    state->block_2x2 = EnvironmentFlag("WEBP_METAL_LOSSY_BLOCK_2X2", false);
+    state->write_combined_inputs = EnvironmentFlag(
+        "WEBP_METAL_WRITE_COMBINED_INPUTS", false);
+    state->unretained_command_buffers = EnvironmentFlag(
+        "WEBP_METAL_LOSSY_UNRETAINED_COMMAND_BUFFERS", false);
+    state->contiguous_copy = EnvironmentFlag(
+        "WEBP_METAL_LOSSY_CONTIGUOUS_COPY", false);
     state->device = MTLCreateSystemDefaultDevice();
     if (state->device == nil) {
       delete state;
@@ -243,8 +336,13 @@ MetalState* InitializeState() {
       delete state;
       return nullptr;
     }
-    id<MTLFunction> function =
-        [library newFunctionWithName:@"rgb_to_yuv420"];
+    MTLFunctionConstantValues* constants =
+        [[MTLFunctionConstantValues alloc] init];
+    bool block_2x2 = state->block_2x2;
+    [constants setConstantValue:&block_2x2 type:MTLDataTypeBool atIndex:0];
+    id<MTLFunction> function = [library
+        newFunctionWithName:@"rgb_to_yuv420"
+             constantValues:constants error:&error];
     if (function == nil) {
       if (EnvironmentFlag("WEBP_METAL_VERBOSE", false)) {
         std::fprintf(stderr, "WebP-Metal: lossy function not found\n");
@@ -270,6 +368,8 @@ MetalState* InitializeState() {
       delete state;
       return nullptr;
     }
+    state->threads = ThreadgroupSize("WEBP_METAL_LOSSY_THREADS",
+                                     state->pipeline);
 
     uint16_t gamma_to_linear[256];
     int32_t linear_to_gamma[33];
@@ -298,7 +398,7 @@ bool EnsureBuffers(MetalState* state, size_t source_size, size_t output_size) {
     size_t capacity;
     if (!RoundedBufferLength(source_size, &capacity)) return false;
     id<MTLBuffer> source = [state->device newBufferWithLength:capacity
-        options:MTLResourceStorageModeShared];
+        options:SharedBufferOptions(state->write_combined_inputs)];
     if (source == nil) return false;
 #if !__has_feature(objc_arc)
     [state->source release];
@@ -310,7 +410,7 @@ bool EnsureBuffers(MetalState* state, size_t source_size, size_t output_size) {
     size_t capacity;
     if (!RoundedBufferLength(output_size, &capacity)) return false;
     id<MTLBuffer> output = [state->device newBufferWithLength:capacity
-        options:MTLResourceStorageModeShared];
+        options:SharedBufferOptions(false)];
     if (output == nil) return false;
 #if !__has_feature(objc_arc)
     [state->output release];
@@ -464,14 +564,12 @@ extern "C" int WebPImportRGBToYUVAMetalBatch(
       std::memcpy(source + item.source_offset, item.source, item.source_size);
     }
 
-    id<MTLCommandBuffer> command = [state->queue commandBuffer];
+    id<MTLCommandBuffer> command = NewCommandBuffer(state);
     id<MTLComputeCommandEncoder> encoder = [command computeCommandEncoder];
     if (command == nil || encoder == nil) return 0;
     [encoder setComputePipelineState:state->pipeline];
     [encoder setBuffer:state->gamma_to_linear offset:0 atIndex:2];
     [encoder setBuffer:state->linear_to_gamma offset:0 atIndex:3];
-    const NSUInteger threads = std::min(
-        kPreferredThreads, state->pipeline.maxTotalThreadsPerThreadgroup);
     for (size_t i = 0; i < request_count; ++i) {
       const BatchItem& item = items[i];
       [encoder setBuffer:state->source
@@ -481,8 +579,11 @@ extern "C" int WebPImportRGBToYUVAMetalBatch(
                   offset:static_cast<NSUInteger>(item.output_offset)
                  atIndex:1];
       [encoder setBytes:&item.params length:sizeof(item.params) atIndex:4];
-      [encoder dispatchThreads:MTLSizeMake(item.y_size, 1, 1)
-          threadsPerThreadgroup:MTLSizeMake(threads, 1, 1)];
+      const MTLSize grid = state->block_2x2
+          ? MTLSizeMake(item.uv_width, item.uv_height, 1)
+          : MTLSizeMake(item.y_size, 1, 1);
+      [encoder dispatchThreads:grid
+          threadsPerThreadgroup:MTLSizeMake(state->threads, 1, 1)];
     }
     [encoder endEncoding];
     const CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
@@ -495,20 +596,30 @@ extern "C" int WebPImportRGBToYUVAMetalBatch(
     for (size_t i = 0; i < request_count; ++i) {
       const BatchItem& item = items[i];
       const uint8_t* const item_output = output + item.output_offset;
-      for (int y = 0; y < item.height; ++y) {
-        std::memcpy(item.y + static_cast<size_t>(y) * item.y_stride,
-                    item_output + static_cast<size_t>(y) * item.width,
-                    item.width);
-      }
-      const uint8_t* const u = item_output + item.y_size;
-      const uint8_t* const v = u + item.uv_size;
-      for (uint32_t y = 0; y < item.uv_height; ++y) {
-        std::memcpy(item.u + static_cast<size_t>(y) * item.uv_stride,
-                    u + static_cast<size_t>(y) * item.uv_width,
-                    item.uv_width);
-        std::memcpy(item.v + static_cast<size_t>(y) * item.uv_stride,
-                    v + static_cast<size_t>(y) * item.uv_width,
-                    item.uv_width);
+      const bool contiguous =
+          item.y_stride == item.width &&
+          item.uv_stride == static_cast<int>(item.uv_width) &&
+          item.u == item.y + item.y_size &&
+          item.v == item.u + item.uv_size;
+      if (state->contiguous_copy && contiguous) {
+        std::memcpy(item.y, item_output,
+                    item.y_size + 2u * item.uv_size);
+      } else {
+        for (int y = 0; y < item.height; ++y) {
+          std::memcpy(item.y + static_cast<size_t>(y) * item.y_stride,
+                      item_output + static_cast<size_t>(y) * item.width,
+                      item.width);
+        }
+        const uint8_t* const u = item_output + item.y_size;
+        const uint8_t* const v = u + item.uv_size;
+        for (uint32_t y = 0; y < item.uv_height; ++y) {
+          std::memcpy(item.u + static_cast<size_t>(y) * item.uv_stride,
+                      u + static_cast<size_t>(y) * item.uv_width,
+                      item.uv_width);
+          std::memcpy(item.v + static_cast<size_t>(y) * item.uv_stride,
+                      v + static_cast<size_t>(y) * item.uv_width,
+                      item.uv_width);
+        }
       }
     }
     if (EnvironmentFlag("WEBP_METAL_VERBOSE", false)) {

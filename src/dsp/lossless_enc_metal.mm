@@ -35,6 +35,8 @@ constexpr const char* kMetalSource = R"METAL(
 #include <metal_stdlib>
 using namespace metal;
 
+constant bool kTransformDispatch2D [[function_constant(0)]];
+
 struct Params {
   uint width;
   uint height;
@@ -164,12 +166,19 @@ kernel void color_space_transform(
     device uint* pixels [[buffer(0)]],
     device uint* transform_image [[buffer(1)]],
     constant Params& params [[buffer(2)]],
-    uint group_index [[threadgroup_position_in_grid]],
-    uint thread_index [[thread_index_in_threadgroup]],
-    uint group_size [[threads_per_threadgroup]]) {
+    uint3 group_position [[threadgroup_position_in_grid]],
+    uint3 thread_position [[thread_position_in_threadgroup]],
+    uint3 group_dimensions [[threads_per_threadgroup]]) {
+  const uint thread_index = thread_position.x;
+  const uint group_size = group_dimensions.x;
+  const uint group_index = kTransformDispatch2D
+      ? group_position.y * params.tile_columns + group_position.x
+      : group_position.x;
   const uint tile_size = 1u << params.bits;
-  const uint tile_column = group_index % params.tile_columns;
-  const uint tile_row = group_index / params.tile_columns;
+  const uint tile_column = kTransformDispatch2D
+      ? group_position.x : group_index % params.tile_columns;
+  const uint tile_row = kTransformDispatch2D
+      ? group_position.y : group_index / params.tile_columns;
   const uint tile_x = tile_column * tile_size;
   const uint tile_y = tile_row * tile_size;
   const uint tile_width = min(tile_size, params.width - tile_x);
@@ -284,6 +293,8 @@ constexpr const char* kHashMetalSource = R"METAL(
 #include <metal_stdlib>
 using namespace metal;
 
+constant bool kHashMatch4 [[function_constant(0)]];
+
 struct HashParams {
   uint size;
   uint xsize;
@@ -296,6 +307,21 @@ inline uint match_length(device const uint* pixels, uint first, uint second,
                          uint best_length, uint max_length) {
   if (pixels[first + best_length] != pixels[second + best_length]) return 0u;
   uint length = 0u;
+  if (kHashMatch4) {
+    while (length + 4u <= max_length) {
+      if (pixels[first + length] != pixels[second + length]) return length;
+      if (pixels[first + length + 1u] != pixels[second + length + 1u]) {
+        return length + 1u;
+      }
+      if (pixels[first + length + 2u] != pixels[second + length + 2u]) {
+        return length + 2u;
+      }
+      if (pixels[first + length + 3u] != pixels[second + length + 3u]) {
+        return length + 3u;
+      }
+      length += 4u;
+    }
+  }
   while (length < max_length &&
          pixels[first + length] == pixels[second + length]) {
     ++length;
@@ -387,15 +413,24 @@ struct MetalState {
   id<MTLComputePipelineState> pipeline = nil;
   id<MTLComputePipelineState> hash_pipeline = nil;
   id<MTLBuffer> pixel_buffer = nil;
+  id<MTLBuffer> hash_pixel_buffer = nil;
   id<MTLBuffer> transform_buffer = nil;
   id<MTLBuffer> chain_buffer = nil;
   size_t pixel_capacity = 0;
+  size_t hash_pixel_capacity = 0;
   size_t transform_capacity = 0;
   size_t chain_capacity = 0;
   size_t minimum_pixels = kDefaultMinimumPixels;
   size_t hash_minimum_pixels = kDefaultHashMinimumPixels;
   bool verbose = false;
   bool hash_pipeline_attempted = false;
+  bool transform_dispatch_2d = false;
+  bool hash_match4 = false;
+  bool write_combined_inputs = false;
+  bool transform_unretained_command_buffers = false;
+  bool hash_unretained_command_buffers = false;
+  NSUInteger transform_threads = kPreferredThreads;
+  NSUInteger hash_threads = kPreferredThreads;
   std::mutex operation_mutex;
 };
 
@@ -419,6 +454,26 @@ size_t EnvironmentSize(const char* name, size_t default_value) {
   return static_cast<size_t>(parsed);
 }
 
+NSUInteger ThreadgroupSize(const char* name,
+                           id<MTLComputePipelineState> pipeline) {
+  size_t requested = EnvironmentSize(name, kPreferredThreads);
+  if (requested == 0u) requested = kPreferredThreads;
+  return static_cast<NSUInteger>(std::min(
+      requested, static_cast<size_t>(pipeline.maxTotalThreadsPerThreadgroup)));
+}
+
+MTLResourceOptions SharedBufferOptions(bool write_combined) {
+  return MTLResourceStorageModeShared |
+      (write_combined ? MTLResourceCPUCacheModeWriteCombined
+                      : MTLResourceCPUCacheModeDefaultCache);
+}
+
+id<MTLCommandBuffer> NewCommandBuffer(MetalState* state, bool unretained) {
+  return unretained
+      ? [state->queue commandBufferWithUnretainedReferences]
+      : [state->queue commandBuffer];
+}
+
 size_t RoundedBufferLength(size_t length) {
   constexpr size_t kPage = 16u * 1024u;
   return std::max(kPage, (length + kPage - 1u) & ~(kPage - 1u));
@@ -434,6 +489,15 @@ void InitializeMetal() {
                                              kDefaultMinimumPixels);
     state->hash_minimum_pixels = EnvironmentSize(
         "WEBP_METAL_HASH_MIN_PIXELS", kDefaultHashMinimumPixels);
+    state->transform_dispatch_2d = EnvironmentFlag(
+        "WEBP_METAL_TRANSFORM_DISPATCH_2D", false);
+    state->hash_match4 = EnvironmentFlag("WEBP_METAL_HASH_MATCH4", false);
+    state->write_combined_inputs = EnvironmentFlag(
+        "WEBP_METAL_WRITE_COMBINED_INPUTS", false);
+    state->transform_unretained_command_buffers = EnvironmentFlag(
+        "WEBP_METAL_TRANSFORM_UNRETAINED_COMMAND_BUFFERS", false);
+    state->hash_unretained_command_buffers = EnvironmentFlag(
+        "WEBP_METAL_HASH_UNRETAINED_COMMAND_BUFFERS", false);
     state->device = MTLCreateSystemDefaultDevice();
     if (state->device == nil) {
       delete state;
@@ -451,8 +515,13 @@ void InitializeMetal() {
       delete state;
       return;
     }
-    id<MTLFunction> function = [library newFunctionWithName:
-        @"color_space_transform"];
+    MTLFunctionConstantValues* constants =
+        [[MTLFunctionConstantValues alloc] init];
+    bool dispatch_2d = state->transform_dispatch_2d;
+    [constants setConstantValue:&dispatch_2d type:MTLDataTypeBool atIndex:0];
+    id<MTLFunction> function = [library
+        newFunctionWithName:@"color_space_transform"
+             constantValues:constants error:&error];
     if (function == nil) {
       std::fprintf(stderr, "WebP-Metal: color_space_transform not found\n");
       delete state;
@@ -467,11 +536,16 @@ void InitializeMetal() {
       delete state;
       return;
     }
+    state->transform_threads = ThreadgroupSize(
+        "WEBP_METAL_TRANSFORM_THREADS", state->pipeline);
     if (state->verbose) {
       std::fprintf(stderr,
                    "WebP-Metal: using %s (transform minimum %zu, hash minimum "
-                   "%zu pixels)\n", state->device.name.UTF8String,
-                   state->minimum_pixels, state->hash_minimum_pixels);
+                   "%zu pixels, transform dispatch %s/%lu threads)\n",
+                   state->device.name.UTF8String, state->minimum_pixels,
+                   state->hash_minimum_pixels,
+                   state->transform_dispatch_2d ? "2d" : "linear",
+                   static_cast<unsigned long>(state->transform_threads));
     }
     g_state = state;
   }
@@ -499,8 +573,13 @@ bool EnsureHashPipeline(MetalState* state) {
     }
     return false;
   }
-  id<MTLFunction> function = [library newFunctionWithName:
-      @"hash_chain_candidates"];
+  MTLFunctionConstantValues* constants =
+      [[MTLFunctionConstantValues alloc] init];
+  bool match4 = state->hash_match4;
+  [constants setConstantValue:&match4 type:MTLDataTypeBool atIndex:0];
+  id<MTLFunction> function = [library
+      newFunctionWithName:@"hash_chain_candidates"
+           constantValues:constants error:&error];
   if (function == nil) return false;
   state->hash_pipeline = [state->device newComputePipelineStateWithFunction:
       function error:&error];
@@ -508,34 +587,58 @@ bool EnsureHashPipeline(MetalState* state) {
     std::fprintf(stderr, "WebP-Metal: hash pipeline creation failed: %s\n",
                  error.localizedDescription.UTF8String);
   }
+  if (state->hash_pipeline != nil) {
+    state->hash_threads = ThreadgroupSize("WEBP_METAL_HASH_THREADS",
+                                          state->hash_pipeline);
+  }
   return state->hash_pipeline != nil;
 }
 
-bool EnsureBuffers(MetalState* state, size_t pixel_bytes,
-                   size_t transform_bytes) {
+bool EnsurePixelBuffer(MetalState* state, size_t pixel_bytes) {
   if (pixel_bytes > state->pixel_capacity) {
     const size_t capacity = RoundedBufferLength(pixel_bytes);
     state->pixel_buffer = [state->device newBufferWithLength:capacity
-        options:MTLResourceStorageModeShared];
+        options:SharedBufferOptions(false)];
     if (state->pixel_buffer == nil) return false;
     state->pixel_capacity = capacity;
   }
+  return true;
+}
+
+bool EnsureTransformBuffer(MetalState* state, size_t transform_bytes) {
   if (transform_bytes > state->transform_capacity) {
     const size_t capacity = RoundedBufferLength(transform_bytes);
     state->transform_buffer = [state->device newBufferWithLength:capacity
-        options:MTLResourceStorageModeShared];
+        options:SharedBufferOptions(false)];
     if (state->transform_buffer == nil) return false;
     state->transform_capacity = capacity;
   }
   return true;
 }
 
+bool EnsureBuffers(MetalState* state, size_t pixel_bytes,
+                   size_t transform_bytes) {
+  return EnsurePixelBuffer(state, pixel_bytes) &&
+         EnsureTransformBuffer(state, transform_bytes);
+}
+
 bool EnsureHashBuffers(MetalState* state, size_t bytes) {
-  if (!EnsureBuffers(state, bytes, bytes)) return false;
+  if (!EnsureTransformBuffer(state, bytes)) return false;
+  if (state->write_combined_inputs) {
+    if (bytes > state->hash_pixel_capacity) {
+      const size_t capacity = RoundedBufferLength(bytes);
+      state->hash_pixel_buffer = [state->device newBufferWithLength:capacity
+          options:SharedBufferOptions(true)];
+      if (state->hash_pixel_buffer == nil) return false;
+      state->hash_pixel_capacity = capacity;
+    }
+  } else if (!EnsurePixelBuffer(state, bytes)) {
+    return false;
+  }
   if (bytes > state->chain_capacity) {
     const size_t capacity = RoundedBufferLength(bytes);
     state->chain_buffer = [state->device newBufferWithLength:capacity
-        options:MTLResourceStorageModeShared];
+        options:SharedBufferOptions(state->write_combined_inputs)];
     if (state->chain_buffer == nil) return false;
     state->chain_capacity = capacity;
   }
@@ -579,7 +682,8 @@ extern "C" int VP8LColorSpaceTransformMetal(int width, int height, int bits,
     }
     std::memcpy(state->pixel_buffer.contents, argb, pixel_bytes);
 
-    id<MTLCommandBuffer> command_buffer = [state->queue commandBuffer];
+    id<MTLCommandBuffer> command_buffer = NewCommandBuffer(
+        state, state->transform_unretained_command_buffers);
     id<MTLComputeCommandEncoder> encoder =
         [command_buffer computeCommandEncoder];
     if (command_buffer == nil || encoder == nil) {
@@ -592,10 +696,12 @@ extern "C" int VP8LColorSpaceTransformMetal(int width, int height, int bits,
     [encoder setBuffer:state->transform_buffer offset:0 atIndex:1];
     [encoder setBytes:&params length:sizeof(params) atIndex:2];
 
-    const NSUInteger threads = std::min(
-        kPreferredThreads, state->pipeline.maxTotalThreadsPerThreadgroup);
-    [encoder dispatchThreadgroups:MTLSizeMake(tile_count, 1, 1)
-             threadsPerThreadgroup:MTLSizeMake(threads, 1, 1)];
+    const MTLSize groups = state->transform_dispatch_2d
+        ? MTLSizeMake(tile_columns, tile_rows, 1)
+        : MTLSizeMake(tile_count, 1, 1);
+    [encoder dispatchThreadgroups:groups
+             threadsPerThreadgroup:MTLSizeMake(state->transform_threads, 1,
+                                                1)];
     [encoder endEncoding];
 
     const CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
@@ -657,10 +763,13 @@ extern "C" int VP8LHashChainFillMetalCandidates(
     const uint64_t dispatch_start =
         WebPProfileStageBegin(WEBP_PROFILE_METAL_HASH_DISPATCH);
     const CFAbsoluteTime start = CFAbsoluteTimeGetCurrent();
-    std::memcpy(state->pixel_buffer.contents, pixels, bytes);
+    id<MTLBuffer> hash_pixels = state->write_combined_inputs
+        ? state->hash_pixel_buffer : state->pixel_buffer;
+    std::memcpy(hash_pixels.contents, pixels, bytes);
     std::memcpy(state->chain_buffer.contents, chain, bytes);
 
-    id<MTLCommandBuffer> command_buffer = [state->queue commandBuffer];
+    id<MTLCommandBuffer> command_buffer = NewCommandBuffer(
+        state, state->hash_unretained_command_buffers);
     id<MTLComputeCommandEncoder> encoder =
         [command_buffer computeCommandEncoder];
     if (command_buffer == nil || encoder == nil) {
@@ -668,14 +777,12 @@ extern "C" int VP8LHashChainFillMetalCandidates(
       return 0;
     }
     [encoder setComputePipelineState:state->hash_pipeline];
-    [encoder setBuffer:state->pixel_buffer offset:0 atIndex:0];
+    [encoder setBuffer:hash_pixels offset:0 atIndex:0];
     [encoder setBuffer:state->chain_buffer offset:0 atIndex:1];
     [encoder setBuffer:state->transform_buffer offset:0 atIndex:2];
     [encoder setBytes:&params length:sizeof(params) atIndex:3];
-    const NSUInteger threads = std::min(
-        kPreferredThreads, state->hash_pipeline.maxTotalThreadsPerThreadgroup);
     [encoder dispatchThreads:MTLSizeMake(static_cast<NSUInteger>(size), 1, 1)
-        threadsPerThreadgroup:MTLSizeMake(threads, 1, 1)];
+        threadsPerThreadgroup:MTLSizeMake(state->hash_threads, 1, 1)];
     [encoder endEncoding];
     [command_buffer commit];
     [command_buffer waitUntilCompleted];
