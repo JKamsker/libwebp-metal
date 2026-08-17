@@ -13,6 +13,10 @@ dnl === AC_PROG_LIBTOOL is deprecated.
 m4_ifdef([LT_INIT], [LT_INIT], [AC_PROG_LIBTOOL])
 AC_PROG_SED
 AM_PROG_CC_C_O
+dnl Automake requires the Objective-C++ dependency conditionals to be defined
+dnl even when conditional Metal sources are disabled. The compiler is never
+dnl invoked by a Metal-off build.
+AC_PROG_OBJCXX
 
 dnl === Enable less verbose output when building.
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
@@ -33,6 +37,47 @@ AC_ARG_ENABLE([everything],
                SET_IF_UNSET([enable_libwebpdemux], [$enableval])
                SET_IF_UNSET([enable_libwebpextras], [$enableval])
                SET_IF_UNSET([enable_libwebpmux], [$enableval])])
+
+dnl === Metal encoder acceleration is supported only by Apple Clang on Darwin.
+dnl === Keep the policy explicit: default on for native Darwin builds and off
+dnl === everywhere else, with either choice available on Darwin.
+AC_ARG_ENABLE([metal],
+              AS_HELP_STRING([--enable-metal],
+                             [Enable Metal encoder acceleration on Darwin
+                              @<:@default=yes on Darwin, no elsewhere@:>@]),
+              [],
+              [case "$host_os" in
+                 darwin*) enable_metal=yes ;;
+                 *) enable_metal=no ;;
+               esac])
+AS_IF([test "x$enable_metal" = "xyes"], [
+  AS_CASE([$host_os], [darwin*], [],
+          [AC_MSG_ERROR([--enable-metal is supported only on Darwin])])
+  saved_OBJCXXFLAGS=$OBJCXXFLAGS
+  OBJCXXFLAGS="$OBJCXXFLAGS -fblocks"
+  METAL_LIBS="-framework Foundation -framework Metal -lc++"
+  AC_MSG_CHECKING([whether the Objective-C++ compiler can link Metal])
+  cat > conftest.mm <<'_ACEOF'
+#import <Foundation/Foundation.h>
+#import <Metal/Metal.h>
+int main(void) {
+  id<MTLDevice> device = MTLCreateSystemDefaultDevice();
+  return device == nil;
+}
+_ACEOF
+  AS_IF([$OBJCXX $OBJCXXFLAGS conftest.mm $METAL_LIBS -o conftest$ac_exeext
+         >&AS_MESSAGE_LOG_FD 2>&1],
+        [AC_MSG_RESULT([yes])],
+        [AC_MSG_RESULT([no])
+         rm -f conftest.mm conftest$ac_exeext
+         AC_MSG_ERROR([Metal requires Objective-C++ with blocks, Foundation, and Metal])])
+  rm -f conftest.mm conftest$ac_exeext
+  OBJCXXFLAGS=$saved_OBJCXXFLAGS
+  AC_DEFINE([WEBP_USE_METAL], [1],
+            [Set to 1 when Metal encoder acceleration is enabled])
+])
+AM_CONDITIONAL([ENABLE_METAL], [test "x$enable_metal" = "xyes"])
+AC_SUBST([METAL_LIBS])
 
 dnl === Check whether libwebpmux should be built
 AC_MSG_CHECKING(whether libwebpmux is to be built)
@@ -826,6 +871,7 @@ libwebpdecoder: ${enable_libwebpdecoder-no}
 libwebpdemux: ${enable_libwebpdemux-no}
 libwebpmux: ${enable_libwebpmux-no}
 libwebpextras: ${enable_libwebpextras-no}
+Metal: ${enable_metal-no}
 
 Tools:
 cwebp : ${enable_libwebpdemux-no}

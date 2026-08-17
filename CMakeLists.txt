@@ -80,6 +80,10 @@ if(WEBP_ENABLE_METAL)
   if(NOT WEBP_FOUNDATION_FRAMEWORK OR NOT WEBP_METAL_FRAMEWORK)
     message(FATAL_ERROR "Metal acceleration requires Foundation and Metal.")
   endif()
+  # Metal implementation details are private and must not expand the installed
+  # dylib's exported symbol surface.
+  set(CMAKE_OBJCXX_VISIBILITY_PRESET hidden)
+  set(METAL_LIBS "-framework Foundation -framework Metal -lc++")
 endif()
 if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
   if(NOT WEBP_ENABLE_METAL)
@@ -338,15 +342,18 @@ if(NOT WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT)
 endif()
 
 if(WEBP_ENABLE_METAL)
-  list(APPEND WEBP_DSP_ENC_SRCS
-       ${WEBP_SRC_DIR}/dsp/lossless_enc_metal.mm)
-  list(APPEND WEBP_ENC_SRCS
-       ${WEBP_SRC_DIR}/enc/metal_enc.c
-       ${WEBP_SRC_DIR}/enc/picture_csp_enc_metal.mm)
   set_source_files_properties(
     ${WEBP_SRC_DIR}/dsp/lossless_enc_metal.mm
     ${WEBP_SRC_DIR}/enc/picture_csp_enc_metal.mm
     PROPERTIES COMPILE_OPTIONS "-fblocks")
+else()
+  # parse_makefile_am() intentionally sees conditional Automake sources. Keep
+  # Metal translation units out of portable CMake builds when the option is off.
+  list(REMOVE_ITEM WEBP_DSP_ENC_SRCS
+       ${WEBP_SRC_DIR}/dsp/lossless_enc_metal.mm)
+  list(REMOVE_ITEM WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/metal_enc.c
+       ${WEBP_SRC_DIR}/enc/picture_csp_enc_metal.mm)
 endif()
 if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
   list(APPEND WEBP_ENC_SRCS
@@ -538,11 +545,11 @@ if(WEBP_ENABLE_FBOUNDS_SAFETY)
   target_compile_options(webpdecoder PRIVATE -fbounds-safety)
 endif()
 
-target_link_libraries(webp sharpyuv)
+target_link_libraries(webp PRIVATE sharpyuv)
 if(XCODE)
   libwebp_add_stub_file(webp)
 endif()
-target_link_libraries(webp ${WEBP_DEP_LIBRARIES})
+target_link_libraries(webp PRIVATE ${WEBP_DEP_LIBRARIES})
 if(WEBP_ENABLE_METAL)
   target_link_libraries(webp PRIVATE ${WEBP_FOUNDATION_FRAMEWORK}
                                      ${WEBP_METAL_FRAMEWORK} "-lc++")
@@ -682,8 +689,9 @@ if(WEBP_BUILD_CWEBP)
   # cwebp
   parse_makefile_am(${CMAKE_CURRENT_SOURCE_DIR}/examples "CWEBP_SRCS" "cwebp")
   add_executable(cwebp ${CWEBP_SRCS})
-  target_link_libraries(cwebp exampleutil imagedec webp)
-  target_include_directories(cwebp PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
+  target_link_libraries(cwebp exampleutil imagedec webp sharpyuv)
+  target_include_directories(
+    cwebp PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR})
   if(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT)
     target_compile_definitions(
       cwebp PRIVATE WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT=1)

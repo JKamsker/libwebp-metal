@@ -24,12 +24,12 @@ if BUILD_WEBPINFO
 endif
 
 noinst_LTLIBRARIES = libexample_util.la
-noinst_LTLIBRARIES += libanim_util.la
 
 libexample_util_la_SOURCES = example_util.c example_util.h
 libexample_util_la_LIBADD = ../src/libwebp.la
 
 if BUILD_ANIMDIFF
+noinst_LTLIBRARIES += libanim_util.la
 libanim_util_la_SOURCES = anim_util.c anim_util.h gifdec.c gifdec.h
 libanim_util_la_LIBADD =
 libanim_util_la_LIBADD += ../src/libwebp.la
