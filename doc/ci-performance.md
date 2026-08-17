@@ -16,8 +16,9 @@ runtime coverage.
 - `Metal correctness` runs on physical Apple silicon labeled `self-hosted`,
   `macOS`, `ARM64`, and `metal`. It forces all three Metal operations, verifies
   pixel/bitstream promises, and proves that each GPU operation logged actual
-  execution. It also covers odd dimensions, padded strides, supported packed
-  RGB formats, cancellation/fallback, and a bounded forced-Metal UBSan
+  execution. It also covers odd dimensions, padded source and output-plane
+  strides, supported packed RGB formats, cancellation after an observed
+  transform, fallback, and a bounded forced-Metal UBSan
   mutation harness. It is a trusted-branch, scheduled, and manual release gate.
 - `Metal performance signal` runs on the same class of physical Mac with an
   additional `performance` label. It provides weekly/manual alternating

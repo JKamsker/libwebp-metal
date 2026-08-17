@@ -221,7 +221,8 @@ external static and shared consumers with Metal both off and on; installed
 headers and exported dylib symbols are compared between those variants.
 
 The physical-Metal workflow additionally covers odd/minimal dimensions, padded
-strides, every supported packed RGB import format, cancellation and fallback,
+source and output-plane strides, every supported packed RGB import format,
+cancellation after an observed transform, fallback,
 and a bounded forced-Metal UBSan mutation harness. These checks close the
 locally actionable build, ABI-comparison, and adversarial-test gaps above; they
 do not provide cross-device determinism, memory-pressure/concurrency evidence,

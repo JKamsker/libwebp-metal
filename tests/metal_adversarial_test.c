@@ -10,6 +10,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "src/enc/metal_enc.h"
 #include "webp/decode.h"
 #include "webp/encode.h"
 
@@ -208,6 +209,66 @@ static void CheckTransformDecodeFidelity(void) {
   free(source);
 }
 
+static void CheckPaddedOutputStrides(void) {
+  const uint8_t sentinel = 0xcd;
+  const int width = 17;
+  const int height = 9;
+  const int uv_width = (width + 1) / 2;
+  const int uv_height = (height + 1) / 2;
+  const int source_stride = width * 3 + 7;
+  const int y_stride = width + 5;
+  const int uv_stride = uv_width + 3;
+  uint8_t* const source =
+      (uint8_t*)malloc((size_t)source_stride * height);
+  uint8_t* const y = (uint8_t*)malloc((size_t)y_stride * height);
+  uint8_t* const u = (uint8_t*)malloc((size_t)uv_stride * uv_height);
+  uint8_t* const v = (uint8_t*)malloc((size_t)uv_stride * uv_height);
+  WebPPicture cpu;
+  int row;
+  assert(source != NULL && y != NULL && u != NULL && v != NULL);
+  FillSource(source, source_stride, width, height, FORMAT_RGB, 0);
+  memset(y, sentinel, (size_t)y_stride * height);
+  memset(u, sentinel, (size_t)uv_stride * uv_height);
+  memset(v, sentinel, (size_t)uv_stride * uv_height);
+
+  assert(WebPPictureInit(&cpu));
+  cpu.width = width;
+  cpu.height = height;
+  cpu.use_argb = 0;
+  assert(setenv("WEBP_ACCELERATOR", "none", 1) == 0);
+  assert(Import(&cpu, FORMAT_RGB, source, source_stride));
+
+  assert(setenv("WEBP_METAL_LOSSY", "1", 1) == 0);
+  assert(setenv("WEBP_METAL_LOSSY_MIN_PIXELS", "0", 1) == 0);
+  assert(WebPImportRGBToYUVAMetal(
+      source, source + 1, source + 2, 3, source_stride, width, height, y, u, v,
+      y_stride, uv_stride));
+  for (row = 0; row < height; ++row) {
+    int column;
+    assert(memcmp(y + (size_t)row * y_stride,
+                  cpu.y + (size_t)row * cpu.y_stride, width) == 0);
+    for (column = width; column < y_stride; ++column) {
+      assert(y[(size_t)row * y_stride + column] == sentinel);
+    }
+  }
+  for (row = 0; row < uv_height; ++row) {
+    int column;
+    assert(memcmp(u + (size_t)row * uv_stride,
+                  cpu.u + (size_t)row * cpu.uv_stride, uv_width) == 0);
+    assert(memcmp(v + (size_t)row * uv_stride,
+                  cpu.v + (size_t)row * cpu.uv_stride, uv_width) == 0);
+    for (column = uv_width; column < uv_stride; ++column) {
+      assert(u[(size_t)row * uv_stride + column] == sentinel);
+      assert(v[(size_t)row * uv_stride + column] == sentinel);
+    }
+  }
+  WebPPictureFree(&cpu);
+  free(source);
+  free(y);
+  free(u);
+  free(v);
+}
+
 static int AbortAfterMetal(int percent, const WebPPicture* picture) {
   (void)picture;
   return percent < 50;
@@ -257,13 +318,17 @@ static void CheckCancellationAndFallback(void) {
 int main(int argc, char** argv) {
   assert(setenv("WEBP_METAL_VERBOSE", "1", 1) == 0);
   if (argc != 2) {
-    fprintf(stderr, "usage: %s matrix|transform|cancellation\n", argv[0]);
+    fprintf(stderr,
+            "usage: %s matrix|transform|output-strides|cancellation\n",
+            argv[0]);
     return 2;
   }
   if (strcmp(argv[1], "matrix") == 0) {
     CheckDimensionsStridesAndFormats();
   } else if (strcmp(argv[1], "transform") == 0) {
     CheckTransformDecodeFidelity();
+  } else if (strcmp(argv[1], "output-strides") == 0) {
+    CheckPaddedOutputStrides();
   } else if (strcmp(argv[1], "cancellation") == 0) {
     CheckCancellationAndFallback();
   } else {
