@@ -1,0 +1,177 @@
+{
+  "schema": "libwebp-metal-persistent-batch-preflight-v1",
+  "artifact_kind": "experiment-3-metal-batch-operator-preflight",
+  "protocol": "doc/metal_persistent_batch_experiment.md",
+  "guard_matrix": "doc/experiment-guard-matrix.md",
+  "preflight_utc": "2026-08-17T18:39:25Z",
+  "preflight_local": "2026-08-17T20:39:25+0200",
+  "required_source_base": "18fd520d5d7faf0645d461bded27c0ba7ee4a48e",
+  "head": "64309ffce345333c1a252e54e088e696dc3018c0",
+  "head_expected": "64309ffce345333c1a252e54e088e696dc3018c0",
+  "preserved_verified_artifact_commits": [
+    "0d925e3dd33daab83d3717e3763d36d91bcfdca7",
+    "64309ffce345333c1a252e54e088e696dc3018c0"
+  ],
+  "git_status_porcelain": "",
+  "worktree_clean": true,
+  "operator_scope": {
+    "operator": "sole local operator",
+    "other_agent_used": false,
+    "other_experiment_run": false,
+    "codec_algorithms_modified": false,
+    "matrix_variant_repetition_stopping_rule_changed": false,
+    "performance_interpretation_made": false
+  },
+  "authoritative_file_sha256": {
+    "doc/metal_persistent_batch_experiment.md": "4d0238ccfbbc693c0efb8691a18d739e55a2bbf09abe4fb2b62c9fa6e1576bde",
+    "doc/experiment-guard-matrix.md": "04ecc416de3433761c2536112e4912b29dbbb06dc56218a74a1943e13173eded",
+    "scripts/run_metal_batch_experiment.sh": "c5b28090352892f8a003760cbb0324532a3a9140d406ca2457e9eca42e6b861c",
+    "scripts/test_experiment_guards.py": "727f8eda2a3426ebbf1b770d4f6a2eb998987fead14f007881acce278c05b5be",
+    "extras/metal_encode_batch_experiment.c": "a36e45e6ad406988e75d1de931dd0c196abe8ee3ede7fba97f1d2d28e2eb3a1f",
+    "makefile.unix": "ee3be6066a9a75a5eb71ad41debeab6e21004c398f2f710cf8f61c524dfe88d1"
+  },
+  "commands": {
+    "clean": "make -f makefile.unix clean",
+    "build": "make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 WEBP_BUILD_METAL_BATCH_EXPERIMENT=1 metal-experiment",
+    "verify_only": "WEBP_METAL_BATCH_EXPERIMENT=1 extras/metal_encode_batch_experiment --verify-only --width=97 --height=65 --batch-size=3 --quality=75 --method=4",
+    "independent_guard_validation": "scripts/test_experiment_guards.py",
+    "import_timed": "WEBP_BENCHMARK_SESSION=exclusive WEBP_METAL_BATCH_EXPERIMENT=1 WEBP_METAL_BATCH_SIZES='1 2 4 8' WEBP_METAL_COLD_REPETITIONS=5 WEBP_METAL_WARM_ITERATIONS=20 scripts/run_metal_batch_experiment.sh extras/metal_encode_batch_experiment /private/tmp/libwebp-metal-batch-item3-b98d7i/item3-import-3000x2000.jsonl 3000 2000",
+    "encode_timed": "WEBP_BENCHMARK_SESSION=exclusive WEBP_METAL_BATCH_EXPERIMENT=1 WEBP_METAL_BATCH_SIZES='1 2 4 8' WEBP_METAL_COLD_REPETITIONS=5 WEBP_METAL_WARM_ITERATIONS=20 WEBP_METAL_EXPERIMENT_STAGE=encode scripts/run_metal_batch_experiment.sh extras/metal_encode_batch_experiment /private/tmp/libwebp-metal-batch-item3-b98d7i/item3-encode-3000x2000.jsonl 3000 2000"
+  },
+  "operator_and_harness": {
+    "harness_path": "extras/metal_encode_batch_experiment",
+    "harness_source": "extras/metal_encode_batch_experiment.c",
+    "wrapper_path": "scripts/run_metal_batch_experiment.sh",
+    "wrapper_sha256": "c5b28090352892f8a003760cbb0324532a3a9140d406ca2457e9eca42e6b861c",
+    "harness_source_sha256": "a36e45e6ad406988e75d1de931dd0c196abe8ee3ede7fba97f1d2d28e2eb3a1f",
+    "harness_contract": "libwebp-metal-persistent-batch-v1",
+    "output_directory": "/private/tmp/libwebp-metal-batch-item3-b98d7i",
+    "output_paths": [
+      "/private/tmp/libwebp-metal-batch-item3-b98d7i/item3-import-3000x2000.jsonl",
+      "/private/tmp/libwebp-metal-batch-item3-b98d7i/item3-encode-3000x2000.jsonl"
+    ],
+    "output_directory_new": true,
+    "output_files_absent_before_timing": true,
+    "wrapper_truncation_contract": "wrapper uses : > output only after operator verified each path was absent"
+  },
+  "effective_flags": {
+    "build": {
+      "WEBP_ENABLE_METAL": "1",
+      "WEBP_BUILD_METAL_BATCH_EXPERIMENT": "1",
+      "expected_private_macro": "WEBP_USE_METAL_BATCH_EXPERIMENT=1"
+    },
+    "verify_only_runtime": {
+      "WEBP_METAL_BATCH_EXPERIMENT": "1"
+    },
+    "timed_import_runtime": {
+      "WEBP_BENCHMARK_SESSION": "exclusive",
+      "WEBP_METAL_BATCH_EXPERIMENT": "1",
+      "WEBP_METAL_BATCH_SIZES": "1 2 4 8",
+      "WEBP_METAL_COLD_REPETITIONS": "5",
+      "WEBP_METAL_WARM_ITERATIONS": "20"
+    },
+    "timed_encode_runtime": {
+      "WEBP_BENCHMARK_SESSION": "exclusive",
+      "WEBP_METAL_BATCH_EXPERIMENT": "1",
+      "WEBP_METAL_BATCH_SIZES": "1 2 4 8",
+      "WEBP_METAL_COLD_REPETITIONS": "5",
+      "WEBP_METAL_WARM_ITERATIONS": "20",
+      "WEBP_METAL_EXPERIMENT_STAGE": "encode"
+    },
+    "operator_environment_experiment_flags_absent_before_launch": [
+      "WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT",
+      "WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT",
+      "WEBP_BUILD_METAL_ABLATION_EXPERIMENT",
+      "WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT",
+      "WEBP_BUILD_METAL_BENCHMARK",
+      "WEBP_BUILD_METAL_ABLATION",
+      "WEBP_EXPERIMENTAL_FEATURES",
+      "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT",
+      "WEBP_METAL_CROSSOVER_EXPERIMENT",
+      "WEBP_METAL_ABLATION_EXPERIMENT",
+      "WEBP_METAL_PREDICTOR",
+      "WEBP_METAL_BENCHMARK",
+      "WEBP_METAL_EXPERIMENT_STAGE",
+      "WEBP_BENCHMARK_SESSION"
+    ],
+    "other_experiment_flags_absent": true,
+    "internal_harness_settings_allowed": [
+      "WEBP_METAL_LOSSY=1",
+      "WEBP_METAL_LOSSY_MIN_PIXELS=0"
+    ],
+    "internal_harness_settings_note": "The committed harness sets these documented experiment-only settings internally; they were not operator-selected experiment flags."
+  },
+  "fixed_matrix": {
+    "input": "deterministic synthetic RGB generated by the committed harness",
+    "width": 3000,
+    "height": 2000,
+    "quality": 75,
+    "method": 4,
+    "batch_sizes": [1, 2, 4, 8],
+    "submissions": ["single", "batch"],
+    "cold_repetitions_per_size_submission": 5,
+    "warm_iterations_per_size_submission": 20,
+    "cold_process_contract": "five independent cold processes per batch size and submission",
+    "warm_process_contract": "one warmed process with twenty measured samples per batch size and submission",
+    "stages": ["import", "encode"],
+    "stage_order": ["import", "encode"],
+    "serial_stage_contract": true,
+    "expected_records_per_stage": 200,
+    "expected_records_total": 400,
+    "expected_records_breakdown_per_stage": {
+      "cold": 40,
+      "warm": 160,
+      "size_submission_groups": 8
+    },
+    "threshold_policy_changed": false,
+    "default_behavior_changed": false
+  },
+  "enforced_contracts": {
+    "verify_only": "compare CPU, batched Metal, and unchanged single Metal final WebP bitstreams; also exercise transactional rejection",
+    "timed_schema": "libwebp-metal-persistent-batch-v1",
+    "timed_fields": ["schema", "lifecycle", "submission", "stage", "width", "height", "batch_size", "iteration", "elapsed_ns", "ns_per_image", "encoded_bytes", "metal_command_buffers", "warmup_batches"],
+    "lifecycle": "cold has no warmup; warm has exactly one same-shape unmeasured warmup batch",
+    "submission": "single submits one image per command buffer; batch submits the request array in one command buffer",
+    "stage": "import measures RGB-to-YUV only and encode includes serial WebP encoding after import",
+    "dispatch": "single command buffers=batch_size and batch command buffers=1",
+    "import_output": "encoded_bytes=0",
+    "encode_output": "aggregate encoded_bytes must be positive and valid for every record",
+    "timing": "elapsed_ns and ns_per_image must be nonnegative numeric values",
+    "determinism": "verify-only equality plus repeated-output/record contract validation",
+    "no_aggregate_threshold_policy_change": true
+  },
+  "precondition_checks": {
+    "1_head_and_worktree": "PASS: exact HEAD recorded and porcelain status empty",
+    "2_command_harness_flags": "PASS: exact clean/build/verify/timed commands and paths recorded",
+    "3_flag_isolation": "PASS: only item-3 build/runtime flags are selected; all other checked experiment and legacy names absent",
+    "4_exclusive_lease": "PASS: WEBP_BENCHMARK_SESSION=exclusive mechanically asserted for the timed command prefix",
+    "5_contention": "PASS: no other experiment operator/process matched the scan patterns",
+    "6_fixed_matrix": "PASS: deterministic 3000x2000 RGB, quality 75, method 4, sizes 1/2/4/8, single/batch, 5 cold and 20 warm, import then encode",
+    "7_correctness_dispatch_determinism": "PASS: committed harness and schema contracts are identified and enforceable; validation required after timing",
+    "8_non_overwriting_outputs": "PASS: fresh output directory and both JSONL paths were absent before timing",
+    "9_machine_power_thermal_memory_ac_sleep_contention": "PASS: sanitized machine and precondition snapshot recorded below"
+  },
+  "machine_preconditions": {
+    "os": "macOS 26.5.1 build 25F80",
+    "architecture": "arm64",
+    "model": "MacBook Pro Mac16,7",
+    "chip": "Apple M4 Pro",
+    "logical_cpu_count": 14,
+    "metal_gpu": "Apple M4 Pro integrated GPU, 20 cores, Metal 4",
+    "memory_bytes": 25769803776,
+    "memory_free_percent": 77,
+    "power_source": "AC Power",
+    "battery": "100%; charged",
+    "power_mode": "AC powermode=2",
+    "thermal": "no thermal warning, performance warning, or CPU power status recorded",
+    "sleep_settings": "AC sleep=1, displaysleep=10, disksleep=10",
+    "sleep_prevention": "PreventUserIdleSystemSleep=1 and PreventUserIdleDisplaySleep=1; Amphetamine single-use system/display assertions active; PreventSystemSleep=0",
+    "load_average": [2.36, 2.33, 2.52],
+    "disk_available_kib": 360382532,
+    "contention_scan": "no process matched any item-1 through item-5 operator, harness, benchmark, or Metal experiment pattern",
+    "sensitive_identifiers_committed": false
+  },
+  "preflight_passed": true,
+  "timed_run_authorized": true,
+  "interpretation_owner": "Sol; this operator will return raw/mechanical evidence only"
+}

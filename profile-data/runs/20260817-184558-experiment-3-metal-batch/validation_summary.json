@@ -1,0 +1,210 @@
+{
+  "schema": "libwebp-metal-persistent-batch-validation-v1",
+  "operator_status": "completed-valid",
+  "experiment": "3 persistent/batched Metal prototype",
+  "required_source_base": "18fd520d5d7faf0645d461bded27c0ba7ee4a48e",
+  "source_head_at_run": "64309ffce345333c1a252e54e088e696dc3018c0",
+  "preserved_prior_artifact_commits": [
+    "0d925e3dd33daab83d3717e3763d36d91bcfdca7",
+    "64309ffce345333c1a252e54e088e696dc3018c0"
+  ],
+  "worktree_clean_at_preflight": true,
+  "codec_algorithms_modified": false,
+  "run": {
+    "operator_start_utc": "2026-08-17T18:39:25Z",
+    "operator_start_local": "2026-08-17T20:39:25+0200",
+    "artifact_validation_completed_utc": "2026-08-17T18:58:45Z",
+    "artifact_validation_completed_local": "2026-08-17T20:58:45+0200",
+    "timed_stages_serial": true,
+    "timed_stage_order": ["import", "encode"],
+    "phase_boundaries": {
+      "clean": {
+        "start_utc": "2026-08-17T18:42:07Z",
+        "end_utc": "2026-08-17T18:42:07Z",
+        "elapsed_seconds": 0.06264805793762207
+      },
+      "build": {
+        "start_utc": "2026-08-17T18:42:23Z",
+        "end_utc": "2026-08-17T18:42:25Z",
+        "elapsed_seconds": 1.3997151851654053
+      },
+      "verify_only": {
+        "start_utc": "2026-08-17T18:42:48Z",
+        "end_utc": "2026-08-17T18:42:49Z",
+        "elapsed_seconds": 0.4724600315093994
+      },
+      "guard_validation": {
+        "start_utc": "2026-08-17T18:43:03Z",
+        "end_utc": "2026-08-17T18:43:04Z",
+        "elapsed_seconds": 0.6556031703948975
+      },
+      "timed_import": {
+        "start_utc": "2026-08-17T18:45:58Z",
+        "end_utc": "2026-08-17T18:46:02Z",
+        "elapsed_seconds": 4.225574016571045
+      },
+      "timed_encode": {
+        "start_utc": "2026-08-17T18:47:21Z",
+        "end_utc": "2026-08-17T18:54:03Z",
+        "elapsed_seconds": 401.2982473373413
+      },
+      "timed_wrapper_elapsed_seconds_sum": 405.52382135391235
+    },
+    "exact_commands": {
+      "clean": "make -f makefile.unix clean",
+      "build": "make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 WEBP_BUILD_METAL_BATCH_EXPERIMENT=1 metal-experiment",
+      "verify_only": "WEBP_METAL_BATCH_EXPERIMENT=1 extras/metal_encode_batch_experiment --verify-only --width=97 --height=65 --batch-size=3 --quality=75 --method=4",
+      "guard_validation": "scripts/test_experiment_guards.py",
+      "timed_import": "WEBP_BENCHMARK_SESSION=exclusive WEBP_METAL_BATCH_EXPERIMENT=1 WEBP_METAL_BATCH_SIZES='1 2 4 8' WEBP_METAL_COLD_REPETITIONS=5 WEBP_METAL_WARM_ITERATIONS=20 scripts/run_metal_batch_experiment.sh extras/metal_encode_batch_experiment /private/tmp/libwebp-metal-batch-item3-b98d7i/item3-import-3000x2000.jsonl 3000 2000",
+      "timed_encode": "WEBP_BENCHMARK_SESSION=exclusive WEBP_METAL_BATCH_EXPERIMENT=1 WEBP_METAL_BATCH_SIZES='1 2 4 8' WEBP_METAL_COLD_REPETITIONS=5 WEBP_METAL_WARM_ITERATIONS=20 WEBP_METAL_EXPERIMENT_STAGE=encode scripts/run_metal_batch_experiment.sh extras/metal_encode_batch_experiment /private/tmp/libwebp-metal-batch-item3-b98d7i/item3-encode-3000x2000.jsonl 3000 2000",
+      "repeated_untimed_verify": "WEBP_METAL_BATCH_EXPERIMENT=1 extras/metal_encode_batch_experiment --verify-only --width=97 --height=65 --batch-size=3 --quality=75 --method=4 (run twice; identical PASS output)"
+    },
+    "effective_flags": {
+      "build": {
+        "WEBP_ENABLE_METAL": "1",
+        "WEBP_BUILD_METAL_BATCH_EXPERIMENT": "1",
+        "private_macro_observed": "WEBP_USE_METAL_BATCH_EXPERIMENT=1"
+      },
+      "verify_only": {
+        "WEBP_METAL_BATCH_EXPERIMENT": "1"
+      },
+      "timed_import": {
+        "WEBP_BENCHMARK_SESSION": "exclusive",
+        "WEBP_METAL_BATCH_EXPERIMENT": "1",
+        "WEBP_METAL_BATCH_SIZES": "1 2 4 8",
+        "WEBP_METAL_COLD_REPETITIONS": "5",
+        "WEBP_METAL_WARM_ITERATIONS": "20"
+      },
+      "timed_encode": {
+        "WEBP_BENCHMARK_SESSION": "exclusive",
+        "WEBP_METAL_BATCH_EXPERIMENT": "1",
+        "WEBP_METAL_BATCH_SIZES": "1 2 4 8",
+        "WEBP_METAL_COLD_REPETITIONS": "5",
+        "WEBP_METAL_WARM_ITERATIONS": "20",
+        "WEBP_METAL_EXPERIMENT_STAGE": "encode"
+      },
+      "other_experiment_flags_absent": true,
+      "absent_names_checked": [
+        "WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT",
+        "WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT",
+        "WEBP_BUILD_METAL_ABLATION_EXPERIMENT",
+        "WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT",
+        "WEBP_BUILD_METAL_BENCHMARK",
+        "WEBP_BUILD_METAL_ABLATION",
+        "WEBP_EXPERIMENTAL_FEATURES",
+        "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT",
+        "WEBP_METAL_CROSSOVER_EXPERIMENT",
+        "WEBP_METAL_ABLATION_EXPERIMENT",
+        "WEBP_METAL_PREDICTOR",
+        "WEBP_METAL_BENCHMARK"
+      ],
+      "internal_harness_settings": [
+        "WEBP_METAL_LOSSY=1",
+        "WEBP_METAL_LOSSY_MIN_PIXELS=0"
+      ],
+      "internal_harness_settings_note": "These documented experiment-only settings were forced internally by the committed harness; they were not operator-selected flags."
+    }
+  },
+  "fixed_matrix": {
+    "input": "deterministic synthetic RGB from the committed harness",
+    "width": 3000,
+    "height": 2000,
+    "quality": 75,
+    "method": 4,
+    "quality_method_source_defaults_verified": true,
+    "batch_sizes": [1, 2, 4, 8],
+    "submissions": ["single", "batch"],
+    "cold_repetitions_per_group": 5,
+    "warm_iterations_per_group": 20,
+    "expected_records_per_stage": 200,
+    "expected_records_total": 400,
+    "matrix_or_stopping_rule_changed": false,
+    "aggregate_threshold_policy_changed": false,
+    "default_behavior_enabled": false
+  },
+  "stages": {
+    "import": {
+      "original_path": "/private/tmp/libwebp-metal-batch-item3-b98d7i/item3-import-3000x2000.jsonl",
+      "committed_path": "profile-data/runs/20260817-184558-experiment-3-metal-batch/item3-import-3000x2000.jsonl",
+      "original_sha256": "1c7719b075b2fa371c4b109692f56bf43e83be425b5508eee44e8f0edcf325dd",
+      "committed_sha256": "1c7719b075b2fa371c4b109692f56bf43e83be425b5508eee44e8f0edcf325dd",
+      "original_bytes": 54483,
+      "committed_bytes": 54483,
+      "original_lines": 200,
+      "committed_lines": 200,
+      "original_immutable_recheck_passed": true,
+      "schema": "libwebp-metal-persistent-batch-v1",
+      "records": 200,
+      "groups": 8,
+      "cold_records": 40,
+      "warm_records": 160,
+      "cold_per_group": 5,
+      "warm_per_group": 20,
+      "encoded_bytes_contract": "all zero",
+      "lifecycle_warmup_contract": true,
+      "iteration_identity_contract": true,
+      "timing_nonnegative_contract": true,
+      "dispatch_command_buffer_contract": true
+    },
+    "encode": {
+      "original_path": "/private/tmp/libwebp-metal-batch-item3-b98d7i/item3-encode-3000x2000.jsonl",
+      "committed_path": "profile-data/runs/20260817-184558-experiment-3-metal-batch/item3-encode-3000x2000.jsonl",
+      "original_sha256": "693a881a4c0035b4bed48f9421ec3b8c1959912396172ae291c8f2f12ab2d405",
+      "committed_sha256": "693a881a4c0035b4bed48f9421ec3b8c1959912396172ae291c8f2f12ab2d405",
+      "original_bytes": 56629,
+      "committed_bytes": 56629,
+      "original_lines": 200,
+      "committed_lines": 200,
+      "original_immutable_recheck_passed": true,
+      "schema": "libwebp-metal-persistent-batch-v1",
+      "records": 200,
+      "groups": 8,
+      "cold_records": 40,
+      "warm_records": 160,
+      "cold_per_group": 5,
+      "warm_per_group": 20,
+      "encoded_bytes_contract": "all positive aggregate outputs",
+      "lifecycle_warmup_contract": true,
+      "iteration_identity_contract": true,
+      "timing_nonnegative_contract": true,
+      "dispatch_command_buffer_contract": true,
+      "aggregate_encoded_bytes_unique_values_per_group": 1
+    }
+  },
+  "correctness_determinism_dispatch": {
+    "verify_only_first_run": "PASS: Metal batch and single streams match CPU for 3 images",
+    "verify_only_cpu_batched_single_final_webp_bitstream_equality": "PASS: committed harness comparison",
+    "verify_only_repeat_1": "PASS: Metal batch and single streams match CPU for 3 images",
+    "verify_only_repeat_2": "PASS: Metal batch and single streams match CPU for 3 images",
+    "repeated_verify_output_equal": true,
+    "repeated_output_determinism": "PASS for available committed evidence: repeated verify-only equality checks were identical and encode aggregate byte outputs were constant within every fixed group",
+    "timed_dispatch_evidence": "PASS: every single record reports batch_size command buffers and every batch record reports one",
+    "failed_metal_calls_emitted_no_record": true,
+    "transactional_rejection_exercised_by_verify_only": true
+  },
+  "guard_validation": {
+    "command": "scripts/test_experiment_guards.py",
+    "result": "PASS: five independent build/runtime guards and fail-closed leases",
+    "timed_commands_run_by_guard_suite": 0,
+    "other_experiment_timing_run": false
+  },
+  "preflight": {
+    "committed_path": "profile-data/operators/experiment-3-metal-batch-20260817T183925Z/preflight.json",
+    "sha256": "dc04416cf291bb6a5b51f9e2fa6038df0dffc1dfa760e024bd0b9e0f333b66bb",
+    "head_and_clean_state_passed": true,
+    "exclusive_lease_passed": true,
+    "no_other_experiment_process_passed": true,
+    "fresh_output_paths_passed": true,
+    "machine_power_thermal_memory_sleep_contention_recorded": true
+  },
+  "operator_gate_notes": {
+    "failed_prerequisites": [],
+    "pre_timed_gate_attempts_before_success": 3,
+    "gate_attempt_note": "Two preliminary gate shells exited before timing because bare system commands were unavailable and then because the scan matched its own shell command text. No output file was created and no timed sample ran in either attempt; the final gate passed using absolute system paths and PID/parent-PID self-exclusion.",
+    "performance_interpretation": false,
+    "codec_algorithm_or_policy_change": false,
+    "sensitive_identifiers_or_oversized_inputs_committed": false
+  },
+  "remaining_owner": "Sol",
+  "remaining_work": "Sol may later inspect the raw timing records and perform the authorized interpretation. This operator supplies no performance conclusion, threshold, matrix, repetition, stopping-rule, or codec-policy decision."
+}
