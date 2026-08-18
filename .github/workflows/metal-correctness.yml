@@ -4,6 +4,7 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "17 3 * * 1"
+  pull_request:
   push:
     branches: [main]
     paths:
@@ -25,13 +26,16 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  real-metal:
-    # These labels intentionally select a project-owned physical Mac. Do not
-    # replace them with a generic hosted macOS image and call it GPU coverage.
-    runs-on: [self-hosted, macOS, ARM64, metal]
+  hosted-metal-m1:
+    name: Hosted Metal correctness (macos-14 ARM64/M1)
+    # This hosted M1 is a functional correctness target. It is neither a
+    # characterized performance host nor a cross-device Metal coverage claim.
+    runs-on: macos-14
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Record runner environment
         run: |
           mkdir -p artifacts
@@ -43,6 +47,21 @@ jobs:
           xcodebuild -version > artifacts/xcode.txt 2>&1 || true
           pmset -g batt > artifacts/power.txt 2>&1 || true
           pmset -g therm > artifacts/thermal.txt 2>&1 || true
+      - name: Require hosted ARM64 M1 Metal device
+        run: |
+          test "$RUNNER_ARCH" = ARM64
+          test "$(uname -m)" = arm64
+          grep -Eq 'Chip: Apple M1([[:space:]]|$| \()' \
+            artifacts/system_profiler.txt
+          xcrun swift -e '
+            import Metal
+            guard let device = MTLCreateSystemDefaultDevice() else {
+              fatalError("no Metal device")
+            }
+            print("name=\(device.name)")
+            print("registryID=\(device.registryID)")
+          ' > artifacts/metal-device.txt
+          cat artifacts/metal-device.txt
       - name: Configure Metal build
         run: >-
           cmake -S . -B build -G Ninja
@@ -60,8 +79,22 @@ jobs:
         env:
           WEBP_TEST_BIN_DIR: ${{ github.workspace }}/build
           WEBP_TEST_REQUIRE_METAL: "1"
-        run: scripts/test_metal.sh
+          WEBP_TEST_METAL_LOG: >-
+            ${{ github.workspace }}/artifacts/forced-metal-dispatch.log
+          WEBP_ACCELERATOR: metal
+          WEBP_METAL: "1"
+        run: |
+          status=0
+          scripts/test_metal.sh \
+            > artifacts/forced-metal.stdout \
+            2> artifacts/forced-metal.stderr || status=$?
+          cat artifacts/forced-metal.stdout
+          cat artifacts/forced-metal-dispatch.log >&2
+          cat artifacts/forced-metal.stderr >&2
+          exit "$status"
       - name: Public API adversarial coverage
+        env:
+          WEBP_ACCELERATOR: metal
         run: |
           cc -std=c99 -Wall -Wextra -Werror \
             -I"${{ github.workspace }}" \
