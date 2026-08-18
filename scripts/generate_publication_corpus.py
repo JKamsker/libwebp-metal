@@ -4,9 +4,6 @@
 The image bytes depend only on the constants and integer operations in this
 file.  They do not depend on Python's random module, host endianness, locale,
 clock, filesystem path, or any external image asset.
-
-The generator source digest is calculated after normalizing Git's Windows
-line endings so the canonical manifest verifies on every supported platform.
 """
 
 from __future__ import annotations
@@ -42,12 +39,6 @@ def sha256(path: Path) -> str:
         for chunk in iter(lambda: source.read(1024 * 1024), b""):
             digest.update(chunk)
     return digest.hexdigest()
-
-
-def sha256_source(path: Path) -> str:
-    """Hash source text independently of the checkout's line-ending policy."""
-    source = path.read_bytes().replace(b"\r\n", b"\n")
-    return hashlib.sha256(source).hexdigest()
 
 
 def ppm_row(category: str, width: int, height: int, y: int) -> bytearray:
@@ -132,7 +123,7 @@ def manifest_for(output: Path) -> dict[str, object]:
             "seed": GENERATOR_SEED,
             "seed_hex": f"0x{GENERATOR_SEED:08x}",
             "source": "scripts/generate_publication_corpus.py",
-            "source_sha256": sha256_source(Path(__file__).resolve()),
+            "source_sha256": sha256(Path(__file__).resolve()),
             "version": GENERATOR_VERSION,
         },
         "format": FORMAT,

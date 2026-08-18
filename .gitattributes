@@ -4,3 +4,7 @@
 *.bat text eol=crlf
 *.pdf -text -diff
 *.ppm -text -diff
+# Frozen experiment protocols pin the raw byte hashes of these files; keep
+# their checkout bytes identical on every platform.
+scripts/generate_publication_corpus.py text eol=lf
+benchmarks/publication-corpus/manifest.json text eol=lf
