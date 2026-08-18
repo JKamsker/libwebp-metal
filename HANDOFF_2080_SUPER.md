@@ -85,7 +85,7 @@ measurements are meaningless until they pass.
   graphic / texture, tiny and odd dimensions) and the six verify-only
   batch matrices (`--verify-only`, lossy/lossless/near-lossless x
   png/jpeg).
-- [ ] 2. **Exercise the fallback path on this GPU:**
+- [x] 2. **Exercise the fallback path on this GPU:**
   `WEBP_CUDA_DECIMATE_FAIL_COLLECT=<band>` for bands 0/1/3/5/7, pipeline
   on and off — outputs must stay byte-identical to CPU.
 - [ ] 3. **Run the official suite** and file a new result set:
