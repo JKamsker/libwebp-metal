@@ -421,6 +421,9 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
     WebPProfileStageEnd(WEBP_PROFILE_LOSSY_ENCODER_INIT, profile_start);
     if (enc == NULL) {
       WebPProfileEndSession(0, pic->error_code);
+      WebPPredictorBoundaryEnd(0, pic->error_code);
+      WebPBackrefExactEnd(0, pic->error_code);
+      WebPBackrefCacheSearchEnd(0, pic->error_code);
       WebPAcceleratorEndEncode();
       return 0;  // pic->error is already set.
     }

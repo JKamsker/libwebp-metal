@@ -180,14 +180,15 @@ python3 scripts/benchmark_cuda_end_to_end.py run \
   --build-dir build-cuda --output-dir /tmp/webp-cuda-results \
   --label "workstation / RTX 2080 SUPER"
 python3 scripts/benchmark_cuda_end_to_end.py report \
-  system-a/results.json system-b/results.json
+  /tmp/webp-cuda-results/results.json
 ```
 
 Each run preserves all samples and commands in `raw.jsonl`, normalized system,
 binary, corpus, and aggregate metadata in `results.json`, and a human-readable
 `report.md` with CPU time, CUDA time, and speedup per image. Use
 `--verify-only` for correctness checks without collecting timing data, and
-`--cuda-device N` to select a GPU on multi-device systems.
+`--cuda-device N` to select a GPU on multi-device systems. Pass multiple
+`results.json` paths to `report` when comparing separately copied system runs.
 
 Additional, non-installed CUDA strategy prototypes can be built with
 `-DWEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS=ON`. See
