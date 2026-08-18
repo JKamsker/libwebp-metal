@@ -43,6 +43,10 @@ if grep -q "WebP-CUDA: lossy RGB->YUV" "$lossy_default_log"; then
   echo "lossy CUDA ran without the WEBP_CUDA_LOSSY opt-in" >&2
   exit 1
 fi
+if grep -q "WebP-CUDA: lossy analysis" "$lossy_default_log"; then
+  echo "lossy CUDA analysis ran without its explicit opt-in" >&2
+  exit 1
+fi
 
 for input do
   name=$(basename -- "$input")
@@ -123,6 +127,7 @@ for input do
       "$encoder" -quiet -q "$quality" -m "$method" "$input" \
       -o "$temporary_dir/$name-lossy-cpu.webp"
     WEBP_ACCELERATOR=cuda WEBP_CUDA_LOSSY=1 \
+      WEBP_CUDA_LOSSY_ANALYSIS=1 \
       WEBP_CUDA_LOSSY_MIN_PIXELS=0 WEBP_CUDA_VERBOSE=1 \
       "$encoder" -quiet -q "$quality" -m "$method" "$input" \
       -o "$temporary_dir/$name-lossy-cuda.webp" 2>>"$cuda_log"
@@ -151,9 +156,10 @@ grep -q "WebP-CUDA: using" "$cuda_log"
 grep -q "WebP-CUDA: transformed" "$cuda_log"
 grep -q "WebP-CUDA: hash candidates" "$cuda_log"
 grep -q "WebP-CUDA: lossy RGB->YUV" "$cuda_log"
+grep -q "WebP-CUDA: lossy analysis" "$cuda_log"
 if grep -q "WebP-CUDA: using" "$cold_log"; then
   echo "small default encode initialized CUDA before its cold threshold" >&2
   exit 1
 fi
-printf 'PASS: observed forced color/hash/RGB/near-lossless CUDA stages\n'
+printf 'PASS: observed forced color/hash/RGB/lossy-analysis/near-lossless CUDA stages\n'
 printf 'PASS: lossy CUDA remains opt-in by default\n'

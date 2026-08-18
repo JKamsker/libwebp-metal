@@ -13,11 +13,19 @@ typedef struct {
   WebPAcceleratorResult hash_result;
   WebPAcceleratorResult rgb_result;
   WebPAcceleratorResult near_lossless_result;
+  WebPAcceleratorResult lossy_analysis_result;
   int color_calls;
   int hash_calls;
   int rgb_calls;
   int near_lossless_calls;
+  int lossy_analysis_calls;
+  int end_encode_calls;
 } FakeContext;
+
+static void FakeEndEncode(void* opaque) {
+  FakeContext* const context = (FakeContext*)opaque;
+  ++context->end_encode_calls;
+}
 
 static WebPAcceleratorResult FakeColorTransform(
     void* opaque, const WebPAcceleratorColorTransformRequest* request) {
@@ -81,6 +89,21 @@ static WebPAcceleratorResult FakeNearLossless(
   return context->near_lossless_result;
 }
 
+static WebPAcceleratorResult FakeLossyAnalysis(
+    void* opaque, const WebPAcceleratorLossyAnalysisRequest* request) {
+  FakeContext* const context = (FakeContext*)opaque;
+  if (request == NULL) return context->lossy_analysis_result;
+  ++context->lossy_analysis_calls;
+  assert(request->width == 2);
+  assert(request->height == 2);
+  assert(request->method == 4);
+  assert(request->quality == 75);
+  if (context->lossy_analysis_result == WEBP_ACCELERATOR_SUCCESS) {
+    request->results[0].alpha = 46u;
+  }
+  return context->lossy_analysis_result;
+}
+
 static WebPEncoderAccelerator MakeBackend(FakeContext* context) {
   WebPEncoderAccelerator backend;
   memset(&backend, 0, sizeof(backend));
@@ -90,7 +113,8 @@ static WebPEncoderAccelerator MakeBackend(FakeContext* context) {
   backend.stages = WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM |
                    WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN |
                    WEBP_ACCELERATOR_STAGE_RGB_TO_YUV |
-                   WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS;
+                   WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS |
+                   WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS;
   backend.properties = WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS |
                        WEBP_ACCELERATOR_PROPERTY_TRANSACTIONAL_OUTPUT |
                        WEBP_ACCELERATOR_PROPERTY_DETERMINISTIC;
@@ -99,6 +123,8 @@ static WebPEncoderAccelerator MakeBackend(FakeContext* context) {
   backend.hash_chain = FakeHashChain;
   backend.rgb_to_yuv = FakeRGBToYUV;
   backend.near_lossless = FakeNearLossless;
+  backend.lossy_analysis = FakeLossyAnalysis;
+  backend.end_encode = FakeEndEncode;
   return backend;
 }
 
@@ -124,17 +150,24 @@ int main(void) {
   uint32_t near_output[6] = {10u};
   const WebPAcceleratorNearLosslessRequest near_lossless_request = {
       near_source, 3, 2, 3, 4, near_output};
+  WebPAcceleratorLossyAnalysisResult analysis_result = {0};
+  const WebPAcceleratorLossyAnalysisRequest lossy_analysis_request = {
+      y, u, v, 5, 3, 2, 2, 4, 75, &analysis_result};
 
   memset(&context, 0, sizeof(context));
   context.hash_result = WEBP_ACCELERATOR_SUCCESS;
   context.rgb_result = WEBP_ACCELERATOR_SUCCESS;
   context.near_lossless_result = WEBP_ACCELERATOR_SUCCESS;
+  context.lossy_analysis_result = WEBP_ACCELERATOR_SUCCESS;
   backend = MakeBackend(&context);
   if (getenv("WEBP_ACCELERATOR") != NULL &&
       strcmp(getenv("WEBP_ACCELERATOR"), "none") == 0) {
     assert(WebPSetEncoderAcceleratorForTesting(&backend));
     assert(WebPAccelerateColorTransform(&color_request) ==
            WEBP_ACCELERATOR_NOT_RUN);
+    assert(!WebPAcceleratorLossyAnalysisEnabled());
+    WebPAcceleratorEndEncode();
+    assert(context.end_encode_calls == 1);
     assert(context.color_calls == 0);
     assert(argb[0] == 1u && transform_image[0] == 3u);
     puts("PASS: accelerator common CPU override");
@@ -142,11 +175,14 @@ int main(void) {
   }
 
   assert(WebPSetEncoderAcceleratorForTesting(NULL));
+  assert(!WebPAcceleratorLossyAnalysisEnabled());
   assert(WebPAccelerateColorTransform(&color_request) ==
          WEBP_ACCELERATOR_NOT_RUN);
   assert(argb[0] == 1u && transform_image[0] == 3u);
 
   assert(WebPSetEncoderAcceleratorForTesting(&backend));
+  WebPAcceleratorEndEncode();
+  assert(context.end_encode_calls == 1);
   context.color_result = WEBP_ACCELERATOR_SUCCESS;
   assert(WebPAccelerateColorTransform(&color_request) ==
          WEBP_ACCELERATOR_SUCCESS);
@@ -184,10 +220,17 @@ int main(void) {
   assert(context.near_lossless_calls == 1);
   assert(near_output[0] == 45u);
 
+  assert(WebPAccelerateLossyAnalysis(&lossy_analysis_request) ==
+         WEBP_ACCELERATOR_SUCCESS);
+  assert(context.lossy_analysis_calls == 1);
+  assert(analysis_result.alpha == 46u);
+  assert(WebPAcceleratorLossyAnalysisEnabled());
+
   assert(WebPAccelerateColorTransform(NULL) == WEBP_ACCELERATOR_NOT_RUN);
   assert(WebPAccelerateHashChain(NULL) == WEBP_ACCELERATOR_NOT_RUN);
   assert(WebPAccelerateRGBToYUV(NULL) == WEBP_ACCELERATOR_NOT_RUN);
   assert(WebPAccelerateNearLossless(NULL) == WEBP_ACCELERATOR_NOT_RUN);
+  assert(WebPAccelerateLossyAnalysis(NULL) == WEBP_ACCELERATOR_NOT_RUN);
 
   backend.properties = WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS;
   assert(!WebPSetEncoderAcceleratorForTesting(&backend));

@@ -175,6 +175,67 @@ WebPAcceleratorResult WebPAccelerateNearLossless(
   return WEBP_ACCELERATOR_NOT_RUN;
 }
 
+WebPAcceleratorResult WebPAccelerateLossyAnalysis(
+    const WebPAcceleratorLossyAnalysisRequest* const request) {
+  const WebPEncoderAccelerator* backends[4];
+  const size_t count =
+      GetBackends(backends, sizeof(backends) / sizeof(*backends));
+  size_t i;
+  if (request == NULL || count == 0 || IsDisabledByEnvironment()) {
+    return WEBP_ACCELERATOR_NOT_RUN;
+  }
+  for (i = 0; i < count; ++i) {
+    const WebPEncoderAccelerator* const backend = backends[i];
+    WebPAcceleratorResult result;
+    if (!IsValidBackend(backend)) return WEBP_ACCELERATOR_ERROR;
+    if (!BackendMatchesEnvironment(backend) ||
+        !(backend->stages & WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS)) {
+      continue;
+    }
+    if (backend->lossy_analysis == NULL) return WEBP_ACCELERATOR_ERROR;
+    result = NormalizeResult(
+        backend->lossy_analysis(backend->context, request));
+    if (result != WEBP_ACCELERATOR_NOT_RUN) return result;
+  }
+  return WEBP_ACCELERATOR_NOT_RUN;
+}
+
+int WebPAcceleratorLossyAnalysisEnabled(void) {
+  const WebPEncoderAccelerator* backends[4];
+  const size_t count =
+      GetBackends(backends, sizeof(backends) / sizeof(*backends));
+  size_t i;
+  if (count == 0 || IsDisabledByEnvironment()) return 0;
+  for (i = 0; i < count; ++i) {
+    const WebPEncoderAccelerator* const backend = backends[i];
+    if (!IsValidBackend(backend)) return 0;
+    if (!BackendMatchesEnvironment(backend) ||
+        !(backend->stages & WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS)) {
+      continue;
+    }
+    if (backend->lossy_analysis == NULL) return 0;
+    return NormalizeResult(backend->lossy_analysis(backend->context, NULL)) ==
+           WEBP_ACCELERATOR_SUCCESS;
+  }
+  return 0;
+}
+
+void WebPAcceleratorEndEncode(void) {
+  const WebPEncoderAccelerator* backends[4];
+  const size_t count =
+      GetBackends(backends, sizeof(backends) / sizeof(*backends));
+  size_t i;
+  if (count == 0) return;
+  for (i = 0; i < count; ++i) {
+    const WebPEncoderAccelerator* const backend = backends[i];
+    // Cleanup is intentionally independent of the current environment. A
+    // caller may change dispatch policy between picture import and encode.
+    if (IsValidBackend(backend) && backend->end_encode != NULL) {
+      backend->end_encode(backend->context);
+    }
+  }
+}
+
 #if defined(WEBP_ACCELERATOR_TESTING)
 int WebPSetEncoderAcceleratorForTesting(
     const WebPEncoderAccelerator* const backend) {

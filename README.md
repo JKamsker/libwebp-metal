@@ -63,7 +63,9 @@ Selected lossy imports use the exact 2x2 Metal kernel by default.
 
 CUDA acceleration for the lossless cross-color transform, lossless hash-chain
 candidates, exact near-lossless preprocessing, and opaque regular
-RGB-to-YUV420 conversion is available as an opt-in CMake backend. It requires
+RGB-to-YUV420 conversion is available as an opt-in CMake backend. An
+experimental exact lossy macroblock-analysis stage is also built by default but
+requires a separate runtime opt-in. The backend requires
 CMake 3.17 or newer and a CUDA toolkit, and is enabled with
 `-DWEBP_ENABLE_CUDA=ON`. The CUDA language is enabled only for this build mode;
 CPU-only and Metal builds do not require the toolkit. For example:
@@ -86,12 +88,22 @@ At runtime, `WEBP_ACCELERATOR=cuda` explicitly selects CUDA and
 lossless transform threshold, `WEBP_CUDA_HASH_MIN_PIXELS=N` controls hash
 candidates, `WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS=N` controls near-lossless
 preprocessing, and `WEBP_CUDA_LOSSY_MIN_PIXELS=N` controls RGB conversion.
+`WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS=N` controls the experimental lossy
+analysis stage.
 `WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`, and
 `WEBP_CUDA_LOSSY=0` disable one stage. Lossy CUDA is off by default because it
 was neutral in persistent end-to-end batches and much slower in fresh
 processes; set `WEBP_CUDA_LOSSY=1` to opt in. `WEBP_CUDA_VERBOSE=1` reports
 device and dispatch timings. Set a threshold to zero for forced correctness
 tests.
+The macroblock-analysis experiment remains off independently; set
+`WEBP_CUDA_LOSSY_ANALYSIS=1` to exercise it. It reproduces the production
+susceptibility histogram, initial luma/chroma modes, and segment inputs exactly,
+so forced CPU/CUDA tests require byte-identical lossy WebP output. With
+persistent buffers enabled, it consumes the device-resident YUV produced by the
+CUDA RGB stage and avoids a redundant upload; an end-of-encode hook clears any
+unconsumed handoff safely. No production crossover is claimed until the
+portable end-to-end suite is rerun.
 Defaults are adaptive: a stage pays the
 roughly 140 ms runtime/device initialization cost only for large inputs, then
 uses a lower warm-process threshold once another CUDA stage initialized the

@@ -48,7 +48,8 @@ namespace {
 #if defined(WEBP_CUDA_ENABLE_COLOR_TRANSFORM) || \
     defined(WEBP_CUDA_ENABLE_HASH_CHAIN) || \
     defined(WEBP_CUDA_ENABLE_RGB_TO_YUV) || \
-    defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS)
+    defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS) || \
+    defined(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS)
 #define WEBP_CUDA_HAS_ENCODER_STAGE 1
 #endif
 
@@ -138,6 +139,16 @@ struct RGBKernelParams {
   uint32_t packed4;
 };
 
+struct LossyAnalysisKernelParams {
+  uint32_t width;
+  uint32_t height;
+  uint32_t uv_width;
+  uint32_t uv_height;
+  uint32_t mb_width;
+  uint32_t method;
+  uint32_t quality;
+};
+
 struct CudaState {
   bool initialization_attempted = false;
   bool available = false;
@@ -149,15 +160,35 @@ struct CudaState {
   uint32_t* pixels = nullptr;
   uint32_t* transform = nullptr;
   int32_t* chain = nullptr;
+  uint8_t* analysis_y = nullptr;
+  uint8_t* analysis_u = nullptr;
+  uint8_t* analysis_v = nullptr;
+  WebPAcceleratorLossyAnalysisResult* analysis_results = nullptr;
   size_t pixel_capacity = 0;
   size_t transform_capacity = 0;
   size_t chain_capacity = 0;
+  size_t analysis_y_capacity = 0;
+  size_t analysis_u_capacity = 0;
+  size_t analysis_v_capacity = 0;
+  size_t analysis_result_capacity = 0;
   uint32_t* host_pixels = nullptr;
   uint32_t* host_transform = nullptr;
   int32_t* host_chain = nullptr;
+  WebPAcceleratorLossyAnalysisResult* host_analysis_results = nullptr;
   size_t host_pixel_capacity = 0;
   size_t host_transform_capacity = 0;
   size_t host_chain_capacity = 0;
+  size_t host_analysis_result_capacity = 0;
+  bool resident_yuv_valid = false;
+  const uint8_t* resident_y = nullptr;
+  const uint8_t* resident_u = nullptr;
+  const uint8_t* resident_v = nullptr;
+  int resident_y_stride = 0;
+  int resident_uv_stride = 0;
+  int resident_width = 0;
+  int resident_height = 0;
+  size_t resident_y_size = 0;
+  size_t resident_uv_size = 0;
   bool gamma_initialized = false;
   uint32_t successful_stages = 0;
   char device_name[256] = {0};
@@ -823,6 +854,284 @@ __global__ void RGBToYUV420Kernel(
 
 #endif  // WEBP_CUDA_ENABLE_RGB_TO_YUV
 
+#if defined(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS)
+
+__device__ uint8_t LossyAnalysisSample(const uint8_t* plane, uint32_t width,
+                                       uint32_t height, uint32_t x,
+                                       uint32_t y) {
+  x = x < width ? x : width - 1u;
+  y = y < height ? y : height - 1u;
+  return plane[y * width + x];
+}
+
+__device__ int LossyAnalysisDC(const uint8_t* plane, uint32_t width,
+                               uint32_t height, uint32_t mb_x, uint32_t mb_y,
+                               uint32_t size) {
+  int sum = 0;
+  const bool has_top = mb_y != 0u;
+  const bool has_left = mb_x != 0u;
+  if (!has_top && !has_left) return 128;
+  if (has_top) {
+    const uint32_t y = mb_y * size - 1u;
+    for (uint32_t x = 0; x < size; ++x) {
+      sum += LossyAnalysisSample(plane, width, height, mb_x * size + x, y);
+    }
+  }
+  if (has_left) {
+    const uint32_t x = mb_x * size - 1u;
+    for (uint32_t y = 0; y < size; ++y) {
+      sum += LossyAnalysisSample(plane, width, height, x, mb_y * size + y);
+    }
+  }
+  if (has_top != has_left) sum += sum;
+  return (sum + static_cast<int>(size)) >> (size == 16u ? 5 : 4);
+}
+
+__device__ uint8_t LossyAnalysisPrediction(
+    const uint8_t* plane, uint32_t width, uint32_t height, uint32_t mb_x,
+    uint32_t mb_y, uint32_t size, uint32_t x, uint32_t y, uint32_t mode,
+    int dc) {
+  const bool has_top = mb_y != 0u;
+  const bool has_left = mb_x != 0u;
+  if (mode == 0u) return static_cast<uint8_t>(dc);
+  if (has_top && has_left) {
+    const int top = LossyAnalysisSample(plane, width, height,
+                                        mb_x * size + x, mb_y * size - 1u);
+    const int left = LossyAnalysisSample(plane, width, height,
+                                         mb_x * size - 1u, mb_y * size + y);
+    const int top_left = LossyAnalysisSample(
+        plane, width, height, mb_x * size - 1u, mb_y * size - 1u);
+    const int value = top + left - top_left;
+    return static_cast<uint8_t>(value < 0 ? 0 : (value > 255 ? 255 : value));
+  }
+  if (has_left) {
+    return LossyAnalysisSample(plane, width, height, mb_x * size - 1u,
+                               mb_y * size + y);
+  }
+  if (has_top) {
+    return LossyAnalysisSample(plane, width, height, mb_x * size + x,
+                               mb_y * size - 1u);
+  }
+  return 129u;
+}
+
+__device__ int LossyAnalysisCoefficient(
+    const uint8_t* plane, uint32_t width, uint32_t height, uint32_t mb_x,
+    uint32_t mb_y, uint32_t block_size, uint32_t block_x, uint32_t block_y,
+    const uint8_t* prediction, uint32_t coefficient) {
+  const uint32_t horizontal = coefficient & 3u;
+  const uint32_t vertical = coefficient >> 2;
+  int tmp[4];
+  for (uint32_t row = 0; row < 4u; ++row) {
+    int delta[4];
+    for (uint32_t column = 0; column < 4u; ++column) {
+      const uint32_t local_x = block_x + column;
+      const uint32_t local_y = block_y + row;
+      delta[column] =
+          static_cast<int>(LossyAnalysisSample(
+              plane, width, height, mb_x * block_size + local_x,
+              mb_y * block_size + local_y)) -
+          prediction[local_y * block_size + local_x];
+    }
+    const int a0 = delta[0] + delta[3];
+    const int a1 = delta[1] + delta[2];
+    const int a2 = delta[1] - delta[2];
+    const int a3 = delta[0] - delta[3];
+    switch (horizontal) {
+      case 0:
+        tmp[row] = (a0 + a1) * 8;
+        break;
+      case 1:
+        tmp[row] = (a2 * 2217 + a3 * 5352 + 1812) >> 9;
+        break;
+      case 2:
+        tmp[row] = (a0 - a1) * 8;
+        break;
+      default:
+        tmp[row] = (a3 * 2217 - a2 * 5352 + 937) >> 9;
+        break;
+    }
+  }
+  const int a0 = tmp[0] + tmp[3];
+  const int a1 = tmp[1] + tmp[2];
+  const int a2 = tmp[1] - tmp[2];
+  const int a3 = tmp[0] - tmp[3];
+  switch (vertical) {
+    case 0:
+      return (a0 + a1 + 7) >> 4;
+    case 1:
+      return ((a2 * 2217 + a3 * 5352 + 12000) >> 16) + (a3 != 0);
+    case 2:
+      return (a0 - a1 + 7) >> 4;
+    default:
+      return (a3 * 2217 - a2 * 5352 + 51000) >> 16;
+  }
+}
+
+__device__ int LossyAnalysisAlpha(const uint32_t* histogram) {
+  uint32_t max_value = 0;
+  int last_non_zero = 1;
+  for (int i = 0; i <= 31; ++i) {
+    if (histogram[i] != 0u) {
+      max_value = histogram[i] > max_value ? histogram[i] : max_value;
+      last_non_zero = i;
+    }
+  }
+  return max_value > 1u ? 510 * last_non_zero / static_cast<int>(max_value)
+                        : 0;
+}
+
+__global__ void LossyAnalysisKernel(
+    const uint8_t* WEBP_CUDA_RESTRICT y_plane,
+    const uint8_t* WEBP_CUDA_RESTRICT u_plane,
+    const uint8_t* WEBP_CUDA_RESTRICT v_plane,
+    WebPAcceleratorLossyAnalysisResult* WEBP_CUDA_RESTRICT results,
+    LossyAnalysisKernelParams params) {
+  __shared__ uint32_t histogram[4 * 32];
+  __shared__ uint8_t y_predictions[2 * 16 * 16];
+  __shared__ uint8_t u_predictions[2 * 8 * 8];
+  __shared__ uint8_t v_predictions[2 * 8 * 8];
+  __shared__ int dc[3];
+  const uint32_t mb_index = blockIdx.x;
+  const uint32_t mb_x = mb_index % params.mb_width;
+  const uint32_t mb_y = mb_index / params.mb_width;
+
+  if (threadIdx.x < 4u * 32u) histogram[threadIdx.x] = 0u;
+  if (threadIdx.x == 0u) {
+    dc[0] = LossyAnalysisDC(y_plane, params.width, params.height, mb_x, mb_y,
+                            16u);
+    dc[1] = LossyAnalysisDC(u_plane, params.uv_width, params.uv_height, mb_x,
+                            mb_y, 8u);
+    dc[2] = LossyAnalysisDC(v_plane, params.uv_width, params.uv_height, mb_x,
+                            mb_y, 8u);
+  }
+  __syncthreads();
+
+  for (uint32_t item = threadIdx.x; item < 2u * 16u * 16u;
+       item += blockDim.x) {
+    const uint32_t mode = item / (16u * 16u);
+    const uint32_t pixel = item % (16u * 16u);
+    const uint32_t x = pixel & 15u;
+    const uint32_t row = pixel >> 4;
+    y_predictions[item] = LossyAnalysisPrediction(
+        y_plane, params.width, params.height, mb_x, mb_y, 16u, x, row, mode,
+        dc[0]);
+  }
+  for (uint32_t item = threadIdx.x; item < 2u * 2u * 8u * 8u;
+       item += blockDim.x) {
+    const uint32_t mode = item / (2u * 8u * 8u);
+    const uint32_t remainder = item % (2u * 8u * 8u);
+    const uint32_t plane = remainder / (8u * 8u);
+    const uint32_t pixel = remainder % (8u * 8u);
+    const uint32_t x = pixel & 7u;
+    const uint32_t row = pixel >> 3;
+    uint8_t* const destination =
+        plane == 0u ? u_predictions : v_predictions;
+    const uint8_t* const source = plane == 0u ? u_plane : v_plane;
+    destination[mode * 8u * 8u + pixel] = LossyAnalysisPrediction(
+        source, params.uv_width, params.uv_height, mb_x, mb_y, 8u, x, row,
+        mode, dc[plane + 1u]);
+  }
+  __syncthreads();
+
+  for (uint32_t task = threadIdx.x; task < 768u; task += blockDim.x) {
+    const uint8_t* plane;
+    const uint8_t* prediction;
+    uint32_t plane_width;
+    uint32_t plane_height;
+    uint32_t block_size;
+    uint32_t block;
+    uint32_t coefficient;
+    uint32_t histogram_index;
+    if (task < 512u) {
+      if (params.method <= 1u) continue;
+      const uint32_t mode = task / 256u;
+      const uint32_t remainder = task % 256u;
+      block = remainder / 16u;
+      coefficient = remainder & 15u;
+      plane = y_plane;
+      prediction = y_predictions + mode * 16u * 16u;
+      plane_width = params.width;
+      plane_height = params.height;
+      block_size = 16u;
+      histogram_index = mode;
+    } else {
+      const uint32_t remainder = task - 512u;
+      const uint32_t mode = remainder / 128u;
+      const uint32_t mode_remainder = remainder % 128u;
+      block = mode_remainder / 16u;
+      coefficient = mode_remainder & 15u;
+      const uint32_t plane_index = block / 4u;
+      block &= 3u;
+      plane = plane_index == 0u ? u_plane : v_plane;
+      prediction = (plane_index == 0u ? u_predictions : v_predictions) +
+                   mode * 8u * 8u;
+      plane_width = params.uv_width;
+      plane_height = params.uv_height;
+      block_size = 8u;
+      histogram_index = 2u + mode;
+    }
+    const uint32_t blocks_per_row = block_size / 4u;
+    int value = LossyAnalysisCoefficient(
+        plane, plane_width, plane_height, mb_x, mb_y, block_size,
+        (block % blocks_per_row) * 4u, (block / blocks_per_row) * 4u,
+        prediction, coefficient);
+    value = value < 0 ? -value : value;
+    const uint32_t bin =
+        static_cast<uint32_t>(value >> 3) < 31u
+            ? static_cast<uint32_t>(value >> 3)
+            : 31u;
+    atomicAdd(histogram + histogram_index * 32u + bin, 1u);
+  }
+  __syncthreads();
+
+  if (threadIdx.x == 0u) {
+    WebPAcceleratorLossyAnalysisResult result;
+    int best_alpha;
+    if (params.method <= 1u) {
+      uint64_t mean = 0;
+      uint64_t squared_mean = 0;
+      for (uint32_t block = 0; block < 16u; ++block) {
+        uint32_t sum = 0;
+        const uint32_t block_x = (block & 3u) * 4u;
+        const uint32_t block_y = (block >> 2) * 4u;
+        for (uint32_t row = 0; row < 4u; ++row) {
+          for (uint32_t x = 0; x < 4u; ++x) {
+            sum += LossyAnalysisSample(
+                y_plane, params.width, params.height, mb_x * 16u + block_x + x,
+                mb_y * 16u + block_y + row);
+          }
+        }
+        mean += sum;
+        squared_mean += static_cast<uint64_t>(sum) * sum;
+      }
+      const uint64_t threshold = 8u + 9u * params.quality / 100u;
+      result.type = threshold * squared_mean < mean * mean ? 1u : 0u;
+      result.y_mode = 0u;
+      best_alpha = 0;
+    } else {
+      const int alpha0 = LossyAnalysisAlpha(histogram + 0u * 32u);
+      const int alpha1 = LossyAnalysisAlpha(histogram + 1u * 32u);
+      result.y_mode = alpha1 > alpha0 ? 1u : 0u;
+      result.type = 1u;
+      best_alpha = alpha1 > alpha0 ? alpha1 : alpha0;
+    }
+    const int uv_alpha0 = LossyAnalysisAlpha(histogram + 2u * 32u);
+    const int uv_alpha1 = LossyAnalysisAlpha(histogram + 3u * 32u);
+    const int best_uv_alpha =
+        uv_alpha1 > uv_alpha0 ? uv_alpha1 : uv_alpha0;
+    const int mixed_alpha = (3 * best_alpha + best_uv_alpha + 2) >> 2;
+    const int final_alpha = 255 - mixed_alpha;
+    result.alpha = static_cast<uint8_t>(
+        final_alpha < 0 ? 0 : (final_alpha > 255 ? 255 : final_alpha));
+    result.uv_alpha = static_cast<uint16_t>(best_uv_alpha);
+    result.uv_mode = uv_alpha1 < uv_alpha0 ? 1u : 0u;
+    results[mb_index] = result;
+  }
+}
+
+#endif  // WEBP_CUDA_ENABLE_LOSSY_ANALYSIS
+
 #if defined(WEBP_CUDA_HAS_ENCODER_STAGE)
 WebPAcceleratorResult Initialize(CudaState* state) {
   int device_count = 0;
@@ -1024,32 +1333,62 @@ cudaError_t FinishDownloads(cudaStream_t stream) {
 #endif  // WEBP_CUDA_HAS_ENCODER_STAGE
 
 void ReleaseStagingBuffers(CudaState* state) {
+  state->resident_yuv_valid = false;
 #if defined(WEBP_CUDA_ENABLE_STREAM_ORDERED_ALLOCATIONS)
   if (state->pixels != nullptr) (void)cudaFreeAsync(state->pixels, state->stream);
   if (state->transform != nullptr) {
     (void)cudaFreeAsync(state->transform, state->stream);
   }
   if (state->chain != nullptr) (void)cudaFreeAsync(state->chain, state->stream);
+  if (state->analysis_y != nullptr) {
+    (void)cudaFreeAsync(state->analysis_y, state->stream);
+  }
+  if (state->analysis_u != nullptr) {
+    (void)cudaFreeAsync(state->analysis_u, state->stream);
+  }
+  if (state->analysis_v != nullptr) {
+    (void)cudaFreeAsync(state->analysis_v, state->stream);
+  }
+  if (state->analysis_results != nullptr) {
+    (void)cudaFreeAsync(state->analysis_results, state->stream);
+  }
 #else
   if (state->pixels != nullptr) (void)cudaFree(state->pixels);
   if (state->transform != nullptr) (void)cudaFree(state->transform);
   if (state->chain != nullptr) (void)cudaFree(state->chain);
+  if (state->analysis_y != nullptr) (void)cudaFree(state->analysis_y);
+  if (state->analysis_u != nullptr) (void)cudaFree(state->analysis_u);
+  if (state->analysis_v != nullptr) (void)cudaFree(state->analysis_v);
+  if (state->analysis_results != nullptr) {
+    (void)cudaFree(state->analysis_results);
+  }
 #endif
   state->pixels = nullptr;
   state->transform = nullptr;
   state->chain = nullptr;
+  state->analysis_y = nullptr;
+  state->analysis_u = nullptr;
+  state->analysis_v = nullptr;
+  state->analysis_results = nullptr;
   state->pixel_capacity = 0;
   state->transform_capacity = 0;
   state->chain_capacity = 0;
+  state->analysis_y_capacity = 0;
+  state->analysis_u_capacity = 0;
+  state->analysis_v_capacity = 0;
+  state->analysis_result_capacity = 0;
   FreeHostBuffer(state->host_pixels);
   FreeHostBuffer(state->host_transform);
   FreeHostBuffer(state->host_chain);
+  FreeHostBuffer(state->host_analysis_results);
   state->host_pixels = nullptr;
   state->host_transform = nullptr;
   state->host_chain = nullptr;
+  state->host_analysis_results = nullptr;
   state->host_pixel_capacity = 0;
   state->host_transform_capacity = 0;
   state->host_chain_capacity = 0;
+  state->host_analysis_result_capacity = 0;
 }
 
 WebPAcceleratorResult ReportError(CudaState* state, const char* operation,
@@ -1136,6 +1475,7 @@ WebPAcceleratorResult CUDAColorTransformLocked(
   if (error != cudaSuccess) {
     return ReportError(state, "select device", error, true);
   }
+  state->resident_yuv_valid = false;
   error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
                              pixel_bytes, state->stream);
   if (error == cudaSuccess) {
@@ -1294,6 +1634,7 @@ WebPAcceleratorResult CUDANearLosslessLocked(
   if (error != cudaSuccess) {
     return ReportError(state, "select device", error, true);
   }
+  state->resident_yuv_valid = false;
   error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
                              pixel_bytes, state->stream);
   if (error == cudaSuccess) {
@@ -1434,6 +1775,7 @@ WebPAcceleratorResult CUDAHashChainLocked(
   if (error != cudaSuccess) {
     return ReportError(state, "select device", error, true);
   }
+  state->resident_yuv_valid = false;
   error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity, bytes,
                              state->stream);
   if (error == cudaSuccess) {
@@ -1678,6 +2020,7 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
   if (error != cudaSuccess) {
     return ReportError(state, "initialize gamma tables", error, true);
   }
+  state->resident_yuv_valid = false;
   error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
                              source_size, state->stream);
   if (error == cudaSuccess) {
@@ -1755,6 +2098,18 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
     memcpy(request->v + static_cast<size_t>(row) * request->uv_stride,
            output_v + static_cast<size_t>(row) * uv_width, uv_width);
   }
+#if defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+  state->resident_y = request->y;
+  state->resident_u = request->u;
+  state->resident_v = request->v;
+  state->resident_y_stride = request->y_stride;
+  state->resident_uv_stride = request->uv_stride;
+  state->resident_width = request->width;
+  state->resident_height = request->height;
+  state->resident_y_size = pixel_count;
+  state->resident_uv_size = uv_size;
+  state->resident_yuv_valid = true;
+#endif
   if (verbose) {
     if (timing && cudaEventElapsedTime(&elapsed_ms, state->event_start,
                                        state->event_stop) != cudaSuccess) {
@@ -1783,6 +2138,210 @@ WebPAcceleratorResult CUDARGBToYUV(
 }
 
 #endif  // WEBP_CUDA_ENABLE_RGB_TO_YUV
+
+#if defined(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS)
+
+WebPAcceleratorResult CUDALossyAnalysisLocked(
+    void* context, const WebPAcceleratorLossyAnalysisRequest* request) {
+  CudaState* const state = static_cast<CudaState*>(context);
+  size_t y_bytes;
+  size_t uv_bytes;
+  size_t result_count;
+  size_t result_bytes;
+  uint32_t uv_width;
+  uint32_t uv_height;
+  uint32_t mb_width;
+  uint32_t mb_height;
+  LossyAnalysisKernelParams params;
+  cudaError_t error;
+  float elapsed_ms = 0.0f;
+  bool verbose;
+  bool timing;
+  bool use_resident_yuv;
+  const uint8_t* device_y;
+  const uint8_t* device_u;
+  const uint8_t* device_v;
+
+  if (!EnvironmentFlag("WEBP_CUDA", true) ||
+      !EnvironmentFlag("WEBP_CUDA_LOSSY_ANALYSIS", false)) {
+    return WEBP_ACCELERATOR_NOT_RUN;
+  }
+  if (request == nullptr) return WEBP_ACCELERATOR_SUCCESS;
+  if (request->y == nullptr || request->u == nullptr ||
+      request->v == nullptr || request->results == nullptr ||
+      request->width <= 0 || request->height <= 0 ||
+      request->y_stride < request->width || request->uv_stride <= 0 ||
+      request->method < 0 || request->method > 6 || request->quality < 0 ||
+      request->quality > 100) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  uv_width = (static_cast<uint32_t>(request->width) + 1u) >> 1;
+  uv_height = (static_cast<uint32_t>(request->height) + 1u) >> 1;
+  if (request->uv_stride < static_cast<int>(uv_width)) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  mb_width = (static_cast<uint32_t>(request->width) + 15u) >> 4;
+  mb_height = (static_cast<uint32_t>(request->height) + 15u) >> 4;
+  if (static_cast<size_t>(request->width) >
+          std::numeric_limits<size_t>::max() /
+              static_cast<size_t>(request->height) ||
+      static_cast<size_t>(uv_width) >
+          std::numeric_limits<size_t>::max() / uv_height ||
+      static_cast<size_t>(mb_width) >
+          std::numeric_limits<size_t>::max() / mb_height) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  y_bytes = static_cast<size_t>(request->width) * request->height;
+  uv_bytes = static_cast<size_t>(uv_width) * uv_height;
+  result_count = static_cast<size_t>(mb_width) * mb_height;
+  if (result_count > std::numeric_limits<size_t>::max() /
+                         sizeof(WebPAcceleratorLossyAnalysisResult)) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  result_bytes =
+      result_count * sizeof(WebPAcceleratorLossyAnalysisResult);
+  if (result_count < EnvironmentSize(
+                         "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS", 0u)) {
+    return WEBP_ACCELERATOR_NOT_RUN;
+  }
+  params = {static_cast<uint32_t>(request->width),
+            static_cast<uint32_t>(request->height), uv_width, uv_height,
+            mb_width, static_cast<uint32_t>(request->method),
+            static_cast<uint32_t>(request->quality)};
+
+  if (state->quarantined) return WEBP_ACCELERATOR_NOT_RUN;
+  const WebPAcceleratorResult initialized = Initialize(state);
+  if (initialized != WEBP_ACCELERATOR_SUCCESS) return initialized;
+  error = cudaSetDevice(state->device);
+  if (error != cudaSuccess) {
+    return ReportError(state, "select device", error, true);
+  }
+  use_resident_yuv =
+      state->resident_yuv_valid && state->resident_y == request->y &&
+      state->resident_u == request->u && state->resident_v == request->v &&
+      state->resident_y_stride == request->y_stride &&
+      state->resident_uv_stride == request->uv_stride &&
+      state->resident_width == request->width &&
+      state->resident_height == request->height &&
+      state->resident_y_size == y_bytes && state->resident_uv_size == uv_bytes;
+  if (use_resident_yuv) {
+    device_y = reinterpret_cast<const uint8_t*>(state->transform);
+    device_u = device_y + y_bytes;
+    device_v = device_u + uv_bytes;
+    state->resident_yuv_valid = false;
+    error = cudaSuccess;
+  } else {
+    error = EnsureDeviceBuffer(&state->analysis_y, &state->analysis_y_capacity,
+                               y_bytes, state->stream);
+    if (error == cudaSuccess) {
+      error = EnsureDeviceBuffer(&state->analysis_u,
+                                 &state->analysis_u_capacity, uv_bytes,
+                                 state->stream);
+    }
+    if (error == cudaSuccess) {
+      error = EnsureDeviceBuffer(&state->analysis_v,
+                                 &state->analysis_v_capacity, uv_bytes,
+                                 state->stream);
+    }
+    device_y = state->analysis_y;
+    device_u = state->analysis_u;
+    device_v = state->analysis_v;
+  }
+  if (error == cudaSuccess) {
+    error = EnsureDeviceBuffer(&state->analysis_results,
+                               &state->analysis_result_capacity, result_bytes,
+                               state->stream);
+  }
+  if (error != cudaSuccess) {
+    return ReportError(state, "allocate lossy analysis buffers", error, false);
+  }
+  if (!EnsureHostBuffer(&state->host_analysis_results,
+                        &state->host_analysis_result_capacity, result_bytes)) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  verbose = EnvironmentFlag("WEBP_CUDA_VERBOSE", false);
+  timing = verbose && EnsureTimingEvents(state);
+
+  error = cudaSuccess;
+  if (!use_resident_yuv) {
+    error = cudaMemcpy2DAsync(state->analysis_y, request->width, request->y,
+                              request->y_stride, request->width,
+                              request->height, cudaMemcpyHostToDevice,
+                              state->stream);
+    if (error == cudaSuccess) {
+      error = cudaMemcpy2DAsync(state->analysis_u, uv_width, request->u,
+                                request->uv_stride, uv_width, uv_height,
+                                cudaMemcpyHostToDevice, state->stream);
+    }
+    if (error == cudaSuccess) {
+      error = cudaMemcpy2DAsync(state->analysis_v, uv_width, request->v,
+                                request->uv_stride, uv_width, uv_height,
+                                cudaMemcpyHostToDevice, state->stream);
+    }
+  }
+  if (error == cudaSuccess && timing) {
+    error = cudaEventRecord(state->event_start, state->stream);
+  }
+  if (error != cudaSuccess) {
+    (void)cudaStreamSynchronize(state->stream);
+    return ReportError(state, "lossy analysis upload", error, true);
+  }
+  (void)cudaGetLastError();
+  LossyAnalysisKernel<<<static_cast<uint32_t>(result_count), 256u, 0,
+                        state->stream>>>(
+      device_y, device_u, device_v, state->analysis_results, params);
+  error = cudaGetLastError();
+  if (error == cudaSuccess && timing) {
+    error = cudaEventRecord(state->event_stop, state->stream);
+  }
+  if (error == cudaSuccess) {
+    error = DownloadFromDevice(state->host_analysis_results,
+                               state->analysis_results, result_bytes,
+                               state->stream);
+  }
+  if (error == cudaSuccess) error = FinishDownloads(state->stream);
+  if (error != cudaSuccess) {
+    (void)cudaStreamSynchronize(state->stream);
+    return ReportError(state, "lossy macroblock analysis", error, true);
+  }
+  memcpy(request->results, state->host_analysis_results, result_bytes);
+  if (verbose) {
+    if (timing && cudaEventElapsedTime(&elapsed_ms, state->event_start,
+                                       state->event_stop) != cudaSuccess) {
+      elapsed_ms = 0.0f;
+      (void)cudaGetLastError();
+    }
+    fprintf(stderr,
+            "WebP-CUDA: lossy analysis %ux%u macroblocks in %.3f ms%s\n",
+            mb_width, mb_height, elapsed_ms,
+            use_resident_yuv ? " (resident YUV)" : "");
+  }
+#if !defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+  ReleaseStagingBuffers(state);
+#endif
+  return WEBP_ACCELERATOR_SUCCESS;
+}
+
+WebPAcceleratorResult CUDALossyAnalysis(
+    void* context, const WebPAcceleratorLossyAnalysisRequest* request) {
+  WebPAcceleratorResult result;
+  LockCudaMutex(&g_cuda_mutex);
+  result = CUDALossyAnalysisLocked(context, request);
+  if (result == WEBP_ACCELERATOR_SUCCESS) {
+    g_cuda_state.successful_stages |= WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS;
+  }
+  UnlockCudaMutex(&g_cuda_mutex);
+  return result;
+}
+
+#endif  // WEBP_CUDA_ENABLE_LOSSY_ANALYSIS
+
+void CUDAEndEncode(void* context) {
+  CudaState* const state = static_cast<CudaState*>(context);
+  LockCudaMutex(&g_cuda_mutex);
+  state->resident_yuv_valid = false;
+  UnlockCudaMutex(&g_cuda_mutex);
+}
 
 WebPAcceleratorResult CUDAFlush(void* context) {
   CudaState* const state = static_cast<CudaState*>(context);
@@ -1827,6 +2386,9 @@ constexpr uint32_t kCUDAStages =
 #if defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS)
     | WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS
 #endif
+#if defined(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS)
+    | WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS
+#endif
     ;
 
 constexpr uint32_t kCUDAProperties =
@@ -1868,6 +2430,12 @@ static const WebPEncoderAccelerator kCUDAEncoderAccelerator = {
 #else
     nullptr,
 #endif
+#if defined(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS)
+    CUDALossyAnalysis,
+#else
+    nullptr,
+#endif
+    CUDAEndEncode,
     CUDAFlush,
     CUDATrim};
 

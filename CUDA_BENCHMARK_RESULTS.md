@@ -96,6 +96,12 @@ testing. Full raw rows and computed medians are in
 
 ## Reproducible file-to-WebP suite
 
+The suite now also forces the exact CUDA lossy macroblock-analysis stage and
+aborts its preflight if either RGB conversion or analysis falls back to the
+CPU. Historical rows in this document predate that stage and must not be used
+to claim its performance. A new result set is required before enabling
+`WEBP_CUDA_LOSSY_ANALYSIS` by default or selecting a crossover.
+
 `scripts/benchmark_cuda_end_to_end.py` provides a portable comparison across
 systems. It creates a deterministic six-image corpus in both PNG and JPEG and
 measures lossy, lossless, and near-lossless encoding. The runner requires

@@ -182,10 +182,13 @@ static void ConfigureDispatch(const Options* options) {
          cuda && options->operation == OP_LOSSY ? "1" : "0", 1);
   setenv("WEBP_CUDA_NEAR_LOSSLESS",
          cuda && options->operation == OP_NEAR_LOSSLESS ? "1" : "0", 1);
+  setenv("WEBP_CUDA_LOSSY_ANALYSIS",
+         cuda && options->operation == OP_LOSSY ? "1" : "0", 1);
   setenv("WEBP_CUDA_MIN_PIXELS", "0", 1);
   setenv("WEBP_CUDA_HASH_MIN_PIXELS", "0", 1);
   setenv("WEBP_CUDA_LOSSY_MIN_PIXELS", "0", 1);
   setenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "0", 1);
+  setenv("WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS", "0", 1);
 }
 
 static int Encode(const Options* options, const uint8_t* rgba,
@@ -285,7 +288,8 @@ static uint32_t RequiredCUDAStages(Operation operation) {
       return WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM |
              WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN;
     case OP_LOSSY:
-      return WEBP_ACCELERATOR_STAGE_RGB_TO_YUV;
+      return WEBP_ACCELERATOR_STAGE_RGB_TO_YUV |
+             WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS;
   }
   return 0;
 }

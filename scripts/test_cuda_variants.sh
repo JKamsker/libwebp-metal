@@ -29,6 +29,7 @@ build_and_test() {
   WEBP_TEST_BIN_DIR="$build_dir" "$root_dir/scripts/test_cuda.sh"
   batch_log="$temporary_dir/$name-batch.log"
   WEBP_CUDA_VERBOSE=1 WEBP_CUDA_BATCH_MIN_PIXELS=1 \
+    WEBP_CUDA_HASH_BATCH_MIN_PIXELS=1 \
     "$build_dir/webp_cuda_batch_benchmark" --variant cuda --mode lossless \
       --batch-size 24 --batch-aware --verify-only \
       "$root_dir/examples/test_ref.ppm" 2>"$batch_log"
@@ -65,7 +66,8 @@ all_disabled_dir="$temporary_dir/all-stages-disabled"
   -DWEBP_CUDA_ENABLE_COLOR_TRANSFORM=OFF \
   -DWEBP_CUDA_ENABLE_HASH_CHAIN=OFF \
   -DWEBP_CUDA_ENABLE_RGB_TO_YUV=OFF \
-  -DWEBP_CUDA_ENABLE_NEAR_LOSSLESS=OFF
+  -DWEBP_CUDA_ENABLE_NEAR_LOSSLESS=OFF \
+  -DWEBP_CUDA_ENABLE_LOSSY_ANALYSIS=OFF
 "$cmake_command" --build "$all_disabled_dir" --target webp -j
 
 printf 'PASS: default, baseline, and all-stage-disabled CUDA variants\n'

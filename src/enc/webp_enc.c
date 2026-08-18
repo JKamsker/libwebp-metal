@@ -18,6 +18,7 @@
 
 #include "src/dec/common_dec.h"
 #include "src/dsp/dsp.h"
+#include "src/enc/accelerator_enc.h"
 #include "src/enc/cost_enc.h"
 #include "src/enc/backref_cache_search_experiment_enc.h"
 #include "src/enc/profile_enc.h"
@@ -337,18 +338,30 @@ int WebPReportProgress(const WebPPicture* const pic, int percent,
 
 int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
   int ok = 0;
-  if (pic == NULL) return 0;
+  if (pic == NULL) {
+    WebPAcceleratorEndEncode();
+    return 0;
+  }
 
   pic->error_code = VP8_ENC_OK;  // all ok so far
   if (config == NULL) {          // bad params
-    return WebPEncodingSetError(pic, VP8_ENC_ERROR_NULL_PARAMETER);
+    ok = WebPEncodingSetError(pic, VP8_ENC_ERROR_NULL_PARAMETER);
+    WebPAcceleratorEndEncode();
+    return ok;
   }
   if (!WebPValidateConfig(config)) {
-    return WebPEncodingSetError(pic, VP8_ENC_ERROR_INVALID_CONFIGURATION);
+    ok = WebPEncodingSetError(pic, VP8_ENC_ERROR_INVALID_CONFIGURATION);
+    WebPAcceleratorEndEncode();
+    return ok;
   }
-  if (!WebPValidatePicture(pic)) return 0;
+  if (!WebPValidatePicture(pic)) {
+    WebPAcceleratorEndEncode();
+    return 0;
+  }
   if (pic->width > WEBP_MAX_DIMENSION || pic->height > WEBP_MAX_DIMENSION) {
-    return WebPEncodingSetError(pic, VP8_ENC_ERROR_BAD_DIMENSION);
+    ok = WebPEncodingSetError(pic, VP8_ENC_ERROR_BAD_DIMENSION);
+    WebPAcceleratorEndEncode();
+    return ok;
   }
 
   if (pic->stats != NULL) memset(pic->stats, 0, sizeof(*pic->stats));
@@ -371,6 +384,7 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
           WebPPredictorBoundaryEnd(0, pic->error_code);
           WebPBackrefExactEnd(0, pic->error_code);
           WebPBackrefCacheSearchEnd(0, pic->error_code);
+          WebPAcceleratorEndEncode();
           return 0;
         }
       } else {
@@ -388,6 +402,7 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
           WebPPredictorBoundaryEnd(0, pic->error_code);
           WebPBackrefExactEnd(0, pic->error_code);
           WebPBackrefCacheSearchEnd(0, pic->error_code);
+          WebPAcceleratorEndEncode();
           return 0;
         }
       }
@@ -403,6 +418,7 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
     WebPProfileStageEnd(WEBP_PROFILE_LOSSY_ENCODER_INIT, profile_start);
     if (enc == NULL) {
       WebPProfileEndSession(0, pic->error_code);
+      WebPAcceleratorEndEncode();
       return 0;  // pic->error is already set.
     }
     // Note: each of the tasks below account for 20% in the progress report.
@@ -443,6 +459,7 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
       WebPPredictorBoundaryEnd(0, pic->error_code);
       WebPBackrefExactEnd(0, pic->error_code);
       WebPBackrefCacheSearchEnd(0, pic->error_code);
+      WebPAcceleratorEndEncode();
       return 0;
     }
 
@@ -458,5 +475,6 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
   WebPPredictorBoundaryEnd(ok, pic->error_code);
   WebPBackrefExactEnd(ok, pic->error_code);
   WebPBackrefCacheSearchEnd(ok, pic->error_code);
+  WebPAcceleratorEndEncode();
   return ok;
 }

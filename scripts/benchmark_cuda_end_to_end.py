@@ -46,10 +46,12 @@ CUDA_ENVIRONMENT_NAMES = (
     "WEBP_CUDA_HASH",
     "WEBP_CUDA_LOSSY",
     "WEBP_CUDA_NEAR_LOSSLESS",
+    "WEBP_CUDA_LOSSY_ANALYSIS",
     "WEBP_CUDA_MIN_PIXELS",
     "WEBP_CUDA_HASH_MIN_PIXELS",
     "WEBP_CUDA_LOSSY_MIN_PIXELS",
     "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS",
+    "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS",
     "WEBP_CUDA_BATCH_SIZE",
     "WEBP_CUDA_BATCH_PIXELS",
     "WEBP_CUDA_BATCH_MIN_IMAGES",
@@ -118,10 +120,12 @@ def clean_environment(
                 "WEBP_CUDA_HASH": "1",
                 "WEBP_CUDA_LOSSY": "1",
                 "WEBP_CUDA_NEAR_LOSSLESS": "1",
+                "WEBP_CUDA_LOSSY_ANALYSIS": "1",
                 "WEBP_CUDA_MIN_PIXELS": "0",
                 "WEBP_CUDA_HASH_MIN_PIXELS": "0",
                 "WEBP_CUDA_LOSSY_MIN_PIXELS": "0",
                 "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS": "0",
+                "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS": "0",
             }
         )
     return environment
@@ -753,6 +757,9 @@ def run_suite(args: argparse.Namespace) -> int:
             "near_lossless": 40,
             "file_io": "page-cached unless the operator documents otherwise",
             "cuda_policy": "forced stages for matched CPU/CUDA comparison",
+            "cuda_lossy_analysis": (
+                "forced exact macroblock analysis with resident YUV handoff"
+            ),
             "validation_policy": {
                 "lossy": "encoded_bytes",
                 "lossless": "decoded_pixels",

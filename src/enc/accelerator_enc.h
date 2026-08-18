@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 2u
+#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 4u
 
 // These are deliberately encoder stages, not low-level GPU kernels. A backend
 // advertises only the stages whose complete CPU call-site contract it can
@@ -21,7 +21,8 @@ typedef enum {
   WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM = 1u << 0,
   WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN = 1u << 1,
   WEBP_ACCELERATOR_STAGE_RGB_TO_YUV = 1u << 2,
-  WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS = 1u << 3
+  WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS = 1u << 3,
+  WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS = 1u << 4
 } WebPAcceleratorStage;
 
 // SUCCESS is the only result for which a caller may consume output buffers.
@@ -101,6 +102,32 @@ typedef struct {
   uint32_t* output;
 } WebPAcceleratorNearLosslessRequest;
 
+// One independently computed lossy macroblock-analysis result. The caller
+// performs the global segment assignment after every result is available.
+typedef struct {
+  uint16_t uv_alpha;
+  uint8_t alpha;
+  uint8_t type;
+  uint8_t y_mode;
+  uint8_t uv_mode;
+} WebPAcceleratorLossyAnalysisResult;
+
+typedef struct {
+  // Borrowed YUV420 input planes. Plane padding is not part of the result.
+  const uint8_t* y;
+  const uint8_t* u;
+  const uint8_t* v;
+  int y_stride;
+  int uv_stride;
+  int width;
+  int height;
+  int method;
+  int quality;
+  // Borrowed mutable output with ceil(width / 16) * ceil(height / 16)
+  // elements, committed only on SUCCESS.
+  WebPAcceleratorLossyAnalysisResult* results;
+} WebPAcceleratorLossyAnalysisRequest;
+
 typedef struct WebPEncoderAccelerator WebPEncoderAccelerator;
 
 struct WebPEncoderAccelerator {
@@ -119,8 +146,15 @@ struct WebPEncoderAccelerator {
       void* context, const WebPAcceleratorRGBToYUVRequest* request);
   WebPAcceleratorResult (*near_lossless)(
       void* context, const WebPAcceleratorNearLosslessRequest* request);
+  // lossy_analysis(NULL) is a side-effect-free enabled-state probe. It returns
+  // SUCCESS only when a real request may be attempted under current policy.
+  WebPAcceleratorResult (*lossy_analysis)(
+      void* context, const WebPAcceleratorLossyAnalysisRequest* request);
 
-  // Optional lifecycle hooks for a future encoder-level batch boundary.
+  // Optional lifecycle hooks. end_encode discards backend-owned handoff state
+  // after the current encode has consumed it or stopped early.
+  void (*end_encode)(void* context);
+  // Hooks for a future encoder-level batch boundary.
   // ABI operations are synchronous, so flush may be NULL. trim may release
   // cached backend-owned buffers, but must leave the descriptor usable.
   WebPAcceleratorResult (*flush)(void* context);
@@ -135,6 +169,10 @@ WebPAcceleratorResult WebPAccelerateRGBToYUV(
     const WebPAcceleratorRGBToYUVRequest* request);
 WebPAcceleratorResult WebPAccelerateNearLossless(
     const WebPAcceleratorNearLosslessRequest* request);
+WebPAcceleratorResult WebPAccelerateLossyAnalysis(
+    const WebPAcceleratorLossyAnalysisRequest* request);
+int WebPAcceleratorLossyAnalysisEnabled(void);
+void WebPAcceleratorEndEncode(void);
 
 #if defined(WEBP_ACCELERATOR_TESTING)
 // Installs one process-global fake backend. Test programs must not call this
