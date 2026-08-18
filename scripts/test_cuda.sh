@@ -9,6 +9,7 @@ temporary_dir=$(mktemp -d "${TMPDIR:-/tmp}/libwebp-cuda-test.XXXXXX")
 trap 'rm -rf "$temporary_dir"' EXIT HUP INT TERM
 cuda_log="$temporary_dir/cuda.log"
 cold_log="$temporary_dir/cold.log"
+lossy_default_log="$temporary_dir/lossy-default.log"
 
 if [ ! -x "$encoder" ] || [ ! -x "$decoder" ]; then
   echo "cwebp and dwebp not found in $binary_dir" >&2
@@ -27,6 +28,21 @@ WEBP_ACCELERATOR=cuda WEBP_CUDA_VERBOSE=1 \
   "$encoder" -quiet -lossless -exact -m 4 "$root_dir/examples/test_ref.ppm" \
   -o "$temporary_dir/cold-default.webp" 2>>"$cold_log"
 cmp "$temporary_dir/cold-cpu.webp" "$temporary_dir/cold-default.webp"
+
+# Lossy CUDA is deliberately opt-in: measured end-to-end batch performance was
+# neutral, while fresh-process runtime initialization made it much slower.
+WEBP_ACCELERATOR=none \
+  "$encoder" -quiet -q 75 -m 4 "$root_dir/examples/test_ref.ppm" \
+  -o "$temporary_dir/lossy-default-cpu.webp"
+WEBP_ACCELERATOR=cuda WEBP_CUDA_LOSSY_MIN_PIXELS=0 WEBP_CUDA_VERBOSE=1 \
+  "$encoder" -quiet -q 75 -m 4 "$root_dir/examples/test_ref.ppm" \
+  -o "$temporary_dir/lossy-default-cuda.webp" 2>>"$lossy_default_log"
+cmp "$temporary_dir/lossy-default-cpu.webp" \
+    "$temporary_dir/lossy-default-cuda.webp"
+if grep -q "WebP-CUDA: lossy RGB->YUV" "$lossy_default_log"; then
+  echo "lossy CUDA ran without the WEBP_CUDA_LOSSY opt-in" >&2
+  exit 1
+fi
 
 for input do
   name=$(basename -- "$input")
@@ -140,3 +156,4 @@ if grep -q "WebP-CUDA: using" "$cold_log"; then
   exit 1
 fi
 printf 'PASS: observed forced color/hash/RGB CUDA stages\n'
+printf 'PASS: lossy CUDA remains opt-in by default\n'

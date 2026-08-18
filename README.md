@@ -87,8 +87,11 @@ lossless transform threshold, `WEBP_CUDA_HASH_MIN_PIXELS=N` controls hash
 candidates, `WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS=N` controls near-lossless
 preprocessing, and `WEBP_CUDA_LOSSY_MIN_PIXELS=N` controls RGB conversion.
 `WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`, and
-`WEBP_CUDA_LOSSY=0` disable one stage. `WEBP_CUDA_VERBOSE=1` reports device and
-dispatch timings. Set a threshold to zero for forced correctness tests.
+`WEBP_CUDA_LOSSY=0` disable one stage. Lossy CUDA is off by default because it
+was neutral in persistent end-to-end batches and much slower in fresh
+processes; set `WEBP_CUDA_LOSSY=1` to opt in. `WEBP_CUDA_VERBOSE=1` reports
+device and dispatch timings. Set a threshold to zero for forced correctness
+tests.
 Defaults are adaptive: a stage pays the
 roughly 140 ms runtime/device initialization cost only for large inputs, then
 uses a lower warm-process threshold once another CUDA stage initialized the
@@ -98,6 +101,19 @@ uses 80,000,000 / 4,000,000. Cold near-lossless requests with fewer than three
 passes stay on the CPU because no safe crossover was measured; an explicit
 near-lossless threshold overrides that conservative gate as well as both
 threshold defaults.
+
+Callers that know they will encode a persistent batch can provide
+`WEBP_CUDA_BATCH_SIZE` and `WEBP_CUDA_BATCH_PIXELS` (the total number of
+source pixels in that batch). This admits the measured warm thresholds before
+the first item only for profitable lossless work: at least 6 images and
+6,000,000 total pixels for lossless, or 5 images and 5,000,000 pixels for
+near-lossless. The cutoffs can be calibrated with
+`WEBP_CUDA_BATCH_MIN_IMAGES`, `WEBP_CUDA_BATCH_MIN_PIXELS`,
+`WEBP_CUDA_NEAR_LOSSLESS_BATCH_MIN_IMAGES`, and
+`WEBP_CUDA_NEAR_LOSSLESS_BATCH_MIN_PIXELS`. Hash work in an accepted batch
+keeps a 1,000,000-pixel per-image floor, configurable through
+`WEBP_CUDA_HASH_BATCH_MIN_PIXELS`. One-shot callers should omit the batch
+hints and retain the conservative cold thresholds.
 
 Every CUDA stage and optimization has an independent `WEBP_CUDA_ENABLE_*`
 CMake option. The default strategy uses dynamically sized shared source tiles
@@ -114,6 +130,24 @@ decode/encode batches and an explicit `--force-cuda` experiment flag.
 all-strategies-disabled builds. Measurement details are in
 [CUDA_BENCHMARK_RESULTS.md](CUDA_BENCHMARK_RESULTS.md), and the concise batch
 decision is in [CUDA_EXPERIMENT_SUMMARY.md](CUDA_EXPERIMENT_SUMMARY.md#persistent-cuda-batch-follow-up).
+
+The portable file-to-WebP suite measures real PNG and JPEG inputs in both a
+persistent 24-item process and fresh `cwebp` processes. It requires Python
+3.9 or newer, Pillow, and a build with PNG and JPEG input support:
+
+~~~sh
+python3 scripts/benchmark_cuda_end_to_end.py run \
+  --build-dir build-cuda --output-dir /tmp/webp-cuda-results \
+  --label "workstation / RTX 2080 SUPER"
+python3 scripts/benchmark_cuda_end_to_end.py report \
+  system-a/results.json system-b/results.json
+~~~
+
+Each run preserves all samples and commands in `raw.jsonl`, normalized system,
+binary, corpus, and aggregate metadata in `results.json`, and a human-readable
+`report.md` with CPU time, CUDA time, and speedup per image. Use
+`--verify-only` for correctness checks without collecting timing data, and
+`--cuda-device N` to select a GPU on multi-device systems.
 
 Additional, non-installed CUDA strategy prototypes can be built with
 `-DWEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS=ON`. See

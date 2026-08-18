@@ -24,6 +24,8 @@ typedef struct {
   const char* filename;
   const uint8_t* data;
   size_t data_size;
+  int width;
+  int height;
 } Input;
 
 typedef struct {
@@ -38,6 +40,8 @@ typedef struct {
   int samples;
   int include_file_io;
   int force_cuda;
+  int batch_aware;
+  uint64_t batch_pixels;
   int verify;
   int verify_only;
   Input* inputs;
@@ -49,7 +53,8 @@ static void Usage(const char* const program) {
           "Usage: %s --variant cpu|cuda --mode lossy|lossless|near-lossless "
           "--batch-size N [--method 0..6] [--quality 0..100] "
           "[--near-lossless 0..100] [--warmups N] [--samples N] "
-          "[--include-file-io] [--force-cuda] [--verify|--verify-only] "
+          "[--include-file-io] [--force-cuda|--batch-aware] "
+          "[--verify|--verify-only] "
           "INPUT [INPUT ...]\n",
           program);
 }
@@ -87,6 +92,10 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
     }
     if (!strcmp(flag, "--force-cuda")) {
       options->force_cuda = 1;
+      continue;
+    }
+    if (!strcmp(flag, "--batch-aware")) {
+      options->batch_aware = 1;
       continue;
     }
     if (!strcmp(flag, "--verify")) {
@@ -133,7 +142,8 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
       return 0;
     }
   }
-  return options->variant != NULL && options->mode_name != NULL &&
+  return !(options->force_cuda && options->batch_aware) &&
+         options->variant != NULL && options->mode_name != NULL &&
          options->batch_size > 0 && options->input_count > 0;
 }
 
@@ -151,24 +161,38 @@ static uint64_t HashBytes(uint64_t hash, const uint8_t* data, size_t size) {
   return hash;
 }
 
-static void ConfigureDispatch(const char* const variant, const int force_cuda) {
+static void ConfigureDispatch(const Options* const options,
+                              const char* const variant) {
   const int cuda = !strcmp(variant, "cuda");
+  char batch_size[32];
+  char batch_pixels[32];
   setenv("WEBP_ACCELERATOR", cuda ? "cuda" : "none", 1);
   setenv("WEBP_CUDA", cuda ? "1" : "0", 1);
   setenv("WEBP_CUDA_COLOR", "1", 1);
   setenv("WEBP_CUDA_HASH", "1", 1);
-  setenv("WEBP_CUDA_LOSSY", "1", 1);
   setenv("WEBP_CUDA_NEAR_LOSSLESS", "1", 1);
-  if (force_cuda) {
+  if (options->force_cuda) {
+    setenv("WEBP_CUDA_LOSSY", "1", 1);
     setenv("WEBP_CUDA_MIN_PIXELS", "0", 1);
     setenv("WEBP_CUDA_HASH_MIN_PIXELS", "0", 1);
     setenv("WEBP_CUDA_LOSSY_MIN_PIXELS", "0", 1);
     setenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "0", 1);
   } else {
+    unsetenv("WEBP_CUDA_LOSSY");
     unsetenv("WEBP_CUDA_MIN_PIXELS");
     unsetenv("WEBP_CUDA_HASH_MIN_PIXELS");
     unsetenv("WEBP_CUDA_LOSSY_MIN_PIXELS");
     unsetenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS");
+  }
+  if (options->batch_aware) {
+    snprintf(batch_size, sizeof(batch_size), "%d", options->batch_size);
+    snprintf(batch_pixels, sizeof(batch_pixels), "%" PRIu64 "",
+             options->batch_pixels);
+    setenv("WEBP_CUDA_BATCH_SIZE", batch_size, 1);
+    setenv("WEBP_CUDA_BATCH_PIXELS", batch_pixels, 1);
+  } else {
+    unsetenv("WEBP_CUDA_BATCH_SIZE");
+    unsetenv("WEBP_CUDA_BATCH_PIXELS");
   }
 }
 
@@ -176,16 +200,34 @@ static int LoadInputs(Options* const options) {
   int i;
   for (i = 0; i < options->input_count; ++i) {
     Input* const input = &options->inputs[i];
+    WebPPicture picture;
+    WebPImageReader reader;
     if (!ImgIoUtilReadFile(input->filename, &input->data, &input->data_size)) {
       fprintf(stderr, "failed to read %s\n", input->filename);
       return 0;
     }
-    if (WebPGuessImageType(input->data, input->data_size) ==
-        WEBP_UNSUPPORTED_FORMAT) {
+    if (!WebPPictureInit(&picture)) return 0;
+    reader = WebPGuessImageReader(input->data, input->data_size);
+    picture.use_argb = 0;
+    if (!reader(input->data, input->data_size, &picture, 1, NULL)) {
       fprintf(stderr, "unsupported input format: %s (enabled: %s)\n",
               input->filename, WebPGetEnabledInputFileFormats());
+      WebPPictureFree(&picture);
       return 0;
     }
+    input->width = picture.width;
+    input->height = picture.height;
+    WebPPictureFree(&picture);
+  }
+  options->batch_pixels = 0;
+  for (i = 0; i < options->batch_size; ++i) {
+    const Input* const input = &options->inputs[i % options->input_count];
+    const uint64_t pixels = (uint64_t)input->width * input->height;
+    if (UINT64_MAX - options->batch_pixels < pixels) {
+      fprintf(stderr, "batch pixel count overflow\n");
+      return 0;
+    }
+    options->batch_pixels += pixels;
   }
   return 1;
 }
@@ -274,9 +316,9 @@ static int Verify(const Options* const options) {
     WebPMemoryWriter cpu, cuda;
     Options preflight = *options;
     preflight.include_file_io = 0;
-    ConfigureDispatch("cpu", options->force_cuda);
+    ConfigureDispatch(&preflight, "cpu");
     if (!EncodeInput(&preflight, &options->inputs[i], &cpu)) return 0;
-    ConfigureDispatch("cuda", options->force_cuda);
+    ConfigureDispatch(&preflight, "cuda");
     if (!EncodeInput(&preflight, &options->inputs[i], &cuda)) {
       WebPMemoryWriterClear(&cpu);
       return 0;
@@ -342,7 +384,7 @@ int main(int argc, const char* const argv[]) {
     FreeInputs(&options);
     return 0;
   }
-  ConfigureDispatch(options.variant, options.force_cuda);
+  ConfigureDispatch(&options, options.variant);
   for (sequence = -options.warmups; sequence < options.samples; ++sequence) {
     uint64_t elapsed_ns, output_hash, output_bytes;
     if (!RunBatch(&options, &elapsed_ns, &output_hash, &output_bytes)) {
@@ -361,6 +403,7 @@ int main(int argc, const char* const argv[]) {
            "\"variant\":\"%s\",\"mode\":\"%s\","
            "\"batch_size\":%d,\"input_count\":%d,"
            "\"include_file_io\":%s,\"force_cuda\":%s,"
+           "\"batch_aware\":%s,\"batch_pixels\":%" PRIu64 ","
            "\"method\":%d,\"quality\":%d,"
            "\"near_lossless\":%d,\"sequence\":%d,"
            "\"elapsed_ns\":%" PRIu64 ",\"ns_per_image\":%.3f,"
@@ -370,6 +413,7 @@ int main(int argc, const char* const argv[]) {
            options.variant, options.mode_name, options.batch_size,
            options.input_count, options.include_file_io ? "true" : "false",
            options.force_cuda ? "true" : "false",
+           options.batch_aware ? "true" : "false", options.batch_pixels,
            options.method, options.quality, options.near_lossless, sequence,
            elapsed_ns, (double)elapsed_ns / options.batch_size,
            1e9 * options.batch_size / elapsed_ns, output_hash, output_bytes);

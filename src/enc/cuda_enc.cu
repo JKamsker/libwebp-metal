@@ -44,6 +44,14 @@ static void UnlockCudaMutex(CudaMutex* mutex) {
 
 namespace {
 
+// The batch cutoffs conservatively amortize the measured cold runtime cost
+// using the batch-6 PNG/JPEG crossover. Callers can recalibrate every value
+// through the corresponding environment override.
+#if defined(WEBP_CUDA_ENABLE_COLOR_TRANSFORM) || \
+    defined(WEBP_CUDA_ENABLE_HASH_CHAIN)
+constexpr size_t kDefaultLosslessBatchMinimumImages = 6u;
+constexpr size_t kDefaultLosslessBatchMinimumPixels = 6u * 1000u * 1000u;
+#endif
 #if defined(WEBP_CUDA_ENABLE_COLOR_TRANSFORM)
 constexpr size_t kDefaultColorColdMinimumPixels = 4u * 1000u * 1000u;
 constexpr size_t kDefaultColorWarmMinimumPixels = 128u * 128u;
@@ -59,10 +67,14 @@ constexpr unsigned int kColorThreadsPerBlock = 128u;
 #if defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS)
 constexpr size_t kDefaultNearLosslessColdMinimumPixels = 4096u * 4096u;
 constexpr size_t kDefaultNearLosslessWarmMinimumPixels = 256u * 256u;
+constexpr size_t kDefaultNearLosslessBatchMinimumImages = 5u;
+constexpr size_t kDefaultNearLosslessBatchMinimumPixels =
+    5u * 1000u * 1000u;
 #endif
 #if defined(WEBP_CUDA_ENABLE_HASH_CHAIN)
 constexpr size_t kDefaultHashColdMinimumPixels = 8u * 1000u * 1000u;
 constexpr size_t kDefaultHashWarmMinimumPixels = 4u * 1000u * 1000u;
+constexpr size_t kDefaultHashBatchMinimumPixels = 1u * 1000u * 1000u;
 #if defined(WEBP_CUDA_ENABLE_HASH_256_THREAD_BLOCKS)
 constexpr unsigned int kHashThreadsPerBlock = 256u;
 #else
@@ -170,6 +182,39 @@ size_t EnvironmentSize(const char* name, size_t default_value) {
   size_t parsed;
   return ParseEnvironmentSize(name, &parsed) ? parsed : default_value;
 }
+
+#if defined(WEBP_CUDA_ENABLE_COLOR_TRANSFORM) || \
+    defined(WEBP_CUDA_ENABLE_HASH_CHAIN) || \
+    defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS)
+bool HasProfitableBatchHint(size_t minimum_images, size_t minimum_pixels) {
+  size_t images;
+  size_t pixels;
+  return ParseEnvironmentSize("WEBP_CUDA_BATCH_SIZE", &images) &&
+         ParseEnvironmentSize("WEBP_CUDA_BATCH_PIXELS", &pixels) &&
+         images >= minimum_images && pixels >= minimum_pixels;
+}
+#endif
+
+#if defined(WEBP_CUDA_ENABLE_COLOR_TRANSFORM) || \
+    defined(WEBP_CUDA_ENABLE_HASH_CHAIN)
+bool HasProfitableLosslessBatchHint(void) {
+  return HasProfitableBatchHint(
+      EnvironmentSize("WEBP_CUDA_BATCH_MIN_IMAGES",
+                      kDefaultLosslessBatchMinimumImages),
+      EnvironmentSize("WEBP_CUDA_BATCH_MIN_PIXELS",
+                      kDefaultLosslessBatchMinimumPixels));
+}
+#endif
+
+#if defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS)
+bool HasProfitableNearLosslessBatchHint(void) {
+  return HasProfitableBatchHint(
+      EnvironmentSize("WEBP_CUDA_NEAR_LOSSLESS_BATCH_MIN_IMAGES",
+                      kDefaultNearLosslessBatchMinimumImages),
+      EnvironmentSize("WEBP_CUDA_NEAR_LOSSLESS_BATCH_MIN_PIXELS",
+                      kDefaultNearLosslessBatchMinimumPixels));
+}
+#endif
 
 int EnvironmentDevice(void) {
   const char* const value = getenv("WEBP_CUDA_DEVICE");
@@ -1033,10 +1078,12 @@ WebPAcceleratorResult CUDAColorTransformLocked(
     return WEBP_ACCELERATOR_ERROR;
   }
   pixel_count = static_cast<size_t>(request->width) * request->height;
+  const bool profitable_batch = HasProfitableLosslessBatchHint();
   if (pixel_count < EnvironmentSize(
                         "WEBP_CUDA_MIN_PIXELS",
-                        state->available ? kDefaultColorWarmMinimumPixels
-                                         : kDefaultColorColdMinimumPixels)) {
+                        state->available || profitable_batch
+                            ? kDefaultColorWarmMinimumPixels
+                            : kDefaultColorColdMinimumPixels)) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
   if (pixel_count > std::numeric_limits<size_t>::max() / sizeof(uint32_t)) {
@@ -1186,19 +1233,20 @@ WebPAcceleratorResult CUDANearLosslessLocked(
     return WEBP_ACCELERATOR_ERROR;
   }
   pixel_count = static_cast<size_t>(request->width) * request->height;
+  const bool profitable_batch = HasProfitableNearLosslessBatchHint();
   // One- and two-pass CPU preprocessing remained faster than a cold CUDA
   // runtime at the largest measured size. An explicit threshold remains a
   // correctness/experimentation override for every pass count.
   size_t explicit_threshold;
   const bool has_explicit_threshold = ParseEnvironmentSize(
       "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", &explicit_threshold);
-  if (!state->available && request->limit_bits < 3 &&
+  if (!state->available && !profitable_batch && request->limit_bits < 3 &&
       !has_explicit_threshold) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
   if (pixel_count < EnvironmentSize(
                         "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS",
-                        state->available
+                        state->available || profitable_batch
                             ? kDefaultNearLosslessWarmMinimumPixels
                             : kDefaultNearLosslessColdMinimumPixels)) {
     return WEBP_ACCELERATOR_NOT_RUN;
@@ -1323,10 +1371,15 @@ WebPAcceleratorResult CUDAHashChainLocked(
       request->size <= 2 || request->xsize <= 0 || request->iter_max <= 0) {
     return WEBP_ACCELERATOR_ERROR;
   }
+  const bool profitable_batch = HasProfitableLosslessBatchHint();
   if (static_cast<size_t>(request->size) <
-      EnvironmentSize("WEBP_CUDA_HASH_MIN_PIXELS",
-                      state->available ? kDefaultHashWarmMinimumPixels
-                                       : kDefaultHashColdMinimumPixels)) {
+      EnvironmentSize(
+          "WEBP_CUDA_HASH_MIN_PIXELS",
+          profitable_batch
+              ? EnvironmentSize("WEBP_CUDA_HASH_BATCH_MIN_PIXELS",
+                                kDefaultHashBatchMinimumPixels)
+              : state->available ? kDefaultHashWarmMinimumPixels
+                                 : kDefaultHashColdMinimumPixels)) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
   if (static_cast<size_t>(request->size) >
@@ -1496,7 +1549,7 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
   bool timing;
 
   if (!EnvironmentFlag("WEBP_CUDA", true) ||
-      !EnvironmentFlag("WEBP_CUDA_LOSSY", true)) {
+      !EnvironmentFlag("WEBP_CUDA_LOSSY", false)) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
   if (request == nullptr || request->red == nullptr ||

@@ -33,6 +33,16 @@ different cold and warm defaults. A stage that declines does not initialize the
 runtime, while any successful CUDA stage makes later stages eligible for their
 lower warm threshold.
 
+Forced-stage PNG/JPEG measurements refined that policy. Persistent lossy
+batches ranged from 0.981x to 1.012x, so lossy CUDA is now runtime opt-in.
+Fresh-process CUDA was slower for every measured encoding mode because each
+image paid initialization. Persistent lossless and near-lossless batches
+ranged from 1.109x to 1.377x, so callers that know their batch size and total
+pixel count may provide `WEBP_CUDA_BATCH_SIZE` and
+`WEBP_CUDA_BATCH_PIXELS`. The defaults admit lossless batches at 6 images
+and 6,000,000 total pixels and near-lossless batches at 5 images and 5,000,000
+pixels; one-shot requests retain the cold thresholds.
+
 ## Compile-time strategy ablation
 
 Five-sample warm comparisons selected persistent device buffers, asynchronous
@@ -77,3 +87,33 @@ default therefore uses 16,777,216 cold / 65,536 warm pixels and declines cold
 one- and two-pass work. An explicit threshold still forces every pass count for
 testing. Full raw rows and computed medians are in
 `CUDA_NEAR_LOSSLESS_RESULTS_RAW.md`.
+
+## Reproducible file-to-WebP suite
+
+`scripts/benchmark_cuda_end_to_end.py` provides a portable comparison across
+systems. It creates a deterministic six-image corpus in both PNG and JPEG and
+measures lossy, lossless, and near-lossless encoding. The runner requires
+Python 3.9 or newer, Pillow, and a build with PNG and JPEG input support. It
+measures each configuration with:
+
+- a persistent 24-item decode/encode process, reported as median milliseconds
+  per item; and
+- a new `cwebp` process for every input, reported as the median of per-run
+  average milliseconds per item.
+
+The CUDA side deliberately forces every eligible CUDA stage. This isolates
+hardware capability from the conservative production dispatch policy. Before
+timing, the runner checks deterministic encoded hashes and decoded-pixel
+parity. It records the randomized execution order, exact commands, raw
+nanosecond samples, output hashes, corpus hashes, binary hashes, build revision,
+CPU, GPU, driver, CUDA toolkit, and relevant software versions. Its
+`report.md` uses the compact `Method | CPU time | CUDA time | Speedup`
+table, while `results.json` and `raw.jsonl` support cross-system comparison
+without reparsing prose.
+
+Run `python3 scripts/benchmark_cuda_end_to_end.py --help` for the complete
+protocol. The `report` subcommand accepts results from multiple machines and
+prints both each full table and a side-by-side speedup matrix. It rejects
+mismatched corpus hashes or encoding settings instead of presenting an invalid
+comparison. Keep raw results from every system; summaries can be regenerated
+without rerunning benchmarks.

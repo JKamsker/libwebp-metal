@@ -24,8 +24,15 @@ build_and_test() {
     -DWEBP_BUILD_WEBPMUX=OFF \
     "$@"
   "$cmake_command" --build "$build_dir" \
-    --target cwebp dwebp cuda_concurrency_test cuda_near_lossless_test -j
+    --target cwebp dwebp webp_cuda_batch_benchmark cuda_concurrency_test \
+      cuda_near_lossless_test -j
   WEBP_TEST_BIN_DIR="$build_dir" "$root_dir/scripts/test_cuda.sh"
+  batch_log="$temporary_dir/$name-batch.log"
+  WEBP_CUDA_VERBOSE=1 WEBP_CUDA_BATCH_MIN_PIXELS=1 \
+    "$build_dir/webp_cuda_batch_benchmark" --variant cuda --mode lossless \
+      --batch-size 24 --batch-aware --verify-only \
+      "$root_dir/examples/test_ref.ppm" 2>"$batch_log"
+  grep -q "WebP-CUDA: transformed" "$batch_log"
   "$build_dir/cuda_concurrency_test"
   if [ "$name" = defaults ]; then
     "$build_dir/cuda_near_lossless_test"

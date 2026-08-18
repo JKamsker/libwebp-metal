@@ -116,6 +116,16 @@ validation pairs passed decoded parity, including 60/60 exact lossy outputs.
 The complete raw rows and validation records are in
 `CUDA_BATCH_RESULTS_RAW.md`.
 
+Production action: lossy RGB-to-YUV CUDA is now opt-in through
+`WEBP_CUDA_LOSSY=1`. One-shot encodes retain cold thresholds. Persistent
+lossless callers may advertise `WEBP_CUDA_BATCH_SIZE` and
+`WEBP_CUDA_BATCH_PIXELS`; conservative defaults require 6 images and
+6,000,000 pixels for lossless or 5 images and 5,000,000 pixels for
+near-lossless before the first item may use warm dispatch thresholds. The
+portable `scripts/benchmark_cuda_end_to_end.py` suite reproduces this
+PNG/JPEG matrix on other systems and emits `raw.jsonl`, `results.json`, and
+the four-column human-readable `report.md`.
+
 ## Evidence locations
 
 - `CUDA_EXPERIMENT_RESULTS_RAW.md`: original 75-row capture plus matched
@@ -126,3 +136,5 @@ The complete raw rows and validation records are in
 - `CUDA_BENCHMARK_RESULTS.md`: production encoder crossover and strategy context.
 - `CUDA_BATCH_RESULTS_RAW.md`: persistent and fresh-process batch rows,
   validation records, and computed medians.
+- `scripts/benchmark_cuda_end_to_end.py`: portable cross-system runner and
+  report generator for the same PNG/JPEG lifecycle matrix.
