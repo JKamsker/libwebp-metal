@@ -29,6 +29,15 @@
 
 #include "src/enc/cuda_decimate_dsp.cuh"
 
+// CPU cost tables reused verbatim on the device.
+extern "C" {
+extern const uint16_t VP8EntropyCost[256];
+extern const uint16_t VP8LevelFixedCosts[2048];
+extern const uint16_t VP8FixedCostsI16[4];
+extern const uint16_t VP8FixedCostsUV[4];
+extern const uint16_t VP8FixedCostsI4[10][10][10];
+}
+
 namespace {
 
 // ---------------------------------------------------------------------------
@@ -329,6 +338,8 @@ struct MBWork {
   int i4_nz[kNumBModes];
   long long i4_sse[kNumBModes];
   long long i4_sd[kNumBModes];
+  int i4_flat[kNumBModes];
+  long long i4_rcost[kNumBModes];
   // Chroma per-mode scratch.
   int16_t uv_tmp[4][8][16];
   int16_t uv_levels_all[4][8][16];
@@ -656,7 +667,30 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
   }
   __syncthreads();
 
-  // ---- Phase 2 (serial): intra16 selection, exactly PickBestIntra16.
+  // ---- Phase 2: intra16 selection (PickBestIntra16). The residual-cost
+  // walks run one mode per warp; thread 0 then replays the CPU's exact
+  // sequential comparison (including the flatness chain) on the precomputed
+  // values.
+  __shared__ long long i16_R[4];
+  __shared__ int i16_levels_flat[4];
+  if (tid < 4 * 32 && (tid & 31) == 0) {
+    const int mode = tid >> 5;
+    NzContext c = w.nz_ctx;
+    long long R = ResidualCostDev(&v, c.top_nz[8] + c.left_nz[8], 0, 1,
+                                  w.i16_dc_levels[mode]);
+    for (int by = 0; by < 4; ++by) {
+      for (int bx = 0; bx < 4; ++bx) {
+        const int ctx = c.top_nz[bx] + c.left_nz[by];
+        const int16_t* const lv = w.i16_ac_levels[mode][bx + by * 4];
+        R += ResidualCostDev(&v, ctx, 1, 0, lv);
+        c.top_nz[bx] = c.left_nz[by] = BlockNonZero(lv);
+      }
+    }
+    i16_R[mode] = R;
+    i16_levels_flat[mode] =
+        CudaIsFlat(w.i16_ac_levels[mode][0], 16, kFlatnessLimitI16);
+  }
+  __syncthreads();
   if (tid == 0) {
     int is_flat = CudaIsFlatSource16(w.yuv_in + kCudaYOffEnc);
     long long best_score = 0;
@@ -669,23 +703,9 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
       rd_cur.D = w.i16_sse[mode];
       rd_cur.SD = tlambda ? MULT_8B_DEV(tlambda, w.i16_sd[mode]) : 0;
       rd_cur.H = v.tables->fixed_costs_i16[mode];
-      // VP8GetCostLuma16: fresh neighbor context each evaluation.
-      {
-        NzContext c = w.nz_ctx;
-        long long R = ResidualCostDev(&v, c.top_nz[8] + c.left_nz[8], 0, 1,
-                                      w.i16_dc_levels[mode]);
-        for (int by = 0; by < 4; ++by) {
-          for (int bx = 0; bx < 4; ++bx) {
-            const int ctx = c.top_nz[bx] + c.left_nz[by];
-            const int16_t* const lv = w.i16_ac_levels[mode][bx + by * 4];
-            R += ResidualCostDev(&v, ctx, 1, 0, lv);
-            c.top_nz[bx] = c.left_nz[by] = BlockNonZero(lv);
-          }
-        }
-        rd_cur.R = R;
-      }
+      rd_cur.R = i16_R[mode];
       if (is_flat) {
-        is_flat = CudaIsFlat(w.i16_ac_levels[mode][0], 16, kFlatnessLimitI16);
+        is_flat = i16_levels_flat[mode];
         if (is_flat) {
           rd_cur.D *= 2;
           rd_cur.SD *= 2;
@@ -788,6 +808,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
         const uint8_t* const src =
             w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[i4_index];
         const uint8_t* const ref = w.yuv_p + kCudaVP8I4ModeOffsets[mode];
+        const int bx = i4_index & 3, by = i4_index >> 2;
         CudaFTransform(src, ref, w.i4_tmp[mode]);
         w.i4_nz[mode] = CudaQuantizeBlock(w.i4_tmp[mode], w.i4_levels[mode],
                                           &dqm->y1);
@@ -795,6 +816,16 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
         w.i4_sse[mode] = CudaSSE4x4(src, w.i4_out[mode]);
         w.i4_sd[mode] =
             tlambda ? CudaDisto4x4(src, w.i4_out[mode], kWeightY) : 0;
+        // Full residual cost precomputed for every mode: the CPU's early-out
+        // only skips this computation for modes it rejects anyway, so
+        // replaying its comparison order on complete values selects
+        // identically.
+        w.i4_flat[mode] =
+            (mode > 0) ? CudaIsFlat(w.i4_levels[mode], 1, kFlatnessLimitI4)
+                       : 0;
+        w.i4_rcost[mode] = ResidualCostDev(
+            &v, i4_ctx.top_nz[bx] + i4_ctx.left_nz[by], 0, 3,
+            w.i4_levels[mode]);
       }
       __syncthreads();
       if (tid == 0) {
@@ -820,17 +851,10 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
           rd_tmp.SD = tlambda ? MULT_8B_DEV(tlambda, w.i4_sd[mode]) : 0;
           rd_tmp.H = mode_costs[mode];
           rd_tmp.nz = (uint32_t)w.i4_nz[mode] << i4_index;
-          if (mode > 0 &&
-              CudaIsFlat(w.i4_levels[mode], 1, kFlatnessLimitI4)) {
-            rd_tmp.R = kFlatnessPenalty;
-          } else {
-            rd_tmp.R = 0;
-          }
+          rd_tmp.R = w.i4_flat[mode] ? kFlatnessPenalty : 0;
           SetRDScoreDev(dqm->lambda_i4, &rd_tmp);
           if (best_mode >= 0 && rd_tmp.score >= rd_i4.score) continue;
-          rd_tmp.R += ResidualCostDev(
-              &v, i4_ctx.top_nz[bx] + i4_ctx.left_nz[by], 0, 3,
-              w.i4_levels[mode]);
+          rd_tmp.R += w.i4_rcost[mode];
           SetRDScoreDev(dqm->lambda_i4, &rd_tmp);
           if (best_mode < 0 || rd_tmp.score < rd_i4.score) {
             CopyScoreDev(&rd_i4, &rd_tmp);
@@ -943,7 +967,31 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
   }
   __syncthreads();
 
-  // ---- Phase 5 (serial): chroma selection, exactly PickBestUV.
+  // ---- Phase 5: chroma selection (PickBestUV). Cost walks run one mode per
+  // warp; thread 0 replays the CPU comparison order on precomputed values.
+  __shared__ long long uv_R[4];
+  if (tid < 4 * 32 && (tid & 31) == 0) {
+    const int mode = tid >> 5;
+    NzContext c = w.nz_ctx;
+    long long R = 0;
+    for (int ch = 0; ch <= 2; ch += 2) {
+      for (int by = 0; by < 2; ++by) {
+        for (int bx = 0; bx < 2; ++bx) {
+          const int b = ch * 2 + bx + by * 2;
+          const int ctx = c.top_nz[4 + ch + bx] + c.left_nz[4 + ch + by];
+          const int16_t* const lv = w.uv_levels_all[mode][b];
+          R += ResidualCostDev(&v, ctx, 0, 2, lv);
+          c.top_nz[4 + ch + bx] = c.left_nz[4 + ch + by] = BlockNonZero(lv);
+        }
+      }
+    }
+    if (mode > 0 &&
+        CudaIsFlat(w.uv_levels_all[mode][0], 8, kFlatnessLimitUV)) {
+      R += kFlatnessPenalty * 8;
+    }
+    uv_R[mode] = R;
+  }
+  __syncthreads();
   if (tid == 0) {
     ModeScore rd_best;
     int best_mode = -1;
@@ -954,27 +1002,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
       rd_uv.D = w.uv_sse[mode];
       rd_uv.SD = 0;
       rd_uv.H = v.tables->fixed_costs_uv[mode];
-      {
-        NzContext c = w.nz_ctx;
-        long long R = 0;
-        for (int ch = 0; ch <= 2; ch += 2) {
-          for (int by = 0; by < 2; ++by) {
-            for (int bx = 0; bx < 2; ++bx) {
-              const int b = ch * 2 + bx + by * 2;
-              const int ctx = c.top_nz[4 + ch + bx] + c.left_nz[4 + ch + by];
-              const int16_t* const lv = w.uv_levels_all[mode][b];
-              R += ResidualCostDev(&v, ctx, 0, 2, lv);
-              c.top_nz[4 + ch + bx] = c.left_nz[4 + ch + by] =
-                  BlockNonZero(lv);
-            }
-          }
-        }
-        rd_uv.R = R;
-      }
-      if (mode > 0 &&
-          CudaIsFlat(w.uv_levels_all[mode][0], 8, kFlatnessLimitUV)) {
-        rd_uv.R += kFlatnessPenalty * 8;
-      }
+      rd_uv.R = uv_R[mode];
       SetRDScoreDev(dqm->lambda_uv, &rd_uv);
       if (mode == 0 || rd_uv.score < rd_best.score) {
         CopyScoreDev(&rd_best, &rd_uv);
@@ -1124,6 +1152,35 @@ bool DecimateInitialize(DecimateState* state) {
   return true;
 }
 
+// The static cost tables never change: upload them once into a persistent
+// buffer so per-image calls skip both the copy and the mid-call synchronize.
+bool DecimateEnsureTables(DecimateState* state) {
+  if (state->tables_uploaded) return true;
+  if (state->device_tables == nullptr &&
+      cudaMalloc((void**)&state->device_tables, sizeof(StaticCostTables)) !=
+          cudaSuccess) {
+    (void)cudaGetLastError();
+    return false;
+  }
+  StaticCostTables tables;
+  memcpy(tables.entropy_cost, VP8EntropyCost, sizeof(tables.entropy_cost));
+  memcpy(tables.level_fixed_costs, VP8LevelFixedCosts,
+         sizeof(tables.level_fixed_costs));
+  memcpy(tables.fixed_costs_i16, VP8FixedCostsI16,
+         sizeof(tables.fixed_costs_i16));
+  memcpy(tables.fixed_costs_uv, VP8FixedCostsUV,
+         sizeof(tables.fixed_costs_uv));
+  memcpy(tables.fixed_costs_i4, VP8FixedCostsI4,
+         sizeof(tables.fixed_costs_i4));
+  if (cudaMemcpy(state->device_tables, &tables, sizeof(tables),
+                 cudaMemcpyHostToDevice) != cudaSuccess) {
+    (void)cudaGetLastError();
+    return false;
+  }
+  state->tables_uploaded = true;
+  return true;
+}
+
 bool DecimateEnsureArena(DecimateState* state, size_t bytes) {
   if (bytes <= state->arena_capacity) return true;
   if (state->device_arena != nullptr) {
@@ -1142,15 +1199,6 @@ bool DecimateEnsureArena(DecimateState* state, size_t bytes) {
 size_t AlignUp(size_t value) { return (value + 255u) & ~(size_t)255u; }
 
 }  // namespace
-
-// CPU cost tables reused verbatim on the device.
-extern "C" {
-extern const uint16_t VP8EntropyCost[256];
-extern const uint16_t VP8LevelFixedCosts[2048];
-extern const uint16_t VP8FixedCostsI16[4];
-extern const uint16_t VP8FixedCostsUV[4];
-extern const uint16_t VP8FixedCostsI4[10][10][10];
-}
 
 static_assert(sizeof(DeviceResult) == sizeof(WebPAcceleratorDecimateResult),
               "device result must mirror the ABI struct");
@@ -1196,6 +1244,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
   DecimateState* const state = &g_decimate_state;
   do {
     if (state->quarantined || !DecimateInitialize(state)) break;
+    if (!DecimateEnsureTables(state)) break;
     if (cudaSetDevice(state->device) != cudaSuccess) {
       state->quarantined = true;
       result = WEBP_ACCELERATOR_ERROR;
@@ -1226,8 +1275,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     const size_t off_level_costs =
         off_seg_params + AlignUp(4 * sizeof(DeviceSegment));
     const size_t off_probas = off_level_costs + AlignUp(level_cost_bytes);
-    const size_t off_tables = off_probas + AlignUp(proba_bytes);
-    const size_t off_nz = off_tables + AlignUp(sizeof(StaticCostTables));
+    const size_t off_nz = off_probas + AlignUp(proba_bytes);
     const size_t off_preds = off_nz + AlignUp(mb_count * sizeof(uint32_t));
     const size_t off_left_nz8 = off_preds + AlignUp(preds_bytes);
     const size_t off_results = off_left_nz8 + AlignUp(mb_count);
@@ -1248,25 +1296,6 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     UPLOAD(off_level_costs, request->level_costs, level_cost_bytes);
     UPLOAD(off_probas, request->coeff_probas, proba_bytes);
 #undef UPLOAD
-    if (error == cudaSuccess) {
-      StaticCostTables tables;
-      memcpy(tables.entropy_cost, VP8EntropyCost, sizeof(tables.entropy_cost));
-      memcpy(tables.level_fixed_costs, VP8LevelFixedCosts,
-             sizeof(tables.level_fixed_costs));
-      memcpy(tables.fixed_costs_i16, VP8FixedCostsI16,
-             sizeof(tables.fixed_costs_i16));
-      memcpy(tables.fixed_costs_uv, VP8FixedCostsUV,
-             sizeof(tables.fixed_costs_uv));
-      memcpy(tables.fixed_costs_i4, VP8FixedCostsI4,
-             sizeof(tables.fixed_costs_i4));
-      error = cudaMemcpyAsync(arena + off_tables, &tables, sizeof(tables),
-                              cudaMemcpyHostToDevice, state->stream);
-      if (error == cudaSuccess) {
-        // The tables snapshot lives on the stack; synchronize before it goes
-        // out of scope.
-        error = cudaStreamSynchronize(state->stream);
-      }
-    }
     if (error == cudaSuccess) {
       error = cudaMemsetAsync(arena + off_preds, 0, preds_bytes,
                               state->stream);
@@ -1297,7 +1326,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     view.segment_params = (const DeviceSegment*)(arena + off_seg_params);
     view.level_costs = (const uint16_t*)(arena + off_level_costs);
     view.coeff_probas = arena + off_probas;
-    view.tables = (const StaticCostTables*)(arena + off_tables);
+    view.tables = state->device_tables;
     view.nz_words = (uint32_t*)(arena + off_nz);
     // The preds pointer addresses the interior origin like the encoder's.
     view.preds = arena + off_preds + preds_w + 1;
@@ -1360,13 +1389,25 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
       break;
     }
     if (DecimateFlag("WEBP_CUDA_VERBOSE", false)) {
-      fprintf(stderr, "WebP-CUDA: lossy decimate of %dx%d (%zu MBs)\n",
-              request->width, request->height, mb_count);
+      fprintf(stderr,
+              "WebP-CUDA: lossy decimate of %dx%d (%zu MBs, %d diagonals)\n",
+              request->width, request->height, mb_count, last_diagonal + 1);
     }
     result = WEBP_ACCELERATOR_SUCCESS;
   } while (0);
   UnlockDecimate(&g_decimate_mutex);
   return result;
+}
+
+// Called from the CUDA backend's process-start prewarm thread: creating the
+// stream and uploading the static tables here overlaps with image decode.
+extern "C" void WebPCUDALossyDecimatePrewarm(void) {
+  LockDecimate(&g_decimate_mutex);
+  if (!g_decimate_state.quarantined &&
+      DecimateInitialize(&g_decimate_state)) {
+    (void)DecimateEnsureTables(&g_decimate_state);
+  }
+  UnlockDecimate(&g_decimate_mutex);
 }
 
 #endif  // WEBP_CUDA_ENABLE_LOSSY_DECIMATE

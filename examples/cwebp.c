@@ -15,6 +15,15 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#if defined(_WIN32)
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 #include <string.h>
 
 #ifdef HAVE_CONFIG_H
@@ -1453,6 +1462,20 @@ Error:
     fclose(out);
   }
 
+  // With every output flushed and closed, graceful process teardown only
+  // costs time: an accelerator context alone takes tens of milliseconds to
+  // destroy, which can rival a small image's whole encode. Skip the CRT and
+  // driver cleanup and let the OS reclaim the process, unless the operator
+  // opts out (e.g. when running under leak checkers).
+  if (getenv("WEBP_NO_FAST_EXIT") == NULL) {
+    fflush(stdout);
+    fflush(stderr);
+#if defined(_WIN32)
+    TerminateProcess(GetCurrentProcess(), (UINT)return_value);
+#else
+    _exit(return_value);
+#endif
+  }
   FREE_WARGV_AND_RETURN(return_value);
 }
 

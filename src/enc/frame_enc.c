@@ -968,7 +968,12 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
       VP8InitFilter(&it);  // don't collect stats until last pass (too costly)
     }
     VP8TBufferClear(&enc->tokens);
-    accelerated = TryAcceleratedDecimate(enc, &accel_pass);
+    {
+      const uint64_t accel_start =
+          WebPProfileStageBegin(WEBP_PROFILE_LOSSY_DECIMATE);
+      accelerated = TryAcceleratedDecimate(enc, &accel_pass);
+      WebPProfileStageEnd(WEBP_PROFILE_LOSSY_DECIMATE, accel_start);
+    }
     do {
       VP8ModeScore info;
       VP8IteratorImport(&it, NULL);

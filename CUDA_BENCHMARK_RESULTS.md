@@ -164,16 +164,17 @@ lossless batch recorded 16 observed resident handoffs (texture and graphic
 inputs skip the donating cross-color transform, so a handoff per image is
 not expected on this corpus).
 
-| Method | baseline | + guided predictor | + exact-NL predictor | + GPU decimate |
-|---|---:|---:|---:|---:|
-| PNG lossy — batch | 0.95x | 1.01x | 1.03x | 2.00x |
-| JPEG lossy — batch | 0.96x | 1.02x | 1.03x | 1.94x |
-| PNG lossless — batch | 1.37x | 1.99x | 1.81x | 1.79x |
-| JPEG lossless — batch | 1.20x | 4.87x | 4.95x | 4.85x |
-| JPEG lossless — single | 0.88x | 2.76x | 2.66x | 2.88x |
-| PNG near-lossless — batch | 1.21x | 1.18x | 2.55x | 2.61x |
-| JPEG near-lossless — batch | 1.13x | 1.10x | 5.58x | 5.60x |
-| JPEG near-lossless — single | 0.93x | 0.96x | 2.99x | 3.16x |
+| Method | baseline | + guided predictor | + exact-NL predictor | + GPU decimate | + tuning |
+|---|---:|---:|---:|---:|---:|
+| PNG lossy — batch | 0.95x | 1.01x | 1.03x | 2.00x | 2.60x |
+| JPEG lossy — batch | 0.96x | 1.02x | 1.03x | 1.94x | 2.45x |
+| PNG lossy — single | 0.57x | 0.61x | 0.79x | 0.79x | 0.90x |
+| PNG lossless — batch | 1.37x | 1.99x | 1.81x | 1.79x | 1.65x |
+| JPEG lossless — batch | 1.20x | 4.87x | 4.95x | 4.85x | 5.15x |
+| JPEG lossless — single | 0.88x | 2.76x | 2.66x | 2.88x | 2.84x |
+| PNG near-lossless — batch | 1.21x | 1.18x | 2.55x | 2.61x | 2.61x |
+| JPEG near-lossless — batch | 1.13x | 1.10x | 5.58x | 5.60x | 6.01x |
+| JPEG near-lossless — single | 0.93x | 0.96x | 2.99x | 3.16x | 3.09x |
 
 Absolute CUDA times are the stable signal across runs; the CPU baseline
 varied by up to 8% between suite executions and moves the ratios. The
@@ -193,10 +194,17 @@ The lossy step change is the whole-pass GPU macroblock decimation: a
 byte-exact device port of VP8Decimate covering 74% of the lossy CPU encode
 (mode search, quantization, reconstruction), processed in skewed
 anti-diagonal wavefront order and enabled by this fork's stable in-pass
-cost tables. Every lossy validation pair remains byte-identical.
+cost tables. Every lossy validation pair remains byte-identical. The tuning
+column parallelizes the residual-cost walks across warps (one mode per
+warp; thread 0 replays the CPU's exact comparison order on the precomputed
+values, so decisions are unchanged), keeps the static cost tables resident
+on the device, extends the process-start prewarm to the decimate unit, and
+gives cwebp a fast exit that skips CRT and driver teardown once every
+output is flushed and closed (`WEBP_NO_FAST_EXIT` opts out) — the last
+change shortens every fresh-process encode, CPU and CUDA alike.
 
 Raw result sets:
-`libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl,-decimate}`
+`libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl,-decimate,-tuned}`
 under the operator's temp directory, comparable through the `report`
 subcommand.
 

@@ -2185,18 +2185,23 @@ WebPAcceleratorResult Initialize(CudaState* state) {
 // only runs Initialize() under the global mutex; a concurrent first dispatch
 // simply blocks until the shared state is ready, exactly as if it had
 // initialized the state itself.
-#if defined(_WIN32)
-DWORD WINAPI PrewarmThreadMain(LPVOID) {
+void PrewarmBackends(void) {
   LockCudaMutex(&g_cuda_mutex);
   (void)Initialize(&g_cuda_state);
   UnlockCudaMutex(&g_cuda_mutex);
+#if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+  WebPCUDALossyDecimatePrewarm();
+#endif
+}
+
+#if defined(_WIN32)
+DWORD WINAPI PrewarmThreadMain(LPVOID) {
+  PrewarmBackends();
   return 0;
 }
 #else
 void* PrewarmThreadMain(void*) {
-  LockCudaMutex(&g_cuda_mutex);
-  (void)Initialize(&g_cuda_state);
-  UnlockCudaMutex(&g_cuda_mutex);
+  PrewarmBackends();
   return nullptr;
 }
 #endif

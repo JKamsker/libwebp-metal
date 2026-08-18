@@ -18,6 +18,9 @@ const WebPEncoderAccelerator* WebPGetCUDAEncoderAccelerator(void);
 // cuda_decimate_enc.cu with its own device resources.
 WebPAcceleratorResult WebPCUDALossyDecimate(
     void* context, const WebPAcceleratorDecimateRequest* request);
+// Warms the decimate unit's stream and static tables; called from the
+// process-start prewarm thread.
+void WebPCUDALossyDecimatePrewarm(void);
 #endif
 
 // Internal benchmark instrumentation. Stage bits are set only after a CUDA
