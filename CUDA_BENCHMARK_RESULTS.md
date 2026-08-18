@@ -302,3 +302,42 @@ lossy at roughly 1.05x regardless of their own speed; moving lossy further
 requires offloading the encode loop itself, which is a ground-up
 GPU-encoder project rather than a stage port. Recorded so future lossy
 work starts from the loop, not from the remaining small stages.
+
+## RTX 2080 SUPER cross-hardware results (2026-08-18)
+
+The official portable suite ran on Linux with a native sm_75 Release build,
+CUDA 12.0.140, driver 595.84, an RTX 2080 SUPER, and a Ryzen 9 3900X. The
+result label is `win-2080super` (retained for compatibility with the handoff
+protocol despite this host running Linux), and the source revision is
+`9393a44d96f626635ba8b6b988fd02759390ac65`. The default protocol used a
+persistent 24-image batch, one warmup, five samples, quality 75, method 4,
+near-lossless 40, and forced CUDA stages. All 180 validation pairs passed;
+all 60 lossy pairs were byte-identical.
+
+| Method | RTX 2080 CPU | RTX 2080 CUDA | RTX 2080 speedup | Latest recorded RTX 5070 Ti speedup |
+|---|---:|---:|---:|---:|
+| PNG lossy — batch | 103.5 ms | 56.6 ms | **1.83x** | 3.77x |
+| JPEG lossy — batch | 99.1 ms | 57.5 ms | **1.72x** | 3.52x |
+| PNG lossless — batch | 141.6 ms | 92.1 ms | **1.54x** | 1.98x |
+| JPEG lossless — batch | 713.8 ms | 145.0 ms | **4.92x** | 4.69x |
+| PNG near-lossless — batch | 210.9 ms | 91.0 ms | **2.32x** | 2.59x |
+| JPEG near-lossless — batch | 800.2 ms | 146.2 ms | **5.47x** | 5.71x |
+| PNG lossy — single | 99.7 ms | 286.0 ms | 0.35x | 1.03x |
+| JPEG lossy — single | 100.9 ms | 289.5 ms | 0.35x | 1.05x |
+| PNG lossless — single | 177.7 ms | 315.4 ms | 0.56x | not retained |
+| JPEG lossless — single | 715.4 ms | 366.6 ms | **1.95x** | 2.74x |
+| PNG near-lossless — single | 220.3 ms | 330.8 ms | 0.67x | not retained |
+| JPEG near-lossless — single | 840.2 ms | 392.8 ms | **2.14x** | 3.22x |
+
+The speedup columns are not a GPU-only comparison because the host CPUs and
+toolchains differ. For the four rows whose latest 5070 record retained both
+absolute times, the 2080 CUDA time was 29.9% slower for PNG lossy, 16.8%
+slower for JPEG lossy, 9.9% slower for PNG lossless, and 5.6% faster for JPEG
+lossless. The 2080's lossy CPU baseline was 37–43% faster, which further
+compresses its end-to-end lossy speedup ratio. Fresh-process CUDA is much
+slower on this host because each image exposes the Turing/CUDA 12 context
+startup cost; only the long JPEG lossless modes amortize it.
+
+The machine-readable result set is
+`/tmp/libwebp-cuda-results-2080super/{results.json,raw.jsonl}` on the operator
+host. The corresponding rendered report is `report.md` in the same directory.

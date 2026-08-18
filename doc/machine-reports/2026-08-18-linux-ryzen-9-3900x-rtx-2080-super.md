@@ -14,8 +14,9 @@ speedup is CPU time divided by CUDA time, so values above `1x` favor CUDA.
 | CUDA toolkit | 12.0.140 |
 | Compiler | GCC 13.3.0 / NVCC 12.0.140 |
 | Python / Pillow | Python 3.12.3 / Pillow 10.2.0 |
-| Source revision | `3c21eb0d91d7e3464fdfb1ff30e1e911f782be1c` |
+| Source revision | `9393a44d96f626635ba8b6b988fd02759390ac65` |
 | Build | CMake Release, CUDA enabled |
+| Result label | `win-2080super` |
 
 ## Protocol
 
@@ -35,32 +36,32 @@ Command:
 
 ```sh
 python3 scripts/benchmark_cuda_end_to_end.py run \
-  --build-dir build-cuda \
-  --output-dir /tmp/libwebp-cuda-benchmark-20260818 \
-  --label "Ryzen 9 3900X / RTX 2080 SUPER"
+  --build-dir build-cuda-sm75-gate \
+  --output-dir /tmp/libwebp-cuda-results-2080super \
+  --label "win-2080super"
 ```
 
 ## Persistent 24-image batch
 
 | Method | CPU time | CUDA time | CUDA speedup |
 |---|---:|---:|---:|
-| PNG lossy | 99.8 ms | 60.4 ms | **1.65x** |
-| PNG lossless | 141.3 ms | 88.7 ms | **1.59x** |
-| PNG near-lossless | 207.6 ms | 89.2 ms | **2.33x** |
-| JPEG lossy | 98.1 ms | 61.5 ms | **1.60x** |
-| JPEG lossless | 686.4 ms | 144.6 ms | **4.75x** |
-| JPEG near-lossless | 787.3 ms | 143.4 ms | **5.49x** |
+| PNG lossy | 103.5 ms | 56.6 ms | **1.83x** |
+| PNG lossless | 141.6 ms | 92.1 ms | **1.54x** |
+| PNG near-lossless | 210.9 ms | 91.0 ms | **2.32x** |
+| JPEG lossy | 99.1 ms | 57.5 ms | **1.72x** |
+| JPEG lossless | 713.8 ms | 145.0 ms | **4.92x** |
+| JPEG near-lossless | 800.2 ms | 146.2 ms | **5.47x** |
 
 ## Fresh process per image
 
 | Method | CPU time | CUDA time | CUDA speedup |
 |---|---:|---:|---:|
-| PNG lossy | 100.0 ms | 275.3 ms | **0.36x** |
-| PNG lossless | 154.2 ms | 311.8 ms | **0.49x** |
-| PNG near-lossless | 220.2 ms | 316.2 ms | **0.70x** |
-| JPEG lossy | 101.1 ms | 277.6 ms | **0.36x** |
-| JPEG lossless | 693.9 ms | 357.2 ms | **1.94x** |
-| JPEG near-lossless | 801.2 ms | 375.1 ms | **2.14x** |
+| PNG lossy | 99.7 ms | 286.0 ms | **0.35x** |
+| PNG lossless | 177.7 ms | 315.4 ms | **0.56x** |
+| PNG near-lossless | 220.3 ms | 330.8 ms | **0.67x** |
+| JPEG lossy | 100.9 ms | 289.5 ms | **0.35x** |
+| JPEG lossless | 715.4 ms | 366.6 ms | **1.95x** |
+| JPEG near-lossless | 840.2 ms | 392.8 ms | **2.14x** |
 
 ## Validation and interpretation
 

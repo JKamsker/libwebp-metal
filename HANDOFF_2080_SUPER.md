@@ -88,7 +88,7 @@ measurements are meaningless until they pass.
 - [x] 2. **Exercise the fallback path on this GPU:**
   `WEBP_CUDA_DECIMATE_FAIL_COLLECT=<band>` for bands 0/1/3/5/7, pipeline
   on and off — outputs must stay byte-identical to CPU.
-- [ ] 3. **Run the official suite** and file a new result set:
+- [x] 3. **Run the official suite** and file a new result set:
   `python scripts/benchmark_cuda_end_to_end.py run --build-dir
   <build>/Release --output-dir <temp>/libwebp-cuda-results-2080super
   --label "win-2080super"`. Compare against the 5070 Ti sets with the
