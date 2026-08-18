@@ -29,6 +29,9 @@ WEBP_BUILD_BACKREF_EXACT_EXPERIMENT ?= 0
 WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT ?= 0
 WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT ?= 0
 WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT ?= 0
+WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT ?= 0
+WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT ?= 0
+WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT ?= 0
 
 ifneq ($(origin WEBP_BUILD_METAL_BENCHMARK),undefined)
   $(error WEBP_BUILD_METAL_BENCHMARK was replaced by WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT)
@@ -201,6 +204,15 @@ endif
 ifeq ($(WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT),1)
   override EXTRA_FLAGS += -DWEBP_USE_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT=1
 endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT),1)
+  override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT=1
+endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT),1)
+  override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_WORKSPACE_AB_EXPERIMENT=1
+endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT),1)
+  override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT=1
+endif
 INSTALL = install
 GROFF = /usr/bin/groff
 COL = /usr/bin/col
@@ -358,6 +370,15 @@ endif
 ifeq ($(WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT),1)
 ENC_OBJS += src/enc/cache_size_single_pass_slab_enc.o
 endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT),1)
+ENC_OBJS += src/enc/backref_cost_traceback_experiment_enc.o
+endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT),1)
+ENC_OBJS += src/enc/backref_cost_workspace_ab_experiment_enc.o
+endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT),1)
+ENC_OBJS += src/enc/backref_cost_workspace_remote_v2_experiment_enc.o
+endif
 
 EX_FORMAT_DEC_OBJS = \
     imageio/image_dec.o \
@@ -494,6 +515,32 @@ ifeq ($(MAKECMDGOALS),clean)
   OUTPUT += examples/libgifdec.a examples/libanim_util.a
 endif
 
+ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT),1)
+tools/backref_cost_workspace_ab_experiment_runner: \
+    tools/backref_cost_workspace_ab_experiment_runner.o
+tools/backref_cost_workspace_ab_experiment_runner: \
+    src/libwebp.a sharpyuv/libsharpyuv.a
+	$(LINK) -o $@ $^ $(LDFLAGS)
+else
+tools/backref_cost_workspace_ab_experiment_runner:
+	@echo "$@ requires WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT=1" >&2
+	@false
+.PHONY: tools/backref_cost_workspace_ab_experiment_runner
+endif
+
+ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT),1)
+tools/backref_cost_workspace_remote_v2_experiment_runner: \
+    tools/backref_cost_workspace_remote_v2_experiment_runner.o
+tools/backref_cost_workspace_remote_v2_experiment_runner: \
+    src/libwebp.a sharpyuv/libsharpyuv.a
+	$(LINK) -o $@ $^ $(LDFLAGS)
+else
+tools/backref_cost_workspace_remote_v2_experiment_runner:
+	@echo "$@ requires WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT=1" >&2
+	@false
+.PHONY: tools/backref_cost_workspace_remote_v2_experiment_runner
+endif
+
 ex: $(OUT_EXAMPLES)
 all: ex $(EXTRA_EXAMPLES) $(OTHER_EXAMPLES)
 extras: $(EXTRA_LIB)
@@ -573,6 +620,26 @@ tools/webp_metal_benchmark:
 	@echo "tools/webp_metal_benchmark requires WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT=1" >&2
 	@false
 .PHONY: tools/webp_metal_benchmark
+endif
+
+ifeq ($(WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT),1)
+tools/backref_cost_traceback_experiment_runner: \
+    tools/backref_cost_traceback_experiment_runner.o
+tools/backref_cost_traceback_experiment_runner: \
+    src/libwebp.a sharpyuv/libsharpyuv.a
+	$(LINK) -o $@ $^ $(LDFLAGS)
+tests/backref_cost_traceback_experiment_test: \
+    tests/backref_cost_traceback_experiment_test.o
+tests/backref_cost_traceback_experiment_test: \
+    src/libwebp.a sharpyuv/libsharpyuv.a
+	$(LINK) -o $@ $^ $(LDFLAGS)
+else
+tools/backref_cost_traceback_experiment_runner \
+tests/backref_cost_traceback_experiment_test:
+	@echo "$@ requires WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT=1" >&2
+	@false
+.PHONY: tools/backref_cost_traceback_experiment_runner \
+        tests/backref_cost_traceback_experiment_test
 endif
 
 examples/anim_diff: examples/libanim_util.a examples/libgifdec.a

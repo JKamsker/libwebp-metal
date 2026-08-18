@@ -96,6 +96,30 @@ testing. Full raw rows and computed medians are in
 
 ## Reproducible file-to-WebP suite
 
+The suite now also forces the exact CUDA lossy macroblock-analysis stage and
+aborts its preflight if either RGB conversion or analysis falls back to the
+CPU. Historical rows in this document predate that stage and must not be used
+to claim its performance. A new result set is required before enabling
+`WEBP_CUDA_LOSSY_ANALYSIS` by default or selecting a crossover.
+Forced lossy rows now also enable fused RGB conversion plus exact analysis,
+which defers regular lossy import until method/quality are available and uses a
+single completion boundary. Historical rows predate this fused mode too; they
+provide no evidence for its performance.
+Forced lossless rows also enable the experimental resident cross-color-to-hash
+handoff. Each new persistent row records a successful-handoff count equal to
+its batch size; each fresh-process row retains the observed
+`hash candidates ... (resident pixels)` marker. The runner rejects a forced
+lossless or near-lossless row when that evidence is absent, because the
+environment opt-in alone does not prove reuse. Historical rows predate that
+handoff and remain evidence for the older round-trip pipeline only.
+They now also force the experimental parallel predictor selector/residual
+stage and require observed dispatch. Historical rows predate it and provide no
+evidence for its speed or compressed-size effect.
+Forced lossless rows now force exact CUDA full-stream histogram population
+counting and require observed dispatch. Historical rows also predate this
+stage and provide no evidence for its performance; its current evidence is
+correctness-only.
+
 `scripts/benchmark_cuda_end_to_end.py` provides a portable comparison across
 systems. It creates a deterministic six-image corpus in both PNG and JPEG and
 measures lossy, lossless, and near-lossless encoding. The runner requires
@@ -118,8 +142,9 @@ randomized execution order, exact commands, raw
 nanosecond samples, output hashes, corpus hashes, binary hashes, build revision,
 CPU, GPU, driver, CUDA toolkit, and relevant software versions. Its
 `report.md` uses the compact `Method | CPU time | CUDA time | Speedup`
-table, while `results.json` and `raw.jsonl` support cross-system comparison
-without reparsing prose.
+table, while each `results.json` summary row also records CPU/CUDA bytes per
+image and the CUDA/CPU compressed-size ratio. `results.json` and `raw.jsonl`
+support cross-system comparison without reparsing prose.
 
 Run `python3 scripts/benchmark_cuda_end_to_end.py --help` for the complete
 protocol. The `report` subcommand accepts results from multiple machines and

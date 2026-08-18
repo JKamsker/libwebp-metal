@@ -31,6 +31,10 @@ def synthetic_rows():
                             "mode": mode,
                             "variant": variant,
                             "ns_per_image": base * factor * 1e6,
+                            "batch_size": 24,
+                            "output_bytes": 24 * 1000 * (
+                                1.1 if variant == "cuda" else 1.0
+                            ),
                         }
                     )
                 for repetition in range(5):
@@ -43,6 +47,9 @@ def synthetic_rows():
                                 "repetition": repetition,
                                 "input": input_name,
                                 "elapsed_ns": base * factor * 1e6,
+                                "output_bytes": 1000 * (
+                                    1.1 if variant == "cuda" else 1.0
+                                ),
                             }
                         )
     return persistent, single
@@ -81,6 +88,7 @@ def main() -> int:
     summary = cuda_e2e.summarize(persistent, single)
     assert len(summary) == 12
     assert all(abs(row["speedup"] - 1.25) < 1e-12 for row in summary)
+    assert all(abs(row["cuda_size_ratio"] - 1.1) < 1e-12 for row in summary)
     report = cuda_e2e.render_markdown(summary, 24)
     assert (
         "Times are milliseconds per image. Batch uses a persistent 24-item "
@@ -133,6 +141,16 @@ Bottom line: CUDA helps persistent lossless batches, is neutral for lossy batche
         cuda_e2e.command_output = original_command_output
     assert metadata["label"].endswith(" / unknown gpu")
     assert metadata["gpu"] == ""
+    assert cuda_e2e.observed_resident_lossless_handoff(
+        "WebP-CUDA: hash candidates for 4096 pixels in 0.1 ms "
+        "(resident pixels)\n"
+    )
+    assert cuda_e2e.observed_resident_lossless_handoff(
+        "WebP-CUDA: hash candidates (resident pixels)\n"
+    )
+    assert not cuda_e2e.observed_resident_lossless_handoff(
+        "WebP-CUDA: hash candidates for 4096 pixels in 0.1 ms\n"
+    )
 
     with tempfile.TemporaryDirectory() as directory:
         verification = Path(directory) / "verification.json"

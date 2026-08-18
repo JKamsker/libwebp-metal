@@ -1,0 +1,35 @@
+{
+  "schema": "libwebp-backref-cost-traceback-executor-refusal-v1",
+  "experiment_id": "backref_cost_traceback",
+  "status": "refused_before_run",
+  "captured_at_utc": "2026-08-18T14:42:10Z",
+  "source_commit": "355efae8dad9fc09717a4ccef874adf6bf6b2d6f",
+  "source_parent": "3142ff3fe31cd1666c5615c5c4ee7dec2ef891f8",
+  "worktree_clean": true,
+  "untimed_validate": {
+    "executed": true,
+    "exit_code": 0,
+    "schema": "libwebp-backref-cost-traceback-frozen-v1",
+    "manifest_sha256": "bd07a2ebf37e9907fd5182959ac3e01d49249f6803ef584b3de68ae6afe814ee",
+    "operator_sha256": "00e259fbba76fd3721f7e3d432e1e5fd5d13ee5d20dbedd63ee9bdfbb56b7d72"
+  },
+  "intended_output_path": "/Users/jonaskamsker/.codex/worktrees/79be/libwebp-metal/evidence/backref-cost-traceback-20260818-executor-refusal/run",
+  "timed_run_invoked": false,
+  "lease_acquired": false,
+  "counts": {
+    "command_processes": 0,
+    "raw_sample_rows": 0,
+    "measured_samples": 0,
+    "warmup_samples": 0,
+    "correctness_cells": 0,
+    "evaluation_cells": 0,
+    "resource_records": 0
+  },
+  "refusal": {
+    "gate": "low_power_mode",
+    "reason": "Low Power Mode was enabled on AC at preflight time.",
+    "observed": "system_profiler SPPowerDataType reported Low Power Mode: Yes for AC Power.",
+    "action": "fail_closed_without_build_or_timed_execution"
+  },
+  "closed_evidence_used": false
+}

@@ -36,6 +36,23 @@
 > off. No cache threshold, API/ABI, fallback, Metal, or CUDA policy changes.
 > See
 > [cache-size-single-pass-slab-experiment-evaluation-20260818.md](cache-size-single-pass-slab-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 cost/traceback workspace consequence:** the independent row-11
+> executor refused before build, lease acquisition, correctness, or timing
+> after preflight found Low Power Mode enabled on AC. The retained default-off
+> candidate passes existing untimed equivalence, fallback, isolation, and
+> sanitizer checks, but no performance result exists. Promotion is unassessed
+> and rejected for this cycle; API/ABI, integer/tie semantics, thresholds,
+> fallback, Metal, CUDA, and production defaults remain unchanged. See
+> [backref-cost-traceback-experiment-evaluation-20260818.md](backref-cost-traceback-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 remote workspace A/B consequence:** the independent row-12
+> remote re-freeze produced zero samples because its frozen driver rejected the
+> generated temporary path before transfer, preflight, lease, correctness, or
+> timing. Untimed equivalence, fallback, omission, guard, and sanitizer checks
+> pass, so the code is retained default off. No performance or production
+> conclusion follows. See
+> [backref-cost-workspace-ab-experiment-evaluation-20260818.md](backref-cost-workspace-ab-experiment-evaluation-20260818.md).
 
 ## Abstract
 
@@ -511,6 +528,18 @@ matrix.
   sole-host records and separate timed-child stderr. Current-host checks only
   corroborate, rather than prove, that timed state. Those limitations do not
   rescue three failed required holdout medians.
+- Row 11 has no implementation timing result. Its preflight records Low Power
+  Mode enabled on AC and a correct refusal before lease acquisition. All 408
+  required command processes, 1,560 measurements, 26 executor correctness
+  cells, 24 evaluation cells, and the resource record are absent. Untimed
+  safety checks justify retaining default-off code but cannot establish a
+  speedup, regression, resource ceiling, or production consequence.
+- Row 12 also has no implementation timing result. The frozen transfer driver
+  rejected its own generated temporary path before source transfer or remote
+  preflight. Baseline and candidate each have zero samples; execution-time
+  host, runner, power, thermal, resource, transfer, median, and p95 evidence is
+  absent. The refusal validates fail-closed execution only and supports no
+  performance direction or production promotion.
 
 ## Reproducibility
 

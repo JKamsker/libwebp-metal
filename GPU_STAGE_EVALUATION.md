@@ -57,8 +57,8 @@ Those are baselines rather than new candidates here.
 |---:|---|---:|---:|---:|---:|---:|---:|---|
 | 1 | Lossless predictor search plus residual application | 3 | 5 | 4 | 5 | 5 | 4 | Prototype exact residual application now; investigate fixed-point tile histograms/search next. |
 | 2 | Lossless near-lossless preprocessing | 4 | 5 | 4 | 5 | 5 | 4 | Strong local stencil/multi-pass candidate, but require byte-for-byte CPU preprocessing output before enabling. |
-| 3 | Lossy macroblock mode/RD batches | 4 | 4 | 2 | 4 | 5 | 5 | Highest compute potential, but only after separating immutable per-MB trials from raster-order context/probability commits. |
-| 4 | Lossless histogram construction and cost precomputation | 3 | 4 | 3 | 5 | 5 | 3 | Flatten refs and accelerate exact counts/costs only; retain stochastic/greedy merge and tie order on CPU initially. |
+| 3 | Lossy macroblock mode/RD batches | 4 | 4 | 2 | 4 | 5 | 5 | Highest remaining compute potential; exact batching requires a device-resident anti-diagonal wavefront for reconstructed-neighbor and context state. |
+| 4 | Lossless histogram construction and cost precomputation | 3 | 4 | 3 | 5 | 5 | 3 | Exact full-stream counts now consume linked spans directly; measure them before extending to independent costs. Keep stochastic/greedy merge and tie order on CPU. |
 | 5 | Palette mapping | 2 | 5 | 5 | 5 | 5 | 2 | Exact and easy, but low arithmetic intensity and only applies to <=256-color images. Prefer fusion/resident input. |
 | 6 | Subtract-green as a standalone dispatch | 1 | 5 | 5 | 5 | 5 | 1 | Do not dispatch alone. Fuse into a resident predictor/cross-color chain. |
 | 7 | Huffman construction and bitstream serialization | 1 | 1 | 1 | 5 | 5 | 1 | Keep on CPU; small/global/order-sensitive work is a poor device boundary. |
@@ -102,19 +102,25 @@ Transforms, quantization, reconstruction, and mode scoring are compute-heavy,
 fixed-point operations over many small blocks. A useful boundary must batch
 many macroblocks; dispatching individual 4x4/16x16 DSP calls cannot amortize
 submission. Exact mode scores and tie order can preserve the stream, but the
-current iterator also carries left/top prediction state, non-zero contexts,
-probability refreshes, filter statistics, and rate-control passes. A safe first
-step is GPU evaluation of candidate trials with CPU selection/commit in raster
-order, analogous to hash candidates plus CPU replay.
+current iterator also carries left/top reconstructed prediction state,
+non-zero contexts, probability refreshes, filter statistics, and rate-control
+passes. Mapping one callback per macroblock would preserve those dependencies
+but cannot amortize launch and transfer costs. The viable exact architecture is
+a resident macroblock pipeline: upload the frame and immutable configuration
+once, process macroblocks in anti-diagonal wavefronts so top/left reconstruction
+is available, retain coefficient/context/probability state on device, and
+download tokens and final statistics at coarse pass boundaries. This is a
+substantial encoder partition, not another isolated kernel.
 
 ### 4. Histograms
 
-Raw local histogram construction and independent histogram costs can use exact
-integer atomics/reductions. The linked `VP8LBackwardRefs` representation first
-needs a deterministic flattened command stream, adding movement. Stochastic
-and greedy combination mutate a global queue/set with order-sensitive equal-
-cost decisions; they should remain on CPU until an exact replay protocol is
-designed.
+Raw histogram construction and independent histogram costs can use exact
+integer atomics/reductions. The production CUDA experiment now exposes the
+at-most-16 `VP8LBackwardRefs` blocks as borrowed spans and uploads them directly,
+avoiding a CPU flattening pass. It accelerates exact full-stream symbol counts
+only; local histograms that remap distances, stochastic/greedy combination,
+and order-sensitive equal-cost decisions remain on CPU. Correctness is proven,
+but no timing result yet justifies enabling the stage by default.
 
 ## Predictor-residual experiment
 

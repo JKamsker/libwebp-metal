@@ -35,6 +35,23 @@
 > holdout cells nevertheless missed the paired-median limit. It is rejected,
 > remains default off, and promotes no production or threshold change. See
 > [cache-size-single-pass-slab-experiment-evaluation-20260818.md](cache-size-single-pass-slab-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 cost/traceback workspace addendum:** the row-11 executor stopped
+> fail-closed before lease acquisition, build, correctness, or timing because
+> Low Power Mode was enabled on AC. Independent untimed equivalence, fallback,
+> build-isolation, and sanitizer checks pass, so the candidate is retained
+> default off. With no mandatory holdout medians or p95 values, performance is
+> unassessed and promotion is rejected for this cycle. No production or
+> follow-up gate is added. See
+> [backref-cost-traceback-experiment-evaluation-20260818.md](backref-cost-traceback-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 remote workspace A/B addendum:** the row-12 remote re-freeze
+> stopped before source transfer, preflight, lease, correctness, or timing when
+> the frozen driver rejected its generated temporary path. No rerun or repair
+> occurred. Both variants have zero samples, so performance remains unassessed
+> and promotion is rejected for this cycle. The exact candidate passes untimed
+> equivalence and safety checks and remains default off. See
+> [backref-cost-workspace-ab-experiment-evaluation-20260818.md](backref-cost-workspace-ab-experiment-evaluation-20260818.md).
 
 ## Scope and evidence boundary
 

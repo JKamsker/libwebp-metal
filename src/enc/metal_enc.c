@@ -54,9 +54,12 @@ const WebPEncoderAccelerator* WebPGetMetalEncoderAccelerator(void) {
       MetalColorTransform,
       MetalHashChain,
       MetalRGBToYUV,
-      NULL,  // near_lossless
-      NULL,  // predictor
-      NULL,  // flush
-      NULL};  // trim
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL,
+      NULL};
   return &backend;
 }

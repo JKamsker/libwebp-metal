@@ -25,6 +25,32 @@
 #include "src/webp/format_constants.h"
 #include "src/webp/types.h"
 
+#if (defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT) && \
+     defined(WEBP_USE_BACKREF_COST_WORKSPACE_AB_EXPERIMENT)) || \
+    (defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT) && \
+     defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT)) || \
+    (defined(WEBP_USE_BACKREF_COST_WORKSPACE_AB_EXPERIMENT) && \
+     defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT))
+#error "backref workspace experiments are mutually exclusive"
+#elif defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#include "src/enc/backref_cost_traceback_experiment_enc.h"
+#define WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE 1
+#elif defined(WEBP_USE_BACKREF_COST_WORKSPACE_AB_EXPERIMENT)
+#include "src/enc/backref_cost_workspace_ab_experiment_enc.h"
+#define WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE 1
+#define VP8LBackrefCostTracebackExperimentEnabled \
+  VP8LBackrefCostWorkspaceABExperimentEnabled
+#define VP8LBackrefCostTracebackExperimentMalloc \
+  VP8LBackrefCostWorkspaceABExperimentMalloc
+#elif defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT)
+#include "src/enc/backref_cost_workspace_remote_v2_experiment_enc.h"
+#define WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE 1
+#define VP8LBackrefCostTracebackExperimentEnabled \
+  VP8LBackrefCostWorkspaceRemoteV2ExperimentEnabled
+#define VP8LBackrefCostTracebackExperimentMalloc \
+  VP8LBackrefCostWorkspaceRemoteV2ExperimentMalloc
+#endif
+
 #define VALUES_IN_BYTE 256
 
 extern void VP8LClearBackwardRefs(VP8LBackwardRefs* const refs);
@@ -195,6 +221,14 @@ typedef struct {
   // These are regularly malloc'd remains. This list can't grow larger than than
   // size COST_CACHE_INTERVAL_SIZE_MAX - COST_MANAGER_MAX_FREE_LIST, note.
   CostInterval* recycled_intervals;
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+  // Candidate-only ownership. One exact-sized allocation contains costs,
+  // cached-cost intervals and every non-inline interval permitted by the cap.
+  void* workspace;
+  CostInterval* workspace_intervals;
+  CostInterval* workspace_intervals_end;
+  CostInterval* workspace_free_intervals;
+#endif
 } CostManager;
 
 static void CostIntervalAddToFreeList(CostManager* const manager,
@@ -209,6 +243,16 @@ static int CostIntervalIsInFreeList(const CostManager* const manager,
           interval <= &manager->intervals[COST_MANAGER_MAX_FREE_LIST - 1]);
 }
 
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+static int CostIntervalIsInWorkspace(const CostManager* const manager,
+                                     const CostInterval* const interval) {
+  const uintptr_t address = (uintptr_t)interval;
+  return (manager->workspace_intervals != NULL &&
+          address >= (uintptr_t)manager->workspace_intervals &&
+          address < (uintptr_t)manager->workspace_intervals_end);
+}
+#endif
+
 static void CostManagerInitFreeList(CostManager* const manager) {
   int i;
   manager->free_intervals = NULL;
@@ -221,7 +265,11 @@ static void DeleteIntervalList(CostManager* const manager,
                                const CostInterval* interval) {
   while (interval != NULL) {
     const CostInterval* const next = interval->next;
-    if (!CostIntervalIsInFreeList(manager, interval)) {
+    if (!CostIntervalIsInFreeList(manager, interval)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+        && !CostIntervalIsInWorkspace(manager, interval)
+#endif
+    ) {
       WebPSafeFree((void*)interval);
     }  // else: do nothing
     interval = next;
@@ -231,14 +279,24 @@ static void DeleteIntervalList(CostManager* const manager,
 static void CostManagerClear(CostManager* const manager) {
   if (manager == NULL) return;
 
-  WebPSafeFree(manager->costs);
-  WebPSafeFree(manager->cache_intervals);
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+  if (manager->workspace == NULL) {
+#endif
+    WebPSafeFree(manager->costs);
+    WebPSafeFree(manager->cache_intervals);
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+  }
+#endif
 
   // Clear the interval lists.
   DeleteIntervalList(manager, manager->head);
   manager->head = NULL;
   DeleteIntervalList(manager, manager->recycled_intervals);
   manager->recycled_intervals = NULL;
+
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+  WebPSafeFree(manager->workspace);
+#endif
 
   // Reset pointers, 'count' and 'cache_intervals_size'.
   memset(manager, 0, sizeof(*manager));
@@ -247,7 +305,13 @@ static void CostManagerClear(CostManager* const manager) {
 
 static int CostManagerInit(CostManager* const manager,
                            uint16_t* const dist_array, int pix_count,
-                           const CostModel* const cost_model) {
+                           const CostModel* const cost_model
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+                           ,
+                           int use_experiment,
+                           int* const experiment_setup_failed
+#endif
+) {
   int i;
   const int cost_cache_size = (pix_count > MAX_LENGTH) ? MAX_LENGTH : pix_count;
 
@@ -258,6 +322,13 @@ static int CostManagerInit(CostManager* const manager,
   manager->count = 0;
   manager->dist_array = dist_array;
   CostManagerInitFreeList(manager);
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+  manager->workspace = NULL;
+  manager->workspace_intervals = NULL;
+  manager->workspace_intervals_end = NULL;
+  manager->workspace_free_intervals = NULL;
+  if (experiment_setup_failed != NULL) *experiment_setup_failed = 0;
+#endif
 
   // Fill in the 'cost_cache'.
   // Has to be done in two passes due to a GCC bug on i686
@@ -278,8 +349,55 @@ static int CostManagerInit(CostManager* const manager,
   // different cost, hence MAX_LENGTH but that is impossible with the current
   // implementation that spirals around a pixel.
   assert(manager->cache_intervals_size <= MAX_LENGTH);
-  manager->cache_intervals = (CostCacheInterval*)WebPSafeMalloc(
-      manager->cache_intervals_size, sizeof(*manager->cache_intervals));
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+  if (use_experiment) {
+    const size_t workspace_interval_count =
+        COST_CACHE_INTERVAL_SIZE_MAX - COST_MANAGER_MAX_FREE_LIST;
+    const uint64_t costs_bytes =
+        (uint64_t)(size_t)pix_count * sizeof(*manager->costs);
+    const uint64_t cache_intervals_bytes =
+        (uint64_t)manager->cache_intervals_size *
+        sizeof(*manager->cache_intervals);
+    const uint64_t workspace_intervals_bytes =
+        (uint64_t)workspace_interval_count * sizeof(CostInterval);
+    const uint64_t workspace_size =
+        costs_bytes + cache_intervals_bytes + workspace_intervals_bytes;
+    uint8_t* memory;
+    size_t j;
+    if (workspace_size > (uint64_t)SIZE_MAX) {
+      if (experiment_setup_failed != NULL) *experiment_setup_failed = 1;
+      CostManagerClear(manager);
+      return 0;
+    }
+    manager->workspace =
+        VP8LBackrefCostTracebackExperimentMalloc((size_t)workspace_size);
+    if (manager->workspace == NULL) {
+      if (experiment_setup_failed != NULL) *experiment_setup_failed = 1;
+      CostManagerClear(manager);
+      return 0;
+    }
+    memory = (uint8_t*)manager->workspace;
+    manager->costs = (int64_t*)memory;
+    memory += (size_t)costs_bytes;
+    manager->cache_intervals = (CostCacheInterval*)memory;
+    memory += (size_t)cache_intervals_bytes;
+    manager->workspace_intervals = (CostInterval*)memory;
+    manager->workspace_intervals_end =
+        manager->workspace_intervals + workspace_interval_count;
+    manager->free_intervals = NULL;
+    for (j = 0; j < workspace_interval_count; ++j) {
+      CostIntervalAddToFreeList(manager, &manager->workspace_intervals[j]);
+    }
+    manager->workspace_free_intervals = manager->free_intervals;
+    // Keep the ten inline nodes ahead of the workspace pool, matching the
+    // baseline's first ten interval-node choices.
+    CostManagerInitFreeList(manager);
+  } else
+#endif
+  {
+    manager->cache_intervals = (CostCacheInterval*)WebPSafeMalloc(
+        manager->cache_intervals_size, sizeof(*manager->cache_intervals));
+  }
   if (manager->cache_intervals == NULL) {
     CostManagerClear(manager);
     return 0;
@@ -308,7 +426,13 @@ static int CostManagerInit(CostManager* const manager,
            manager->cache_intervals_size);
   }
 
-  manager->costs = (int64_t*)WebPSafeMalloc(pix_count, sizeof(*manager->costs));
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+  if (!use_experiment)
+#endif
+  {
+    manager->costs =
+        (int64_t*)WebPSafeMalloc(pix_count, sizeof(*manager->costs));
+  }
   if (manager->costs == NULL) {
     CostManagerClear(manager);
     return 0;
@@ -438,6 +562,11 @@ static WEBP_INLINE void InsertInterval(CostManager* const manager,
   } else if (manager->recycled_intervals != NULL) {
     interval_new = manager->recycled_intervals;
     manager->recycled_intervals = interval_new->next;
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+  } else if (manager->workspace_free_intervals != NULL) {
+    interval_new = manager->workspace_free_intervals;
+    manager->workspace_free_intervals = interval_new->next;
+#endif
   } else {  // malloc for good
     interval_new = (CostInterval*)WebPSafeMalloc(1, sizeof(*interval_new));
     if (interval_new == NULL) {
@@ -567,7 +696,12 @@ static WEBP_INLINE void PushInterval(CostManager* const manager,
 static int BackwardReferencesHashChainDistanceOnly(
     int xsize, int ysize, const uint32_t* const argb, int cache_bits,
     const VP8LHashChain* const hash_chain, const VP8LBackwardRefs* const refs,
-    uint16_t* const dist_array) {
+    uint16_t* const dist_array
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+    ,
+    int use_experiment, int* const experiment_setup_failed
+#endif
+) {
   int i;
   int ok = 0;
   int cc_init = 0;
@@ -598,7 +732,12 @@ static int BackwardReferencesHashChainDistanceOnly(
     goto Error;
   }
 
-  if (!CostManagerInit(cost_manager, dist_array, pix_count, cost_model)) {
+  if (!CostManagerInit(cost_manager, dist_array, pix_count, cost_model
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+                       ,
+                       use_experiment, experiment_setup_failed
+#endif
+                       )) {
     goto Error;
   }
 
@@ -776,9 +915,31 @@ int VP8LBackwardReferencesTraceBackwards(int xsize, int ysize,
 
   if (dist_array == NULL) goto Error;
 
-  if (!BackwardReferencesHashChainDistanceOnly(
-          xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array)) {
-    goto Error;
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+  if (VP8LBackrefCostTracebackExperimentEnabled()) {
+    int experiment_setup_failed = 0;
+    if (!BackwardReferencesHashChainDistanceOnly(
+            xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array,
+            /*use_experiment=*/1, &experiment_setup_failed)) {
+      if (!experiment_setup_failed ||
+          !BackwardReferencesHashChainDistanceOnly(
+              xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array,
+              /*use_experiment=*/0, NULL)) {
+        goto Error;
+      }
+    }
+  } else
+#endif
+  {
+    if (!BackwardReferencesHashChainDistanceOnly(
+            xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+            ,
+            /*use_experiment=*/0, NULL
+#endif
+            )) {
+      goto Error;
+    }
   }
   TraceBackwards(dist_array, dist_array_size, &chosen_path, &chosen_path_size);
   if (!BackwardReferencesHashChainFollowChosenPath(

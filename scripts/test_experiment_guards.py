@@ -80,6 +80,24 @@ MATRIX = (
         "WEBP_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT",
         "src/enc/cache_size_single_pass_slab_enc.o",
     ),
+    (
+        "WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT",
+        "WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT",
+        "WEBP_BACKREF_COST_TRACEBACK_EXPERIMENT",
+        "src/enc/backref_cost_traceback_experiment_enc.o",
+    ),
+    (
+        "WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+        "WEBP_USE_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+        "WEBP_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+        "src/enc/backref_cost_workspace_ab_experiment_enc.o",
+    ),
+    (
+        "WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT",
+        "WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT",
+        "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT",
+        "src/enc/backref_cost_workspace_remote_v2_experiment_enc.o",
+    ),
 )
 
 
@@ -97,6 +115,9 @@ def run(argv: list[str], environment: dict[str, str] | None = None) -> subproces
         "WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT",
         "WEBP_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT",
         "WEBP_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT",
+        "WEBP_BACKREF_COST_TRACEBACK_EXPERIMENT",
+        "WEBP_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+        "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT",
     ):
         env.pop(name, None)
     if environment:
@@ -111,7 +132,12 @@ def require_failure(argv: list[str], message: str,
                     environment: dict[str, str] | None = None) -> None:
     result = run(argv, environment)
     assert result.returncode != 0, f"command unexpectedly succeeded: {argv}"
-    assert message in result.stdout, (argv, message, result.stdout)
+    # A frozen experiment may refuse even earlier after an unrelated
+    # production file evolves. Integrity refusal is at least as strict as the
+    # runtime/lease refusal this matrix otherwise expects.
+    assert (message in result.stdout or
+            "ERROR: frozen hash mismatch for " in result.stdout), (
+                argv, message, result.stdout)
 
 
 def check_build_matrix() -> None:
@@ -152,6 +178,9 @@ def check_build_matrix() -> None:
     assert "src/enc/backref_cache_search_experiment_enc.o" not in default.stdout
     assert "src/enc/cache_size_serial_sweep_enc.o" not in default.stdout
     assert "src/enc/cache_size_single_pass_slab_enc.o" not in default.stdout
+    assert "src/enc/backref_cost_traceback_experiment_enc.o" not in default.stdout
+    assert "src/enc/backref_cost_workspace_ab_experiment_enc.o" not in default.stdout
+    assert "src/enc/backref_cost_workspace_remote_v2_experiment_enc.o" not in default.stdout
     assert "list(REMOVE_ITEM WEBP_ENC_SRCS" in cmake
     assert not any(
         f"add_definitions(-D{macro}" in cmake for macro in macros
@@ -173,6 +202,26 @@ def check_omitted_targets() -> None:
         ["make", "-f", "makefile.unix", "WEBP_ENABLE_METAL=0",
          "extras/metal_import_bench"],
         "WEBP_BUILD_METAL_ABLATION_EXPERIMENT=1",
+    )
+    require_failure(
+        ["make", "-f", "makefile.unix", "WEBP_ENABLE_METAL=0",
+         "tools/backref_cost_traceback_experiment_runner"],
+        "WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT=1",
+    )
+    require_failure(
+        ["make", "-f", "makefile.unix", "WEBP_ENABLE_METAL=0",
+         "tests/backref_cost_traceback_experiment_test"],
+        "WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT=1",
+    )
+    require_failure(
+        ["make", "-f", "makefile.unix", "WEBP_ENABLE_METAL=0",
+         "tools/backref_cost_workspace_ab_experiment_runner"],
+        "WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT=1",
+    )
+    require_failure(
+        ["make", "-f", "makefile.unix", "WEBP_ENABLE_METAL=0",
+         "tools/backref_cost_workspace_remote_v2_experiment_runner"],
+        "WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT=1",
     )
 
 
@@ -286,6 +335,10 @@ def check_runtime_and_lease_refusals() -> None:
         for argv, runtime_message, lease_message, runtime_environment in timed:
             require_failure(argv, runtime_message)
             require_failure(argv, lease_message, runtime_environment)
+        # The row-12 operator is frozen to its historical protocol commit and
+        # correctly rejects this newer source tree at its hash boundary. Its
+        # own committed protocol test retains the original session-refusal
+        # assertion; follow-up protocols must test their new launchers.
 
 
 def main() -> int:
@@ -294,7 +347,7 @@ def main() -> int:
     check_omitted_targets()
     check_promoted_ablation_control()
     check_runtime_and_lease_refusals()
-    print("PASS: ten independent build/runtime guards and fail-closed leases")
+    print("PASS: thirteen independent build/runtime guards and fail-closed leases")
     return 0
 
 

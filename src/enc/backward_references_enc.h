@@ -35,6 +35,9 @@ enum Mode { kLiteral, kCacheIdx, kCopy, kNone };
 typedef struct {
   // mode as uint8_t to make the memory layout to be exactly 8 bytes.
   uint8_t mode;
+  // Keep the layout explicit because accelerator backends copy command blocks
+  // as raw bytes. The value is not part of the command semantics.
+  uint8_t reserved;
   uint16_t len;
   uint32_t argb_or_distance;
 } PixOrCopy;
@@ -43,6 +46,7 @@ static WEBP_INLINE PixOrCopy PixOrCopyCreateCopy(uint32_t distance,
                                                  uint16_t len) {
   PixOrCopy retval;
   retval.mode = kCopy;
+  retval.reserved = 0;
   retval.argb_or_distance = distance;
   retval.len = len;
   return retval;
@@ -53,6 +57,7 @@ static WEBP_INLINE PixOrCopy PixOrCopyCreateCacheIdx(int idx) {
   assert(idx >= 0);
   assert(idx < (1 << MAX_COLOR_CACHE_BITS));
   retval.mode = kCacheIdx;
+  retval.reserved = 0;
   retval.argb_or_distance = idx;
   retval.len = 1;
   return retval;
@@ -61,6 +66,7 @@ static WEBP_INLINE PixOrCopy PixOrCopyCreateCacheIdx(int idx) {
 static WEBP_INLINE PixOrCopy PixOrCopyCreateLiteral(uint32_t argb) {
   PixOrCopy retval;
   retval.mode = kLiteral;
+  retval.reserved = 0;
   retval.argb_or_distance = argb;
   retval.len = 1;
   return retval;

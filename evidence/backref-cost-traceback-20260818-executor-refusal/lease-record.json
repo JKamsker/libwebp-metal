@@ -1,0 +1,10 @@
+{
+  "schema": "libwebp-backref-cost-traceback-lease-record-v1",
+  "lease_path": "/tmp/libwebp-metal-backref-cost-traceback.lock",
+  "preflight_check_utc": "2026-08-18T14:42:10Z",
+  "preflight_path_present": false,
+  "preflight_holder": null,
+  "operator_run_invoked": false,
+  "acquisition": {"status": "not_attempted", "reason": "Low Power Mode preflight refusal"},
+  "release": {"status": "not_applicable", "reason": "No lease was acquired"}
+}

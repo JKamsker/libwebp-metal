@@ -59,6 +59,12 @@ option(WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT
        "Build the cache-size serial-sweep implementation experiment." OFF)
 option(WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT
        "Build the cache-size single-pass slab implementation experiment." OFF)
+option(WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT
+       "Build the backward-reference cost/traceback workspace experiment." OFF)
+option(WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT
+       "Build the independent remote backref-cost workspace A/B experiment." OFF)
+option(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT
+       "Build the independent v2 remote backref-cost workspace experiment." OFF)
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
 option(WEBP_BUILD_CWEBP "Build the cwebp command line tool." ON)
 option(WEBP_BUILD_DWEBP "Build the dwebp command line tool." ON)
@@ -136,8 +142,14 @@ if(WEBP_ENABLE_CUDA)
          "Build the CUDA opaque RGB-to-YUV420 stage." ON)
   option(WEBP_CUDA_ENABLE_NEAR_LOSSLESS
          "Build CUDA near-lossless preprocessing." ON)
+  option(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS
+         "Build CUDA lossy macroblock analysis." ON)
+  option(WEBP_CUDA_ENABLE_FUSED_LOSSY_ANALYSIS
+         "Build fused CUDA RGB conversion and lossy analysis." ON)
   option(WEBP_CUDA_ENABLE_PREDICTOR
          "Build the CUDA lossless predictor stage." ON)
+  option(WEBP_CUDA_ENABLE_HISTOGRAM
+         "Build experimental CUDA lossless histogram counting." ON)
   option(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS
          "Retain CUDA staging allocations across encoder calls." ON)
   option(WEBP_CUDA_ENABLE_PINNED_HOST_MEMORY
@@ -455,6 +467,18 @@ if(WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT)
   list(APPEND WEBP_ENC_SRCS
        ${WEBP_SRC_DIR}/enc/cache_size_single_pass_slab_enc.c)
 endif()
+if(WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT)
+  list(APPEND WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/backref_cost_traceback_experiment_enc.c)
+endif()
+if(WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT)
+  list(APPEND WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/backref_cost_workspace_ab_experiment_enc.c)
+endif()
+if(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT)
+  list(APPEND WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/backref_cost_workspace_remote_v2_experiment_enc.c)
+endif()
 
 if(WEBP_ENABLE_METAL)
   set_source_files_properties(
@@ -626,7 +650,8 @@ target_include_directories(
 if(WEBP_ENABLE_CUDA)
   foreach(CUDA_OPTION
           COLOR_TRANSFORM COLOR_SHARED_TILE HASH_CHAIN RGB_TO_YUV
-          NEAR_LOSSLESS PREDICTOR PERSISTENT_BUFFERS
+          NEAR_LOSSLESS LOSSY_ANALYSIS FUSED_LOSSY_ANALYSIS PREDICTOR HISTOGRAM
+          PERSISTENT_BUFFERS
           PINNED_HOST_MEMORY ASYNC_COPIES HASH_MATCH4 RGB_BLOCK_2X2
           COLOR_256_THREAD_BLOCKS HASH_256_THREAD_BLOCKS
           RGB_256_THREAD_BLOCKS READ_ONLY_CACHE RESTRICT_POINTERS
@@ -684,6 +709,18 @@ endif()
 if(WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT)
   target_compile_definitions(
     webpencode PRIVATE WEBP_USE_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT=1)
+endif()
+if(WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT=1)
+endif()
+if(WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_BACKREF_COST_WORKSPACE_AB_EXPERIMENT=1)
+endif()
+if(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT=1)
 endif()
 add_library(webp $<TARGET_OBJECTS:webpdecode> $<TARGET_OBJECTS:webpdsp>
                  $<TARGET_OBJECTS:webpencode> $<TARGET_OBJECTS:webputils>)
@@ -744,6 +781,44 @@ if(WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT)
   target_include_directories(
     cache_size_single_pass_slab_test PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
                                              ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
+if(WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT)
+  add_executable(
+    backref_cost_traceback_experiment_test
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/backref_cost_traceback_experiment_test.c)
+  target_link_libraries(backref_cost_traceback_experiment_test PRIVATE webp)
+  target_include_directories(
+    backref_cost_traceback_experiment_test
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+  add_executable(
+    backref_cost_traceback_experiment_runner
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/backref_cost_traceback_experiment_runner.c)
+  target_link_libraries(backref_cost_traceback_experiment_runner PRIVATE webp)
+  target_include_directories(
+    backref_cost_traceback_experiment_runner
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
+if(WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT)
+  add_executable(
+    backref_cost_workspace_ab_experiment_runner
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/backref_cost_workspace_ab_experiment_runner.c)
+  target_link_libraries(backref_cost_workspace_ab_experiment_runner PRIVATE webp)
+  target_include_directories(
+    backref_cost_workspace_ab_experiment_runner
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
+if(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT)
+  add_executable(
+    backref_cost_workspace_remote_v2_experiment_runner
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/backref_cost_workspace_remote_v2_experiment_runner.c)
+  target_link_libraries(
+    backref_cost_workspace_remote_v2_experiment_runner PRIVATE webp)
+  target_include_directories(
+    backref_cost_workspace_remote_v2_experiment_runner
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
 if(WEBP_BUILD_METAL_BATCH_EXPERIMENT)
@@ -930,6 +1005,12 @@ if(WEBP_BUILD_CUDA_BENCHMARK)
   target_include_directories(cuda_concurrency_test
                              PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src
                                      ${CMAKE_CURRENT_SOURCE_DIR})
+  add_executable(cuda_histogram_test tests/cuda_histogram_test.c)
+  target_link_libraries(cuda_histogram_test PRIVATE webp)
+  target_include_directories(
+    cuda_histogram_test
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+            ${CMAKE_CURRENT_SOURCE_DIR})
   if(WEBP_NEAR_LOSSLESS)
     add_executable(cuda_near_lossless_test tests/cuda_near_lossless_test.c)
     target_link_libraries(cuda_near_lossless_test PRIVATE webp)

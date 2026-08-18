@@ -1146,10 +1146,13 @@ int main(int argc, const char* argv[]) {
 
   // Read the input. We need to decide if we prefer ARGB or YUVA
   // samples, depending on the expected compression mode (this saves
-  // some conversion steps).
+  // some conversion steps). The fused CUDA experiment deliberately defers
+  // regular lossy conversion until WebPEncode() has supplied method/quality.
   picture.use_argb =
       (config.lossless || config.use_sharp_yuv || config.preprocessing > 0 ||
-       crop || (resize_w | resize_h) > 0);
+       crop || (resize_w | resize_h) > 0 ||
+       (getenv("WEBP_CUDA_FUSED_LOSSY_ANALYSIS") != NULL &&
+        !strcmp(getenv("WEBP_CUDA_FUSED_LOSSY_ANALYSIS"), "1")));
   if (verbose) {
     StopwatchReset(&stop_watch);
   }

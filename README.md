@@ -63,7 +63,10 @@ Selected lossy imports use the exact 2x2 Metal kernel by default.
 
 CUDA acceleration for the lossless cross-color transform, lossless hash-chain
 candidates, exact near-lossless preprocessing, and opaque regular
-RGB-to-YUV420 conversion is available as an opt-in CMake backend. It requires
+RGB-to-YUV420 conversion is available as an opt-in CMake backend. Experimental
+lossy macroblock-analysis, lossless predictor, and exact full-stream lossless
+histogram-counting stages are also built by default but require separate
+runtime opt-ins. The backend requires
 CMake 3.17 or newer and a CUDA toolkit, and is enabled with
 `-DWEBP_ENABLE_CUDA=ON`. The CUDA language is enabled only for this build mode;
 CPU-only and Metal builds do not require the toolkit. For example:
@@ -101,34 +104,68 @@ At runtime, `WEBP_ACCELERATOR=cuda` explicitly selects CUDA and
 lossless transform threshold, `WEBP_CUDA_HASH_MIN_PIXELS=N` controls hash
 candidates, `WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS=N` controls near-lossless
 preprocessing, and `WEBP_CUDA_LOSSY_MIN_PIXELS=N` controls RGB conversion.
-`WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`,
-`WEBP_CUDA_PREDICTOR=0`, and `WEBP_CUDA_LOSSY=0` disable one stage.
-The predictor stage takes both tile-mode selection and residual application
-when a single sampling is requested (method 4 and below). Tile rows are
-scored in launch order against the accumulated residual histogram of the
-previous rows, mirroring the CPU cost model; the chosen predictor image is
+`WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS=N` controls the experimental lossy
+analysis stage.
+The predictor stage takes both tile-mode selection and exact residual
+application; `WEBP_CUDA_PREDICTOR_MIN_PIXELS=N` controls its threshold. Tile
+rows are scored in launch order against the accumulated residual histogram of
+the previous rows, mirroring the CPU cost model; the chosen predictor image is
 valid but not byte-identical to the CPU search, so lossless modes promise
-decoded-pixel parity (as with the accelerated cross-color search).
-Near-lossless residual quantization and alpha-cleanup rewrites are scan-order
-sequential, so the backend declines those requests
-(`max_quantization > 1`, or non-exact encodes of images with transparent
-pixels) and the CPU path keeps them.
-`WEBP_CUDA_PREDICTOR_MIN_PIXELS=N` overrides its dispatch threshold. Lossy CUDA is off by default because it
-was neutral in persistent end-to-end batches and much slower in fresh
-processes; set `WEBP_CUDA_LOSSY=1` to opt in. `WEBP_CUDA_VERBOSE=1` reports
-device and dispatch timings. Set a threshold to zero for forced correctness
-tests.
+decoded-pixel parity (as with the accelerated cross-color search). It declines
+near-lossless residual quantization and non-exact inputs containing fully
+transparent pixels, whose RGB cleanup has scan-order dependencies.
+`WEBP_CUDA_HISTOGRAM=1` enables exact population counting for the full-image
+backward-reference histograms used during candidate-cost evaluation and final
+Huffman preparation. It uploads the encoder's at-most-16 linked command spans
+directly, without a CPU flattening pass, while entropy estimation, local
+histogram construction, merging, and tie-sensitive decisions stay on the CPU.
+`WEBP_CUDA_HISTOGRAM_MIN_COMMANDS=N` controls its command-count threshold. This
+stage is off by default and has correctness evidence only.
+`WEBP_CUDA_RESIDENT_LOSSLESS=1` enables an experimental pipeline handoff: the
+cross-color stage preserves its transformed device pixels across transform-map
+encoding, and the matching main hash-chain stage reuses them instead of
+uploading the host copy again. Pointer identity, dimensions, and encode-end
+cleanup prevent reuse outside the originating image. It remains off by default
+until the portable suite establishes whether the saved upload outweighs the
+device-to-device preservation copy on a given system.
+`WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`,
+`WEBP_CUDA_PREDICTOR=0`, `WEBP_CUDA_HISTOGRAM=0`, and `WEBP_CUDA_LOSSY=0`
+disable one stage. Lossy CUDA
+is off by default because it was neutral in persistent end-to-end batches and
+much slower in fresh processes; set `WEBP_CUDA_LOSSY=1` to opt in.
+`WEBP_CUDA_VERBOSE=1` reports device and dispatch timings. Set a threshold to
+zero for forced correctness tests.
 When `WEBP_ACCELERATOR=cuda` commits a process to the CUDA backend, the
 adapter warms the device context on a background thread at process start so
 initialization overlaps image decode and the CPU-side encoder stages;
 `WEBP_CUDA_PREWARM=1` forces that prewarm without the backend commitment and
 `WEBP_CUDA_PREWARM=0` disables it.
+The macroblock-analysis experiment remains off independently; set
+`WEBP_CUDA_LOSSY_ANALYSIS=1` to exercise it. It reproduces the production
+susceptibility histogram, initial luma/chroma modes, and segment inputs exactly,
+so forced CPU/CUDA tests require byte-identical lossy WebP output. With
+persistent buffers enabled, it consumes the device-resident YUV produced by the
+CUDA RGB stage and avoids a redundant upload; an end-of-encode hook clears any
+unconsumed handoff safely. No production crossover is claimed until the
+portable end-to-end suite is rerun.
+`WEBP_CUDA_FUSED_LOSSY_ANALYSIS=1` additionally asks `cwebp` and the benchmark
+tools to defer regular lossy conversion until the encoder has supplied its
+method and quality. When RGB conversion, lossy analysis, and persistent buffers
+are all compiled in and enabled, CUDA launches both exact kernels on one stream,
+queues both readbacks, and synchronizes once. The later analysis callback
+consumes the cached result only when its plane pointers, strides, dimensions,
+method, quality, and result count still match; otherwise it safely runs the
+ordinary analysis path. This experiment is also off by default and has
+correctness evidence only.
 Defaults are adaptive: a stage pays the
 roughly 140 ms runtime/device initialization cost only for large inputs, then
 uses a lower warm-process threshold once another CUDA stage initialized the
 backend: color and the predictor use 4,000,000 cold / 16,384 warm pixels,
-hash uses 8,000,000 / 4,000,000, near-lossless uses 16,777,216 cold / 65,536
-warm pixels, and RGB uses 80,000,000 / 4,000,000. Cold near-lossless requests with fewer than three
+hash uses 8,000,000 / 4,000,000, histogram uses 1,000,000 /
+65,536 commands, near-lossless uses 16,777,216 cold / 65,536 warm pixels, and
+RGB uses 80,000,000 / 4,000,000. Histogram thresholds are provisional because
+the stage has not yet been timed. Cold
+near-lossless requests with fewer than three
 passes stay on the CPU because no safe crossover was measured; an explicit
 near-lossless threshold overrides that conservative gate as well as both
 threshold defaults.
@@ -151,10 +188,15 @@ CMake option. The default strategy uses dynamically sized shared source tiles
 for cross-color search, persistent buffers, stream-ordered copies,
 four-at-a-time hash matching, read-only hash loads, restrict-qualified kernel
 pointers, packed four-byte RGB loads, 128-thread color/hash blocks, and
-256-thread RGB blocks. Page-locked host staging, fused RGB 2x2 work, alternate
-block widths, and stream-ordered allocation remain available for ablation but
-are off by default on the measured RTX 2080 SUPER. Build the non-installed
-`webp_cuda_benchmark`, `webp_cuda_batch_benchmark`, and concurrency runner with
+256-thread RGB blocks. The predictor, histogram, and fused lossy-analysis
+stages are built but runtime-off pending time, and for predictor compressed-size,
+measurements. `WEBP_CUDA_ENABLE_HISTOGRAM=OFF` and
+`WEBP_CUDA_ENABLE_FUSED_LOSSY_ANALYSIS=OFF` provide compile-time ablations.
+Page-locked host staging, fused RGB 2x2 work, alternate block widths, and
+stream-ordered allocation remain available for ablation but are off by default
+on the measured RTX 2080 SUPER. Build the
+non-installed `webp_cuda_benchmark`, `webp_cuda_batch_benchmark`, and
+concurrency runner with
 `-DWEBP_BUILD_CUDA_BENCHMARK=ON`; the batch runner supports persistent
 decode/encode batches and an explicit `--force-cuda` experiment flag.
 `scripts/test_cuda_variants.sh` validates both the default and
@@ -171,14 +213,17 @@ python3 scripts/benchmark_cuda_end_to_end.py run \
   --build-dir build-cuda --output-dir /tmp/webp-cuda-results \
   --label "workstation / RTX 2080 SUPER"
 python3 scripts/benchmark_cuda_end_to_end.py report \
-  system-a/results.json system-b/results.json
+  /tmp/webp-cuda-results/results.json
 ```
 
 Each run preserves all samples and commands in `raw.jsonl`, normalized system,
 binary, corpus, and aggregate metadata in `results.json`, and a human-readable
 `report.md` with CPU time, CUDA time, and speedup per image. Use
 `--verify-only` for correctness checks without collecting timing data, and
-`--cuda-device N` to select a GPU on multi-device systems.
+`--cuda-device N` to select a GPU on multi-device systems. Pass multiple
+`results.json` paths to `report` when comparing separately copied system runs.
+Forced lossless rows also record observed resident color-to-hash handoffs and
+are rejected if the requested reuse did not actually occur.
 
 Additional, non-installed CUDA strategy prototypes can be built with
 `-DWEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS=ON`. See

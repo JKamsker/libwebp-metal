@@ -43,16 +43,23 @@ CUDA_ENVIRONMENT_NAMES = (
     "WEBP_CUDA_VERBOSE",
     "WEBP_CUDA_PREWARM",
     "WEBP_CUDA_TIMING",
+    "WEBP_CUDA_HANDOFF_MARKERS",
     "WEBP_CUDA_COLOR",
     "WEBP_CUDA_HASH",
     "WEBP_CUDA_LOSSY",
     "WEBP_CUDA_NEAR_LOSSLESS",
+    "WEBP_CUDA_LOSSY_ANALYSIS",
+    "WEBP_CUDA_FUSED_LOSSY_ANALYSIS",
+    "WEBP_CUDA_RESIDENT_LOSSLESS",
     "WEBP_CUDA_PREDICTOR",
+    "WEBP_CUDA_HISTOGRAM",
     "WEBP_CUDA_MIN_PIXELS",
     "WEBP_CUDA_HASH_MIN_PIXELS",
     "WEBP_CUDA_LOSSY_MIN_PIXELS",
     "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS",
+    "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS",
     "WEBP_CUDA_PREDICTOR_MIN_PIXELS",
+    "WEBP_CUDA_HISTOGRAM_MIN_COMMANDS",
     "WEBP_CUDA_BATCH_SIZE",
     "WEBP_CUDA_BATCH_PIXELS",
     "WEBP_CUDA_BATCH_MIN_IMAGES",
@@ -110,6 +117,14 @@ def run_checked(
     return completed
 
 
+def observed_resident_lossless_handoff(stderr: str) -> bool:
+    return any(
+        line.startswith("WebP-CUDA: hash candidates")
+        and "(resident pixels)" in line
+        for line in stderr.splitlines()
+    )
+
+
 def clean_environment(
     variant: str, force_cuda: bool, cuda_device: Optional[int]
 ) -> dict[str, str]:
@@ -127,12 +142,18 @@ def clean_environment(
                 "WEBP_CUDA_HASH": "1",
                 "WEBP_CUDA_LOSSY": "1",
                 "WEBP_CUDA_NEAR_LOSSLESS": "1",
+                "WEBP_CUDA_LOSSY_ANALYSIS": "1",
+                "WEBP_CUDA_FUSED_LOSSY_ANALYSIS": "1",
+                "WEBP_CUDA_RESIDENT_LOSSLESS": "1",
                 "WEBP_CUDA_PREDICTOR": "1",
+                "WEBP_CUDA_HISTOGRAM": "1",
                 "WEBP_CUDA_MIN_PIXELS": "0",
                 "WEBP_CUDA_HASH_MIN_PIXELS": "0",
                 "WEBP_CUDA_LOSSY_MIN_PIXELS": "0",
                 "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS": "0",
+                "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS": "0",
                 "WEBP_CUDA_PREDICTOR_MIN_PIXELS": "0",
+                "WEBP_CUDA_HISTOGRAM_MIN_COMMANDS": "0",
             }
         )
     return environment
@@ -317,6 +338,14 @@ def run_persistent(
         if len(hashes) != 1:
             raise RuntimeError(f"{case_id}: unstable output hashes")
         for row in case_rows:
+            requires_resident_handoff = variant == "cuda" and mode != "lossy"
+            resident_handoff_observed = row.get(
+                "resident_lossless_handoff_observed", False
+            )
+            if requires_resident_handoff and not resident_handoff_observed:
+                raise RuntimeError(
+                    f"{case_id}: resident lossless handoff was not observed"
+                )
             row.update(
                 {
                     "lifecycle": "batch",
@@ -369,6 +398,8 @@ def run_single(
         )
         order.append(case_id)
         environment = clean_environment(variant, True, cuda_device)
+        if variant == "cuda" and mode != "lossy":
+            environment["WEBP_CUDA_HANDOFF_MARKERS"] = "1"
         begin = time.perf_counter_ns()
         completed = subprocess.run(
             command,
@@ -383,6 +414,9 @@ def run_single(
             raise RuntimeError(
                 f"{case_id} failed ({completed.returncode}): {completed.stderr}"
             )
+        resident_handoff_observed = observed_resident_lossless_handoff(
+            completed.stderr
+        )
         rows.append(
             {
                 "operation": "fresh_file_encode",
@@ -398,8 +432,33 @@ def run_single(
                 "output_path": str(destination),
                 "case_id": case_id,
                 "command": command,
+                "stderr": completed.stderr,
+                "resident_lossless_handoff_observed": (
+                    resident_handoff_observed
+                ),
             }
         )
+    # Whether one image donates resident pixels is content-dependent (inputs
+    # that skip the cross-color transform have nothing to hand off), so the
+    # evidence requirement is per format/mode group rather than per image.
+    for image_format in FORMATS:
+        for mode in MODES:
+            if mode == "lossy":
+                continue
+            group = [
+                row
+                for row in rows
+                if row["variant"] == "cuda"
+                and row["format"] == image_format
+                and row["mode"] == mode
+            ]
+            if group and not any(
+                row["resident_lossless_handoff_observed"] for row in group
+            ):
+                raise RuntimeError(
+                    f"{image_format}-{mode}: no single-process resident "
+                    "lossless handoff was observed"
+                )
     return rows, order
 
 
@@ -491,31 +550,46 @@ def summarize(
     persistent: list[dict[str, Any]], single: list[dict[str, Any]]
 ) -> list[dict[str, Any]]:
     batch_groups: dict[tuple[str, str, str], list[float]] = defaultdict(list)
+    batch_byte_groups: dict[tuple[str, str, str], list[float]] = defaultdict(
+        list
+    )
     for row in persistent:
-        batch_groups[(row["format"], row["mode"], row["variant"])].append(
-            row["ns_per_image"] / 1e6
-        )
+        key = (row["format"], row["mode"], row["variant"])
+        batch_groups[key].append(row["ns_per_image"] / 1e6)
+        batch_byte_groups[key].append(row["output_bytes"] / row["batch_size"])
 
     repetitions: dict[tuple[str, str, str, int], list[float]] = defaultdict(list)
+    byte_repetitions: dict[
+        tuple[str, str, str, int], list[float]
+    ] = defaultdict(list)
     for row in single:
-        repetitions[
-            (row["format"], row["mode"], row["variant"], row["repetition"])
-        ].append(row["elapsed_ns"] / 1e6)
+        key = (row["format"], row["mode"], row["variant"], row["repetition"])
+        repetitions[key].append(row["elapsed_ns"] / 1e6)
+        byte_repetitions[key].append(row["output_bytes"])
     single_groups: dict[tuple[str, str, str], list[float]] = defaultdict(list)
-    for (image_format, mode, variant, _), values in repetitions.items():
-        single_groups[(image_format, mode, variant)].append(
-            sum(values) / len(values)
-        )
+    single_byte_groups: dict[
+        tuple[str, str, str], list[float]
+    ] = defaultdict(list)
+    for key, values in repetitions.items():
+        image_format, mode, variant, _ = key
+        group = (image_format, mode, variant)
+        single_groups[group].append(sum(values) / len(values))
+        byte_values = byte_repetitions[key]
+        single_byte_groups[group].append(sum(byte_values) / len(byte_values))
 
     summary = []
     for image_format in FORMATS:
         for mode in MODES:
-            for lifecycle, groups in (
-                ("batch", batch_groups),
-                ("single", single_groups),
+            for lifecycle, groups, byte_groups in (
+                ("batch", batch_groups, batch_byte_groups),
+                ("single", single_groups, single_byte_groups),
             ):
-                cpu_ms = statistics.median(groups[(image_format, mode, "cpu")])
-                cuda_ms = statistics.median(groups[(image_format, mode, "cuda")])
+                cpu_key = (image_format, mode, "cpu")
+                cuda_key = (image_format, mode, "cuda")
+                cpu_ms = statistics.median(groups[cpu_key])
+                cuda_ms = statistics.median(groups[cuda_key])
+                cpu_bytes = statistics.median(byte_groups[cpu_key])
+                cuda_bytes = statistics.median(byte_groups[cuda_key])
                 summary.append(
                     {
                         "format": image_format,
@@ -524,6 +598,9 @@ def summarize(
                         "cpu_ms_per_image": cpu_ms,
                         "cuda_ms_per_image": cuda_ms,
                         "speedup": cpu_ms / cuda_ms,
+                        "cpu_bytes_per_image": cpu_bytes,
+                        "cuda_bytes_per_image": cuda_bytes,
+                        "cuda_size_ratio": cuda_bytes / cpu_bytes,
                     }
                 )
     return summary
@@ -766,6 +843,21 @@ def run_suite(args: argparse.Namespace) -> int:
             "near_lossless": 40,
             "file_io": "page-cached unless the operator documents otherwise",
             "cuda_policy": "forced stages for matched CPU/CUDA comparison",
+            "cuda_lossy_analysis": (
+                "forced exact macroblock analysis with resident YUV handoff"
+            ),
+            "cuda_fused_lossy_analysis": (
+                "forced RGB conversion plus exact analysis before one sync"
+            ),
+            "cuda_lossless_handoff": (
+                "forced transformed-pixel reuse from color to main hash"
+            ),
+            "cuda_predictor": (
+                "forced parallel 14-mode tile selector and exact residuals"
+            ),
+            "cuda_histogram": (
+                "forced exact global backward-reference population counts"
+            ),
             "validation_policy": {
                 "lossy": "encoded_bytes",
                 "lossless": "decoded_pixels",

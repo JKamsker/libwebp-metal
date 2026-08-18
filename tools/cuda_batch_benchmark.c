@@ -17,6 +17,7 @@
 #include "imageio/image_dec.h"
 #include "imageio/imageio_util.h"
 #include "imageio/wicdec.h"
+#include "src/enc/cuda_enc.h"
 #include "tools/benchmark_platform.h"
 #include "webp/decode.h"
 #include "webp/encode.h"
@@ -198,14 +199,30 @@ static int ConfigureDispatch(const Options* const options,
     ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY_MIN_PIXELS", "0");
     ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS",
                                       "0");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY_ANALYSIS", "1");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_FUSED_LOSSY_ANALYSIS", "1");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS",
+                                      "0");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_RESIDENT_LOSSLESS", "1");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_PREDICTOR", "1");
     ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_PREDICTOR_MIN_PIXELS", "0");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_HISTOGRAM", "1");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_HISTOGRAM_MIN_COMMANDS", "0");
   } else {
     ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_LOSSY");
     ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_MIN_PIXELS");
     ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_HASH_MIN_PIXELS");
     ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_LOSSY_MIN_PIXELS");
     ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_LOSSY_ANALYSIS");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_FUSED_LOSSY_ANALYSIS");
+    ok &= WebPBenchmarkUnsetEnvironment(
+        "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_RESIDENT_LOSSLESS");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_PREDICTOR");
     ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_PREDICTOR_MIN_PIXELS");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_HISTOGRAM");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_HISTOGRAM_MIN_COMMANDS");
   }
   if (options->batch_aware) {
     snprintf(batch_size, sizeof(batch_size), "%d", options->batch_size);
@@ -218,6 +235,29 @@ static int ConfigureDispatch(const Options* const options,
     ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_BATCH_PIXELS");
   }
   return ok;
+}
+
+static uint32_t RequiredCUDAStages(const Options* options) {
+  if (options->mode == MODE_LOSSY) {
+    return WEBP_ACCELERATOR_STAGE_RGB_TO_YUV |
+           WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS;
+  }
+  if (options->mode == MODE_NEAR_LOSSLESS) {
+    return WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS |
+           WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM |
+           WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN |
+           (options->force_cuda
+                ? WEBP_ACCELERATOR_STAGE_LOSSLESS_HISTOGRAM
+                : 0u);
+  }
+  return WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM |
+         WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN |
+         (options->force_cuda
+              ? WEBP_ACCELERATOR_STAGE_LOSSLESS_HISTOGRAM
+              : 0u) |
+         (!options->force_cuda || options->method == 0
+              ? 0u
+              : WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR);
 }
 
 static int LoadInputs(Options* const options) {
@@ -292,7 +332,8 @@ static int EncodeInput(const Options* const options, const Input* const input,
     owns_data = 1;
   }
   if (!InitConfig(options, &config) || !WebPPictureInit(&picture)) goto end;
-  picture.use_argb = config.lossless;
+  picture.use_argb = config.lossless ||
+                     (options->force_cuda && options->mode == MODE_LOSSY);
   if (!DecodeInput(input, data, data_size,
                    options->include_file_io || options->verify, &picture)) {
     WFPRINTF(stderr, "failed to decode %s\n",
@@ -337,9 +378,16 @@ static int DecodedOutputsEqual(const WebPMemoryWriter* const left,
 }
 
 static int Verify(const Options* const options) {
+  // Whether a stage dispatches for one image is content-dependent (palette or
+  // texture-like inputs skip the predictor and cross-color transforms
+  // entirely), so stage coverage is required across the verification set
+  // while decoded parity is required for every image. The resident handoff is
+  // required exactly when its donating cross-color stage ran.
+  uint32_t observed_stages = 0;
   int i;
   for (i = 0; i < options->input_count; ++i) {
     WebPMemoryWriter cpu, cuda;
+    uint32_t image_stages;
     Options preflight = *options;
     preflight.include_file_io = 0;
     if (!ConfigureDispatch(&preflight, "cpu")) return 0;
@@ -348,8 +396,22 @@ static int Verify(const Options* const options) {
       WebPMemoryWriterClear(&cpu);
       return 0;
     }
+    WebPCUDAResetSuccessfulStages();
     if (!EncodeInput(&preflight, &options->inputs[i], &cuda)) {
       WebPMemoryWriterClear(&cpu);
+      return 0;
+    }
+    image_stages = WebPCUDAGetSuccessfulStages();
+    observed_stages |= image_stages;
+    if (options->force_cuda && options->mode != MODE_LOSSY &&
+        (image_stages & WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM) !=
+            0u &&
+        WebPCUDAGetResidentLosslessHandoffCount() == 0u) {
+      fprintf(stderr,
+              "resident lossless handoff was not observed for %s\n",
+              options->inputs[i].filename);
+      WebPMemoryWriterClear(&cpu);
+      WebPMemoryWriterClear(&cuda);
       return 0;
     }
     if (!DecodedOutputsEqual(&cpu, &cuda)) {
@@ -361,6 +423,14 @@ static int Verify(const Options* const options) {
     }
     WebPMemoryWriterClear(&cpu);
     WebPMemoryWriterClear(&cuda);
+  }
+  if ((observed_stages & RequiredCUDAStages(options)) !=
+      RequiredCUDAStages(options)) {
+    fprintf(stderr,
+            "CUDA stage coverage missing across verification set "
+            "(observed 0x%x, required 0x%x)\n",
+            observed_stages, RequiredCUDAStages(options));
+    return 0;
   }
   fprintf(stderr, "verified CPU/CUDA decoded parity for %d input(s)\n",
           options->input_count);
@@ -423,10 +493,25 @@ int main(int argc, const char* const argv[]) {
   }
   for (sequence = -options.warmups; sequence < options.samples; ++sequence) {
     uint64_t elapsed_ns, output_hash, output_bytes;
+    uint64_t resident_lossless_handoffs;
+    WebPCUDAResetSuccessfulStages();
     if (!RunBatch(&options, &elapsed_ns, &output_hash, &output_bytes)) {
       fprintf(stderr, "batch failed at sequence %d\n", sequence);
       FreeInputs(&options);
       FREE_WARGV_AND_RETURN(1);
+    }
+    resident_lossless_handoffs =
+        WebPCUDAGetResidentLosslessHandoffCount();
+    // Images whose content skips the cross-color transform have no resident
+    // donor, so the batch requires observed reuse rather than one handoff per
+    // encode.
+    if (!strcmp(options.variant, "cuda") && options.force_cuda &&
+        options.mode != MODE_LOSSY && resident_lossless_handoffs == 0u) {
+      fprintf(stderr,
+              "no resident lossless handoff observed at sequence %d\n",
+              sequence);
+      FreeInputs(&options);
+      return 1;
     }
     if (sequence < 0) continue;
     if (sequence == 0) reference_hash = output_hash;
@@ -444,6 +529,8 @@ int main(int argc, const char* const argv[]) {
            "\"near_lossless\":%d,\"sequence\":%d,"
            "\"elapsed_ns\":%" PRIu64 ",\"ns_per_image\":%.3f,"
            "\"images_per_second\":%.6f,"
+           "\"resident_lossless_handoffs\":%" PRIu64 ","
+           "\"resident_lossless_handoff_observed\":%s,"
            "\"output_hash\":\"%016" PRIx64 "\","
            "\"output_bytes\":%" PRIu64 "}\n",
            options.variant, options.mode_name, options.batch_size,
@@ -452,7 +539,10 @@ int main(int argc, const char* const argv[]) {
            options.batch_aware ? "true" : "false", options.batch_pixels,
            options.method, options.quality, options.near_lossless, sequence,
            elapsed_ns, (double)elapsed_ns / options.batch_size,
-           1e9 * options.batch_size / elapsed_ns, output_hash, output_bytes);
+           1e9 * options.batch_size / elapsed_ns,
+           resident_lossless_handoffs,
+           resident_lossless_handoffs != 0u ? "true" : "false",
+           output_hash, output_bytes);
   }
   FreeInputs(&options);
   FREE_WARGV_AND_RETURN(0);

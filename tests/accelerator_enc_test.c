@@ -13,13 +13,25 @@ typedef struct {
   WebPAcceleratorResult hash_result;
   WebPAcceleratorResult rgb_result;
   WebPAcceleratorResult near_lossless_result;
+  WebPAcceleratorResult lossy_analysis_result;
   WebPAcceleratorResult predictor_result;
+  WebPAcceleratorResult histogram_result;
   int color_calls;
   int hash_calls;
   int rgb_calls;
   int near_lossless_calls;
+  int lossy_analysis_calls;
   int predictor_calls;
+  int histogram_calls;
+  int end_encode_calls;
+  int expected_rgb_method;
+  int expected_rgb_quality;
 } FakeContext;
+
+static void FakeEndEncode(void* opaque) {
+  FakeContext* const context = (FakeContext*)opaque;
+  ++context->end_encode_calls;
+}
 
 static WebPAcceleratorResult FakeColorTransform(
     void* opaque, const WebPAcceleratorColorTransformRequest* request) {
@@ -61,6 +73,8 @@ static WebPAcceleratorResult FakeRGBToYUV(
   assert(request->height == 2);
   assert(request->y_stride == 5);
   assert(request->uv_stride == 3);
+  assert(request->method == context->expected_rgb_method);
+  assert(request->quality == context->expected_rgb_quality);
   if (context->rgb_result == WEBP_ACCELERATOR_SUCCESS) {
     request->y[0] = 42u;
     request->u[0] = 43u;
@@ -83,21 +97,53 @@ static WebPAcceleratorResult FakeNearLossless(
   return context->near_lossless_result;
 }
 
+static WebPAcceleratorResult FakeLossyAnalysis(
+    void* opaque, const WebPAcceleratorLossyAnalysisRequest* request) {
+  FakeContext* const context = (FakeContext*)opaque;
+  if (request == NULL) return context->lossy_analysis_result;
+  ++context->lossy_analysis_calls;
+  assert(request->width == 2);
+  assert(request->height == 2);
+  assert(request->method == 4);
+  assert(request->quality == 75);
+  if (context->lossy_analysis_result == WEBP_ACCELERATOR_SUCCESS) {
+    request->results[0].alpha = 46u;
+  }
+  return context->lossy_analysis_result;
+}
+
 static WebPAcceleratorResult FakePredictor(
     void* opaque, const WebPAcceleratorPredictorRequest* request) {
   FakeContext* const context = (FakeContext*)opaque;
   ++context->predictor_calls;
   assert(request->width == 2);
-  assert(request->height == 2);
-  assert(request->bits == 4);
-  assert(request->exact == 1);
+  assert(request->height == 1);
+  assert(request->min_bits == 2);
+  assert(request->max_bits == 5);
   assert(request->max_quantization == 1);
+  assert(request->exact == 1);
   assert(request->used_subtract_green == 0);
   if (context->predictor_result == WEBP_ACCELERATOR_SUCCESS) {
-    request->argb[0] = 46u;
-    request->image[0] = 47u;
+    request->residuals[0] = 47u;
+    request->mode_image[0] = 0xff000b00u;
+    *request->best_bits = 5;
   }
   return context->predictor_result;
+}
+
+static WebPAcceleratorResult FakeHistogram(
+    void* opaque, const WebPAcceleratorHistogramRequest* request) {
+  FakeContext* const context = (FakeContext*)opaque;
+  ++context->histogram_calls;
+  assert(request->span_count == 1u);
+  assert(request->command_count == 1u);
+  assert(request->spans[0].count == 1u);
+  assert(request->cache_bits == 0);
+  assert(request->literal_count == 280u);
+  if (context->histogram_result == WEBP_ACCELERATOR_SUCCESS) {
+    request->literal[0] = 48u;
+  }
+  return context->histogram_result;
 }
 
 static WebPEncoderAccelerator MakeBackend(FakeContext* context) {
@@ -110,7 +156,9 @@ static WebPEncoderAccelerator MakeBackend(FakeContext* context) {
                    WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN |
                    WEBP_ACCELERATOR_STAGE_RGB_TO_YUV |
                    WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS |
-                   WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR;
+                   WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS |
+                   WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR |
+                   WEBP_ACCELERATOR_STAGE_LOSSLESS_HISTOGRAM;
   backend.properties = WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS |
                        WEBP_ACCELERATOR_PROPERTY_TRANSACTIONAL_OUTPUT |
                        WEBP_ACCELERATOR_PROPERTY_DETERMINISTIC;
@@ -119,7 +167,10 @@ static WebPEncoderAccelerator MakeBackend(FakeContext* context) {
   backend.hash_chain = FakeHashChain;
   backend.rgb_to_yuv = FakeRGBToYUV;
   backend.near_lossless = FakeNearLossless;
+  backend.lossy_analysis = FakeLossyAnalysis;
   backend.predictor = FakePredictor;
+  backend.histogram = FakeHistogram;
+  backend.end_encode = FakeEndEncode;
   return backend;
 }
 
@@ -140,27 +191,51 @@ int main(void) {
   uint8_t u[3] = {8u};
   uint8_t v[3] = {9u};
   const WebPAcceleratorRGBToYUVRequest rgb_request = {
-      rgba, rgba + 1, rgba + 2, 4, 13, 2, 2, y, u, v, 5, 3};
+      rgba, rgba + 1, rgba + 2, 4, 13, 2, 2, y, u, v, 5, 3, -1, -1};
   const uint32_t near_source[9] = {0};
   uint32_t near_output[6] = {10u};
   const WebPAcceleratorNearLosslessRequest near_lossless_request = {
       near_source, 3, 2, 3, 4, near_output};
-  uint32_t predictor_argb[4] = {11u, 12u, 13u, 14u};
-  uint32_t predictor_image[1] = {15u};
+  WebPAcceleratorLossyAnalysisResult analysis_result = {0};
+  const WebPAcceleratorLossyAnalysisRequest lossy_analysis_request = {
+      y, u, v, 5, 3, 2, 2, 4, 75, &analysis_result};
+  uint32_t predictor_source[2] = {11u, 12u};
+  uint32_t predictor_modes[1] = {13u};
+  int predictor_bits = 0;
   const WebPAcceleratorPredictorRequest predictor_request = {
-      2, 2, 4, 1, 1, 0, predictor_argb, predictor_image};
+      2, 1, 2, 5, 1, 1, 0, predictor_source, predictor_source,
+      predictor_modes, &predictor_bits};
+  const WebPAcceleratorHistogramCommand histogram_command = {0, 0, 1,
+                                                              0xff000000u};
+  const WebPAcceleratorHistogramSpan histogram_span = {&histogram_command, 1};
+  uint32_t histogram_literal[280] = {0};
+  uint32_t histogram_red[256] = {0};
+  uint32_t histogram_blue[256] = {0};
+  uint32_t histogram_alpha[256] = {0};
+  uint32_t histogram_distance[40] = {0};
+  const WebPAcceleratorHistogramRequest histogram_request = {
+      &histogram_span, 1,   1,          0, histogram_literal,
+      280,             histogram_red,   histogram_blue,
+      histogram_alpha, histogram_distance};
 
   memset(&context, 0, sizeof(context));
   context.hash_result = WEBP_ACCELERATOR_SUCCESS;
   context.rgb_result = WEBP_ACCELERATOR_SUCCESS;
   context.near_lossless_result = WEBP_ACCELERATOR_SUCCESS;
+  context.lossy_analysis_result = WEBP_ACCELERATOR_SUCCESS;
   context.predictor_result = WEBP_ACCELERATOR_SUCCESS;
+  context.histogram_result = WEBP_ACCELERATOR_SUCCESS;
+  context.expected_rgb_method = 5;
+  context.expected_rgb_quality = 63;
   backend = MakeBackend(&context);
   if (getenv("WEBP_ACCELERATOR") != NULL &&
       strcmp(getenv("WEBP_ACCELERATOR"), "none") == 0) {
     assert(WebPSetEncoderAcceleratorForTesting(&backend));
     assert(WebPAccelerateColorTransform(&color_request) ==
            WEBP_ACCELERATOR_NOT_RUN);
+    assert(!WebPAcceleratorLossyAnalysisEnabled());
+    WebPAcceleratorEndEncode();
+    assert(context.end_encode_calls == 1);
     assert(context.color_calls == 0);
     assert(argb[0] == 1u && transform_image[0] == 3u);
     puts("PASS: accelerator common CPU override");
@@ -168,11 +243,14 @@ int main(void) {
   }
 
   assert(WebPSetEncoderAcceleratorForTesting(NULL));
+  assert(!WebPAcceleratorLossyAnalysisEnabled());
   assert(WebPAccelerateColorTransform(&color_request) ==
          WEBP_ACCELERATOR_NOT_RUN);
   assert(argb[0] == 1u && transform_image[0] == 3u);
 
   assert(WebPSetEncoderAcceleratorForTesting(&backend));
+  WebPAcceleratorEndEncode();
+  assert(context.end_encode_calls == 1);
   context.color_result = WEBP_ACCELERATOR_SUCCESS;
   assert(WebPAccelerateColorTransform(&color_request) ==
          WEBP_ACCELERATOR_SUCCESS);
@@ -201,25 +279,46 @@ int main(void) {
   assert(context.hash_calls == 1);
   assert(candidates[0] == 99u);
 
+  WebPAcceleratorBeginEncode(0, 5, 63);
   assert(WebPAccelerateRGBToYUV(&rgb_request) == WEBP_ACCELERATOR_SUCCESS);
   assert(context.rgb_calls == 1);
   assert(y[0] == 42u && u[0] == 43u && v[0] == 44u);
+  WebPAcceleratorEndEncode();
+  context.expected_rgb_method = -1;
+  context.expected_rgb_quality = -1;
+  assert(WebPAccelerateRGBToYUV(&rgb_request) == WEBP_ACCELERATOR_SUCCESS);
+  assert(context.rgb_calls == 2);
 
   assert(WebPAccelerateNearLossless(&near_lossless_request) ==
          WEBP_ACCELERATOR_SUCCESS);
   assert(context.near_lossless_calls == 1);
   assert(near_output[0] == 45u);
 
+  assert(WebPAccelerateLossyAnalysis(&lossy_analysis_request) ==
+         WEBP_ACCELERATOR_SUCCESS);
+  assert(context.lossy_analysis_calls == 1);
+  assert(analysis_result.alpha == 46u);
+  assert(WebPAcceleratorLossyAnalysisEnabled());
+
   assert(WebPAcceleratePredictor(&predictor_request) ==
          WEBP_ACCELERATOR_SUCCESS);
   assert(context.predictor_calls == 1);
-  assert(predictor_argb[0] == 46u && predictor_image[0] == 47u);
+  assert(predictor_source[0] == 47u);
+  assert(predictor_modes[0] == 0xff000b00u);
+  assert(predictor_bits == 5);
+
+  assert(WebPAccelerateHistogram(&histogram_request) ==
+         WEBP_ACCELERATOR_SUCCESS);
+  assert(context.histogram_calls == 1);
+  assert(histogram_literal[0] == 48u);
 
   assert(WebPAccelerateColorTransform(NULL) == WEBP_ACCELERATOR_NOT_RUN);
   assert(WebPAccelerateHashChain(NULL) == WEBP_ACCELERATOR_NOT_RUN);
   assert(WebPAccelerateRGBToYUV(NULL) == WEBP_ACCELERATOR_NOT_RUN);
   assert(WebPAccelerateNearLossless(NULL) == WEBP_ACCELERATOR_NOT_RUN);
+  assert(WebPAccelerateLossyAnalysis(NULL) == WEBP_ACCELERATOR_NOT_RUN);
   assert(WebPAcceleratePredictor(NULL) == WEBP_ACCELERATOR_NOT_RUN);
+  assert(WebPAccelerateHistogram(NULL) == WEBP_ACCELERATOR_NOT_RUN);
 
   backend.properties = WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS;
   assert(!WebPSetEncoderAcceleratorForTesting(&backend));

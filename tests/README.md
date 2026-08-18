@@ -22,6 +22,24 @@ runtime and lease refusal, build independence, determinism, and array-bounds,
 pointer-overflow, undefined-behavior, and integer-sanitizer coverage. It runs no
 timed protocol.
 
+`scripts/test_backref_cost_traceback_experiment.py` verifies the private,
+default-off CostManager workspace candidate: exact reconstructed references and
+cache indexes, ties and edge sizes, deterministic repeats, injected workspace
+fallback, publication stream/decode identity, immutable inputs, build/runtime
+omission and sanitizer execution. It runs no timed protocol.
+
+`scripts/test_backref_cost_workspace_ab_experiment.py` independently re-freezes
+that unchanged workspace candidate behind new remote-A/B gates. It proves a
+canonical preprocessed-source match to main `e7c1be7d...`, old-gate isolation,
+default omission, exact publication-corpus streams and decoded pixels, injected
+fallback, missing-session refusal, and sanitizer coverage without timing.
+
+`scripts/test_backref_cost_workspace_remote_v2_experiment.py` establishes the
+next independent v2 gate identity from main `d12036f...`. It checks the exact
+validated candidate projection, all 26 method-4/6 correctness cells,
+transactional fallback, sanitizers, prior-gate isolation, and complete default
+artifact omission without invoking the recorder-free timing runner.
+
 ## Building
 
 ### Fuzzers

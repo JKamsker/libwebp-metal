@@ -1,0 +1,75 @@
+{
+  "schema": "libwebp-backref-cost-traceback-preflight-v1",
+  "captured_at_utc": "2026-08-18T14:42:10Z",
+  "source": {
+    "head": "355efae8dad9fc09717a4ccef874adf6bf6b2d6f",
+    "parent": "3142ff3fe31cd1666c5615c5c4ee7dec2ef891f8",
+    "worktree_status_porcelain": "",
+    "expected_commit_environment": "355efae8dad9fc09717a4ccef874adf6bf6b2d6f",
+    "generator_sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+    "corpus_manifest_sha256": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+    "experiment_manifest_sha256": "bd07a2ebf37e9907fd5182959ac3e01d49249f6803ef584b3de68ae6afe814ee",
+    "operator_sha256": "00e259fbba76fd3721f7e3d432e1e5fd5d13ee5d20dbedd63ee9bdfbb56b7d72",
+    "schema_catalog_sha256": "56448224ba69cf1fff4550adbe107d957b176216922bcaa4027b46b71e13ba73"
+  },
+  "host": {
+    "hostname": "Mac.lan",
+    "kernel": "Darwin 25.5.0",
+    "os": "macOS 26.5.1 (25F80)",
+    "architecture": "arm64",
+    "model": "Mac16,7 / MacBook Pro",
+    "chip": "Apple M4 Pro",
+    "cpu_cores": 14,
+    "memory_total_bytes": 25769803776,
+    "physical_host_identity": {
+      "IOPlatformUUID_sha256": "b56ed1d87d1fa03410c22738f9a013da8ec0025cc5fa37a2393dbff19d7b8f0d",
+      "IOPlatformSerialNumber_sha256": "effed59ef70ef0c46c639f77b6ecd1135027d787ca6adb9402e14bf12b86643f"
+    },
+    "sdk": {
+      "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+      "xcode": "Xcode 26.3 (17C529)",
+      "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "version": "26.2"
+    },
+    "compiler": {
+      "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "version": "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+      "target": "arm64-apple-darwin25.5.0"
+    },
+    "cmake": "cmake version 4.4.2",
+    "gpu": "Apple M4 Pro, 20 cores, Metal 4",
+    "cuda": {"nvcc_found": false}
+  },
+  "power_thermal": {
+    "power_source": "AC Power",
+    "battery": "100%; charged",
+    "charger": "140W USB-C Power Adapter connected",
+    "low_power_mode_ac": true,
+    "low_power_mode_battery": true,
+    "high_power_mode_ac": false,
+    "pmset_powermode": 2,
+    "thermal_warning": false,
+    "performance_warning": false,
+    "cpu_power_warning": false,
+    "observed_reason_for_refusal": "Low Power Mode: Yes on AC Power"
+  },
+  "resources": {
+    "available_memory_bytes_preflight": 10240802816,
+    "available_memory_source": "vm_stat: free + inactive + speculative pages, 16384-byte pages",
+    "data_volume_available_1024_blocks": 357757972,
+    "data_volume_available_bytes": 366344163328,
+    "data_volume_capacity_percent": 22,
+    "benchmark_process_matches": [],
+    "cuda_process_matches": [],
+    "sole_host_process_check": "no matching benchmark/CUDA process on this physical host"
+  },
+  "lease": {
+    "path": "/tmp/libwebp-metal-backref-cost-traceback.lock",
+    "path_present_before_run": false,
+    "holder_before_run": null,
+    "acquired": false,
+    "released": "not_applicable_run_not_invoked"
+  },
+  "decision": "refuse",
+  "decision_reason": "Low Power Mode was enabled on AC; no power-setting change was authorized."
+}
