@@ -341,3 +341,39 @@ startup cost; only the long JPEG lossless modes amortize it.
 The machine-readable result set is
 `/tmp/libwebp-cuda-results-2080super/{results.json,raw.jsonl}` on the operator
 host. The corresponding rendered report is `report.md` in the same directory.
+
+### Turing decimate wall and band-count re-check
+
+`WEBP_CUDA_DECIMATE_TIMING=1/2` measured 24 post-warmup samples for each
+medium publication-corpus input in a persistent process. Level 1 and level 2
+wall medians agreed closely; level 2 also accumulated device block cycles by
+phase:
+
+| Input | Level 1 wall | Level 2 wall | Import | I16 numeric | I16 select | I4 | UV numeric | UV select | Recon |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| PNG photo | 38.63 ms | 38.67 ms | 17.1% | 5.4% | 5.3% | 64.8% | 2.8% | 4.3% | 0.3% |
+| PNG graphic | 36.01 ms | 36.06 ms | 27.9% | 8.4% | 15.9% | 35.1% | 4.8% | 7.3% | 0.5% |
+| PNG texture | 45.65 ms | 45.69 ms | 17.6% | 5.6% | 4.7% | 65.6% | 3.2% | 3.0% | 0.3% |
+| JPEG photo | 37.92 ms | 37.94 ms | 17.4% | 5.4% | 5.2% | 64.2% | 3.0% | 4.4% | 0.3% |
+| JPEG graphic | 36.06 ms | 36.10 ms | 27.8% | 8.4% | 15.8% | 35.5% | 4.8% | 7.3% | 0.5% |
+| JPEG texture | 45.66 ms | 45.68 ms | 17.6% | 5.6% | 4.7% | 65.6% | 3.2% | 3.0% | 0.3% |
+
+The photo/texture I4 share is 64–66%, above the 5070 Ti's roughly 60%, and
+Turing import is 17–18% rather than roughly 12%. Graphics choose a different
+mode mix: I4 falls to about 35%, while import plus I16 selection grows. The
+Turing optimization priority therefore remains I4 for photo/texture, with
+import a larger secondary target than on the 5070 Ti.
+
+The required 4-versus-8-band A/B used separate native sm_75 builds and five
+alternating processes per variant and format. Each process discarded one
+warmup and retained three 24-image samples; all output hashes matched. Median
+of the five process medians:
+
+| Format | 4 bands | 8 bands | 4-band delta |
+|---|---:|---:|---:|
+| PNG lossy | 57.699 ms/image | 57.126 ms/image | +0.572 ms/image |
+| JPEG lossy | 58.583 ms/image | 57.725 ms/image | +0.857 ms/image |
+
+Both deltas are below the 1.5 ms/image noise threshold, and both signs favor
+8 bands. The four-band build was discarded and the existing eight-band
+default remains unchanged.

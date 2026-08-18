@@ -97,7 +97,7 @@ measurements are meaningless until they pass.
   files are portable — copy them over or re-derive from the table in
   `CUDA_BENCHMARK_RESULTS.md`). Add a cross-hardware section to that
   file with whatever this GPU shows.
-- [ ] 4. **Measure the GPU wall here:** `WEBP_CUDA_DECIMATE_TIMING=1`
+- [x] 4. **Measure the GPU wall here:** `WEBP_CUDA_DECIMATE_TIMING=1`
   (per-pass device wall) and `=2` (per-phase cycle percentages) on
   photo/graphic/texture-medium. On the 5070 Ti: ~27.7 ms wall, i4 ~60%,
   import ~12%, i16-sel ~6%. If Turing shifts the phase mix, the tuning
