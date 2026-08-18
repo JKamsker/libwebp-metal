@@ -1,0 +1,35 @@
+{
+  "artifacts": [
+    {
+      "bytes": 6685,
+      "path": "build-commands.json",
+      "sha256": "6be2f3b2bd514d7ce779546fed114c4f587bef1c66d297a531047888657ff275"
+    },
+    {
+      "bytes": 105894,
+      "path": "build.log",
+      "sha256": "d5f9e9cd955a89cf2be72dfa5caacba50570f154e233c9ea68b56f7d2c405b87"
+    },
+    {
+      "bytes": 13597,
+      "path": "correctness.json",
+      "sha256": "b445a72eece191e3feaee051eede2f1c78623e02ada1a2fc80d851aa79348dd8"
+    },
+    {
+      "bytes": 160,
+      "path": "lease-record.json",
+      "sha256": "40a1f73a9d28df906aeca387fad5994fd01d0eaf3760334d0fccbb23ecc270f7"
+    },
+    {
+      "bytes": 93708,
+      "path": "processes-rehearsal.txt",
+      "sha256": "741c982d32000604f1fa9fedaa031140a97dca8d7809aa23fa0bf6012238df4f"
+    },
+    {
+      "bytes": 9200,
+      "path": "rehearsal.json",
+      "sha256": "dda3cb74ee03ece8c586fd87187db58e55770fcb13522ecec32d3aaa0dc04bdf"
+    }
+  ],
+  "schema": "libwebp-backref-cost-workspace-remote-v5-artifact-hashes-v1"
+}

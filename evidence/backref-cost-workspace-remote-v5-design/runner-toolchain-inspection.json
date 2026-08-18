@@ -1,0 +1,29 @@
+{
+  "cmake_locations": {
+    "/Applications/CMake.app/Contents/bin/cmake": "absent",
+    "/Applications/Xcode-26.3.0.app/Contents/Developer/usr/bin/cmake": "absent",
+    "/opt/homebrew/bin/cmake": {
+      "canonical_path": "/opt/homebrew/Cellar/cmake/4.4.2/bin/cmake",
+      "path_type": "symlink",
+      "sha256": "b4a1a844d905fd77839a88db9083422f8246a6aa10d4ce72b0cf223b5cb438a3",
+      "version": "cmake version 4.4.2"
+    },
+    "/usr/local/bin/cmake": "absent"
+  },
+  "cmake_selected": false,
+  "existing_tools_selected": [
+    "/usr/bin/xcrun",
+    "/usr/bin/make",
+    "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+    "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+    "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib"
+  ],
+  "host_or_global_path_changed": false,
+  "homebrew_used": false,
+  "network_downloads": false,
+  "noninteractive_path": "/usr/bin:/bin:/usr/sbin:/sbin",
+  "runner_worker_matches": [],
+  "schema": "libwebp-backref-cost-workspace-remote-v5-runner-toolchain-inspection-v1",
+  "status": "PASS"
+}

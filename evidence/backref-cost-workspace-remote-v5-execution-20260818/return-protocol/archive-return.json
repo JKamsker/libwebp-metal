@@ -1,0 +1,148 @@
+{
+  "archive": {
+    "bytes": 95586,
+    "hashes_match": true,
+    "local_sha256": "d9b3945d68464fafaaa742844751c7b09bb7cd806ce93e74425c8cf21e4c5ecf",
+    "path": "evidence.tar.gz",
+    "remote_sha256": "d9b3945d68464fafaaa742844751c7b09bb7cd806ce93e74425c8cf21e4c5ecf"
+  },
+  "builder_exit_code": 0,
+  "builder_stderr": "",
+  "builder_stdout": "{\"archive_bytes\": 95586, \"archive_sha256\": \"d9b3945d68464fafaaa742844751c7b09bb7cd806ce93e74425c8cf21e4c5ecf\", \"inventory_sha256\": \"c7c7cad2eb9bad44067f591a900ab6a2cf47bbd16373643c0225cfc59ca6be4f\", \"member_count\": 21, \"schema\": \"libwebp-backref-cost-workspace-remote-v5-archive-v1\", \"status\": \"accepted\"}\n",
+  "digest": {
+    "bytes": 320,
+    "hashes_match": true,
+    "local_sha256": "6dde9299a5f19f7a8e9372086dd1b9a055b290f547cd42d55013fd8eee42a6e0",
+    "path": "archive-digest.json",
+    "remote_sha256": "6dde9299a5f19f7a8e9372086dd1b9a055b290f547cd42d55013fd8eee42a6e0"
+  },
+  "digest_record": {
+    "archive_bytes": 95586,
+    "archive_sha256": "d9b3945d68464fafaaa742844751c7b09bb7cd806ce93e74425c8cf21e4c5ecf",
+    "inventory_sha256": "c7c7cad2eb9bad44067f591a900ab6a2cf47bbd16373643c0225cfc59ca6be4f",
+    "member_count": 21,
+    "schema": "libwebp-backref-cost-workspace-remote-v5-archive-v1",
+    "status": "accepted"
+  },
+  "inventory": {
+    "bytes": 2301,
+    "hashes_match": true,
+    "local_sha256": "c7c7cad2eb9bad44067f591a900ab6a2cf47bbd16373643c0225cfc59ca6be4f",
+    "path": "archive-inventory.json",
+    "remote_sha256": "c7c7cad2eb9bad44067f591a900ab6a2cf47bbd16373643c0225cfc59ca6be4f"
+  },
+  "member_inventory": {
+    "member_count": 21,
+    "members": [
+      {
+        "name": "evidence/artifact-hashes.json",
+        "size": 3150,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build-commands.json",
+        "size": 6637,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build.log",
+        "size": 105860,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/commands.jsonl",
+        "size": 263687,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness.json",
+        "size": 13597,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/evaluation.json",
+        "size": 6595,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/lease-record.json",
+        "size": 322,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-report.md",
+        "size": 320,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-stage.json",
+        "size": 136,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-status.json",
+        "size": 163,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/post-timing.json",
+        "size": 3398,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/pre-timing.json",
+        "size": 3396,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/preflight.json",
+        "size": 3394,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-post-timing.txt",
+        "size": 94449,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-pre-timing.txt",
+        "size": 94965,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-preflight.txt",
+        "size": 93477,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/records.jsonl",
+        "size": 628416,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/resources.json",
+        "size": 516,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/source-hashes.json",
+        "size": 4971,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/timed-child-stderr.log",
+        "size": 42525,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/toolchain.json",
+        "size": 7851,
+        "type": "regular"
+      }
+    ],
+    "offending": null,
+    "schema": "libwebp-backref-cost-workspace-remote-v5-archive-inventory-v1",
+    "status": "accepted"
+  },
+  "status": "accepted"
+}

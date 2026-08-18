@@ -1,0 +1,390 @@
+{
+  "admission": {
+    "admission": {
+      "bundle_hash_match": true,
+      "bundle_path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7/source.bundle",
+      "bundle_sha256": "53e8fa968a1b625c00c2288ff0efb6238e59163d38eafa6e56a81bed383ec7c4",
+      "bundle_verified_in_repository_context": true,
+      "bundle_verify_command": [
+        "git",
+        "-C",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7/verify.git",
+        "bundle",
+        "verify",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7/source.bundle"
+      ],
+      "bundle_verify_repository": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7/verify.git",
+      "clean_status": true,
+      "clone": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7/source",
+      "source_commit": "13374003895d81f4e85b6cf77ad82a48f9fc5bc4",
+      "source_hashes": {
+        "CMakeLists.txt": "500e850b5aa819040b02826524414aa7511ee945290ce1487bfb778b8f9d865c",
+        "benchmarks/publication-corpus/manifest.json": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+        "doc/backref-cost-workspace-remote-v5-operator-20260818.md": "cbf96779cec53b784dd84fc2c32e8d7e59b614b5bb350dd779752aa91c4525d4",
+        "doc/backref-cost-workspace-remote-v5-protocol-20260818.md": "4a17cd95a97fb4ab3b90935f31bc356bc0596774c949d44e0cb05e76406df1d9",
+        "makefile.unix": "4843a763d631f3c0b051c5eec6b396b063bf2c1e1be13310bd0b99fb199bb03b",
+        "scripts/backref_cost_workspace_remote_v5_admission.py": "e5db9abfa4b902c277fc6280437ea016dbdf1bacaf2699f13be3da10f3143d81",
+        "scripts/backref_cost_workspace_remote_v5_archive.py": "ceaf2bb590fefaa5fdf2bc15b4add9c423a993132d49e20c6b362bc74f97da2c",
+        "scripts/backref_cost_workspace_remote_v5_manifest.json": "892c185be44d9773f5a8a30aac4fdb6c8865786ff8578746adacd6fbd47c86e3",
+        "scripts/backref_cost_workspace_remote_v5_paths.py": "7e031b8c8f5db26eb509082bc36d4dd1d2c8a025b4e888130c5fb277c302fdb4",
+        "scripts/backref_cost_workspace_remote_v5_schemas.json": "a27cb4587ed86a9d39e7f1b85be0802890f625fffb82a0b3e62a39e32fe0a573",
+        "scripts/execute_backref_cost_workspace_remote_v5.py": "5110768e71b6c9dad9655d7ccb024ca82c9f7b1ddd6c14fb3ad5e727058cd966",
+        "scripts/generate_publication_corpus.py": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+        "scripts/run_backref_cost_workspace_remote_v5_experiment.py": "48fff562cf646134a2be36991ca8ca296c148d6aabef1483e3c0f09d4bec5857",
+        "scripts/test_backref_cost_workspace_remote_v5_archive.py": "40c09e9b0083c8e5e51c58941d1556f2a08522b932efe4feb9afa6c270be1bb5",
+        "scripts/test_backref_cost_workspace_remote_v5_protocol.py": "48520482f492f03c7c7536a59347ed8cae186b1ca2e4b236baf8767f0f11fd16",
+        "src/enc/backref_cost_workspace_remote_v5_experiment_enc.c": "9c195927cbbdfc4db72094e992d395c92c89073ccd9031f6c2e7db7405f3a4e7",
+        "src/enc/backref_cost_workspace_remote_v5_experiment_enc.h": "ed93984cac1218fc5d0f76638235aff2b564e44e5d5b647c458c0cce6e052291",
+        "src/enc/backward_references_cost_enc.c": "67cd012f1fce90077885123afa869c3964befeafa8ffa1025214921a5114915d",
+        "tools/backref_cost_workspace_remote_v5_experiment_runner.c": "2350f231eca4810ff8c43c7a59785dac5444737f7da3a87ebb005fbb981ebe53"
+      },
+      "source_tree": "d51be627b566e77cfccd59a262b3ba4904c3343b",
+      "verification_repository_removed": true
+    },
+    "finished": true,
+    "home": "/Users/pandocs-agent-001",
+    "path_generation": {
+      "generator": "mktemp -d",
+      "home": "/Users/pandocs-agent-001",
+      "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7",
+      "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5",
+      "token": "run.3XLdC7",
+      "validated": true
+    },
+    "post_admission_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "process_table_sha256": "bb7c20b0be7774a7a42c26c541fe3bf71761ee4c5f3d82c841b73f056f280701",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "pretransfer_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "process_table_sha256": "20f309b4e0e9874bf620e0a15f8c8ef256f1321fa1080847022f903a5890000e",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "remote_source_bundle_sha256": "53e8fa968a1b625c00c2288ff0efb6238e59163d38eafa6e56a81bed383ec7c4",
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5",
+    "source_bundle_sha256": "53e8fa968a1b625c00c2288ff0efb6238e59163d38eafa6e56a81bed383ec7c4",
+    "source_commit": "13374003895d81f4e85b6cf77ad82a48f9fc5bc4",
+    "source_hashes": {
+      "CMakeLists.txt": "500e850b5aa819040b02826524414aa7511ee945290ce1487bfb778b8f9d865c",
+      "benchmarks/publication-corpus/manifest.json": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+      "doc/backref-cost-workspace-remote-v5-operator-20260818.md": "cbf96779cec53b784dd84fc2c32e8d7e59b614b5bb350dd779752aa91c4525d4",
+      "doc/backref-cost-workspace-remote-v5-protocol-20260818.md": "4a17cd95a97fb4ab3b90935f31bc356bc0596774c949d44e0cb05e76406df1d9",
+      "makefile.unix": "4843a763d631f3c0b051c5eec6b396b063bf2c1e1be13310bd0b99fb199bb03b",
+      "scripts/backref_cost_workspace_remote_v5_admission.py": "e5db9abfa4b902c277fc6280437ea016dbdf1bacaf2699f13be3da10f3143d81",
+      "scripts/backref_cost_workspace_remote_v5_archive.py": "ceaf2bb590fefaa5fdf2bc15b4add9c423a993132d49e20c6b362bc74f97da2c",
+      "scripts/backref_cost_workspace_remote_v5_manifest.json": "892c185be44d9773f5a8a30aac4fdb6c8865786ff8578746adacd6fbd47c86e3",
+      "scripts/backref_cost_workspace_remote_v5_paths.py": "7e031b8c8f5db26eb509082bc36d4dd1d2c8a025b4e888130c5fb277c302fdb4",
+      "scripts/backref_cost_workspace_remote_v5_schemas.json": "a27cb4587ed86a9d39e7f1b85be0802890f625fffb82a0b3e62a39e32fe0a573",
+      "scripts/execute_backref_cost_workspace_remote_v5.py": "5110768e71b6c9dad9655d7ccb024ca82c9f7b1ddd6c14fb3ad5e727058cd966",
+      "scripts/generate_publication_corpus.py": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+      "scripts/run_backref_cost_workspace_remote_v5_experiment.py": "48fff562cf646134a2be36991ca8ca296c148d6aabef1483e3c0f09d4bec5857",
+      "scripts/test_backref_cost_workspace_remote_v5_archive.py": "40c09e9b0083c8e5e51c58941d1556f2a08522b932efe4feb9afa6c270be1bb5",
+      "scripts/test_backref_cost_workspace_remote_v5_protocol.py": "48520482f492f03c7c7536a59347ed8cae186b1ca2e4b236baf8767f0f11fd16",
+      "src/enc/backref_cost_workspace_remote_v5_experiment_enc.c": "9c195927cbbdfc4db72094e992d395c92c89073ccd9031f6c2e7db7405f3a4e7",
+      "src/enc/backref_cost_workspace_remote_v5_experiment_enc.h": "ed93984cac1218fc5d0f76638235aff2b564e44e5d5b647c458c0cce6e052291",
+      "src/enc/backward_references_cost_enc.c": "67cd012f1fce90077885123afa869c3964befeafa8ffa1025214921a5114915d",
+      "tools/backref_cost_workspace_remote_v5_experiment_runner.c": "2350f231eca4810ff8c43c7a59785dac5444737f7da3a87ebb005fbb981ebe53"
+    },
+    "source_tree": "d51be627b566e77cfccd59a262b3ba4904c3343b"
+  },
+  "evidence_transfer": {
+    "archive": {
+      "archive": {
+        "bytes": 95586,
+        "hashes_match": true,
+        "local_sha256": "d9b3945d68464fafaaa742844751c7b09bb7cd806ce93e74425c8cf21e4c5ecf",
+        "path": "evidence.tar.gz",
+        "remote_sha256": "d9b3945d68464fafaaa742844751c7b09bb7cd806ce93e74425c8cf21e4c5ecf"
+      },
+      "builder_exit_code": 0,
+      "builder_stderr": "",
+      "builder_stdout": "{\"archive_bytes\": 95586, \"archive_sha256\": \"d9b3945d68464fafaaa742844751c7b09bb7cd806ce93e74425c8cf21e4c5ecf\", \"inventory_sha256\": \"c7c7cad2eb9bad44067f591a900ab6a2cf47bbd16373643c0225cfc59ca6be4f\", \"member_count\": 21, \"schema\": \"libwebp-backref-cost-workspace-remote-v5-archive-v1\", \"status\": \"accepted\"}\n",
+      "digest": {
+        "bytes": 320,
+        "hashes_match": true,
+        "local_sha256": "6dde9299a5f19f7a8e9372086dd1b9a055b290f547cd42d55013fd8eee42a6e0",
+        "path": "archive-digest.json",
+        "remote_sha256": "6dde9299a5f19f7a8e9372086dd1b9a055b290f547cd42d55013fd8eee42a6e0"
+      },
+      "digest_record": {
+        "archive_bytes": 95586,
+        "archive_sha256": "d9b3945d68464fafaaa742844751c7b09bb7cd806ce93e74425c8cf21e4c5ecf",
+        "inventory_sha256": "c7c7cad2eb9bad44067f591a900ab6a2cf47bbd16373643c0225cfc59ca6be4f",
+        "member_count": 21,
+        "schema": "libwebp-backref-cost-workspace-remote-v5-archive-v1",
+        "status": "accepted"
+      },
+      "inventory": {
+        "bytes": 2301,
+        "hashes_match": true,
+        "local_sha256": "c7c7cad2eb9bad44067f591a900ab6a2cf47bbd16373643c0225cfc59ca6be4f",
+        "path": "archive-inventory.json",
+        "remote_sha256": "c7c7cad2eb9bad44067f591a900ab6a2cf47bbd16373643c0225cfc59ca6be4f"
+      },
+      "member_inventory": {
+        "member_count": 21,
+        "members": [
+          {
+            "name": "evidence/artifact-hashes.json",
+            "size": 3150,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/build-commands.json",
+            "size": 6637,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/build.log",
+            "size": 105860,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/commands.jsonl",
+            "size": 263687,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness.json",
+            "size": 13597,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/evaluation.json",
+            "size": 6595,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/lease-record.json",
+            "size": 322,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/operator-report.md",
+            "size": 320,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/operator-stage.json",
+            "size": 136,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/operator-status.json",
+            "size": 163,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/post-timing.json",
+            "size": 3398,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/pre-timing.json",
+            "size": 3396,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/preflight.json",
+            "size": 3394,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-post-timing.txt",
+            "size": 94449,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-pre-timing.txt",
+            "size": 94965,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-preflight.txt",
+            "size": 93477,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/records.jsonl",
+            "size": 628416,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/resources.json",
+            "size": 516,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/source-hashes.json",
+            "size": 4971,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/timed-child-stderr.log",
+            "size": 42525,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/toolchain.json",
+            "size": 7851,
+            "type": "regular"
+          }
+        ],
+        "offending": null,
+        "schema": "libwebp-backref-cost-workspace-remote-v5-archive-inventory-v1",
+        "status": "accepted"
+      },
+      "status": "accepted"
+    },
+    "extraction": {
+      "member_inventory": {
+        "member_count": 21,
+        "members": [
+          {
+            "name": "evidence/artifact-hashes.json",
+            "size": 3150,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/build-commands.json",
+            "size": 6637,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/build.log",
+            "size": 105860,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/commands.jsonl",
+            "size": 263687,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness.json",
+            "size": 13597,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/evaluation.json",
+            "size": 6595,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/lease-record.json",
+            "size": 322,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/operator-report.md",
+            "size": 320,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/operator-stage.json",
+            "size": 136,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/operator-status.json",
+            "size": 163,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/post-timing.json",
+            "size": 3398,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/pre-timing.json",
+            "size": 3396,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/preflight.json",
+            "size": 3394,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-post-timing.txt",
+            "size": 94449,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-pre-timing.txt",
+            "size": 94965,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-preflight.txt",
+            "size": 93477,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/records.jsonl",
+            "size": 628416,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/resources.json",
+            "size": 516,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/source-hashes.json",
+            "size": 4971,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/timed-child-stderr.log",
+            "size": 42525,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/toolchain.json",
+            "size": 7851,
+            "type": "regular"
+          }
+        ],
+        "offending": null,
+        "schema": "libwebp-backref-cost-workspace-remote-v5-archive-inventory-v1",
+        "status": "accepted"
+      },
+      "status": "accepted"
+    },
+    "lease": {
+      "bytes": 322,
+      "hashes_match": true,
+      "local_sha256": "9e139dd0843b0fff6867be68a1b1c9b782d2585f0f831356786ee795f97dfaa8",
+      "path": "evidence/lease-record.json",
+      "remote_sha256": "9e139dd0843b0fff6867be68a1b1c9b782d2585f0f831356786ee795f97dfaa8",
+      "status": "accepted"
+    }
+  },
+  "failure": null,
+  "installed_runner_directory_touched": false,
+  "lease_released": true,
+  "pipeline_exit_code": 0,
+  "pipeline_stderr_path": "return-protocol/pipeline.stderr",
+  "pipeline_stdout_path": "return-protocol/pipeline.stdout",
+  "remote_cleanup_complete": true,
+  "remote_cleanup_proof": {
+    "absence_proved": true,
+    "home": "/Users/pandocs-agent-001",
+    "removed_exact_validated_child": true,
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5",
+    "schema": "libwebp-backref-cost-workspace-remote-v5-cleanup-receipt-v1",
+    "status": "complete",
+    "token": "run.3XLdC7",
+    "validated": true
+  },
+  "remote_host_alias": "pandocs-agent",
+  "schema": "libwebp-backref-cost-workspace-remote-v5-transfer-cleanup-v1",
+  "source_commit": "13374003895d81f4e85b6cf77ad82a48f9fc5bc4",
+  "status": "complete"
+}

@@ -1,0 +1,228 @@
+{
+  "archive_return": {
+    "archive": {
+      "bytes": 688,
+      "hashes_match": true,
+      "local_sha256": "7f9e06274d73faf34f5c8113dcc8e1397509066442f67ab693cc89c10e18c291",
+      "path": "evidence.tar.gz",
+      "remote_sha256": "7f9e06274d73faf34f5c8113dcc8e1397509066442f67ab693cc89c10e18c291"
+    },
+    "archive_path": "/var/folders/g_/y0l39t0x5q39xs0msnnn7hb80000gn/T/v5-refusal-return-m8rjz4_5/evidence.tar.gz",
+    "builder_exit_code": 0,
+    "builder_stderr": "",
+    "builder_stdout": "{\"archive_bytes\": 688, \"archive_sha256\": \"7f9e06274d73faf34f5c8113dcc8e1397509066442f67ab693cc89c10e18c291\", \"inventory_sha256\": \"ef487ad5f198d8729a497acfa94992a9249735d5d573fa51ed79b737d676c528\", \"member_count\": 4, \"schema\": \"libwebp-backref-cost-workspace-remote-v5-archive-v1\", \"status\": \"accepted\"}\n",
+    "digest": {
+      "bytes": 317,
+      "hashes_match": true,
+      "local_sha256": "d3848d8a36ebaf40d5a7055e2c7f71b5e8e529c469eb8c6b78e3ca3b627ad852",
+      "path": "archive-digest.json",
+      "remote_sha256": "d3848d8a36ebaf40d5a7055e2c7f71b5e8e529c469eb8c6b78e3ca3b627ad852"
+    },
+    "digest_path": "/var/folders/g_/y0l39t0x5q39xs0msnnn7hb80000gn/T/v5-refusal-return-m8rjz4_5/archive-digest.json",
+    "digest_record": {
+      "archive_bytes": 688,
+      "archive_sha256": "7f9e06274d73faf34f5c8113dcc8e1397509066442f67ab693cc89c10e18c291",
+      "inventory_sha256": "ef487ad5f198d8729a497acfa94992a9249735d5d573fa51ed79b737d676c528",
+      "member_count": 4,
+      "schema": "libwebp-backref-cost-workspace-remote-v5-archive-v1",
+      "status": "accepted"
+    },
+    "inventory": {
+      "bytes": 566,
+      "hashes_match": true,
+      "local_sha256": "ef487ad5f198d8729a497acfa94992a9249735d5d573fa51ed79b737d676c528",
+      "path": "archive-inventory.json",
+      "remote_sha256": "ef487ad5f198d8729a497acfa94992a9249735d5d573fa51ed79b737d676c528"
+    },
+    "inventory_path": "/var/folders/g_/y0l39t0x5q39xs0msnnn7hb80000gn/T/v5-refusal-return-m8rjz4_5/archive-inventory.json",
+    "member_inventory": {
+      "member_count": 4,
+      "members": [
+        {
+          "name": "evidence/artifact-hashes.json",
+          "size": 550,
+          "type": "regular"
+        },
+        {
+          "name": "evidence/lease-record.json",
+          "size": 160,
+          "type": "regular"
+        },
+        {
+          "name": "evidence/operator-status.json",
+          "size": 162,
+          "type": "regular"
+        },
+        {
+          "name": "evidence/refusal.json",
+          "size": 298,
+          "type": "regular"
+        }
+      ],
+      "offending": null,
+      "schema": "libwebp-backref-cost-workspace-remote-v5-archive-inventory-v1",
+      "status": "accepted"
+    },
+    "status": "accepted"
+  },
+  "artifact_index_verified_after_extraction": true,
+  "benchmark_lease_attempted": false,
+  "cleanup_receipt": {
+    "absence_proved": true,
+    "home": "/Users/pandocs-agent-001",
+    "removed_exact_validated_child": true,
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.ZO2q4t",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5",
+    "token": "run.ZO2q4t",
+    "validated": true
+  },
+  "extraction_inventory": {
+    "member_count": 4,
+    "members": [
+      {
+        "name": "evidence/artifact-hashes.json",
+        "size": 550,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/lease-record.json",
+        "size": 160,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-status.json",
+        "size": 162,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/refusal.json",
+        "size": 298,
+        "type": "regular"
+      }
+    ],
+    "offending": null,
+    "schema": "libwebp-backref-cost-workspace-remote-v5-archive-inventory-v1",
+    "status": "accepted"
+  },
+  "lease_record": {
+    "acquired": false,
+    "acquisition_attempted": false,
+    "path": null,
+    "released": false,
+    "schema": "libwebp-backref-cost-workspace-remote-v5-lease-v1"
+  },
+  "lease_transfer": {
+    "bytes": 160,
+    "hashes_match": true,
+    "local_sha256": "40a1f73a9d28df906aeca387fad5994fd01d0eaf3760334d0fccbb23ecc270f7",
+    "path": "evidence/lease-record.json",
+    "remote_sha256": "40a1f73a9d28df906aeca387fad5994fd01d0eaf3760334d0fccbb23ecc270f7"
+  },
+  "operator_exit_code": 0,
+  "operator_stderr": "",
+  "operator_stdout": "",
+  "refusal": {
+    "controlled_exit": true,
+    "error_type": "RuntimeError",
+    "lease_record_present": true,
+    "reason": "required tool is absent: make",
+    "schema": "libwebp-backref-cost-workspace-remote-v5-refusal-v1",
+    "stage": "toolchain-admission",
+    "status": "refused",
+    "timing_samples_present": false
+  },
+  "schema": "libwebp-backref-cost-workspace-remote-v5-refusal-return-rehearsal-v1",
+  "source_admission": {
+    "admission": {
+      "bundle_hash_match": true,
+      "bundle_path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.ZO2q4t/source.bundle",
+      "bundle_sha256": "9155898114bfa910e1a1cc55880a1ff5ad31c1ea73dcb7db12d6222a2b39285f",
+      "bundle_verified_in_repository_context": true,
+      "bundle_verify_command": [
+        "git",
+        "-C",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.ZO2q4t/verify.git",
+        "bundle",
+        "verify",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.ZO2q4t/source.bundle"
+      ],
+      "bundle_verify_repository": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.ZO2q4t/verify.git",
+      "clean_status": true,
+      "clone": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.ZO2q4t/source",
+      "source_commit": "ed18da115e234c13ef383ea08291e1eaecb235b7",
+      "source_hashes": {
+        "CMakeLists.txt": "500e850b5aa819040b02826524414aa7511ee945290ce1487bfb778b8f9d865c",
+        "benchmarks/publication-corpus/manifest.json": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+        "doc/backref-cost-workspace-remote-v5-operator-20260818.md": "cbf96779cec53b784dd84fc2c32e8d7e59b614b5bb350dd779752aa91c4525d4",
+        "doc/backref-cost-workspace-remote-v5-protocol-20260818.md": "4a17cd95a97fb4ab3b90935f31bc356bc0596774c949d44e0cb05e76406df1d9",
+        "makefile.unix": "4843a763d631f3c0b051c5eec6b396b063bf2c1e1be13310bd0b99fb199bb03b",
+        "scripts/backref_cost_workspace_remote_v5_admission.py": "e5db9abfa4b902c277fc6280437ea016dbdf1bacaf2699f13be3da10f3143d81",
+        "scripts/backref_cost_workspace_remote_v5_archive.py": "ceaf2bb590fefaa5fdf2bc15b4add9c423a993132d49e20c6b362bc74f97da2c",
+        "scripts/backref_cost_workspace_remote_v5_manifest.json": "e80b62c383926f6f7e8f83cf311d66cf52f6958227d23938f28fd163789adb73",
+        "scripts/backref_cost_workspace_remote_v5_paths.py": "7e031b8c8f5db26eb509082bc36d4dd1d2c8a025b4e888130c5fb277c302fdb4",
+        "scripts/backref_cost_workspace_remote_v5_schemas.json": "f0bd8868888591dd6dc786886874dddbbe6e548820d69339d5aa8972ffec8c37",
+        "scripts/execute_backref_cost_workspace_remote_v5.py": "5110768e71b6c9dad9655d7ccb024ca82c9f7b1ddd6c14fb3ad5e727058cd966",
+        "scripts/generate_publication_corpus.py": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+        "scripts/run_backref_cost_workspace_remote_v5_experiment.py": "48fff562cf646134a2be36991ca8ca296c148d6aabef1483e3c0f09d4bec5857",
+        "scripts/test_backref_cost_workspace_remote_v5_archive.py": "40c09e9b0083c8e5e51c58941d1556f2a08522b932efe4feb9afa6c270be1bb5",
+        "scripts/test_backref_cost_workspace_remote_v5_protocol.py": "1872b1ecf06ecc9c60572731c09f99cc960e86b4ed8932d0f7e99f6d558ceb45",
+        "src/enc/backref_cost_workspace_remote_v5_experiment_enc.c": "9c195927cbbdfc4db72094e992d395c92c89073ccd9031f6c2e7db7405f3a4e7",
+        "src/enc/backref_cost_workspace_remote_v5_experiment_enc.h": "ed93984cac1218fc5d0f76638235aff2b564e44e5d5b647c458c0cce6e052291",
+        "src/enc/backward_references_cost_enc.c": "67cd012f1fce90077885123afa869c3964befeafa8ffa1025214921a5114915d",
+        "tools/backref_cost_workspace_remote_v5_experiment_runner.c": "2350f231eca4810ff8c43c7a59785dac5444737f7da3a87ebb005fbb981ebe53"
+      },
+      "source_tree": "d5b33162fd686aa3441ab3984fa60fc72b3a9095",
+      "verification_repository_removed": true
+    },
+    "home": "/Users/pandocs-agent-001",
+    "path_generation": {
+      "generator": "mktemp -d",
+      "home": "/Users/pandocs-agent-001",
+      "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.ZO2q4t",
+      "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5",
+      "token": "run.ZO2q4t",
+      "validated": true
+    },
+    "post_admission_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "process_table_sha256": "9417d33ae8ea261a0ce4bc8cae9847de71970c61e9b89074f1d8d2e22c3f7c7a",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "pretransfer_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "process_table_sha256": "f37d31703b3de3c61f88468116b66ca6f50cd8b16648b3304067a7dc2978c2ea",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "remote_source_bundle_sha256": "9155898114bfa910e1a1cc55880a1ff5ad31c1ea73dcb7db12d6222a2b39285f",
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.ZO2q4t",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5",
+    "source_bundle_sha256": "9155898114bfa910e1a1cc55880a1ff5ad31c1ea73dcb7db12d6222a2b39285f",
+    "source_commit": "ed18da115e234c13ef383ea08291e1eaecb235b7",
+    "source_hashes": {
+      "CMakeLists.txt": "500e850b5aa819040b02826524414aa7511ee945290ce1487bfb778b8f9d865c",
+      "benchmarks/publication-corpus/manifest.json": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+      "doc/backref-cost-workspace-remote-v5-operator-20260818.md": "cbf96779cec53b784dd84fc2c32e8d7e59b614b5bb350dd779752aa91c4525d4",
+      "doc/backref-cost-workspace-remote-v5-protocol-20260818.md": "4a17cd95a97fb4ab3b90935f31bc356bc0596774c949d44e0cb05e76406df1d9",
+      "makefile.unix": "4843a763d631f3c0b051c5eec6b396b063bf2c1e1be13310bd0b99fb199bb03b",
+      "scripts/backref_cost_workspace_remote_v5_admission.py": "e5db9abfa4b902c277fc6280437ea016dbdf1bacaf2699f13be3da10f3143d81",
+      "scripts/backref_cost_workspace_remote_v5_archive.py": "ceaf2bb590fefaa5fdf2bc15b4add9c423a993132d49e20c6b362bc74f97da2c",
+      "scripts/backref_cost_workspace_remote_v5_manifest.json": "e80b62c383926f6f7e8f83cf311d66cf52f6958227d23938f28fd163789adb73",
+      "scripts/backref_cost_workspace_remote_v5_paths.py": "7e031b8c8f5db26eb509082bc36d4dd1d2c8a025b4e888130c5fb277c302fdb4",
+      "scripts/backref_cost_workspace_remote_v5_schemas.json": "f0bd8868888591dd6dc786886874dddbbe6e548820d69339d5aa8972ffec8c37",
+      "scripts/execute_backref_cost_workspace_remote_v5.py": "5110768e71b6c9dad9655d7ccb024ca82c9f7b1ddd6c14fb3ad5e727058cd966",
+      "scripts/generate_publication_corpus.py": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+      "scripts/run_backref_cost_workspace_remote_v5_experiment.py": "48fff562cf646134a2be36991ca8ca296c148d6aabef1483e3c0f09d4bec5857",
+      "scripts/test_backref_cost_workspace_remote_v5_archive.py": "40c09e9b0083c8e5e51c58941d1556f2a08522b932efe4feb9afa6c270be1bb5",
+      "scripts/test_backref_cost_workspace_remote_v5_protocol.py": "1872b1ecf06ecc9c60572731c09f99cc960e86b4ed8932d0f7e99f6d558ceb45",
+      "src/enc/backref_cost_workspace_remote_v5_experiment_enc.c": "9c195927cbbdfc4db72094e992d395c92c89073ccd9031f6c2e7db7405f3a4e7",
+      "src/enc/backref_cost_workspace_remote_v5_experiment_enc.h": "ed93984cac1218fc5d0f76638235aff2b564e44e5d5b647c458c0cce6e052291",
+      "src/enc/backward_references_cost_enc.c": "67cd012f1fce90077885123afa869c3964befeafa8ffa1025214921a5114915d",
+      "tools/backref_cost_workspace_remote_v5_experiment_runner.c": "2350f231eca4810ff8c43c7a59785dac5444737f7da3a87ebb005fbb981ebe53"
+    },
+    "source_tree": "d5b33162fd686aa3441ab3984fa60fc72b3a9095"
+  },
+  "status": "PASS",
+  "timed_runner_invoked": false
+}

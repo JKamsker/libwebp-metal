@@ -34,6 +34,7 @@ WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT ?= 0
 WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT ?= 0
 WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT ?= 0
 WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT ?= 0
+WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT ?= 0
 
 ifneq ($(origin WEBP_BUILD_METAL_BENCHMARK),undefined)
   $(error WEBP_BUILD_METAL_BENCHMARK was replaced by WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT)
@@ -49,16 +50,18 @@ ifeq ($(strip $(shell uname)), Darwin)
   EXTRA_FLAGS += -fno-common
   EXTRA_FLAGS += -DHAVE_GLUT_GLUT_H
   EXTRA_FLAGS += -Wno-deprecated-declarations
-  EXTRA_FLAGS += -I/opt/local/include
-  EXTRA_LIBS  += -L/opt/local/lib
-  HOMEBREW_PREFIX := $(shell brew --prefix 2> /dev/null)
-  ifneq ($(HOMEBREW_PREFIX),)
-    EXTRA_FLAGS += -I$(HOMEBREW_PREFIX)/opt/libpng/include
-    EXTRA_FLAGS += -I$(HOMEBREW_PREFIX)/opt/jpeg-turbo/include
-    EXTRA_FLAGS += -I$(HOMEBREW_PREFIX)/opt/libtiff/include
-    EXTRA_LIBS += -L$(HOMEBREW_PREFIX)/opt/libpng/lib
-    EXTRA_LIBS += -L$(HOMEBREW_PREFIX)/opt/jpeg-turbo/lib
-    EXTRA_LIBS += -L$(HOMEBREW_PREFIX)/opt/libtiff/lib
+  ifneq ($(WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_DETERMINISTIC_BUILD),1)
+    EXTRA_FLAGS += -I/opt/local/include
+    EXTRA_LIBS  += -L/opt/local/lib
+    HOMEBREW_PREFIX := $(shell brew --prefix 2> /dev/null)
+    ifneq ($(HOMEBREW_PREFIX),)
+      EXTRA_FLAGS += -I$(HOMEBREW_PREFIX)/opt/libpng/include
+      EXTRA_FLAGS += -I$(HOMEBREW_PREFIX)/opt/jpeg-turbo/include
+      EXTRA_FLAGS += -I$(HOMEBREW_PREFIX)/opt/libtiff/include
+      EXTRA_LIBS += -L$(HOMEBREW_PREFIX)/opt/libpng/lib
+      EXTRA_LIBS += -L$(HOMEBREW_PREFIX)/opt/jpeg-turbo/lib
+      EXTRA_LIBS += -L$(HOMEBREW_PREFIX)/opt/libtiff/lib
+    endif
   endif
   GL_LIBS = -framework GLUT -framework OpenGL
   WEBP_ENABLE_METAL ?= 1
@@ -69,7 +72,11 @@ else
 endif
 
 # SDL flags: use sdl-config if it exists
+ifeq ($(WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_DETERMINISTIC_BUILD),1)
+SDL_CONFIG =
+else
 SDL_CONFIG = $(shell sdl2-config --version 2> /dev/null)
+endif
 ifneq ($(SDL_CONFIG),)
   SDL_LIBS = $(shell sdl2-config --libs)
   SDL_FLAGS = $(shell sdl2-config --cflags)
@@ -220,6 +227,9 @@ ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT),1)
 endif
 ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT),1)
   override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT=1
+endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT),1)
+  override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT=1
 endif
 INSTALL = install
 GROFF = /usr/bin/groff
@@ -392,6 +402,9 @@ ENC_OBJS += src/enc/backref_cost_workspace_remote_v3_experiment_enc.o
 endif
 ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT),1)
 ENC_OBJS += src/enc/backref_cost_workspace_remote_v4_experiment_enc.o
+endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT),1)
+ENC_OBJS += src/enc/backref_cost_workspace_remote_v5_experiment_enc.o
 endif
 
 EX_FORMAT_DEC_OBJS = \
@@ -579,6 +592,19 @@ tools/backref_cost_workspace_remote_v4_experiment_runner:
 	@echo "$@ requires WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT=1" >&2
 	@false
 .PHONY: tools/backref_cost_workspace_remote_v4_experiment_runner
+endif
+
+ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT),1)
+tools/backref_cost_workspace_remote_v5_experiment_runner: \
+    tools/backref_cost_workspace_remote_v5_experiment_runner.o
+tools/backref_cost_workspace_remote_v5_experiment_runner: \
+    src/libwebp.a sharpyuv/libsharpyuv.a
+	$(LINK) -o $@ $^ $(LDFLAGS)
+else
+tools/backref_cost_workspace_remote_v5_experiment_runner:
+	@echo "$@ requires WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT=1" >&2
+	@false
+.PHONY: tools/backref_cost_workspace_remote_v5_experiment_runner
 endif
 
 ex: $(OUT_EXAMPLES)

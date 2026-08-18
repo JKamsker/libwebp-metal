@@ -1,0 +1,11 @@
+{
+  "absence_proved": true,
+  "home": "/Users/pandocs-agent-001",
+  "removed_exact_validated_child": true,
+  "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7",
+  "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5",
+  "schema": "libwebp-backref-cost-workspace-remote-v5-cleanup-receipt-v1",
+  "status": "complete",
+  "token": "run.3XLdC7",
+  "validated": true
+}

@@ -1,0 +1,116 @@
+{
+  "member_inventory": {
+    "member_count": 21,
+    "members": [
+      {
+        "name": "evidence/artifact-hashes.json",
+        "size": 3150,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build-commands.json",
+        "size": 6637,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build.log",
+        "size": 105860,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/commands.jsonl",
+        "size": 263687,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness.json",
+        "size": 13597,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/evaluation.json",
+        "size": 6595,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/lease-record.json",
+        "size": 322,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-report.md",
+        "size": 320,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-stage.json",
+        "size": 136,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-status.json",
+        "size": 163,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/post-timing.json",
+        "size": 3398,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/pre-timing.json",
+        "size": 3396,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/preflight.json",
+        "size": 3394,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-post-timing.txt",
+        "size": 94449,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-pre-timing.txt",
+        "size": 94965,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-preflight.txt",
+        "size": 93477,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/records.jsonl",
+        "size": 628416,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/resources.json",
+        "size": 516,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/source-hashes.json",
+        "size": 4971,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/timed-child-stderr.log",
+        "size": 42525,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/toolchain.json",
+        "size": 7851,
+        "type": "regular"
+      }
+    ],
+    "offending": null,
+    "schema": "libwebp-backref-cost-workspace-remote-v5-archive-inventory-v1",
+    "status": "accepted"
+  },
+  "status": "accepted"
+}

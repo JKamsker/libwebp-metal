@@ -1,0 +1,123 @@
+{
+  "candidate_equivalence": {
+    "canonicalization": "only private helper symbols, gate names, and assert source locations",
+    "normalized_helper_body_sha256": "3128cbcef3b3f000926d69a117d5d7b79a68c59f0658fe5738eddbfeed33fdfd",
+    "preprocessed_boundary_projection_sha256": "77d14bb905980dfe53f75886b4270a6bfdd9d2ff46874aa0cea3aa480bedd533",
+    "semantics": [
+      "integer costs",
+      "strict ties",
+      "update order",
+      "490 workspace nodes after ten inline nodes",
+      "traceback",
+      "reference order",
+      "cache choice",
+      "transactional allocation-failure fallback"
+    ],
+    "validated_candidate_commit": "978e1b3e12e710c25f465fe1c8a68c359a38004e"
+  },
+  "frozen_artifacts": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "500e850b5aa819040b02826524414aa7511ee945290ce1487bfb778b8f9d865c"
+    },
+    {
+      "path": "makefile.unix",
+      "sha256": "4843a763d631f3c0b051c5eec6b396b063bf2c1e1be13310bd0b99fb199bb03b"
+    },
+    {
+      "path": "doc/backref-cost-workspace-remote-v5-design-20260818.md",
+      "sha256": "d829f7fc8cb7a6e2ebeabd65dc45f6059fcba41e68ca9eb8d9235a434e886136"
+    },
+    {
+      "path": "doc/backref-cost-workspace-remote-v5-protocol-20260818.md",
+      "sha256": "4a17cd95a97fb4ab3b90935f31bc356bc0596774c949d44e0cb05e76406df1d9"
+    },
+    {
+      "path": "doc/backref-cost-workspace-remote-v5-operator-20260818.md",
+      "sha256": "cbf96779cec53b784dd84fc2c32e8d7e59b614b5bb350dd779752aa91c4525d4"
+    },
+    {
+      "path": "scripts/backref_cost_workspace_remote_v5_schemas.json",
+      "sha256": "a27cb4587ed86a9d39e7f1b85be0802890f625fffb82a0b3e62a39e32fe0a573"
+    },
+    {
+      "path": "scripts/backref_cost_workspace_remote_v5_archive.py",
+      "sha256": "ceaf2bb590fefaa5fdf2bc15b4add9c423a993132d49e20c6b362bc74f97da2c"
+    },
+    {
+      "path": "scripts/run_backref_cost_workspace_remote_v5_experiment.py",
+      "sha256": "48fff562cf646134a2be36991ca8ca296c148d6aabef1483e3c0f09d4bec5857"
+    },
+    {
+      "path": "scripts/execute_backref_cost_workspace_remote_v5.py",
+      "sha256": "5110768e71b6c9dad9655d7ccb024ca82c9f7b1ddd6c14fb3ad5e727058cd966"
+    },
+    {
+      "path": "scripts/backref_cost_workspace_remote_v5_admission.py",
+      "sha256": "e5db9abfa4b902c277fc6280437ea016dbdf1bacaf2699f13be3da10f3143d81"
+    },
+    {
+      "path": "scripts/backref_cost_workspace_remote_v5_paths.py",
+      "sha256": "7e031b8c8f5db26eb509082bc36d4dd1d2c8a025b4e888130c5fb277c302fdb4"
+    },
+    {
+      "path": "scripts/validate_backref_cost_workspace_remote_v5_evidence_return.py",
+      "sha256": "132bd5bff584f9f6e02b666c1c99d525a5388ee7b2249d2fbfcc1b0e90678863"
+    },
+    {
+      "path": "scripts/test_backref_cost_workspace_remote_v5_experiment.py",
+      "sha256": "272bc8dc6623cd2fd6963628afe3063f4b8a5a5e4f41e1a23f74dc2a05571ad1"
+    },
+    {
+      "path": "scripts/test_backref_cost_workspace_remote_v5_admission.py",
+      "sha256": "450286a2524ef33475d9df4a1c3584fb2e3bcdf301fd928d45ffb15327ac7f13"
+    },
+    {
+      "path": "scripts/test_backref_cost_workspace_remote_v5_archive.py",
+      "sha256": "40c09e9b0083c8e5e51c58941d1556f2a08522b932efe4feb9afa6c270be1bb5"
+    },
+    {
+      "path": "scripts/test_backref_cost_workspace_remote_v5_protocol.py",
+      "sha256": "48520482f492f03c7c7536a59347ed8cae186b1ca2e4b236baf8767f0f11fd16"
+    },
+    {
+      "path": "scripts/test_experiment_guards.py",
+      "sha256": "43b916c705bff45244514d84ab8de00140f960a46da5a04e03cf32c7c6c02ac1"
+    },
+    {
+      "path": "scripts/generate_publication_corpus.py",
+      "sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007"
+    },
+    {
+      "path": "benchmarks/publication-corpus/manifest.json",
+      "sha256": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff"
+    },
+    {
+      "path": "src/enc/backref_cost_workspace_remote_v5_experiment_enc.c",
+      "sha256": "9c195927cbbdfc4db72094e992d395c92c89073ccd9031f6c2e7db7405f3a4e7"
+    },
+    {
+      "path": "src/enc/backref_cost_workspace_remote_v5_experiment_enc.h",
+      "sha256": "ed93984cac1218fc5d0f76638235aff2b564e44e5d5b647c458c0cce6e052291"
+    },
+    {
+      "path": "src/enc/backward_references_cost_enc.c",
+      "sha256": "67cd012f1fce90077885123afa869c3964befeafa8ffa1025214921a5114915d"
+    },
+    {
+      "path": "tools/backref_cost_workspace_remote_v5_experiment_runner.c",
+      "sha256": "2350f231eca4810ff8c43c7a59785dac5444737f7da3a87ebb005fbb981ebe53"
+    },
+    {
+      "path": "doc/experiment-guard-matrix.md",
+      "sha256": "cbfdf3fd5b34ddea845e8368a69ed84f5acf3aced7494e6893969d2c274e513c"
+    },
+    {
+      "path": "tests/README.md",
+      "sha256": "ca22902dd6e4aa26458fc4fd571ae58ac31d9b0dbb95e5345de521b0e4b49ba7"
+    }
+  ],
+  "manifest_sha256": "892c185be44d9773f5a8a30aac4fdb6c8865786ff8578746adacd6fbd47c86e3",
+  "schema": "libwebp-backref-cost-workspace-remote-v5-source-hashes-v1",
+  "source_commit": "13374003895d81f4e85b6cf77ad82a48f9fc5bc4"
+}

@@ -54,6 +54,13 @@ retains the exact frozen v3 candidate semantics under independent gates and all
 26 correctness/fallback/sanitizer/ordinary-build omission checks. Its archive
 test covers indexed explicit-member construction, canonical containment,
 complete pre-extraction inventory, safe extraction and local returned hashes,
+
+`scripts/test_backref_cost_workspace_remote_v5_experiment.py` proves the
+independent v5 candidate identity, exact 26-cell correctness/fallback behavior,
+predecessor isolation, default omission, and sanitizer coverage. The companion
+v5 protocol/admission/archive tests prove explicit make-toolchain admission,
+indexed controlled refusals, AppleDouble/xattr rejection, repository-context
+source admission, independent lease/cleanup return, and frozen matrix counts.
 plus traversal, absolute, symlink, hardlink, FIFO, and nonregular rejection.
 The frozen live design record exercises the same builder/extractor over ssh on
 `pandocs-agent` without a benchmark session, lease, runner, or timed command.
