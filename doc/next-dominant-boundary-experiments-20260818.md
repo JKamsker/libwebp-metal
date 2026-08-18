@@ -1,5 +1,12 @@
 # Frozen next-cycle dominant-boundary experiments
 
+> **2026-08-18 execution status:** both frozen commands stopped before lease
+> acquisition or timing because the Darwin Python runtime did not recognize
+> `SC_AVPHYS_PAGES`. No criterion was evaluated and no performance disposition
+> was made. The independent audit and narrowly scoped untimed portability
+> consequence are in
+> [next-boundary-experiment-evaluation-20260818.md](next-boundary-experiment-evaluation-20260818.md).
+
 ## Evidence reviewed before selection
 
 The design starts from `cdf2539b29bb767b1557e5069cfee9c111f07358` and the

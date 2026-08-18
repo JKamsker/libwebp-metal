@@ -9,6 +9,7 @@ import hashlib
 import json
 import os
 import platform
+import re
 import resource
 import shutil
 import subprocess
@@ -21,6 +22,52 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "scripts" / "next_boundary_experiments_v1.json"
 LEASE_PATH = Path("/tmp/libwebp-metal-next-boundary.lock")
+
+
+def parse_vm_stat_available_bytes(output: str) -> int:
+    """Returns conservative reclaimable bytes from Darwin's vm_stat output."""
+    header = re.search(r"page size of ([0-9]+) bytes", output)
+    if header is None:
+        raise ValueError("vm_stat page size is missing")
+    page_size = int(header.group(1))
+    pages = {}
+    for line in output.splitlines():
+        match = re.fullmatch(r"([^:]+):\s*([0-9]+)\.?", line.strip())
+        if match is not None:
+            pages[match.group(1)] = int(match.group(2))
+    fields = ("Pages free", "Pages inactive", "Pages speculative")
+    missing = [field for field in fields if field not in pages]
+    if page_size <= 0 or missing:
+        detail = ", ".join(missing) if missing else "invalid page size"
+        raise ValueError(f"vm_stat available-page data is incomplete: {detail}")
+    # Purgeable pages can overlap inactive pages, so do not count them again.
+    return page_size * sum(pages[field] for field in fields)
+
+
+def available_memory_bytes() -> int:
+    """Returns available memory, failing closed if the host cannot report it."""
+    try:
+        page_count = os.sysconf("SC_AVPHYS_PAGES")
+        page_size = os.sysconf("SC_PAGE_SIZE")
+        if page_count < 0 or page_size <= 0:
+            raise ValueError("sysconf returned an invalid page count or size")
+        return page_count * page_size
+    except (OSError, ValueError) as error:
+        if platform.system() != "Darwin":
+            raise SystemExit(
+                f"free-memory prerequisite unavailable: {error}") from error
+    result = subprocess.run(
+        ["vm_stat"], cwd=ROOT, text=True, stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT, check=False)
+    if result.returncode != 0:
+        raise SystemExit(
+            f"free-memory prerequisite unavailable: vm_stat exited "
+            f"{result.returncode}")
+    try:
+        return parse_vm_stat_available_bytes(result.stdout)
+    except ValueError as error:
+        raise SystemExit(
+            f"free-memory prerequisite unavailable: {error}") from error
 
 
 def sha256(path: Path) -> str:
@@ -252,7 +299,7 @@ def operator_run(name: str, output: Path, manifest: dict) -> None:
     if output.exists():
         raise SystemExit("refusing to overwrite evidence output")
     ceilings = manifest["common"]["resource_ceilings"]
-    free_memory = os.sysconf("SC_AVPHYS_PAGES") * os.sysconf("SC_PAGE_SIZE")
+    free_memory = available_memory_bytes()
     if free_memory < ceilings["minimum_free_memory_bytes"]:
         raise SystemExit("free-memory prerequisite failed")
     if shutil.disk_usage(output.parent).free < ceilings["maximum_output_bytes"] * 2:

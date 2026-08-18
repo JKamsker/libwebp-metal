@@ -14,6 +14,17 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  experiment-guards:
+    name: Research experiment guards
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Validate default-off, refusal, and operator portability guards
+        run: python3 scripts/test_experiment_guards.py
+
   cmake:
     name: CMake (${{ matrix.os }}, Metal ${{ matrix.metal }})
     strategy:

@@ -15,6 +15,7 @@ import tempfile
 from pathlib import Path
 
 import benchmark_metal_ablation as metal_ablation
+import test_next_boundary_operator_portability as boundary_portability
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -249,6 +250,7 @@ def check_runtime_and_lease_refusals() -> None:
 
 
 def main() -> int:
+    boundary_portability.main()
     check_build_matrix()
     check_omitted_targets()
     check_promoted_ablation_control()

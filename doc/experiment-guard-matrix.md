@@ -45,6 +45,9 @@ python3 scripts/test_publication_corpus.py
 The later next-cycle rows 6 and 7 are frozen in
 [next-dominant-boundary-experiments-20260818.md](next-dominant-boundary-experiments-20260818.md).
 They diagnose credible implementation boundaries and do not amend item 1--5.
+Both first execution attempts failed before lease acquisition or timing; the
+audited non-result and retained research disposition are in
+[next-boundary-experiment-evaluation-20260818.md](next-boundary-experiment-evaluation-20260818.md).
 
 ## Default and isolation guarantees
 
@@ -116,6 +119,9 @@ that item 4's released timed matrix was not repurposed as a follow-up:
 ```sh
 scripts/test_experiment_guards.py
 ```
+
+That guard also runs the pure untimed Darwin free-memory portability unit test.
+It never calls the next-boundary `run` command or grants an exclusive session.
 
 Normal correctness remains separate:
 

@@ -4,6 +4,12 @@ This audit separates the publishable, reproducible research core from retained
 historical evidence whose inputs have unresolved provenance. It does not alter
 any raw artifact, experiment result, codec behavior, threshold, API, or ABI.
 
+The later predictor-boundary and exact-backref diagnostic attempts produced no
+timed observations: both stopped in a Darwin free-memory preflight before lease
+acquisition. They support no publication performance claim. Their evidence and
+limitations are audited in
+[next-boundary-experiment-evaluation-20260818.md](next-boundary-experiment-evaluation-20260818.md).
+
 ## Evidence policy
 
 Publication-core claims must have committed raw evidence and inputs that are
