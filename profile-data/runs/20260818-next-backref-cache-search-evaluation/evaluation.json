@@ -1,0 +1,368 @@
+{
+  "ancestry": {
+    "base_commit": "297b9e5257ed1098503f7630f3223c1fddbef261",
+    "designer_commit": "90ceb5a3d81a761678c0e89d44f7c09e5ce18836",
+    "evaluation_commit": "the separate descendant commit containing this artifact",
+    "executor_evidence_commit": "5ab9cfc0cf435e821ce7cd8d7c8c2112ef170ec8"
+  },
+  "authority": {
+    "all_nested_artifact_hashes_verified": true,
+    "artifact_count_excluding_hash_index": 89,
+    "artifact_hashes_sha256": "55acf72755516c68fa9b6884589553ae8b9d1ba18679de85d7a97f29491e547d",
+    "manifest_sha256": "ed0c68b0e72fb013da5fe244d20453e3c86d1199cc7877725c2c4b4fb8041fe1",
+    "operator_sha256": "1a66c966dc1d5735e5bba6ef8b281f4b8093b542c399b451c72594d8084a1848"
+  },
+  "cells": [
+    {
+      "cache_search_share": 0.6224061068275236,
+      "cache_search_share_bootstrap_95": [
+        0.6192859969287113,
+        0.6265204417159146
+      ],
+      "cache_search_share_mad": 0.0031201098988122844,
+      "case_id": "texture-medium",
+      "criteria": {
+        "all": true,
+        "median_overhead": true,
+        "p95_overhead": true,
+        "share": true
+      },
+      "lifecycle": "cold",
+      "method": 4,
+      "pair_median_ratios": [
+        1.001108825553498,
+        1.0175660806687195,
+        0.9347267949561172,
+        1.0509990834616634,
+        1.0077088239574348,
+        0.9663624549947162,
+        1.009413597858388
+      ],
+      "process_pairs": 7,
+      "raw_records_per_variant": 7,
+      "record_control_median_ratio": 1.0077088239574348,
+      "record_control_median_ratio_bootstrap_95": [
+        0.9663624549947162,
+        1.0175660806687195
+      ],
+      "record_control_median_ratio_mad": 0.009857256711284679,
+      "record_control_p95_ratio": 1.0204367142964377,
+      "role": "tune"
+    },
+    {
+      "cache_search_share": 0.6513408949865243,
+      "cache_search_share_bootstrap_95": [
+        0.6486407581579589,
+        0.6515479245443756
+      ],
+      "cache_search_share_mad": 0.0002070295578513459,
+      "case_id": "texture-medium",
+      "criteria": {
+        "all": true,
+        "median_overhead": true,
+        "p95_overhead": true,
+        "share": true
+      },
+      "lifecycle": "warm",
+      "method": 4,
+      "pair_median_ratios": [
+        0.9870748377426688,
+        1.0138363680537932,
+        1.0346210254166894
+      ],
+      "process_pairs": 3,
+      "raw_records_per_variant": 15,
+      "record_control_median_ratio": 1.0138363680537932,
+      "record_control_median_ratio_bootstrap_95": [
+        0.9870748377426688,
+        1.0346210254166894
+      ],
+      "record_control_median_ratio_mad": 0.020784657362896253,
+      "record_control_p95_ratio": 1.0477671787055127,
+      "role": "tune"
+    },
+    {
+      "cache_search_share": 0.6163008180250837,
+      "cache_search_share_bootstrap_95": [
+        0.6141818774010102,
+        0.6254329121636488
+      ],
+      "cache_search_share_mad": 0.004264495149295389,
+      "case_id": "texture-medium",
+      "criteria": {
+        "all": true,
+        "median_overhead": true,
+        "p95_overhead": true,
+        "share": true
+      },
+      "lifecycle": "cold",
+      "method": 6,
+      "pair_median_ratios": [
+        0.9552957348249651,
+        1.0178396018216413,
+        1.022859213111089,
+        0.9720934403127359,
+        0.9987664666152083,
+        1.0324624858583833,
+        0.9706513644587597
+      ],
+      "process_pairs": 7,
+      "raw_records_per_variant": 7,
+      "record_control_median_ratio": 0.9987664666152083,
+      "record_control_median_ratio_bootstrap_95": [
+        0.9706513644587597,
+        1.022859213111089
+      ],
+      "record_control_median_ratio_mad": 0.02667302630247237,
+      "record_control_p95_ratio": 0.9941359092158479,
+      "role": "tune"
+    },
+    {
+      "cache_search_share": 0.6508168565204411,
+      "cache_search_share_bootstrap_95": [
+        0.6365282011598704,
+        0.6540542122984698
+      ],
+      "cache_search_share_mad": 0.00323735577802875,
+      "case_id": "texture-medium",
+      "criteria": {
+        "all": true,
+        "median_overhead": true,
+        "p95_overhead": true,
+        "share": true
+      },
+      "lifecycle": "warm",
+      "method": 6,
+      "pair_median_ratios": [
+        1.0077058831645698,
+        1.041335732089515,
+        1.0109317708968903
+      ],
+      "process_pairs": 3,
+      "raw_records_per_variant": 15,
+      "record_control_median_ratio": 1.0109317708968903,
+      "record_control_median_ratio_bootstrap_95": [
+        1.0077058831645698,
+        1.041335732089515
+      ],
+      "record_control_median_ratio_mad": 0.003225887732320576,
+      "record_control_p95_ratio": 1.0189877122872975,
+      "role": "tune"
+    },
+    {
+      "cache_search_share": 0.6157732701644025,
+      "cache_search_share_bootstrap_95": [
+        0.6086665132224836,
+        0.6209827497391797
+      ],
+      "cache_search_share_mad": 0.005498722628304975,
+      "case_id": "texture-large",
+      "criteria": {
+        "all": true,
+        "median_overhead": true,
+        "p95_overhead": true,
+        "share": true
+      },
+      "lifecycle": "cold",
+      "method": 4,
+      "pair_median_ratios": [
+        0.9813748320868969,
+        0.9675994010783926,
+        0.9966785442648511,
+        0.9903068841429344,
+        0.9896204683352231,
+        1.0353760038593678,
+        1.0169053680599307
+      ],
+      "process_pairs": 7,
+      "raw_records_per_variant": 7,
+      "record_control_median_ratio": 0.9903068841429344,
+      "record_control_median_ratio_bootstrap_95": [
+        0.9813748320868969,
+        1.0169053680599307
+      ],
+      "record_control_median_ratio_mad": 0.008932052056037532,
+      "record_control_p95_ratio": 1.000406550187138,
+      "role": "holdout"
+    },
+    {
+      "cache_search_share": 0.641400167772604,
+      "cache_search_share_bootstrap_95": [
+        0.6383588986703861,
+        0.6478910641013371
+      ],
+      "cache_search_share_mad": 0.003041269102217914,
+      "case_id": "texture-large",
+      "criteria": {
+        "all": true,
+        "median_overhead": true,
+        "p95_overhead": true,
+        "share": true
+      },
+      "lifecycle": "warm",
+      "method": 4,
+      "pair_median_ratios": [
+        0.9956262083707554,
+        1.0225945768332751,
+        0.9974802561513728
+      ],
+      "process_pairs": 3,
+      "raw_records_per_variant": 15,
+      "record_control_median_ratio": 0.9974802561513728,
+      "record_control_median_ratio_bootstrap_95": [
+        0.9956262083707554,
+        1.0225945768332751
+      ],
+      "record_control_median_ratio_mad": 0.0018540477806173739,
+      "record_control_p95_ratio": 1.0096246504007906,
+      "role": "holdout"
+    },
+    {
+      "cache_search_share": 0.6089786571439209,
+      "cache_search_share_bootstrap_95": [
+        0.6067324333374973,
+        0.6176364086441628
+      ],
+      "cache_search_share_mad": 0.002246223806423586,
+      "case_id": "texture-large",
+      "criteria": {
+        "all": false,
+        "median_overhead": false,
+        "p95_overhead": true,
+        "share": true
+      },
+      "lifecycle": "cold",
+      "method": 6,
+      "pair_median_ratios": [
+        1.0129315499948985,
+        1.0435768042311995,
+        1.0202929943466514,
+        1.010869491333859,
+        1.0655879183752084,
+        1.0473639526801433,
+        1.0366091549762453
+      ],
+      "process_pairs": 7,
+      "raw_records_per_variant": 7,
+      "record_control_median_ratio": 1.0366091549762453,
+      "record_control_median_ratio_bootstrap_95": [
+        1.0129315499948985,
+        1.0473639526801433
+      ],
+      "record_control_median_ratio_mad": 0.016316160629593845,
+      "record_control_p95_ratio": 1.038319946875448,
+      "role": "holdout"
+    },
+    {
+      "cache_search_share": 0.6414930209359636,
+      "cache_search_share_bootstrap_95": [
+        0.6379593632419612,
+        0.6446280010580472
+      ],
+      "cache_search_share_mad": 0.003134980122083575,
+      "case_id": "texture-large",
+      "criteria": {
+        "all": true,
+        "median_overhead": true,
+        "p95_overhead": true,
+        "share": true
+      },
+      "lifecycle": "warm",
+      "method": 6,
+      "pair_median_ratios": [
+        1.0044589458091764,
+        0.9904650691799128,
+        0.9977803155651921
+      ],
+      "process_pairs": 3,
+      "raw_records_per_variant": 15,
+      "record_control_median_ratio": 0.9977803155651921,
+      "record_control_median_ratio_bootstrap_95": [
+        0.9904650691799128,
+        1.0044589458091764
+      ],
+      "record_control_median_ratio_mad": 0.006678630243984296,
+      "record_control_p95_ratio": 0.9660135806839679,
+      "role": "holdout"
+    }
+  ],
+  "decision": {
+    "accepted": false,
+    "disposition": "reject_not_accept_as_future_implementation_research_boundary; retain_default_off_diagnostic",
+    "failed_holdout_cells": [
+      {
+        "failed_criteria": [
+          "median_overhead"
+        ],
+        "lifecycle": "cold",
+        "method": 6
+      }
+    ],
+    "independent_ratios_multiplied": false,
+    "production_change_supported": false,
+    "threshold_policy_default_public_abi_api_or_cache_semantics_change": false
+  },
+  "gates": {
+    "artifact_hash_inventory_schema_order": true,
+    "correctness_determinism_decoded_pixels_fallback": true,
+    "cuda_used": false,
+    "exact_timing_call_counts": true,
+    "gpu_or_end_to_end_claim": false,
+    "independent_default_off_source_and_runtime_guards": true,
+    "lease_release": true,
+    "resource_ceilings": true,
+    "single_physical_metal_device": true,
+    "source_manifest_operator": true
+  },
+  "inventory": {
+    "cold_records": 56,
+    "command_rows": 80,
+    "control_identity": true,
+    "correctness_summary_rows": 18,
+    "decoded_pixel_identity": true,
+    "determinism": true,
+    "discarded_warmups": 24,
+    "injected_record_failure_transactional": true,
+    "maximum_command_seconds": 1.924518792,
+    "measured_control_variant": 88,
+    "measured_record_variant": 88,
+    "measured_warm_records": 120,
+    "raw_correctness_records": 54,
+    "raw_timing_records": 200,
+    "recorder_open_failure_transactional": true,
+    "unique_processes": 80
+  },
+  "limitations": {
+    "dispatch_specific_claim": false,
+    "end_to_end_speedup_claim": false,
+    "execution_days": 1,
+    "hardware_replication_count": 1,
+    "inputs": "deterministic synthetic texture-medium and texture-large",
+    "warm_samples_within_process_correlated": true
+  },
+  "resources": {
+    "cuda_marker_found": false,
+    "dispatch_evidence_required": false,
+    "elapsed_seconds": 87.91612601280212,
+    "evidence_bytes_including_hash_index": 268234,
+    "free_memory_bytes": 10079453184,
+    "gpu_performance_claim": false,
+    "lease_release_evidenced": true,
+    "maximum_command_seconds": 1.924518792,
+    "maximum_observed_rss_bytes": 356171776,
+    "physical_metal_device_count": 1,
+    "source_commit": "90ceb5a3d81a761678c0e89d44f7c09e5ce18836",
+    "thermal_warning_recorded": false
+  },
+  "schema": "libwebp-backref-cache-search-evaluation-v1",
+  "statistics": {
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20260818,
+    "bootstrap_stream": "one deterministic stream in frozen case/method/lifecycle order; share then overhead",
+    "mad": "median absolute deviation over process-pair values",
+    "p95": "nearest-rank within each raw variant stratum",
+    "pairing": "record-process median / control-process median",
+    "pooling": false,
+    "warm_reduction": "median of five measured encodes within each process"
+  }
+}

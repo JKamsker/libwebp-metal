@@ -7,6 +7,36 @@
 **Publication audit:** 2026-08-18 claim/corpus addendum
 **Status:** reproducible bounded research core; **not production-ready or upstream-ready**
 
+> **2026-08-18 next-boundary addendum:** a separately frozen continuation split
+> predictor selector/apply/map and exact backward-reference components on the
+> deterministic publication corpus. Neither proposed future boundary passed
+> every holdout criterion. Predictor shares were large but one required
+> recorder-overhead cell failed; standard exact LZ77 was only 3.13--4.29% of
+> required texture holdouts. No production code, threshold, or ABI was promoted.
+> See
+> [next-boundary-experiment-evaluation-20260818.md](next-boundary-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 focused cache-search addendum:** a new independent two-clock
+> diagnostic measured `CalculateBestCacheSize` at 60.90--64.15% of all
+> required holdout backref boundaries. Method-6 cold exceeded the frozen
+> median recorder/control ceiling, so the all-cell candidate was not accepted.
+> The diagnostic remains default off; no production or speedup claim follows.
+> See
+> [backref-cache-search-experiment-evaluation-20260818.md](backref-cache-search-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 serial-sweep addendum:** the resulting row-9 implementation A/B
+> passed exact correctness and fallback checks but failed both frozen
+> performance limits in all eight cells. It is rejected and retained default
+> off; no production cache behavior, threshold, API, or ABI changes. See
+> [cache-size-serial-sweep-experiment-evaluation-20260818.md](cache-size-serial-sweep-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 single-pass slab consequence:** the independent recorder-free
+> slab candidate passed exact correctness, but three of four required holdout
+> cells failed the paired-median limit. It is rejected and retained default
+> off. No cache threshold, API/ABI, fallback, Metal, or CUDA policy changes.
+> See
+> [cache-size-single-pass-slab-experiment-evaluation-20260818.md](cache-size-single-pass-slab-experiment-evaluation-20260818.md).
+
 ## Abstract
 
 This report evaluates a private Metal backend for three encoder stages in a
@@ -396,6 +426,10 @@ this report and are not used to justify the 2x2 promotion or threshold policy.
 | 512-thread lossy kernel | inconclusive; promising alone, unmeasured with promoted 2x2 and on other devices |
 | Other lossy memory/command changes | rejected; small, inconsistent, or size-specific effects |
 | Standalone predictor residual | remains default-off; historical external-image result excluded from publication core |
+| Predictor selector-plus-apply boundary | not accepted; required recorder-overhead cell failed |
+| Standard exact-LZ77 boundary | rejected; only 3.13--4.29% of required holdout backref time and one p95 outlier |
+| Focused cache-size-search boundary | not accepted; majority share passed, but method-6 cold recorder/control median exceeded 1.03 |
+| Cache-size serial-sweep implementation | rejected; all eight paired-median and p95 performance cells failed despite exact correctness |
 
 ## Correctness, determinism, and fallback contracts
 
@@ -464,6 +498,19 @@ matrix.
   timing, and cold processes. It is excluded from the publication core.
 - No experiment records GPU energy, peak retained allocation, queue contention,
   multi-threaded application behavior, or long-run thermal equilibrium.
+- The row-8 cache-search result uses one M4 Pro and synthetic textures. Its
+  nested clock is inclusive accounting, not an implementation speedup, and its
+  method-6 cold recorder overhead fails the predeclared all-cell rule.
+- The row-9 implementation result uses one M4 Pro, two synthetic texture sizes,
+  methods 4 and 6, and one execution. Its effective timed-build SDK is not
+  conclusively recorded, and Low Power Mode was omitted from preflight state.
+  Those limitations do not rescue a candidate that failed every A/B cell.
+- The row-10 implementation result uses one execution, synthetic graphic and
+  texture inputs, methods 4 and 6, quality 75, and single-threaded end-to-end
+  timing. Its frozen artifacts omit execution-time device/power/thermal/disk/
+  sole-host records and separate timed-child stderr. Current-host checks only
+  corroborate, rather than prove, that timed state. Those limitations do not
+  rescue three failed required holdout medians.
 
 ## Reproducibility
 

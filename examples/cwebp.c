@@ -685,6 +685,15 @@ static void HelpLong(void) {
 #if defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT)
   printf("  -profile_repetitions <n> repeat a discarded lossless encode in-process\n");
 #endif
+#if defined(WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT)
+  printf("  -predictor_boundary_repetitions <n> repeat a discarded encode for the predictor experiment\n");
+#endif
+#if defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT)
+  printf("  -backref_exact_repetitions <n> repeat a discarded encode for the backref experiment\n");
+#endif
+#if defined(WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT)
+  printf("  -backref_cache_search_repetitions <n> repeat a discarded encode for the focused cache-search experiment\n");
+#endif
   printf("\n");
   printf("Supported input formats:\n  %s\n", WebPGetEnabledInputFileFormats());
 }
@@ -732,6 +741,12 @@ int main(int argc, const char* argv[]) {
   int keep_metadata = 0;
 #if defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT)
   int profile_repetitions = 1;
+#endif
+#if defined(WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT)
+  int boundary_repetitions = 1;
+  int boundary_experiment = 0;  // 1 predictor, 2 exact, 3 cache search.
 #endif
   int metadata_written = 0;
   WebPPicture picture;
@@ -864,6 +879,27 @@ int main(int argc, const char* argv[]) {
     } else if (!strcmp(argv[c], "-profile_repetitions") && c + 1 < argc) {
       profile_repetitions = ExUtilGetInt(argv[++c], 0, &parse_error);
       if (profile_repetitions < 1) parse_error = 1;
+#endif
+#if defined(WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT)
+    } else if (!strcmp(argv[c], "-predictor_boundary_repetitions") &&
+               c + 1 < argc) {
+      boundary_repetitions = ExUtilGetInt(argv[++c], 0, &parse_error);
+      boundary_experiment = 1;
+      if (boundary_repetitions < 1) parse_error = 1;
+#endif
+#if defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT)
+    } else if (!strcmp(argv[c], "-backref_exact_repetitions") &&
+               c + 1 < argc) {
+      boundary_repetitions = ExUtilGetInt(argv[++c], 0, &parse_error);
+      boundary_experiment = 2;
+      if (boundary_repetitions < 1) parse_error = 1;
+#endif
+#if defined(WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT)
+    } else if (!strcmp(argv[c], "-backref_cache_search_repetitions") &&
+               c + 1 < argc) {
+      boundary_repetitions = ExUtilGetInt(argv[++c], 0, &parse_error);
+      boundary_experiment = 3;
+      if (boundary_repetitions < 1) parse_error = 1;
 #endif
     } else if (!strcmp(argv[c], "-low_memory")) {
       config.low_memory = 1;
@@ -1077,6 +1113,36 @@ int main(int argc, const char* argv[]) {
     goto Error;
   }
 #endif
+#if defined(WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT)
+  if (boundary_experiment != 0) {
+    const char* const runtime_flag = boundary_experiment == 1
+                                         ? "WEBP_PREDICTOR_BOUNDARY_EXPERIMENT"
+                                     : boundary_experiment == 2
+                                         ? "WEBP_BACKREF_EXACT_EXPERIMENT"
+                                         : "WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT";
+    if (getenv(runtime_flag) == NULL || strcmp(getenv(runtime_flag), "1") != 0) {
+      fprintf(stderr, "Error! boundary repetitions require %s=1.\n",
+              runtime_flag);
+      goto Error;
+    }
+    if (getenv("WEBP_BENCHMARK_SESSION") == NULL ||
+        strcmp(getenv("WEBP_BENCHMARK_SESSION"), "exclusive") != 0) {
+      fprintf(stderr,
+              "Error! boundary repetitions require "
+              "WEBP_BENCHMARK_SESSION=exclusive.\n");
+      goto Error;
+    }
+    if (!config.lossless || out_file != NULL || print_distortion >= 0 ||
+        dump_file != NULL || keep_metadata != 0 || config.thread_level != 0) {
+      fprintf(stderr,
+              "Error! boundary repetitions require single-threaded lossless "
+              "encoding with discarded output and no distortion/metadata.\n");
+      goto Error;
+    }
+  }
+#endif
 
   // Read the input. We need to decide if we prefer ARGB or YUVA
   // samples, depending on the expected compression mode (this saves
@@ -1229,11 +1295,26 @@ int main(int argc, const char* argv[]) {
   if (verbose) {
     StopwatchReset(&stop_watch);
   }
-#if defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT)
+#if defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT) || \
+    defined(WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT)
   {
-    int profile_iteration;
-    for (profile_iteration = 0; profile_iteration < profile_repetitions;
-         ++profile_iteration) {
+    int experiment_repetitions = 1;
+    int experiment_iteration;
+#if defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT)
+    experiment_repetitions = profile_repetitions;
+#endif
+#if defined(WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT)
+    if (boundary_experiment != 0) {
+      experiment_repetitions = boundary_repetitions;
+    }
+#endif
+    for (experiment_iteration = 0;
+         experiment_iteration < experiment_repetitions;
+         ++experiment_iteration) {
       if (!WebPEncode(&config, &picture)) {
         fprintf(stderr, "Error! Cannot encode picture as WebP\n");
         fprintf(stderr, "Error code: %d (%s)\n", picture.error_code,

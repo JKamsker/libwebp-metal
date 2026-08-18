@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Static and fail-closed checks for the five research experiment guards.
+"""Static and fail-closed checks for all research experiment guards.
 
 This test never grants the benchmark lease and therefore cannot start timed
 work. It does use forced make dry-runs to verify that one selected build flag
@@ -15,6 +15,7 @@ import tempfile
 from pathlib import Path
 
 import benchmark_metal_ablation as metal_ablation
+import test_next_boundary_operator_portability as boundary_portability
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -49,6 +50,36 @@ MATRIX = (
         "WEBP_METAL_PREDICTOR",
         "src/enc/predictor_enc_metal.o",
     ),
+    (
+        "WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT",
+        "WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT",
+        "WEBP_PREDICTOR_BOUNDARY_EXPERIMENT",
+        "src/enc/boundary_experiment_enc.o",
+    ),
+    (
+        "WEBP_BUILD_BACKREF_EXACT_EXPERIMENT",
+        "WEBP_USE_BACKREF_EXACT_EXPERIMENT",
+        "WEBP_BACKREF_EXACT_EXPERIMENT",
+        "src/enc/boundary_experiment_enc.o",
+    ),
+    (
+        "WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT",
+        "WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT",
+        "WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT",
+        "src/enc/backref_cache_search_experiment_enc.o",
+    ),
+    (
+        "WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT",
+        "WEBP_USE_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT",
+        "WEBP_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT",
+        "src/enc/cache_size_serial_sweep_enc.o",
+    ),
+    (
+        "WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT",
+        "WEBP_USE_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT",
+        "WEBP_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT",
+        "src/enc/cache_size_single_pass_slab_enc.o",
+    ),
 )
 
 
@@ -61,6 +92,11 @@ def run(argv: list[str], environment: dict[str, str] | None = None) -> subproces
         "WEBP_METAL_BATCH_EXPERIMENT",
         "WEBP_METAL_ABLATION_EXPERIMENT",
         "WEBP_METAL_PREDICTOR",
+        "WEBP_PREDICTOR_BOUNDARY_EXPERIMENT",
+        "WEBP_BACKREF_EXACT_EXPERIMENT",
+        "WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT",
+        "WEBP_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT",
+        "WEBP_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT",
     ):
         env.pop(name, None)
     if environment:
@@ -112,6 +148,10 @@ def check_build_matrix() -> None:
     assert default.returncode == 0, default.stdout
     assert not any(f"-D{macro}=1" in default.stdout for macro in macros)
     assert "src/enc/profile_enc.o" not in default.stdout
+    assert "src/enc/boundary_experiment_enc.o" not in default.stdout
+    assert "src/enc/backref_cache_search_experiment_enc.o" not in default.stdout
+    assert "src/enc/cache_size_serial_sweep_enc.o" not in default.stdout
+    assert "src/enc/cache_size_single_pass_slab_enc.o" not in default.stdout
     assert "list(REMOVE_ITEM WEBP_ENC_SRCS" in cmake
     assert not any(
         f"add_definitions(-D{macro}" in cmake for macro in macros
@@ -213,6 +253,35 @@ def check_runtime_and_lease_refusals() -> None:
                 "WEBP_BENCHMARK_SESSION=exclusive",
                 {"WEBP_METAL_PREDICTOR": "1"},
             ),
+            (
+                [python, "scripts/run_next_boundary_experiments.py", "run",
+                 "predictor_boundary", output],
+                "WEBP_PREDICTOR_BOUNDARY_EXPERIMENT=1",
+                "WEBP_BENCHMARK_SESSION=exclusive",
+                {"WEBP_PREDICTOR_BOUNDARY_EXPERIMENT": "1"},
+            ),
+            (
+                [python, "scripts/run_next_boundary_experiments.py", "run",
+                 "backref_exact", output],
+                "WEBP_BACKREF_EXACT_EXPERIMENT=1",
+                "WEBP_BENCHMARK_SESSION=exclusive",
+                {"WEBP_BACKREF_EXACT_EXPERIMENT": "1"},
+            ),
+            (
+                [python, "scripts/run_backref_cache_search_experiment.py",
+                 "run", "backref_cache_search", output],
+                "WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT=1",
+                "WEBP_BENCHMARK_SESSION=exclusive",
+                {"WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT": "1"},
+            ),
+            (
+                [python,
+                 "scripts/run_cache_size_single_pass_slab_experiment.py",
+                 "run", output],
+                "WEBP_BENCHMARK_SESSION=exclusive",
+                "WEBP_BENCHMARK_SESSION=exclusive",
+                {"WEBP_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT": "1"},
+            ),
         )
         for argv, runtime_message, lease_message, runtime_environment in timed:
             require_failure(argv, runtime_message)
@@ -220,11 +289,12 @@ def check_runtime_and_lease_refusals() -> None:
 
 
 def main() -> int:
+    boundary_portability.main()
     check_build_matrix()
     check_omitted_targets()
     check_promoted_ablation_control()
     check_runtime_and_lease_refusals()
-    print("PASS: five independent build/runtime guards and fail-closed leases")
+    print("PASS: ten independent build/runtime guards and fail-closed leases")
     return 0
 
 

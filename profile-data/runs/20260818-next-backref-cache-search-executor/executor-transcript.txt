@@ -1,0 +1,2 @@
+$ WEBP_EXPECTED_DESIGNER_COMMIT=90ceb5a3d81a761678c0e89d44f7c09e5ce18836 WEBP_BENCHMARK_SESSION=exclusive WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT=1 python3 scripts/run_backref_cache_search_experiment.py run backref_cache_search /Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal-evidence/20260818-cycle3/backref-cache-search
+PASS: publication corpus matches /Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal/benchmarks/publication-corpus/manifest.json

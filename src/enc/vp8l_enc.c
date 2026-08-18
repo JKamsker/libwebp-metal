@@ -20,6 +20,7 @@
 #include "src/dsp/lossless.h"
 #include "src/dsp/lossless_common.h"
 #include "src/enc/backward_references_enc.h"
+#include "src/enc/boundary_experiment_enc.h"
 #include "src/enc/histogram_enc.h"
 #include "src/enc/profile_enc.h"
 #include "src/enc/vp8i_enc.h"
@@ -1136,11 +1137,18 @@ static int ApplyPredictFilter(VP8LEncoder* const enc, int width, int height,
   VP8LPutBits(bw, PREDICTOR_TRANSFORM, 2);
   assert(*best_bits >= MIN_TRANSFORM_BITS && *best_bits <= MAX_TRANSFORM_BITS);
   VP8LPutBits(bw, *best_bits - MIN_TRANSFORM_BITS, NUM_TRANSFORM_BITS);
-  return EncodeImageNoHuffman(
-      bw, enc->transform_data, &enc->hash_chain, &enc->refs[0],
-      VP8LSubSampleSize(width, *best_bits),
-      VP8LSubSampleSize(height, *best_bits), quality, low_effort, enc->pic,
-      percent_range - percent_range / 2, percent);
+  {
+    const uint64_t boundary_start = WebPPredictorBoundaryStageBegin(
+        WEBP_PREDICTOR_BOUNDARY_MAP_ENCODE);
+    const int ok = EncodeImageNoHuffman(
+        bw, enc->transform_data, &enc->hash_chain, &enc->refs[0],
+        VP8LSubSampleSize(width, *best_bits),
+        VP8LSubSampleSize(height, *best_bits), quality, low_effort, enc->pic,
+        percent_range - percent_range / 2, percent);
+    WebPPredictorBoundaryStageEnd(WEBP_PREDICTOR_BOUNDARY_MAP_ENCODE,
+                                  boundary_start);
+    return ok;
+  }
 }
 
 static int ApplyCrossColorFilter(VP8LEncoder* const enc, int width, int height,

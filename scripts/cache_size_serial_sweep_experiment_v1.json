@@ -1,0 +1,189 @@
+{
+  "schema": "libwebp-cache-size-serial-sweep-frozen-v1",
+  "protocol_version": 1,
+  "experiment_id": "cache_size_serial_sweep",
+  "base_commit": "76c34b682818186132269a13f3e645ecd9e7800d",
+  "required_expected_commit_environment": "WEBP_EXPECTED_CACHE_SIZE_SWEEP_COMMIT",
+  "license": "BSD-3-Clause",
+  "closed_diagnostic": {
+    "name": "backref_cache_search",
+    "status": "closed and rejected because method-6 cold record/control median overhead exceeded 1.03",
+    "permitted_use": "historical boundary-selection context only",
+    "forbidden_actions": [
+      "rerun",
+      "relabel",
+      "promotion",
+      "another observational recorder"
+    ],
+    "observed_cache_search_share_range": [0.6090, 0.6415]
+  },
+  "upstream_semantics": {
+    "audited_upstream_main": "178d2bc03b73aa15fc1186c1fd1c383e092a26a8",
+    "relevant_source_diff_from_fork_base": "none",
+    "selection_order": "cache bits 0 through maximum, strict entropy improvement only",
+    "quality_rule": "quality <= 25 disables the cache",
+    "failure_rule": "allocation failure returns failure to the caller",
+    "candidate_fallback": "candidate failure leaves the requested maximum unchanged and runs the baseline"
+  },
+  "candidate": {
+    "name": "cache-resident serial sweep",
+    "build_flag": "WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT",
+    "compile_macro": "WEBP_USE_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT",
+    "runtime_flag": "WEBP_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT",
+    "runtime_value": "1",
+    "failure_injection_flag": "WEBP_CACHE_SIZE_SERIAL_SWEEP_INJECT_FAILURE",
+    "source": "src/enc/cache_size_serial_sweep_enc.c",
+    "source_sha256": "a63d2efba154f4c395d2ac8e0fe19553794cc7c3657b6a2891866604765709ca",
+    "runner": "tools/cache_size_serial_sweep_runner.c",
+    "runner_sha256": "63c7523dd36d9860b3d8071d6685edfc8c1bed12cdee8cb32554938f4acef53e",
+    "hypothesis": "Sweep one cache size at a time so one maximum-sized histogram and one maximum-sized color cache stay hot; remove the per-pixel candidate loop and reduce 21 candidate allocations to 2 at the maximum cache-bit edge.",
+    "complexity": {
+      "baseline_time": "O(P * B + R), one reference traversal with B cache states",
+      "candidate_time": "O((P + R) * B), B+1 immutable reference traversals with one cache state",
+      "baseline_live_search_memory": "B+1 histograms plus B color caches",
+      "candidate_live_search_memory": "one maximum histogram plus one maximum color cache",
+      "tradeoff": "additional sequential reference traversal for a smaller working set, straight-line per-candidate loops, and fewer allocations"
+    },
+    "scope": "CalculateBestCacheSize only",
+    "preserves": [
+      "chosen cache bits",
+      "strict ordering and tie behavior",
+      "bitstream bytes",
+      "decoded pixels",
+      "transactional fallback",
+      "public ABI and API",
+      "production defaults"
+    ]
+  },
+  "corpus": {
+    "generator": "scripts/generate_publication_corpus.py",
+    "generator_sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+    "manifest": "benchmarks/publication-corpus/manifest.json",
+    "manifest_sha256": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+    "correctness_cases": [
+      "photo-small",
+      "graphic-small",
+      "texture-small",
+      "photo-medium",
+      "graphic-medium",
+      "texture-medium",
+      "photo-large",
+      "graphic-large",
+      "texture-large"
+    ],
+    "timed": {
+      "tune": {
+        "case_id": "texture-medium",
+        "sha256": "91d90466139f54ad441448bc7d352c637a4020ce928434dbff3a358c5a829385"
+      },
+      "holdout": {
+        "case_id": "texture-large",
+        "sha256": "dd02badce31b757f9374f0f5de187e9de3158fe6878929207eeed24ea72d79e2"
+      }
+    }
+  },
+  "builds": {
+    "common": [
+      "-DWEBP_ENABLE_METAL=OFF",
+      "-DBUILD_SHARED_LIBS=OFF",
+      "-DWEBP_BUILD_EXTRAS=OFF",
+      "-DWEBP_BUILD_CWEBP=ON",
+      "-DWEBP_BUILD_DWEBP=ON",
+      "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    "baseline": "ordinary build; candidate option absent and OFF",
+    "candidate": "common flags plus -DWEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT=ON",
+    "forbidden_backend": "CUDA",
+    "runner_linkage": "compile the same runner source separately against each static libwebp build"
+  },
+  "protocol": {
+    "timing_authority": "WebPEncode elapsed time measured only by the external dedicated runner",
+    "boundary_timing": "unavailable without changing the tested library; predeclared non-authoritative and omitted",
+    "recorders": "none; no old or new stage recorder is compiled or invoked",
+    "encoder": {
+      "lossless": true,
+      "exact": true,
+      "quality": 75,
+      "thread_level": 0
+    },
+    "methods": [4, 6],
+    "execution_order": [
+      "tune:texture-medium",
+      "holdout:texture-large",
+      "method:4-before-6",
+      "lifecycle:cold-before-warm"
+    ],
+    "lifecycles": {
+      "cold": {
+        "process_pairs": 9,
+        "discarded_warmups_per_process": 0,
+        "measured_encodes_per_process": 1
+      },
+      "warm": {
+        "process_pairs": 5,
+        "discarded_warmups_per_process": 1,
+        "measured_encodes_per_process": 7
+      }
+    },
+    "pair_order": [
+      "baseline-candidate",
+      "candidate-baseline",
+      "baseline-candidate",
+      "candidate-baseline",
+      "baseline-candidate",
+      "candidate-baseline",
+      "baseline-candidate",
+      "candidate-baseline",
+      "baseline-candidate"
+    ],
+    "statistics": {
+      "warm_process_reduction": "median of seven measured encodes after one discarded warmup",
+      "paired_location": "median of candidate-process/baseline-process ratios",
+      "tail": "nearest-rank p95 over all raw measured samples in each variant stratum; candidate p95 divided by baseline p95",
+      "pooling_forbidden": [
+        "case",
+        "method",
+        "lifecycle",
+        "tune_holdout"
+      ]
+    },
+    "acceptance": {
+      "authority": "end-to-end only",
+      "required_cells": "holdout:texture-large x methods 4/6 x cold/warm",
+      "paired_median_ratio_maximum": 0.98,
+      "p95_ratio_maximum": 1.02,
+      "correctness": "all publication cases at methods 4 and 6 must have exact baseline/candidate/fallback bitstreams and decoded pixels",
+      "decision": "accept only if every required correctness, integrity, resource, median, and p95 gate passes"
+    },
+    "expected_inventory": {
+      "command_processes": 112,
+      "cold_measured_samples": 72,
+      "warmup_samples": 40,
+      "warm_measured_samples": 280,
+      "total_measured_samples": 352,
+      "variant_measured_samples": 176,
+      "correctness_cells": 18
+    }
+  },
+  "resources": {
+    "lease_path": "/tmp/libwebp-metal-cache-size-serial-sweep.lock",
+    "parallel_benchmark_processes": 1,
+    "minimum_available_memory_bytes": 4294967296,
+    "maximum_child_rss_bytes": 2147483648,
+    "maximum_output_bytes": 2147483648,
+    "maximum_command_seconds": 240,
+    "maximum_total_seconds": 3600
+  },
+  "schemas": {
+    "sample": "libwebp-cache-size-serial-sweep-sample-v1",
+    "command": "libwebp-cache-size-serial-sweep-command-v1",
+    "correctness": "libwebp-cache-size-serial-sweep-correctness-v1",
+    "evaluation": "libwebp-cache-size-serial-sweep-evaluation-v1",
+    "resources": "libwebp-cache-size-serial-sweep-resources-v1",
+    "artifact_hashes": "libwebp-cache-size-serial-sweep-artifact-hashes-v1"
+  },
+  "operator": {
+    "path": "scripts/run_cache_size_serial_sweep_experiment.py",
+    "sha256": "e2081b69ab3d7b224967aa07c2c2a2d67f7b77d78a4c2817600dc62b7fec5a2b"
+  }
+}
