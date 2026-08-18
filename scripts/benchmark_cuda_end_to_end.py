@@ -41,15 +41,18 @@ CUDA_ENVIRONMENT_NAMES = (
     "WEBP_CUDA",
     "WEBP_CUDA_DEVICE",
     "WEBP_CUDA_VERBOSE",
+    "WEBP_CUDA_PREWARM",
     "WEBP_CUDA_TIMING",
     "WEBP_CUDA_COLOR",
     "WEBP_CUDA_HASH",
     "WEBP_CUDA_LOSSY",
     "WEBP_CUDA_NEAR_LOSSLESS",
+    "WEBP_CUDA_PREDICTOR",
     "WEBP_CUDA_MIN_PIXELS",
     "WEBP_CUDA_HASH_MIN_PIXELS",
     "WEBP_CUDA_LOSSY_MIN_PIXELS",
     "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS",
+    "WEBP_CUDA_PREDICTOR_MIN_PIXELS",
     "WEBP_CUDA_BATCH_SIZE",
     "WEBP_CUDA_BATCH_PIXELS",
     "WEBP_CUDA_BATCH_MIN_IMAGES",
@@ -80,6 +83,12 @@ def command_output(command: list[str]) -> str:
     except OSError as error:
         return f"unavailable: {error}"
     return completed.stdout.strip()
+
+
+def benchmark_executable(build_dir: Path, name: str) -> Path:
+    """Resolve a CMake benchmark executable on POSIX and Windows builds."""
+    suffix = ".exe" if os.name == "nt" else ""
+    return build_dir / f"{name}{suffix}"
 
 
 def run_checked(
@@ -118,10 +127,12 @@ def clean_environment(
                 "WEBP_CUDA_HASH": "1",
                 "WEBP_CUDA_LOSSY": "1",
                 "WEBP_CUDA_NEAR_LOSSLESS": "1",
+                "WEBP_CUDA_PREDICTOR": "1",
                 "WEBP_CUDA_MIN_PIXELS": "0",
                 "WEBP_CUDA_HASH_MIN_PIXELS": "0",
                 "WEBP_CUDA_LOSSY_MIN_PIXELS": "0",
                 "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS": "0",
+                "WEBP_CUDA_PREDICTOR_MIN_PIXELS": "0",
             }
         )
     return environment
@@ -676,9 +687,11 @@ def run_suite(args: argparse.Namespace) -> int:
     output = args.output_dir.resolve()
     output.mkdir(parents=True, exist_ok=True)
     binaries = {
-        "benchmark": build_dir / "webp_cuda_batch_benchmark",
-        "cwebp": build_dir / "cwebp",
-        "dwebp": build_dir / "dwebp",
+        "benchmark": benchmark_executable(
+            build_dir, "webp_cuda_batch_benchmark"
+        ),
+        "cwebp": benchmark_executable(build_dir, "cwebp"),
+        "dwebp": benchmark_executable(build_dir, "dwebp"),
     }
     missing = [
         str(path) for path in binaries.values() if not os.access(path, os.X_OK)

@@ -784,6 +784,26 @@ int VP8LResidualImage(int width, int height, int min_bits, int max_bits,
                       int* const best_bits) {
   int percent_start = *percent;
   const int max_quantization = 1 << VP8LNearLosslessBits(near_lossless_quality);
+  // A backend may take the whole mode selection and residual application when
+  // a single sampling is requested. Its mode search follows this function's
+  // cost model but not its exact arithmetic, so the predictor image is valid
+  // and the caller promises decoded-pixel parity rather than byte identity
+  // (as with the accelerated cross-color search). Sampling is optimized
+  // afterwards: merged tiles carry identical modes, so the already-applied
+  // residuals are unchanged.
+  if (!low_effort && min_bits == max_bits) {
+    const WebPAcceleratorPredictorRequest request = {
+        width,            height,
+        max_bits,         exact,
+        max_quantization, used_subtract_green,
+        argb,             image};
+    if (WebPAcceleratePredictor(&request) == WEBP_ACCELERATOR_SUCCESS) {
+      *best_bits = max_bits;
+      VP8LOptimizeSampling(image, width, height, max_bits, MAX_TRANSFORM_BITS,
+                           best_bits);
+      return WebPReportProgress(pic, percent_start + percent_range, percent);
+    }
+  }
   if (low_effort) {
     const int tiles_per_row = VP8LSubSampleSize(width, max_bits);
     const int tiles_per_col = VP8LSubSampleSize(height, max_bits);

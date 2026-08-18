@@ -175,6 +175,30 @@ WebPAcceleratorResult WebPAccelerateNearLossless(
   return WEBP_ACCELERATOR_NOT_RUN;
 }
 
+WebPAcceleratorResult WebPAcceleratePredictor(
+    const WebPAcceleratorPredictorRequest* const request) {
+  const WebPEncoderAccelerator* backends[4];
+  const size_t count =
+      GetBackends(backends, sizeof(backends) / sizeof(*backends));
+  size_t i;
+  if (request == NULL || count == 0 || IsDisabledByEnvironment()) {
+    return WEBP_ACCELERATOR_NOT_RUN;
+  }
+  for (i = 0; i < count; ++i) {
+    const WebPEncoderAccelerator* const backend = backends[i];
+    WebPAcceleratorResult result;
+    if (!IsValidBackend(backend)) return WEBP_ACCELERATOR_ERROR;
+    if (!BackendMatchesEnvironment(backend) ||
+        !(backend->stages & WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR)) {
+      continue;
+    }
+    if (backend->predictor == NULL) return WEBP_ACCELERATOR_ERROR;
+    result = NormalizeResult(backend->predictor(backend->context, request));
+    if (result != WEBP_ACCELERATOR_NOT_RUN) return result;
+  }
+  return WEBP_ACCELERATOR_NOT_RUN;
+}
+
 #if defined(WEBP_ACCELERATOR_TESTING)
 int WebPSetEncoderAcceleratorForTesting(
     const WebPEncoderAccelerator* const backend) {

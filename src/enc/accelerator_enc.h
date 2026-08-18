@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 2u
+#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 3u
 
 // These are deliberately encoder stages, not low-level GPU kernels. A backend
 // advertises only the stages whose complete CPU call-site contract it can
@@ -21,7 +21,8 @@ typedef enum {
   WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM = 1u << 0,
   WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN = 1u << 1,
   WEBP_ACCELERATOR_STAGE_RGB_TO_YUV = 1u << 2,
-  WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS = 1u << 3
+  WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS = 1u << 3,
+  WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR = 1u << 4
 } WebPAcceleratorStage;
 
 // SUCCESS is the only result for which a caller may consume output buffers.
@@ -101,6 +102,28 @@ typedef struct {
   uint32_t* output;
 } WebPAcceleratorNearLosslessRequest;
 
+typedef struct {
+  int width;
+  int height;
+  // Tile size exponent for both mode selection and residual application. The
+  // caller requests a single sampling; a backend that cannot search several
+  // samplings therefore keeps the CPU contract. The caller runs
+  // VP8LOptimizeSampling afterwards, which is valid because merged tiles carry
+  // identical modes and residuals are unchanged.
+  int bits;
+  int exact;
+  // Backends decline near-lossless residual quantization (> 1) unless they
+  // reproduce its scan-order source updates.
+  int max_quantization;
+  int used_subtract_green;
+  // Borrowed mutable buffers. argb holds width * height source pixels and
+  // receives the residuals; image receives the ARGB-encoded predictor modes
+  // for ceil(width / 2^bits) * ceil(height / 2^bits) tiles. Both are committed
+  // only on SUCCESS.
+  uint32_t* argb;
+  uint32_t* image;
+} WebPAcceleratorPredictorRequest;
+
 typedef struct WebPEncoderAccelerator WebPEncoderAccelerator;
 
 struct WebPEncoderAccelerator {
@@ -119,6 +142,8 @@ struct WebPEncoderAccelerator {
       void* context, const WebPAcceleratorRGBToYUVRequest* request);
   WebPAcceleratorResult (*near_lossless)(
       void* context, const WebPAcceleratorNearLosslessRequest* request);
+  WebPAcceleratorResult (*predictor)(
+      void* context, const WebPAcceleratorPredictorRequest* request);
 
   // Optional lifecycle hooks for a future encoder-level batch boundary.
   // ABI operations are synchronous, so flush may be NULL. trim may release
@@ -135,6 +160,8 @@ WebPAcceleratorResult WebPAccelerateRGBToYUV(
     const WebPAcceleratorRGBToYUVRequest* request);
 WebPAcceleratorResult WebPAccelerateNearLossless(
     const WebPAcceleratorNearLosslessRequest* request);
+WebPAcceleratorResult WebPAcceleratePredictor(
+    const WebPAcceleratorPredictorRequest* request);
 
 #if defined(WEBP_ACCELERATOR_TESTING)
 // Installs one process-global fake backend. Test programs must not call this

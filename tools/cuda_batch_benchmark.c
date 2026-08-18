@@ -3,7 +3,9 @@
 // Internal persistent-process benchmark for compressed-image decode + encode
 // batches. This is deliberately not installed with the public tools.
 
+#if !defined(_WIN32)
 #define _POSIX_C_SOURCE 200809L
+#endif
 
 #include <errno.h>
 #include <inttypes.h>
@@ -11,10 +13,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
-
+#include "examples/unicode.h"
 #include "imageio/image_dec.h"
 #include "imageio/imageio_util.h"
+#include "imageio/wicdec.h"
+#include "tools/benchmark_platform.h"
 #include "webp/decode.h"
 #include "webp/encode.h"
 
@@ -73,7 +76,8 @@ static int ParseInt(const char* const text, int minimum, int maximum,
   return 1;
 }
 
-static int ParseOptions(int argc, const char* const argv[], Options* options) {
+static int ParseOptions(int argc, const char* const argv[],
+                        const W_CHAR* const path_argv[], Options* options) {
   int i;
   memset(options, 0, sizeof(*options));
   options->method = 4;
@@ -108,7 +112,9 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
       continue;
     }
     if (flag[0] != '-') {
-      options->inputs[options->input_count++].filename = flag;
+      const W_CHAR* const path =
+          path_argv != NULL ? path_argv[i] : (const W_CHAR*)flag;
+      options->inputs[options->input_count++].filename = (const char*)path;
       continue;
     }
     value = i + 1 < argc ? argv[++i] : NULL;
@@ -147,10 +153,21 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
          options->batch_size > 0 && options->input_count > 0;
 }
 
-static uint64_t NowNanoseconds(void) {
-  struct timespec now;
-  if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) return 0;
-  return (uint64_t)now.tv_sec * UINT64_C(1000000000) + (uint64_t)now.tv_nsec;
+static int DecodeInput(const Input* const input, const uint8_t* const data,
+                       size_t data_size, int use_wic,
+                       WebPPicture* const picture) {
+#if defined(_WIN32) && defined(HAVE_WINCODEC_H)
+  if (use_wic && ReadPictureWithWIC(input->filename, picture, 1, NULL)) {
+    return 1;
+  }
+#else
+  (void)input;
+  (void)use_wic;
+#endif
+  {
+    const WebPImageReader reader = WebPGuessImageReader(data, data_size);
+    return reader(data, data_size, picture, 1, NULL);
+  }
 }
 
 static uint64_t HashBytes(uint64_t hash, const uint8_t* data, size_t size) {
@@ -161,39 +178,46 @@ static uint64_t HashBytes(uint64_t hash, const uint8_t* data, size_t size) {
   return hash;
 }
 
-static void ConfigureDispatch(const Options* const options,
-                              const char* const variant) {
+static int ConfigureDispatch(const Options* const options,
+                             const char* const variant) {
   const int cuda = !strcmp(variant, "cuda");
   char batch_size[32];
   char batch_pixels[32];
-  setenv("WEBP_ACCELERATOR", cuda ? "cuda" : "none", 1);
-  setenv("WEBP_CUDA", cuda ? "1" : "0", 1);
-  setenv("WEBP_CUDA_COLOR", "1", 1);
-  setenv("WEBP_CUDA_HASH", "1", 1);
-  setenv("WEBP_CUDA_NEAR_LOSSLESS", "1", 1);
+  int ok = 1;
+  ok &= WebPBenchmarkSetEnvironment("WEBP_ACCELERATOR",
+                                    cuda ? "cuda" : "none");
+  ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA", cuda ? "1" : "0");
+  ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_COLOR", "1");
+  ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_HASH", "1");
+  ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_NEAR_LOSSLESS", "1");
+  ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_PREDICTOR", "1");
   if (options->force_cuda) {
-    setenv("WEBP_CUDA_LOSSY", "1", 1);
-    setenv("WEBP_CUDA_MIN_PIXELS", "0", 1);
-    setenv("WEBP_CUDA_HASH_MIN_PIXELS", "0", 1);
-    setenv("WEBP_CUDA_LOSSY_MIN_PIXELS", "0", 1);
-    setenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "0", 1);
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY", "1");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_MIN_PIXELS", "0");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_HASH_MIN_PIXELS", "0");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY_MIN_PIXELS", "0");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS",
+                                      "0");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_PREDICTOR_MIN_PIXELS", "0");
   } else {
-    unsetenv("WEBP_CUDA_LOSSY");
-    unsetenv("WEBP_CUDA_MIN_PIXELS");
-    unsetenv("WEBP_CUDA_HASH_MIN_PIXELS");
-    unsetenv("WEBP_CUDA_LOSSY_MIN_PIXELS");
-    unsetenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_LOSSY");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_MIN_PIXELS");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_HASH_MIN_PIXELS");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_LOSSY_MIN_PIXELS");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_PREDICTOR_MIN_PIXELS");
   }
   if (options->batch_aware) {
     snprintf(batch_size, sizeof(batch_size), "%d", options->batch_size);
     snprintf(batch_pixels, sizeof(batch_pixels), "%" PRIu64 "",
              options->batch_pixels);
-    setenv("WEBP_CUDA_BATCH_SIZE", batch_size, 1);
-    setenv("WEBP_CUDA_BATCH_PIXELS", batch_pixels, 1);
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_BATCH_SIZE", batch_size);
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_BATCH_PIXELS", batch_pixels);
   } else {
-    unsetenv("WEBP_CUDA_BATCH_SIZE");
-    unsetenv("WEBP_CUDA_BATCH_PIXELS");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_BATCH_SIZE");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_BATCH_PIXELS");
   }
+  return ok;
 }
 
 static int LoadInputs(Options* const options) {
@@ -201,17 +225,18 @@ static int LoadInputs(Options* const options) {
   for (i = 0; i < options->input_count; ++i) {
     Input* const input = &options->inputs[i];
     WebPPicture picture;
-    WebPImageReader reader;
     if (!ImgIoUtilReadFile(input->filename, &input->data, &input->data_size)) {
-      fprintf(stderr, "failed to read %s\n", input->filename);
+      WFPRINTF(stderr, "failed to read %s\n",
+               (const W_CHAR*)input->filename);
       return 0;
     }
     if (!WebPPictureInit(&picture)) return 0;
-    reader = WebPGuessImageReader(input->data, input->data_size);
     picture.use_argb = 0;
-    if (!reader(input->data, input->data_size, &picture, 1, NULL)) {
-      fprintf(stderr, "unsupported input format: %s (enabled: %s)\n",
-              input->filename, WebPGetEnabledInputFileFormats());
+    if (!DecodeInput(input, input->data, input->data_size, 1, &picture)) {
+      WFPRINTF(stderr, "unsupported input format: %s\n",
+               (const W_CHAR*)input->filename);
+      fprintf(stderr, "enabled input formats: %s\n",
+              WebPGetEnabledInputFileFormats());
       WebPPictureFree(&picture);
       return 0;
     }
@@ -261,7 +286,6 @@ static int EncodeInput(const Options* const options, const Input* const input,
   int owns_data = 0;
   WebPConfig config;
   WebPPicture picture;
-  WebPImageReader reader;
   int ok = 0;
   if (options->include_file_io) {
     if (!ImgIoUtilReadFile(input->filename, &data, &data_size)) return 0;
@@ -269,9 +293,11 @@ static int EncodeInput(const Options* const options, const Input* const input,
   }
   if (!InitConfig(options, &config) || !WebPPictureInit(&picture)) goto end;
   picture.use_argb = config.lossless;
-  reader = WebPGuessImageReader(data, data_size);
-  if (!reader(data, data_size, &picture, 1, NULL)) {
-    fprintf(stderr, "failed to decode %s (enabled: %s)\n", input->filename,
+  if (!DecodeInput(input, data, data_size,
+                   options->include_file_io || options->verify, &picture)) {
+    WFPRINTF(stderr, "failed to decode %s\n",
+             (const W_CHAR*)input->filename);
+    fprintf(stderr, "enabled input formats: %s\n",
             WebPGetEnabledInputFileFormats());
     goto free_picture;
   }
@@ -279,8 +305,8 @@ static int EncodeInput(const Options* const options, const Input* const input,
   picture.writer = WebPMemoryWrite;
   picture.custom_ptr = writer;
   if (!WebPEncode(&config, &picture)) {
-    fprintf(stderr, "failed to encode %s: error %d\n", input->filename,
-            picture.error_code);
+    WFPRINTF(stderr, "failed to encode %s: error %d\n",
+             (const W_CHAR*)input->filename, picture.error_code);
     WebPMemoryWriterClear(writer);
     goto free_picture;
   }
@@ -316,16 +342,19 @@ static int Verify(const Options* const options) {
     WebPMemoryWriter cpu, cuda;
     Options preflight = *options;
     preflight.include_file_io = 0;
-    ConfigureDispatch(&preflight, "cpu");
+    if (!ConfigureDispatch(&preflight, "cpu")) return 0;
     if (!EncodeInput(&preflight, &options->inputs[i], &cpu)) return 0;
-    ConfigureDispatch(&preflight, "cuda");
+    if (!ConfigureDispatch(&preflight, "cuda")) {
+      WebPMemoryWriterClear(&cpu);
+      return 0;
+    }
     if (!EncodeInput(&preflight, &options->inputs[i], &cuda)) {
       WebPMemoryWriterClear(&cpu);
       return 0;
     }
     if (!DecodedOutputsEqual(&cpu, &cuda)) {
-      fprintf(stderr, "CPU/CUDA decoded output mismatch for %s\n",
-              options->inputs[i].filename);
+      WFPRINTF(stderr, "CPU/CUDA decoded output mismatch for %s\n",
+               (const W_CHAR*)options->inputs[i].filename);
       WebPMemoryWriterClear(&cpu);
       WebPMemoryWriterClear(&cuda);
       return 0;
@@ -345,7 +374,7 @@ static int RunBatch(const Options* const options, uint64_t* const elapsed_ns,
   uint64_t hash = UINT64_C(1469598103934665603);
   uint64_t bytes = 0;
   int i;
-  begin = NowNanoseconds();
+  begin = WebPBenchmarkNowNanoseconds();
   for (i = 0; i < options->batch_size; ++i) {
     const Input* const input = &options->inputs[i % options->input_count];
     WebPMemoryWriter writer;
@@ -355,7 +384,7 @@ static int RunBatch(const Options* const options, uint64_t* const elapsed_ns,
     bytes += writer.size;
     WebPMemoryWriterClear(&writer);
   }
-  end = NowNanoseconds();
+  end = WebPBenchmarkNowNanoseconds();
   if (begin == 0 || end <= begin) return 0;
   *elapsed_ns = end - begin;
   *output_hash = hash;
@@ -365,39 +394,46 @@ static int RunBatch(const Options* const options, uint64_t* const elapsed_ns,
 
 int main(int argc, const char* const argv[]) {
   Options options;
+  const W_CHAR* const* path_argv;
   uint64_t reference_hash = 0;
   int sequence;
-  if (!ParseOptions(argc, argv, &options)) {
+  INIT_WARGV(argc, argv);
+  path_argv = GET_WARGV_OR_NULL();
+  if (!ParseOptions(argc, argv, path_argv, &options)) {
     Usage(argv[0]);
     FreeInputs(&options);
-    return 2;
+    FREE_WARGV_AND_RETURN(2);
   }
   if (!LoadInputs(&options)) {
     FreeInputs(&options);
-    return 2;
+    FREE_WARGV_AND_RETURN(2);
   }
   if (options.verify && !Verify(&options)) {
     FreeInputs(&options);
-    return 1;
+    FREE_WARGV_AND_RETURN(1);
   }
   if (options.verify_only) {
     FreeInputs(&options);
-    return 0;
+    FREE_WARGV_AND_RETURN(0);
   }
-  ConfigureDispatch(&options, options.variant);
+  if (!ConfigureDispatch(&options, options.variant)) {
+    fprintf(stderr, "failed to configure benchmark environment\n");
+    FreeInputs(&options);
+    FREE_WARGV_AND_RETURN(1);
+  }
   for (sequence = -options.warmups; sequence < options.samples; ++sequence) {
     uint64_t elapsed_ns, output_hash, output_bytes;
     if (!RunBatch(&options, &elapsed_ns, &output_hash, &output_bytes)) {
       fprintf(stderr, "batch failed at sequence %d\n", sequence);
       FreeInputs(&options);
-      return 1;
+      FREE_WARGV_AND_RETURN(1);
     }
     if (sequence < 0) continue;
     if (sequence == 0) reference_hash = output_hash;
     if (output_hash != reference_hash) {
       fprintf(stderr, "non-deterministic output at sequence %d\n", sequence);
       FreeInputs(&options);
-      return 1;
+      FREE_WARGV_AND_RETURN(1);
     }
     printf("{\"operation\":\"decode_encode_batch\","
            "\"variant\":\"%s\",\"mode\":\"%s\","
@@ -419,5 +455,5 @@ int main(int argc, const char* const argv[]) {
            1e9 * options.batch_size / elapsed_ns, output_hash, output_bytes);
   }
   FreeInputs(&options);
-  return 0;
+  FREE_WARGV_AND_RETURN(0);
 }

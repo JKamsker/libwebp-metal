@@ -74,6 +74,21 @@ cmake --build build-cuda -j
 WEBP_TEST_BIN_DIR="$PWD/build-cuda" scripts/test_cuda.sh
 ```
 
+On Windows, use a Visual Studio generator and pass the configuration directory
+to the benchmark runner. The benchmark uses Windows Imaging Component (WIC)
+for PNG/JPEG input when native image libraries are not available:
+
+```powershell
+cmake -S . -B build-cuda -G "Visual Studio 17 2022" -A x64 `
+  -DWEBP_ENABLE_CUDA=ON -DWEBP_BUILD_CUDA_BENCHMARK=ON `
+  -DWEBP_BUILD_CWEBP=ON -DWEBP_BUILD_DWEBP=ON
+cmake --build build-cuda --config Release `
+  --target cwebp dwebp webp_cuda_batch_benchmark cuda_concurrency_test cuda_near_lossless_test
+python scripts\benchmark_cuda_end_to_end.py run `
+  --build-dir build-cuda\Release --output-dir $env:TEMP\webp-cuda-results `
+  --label "Windows / NVIDIA GPU"
+```
+
 The backend retains its device, private stream, events, and geometrically grown
 staging buffers across encodes. Calls sharing those resources are serialized.
 It copies results into caller buffers only after successful completion, so
@@ -86,18 +101,34 @@ At runtime, `WEBP_ACCELERATOR=cuda` explicitly selects CUDA and
 lossless transform threshold, `WEBP_CUDA_HASH_MIN_PIXELS=N` controls hash
 candidates, `WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS=N` controls near-lossless
 preprocessing, and `WEBP_CUDA_LOSSY_MIN_PIXELS=N` controls RGB conversion.
-`WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`, and
-`WEBP_CUDA_LOSSY=0` disable one stage. Lossy CUDA is off by default because it
+`WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`,
+`WEBP_CUDA_PREDICTOR=0`, and `WEBP_CUDA_LOSSY=0` disable one stage.
+The predictor stage takes both tile-mode selection and residual application
+when a single sampling is requested (method 4 and below). Tile rows are
+scored in launch order against the accumulated residual histogram of the
+previous rows, mirroring the CPU cost model; the chosen predictor image is
+valid but not byte-identical to the CPU search, so lossless modes promise
+decoded-pixel parity (as with the accelerated cross-color search).
+Near-lossless residual quantization and alpha-cleanup rewrites are scan-order
+sequential, so the backend declines those requests
+(`max_quantization > 1`, or non-exact encodes of images with transparent
+pixels) and the CPU path keeps them.
+`WEBP_CUDA_PREDICTOR_MIN_PIXELS=N` overrides its dispatch threshold. Lossy CUDA is off by default because it
 was neutral in persistent end-to-end batches and much slower in fresh
 processes; set `WEBP_CUDA_LOSSY=1` to opt in. `WEBP_CUDA_VERBOSE=1` reports
 device and dispatch timings. Set a threshold to zero for forced correctness
 tests.
+When `WEBP_ACCELERATOR=cuda` commits a process to the CUDA backend, the
+adapter warms the device context on a background thread at process start so
+initialization overlaps image decode and the CPU-side encoder stages;
+`WEBP_CUDA_PREWARM=1` forces that prewarm without the backend commitment and
+`WEBP_CUDA_PREWARM=0` disables it.
 Defaults are adaptive: a stage pays the
 roughly 140 ms runtime/device initialization cost only for large inputs, then
 uses a lower warm-process threshold once another CUDA stage initialized the
-backend: color uses 4,000,000 cold / 16,384 warm pixels, hash uses 8,000,000 /
-4,000,000, near-lossless uses 16,777,216 cold / 65,536 warm pixels, and RGB
-uses 80,000,000 / 4,000,000. Cold near-lossless requests with fewer than three
+backend: color and the predictor use 4,000,000 cold / 16,384 warm pixels,
+hash uses 8,000,000 / 4,000,000, near-lossless uses 16,777,216 cold / 65,536
+warm pixels, and RGB uses 80,000,000 / 4,000,000. Cold near-lossless requests with fewer than three
 passes stay on the CPU because no safe crossover was measured; an explicit
 near-lossless threshold overrides that conservative gate as well as both
 threshold defaults.

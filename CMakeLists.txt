@@ -109,6 +109,13 @@ if(WEBP_ENABLE_CUDA)
   if(POLICY CMP0104)
     cmake_policy(SET CMP0104 NEW)
   endif()
+  # Without an explicit architecture list nvcc's default (its oldest supported
+  # arch) ships PTX that the driver must JIT on newer GPUs, inflating every
+  # cold process start. Default to the build machine's real architecture.
+  if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES AND NOT DEFINED ENV{CUDAARCHS}
+     AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+    set(CMAKE_CUDA_ARCHITECTURES native)
+  endif()
   enable_language(CUDA)
   find_package(CUDAToolkit REQUIRED)
   find_package(Threads REQUIRED)
@@ -129,6 +136,8 @@ if(WEBP_ENABLE_CUDA)
          "Build the CUDA opaque RGB-to-YUV420 stage." ON)
   option(WEBP_CUDA_ENABLE_NEAR_LOSSLESS
          "Build CUDA near-lossless preprocessing." ON)
+  option(WEBP_CUDA_ENABLE_PREDICTOR
+         "Build the CUDA lossless predictor stage." ON)
   option(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS
          "Retain CUDA staging allocations across encoder calls." ON)
   option(WEBP_CUDA_ENABLE_PINNED_HOST_MEMORY
@@ -173,9 +182,6 @@ if(WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS AND NOT WEBP_ENABLE_CUDA)
   message(FATAL_ERROR
           "WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS requires "
           "WEBP_ENABLE_CUDA=ON.")
-endif()
-if(WEBP_BUILD_CUDA_BENCHMARK AND NOT UNIX)
-  message(FATAL_ERROR "WEBP_BUILD_CUDA_BENCHMARK currently requires POSIX.")
 endif()
 if((WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT OR
     WEBP_BUILD_BACKREF_EXACT_EXPERIMENT OR
@@ -620,7 +626,7 @@ target_include_directories(
 if(WEBP_ENABLE_CUDA)
   foreach(CUDA_OPTION
           COLOR_TRANSFORM COLOR_SHARED_TILE HASH_CHAIN RGB_TO_YUV
-          NEAR_LOSSLESS PERSISTENT_BUFFERS
+          NEAR_LOSSLESS PREDICTOR PERSISTENT_BUFFERS
           PINNED_HOST_MEMORY ASYNC_COPIES HASH_MATCH4 RGB_BLOCK_2X2
           COLOR_256_THREAD_BLOCKS HASH_256_THREAD_BLOCKS
           RGB_256_THREAD_BLOCKS READ_ONLY_CACHE RESTRICT_POINTERS
@@ -922,7 +928,8 @@ if(WEBP_BUILD_CUDA_BENCHMARK)
   add_executable(cuda_concurrency_test tests/cuda_concurrency_test.c)
   target_link_libraries(cuda_concurrency_test PRIVATE webp Threads::Threads)
   target_include_directories(cuda_concurrency_test
-                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src
+                                     ${CMAKE_CURRENT_SOURCE_DIR})
   if(WEBP_NEAR_LOSSLESS)
     add_executable(cuda_near_lossless_test tests/cuda_near_lossless_test.c)
     target_link_libraries(cuda_near_lossless_test PRIVATE webp)

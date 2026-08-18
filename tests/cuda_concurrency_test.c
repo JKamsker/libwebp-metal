@@ -2,14 +2,25 @@
 //
 // Stress the serialized CUDA descriptor from independent public encoder calls.
 
+#if !defined(_WIN32)
 #define _POSIX_C_SOURCE 200809L
+#endif
 
+#if defined(_WIN32)
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <process.h>
+#include <windows.h>
+#else
 #include <pthread.h>
+#endif
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#include "tools/benchmark_platform.h"
 #include "webp/encode.h"
 
 enum { kWidth = 257, kHeight = 259, kThreadCount = 4, kIterations = 3 };
@@ -25,6 +36,12 @@ typedef struct {
   int failed_iteration;
   int ok;
 } Worker;
+
+#if defined(_WIN32)
+typedef HANDLE BenchmarkThread;
+#else
+typedef pthread_t BenchmarkThread;
+#endif
 
 static uint64_t HashBytes(const uint8_t* data, size_t size) {
   uint64_t hash = UINT64_C(1469598103934665603);
@@ -61,7 +78,11 @@ static int Encode(const uint8_t* rgba, int lossless, uint64_t* hash) {
   return ok;
 }
 
+#if defined(_WIN32)
+static unsigned __stdcall RunWorker(void* opaque) {
+#else
 static void* RunWorker(void* opaque) {
+#endif
   Worker* const worker = (Worker*)opaque;
   int iteration;
   worker->ok = 1;
@@ -79,13 +100,17 @@ static void* RunWorker(void* opaque) {
       break;
     }
   }
+#if defined(_WIN32)
+  return 0;
+#else
   return NULL;
+#endif
 }
 
 int main(void) {
   const size_t rgba_size = (size_t)kWidth * kHeight * 4u;
   uint8_t* const rgba = (uint8_t*)malloc(rgba_size);
-  pthread_t threads[kThreadCount];
+  BenchmarkThread threads[kThreadCount];
   Worker workers[kThreadCount];
   uint64_t expected_lossless, expected_lossy;
   size_t i;
@@ -93,11 +118,12 @@ int main(void) {
   if (rgba == NULL) return 2;
   for (i = 0; i < rgba_size; ++i) rgba[i] = (uint8_t)(i * 37u + i / 17u);
   for (i = 3; i < rgba_size; i += 4) rgba[i] = 255u;
-  setenv("WEBP_ACCELERATOR", "cuda", 1);
-  setenv("WEBP_CUDA", "1", 1);
-  setenv("WEBP_CUDA_MIN_PIXELS", "0", 1);
-  setenv("WEBP_CUDA_HASH_MIN_PIXELS", "0", 1);
-  setenv("WEBP_CUDA_LOSSY_MIN_PIXELS", "0", 1);
+  WebPBenchmarkSetEnvironment("WEBP_ACCELERATOR", "cuda");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA", "1");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_MIN_PIXELS", "0");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_PREDICTOR_MIN_PIXELS", "0");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_HASH_MIN_PIXELS", "0");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY_MIN_PIXELS", "0");
   if (!Encode(rgba, 1, &expected_lossless) ||
       !Encode(rgba, 0, &expected_lossy)) {
     free(rgba);
@@ -108,10 +134,23 @@ int main(void) {
     workers[i].rgba = rgba;
     workers[i].expected_lossless = expected_lossless;
     workers[i].expected_lossy = expected_lossy;
+#if defined(_WIN32)
+    threads[i] = (HANDLE)_beginthreadex(NULL, 0, RunWorker, &workers[i], 0,
+                                         NULL);
+    if (threads[i] == NULL) break;
+#else
     if (pthread_create(&threads[i], NULL, RunWorker, &workers[i]) != 0) break;
+#endif
     ++created;
   }
-  for (i = 0; i < (size_t)created; ++i) pthread_join(threads[i], NULL);
+  for (i = 0; i < (size_t)created; ++i) {
+#if defined(_WIN32)
+    WaitForSingleObject(threads[i], INFINITE);
+    CloseHandle(threads[i]);
+#else
+    pthread_join(threads[i], NULL);
+#endif
+  }
   for (i = 0; i < (size_t)created; ++i) {
     if (!workers[i].ok) break;
   }
