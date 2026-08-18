@@ -1,0 +1,91 @@
+{
+  "boundary_timing_available": false,
+  "cells": [
+    {
+      "case_id": "texture-medium",
+      "lifecycle": "cold",
+      "method": 4,
+      "p95_ratio": 1.079117606199047,
+      "paired_median_ratio": 1.0839180075393642,
+      "passes_performance": false,
+      "process_pairs": 9,
+      "role": "tune"
+    },
+    {
+      "case_id": "texture-medium",
+      "lifecycle": "warm",
+      "method": 4,
+      "p95_ratio": 1.1086686606396265,
+      "paired_median_ratio": 1.0869918352977743,
+      "passes_performance": false,
+      "process_pairs": 5,
+      "role": "tune"
+    },
+    {
+      "case_id": "texture-medium",
+      "lifecycle": "cold",
+      "method": 6,
+      "p95_ratio": 1.068907328765278,
+      "paired_median_ratio": 1.0861586024697436,
+      "passes_performance": false,
+      "process_pairs": 9,
+      "role": "tune"
+    },
+    {
+      "case_id": "texture-medium",
+      "lifecycle": "warm",
+      "method": 6,
+      "p95_ratio": 1.0570735398444884,
+      "paired_median_ratio": 1.0755642741826987,
+      "passes_performance": false,
+      "process_pairs": 5,
+      "role": "tune"
+    },
+    {
+      "case_id": "texture-large",
+      "lifecycle": "cold",
+      "method": 4,
+      "p95_ratio": 1.1022904260694724,
+      "paired_median_ratio": 1.085352162104364,
+      "passes_performance": false,
+      "process_pairs": 9,
+      "role": "holdout"
+    },
+    {
+      "case_id": "texture-large",
+      "lifecycle": "warm",
+      "method": 4,
+      "p95_ratio": 1.0751708953952124,
+      "paired_median_ratio": 1.0798058255474694,
+      "passes_performance": false,
+      "process_pairs": 5,
+      "role": "holdout"
+    },
+    {
+      "case_id": "texture-large",
+      "lifecycle": "cold",
+      "method": 6,
+      "p95_ratio": 1.0946427041798976,
+      "paired_median_ratio": 1.0886495505640401,
+      "passes_performance": false,
+      "process_pairs": 9,
+      "role": "holdout"
+    },
+    {
+      "case_id": "texture-large",
+      "lifecycle": "warm",
+      "method": 6,
+      "p95_ratio": 1.0815180427718012,
+      "paired_median_ratio": 1.078629679993425,
+      "passes_performance": false,
+      "process_pairs": 5,
+      "role": "holdout"
+    }
+  ],
+  "command_processes": 112,
+  "decision": "reject",
+  "measured_samples": 352,
+  "sample_rows": 392,
+  "schema": "libwebp-cache-size-serial-sweep-evaluation-v1",
+  "timing_authority": "end-to-end WebPEncode only"
+}

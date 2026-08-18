@@ -1,0 +1,9 @@
+{
+  "available_memory_bytes_preflight": 10283384832,
+  "elapsed_seconds": 162.557660583,
+  "lease_released": true,
+  "maximum_child_rss_bytes": 283000832,
+  "output_bytes_before_index": 241541,
+  "schema": "libwebp-cache-size-serial-sweep-resources-v1",
+  "source_commit": "69f349c8706e4181ba9ab169cc2bf42ec4c69863"
+}
