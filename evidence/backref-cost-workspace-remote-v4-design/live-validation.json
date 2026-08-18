@@ -1,0 +1,314 @@
+{
+  "archive_digest": {
+    "archive_bytes": 616,
+    "archive_sha256": "3d8a16634880f89e7cdd20350f04ecc65fecc8fe0d378c88d0ab433e2def14ea",
+    "inventory_sha256": "816ef0c46a5a79be3752f3518ccfb90b40c5ae3709966a948458fd968f7ae0e3",
+    "member_count": 6,
+    "schema": "libwebp-backref-cost-workspace-remote-v4-archive-v1",
+    "status": "accepted"
+  },
+  "artifact_index_verified_after_extraction": true,
+  "benchmark_lease_acquisition_attempted": false,
+  "builder_rejections": {
+    "fifo": {
+      "exit_code": 1,
+      "stderr": "",
+      "stdout": "{\"offending_member\": \"bad\", \"reason\": \"nonregular file in evidence tree\", \"status\": \"rejected\"}\n"
+    },
+    "hardlink": {
+      "exit_code": 1,
+      "stderr": "",
+      "stdout": "{\"offending_member\": \"bad\", \"reason\": \"hardlinked regular file\", \"status\": \"rejected\"}\n"
+    },
+    "symlink": {
+      "exit_code": 1,
+      "stderr": "",
+      "stdout": "{\"offending_member\": \"bad\", \"reason\": \"symlink\", \"status\": \"rejected\"}\n"
+    }
+  },
+  "builder_stderr": "",
+  "builder_stdout": "{\"archive_bytes\": 616, \"archive_sha256\": \"3d8a16634880f89e7cdd20350f04ecc65fecc8fe0d378c88d0ab433e2def14ea\", \"inventory_sha256\": \"816ef0c46a5a79be3752f3518ccfb90b40c5ae3709966a948458fd968f7ae0e3\", \"member_count\": 6, \"schema\": \"libwebp-backref-cost-workspace-remote-v4-archive-v1\", \"status\": \"accepted\"}\n",
+  "cleanup_receipt": {
+    "absence_proved": true,
+    "home": "/Users/pandocs-agent-001",
+    "removed_exact_validated_child": true,
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v4/run.xrTfU4",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v4",
+    "token": "run.xrTfU4",
+    "validated": true
+  },
+  "full_member_inventory": {
+    "member_count": 6,
+    "members": [
+      {
+        "name": "evidence/nested",
+        "size": 0,
+        "type": "directory"
+      },
+      {
+        "name": "evidence/nested/deeper",
+        "size": 0,
+        "type": "directory"
+      },
+      {
+        "name": "evidence/artifact-hashes.json",
+        "size": 549,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/lease-record.json",
+        "size": 152,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/nested/deeper/record.json",
+        "size": 32,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/root.txt",
+        "size": 29,
+        "type": "regular"
+      }
+    ],
+    "offending": null,
+    "schema": "libwebp-backref-cost-workspace-remote-v4-archive-inventory-v1",
+    "status": "accepted"
+  },
+  "host_settings_changed": false,
+  "local_returned_index_created_and_verified": true,
+  "malicious_rejections": {
+    "absolute": {
+      "complete_member_inventory": {
+        "member_count": 3,
+        "members": [
+          {
+            "name": "evidence/safe.txt",
+            "size": 4,
+            "type": "regular"
+          },
+          {
+            "name": "/evidence/escape",
+            "size": 0,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/tail.txt",
+            "size": 4,
+            "type": "regular"
+          }
+        ],
+        "offending": {
+          "member": "/evidence/escape",
+          "reason": "absolute path"
+        },
+        "schema": "libwebp-backref-cost-workspace-remote-v4-archive-inventory-v1",
+        "status": "rejected"
+      },
+      "no_content_extracted": true,
+      "offending_member": "/evidence/escape",
+      "reason": "absolute path"
+    },
+    "fifo": {
+      "complete_member_inventory": {
+        "member_count": 3,
+        "members": [
+          {
+            "name": "evidence/safe.txt",
+            "size": 4,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/fifo",
+            "size": 0,
+            "type": "nonregular"
+          },
+          {
+            "name": "evidence/tail.txt",
+            "size": 4,
+            "type": "regular"
+          }
+        ],
+        "offending": {
+          "member": "evidence/fifo",
+          "reason": "forbidden nonregular member"
+        },
+        "schema": "libwebp-backref-cost-workspace-remote-v4-archive-inventory-v1",
+        "status": "rejected"
+      },
+      "no_content_extracted": true,
+      "offending_member": "evidence/fifo",
+      "reason": "forbidden nonregular member"
+    },
+    "hardlink": {
+      "complete_member_inventory": {
+        "member_count": 3,
+        "members": [
+          {
+            "name": "evidence/safe.txt",
+            "size": 4,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/hard",
+            "size": 0,
+            "type": "hardlink"
+          },
+          {
+            "name": "evidence/tail.txt",
+            "size": 4,
+            "type": "regular"
+          }
+        ],
+        "offending": {
+          "member": "evidence/hard",
+          "reason": "forbidden hardlink member"
+        },
+        "schema": "libwebp-backref-cost-workspace-remote-v4-archive-inventory-v1",
+        "status": "rejected"
+      },
+      "no_content_extracted": true,
+      "offending_member": "evidence/hard",
+      "reason": "forbidden hardlink member"
+    },
+    "symlink": {
+      "complete_member_inventory": {
+        "member_count": 3,
+        "members": [
+          {
+            "name": "evidence/safe.txt",
+            "size": 4,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/link",
+            "size": 0,
+            "type": "symlink"
+          },
+          {
+            "name": "evidence/tail.txt",
+            "size": 4,
+            "type": "regular"
+          }
+        ],
+        "offending": {
+          "member": "evidence/link",
+          "reason": "forbidden symlink member"
+        },
+        "schema": "libwebp-backref-cost-workspace-remote-v4-archive-inventory-v1",
+        "status": "rejected"
+      },
+      "no_content_extracted": true,
+      "offending_member": "evidence/link",
+      "reason": "forbidden symlink member"
+    },
+    "traversal": {
+      "complete_member_inventory": {
+        "member_count": 3,
+        "members": [
+          {
+            "name": "evidence/safe.txt",
+            "size": 4,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/../escape",
+            "size": 0,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/tail.txt",
+            "size": 4,
+            "type": "regular"
+          }
+        ],
+        "offending": {
+          "member": "evidence/../escape",
+          "reason": "traversal or non-normalized component"
+        },
+        "schema": "libwebp-backref-cost-workspace-remote-v4-archive-inventory-v1",
+        "status": "rejected"
+      },
+      "no_content_extracted": true,
+      "offending_member": "evidence/../escape",
+      "reason": "traversal or non-normalized component"
+    }
+  },
+  "path_generation": {
+    "generator": "mktemp -d",
+    "home": "/Users/pandocs-agent-001",
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v4/run.xrTfU4",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v4",
+    "token": "run.xrTfU4",
+    "validated": true
+  },
+  "process_isolation": {
+    "benchmark_or_cuda_matches": [],
+    "process_table_sha256": "022e921c2dd84f48abdf5d266923c9cec4f713d38bb23ebd88a02f1b0e6a939f",
+    "runner_listener_present": true,
+    "runner_worker_matches": []
+  },
+  "remote_host_alias": "pandocs-agent",
+  "runner_directories_or_services_touched": false,
+  "schema": "libwebp-backref-cost-workspace-remote-v4-live-return-validation-v1",
+  "status": "PASS",
+  "timed_binary_invoked": false,
+  "transfers": {
+    "archive-digest.json": {
+      "bytes": 317,
+      "hashes_match": true,
+      "local_sha256": "cc07161f859c65a71ee33ca5d9f1f121bde41ebbda3a46c82177b002398b008a",
+      "path": "archive-digest.json",
+      "remote_sha256": "cc07161f859c65a71ee33ca5d9f1f121bde41ebbda3a46c82177b002398b008a"
+    },
+    "archive-inventory.json": {
+      "bytes": 750,
+      "hashes_match": true,
+      "local_sha256": "816ef0c46a5a79be3752f3518ccfb90b40c5ae3709966a948458fd968f7ae0e3",
+      "path": "archive-inventory.json",
+      "remote_sha256": "816ef0c46a5a79be3752f3518ccfb90b40c5ae3709966a948458fd968f7ae0e3"
+    },
+    "evidence.tar.gz": {
+      "bytes": 616,
+      "hashes_match": true,
+      "local_sha256": "3d8a16634880f89e7cdd20350f04ecc65fecc8fe0d378c88d0ab433e2def14ea",
+      "path": "evidence.tar.gz",
+      "remote_sha256": "3d8a16634880f89e7cdd20350f04ecc65fecc8fe0d378c88d0ab433e2def14ea"
+    },
+    "fixture-absolute": {
+      "bytes": 168,
+      "hashes_match": true,
+      "local_sha256": "1aab4dc0258ce2498219529dea0a60e730cfc5bf802c4fc4a1a1ad7ebe147b79",
+      "path": "fixtures/absolute.tar.gz",
+      "remote_sha256": "1aab4dc0258ce2498219529dea0a60e730cfc5bf802c4fc4a1a1ad7ebe147b79"
+    },
+    "fixture-fifo": {
+      "bytes": 161,
+      "hashes_match": true,
+      "local_sha256": "19dc9d0402a4c1f6b5375390583225a3e05d73145771cf7967843abcbf3c4789",
+      "path": "fixtures/fifo.tar.gz",
+      "remote_sha256": "19dc9d0402a4c1f6b5375390583225a3e05d73145771cf7967843abcbf3c4789"
+    },
+    "fixture-hardlink": {
+      "bytes": 173,
+      "hashes_match": true,
+      "local_sha256": "d153d44ed554d840b275c9c35d9eb3bc66ce85ad65a7033864ae52c39c044798",
+      "path": "fixtures/hardlink.tar.gz",
+      "remote_sha256": "d153d44ed554d840b275c9c35d9eb3bc66ce85ad65a7033864ae52c39c044798"
+    },
+    "fixture-symlink": {
+      "bytes": 172,
+      "hashes_match": true,
+      "local_sha256": "2271122407e1d85c837f48e50fe28917dc36342c836339be222d7e798326a094",
+      "path": "fixtures/symlink.tar.gz",
+      "remote_sha256": "2271122407e1d85c837f48e50fe28917dc36342c836339be222d7e798326a094"
+    },
+    "fixture-traversal": {
+      "bytes": 162,
+      "hashes_match": true,
+      "local_sha256": "9bf59a1ee45efa018228ed55da60c65a719ee013914f89ebeddd6bfbffbba0e0",
+      "path": "fixtures/traversal.tar.gz",
+      "remote_sha256": "9bf59a1ee45efa018228ed55da60c65a719ee013914f89ebeddd6bfbffbba0e0"
+    }
+  }
+}

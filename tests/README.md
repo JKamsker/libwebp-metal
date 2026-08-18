@@ -49,6 +49,15 @@ test exercises canonical paths, an empty repository-context bundle verify,
 exact commit/tree/source hashes, malformed rejection, cleanup, and the shared
 admission-only/executor implementation without timing.
 
+`scripts/test_backref_cost_workspace_remote_v4_experiment.py` proves that v4
+retains the exact frozen v3 candidate semantics under independent gates and all
+26 correctness/fallback/sanitizer/ordinary-build omission checks. Its archive
+test covers indexed explicit-member construction, canonical containment,
+complete pre-extraction inventory, safe extraction and local returned hashes,
+plus traversal, absolute, symlink, hardlink, FIFO, and nonregular rejection.
+The frozen live design record exercises the same builder/extractor over ssh on
+`pandocs-agent` without a benchmark session, lease, runner, or timed command.
+
 ## Building
 
 ### Fuzzers
