@@ -14,6 +14,14 @@ benchmark lease or runs timed work. See
 recorder-free cache-size implementation candidate, exact baseline equivalence,
 transactional fallback, build omission, lease refusal, and sanitizer coverage.
 
+`scripts/test_cache_size_single_pass_slab_experiment.py` verifies the private,
+default-off single-pass contiguous cache-state slab: exact selected bits and
+ties, immutable inputs, one-allocation layout, transactional fault fallback,
+publication-corpus bitstream and decoded-pixel identity at methods 4 and 6,
+runtime and lease refusal, build independence, determinism, and array-bounds,
+pointer-overflow, undefined-behavior, and integer-sanitizer coverage. It runs no
+timed protocol.
+
 ## Building
 
 ### Fuzzers
