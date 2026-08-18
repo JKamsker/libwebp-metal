@@ -1,10 +1,9 @@
 # CI and performance regression policy
 
 This fork deliberately separates deterministic correctness gates from noisy
-performance signals. A timing change never makes either correctness workflow
-fail. The GitHub-hosted M1 runner is used for forced Metal functional
-correctness, but is never presented as a characterized performance host or as
-cross-device Metal coverage.
+performance signals. A timing change never makes the portable `Correctness`
+check fail. Standard GitHub-hosted `macos-14` ARM64/M1 runners are used for
+build and linkage coverage, but are not presented as Metal runtime coverage.
 
 ## Workflow inventory
 
@@ -14,42 +13,48 @@ cross-device Metal coverage.
   checks Autotools with its explicit Metal policy. The existing lossless smoke
   test keeps runtime Metal disabled on hosted runners. This is the required
   branch-protection check.
-- `Metal correctness` runs for pull requests, relevant pushes to `main`, its
-  weekly schedule, and manual dispatches on GitHub-hosted `macos-14` ARM64/M1.
-  It requires an actual Metal device, forces all three Metal operations,
-  verifies pixel/bitstream promises, and proves that transform, hash, and lossy
-  GPU dispatch each logged actual execution. It also covers odd dimensions,
-  padded source and output-plane strides, supported packed RGB formats,
-  cancellation after an observed transform, fallback, and a bounded
-  forced-Metal UBSan mutation harness. CPU fallback cannot satisfy this gate.
-  This is untimed functional coverage of one hosted device, not a performance
-  measurement or a claim about other Apple GPUs or OS versions.
+- `Metal correctness` is a manual-only workflow on physical Apple silicon
+  labeled `self-hosted`, `macOS`, `ARM64`, and `metal`. It requires an actual
+  Metal device, forces all three Metal operations, verifies pixel/bitstream
+  promises, and proves that transform, hash, and lossy GPU dispatch each logged
+  actual execution. It also covers odd dimensions, padded source and
+  output-plane strides, supported packed RGB formats, cancellation after an
+  observed transform, fallback, and a bounded forced-Metal UBSan mutation
+  harness. CPU fallback cannot satisfy this gate. It is untimed functional
+  coverage of the selected physical device, not a performance measurement or a
+  claim about other Apple GPUs or OS versions.
 - `Metal performance signal` runs on a characterized physical Mac labeled
   `self-hosted`, `macOS`, `ARM64`, `metal`, and `performance`. It provides
   weekly/manual alternating CPU/Metal measurements against the last accepted
   same-runner baseline. It is never a required correctness check.
 
-The hosted correctness workflow uses no repository secret. The built-in
-checkout token has read-only contents permission. Characterized self-hosted
-hardware is reserved for the performance workflow and optional manual
-cross-device coverage; it is not the pull-request functional correctness gate.
+The standard hosted `macos-14` runner identifies itself as an Apple M1 virtual
+machine, but `MTLCreateSystemDefaultDevice()` returned no device in
+[the attempted forced-Metal run](https://github.com/JKamsker/libwebp-metal/actions/runs/32105999492).
+The gate therefore remains on physical hardware; allowing hosted CPU fallback
+would create a false correctness signal. GitHub documents GPU acceleration for
+[the distinct M2 `macos-14-xlarge` larger-runner tier](https://docs.github.com/en/actions/reference/runners/larger-runners#specifications-for-general-larger-runners),
+which this project has not adopted or characterized.
 
-Required self-hosted performance runner software is a supported macOS/Xcode
-command-line toolchain, CMake, Ninja, Python 3, Git, and a Metal-capable
-Apple-silicon GPU. Give the runner the custom labels `metal` and, only if its
-power/thermal configuration is controlled, `performance`. Disable sleep and
-automatic OS updates during a run; keep the machine on AC power; avoid
-concurrent jobs. Do not apply `performance` to an ordinary developer laptop or
-a hosted VM.
+The self-hosted runner must be project-controlled, ephemeral or dedicated, and
+must not execute untrusted pull-request code. The workflow uses no repository
+secret, and checkout does not persist its read-only token.
+
+Required self-hosted runner software is a supported macOS/Xcode command-line
+toolchain, CMake, Ninja, Python 3, Git, and a Metal-capable Apple-silicon GPU.
+Give the runner the custom label `metal` and, only if its power/thermal
+configuration is controlled, `performance`. Disable sleep and automatic OS
+updates during a run; keep the machine on AC power; avoid concurrent jobs. Do
+not apply `performance` to an ordinary developer laptop or a hosted VM.
 
 Repository settings:
 
 1. Protect `main` and require `Correctness / CMake (ubuntu-latest, Metal OFF)`
-   and `Metal correctness / Hosted Metal correctness (macos-14 ARM64/M1)`.
-2. Treat hosted `Metal correctness` as the forced runtime functional gate for
-   pull requests and releases. Inspect its retained environment and dispatch
-   logs when triaging a failure; successful CPU fallback is intentionally
-   impossible.
+   and `Correctness / CMake (macos-14, Metal ON)`.
+2. Treat `Metal correctness / Physical Metal correctness (self-hosted ARM64)`
+   as a manual release gate. Dispatch only a reviewed, trusted commit. Inspect
+   its retained environment and dispatch logs when triaging a failure;
+   successful CPU fallback is intentionally impossible.
 3. Do not require `Metal performance signal`. Subscribe maintainers to Actions
    failures so critical signals are noticed.
 4. Keep Actions cache and artifact retention enabled. Raw performance artifacts

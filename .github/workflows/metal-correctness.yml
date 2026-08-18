@@ -2,21 +2,6 @@ name: Metal correctness
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "17 3 * * 1"
-  pull_request:
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/metal-correctness.yml"
-      - "CMakeLists.txt"
-      - "configure.ac"
-      - "makefile.unix"
-      - "scripts/test_metal.sh"
-      - "tests/metal_adversarial_test.c"
-      - "tests/metal_api_fuzzer.c"
-      - "src/dsp/**"
-      - "src/enc/**"
 
 permissions:
   contents: read
@@ -26,11 +11,11 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  hosted-metal-m1:
-    name: Hosted Metal correctness (macos-14 ARM64/M1)
-    # This hosted M1 is a functional correctness target. It is neither a
-    # characterized performance host nor a cross-device Metal coverage claim.
-    runs-on: macos-14
+  real-metal:
+    name: Physical Metal correctness (self-hosted ARM64)
+    # This manual workflow intentionally never executes pull-request code on a
+    # self-hosted runner. Dispatch only a reviewed, trusted commit.
+    runs-on: [self-hosted, macOS, ARM64, metal]
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
@@ -47,12 +32,10 @@ jobs:
           xcodebuild -version > artifacts/xcode.txt 2>&1 || true
           pmset -g batt > artifacts/power.txt 2>&1 || true
           pmset -g therm > artifacts/thermal.txt 2>&1 || true
-      - name: Require hosted ARM64 M1 Metal device
+      - name: Require physical ARM64 Metal device
         run: |
           test "$RUNNER_ARCH" = ARM64
           test "$(uname -m)" = arm64
-          grep -Eq 'Chip: Apple M1([[:space:]]|$| \()' \
-            artifacts/system_profiler.txt
           xcrun swift -e '
             import Metal
             guard let device = MTLCreateSystemDefaultDevice() else {
