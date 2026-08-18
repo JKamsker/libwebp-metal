@@ -38,7 +38,7 @@ libwebpencode_la_SOURCES += webp_enc.c
 if ENABLE_METAL
 libwebpencode_la_SOURCES += metal_enc.c
 libwebpencode_la_SOURCES += picture_csp_enc_metal.mm
-libwebpencode_la_OBJCXXFLAGS = $(AM_OBJCXXFLAGS) -fblocks \
+libwebpencode_la_OBJCXXFLAGS = $(AM_OBJCXXFLAGS) -x objective-c++ -fblocks \
   -fvisibility=hidden
 endif
 
