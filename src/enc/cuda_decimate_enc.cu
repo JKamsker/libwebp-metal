@@ -223,6 +223,42 @@ __device__ int ResidualCostDev(const CostCache* c, int ctx0, int first,
   return cost;
 }
 
+// Warp-cooperative GetResidualCost_C: each coefficient's incoming context
+// depends only on the previous coefficient's value (0/1/2+), so all 16
+// costs are computed on parallel lanes and warp-reduced. Bit-exact against
+// ResidualCostDev; must be called by all 32 lanes of a warp with uniform
+// arguments. *nz_out receives BlockNonZero(coeffs).
+__device__ int ResidualCostCoop16(const CostCache* c, int ctx0, int first,
+                                  int coeff_type, const int16_t* coeffs,
+                                  int lane, int* nz_out) {
+  const unsigned mask = 0xffffffffu;
+  const int n = lane;
+  const int v = (n < 16) ? ((coeffs[n] < 0) ? -coeffs[n] : coeffs[n]) : 0;
+  const unsigned nzmask = __ballot_sync(mask, v != 0) & 0xffffu;
+  const int p0 = FirstProba(c, coeff_type, kEncBands[first], ctx0);
+  *nz_out = (nzmask != 0);
+  if (nzmask == 0) return BitCostDev(c, 0, p0);
+  const int last = 31 - __clz(nzmask);
+  const int vprev = __shfl_up_sync(mask, v, 1);
+  int cost = 0;
+  if (n >= first && n <= last) {
+    const int ctx_in = (n == first) ? ctx0 : ((vprev >= 2) ? 2 : vprev);
+    const uint16_t* const t =
+        LevelCostTable(c, coeff_type, kEncBands[n], ctx_in);
+    cost = LevelCostDev(c, t, v);
+    if (n == last && n < 15) {
+      const int ctx_eob = (v == 1) ? 1 : 2;
+      cost += BitCostDev(c, 0,
+                         FirstProba(c, coeff_type, kEncBands[n + 1], ctx_eob));
+    }
+  }
+  for (int off = 16; off; off >>= 1) {
+    cost += __shfl_down_sync(mask, cost, off);
+  }
+  cost = __shfl_sync(mask, cost, 0);
+  return cost + ((ctx0 == 0) ? BitCostDev(c, 1, p0) : 0);
+}
+
 __device__ __forceinline__ int BlockNonZero(const int16_t* coeffs) {
   for (int n = 15; n >= 0; --n) {
     if (coeffs[n]) return 1;
@@ -730,22 +766,26 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
   // values.
   __shared__ long long i16_R[4];
   __shared__ int i16_levels_flat[4];
-  if (tid < 4 * 32 && (tid & 31) == 0) {
+  if (tid < 4 * 32) {  // one mode per warp; 16 lanes cooperate per block
     const int mode = tid >> 5;
+    const int lane = tid & 31;
     NzContext c = w.nz_ctx;
-    long long R = ResidualCostDev(&cc, c.top_nz[8] + c.left_nz[8], 0, 1,
-                                  w.i16_dc_levels[mode]);
+    int nz_bit;
+    long long R = ResidualCostCoop16(&cc, c.top_nz[8] + c.left_nz[8], 0, 1,
+                                     w.i16_dc_levels[mode], lane, &nz_bit);
     for (int by = 0; by < 4; ++by) {
       for (int bx = 0; bx < 4; ++bx) {
         const int ctx = c.top_nz[bx] + c.left_nz[by];
         const int16_t* const lv = w.i16_ac_levels[mode][bx + by * 4];
-        R += ResidualCostDev(&cc, ctx, 1, 0, lv);
-        c.top_nz[bx] = c.left_nz[by] = BlockNonZero(lv);
+        R += ResidualCostCoop16(&cc, ctx, 1, 0, lv, lane, &nz_bit);
+        c.top_nz[bx] = c.left_nz[by] = nz_bit;
       }
     }
-    i16_R[mode] = R;
-    i16_levels_flat[mode] =
-        CudaIsFlat(w.i16_ac_levels[mode][0], 16, kFlatnessLimitI16);
+    if (lane == 0) {
+      i16_R[mode] = R;
+      i16_levels_flat[mode] =
+          CudaIsFlat(w.i16_ac_levels[mode][0], 16, kFlatnessLimitI16);
+    }
   }
   __syncthreads();
   if (tid == 0) {
@@ -885,29 +925,27 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
       }
       __syncthreads();
       {
-        const int warp = tid >> 5, mode = tid & 31;
-        if (mode < kNumBModes) {
-          const uint8_t* const src =
-              w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[i4_index];
-          const int bx = i4_index & 3, by = i4_index >> 2;
-          if (warp == 0) {
-            // Full residual cost precomputed for every mode: the CPU's
-            // early-out only skips this computation for modes it rejects
-            // anyway, so replaying its comparison order on complete values
-            // selects identically.
-            w.i4_rcost[mode] = ResidualCostDev(
-                &cc, i4_ctx.top_nz[bx] + i4_ctx.left_nz[by], 0, 3,
-                w.i4_levels[mode]);
-          } else if (warp == 1) {
-            w.i4_sse[mode] = CudaSSE4x4(src, w.i4_out[mode]);
-            w.i4_flat[mode] =
-                (mode > 0)
-                    ? CudaIsFlat(w.i4_levels[mode], 1, kFlatnessLimitI4)
-                    : 0;
-          } else if (warp == 2) {
-            w.i4_sd[mode] =
-                tlambda ? CudaDisto4x4(src, w.i4_out[mode], kWeightY) : 0;
-          }
+        const int warp = tid >> 5, lane = tid & 31;
+        const uint8_t* const src =
+            w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[i4_index];
+        const int bx = i4_index & 3, by = i4_index >> 2;
+        if (warp == 0 && lane < kNumBModes) {
+          // Full residual cost precomputed for every mode: the CPU's
+          // early-out only skips this computation for modes it rejects
+          // anyway, so replaying its comparison order on complete values
+          // selects identically. Ten concurrent per-lane serial walks beat
+          // sequential cooperative walks here (measured).
+          w.i4_rcost[lane] = ResidualCostDev(
+              &cc, i4_ctx.top_nz[bx] + i4_ctx.left_nz[by], 0, 3,
+              w.i4_levels[lane]);
+        } else if (warp == 2 && lane < kNumBModes) {
+          w.i4_sse[lane] = CudaSSE4x4(src, w.i4_out[lane]);
+          w.i4_flat[lane] =
+              (lane > 0) ? CudaIsFlat(w.i4_levels[lane], 1, kFlatnessLimitI4)
+                         : 0;
+        } else if (warp == 3 && lane < kNumBModes) {
+          w.i4_sd[lane] =
+              tlambda ? CudaDisto4x4(src, w.i4_out[lane], kWeightY) : 0;
         }
       }
       __syncthreads();
@@ -1055,26 +1093,30 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
   // ---- Phase 5: chroma selection (PickBestUV). Cost walks run one mode per
   // warp; thread 0 replays the CPU comparison order on precomputed values.
   __shared__ long long uv_R[4];
-  if (tid < 4 * 32 && (tid & 31) == 0) {
+  if (tid < 4 * 32) {  // one mode per warp; 16 lanes cooperate per block
     const int mode = tid >> 5;
+    const int lane = tid & 31;
     NzContext c = w.nz_ctx;
     long long R = 0;
+    int nz_bit;
     for (int ch = 0; ch <= 2; ch += 2) {
       for (int by = 0; by < 2; ++by) {
         for (int bx = 0; bx < 2; ++bx) {
           const int b = ch * 2 + bx + by * 2;
           const int ctx = c.top_nz[4 + ch + bx] + c.left_nz[4 + ch + by];
           const int16_t* const lv = w.uv_levels_all[mode][b];
-          R += ResidualCostDev(&cc, ctx, 0, 2, lv);
-          c.top_nz[4 + ch + bx] = c.left_nz[4 + ch + by] = BlockNonZero(lv);
+          R += ResidualCostCoop16(&cc, ctx, 0, 2, lv, lane, &nz_bit);
+          c.top_nz[4 + ch + bx] = c.left_nz[4 + ch + by] = nz_bit;
         }
       }
     }
-    if (mode > 0 &&
-        CudaIsFlat(w.uv_levels_all[mode][0], 8, kFlatnessLimitUV)) {
-      R += kFlatnessPenalty * 8;
+    if (lane == 0) {
+      if (mode > 0 &&
+          CudaIsFlat(w.uv_levels_all[mode][0], 8, kFlatnessLimitUV)) {
+        R += kFlatnessPenalty * 8;
+      }
+      uv_R[mode] = R;
     }
-    uv_R[mode] = R;
   }
   __syncthreads();
   if (tid == 0) {

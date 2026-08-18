@@ -259,6 +259,18 @@ defaulting `thread_level=1` (threaded analysis) measured neutral on
 batches and was reverted. `WEBP_CUDA_DECIMATE_TIMING=1` prints each
 pass's device wall time; `=2` adds a per-phase cycle breakdown.
 
+A follow-up makes the intra16 and chroma selection walks warp-cooperative:
+each coefficient's incoming context depends only on the previous
+coefficient's value, so sixteen lanes compute the costs in parallel (a
+ballot supplies the block's non-zero bit for the context chain) and a
+shuffle reduction replaces the 272-step serial walks. Bit-exact against
+the serial walk; GPU wall 30.5 → 27.7 ms. The same treatment applied to
+the intra4 walk regressed (ten concurrent per-lane serial walks beat
+sequential cooperative walks) and was kept serial. Batch times were flat:
+at ~28 ms the device wall now roughly equals the CPU-side serial chain
+(analysis, collect + replay, import), so further gains must shrink both
+sides together.
+
 Raw result sets:
 `libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl,-decimate,-tuned,-stream,-parts,-recpipe,-kernel}`
 under the operator's temp directory, comparable through the `report`
