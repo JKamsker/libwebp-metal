@@ -81,7 +81,12 @@ static const char* const kStageNames[WEBP_PROFILE_STAGE_COUNT] = {
     "lossy_decimate",
     "lossy_record_tokens",
     "lossy_alpha",
-    "lossy_write"};
+    "lossy_write",
+    "lossy_iter_import",
+    "lossy_side_info",
+    "lossy_save_boundary",
+    "lossy_emit_tokens",
+    "lossy_post_loop"};
 
 static int EnvironmentOptIn(const char* name) {
   const char* const value = getenv(name);

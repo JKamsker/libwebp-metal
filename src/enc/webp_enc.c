@@ -125,7 +125,22 @@ static void MapConfigToTools(VP8Encoder* const enc) {
     enc->use_tokens = (enc->rd_opt_level >= RD_OPT_BASIC);  // need rd stats
 #endif
     if (enc->use_tokens) {
-      enc->num_parts = 1;  // doesn't work with multi-partition
+      // This fork records tokens per macroblock row modulo the partition
+      // count, so the token path supports multi-partition output and emits
+      // the partitions on parallel workers. Default to 8 partitions;
+      // WEBP_TOKEN_PARTITIONS=0..3 selects 1/2/4/8 (0 restores the
+      // upstream single-partition stream).
+      int parts_log2 = 3;
+      const char* const parts_env = getenv("WEBP_TOKEN_PARTITIONS");
+      if (parts_env != NULL && parts_env[0] != '\0') {
+        const int v = atoi(parts_env);
+        if (v >= 0 && v <= 3) parts_log2 = v;
+      }
+      enc->num_parts = 1 << parts_log2;
+      // every partition must own at least one macroblock row
+      while (enc->num_parts > 1 && enc->num_parts > enc->mb_h) {
+        enc->num_parts >>= 1;
+      }
     }
   }
 }
@@ -255,7 +270,12 @@ static VP8Encoder* InitVP8Encoder(const WebPConfig* const config,
   // size based on quality. This is just a crude 1rst-order prediction.
   {
     const float scale = 1.f + config->quality * 5.f / 100.f;  // in [1,6]
-    VP8TBufferInit(&enc->tokens, (int)(mb_w * mb_h * 4 * scale));
+    int page_size = (int)(mb_w * mb_h * 4 * scale) / enc->num_parts;
+    int p;
+    if (page_size < 8192) page_size = 8192;
+    for (p = 0; p < MAX_NUM_PARTITIONS; ++p) {
+      VP8TBufferInit(&enc->tokens[p], page_size);
+    }
   }
   return enc;
 }
@@ -263,8 +283,11 @@ static VP8Encoder* InitVP8Encoder(const WebPConfig* const config,
 static int DeleteVP8Encoder(VP8Encoder* enc) {
   int ok = 1;
   if (enc != NULL) {
+    int p;
     ok = VP8EncDeleteAlpha(enc);
-    VP8TBufferClear(&enc->tokens);
+    for (p = 0; p < MAX_NUM_PARTITIONS; ++p) {
+      VP8TBufferClear(&enc->tokens[p]);
+    }
     WebPSafeFree(enc);
   }
   return ok;

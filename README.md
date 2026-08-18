@@ -117,6 +117,13 @@ upstream refresh cadence via `WEBP_TOKEN_REFRESH_SHIFT` declines it.
 `WEBP_CUDA_LOSSY_DECIMATE=0` disables it and
 `WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS=N` overrides its dispatch threshold
 (64 macroblocks warm, 4,000 cold).
+Lossy token streams use eight VP8 token partitions by default (a standard
+bitstream feature costing about 38 bytes per image): macroblock row `y`
+records into partition `y mod parts`, and the final arithmetic coding of
+the partitions runs on parallel worker threads for CPU and CUDA encodes
+alike. `WEBP_TOKEN_PARTITIONS=0..3` selects 1/2/4/8 partitions (0 restores
+the upstream single-partition stream) and `WEBP_TOKEN_EMIT_THREADS=0`
+forces serial emission without changing the bitstream.
 The predictor stage takes both tile-mode selection and exact residual
 application; `WEBP_CUDA_PREDICTOR_MIN_PIXELS=N` controls its threshold. Tile
 rows are scored in launch order against the accumulated residual histogram of

@@ -368,7 +368,10 @@ struct VP8Encoder {
   // per-partition boolean decoders.
   VP8BitWriter bw;                         // part0
   VP8BitWriter parts[MAX_NUM_PARTITIONS];  // token partitions
-  VP8TBuffer tokens;                       // token buffer
+  // per-partition token buffers; macroblock row y records into
+  // tokens[y & (num_parts - 1)] so each partition can be emitted
+  // independently
+  VP8TBuffer tokens[MAX_NUM_PARTITIONS];
 
   int percent;  // for progress
 

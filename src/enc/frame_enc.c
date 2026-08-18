@@ -24,6 +24,7 @@
 #include "src/enc/vp8i_enc.h"
 #include "src/enc/profile_enc.h"
 #include "src/utils/bit_writer_utils.h"
+#include "src/utils/thread_utils.h"
 #include "src/utils/utils.h"
 #include "src/webp/encode.h"
 #include "src/webp/format_constants.h"  // RIFF constants
@@ -944,6 +945,66 @@ int VP8EncLoop(VP8Encoder* const enc) {
 
 #define MIN_COUNT 96  // minimum number of macroblocks before updating stats
 
+typedef struct {
+  VP8TBuffer* tokens;
+  VP8BitWriter* bw;
+  const uint8_t* probas;
+} TokenEmitJob;
+
+static int TokenEmitJobHook(void* arg1, void* arg2) {
+  TokenEmitJob* const job = (TokenEmitJob*)arg1;
+  (void)arg2;
+  return VP8EmitTokens(job->tokens, job->bw, job->probas, 1);
+}
+
+// Emits every token partition; partitions past the first run on worker
+// threads (the partition contents do not depend on the thread schedule).
+// WEBP_TOKEN_EMIT_THREADS=0 forces serial emission.
+static int EmitTokenPartitions(VP8Encoder* const enc) {
+  const uint8_t* const probas = (const uint8_t*)enc->proba.coeffs;
+  const int num_parts = enc->num_parts;
+  const WebPWorkerInterface* const worker_interface = WebPGetWorkerInterface();
+  WebPWorker workers[MAX_NUM_PARTITIONS];
+  TokenEmitJob jobs[MAX_NUM_PARTITIONS];
+  int started = 0;
+  int ok = 1;
+  int use_threads = (num_parts > 1);
+  int p;
+  {
+    const char* const env = getenv("WEBP_TOKEN_EMIT_THREADS");
+    if (env != NULL && !strcmp(env, "0")) use_threads = 0;
+  }
+  for (p = 0; p < num_parts; ++p) {
+    jobs[p].tokens = &enc->tokens[p];
+    jobs[p].bw = enc->parts + p;
+    jobs[p].probas = probas;
+  }
+  if (use_threads) {
+    for (p = 1; p < num_parts; ++p) {
+      WebPWorker* const worker = &workers[p];
+      worker_interface->Init(worker);
+      worker->data1 = &jobs[p];
+      worker->data2 = NULL;
+      worker->hook = TokenEmitJobHook;
+      if (!worker_interface->Reset(worker)) {
+        worker_interface->End(worker);
+        break;  // no thread: this and later partitions emit on this thread
+      }
+      worker_interface->Launch(worker);
+      ++started;
+    }
+  }
+  ok &= TokenEmitJobHook(&jobs[0], NULL);
+  for (p = 1 + started; p < num_parts; ++p) {
+    ok &= TokenEmitJobHook(&jobs[p], NULL);
+  }
+  for (p = 1; p <= started; ++p) {
+    ok &= worker_interface->Sync(&workers[p]);
+    worker_interface->End(&workers[p]);
+  }
+  return ok;
+}
+
 int VP8EncTokenLoop(VP8Encoder* const enc) {
   // This fork does not refresh the cost tables mid-pass. Upstream refreshes
   // them roughly eight times per pass, which serializes macroblock decisions
@@ -978,7 +1039,7 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
 
   if (max_count < MIN_COUNT) max_count = MIN_COUNT;
 
-  assert(enc->num_parts == 1);
+  assert(enc->num_parts >= 1 && enc->num_parts <= MAX_NUM_PARTITIONS);
   assert(enc->use_tokens);
   assert(proba->use_skip_proba == 0);
   assert(rd_opt >= RD_OPT_BASIC);  // otherwise, token-buffer won't be useful
@@ -1002,7 +1063,10 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
       ResetTokenStats(enc);
       VP8InitFilter(&it);  // don't collect stats until last pass (too costly)
     }
-    VP8TBufferClear(&enc->tokens);
+    {
+      int p;
+      for (p = 0; p < enc->num_parts; ++p) VP8TBufferClear(&enc->tokens[p]);
+    }
     {
       const uint64_t accel_start =
           WebPProfileStageBegin(WEBP_PROFILE_LOSSY_DECIMATE);
@@ -1011,7 +1075,12 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
     }
     do {
       VP8ModeScore info;
-      VP8IteratorImport(&it, NULL);
+      {
+        const uint64_t import_start =
+            WebPProfileStageBegin(WEBP_PROFILE_LOSSY_ITER_IMPORT);
+        VP8IteratorImport(&it, NULL);
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSY_ITER_IMPORT, import_start);
+      }
       if (--cnt < 0) {
         FinalizeTokenProbas(proba);
         VP8CalculateLevelCosts(proba);  // refresh cost tables for rd-opt
@@ -1040,7 +1109,8 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
       {
         const uint64_t record_start =
             WebPProfileStageBegin(WEBP_PROFILE_LOSSY_RECORD_TOKENS);
-        ok = RecordTokens(&it, &info, &enc->tokens);
+        ok = RecordTokens(&it, &info,
+                          &enc->tokens[it.y & (enc->num_parts - 1)]);
         WebPProfileStageEnd(WEBP_PROFILE_LOSSY_RECORD_TOKENS, record_start);
       }
       if (!ok) {
@@ -1050,12 +1120,20 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
       size_p0 += info.H;
       distortion += info.D;
       if (is_last_pass) {
+        const uint64_t side_start =
+            WebPProfileStageBegin(WEBP_PROFILE_LOSSY_SIDE_INFO);
         StoreSideInfo(&it);
         VP8StoreFilterStats(&it);
         VP8IteratorExport(&it);
         ok = VP8IteratorProgress(&it, pass_progress);
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSY_SIDE_INFO, side_start);
       }
-      VP8IteratorSaveBoundary(&it);
+      {
+        const uint64_t boundary_start =
+            WebPProfileStageBegin(WEBP_PROFILE_LOSSY_SAVE_BOUNDARY);
+        VP8IteratorSaveBoundary(&it);
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSY_SAVE_BOUNDARY, boundary_start);
+      }
     } while (ok && VP8IteratorNext(&it));
     AcceleratedDecimateClear(&accel_pass);
     if (!ok) break;
@@ -1063,7 +1141,11 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
     size_p0 += enc->segment_hdr.size;
     if (stats.do_size_search) {
       uint64_t size = FinalizeTokenProbas(&enc->proba);
-      size += VP8EstimateTokenSize(&enc->tokens, (const uint8_t*)proba->coeffs);
+      int p;
+      for (p = 0; p < enc->num_parts; ++p) {
+        size += VP8EstimateTokenSize(&enc->tokens[p],
+                                     (const uint8_t*)proba->coeffs);
+      }
       size = (size + size_p0 + 1024) >> 11;  // -> size in bytes
       size += HEADER_SIZE_ESTIMATE;
       stats.value = (double)size;
@@ -1094,15 +1176,23 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
     }
   }
   if (ok) {
+    const uint64_t emit_start =
+        WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS);
     if (!stats.do_size_search) {
       FinalizeTokenProbas(&enc->proba);
     }
-    ok = VP8EmitTokens(&enc->tokens, enc->parts + 0,
-                       (const uint8_t*)proba->coeffs, 1);
+    ok = EmitTokenPartitions(enc);
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSY_EMIT_TOKENS, emit_start);
   }
   ok = ok && WebPReportProgress(enc->pic, enc->percent + remaining_progress,
                                 &enc->percent);
-  return PostLoopFinalize(&it, ok);
+  {
+    const uint64_t post_start =
+        WebPProfileStageBegin(WEBP_PROFILE_LOSSY_POST_LOOP);
+    ok = PostLoopFinalize(&it, ok);
+    WebPProfileStageEnd(WEBP_PROFILE_LOSSY_POST_LOOP, post_start);
+    return ok;
+  }
 }
 
 #else

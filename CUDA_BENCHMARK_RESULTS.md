@@ -164,17 +164,17 @@ lossless batch recorded 16 observed resident handoffs (texture and graphic
 inputs skip the donating cross-color transform, so a handoff per image is
 not expected on this corpus).
 
-| Method | baseline | + guided predictor | + exact-NL predictor | + GPU decimate | + tuning | + band streaming |
-|---|---:|---:|---:|---:|---:|---:|
-| PNG lossy — batch | 0.95x | 1.01x | 1.03x | 2.00x | 2.60x | 2.91x |
-| JPEG lossy — batch | 0.96x | 1.02x | 1.03x | 1.94x | 2.45x | 2.77x |
-| PNG lossy — single | 0.57x | 0.61x | 0.79x | 0.79x | 0.90x | 0.96x |
-| PNG lossless — batch | 1.37x | 1.99x | 1.81x | 1.79x | 1.65x | 1.83x |
-| JPEG lossless — batch | 1.20x | 4.87x | 4.95x | 4.85x | 5.15x | 5.13x |
-| JPEG lossless — single | 0.88x | 2.76x | 2.66x | 2.88x | 2.84x | 2.76x |
-| PNG near-lossless — batch | 1.21x | 1.18x | 2.55x | 2.61x | 2.61x | 2.88x |
-| JPEG near-lossless — batch | 1.13x | 1.10x | 5.58x | 5.60x | 6.01x | 5.63x |
-| JPEG near-lossless — single | 0.93x | 0.96x | 2.99x | 3.16x | 3.09x | 3.23x |
+| Method | baseline | + guided predictor | + exact-NL predictor | + GPU decimate | + tuning | + band streaming | + token partitions |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| PNG lossy — batch | 0.95x | 1.01x | 1.03x | 2.00x | 2.60x | 2.91x | 3.28x |
+| JPEG lossy — batch | 0.96x | 1.02x | 1.03x | 1.94x | 2.45x | 2.77x | 2.99x |
+| PNG lossy — single | 0.57x | 0.61x | 0.79x | 0.79x | 0.90x | 0.96x | 0.93x |
+| PNG lossless — batch | 1.37x | 1.99x | 1.81x | 1.79x | 1.65x | 1.83x | 1.74x |
+| JPEG lossless — batch | 1.20x | 4.87x | 4.95x | 4.85x | 5.15x | 5.13x | 5.06x |
+| JPEG lossless — single | 0.88x | 2.76x | 2.66x | 2.88x | 2.84x | 2.76x | 2.71x |
+| PNG near-lossless — batch | 1.21x | 1.18x | 2.55x | 2.61x | 2.61x | 2.88x | 2.60x |
+| JPEG near-lossless — batch | 1.13x | 1.10x | 5.58x | 5.60x | 6.01x | 5.63x | 5.58x |
+| JPEG near-lossless — single | 0.93x | 0.96x | 2.99x | 3.16x | 3.09x | 3.23x | 3.14x |
 
 Absolute CUDA times are the stable signal across runs; the CPU baseline
 varied by up to 8% between suite executions and moves the ratios. The
@@ -213,8 +213,23 @@ band collection ever fails mid-image, the encoder falls back to CPU
 decimation from the first unreplayed row. Outputs stay byte-identical
 and hash-stable — streaming changes only scheduling, never decisions.
 
+The token-partitions column removes the last large serial stage: a stage
+profile attributed up to 82 ms per texture image to `VP8EmitTokens`, the
+final arithmetic coding of the recorded tokens into a single partition.
+Lossy streams now default to eight VP8 token partitions (a standard
+bitstream feature; macroblock row `y` records into partition `y mod 8`,
+costing a flat ~38 bytes per image), and the partitions are emitted by
+independent bitwriters on parallel worker threads for CPU and CUDA
+encodes alike. CPU/CUDA byte parity, decoded parity against the
+single-partition stream, methods 2–6, odd and tiny dimensions, and
+target-size search were verified; `WEBP_TOKEN_PARTITIONS=0` restores the
+upstream single-partition stream and `WEBP_TOKEN_EMIT_THREADS=0` forces
+serial emission. The change also speeds the CPU baseline (PNG lossy batch
+166.6 → 153.8 ms/image), so the ratio understates the CUDA-side gain
+(57.2 → 46.9 ms/image).
+
 Raw result sets:
-`libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl,-decimate,-tuned,-stream}`
+`libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl,-decimate,-tuned,-stream,-parts}`
 under the operator's temp directory, comparable through the `report`
 subcommand.
 
