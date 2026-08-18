@@ -429,7 +429,32 @@ typedef struct {
   uint8_t* recon_v;
   int recon_y_stride;
   int recon_uv_stride;
+  // Streaming: the request outlives TryAcceleratedDecimate so bands can be
+  // collected lazily while the device still computes later ones.
+  WebPAcceleratorDecimateSegment segment_params[NUM_MB_SEGMENTS];
+  WebPAcceleratorDecimateRequest request;
+  int band_count;
+  int rows_per_band;
+  int bands_collected;
 } AcceleratedDecimatePass;
+
+// Collects result bands up to the one containing macroblock row 'mb_y'.
+// Returns 0 when a collection fails; the caller then falls back to the CPU
+// decimate for the remaining macroblocks (the replayed state is complete, so
+// the switch is seamless).
+static int AcceleratedDecimateEnsureRow(AcceleratedDecimatePass* const pass,
+                                        int mb_y) {
+  while (pass->bands_collected * pass->rows_per_band <= mb_y) {
+    pass->request.phase = WEBP_ACCELERATOR_DECIMATE_COLLECT;
+    pass->request.band_index = pass->bands_collected;
+    if (WebPAccelerateLossyDecimate(&pass->request) !=
+        WEBP_ACCELERATOR_SUCCESS) {
+      return 0;
+    }
+    ++pass->bands_collected;
+  }
+  return 1;
+}
 
 static void AcceleratedDecimateClear(AcceleratedDecimatePass* const pass) {
   WebPSafeFree(pass->results);
@@ -444,10 +469,12 @@ static int TryAcceleratedDecimate(VP8Encoder* const enc,
   const int mb_count = enc->mb_w * enc->mb_h;
   const size_t y_size = (size_t)enc->mb_w * 16 * enc->mb_h * 16;
   const size_t uv_size = (size_t)enc->mb_w * 8 * enc->mb_h * 8;
-  WebPAcceleratorDecimateSegment segment_params[NUM_MB_SEGMENTS];
-  WebPAcceleratorDecimateRequest request;
+  WebPAcceleratorDecimateSegment* segment_params;
+  WebPAcceleratorDecimateRequest* request;
   int i;
   memset(pass, 0, sizeof(*pass));
+  segment_params = pass->segment_params;
+  request = &pass->request;
   // The exact contract requires the basic (non-trellis) search and the
   // fork's stable cost tables; a restored upstream mid-pass refresh cadence
   // would serialize decisions on token statistics again.
@@ -470,7 +497,7 @@ static int TryAcceleratedDecimate(VP8Encoder* const enc,
   }
   for (i = 0; i < NUM_MB_SEGMENTS; ++i) {
     const VP8SegmentInfo* const dqm = &enc->dqm[i];
-    WebPAcceleratorDecimateSegment* const params = &segment_params[i];
+    WebPAcceleratorDecimateSegment* const params = &pass->segment_params[i];
     memcpy(params->y1.q, dqm->y1.q, sizeof(params->y1.q));
     memcpy(params->y1.iq, dqm->y1.iq, sizeof(params->y1.iq));
     memcpy(params->y1.bias, dqm->y1.bias, sizeof(params->y1.bias));
@@ -498,28 +525,36 @@ static int TryAcceleratedDecimate(VP8Encoder* const enc,
   pass->recon_v = pass->recon + y_size + uv_size;
   pass->recon_y_stride = enc->mb_w * 16;
   pass->recon_uv_stride = enc->mb_w * 8;
-  request.width = enc->pic->width;
-  request.height = enc->pic->height;
-  request.mb_w = enc->mb_w;
-  request.mb_h = enc->mb_h;
-  request.y = enc->pic->y;
-  request.u = enc->pic->u;
-  request.v = enc->pic->v;
-  request.y_stride = enc->pic->y_stride;
-  request.uv_stride = enc->pic->uv_stride;
-  request.segments = pass->segments;
-  request.segment_params = segment_params;
-  request.level_costs = &enc->proba.level_cost[0][0][0][0];
-  request.coeff_probas = &enc->proba.coeffs[0][0][0][0];
-  request.max_i4_header_bits = enc->max_i4_header_bits;
-  request.use_error_diffusion = (enc->top_derr != NULL);
-  request.results = pass->results;
-  request.recon_y = pass->recon_y;
-  request.recon_u = pass->recon_u;
-  request.recon_v = pass->recon_v;
-  request.recon_y_stride = pass->recon_y_stride;
-  request.recon_uv_stride = pass->recon_uv_stride;
-  if (WebPAccelerateLossyDecimate(&request) != WEBP_ACCELERATOR_SUCCESS) {
+  request->width = enc->pic->width;
+  request->height = enc->pic->height;
+  request->mb_w = enc->mb_w;
+  request->mb_h = enc->mb_h;
+  request->y = enc->pic->y;
+  request->u = enc->pic->u;
+  request->v = enc->pic->v;
+  request->y_stride = enc->pic->y_stride;
+  request->uv_stride = enc->pic->uv_stride;
+  request->segments = pass->segments;
+  request->segment_params = segment_params;
+  request->level_costs = &enc->proba.level_cost[0][0][0][0];
+  request->coeff_probas = &enc->proba.coeffs[0][0][0][0];
+  request->max_i4_header_bits = enc->max_i4_header_bits;
+  request->use_error_diffusion = (enc->top_derr != NULL);
+  request->results = pass->results;
+  request->recon_y = pass->recon_y;
+  request->recon_u = pass->recon_u;
+  request->recon_v = pass->recon_v;
+  request->recon_y_stride = pass->recon_y_stride;
+  request->recon_uv_stride = pass->recon_uv_stride;
+  // Stream the pass in bands so macroblock replay and token recording can
+  // overlap with the device still computing later rows.
+  pass->band_count = (enc->mb_h >= 8) ? 4 : 1;
+  pass->rows_per_band = (enc->mb_h + pass->band_count - 1) / pass->band_count;
+  pass->bands_collected = 0;
+  request->phase = WEBP_ACCELERATOR_DECIMATE_BEGIN;
+  request->band_count = pass->band_count;
+  request->band_index = 0;
+  if (WebPAccelerateLossyDecimate(request) != WEBP_ACCELERATOR_SUCCESS) {
     AcceleratedDecimateClear(pass);
     return 0;
   }
@@ -985,6 +1020,12 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
       {
         const uint64_t decimate_start =
             WebPProfileStageBegin(WEBP_PROFILE_LOSSY_DECIMATE);
+        if (accelerated &&
+            !AcceleratedDecimateEnsureRow(&accel_pass, it.y)) {
+          // A band collection failed; the replayed state is complete up to
+          // this macroblock, so the CPU search continues seamlessly.
+          accelerated = 0;
+        }
         if (accelerated) {
           VP8ReplayDecimate(&it, &info,
                             &accel_pass.results[it.y * enc->mb_w + it.x],

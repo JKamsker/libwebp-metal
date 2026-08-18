@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 9u
+#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 10u
 #define WEBP_ACCELERATOR_MAX_HISTOGRAM_SPANS 16u
 
 // These are deliberately encoder stages, not low-level GPU kernels. A backend
@@ -237,11 +237,30 @@ typedef struct WebPAcceleratorDecimateResultTag {
   uint16_t max_delta;        // StoreMaxDelta candidate value
 } WebPAcceleratorDecimateResult;
 
+// Decimate call phases. WHOLE runs the complete pass synchronously. A
+// streaming caller instead issues BEGIN once (the backend uploads and
+// launches the whole pass without waiting) and then COLLECT for each band of
+// macroblock rows in order; each COLLECT returns after that band's results
+// and reconstruction rows are in the caller's buffers, so the caller can
+// consume band k while the device still computes band k+1. Outputs are only
+// valid for the collected bands. A BEGIN not followed by all COLLECTs is
+// abandoned safely by the next BEGIN or WHOLE call.
+typedef enum {
+  WEBP_ACCELERATOR_DECIMATE_WHOLE = 0,
+  WEBP_ACCELERATOR_DECIMATE_BEGIN = 1,
+  WEBP_ACCELERATOR_DECIMATE_COLLECT = 2
+} WebPAcceleratorDecimatePhase;
+
 typedef struct {
   int width;
   int height;
   int mb_w;
   int mb_h;
+  // Streaming control; see WebPAcceleratorDecimatePhase. band_count and
+  // band_index are ignored for WHOLE.
+  int phase;
+  int band_count;
+  int band_index;
   // Borrowed source planes in picture layout (cropped origin); partial edge
   // macroblocks are replicated by the backend exactly like the iterator's
   // import.

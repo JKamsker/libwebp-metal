@@ -155,7 +155,7 @@ without rerunning benchmarks.
 
 ## Windows RTX 5070 Ti Laptop results (2026-08-18)
 
-Four result sets from one Windows 11 machine (RTX 5070 Ti Laptop GPU, CUDA
+Result sets from one Windows 11 machine (RTX 5070 Ti Laptop GPU, CUDA
 13.3, VS 2026, sm_120 build) measure the current stage set with the portable
 suite at its defaults (24-item batches, 5 samples, forced stages). All 180
 validation pairs passed in every run, forced lossless batches were
@@ -164,17 +164,17 @@ lossless batch recorded 16 observed resident handoffs (texture and graphic
 inputs skip the donating cross-color transform, so a handoff per image is
 not expected on this corpus).
 
-| Method | baseline | + guided predictor | + exact-NL predictor | + GPU decimate | + tuning |
-|---|---:|---:|---:|---:|---:|
-| PNG lossy — batch | 0.95x | 1.01x | 1.03x | 2.00x | 2.60x |
-| JPEG lossy — batch | 0.96x | 1.02x | 1.03x | 1.94x | 2.45x |
-| PNG lossy — single | 0.57x | 0.61x | 0.79x | 0.79x | 0.90x |
-| PNG lossless — batch | 1.37x | 1.99x | 1.81x | 1.79x | 1.65x |
-| JPEG lossless — batch | 1.20x | 4.87x | 4.95x | 4.85x | 5.15x |
-| JPEG lossless — single | 0.88x | 2.76x | 2.66x | 2.88x | 2.84x |
-| PNG near-lossless — batch | 1.21x | 1.18x | 2.55x | 2.61x | 2.61x |
-| JPEG near-lossless — batch | 1.13x | 1.10x | 5.58x | 5.60x | 6.01x |
-| JPEG near-lossless — single | 0.93x | 0.96x | 2.99x | 3.16x | 3.09x |
+| Method | baseline | + guided predictor | + exact-NL predictor | + GPU decimate | + tuning | + band streaming |
+|---|---:|---:|---:|---:|---:|---:|
+| PNG lossy — batch | 0.95x | 1.01x | 1.03x | 2.00x | 2.60x | 2.91x |
+| JPEG lossy — batch | 0.96x | 1.02x | 1.03x | 1.94x | 2.45x | 2.77x |
+| PNG lossy — single | 0.57x | 0.61x | 0.79x | 0.79x | 0.90x | 0.96x |
+| PNG lossless — batch | 1.37x | 1.99x | 1.81x | 1.79x | 1.65x | 1.83x |
+| JPEG lossless — batch | 1.20x | 4.87x | 4.95x | 4.85x | 5.15x | 5.13x |
+| JPEG lossless — single | 0.88x | 2.76x | 2.66x | 2.88x | 2.84x | 2.76x |
+| PNG near-lossless — batch | 1.21x | 1.18x | 2.55x | 2.61x | 2.61x | 2.88x |
+| JPEG near-lossless — batch | 1.13x | 1.10x | 5.58x | 5.60x | 6.01x | 5.63x |
+| JPEG near-lossless — single | 0.93x | 0.96x | 2.99x | 3.16x | 3.09x | 3.23x |
 
 Absolute CUDA times are the stable signal across runs; the CPU baseline
 varied by up to 8% between suite executions and moves the ratios. The
@@ -203,8 +203,18 @@ gives cwebp a fast exit that skips CRT and driver teardown once every
 output is flushed and closed (`WEBP_NO_FAST_EXIT` opts out) — the last
 change shortens every fresh-process encode, CPU and CUDA alike.
 
+The band-streaming column overlaps the GPU decimation with the CPU's
+token recording: the whole-image wavefront launches asynchronously with a
+CUDA event recorded as each band of macroblock rows completes, and the
+host collects finished bands on a separate copy stream while the GPU is
+still decimating lower diagonals. Selection replay and tokenization for
+band N run concurrently with device work on bands N+1 and beyond; if a
+band collection ever fails mid-image, the encoder falls back to CPU
+decimation from the first unreplayed row. Outputs stay byte-identical
+and hash-stable — streaming changes only scheduling, never decisions.
+
 Raw result sets:
-`libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl,-decimate,-tuned}`
+`libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl,-decimate,-tuned,-stream}`
 under the operator's temp directory, comparable through the `report`
 subcommand.
 

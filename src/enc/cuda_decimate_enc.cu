@@ -798,11 +798,15 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
       // best_blocks accumulate in yuv_out2 luma.
     }
     __syncthreads();
+    // The whole intra4 search runs inside warp 0 (10 evaluation lanes plus
+    // the serial selection on lane 0); warp-scope synchronization avoids two
+    // block-wide barriers per sub-block on the wavefront's critical path.
+    if (tid < 32) {
     for (int step = 0; step < 16 && !i4_abort; ++step) {
       if (tid == 0) {
         CudaIntra4Preds(w.yuv_p, w.i4_boundary + kTopLeftI4[i4_index]);
       }
-      __syncthreads();
+      __syncwarp();
       if (tid < kNumBModes) {
         const int mode = tid;
         const uint8_t* const src =
@@ -827,7 +831,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
             &v, i4_ctx.top_nz[bx] + i4_ctx.left_nz[by], 0, 3,
             w.i4_levels[mode]);
       }
-      __syncthreads();
+      __syncwarp();
       if (tid == 0) {
         // Mode cost context from neighboring prediction modes.
         const int bx = i4_index & 3, by = i4_index >> 2;
@@ -893,8 +897,10 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
           }
         }
       }
-      __syncthreads();
+      __syncwarp();
     }
+    }  // warp 0
+    __syncthreads();
     if (tid == 0 && !i4_abort) {
       // Intra4 wins: adopt its score, levels, and reconstruction.
       w.rd.is_i4 = 1;
@@ -1113,6 +1119,8 @@ static void LockDecimate(DecimateMutex* m) { (void)pthread_mutex_lock(m); }
 static void UnlockDecimate(DecimateMutex* m) { (void)pthread_mutex_unlock(m); }
 #endif
 
+constexpr int kMaxDecimateBands = 8;
+
 struct DecimateState {
   bool initialization_attempted = false;
   bool available = false;
@@ -1120,9 +1128,21 @@ struct DecimateState {
   bool tables_uploaded = false;
   int device = 0;
   cudaStream_t stream = nullptr;
+  cudaStream_t copy_stream = nullptr;
   void* device_arena = nullptr;
   size_t arena_capacity = 0;
   StaticCostTables* device_tables = nullptr;
+  // Streaming pass in flight (BEGIN issued, not all bands collected).
+  bool pass_pending = false;
+  int pending_band_count = 0;
+  int pending_rows_per_band = 0;
+  int pending_mb_w = 0;
+  int pending_mb_h = 0;
+  size_t pending_off_results = 0;
+  size_t pending_off_recon_y = 0;
+  size_t pending_off_recon_u = 0;
+  size_t pending_off_recon_v = 0;
+  cudaEvent_t band_events[kMaxDecimateBands] = {};
 };
 
 DecimateState g_decimate_state;
@@ -1147,6 +1167,18 @@ bool DecimateInitialize(DecimateState* state) {
       cudaSuccess) {
     state->quarantined = true;
     return false;
+  }
+  if (cudaStreamCreateWithFlags(&state->copy_stream, cudaStreamNonBlocking) !=
+      cudaSuccess) {
+    state->quarantined = true;
+    return false;
+  }
+  for (int i = 0; i < kMaxDecimateBands; ++i) {
+    if (cudaEventCreateWithFlags(&state->band_events[i],
+                                 cudaEventDisableTiming) != cudaSuccess) {
+      state->quarantined = true;
+      return false;
+    }
   }
   state->available = true;
   return true;
@@ -1223,6 +1255,78 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     return WEBP_ACCELERATOR_ERROR;
   }
   const size_t mb_count = (size_t)request->mb_w * request->mb_h;
+  if (request->phase == WEBP_ACCELERATOR_DECIMATE_COLLECT) {
+    // Wait for one band's completion event, then copy its rows out on the
+    // dedicated copy stream so later diagonals keep running.
+    WebPAcceleratorResult collect_result = WEBP_ACCELERATOR_ERROR;
+    LockDecimate(&g_decimate_mutex);
+    DecimateState* const state = &g_decimate_state;
+    do {
+      if (!state->pass_pending || state->pending_mb_w != request->mb_w ||
+          state->pending_mb_h != request->mb_h ||
+          request->band_index < 0 ||
+          request->band_index >= state->pending_band_count) {
+        break;
+      }
+      const int band = request->band_index;
+      const int row_start = band * state->pending_rows_per_band;
+      const int row_end_raw = row_start + state->pending_rows_per_band;
+      const int row_end =
+          row_end_raw < request->mb_h ? row_end_raw : request->mb_h;
+      const size_t mb_start = (size_t)row_start * request->mb_w;
+      const size_t mb_end = (size_t)row_end * request->mb_w;
+      uint8_t* const arena = (uint8_t*)state->device_arena;
+      cudaError_t error = cudaStreamWaitEvent(
+          state->copy_stream, state->band_events[band], 0);
+      if (error == cudaSuccess) {
+        error = cudaMemcpyAsync(
+            request->results + mb_start,
+            (const DeviceResult*)(arena + state->pending_off_results) +
+                mb_start,
+            (mb_end - mb_start) * sizeof(DeviceResult),
+            cudaMemcpyDeviceToHost, state->copy_stream);
+      }
+      const size_t ys = (size_t)request->mb_w * 16;
+      const size_t uvs = (size_t)request->mb_w * 8;
+      if (error == cudaSuccess) {
+        error = cudaMemcpyAsync(
+            request->recon_y + (size_t)row_start * 16 * ys,
+            arena + state->pending_off_recon_y + (size_t)row_start * 16 * ys,
+            (size_t)(row_end - row_start) * 16 * ys,
+            cudaMemcpyDeviceToHost, state->copy_stream);
+      }
+      if (error == cudaSuccess) {
+        error = cudaMemcpyAsync(
+            request->recon_u + (size_t)row_start * 8 * uvs,
+            arena + state->pending_off_recon_u + (size_t)row_start * 8 * uvs,
+            (size_t)(row_end - row_start) * 8 * uvs,
+            cudaMemcpyDeviceToHost, state->copy_stream);
+      }
+      if (error == cudaSuccess) {
+        error = cudaMemcpyAsync(
+            request->recon_v + (size_t)row_start * 8 * uvs,
+            arena + state->pending_off_recon_v + (size_t)row_start * 8 * uvs,
+            (size_t)(row_end - row_start) * 8 * uvs,
+            cudaMemcpyDeviceToHost, state->copy_stream);
+      }
+      if (error == cudaSuccess) {
+        error = cudaStreamSynchronize(state->copy_stream);
+      }
+      if (error != cudaSuccess) {
+        (void)cudaStreamSynchronize(state->stream);
+        (void)cudaStreamSynchronize(state->copy_stream);
+        state->pass_pending = false;
+        state->quarantined = true;
+        break;
+      }
+      if (band == state->pending_band_count - 1) {
+        state->pass_pending = false;
+      }
+      collect_result = WEBP_ACCELERATOR_SUCCESS;
+    } while (0);
+    UnlockDecimate(&g_decimate_mutex);
+    return collect_result;
+  }
   {
     // The roughly 140 ms context-creation cost is only worth paying for
     // large images; once a context exists (the unit ran before, or the
@@ -1240,10 +1344,24 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
   }
 
   WebPAcceleratorResult result = WEBP_ACCELERATOR_NOT_RUN;
+  const int streaming = (request->phase == WEBP_ACCELERATOR_DECIMATE_BEGIN);
+  const int band_count =
+      streaming
+          ? ((request->band_count > 0 &&
+              request->band_count <= kMaxDecimateBands)
+                 ? request->band_count
+                 : 1)
+          : 1;
   LockDecimate(&g_decimate_mutex);
   DecimateState* const state = &g_decimate_state;
   do {
     if (state->quarantined || !DecimateInitialize(state)) break;
+    if (state->pass_pending) {
+      // Abandon an uncollected pass: drain the device before reusing arena.
+      (void)cudaStreamSynchronize(state->stream);
+      (void)cudaStreamSynchronize(state->copy_stream);
+      state->pass_pending = false;
+    }
     if (!DecimateEnsureTables(state)) break;
     if (cudaSetDevice(state->device) != cudaSuccess) {
       state->quarantined = true;
@@ -1348,6 +1466,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     (void)cudaGetLastError();
     const int last_diagonal =
         (request->mb_w - 1) + 2 * (request->mb_h - 1);
+    const int rows_per_band = (request->mb_h + band_count - 1) / band_count;
     for (int d = 0; d <= last_diagonal && error == cudaSuccess; ++d) {
       const int y_min =
           (d > request->mb_w - 1) ? (d - (request->mb_w - 1) + 1) / 2 : 0;
@@ -1360,6 +1479,32 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
       DecimateKernel<<<count, kDecimateThreads, 0, state->stream>>>(
           view, params, arena + off_left_nz8);
       error = cudaGetLastError();
+      if (streaming && error == cudaSuccess) {
+        // A band of macroblock rows is complete once the diagonal reaching
+        // its last row's rightmost block has run.
+        for (int band = 0; band < band_count; ++band) {
+          const int end_raw = (band + 1) * rows_per_band;
+          const int end_row =
+              end_raw < request->mb_h ? end_raw : request->mb_h;
+          if (d == (request->mb_w - 1) + 2 * (end_row - 1)) {
+            error = cudaEventRecord(state->band_events[band], state->stream);
+            break;
+          }
+        }
+      }
+    }
+    if (streaming && error == cudaSuccess) {
+      state->pass_pending = true;
+      state->pending_band_count = band_count;
+      state->pending_rows_per_band = rows_per_band;
+      state->pending_mb_w = request->mb_w;
+      state->pending_mb_h = request->mb_h;
+      state->pending_off_results = off_results;
+      state->pending_off_recon_y = off_recon_y;
+      state->pending_off_recon_u = off_recon_u;
+      state->pending_off_recon_v = off_recon_v;
+      result = WEBP_ACCELERATOR_SUCCESS;
+      break;
     }
     if (error == cudaSuccess) {
       error = cudaMemcpyAsync(request->results, view.results, results_bytes,
