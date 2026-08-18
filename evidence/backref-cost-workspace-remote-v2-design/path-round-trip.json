@@ -1,0 +1,39 @@
+{
+  "command": "python3 scripts/execute_backref_cost_workspace_remote_v2.py path-round-trip",
+  "lease_acquired": false,
+  "path_round_trip": {
+    "accepted": {
+      "home": "/Users/pandocs-agent-001",
+      "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v2/run.1Rx3Mg",
+      "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v2",
+      "token": "run.1Rx3Mg",
+      "validated": true
+    },
+    "cleanup": {
+      "absence_proved": true,
+      "home": "/Users/pandocs-agent-001",
+      "removed_exact_validated_child": true,
+      "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v2/run.1Rx3Mg",
+      "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v2",
+      "token": "run.1Rx3Mg",
+      "validated": true
+    },
+    "rejected": {
+      "malformed": "run basename is not a strict run.XXXXXX token",
+      "sibling": "run path is not the exact safe-root child",
+      "symlink": "run path is not the exact safe-root child",
+      "traversal": "run path is not the exact safe-root child"
+    },
+    "schema": "libwebp-backref-cost-workspace-remote-v2-path-round-trip-v1"
+  },
+  "performance_samples": 0,
+  "process_guard": {
+    "process_table_sha256": "b9d338c1b2a4326bdacf8eaedcee13718b08f340be6dd2fccf0491a1514e922f",
+    "runner_listener_present": true,
+    "runner_worker_matches": []
+  },
+  "remote_host_alias": "pandocs-agent",
+  "status": "PASS",
+  "timed_binary_invoked": false,
+  "validation_type": "UNTYPED/UNTIMED"
+}
