@@ -1,0 +1,12 @@
+{
+  "schema": "libwebp-backref-cost-workspace-remote-v2-exact-cleanup-check-v1",
+  "checked_at_utc": "2026-08-18T16:28:56Z",
+  "remote_host_alias": "pandocs-agent",
+  "remote_home": "/Users/pandocs-agent-001",
+  "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v2",
+  "validated_run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v2/run.ucrqiS",
+  "exact_child_absent": true,
+  "postcheck_output": "REMOTE_EXACT_CHILD_ABSENT",
+  "local_evidence_path_absent_before_record": true,
+  "driver_cleanup_path": "finally cleanup_remote after pre-operator checkout failure"
+}
