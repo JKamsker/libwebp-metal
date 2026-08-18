@@ -1266,6 +1266,16 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
           // this macroblock, so the CPU search continues seamlessly. Stop
           // the recorder first so the CPU path appends tokens after it.
           AcceleratedDecimateSyncRecorder(&accel_pass);
+          if (accel_pass.record_pipeline) {
+            // With pipelined recording the main thread skipped the inline
+            // RecordTokens that maintains the iterator's packed nz words;
+            // the recorder's shadow row is exactly the last recorded row
+            // (the one above this fallback row), so install it before the
+            // CPU search reads its top contexts. Fallback lands on a band
+            // boundary, so a row start needs no partial-row left state.
+            memcpy(enc->nz, accel_pass.record_nz,
+                   (size_t)enc->mb_w * sizeof(*enc->nz));
+          }
           accelerated = 0;
         }
         if (accelerated) {

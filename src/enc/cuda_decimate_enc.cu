@@ -1437,6 +1437,19 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
         break;
       }
       const int band = request->band_index;
+      {
+        // Test hook: WEBP_CUDA_DECIMATE_FAIL_COLLECT=<band> fails that
+        // band's collection to exercise the encoder's mid-image CPU
+        // fallback. The pass is drained so the next image accelerates.
+        const char* const fail_env = getenv("WEBP_CUDA_DECIMATE_FAIL_COLLECT");
+        if (fail_env != nullptr && fail_env[0] != '\0' &&
+            atoi(fail_env) == band) {
+          (void)cudaStreamSynchronize(state->stream);
+          (void)cudaStreamSynchronize(state->copy_stream);
+          state->pass_pending = false;
+          break;
+        }
+      }
       const int row_start = band * state->pending_rows_per_band;
       const int row_end_raw = row_start + state->pending_rows_per_band;
       const int row_end =
