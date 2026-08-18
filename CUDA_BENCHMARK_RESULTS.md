@@ -104,6 +104,9 @@ to claim its performance. A new result set is required before enabling
 Forced lossless rows also enable the experimental resident cross-color-to-hash
 handoff. Historical rows predate that handoff as well; they remain evidence for
 the older round-trip pipeline only.
+They now also force the experimental parallel predictor selector/residual
+stage and require observed dispatch. Historical rows predate it and provide no
+evidence for its speed or compressed-size effect.
 
 `scripts/benchmark_cuda_end_to_end.py` provides a portable comparison across
 systems. It creates a deterministic six-image corpus in both PNG and JPEG and
@@ -127,8 +130,9 @@ randomized execution order, exact commands, raw
 nanosecond samples, output hashes, corpus hashes, binary hashes, build revision,
 CPU, GPU, driver, CUDA toolkit, and relevant software versions. Its
 `report.md` uses the compact `Method | CPU time | CUDA time | Speedup`
-table, while `results.json` and `raw.jsonl` support cross-system comparison
-without reparsing prose.
+table, while each `results.json` summary row also records CPU/CUDA bytes per
+image and the CUDA/CPU compressed-size ratio. `results.json` and `raw.jsonl`
+support cross-system comparison without reparsing prose.
 
 Run `python3 scripts/benchmark_cuda_end_to_end.py --help` for the complete
 protocol. The `report` subcommand accepts results from multiple machines and

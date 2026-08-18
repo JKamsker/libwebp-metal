@@ -63,9 +63,9 @@ Selected lossy imports use the exact 2x2 Metal kernel by default.
 
 CUDA acceleration for the lossless cross-color transform, lossless hash-chain
 candidates, exact near-lossless preprocessing, and opaque regular
-RGB-to-YUV420 conversion is available as an opt-in CMake backend. An
-experimental exact lossy macroblock-analysis stage is also built by default but
-requires a separate runtime opt-in. The backend requires
+RGB-to-YUV420 conversion is available as an opt-in CMake backend. Experimental
+lossy macroblock-analysis and lossless predictor stages are also built by
+default but require separate runtime opt-ins. The backend requires
 CMake 3.17 or newer and a CUDA toolkit, and is enabled with
 `-DWEBP_ENABLE_CUDA=ON`. The CUDA language is enabled only for this build mode;
 CPU-only and Metal builds do not require the toolkit. For example:
@@ -90,6 +90,13 @@ candidates, `WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS=N` controls near-lossless
 preprocessing, and `WEBP_CUDA_LOSSY_MIN_PIXELS=N` controls RGB conversion.
 `WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS=N` controls the experimental lossy
 analysis stage.
+`WEBP_CUDA_PREDICTOR=1` enables the experimental parallel lossless predictor
+selector and exact residual transform; `WEBP_CUDA_PREDICTOR_MIN_PIXELS=N`
+controls its threshold. It evaluates all 14 legal modes independently per tile
+with a deterministic integer score and may produce a different compressed size
+than the CPU heuristic while decoding to identical pixels. It declines
+near-lossless residual quantization and non-exact inputs containing fully
+transparent pixels, whose RGB cleanup has scan-order dependencies.
 `WEBP_CUDA_RESIDENT_LOSSLESS=1` enables an experimental pipeline handoff: the
 cross-color stage preserves its transformed device pixels across transform-map
 encoding, and the matching main hash-chain stage reuses them instead of
@@ -97,12 +104,12 @@ uploading the host copy again. Pointer identity, dimensions, and encode-end
 cleanup prevent reuse outside the originating image. It remains off by default
 until the portable suite establishes whether the saved upload outweighs the
 device-to-device preservation copy on a given system.
-`WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`, and
-`WEBP_CUDA_LOSSY=0` disable one stage. Lossy CUDA is off by default because it
-was neutral in persistent end-to-end batches and much slower in fresh
-processes; set `WEBP_CUDA_LOSSY=1` to opt in. `WEBP_CUDA_VERBOSE=1` reports
-device and dispatch timings. Set a threshold to zero for forced correctness
-tests.
+`WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`,
+`WEBP_CUDA_PREDICTOR=0`, and `WEBP_CUDA_LOSSY=0` disable one stage. Lossy CUDA
+is off by default because it was neutral in persistent end-to-end batches and
+much slower in fresh processes; set `WEBP_CUDA_LOSSY=1` to opt in.
+`WEBP_CUDA_VERBOSE=1` reports device and dispatch timings. Set a threshold to
+zero for forced correctness tests.
 The macroblock-analysis experiment remains off independently; set
 `WEBP_CUDA_LOSSY_ANALYSIS=1` to exercise it. It reproduces the production
 susceptibility histogram, initial luma/chroma modes, and segment inputs exactly,
@@ -115,8 +122,9 @@ Defaults are adaptive: a stage pays the
 roughly 140 ms runtime/device initialization cost only for large inputs, then
 uses a lower warm-process threshold once another CUDA stage initialized the
 backend: color uses 4,000,000 cold / 16,384 warm pixels, hash uses 8,000,000 /
-4,000,000, near-lossless uses 16,777,216 cold / 65,536 warm pixels, and RGB
-uses 80,000,000 / 4,000,000. Cold near-lossless requests with fewer than three
+4,000,000, predictor uses 4,000,000 / 1,000,000, near-lossless uses 16,777,216
+cold / 65,536 warm pixels, and RGB uses 80,000,000 / 4,000,000. Cold
+near-lossless requests with fewer than three
 passes stay on the CPU because no safe crossover was measured; an explicit
 near-lossless threshold overrides that conservative gate as well as both
 threshold defaults.
@@ -139,10 +147,12 @@ CMake option. The default strategy uses dynamically sized shared source tiles
 for cross-color search, persistent buffers, stream-ordered copies,
 four-at-a-time hash matching, read-only hash loads, restrict-qualified kernel
 pointers, packed four-byte RGB loads, 128-thread color/hash blocks, and
-256-thread RGB blocks. Page-locked host staging, fused RGB 2x2 work, alternate
-block widths, and stream-ordered allocation remain available for ablation but
-are off by default on the measured RTX 2080 SUPER. Build the non-installed
-`webp_cuda_benchmark`, `webp_cuda_batch_benchmark`, and concurrency runner with
+256-thread RGB blocks. The predictor stage is built but runtime-off pending
+time and compressed-size measurements. Page-locked host staging, fused RGB 2x2
+work, alternate block widths, and stream-ordered allocation remain available
+for ablation but are off by default on the measured RTX 2080 SUPER. Build the
+non-installed `webp_cuda_benchmark`, `webp_cuda_batch_benchmark`, and
+concurrency runner with
 `-DWEBP_BUILD_CUDA_BENCHMARK=ON`; the batch runner supports persistent
 decode/encode batches and an explicit `--force-cuda` experiment flag.
 `scripts/test_cuda_variants.sh` validates both the default and

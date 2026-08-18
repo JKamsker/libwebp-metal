@@ -133,6 +133,8 @@ if(WEBP_ENABLE_CUDA)
          "Build CUDA near-lossless preprocessing." ON)
   option(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS
          "Build CUDA lossy macroblock analysis." ON)
+  option(WEBP_CUDA_ENABLE_PREDICTOR
+         "Build the experimental CUDA lossless predictor stage." ON)
   option(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS
          "Retain CUDA staging allocations across encoder calls." ON)
   option(WEBP_CUDA_ENABLE_PINNED_HOST_MEMORY
@@ -628,7 +630,7 @@ target_include_directories(
 if(WEBP_ENABLE_CUDA)
   foreach(CUDA_OPTION
           COLOR_TRANSFORM COLOR_SHARED_TILE HASH_CHAIN RGB_TO_YUV
-          NEAR_LOSSLESS LOSSY_ANALYSIS PERSISTENT_BUFFERS
+          NEAR_LOSSLESS LOSSY_ANALYSIS PREDICTOR PERSISTENT_BUFFERS
           PINNED_HOST_MEMORY ASYNC_COPIES HASH_MATCH4 RGB_BLOCK_2X2
           COLOR_256_THREAD_BLOCKS HASH_256_THREAD_BLOCKS
           RGB_256_THREAD_BLOCKS READ_ONLY_CACHE RESTRICT_POINTERS

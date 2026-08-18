@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 4u
+#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 5u
 
 // These are deliberately encoder stages, not low-level GPU kernels. A backend
 // advertises only the stages whose complete CPU call-site contract it can
@@ -22,7 +22,8 @@ typedef enum {
   WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN = 1u << 1,
   WEBP_ACCELERATOR_STAGE_RGB_TO_YUV = 1u << 2,
   WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS = 1u << 3,
-  WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS = 1u << 4
+  WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS = 1u << 4,
+  WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR = 1u << 5
 } WebPAcceleratorStage;
 
 // SUCCESS is the only result for which a caller may consume output buffers.
@@ -128,6 +129,23 @@ typedef struct {
   WebPAcceleratorLossyAnalysisResult* results;
 } WebPAcceleratorLossyAnalysisRequest;
 
+typedef struct {
+  int width;
+  int height;
+  int min_bits;
+  int max_bits;
+  int max_quantization;
+  int exact;
+  int used_subtract_green;
+  // Borrowed source and transactional outputs. source and residuals may
+  // alias. mode_image has room for the min_bits tile grid. best_bits is
+  // committed only on SUCCESS.
+  const uint32_t* source;
+  uint32_t* residuals;
+  uint32_t* mode_image;
+  int* best_bits;
+} WebPAcceleratorPredictorRequest;
+
 typedef struct WebPEncoderAccelerator WebPEncoderAccelerator;
 
 struct WebPEncoderAccelerator {
@@ -150,6 +168,8 @@ struct WebPEncoderAccelerator {
   // SUCCESS only when a real request may be attempted under current policy.
   WebPAcceleratorResult (*lossy_analysis)(
       void* context, const WebPAcceleratorLossyAnalysisRequest* request);
+  WebPAcceleratorResult (*predictor)(
+      void* context, const WebPAcceleratorPredictorRequest* request);
 
   // Optional lifecycle hooks. end_encode discards backend-owned handoff state
   // after the current encode has consumed it or stopped early.
@@ -171,6 +191,8 @@ WebPAcceleratorResult WebPAccelerateNearLossless(
     const WebPAcceleratorNearLosslessRequest* request);
 WebPAcceleratorResult WebPAccelerateLossyAnalysis(
     const WebPAcceleratorLossyAnalysisRequest* request);
+WebPAcceleratorResult WebPAcceleratePredictor(
+    const WebPAcceleratorPredictorRequest* request);
 int WebPAcceleratorLossyAnalysisEnabled(void);
 void WebPAcceleratorEndEncode(void);
 

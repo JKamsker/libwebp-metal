@@ -793,6 +793,16 @@ int VP8LResidualImage(int width, int height, int min_bits, int max_bits,
     }
     *best_bits = max_bits;
   } else {
+    const WebPAcceleratorPredictorRequest request = {
+        width,          height,
+        min_bits,       max_bits,
+        max_quantization,
+        exact,          used_subtract_green,
+        argb,           argb,
+        image,          best_bits};
+    if (WebPAcceleratePredictor(&request) == WEBP_ACCELERATOR_SUCCESS) {
+      return WebPReportProgress(pic, percent_start + percent_range, percent);
+    }
     // Allocate data to try all samplings from min_bits to max_bits.
     int bits;
     uint32_t sum_num_pixels = 0u;

@@ -48,11 +48,13 @@ CUDA_ENVIRONMENT_NAMES = (
     "WEBP_CUDA_NEAR_LOSSLESS",
     "WEBP_CUDA_LOSSY_ANALYSIS",
     "WEBP_CUDA_RESIDENT_LOSSLESS",
+    "WEBP_CUDA_PREDICTOR",
     "WEBP_CUDA_MIN_PIXELS",
     "WEBP_CUDA_HASH_MIN_PIXELS",
     "WEBP_CUDA_LOSSY_MIN_PIXELS",
     "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS",
     "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS",
+    "WEBP_CUDA_PREDICTOR_MIN_PIXELS",
     "WEBP_CUDA_BATCH_SIZE",
     "WEBP_CUDA_BATCH_PIXELS",
     "WEBP_CUDA_BATCH_MIN_IMAGES",
@@ -123,11 +125,13 @@ def clean_environment(
                 "WEBP_CUDA_NEAR_LOSSLESS": "1",
                 "WEBP_CUDA_LOSSY_ANALYSIS": "1",
                 "WEBP_CUDA_RESIDENT_LOSSLESS": "1",
+                "WEBP_CUDA_PREDICTOR": "1",
                 "WEBP_CUDA_MIN_PIXELS": "0",
                 "WEBP_CUDA_HASH_MIN_PIXELS": "0",
                 "WEBP_CUDA_LOSSY_MIN_PIXELS": "0",
                 "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS": "0",
                 "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS": "0",
+                "WEBP_CUDA_PREDICTOR_MIN_PIXELS": "0",
             }
         )
     return environment
@@ -486,31 +490,46 @@ def summarize(
     persistent: list[dict[str, Any]], single: list[dict[str, Any]]
 ) -> list[dict[str, Any]]:
     batch_groups: dict[tuple[str, str, str], list[float]] = defaultdict(list)
+    batch_byte_groups: dict[tuple[str, str, str], list[float]] = defaultdict(
+        list
+    )
     for row in persistent:
-        batch_groups[(row["format"], row["mode"], row["variant"])].append(
-            row["ns_per_image"] / 1e6
-        )
+        key = (row["format"], row["mode"], row["variant"])
+        batch_groups[key].append(row["ns_per_image"] / 1e6)
+        batch_byte_groups[key].append(row["output_bytes"] / row["batch_size"])
 
     repetitions: dict[tuple[str, str, str, int], list[float]] = defaultdict(list)
+    byte_repetitions: dict[
+        tuple[str, str, str, int], list[float]
+    ] = defaultdict(list)
     for row in single:
-        repetitions[
-            (row["format"], row["mode"], row["variant"], row["repetition"])
-        ].append(row["elapsed_ns"] / 1e6)
+        key = (row["format"], row["mode"], row["variant"], row["repetition"])
+        repetitions[key].append(row["elapsed_ns"] / 1e6)
+        byte_repetitions[key].append(row["output_bytes"])
     single_groups: dict[tuple[str, str, str], list[float]] = defaultdict(list)
-    for (image_format, mode, variant, _), values in repetitions.items():
-        single_groups[(image_format, mode, variant)].append(
-            sum(values) / len(values)
-        )
+    single_byte_groups: dict[
+        tuple[str, str, str], list[float]
+    ] = defaultdict(list)
+    for key, values in repetitions.items():
+        image_format, mode, variant, _ = key
+        group = (image_format, mode, variant)
+        single_groups[group].append(sum(values) / len(values))
+        byte_values = byte_repetitions[key]
+        single_byte_groups[group].append(sum(byte_values) / len(byte_values))
 
     summary = []
     for image_format in FORMATS:
         for mode in MODES:
-            for lifecycle, groups in (
-                ("batch", batch_groups),
-                ("single", single_groups),
+            for lifecycle, groups, byte_groups in (
+                ("batch", batch_groups, batch_byte_groups),
+                ("single", single_groups, single_byte_groups),
             ):
-                cpu_ms = statistics.median(groups[(image_format, mode, "cpu")])
-                cuda_ms = statistics.median(groups[(image_format, mode, "cuda")])
+                cpu_key = (image_format, mode, "cpu")
+                cuda_key = (image_format, mode, "cuda")
+                cpu_ms = statistics.median(groups[cpu_key])
+                cuda_ms = statistics.median(groups[cuda_key])
+                cpu_bytes = statistics.median(byte_groups[cpu_key])
+                cuda_bytes = statistics.median(byte_groups[cuda_key])
                 summary.append(
                     {
                         "format": image_format,
@@ -519,6 +538,9 @@ def summarize(
                         "cpu_ms_per_image": cpu_ms,
                         "cuda_ms_per_image": cuda_ms,
                         "speedup": cpu_ms / cuda_ms,
+                        "cpu_bytes_per_image": cpu_bytes,
+                        "cuda_bytes_per_image": cuda_bytes,
+                        "cuda_size_ratio": cuda_bytes / cpu_bytes,
                     }
                 )
     return summary
@@ -764,6 +786,9 @@ def run_suite(args: argparse.Namespace) -> int:
             ),
             "cuda_lossless_handoff": (
                 "forced transformed-pixel reuse from color to main hash"
+            ),
+            "cuda_predictor": (
+                "forced parallel 14-mode tile selector and exact residuals"
             ),
             "validation_policy": {
                 "lossy": "encoded_bytes",

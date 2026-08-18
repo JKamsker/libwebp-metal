@@ -14,11 +14,13 @@ typedef struct {
   WebPAcceleratorResult rgb_result;
   WebPAcceleratorResult near_lossless_result;
   WebPAcceleratorResult lossy_analysis_result;
+  WebPAcceleratorResult predictor_result;
   int color_calls;
   int hash_calls;
   int rgb_calls;
   int near_lossless_calls;
   int lossy_analysis_calls;
+  int predictor_calls;
   int end_encode_calls;
 } FakeContext;
 
@@ -104,6 +106,25 @@ static WebPAcceleratorResult FakeLossyAnalysis(
   return context->lossy_analysis_result;
 }
 
+static WebPAcceleratorResult FakePredictor(
+    void* opaque, const WebPAcceleratorPredictorRequest* request) {
+  FakeContext* const context = (FakeContext*)opaque;
+  ++context->predictor_calls;
+  assert(request->width == 2);
+  assert(request->height == 1);
+  assert(request->min_bits == 2);
+  assert(request->max_bits == 5);
+  assert(request->max_quantization == 1);
+  assert(request->exact == 1);
+  assert(request->used_subtract_green == 0);
+  if (context->predictor_result == WEBP_ACCELERATOR_SUCCESS) {
+    request->residuals[0] = 47u;
+    request->mode_image[0] = 0xff000b00u;
+    *request->best_bits = 5;
+  }
+  return context->predictor_result;
+}
+
 static WebPEncoderAccelerator MakeBackend(FakeContext* context) {
   WebPEncoderAccelerator backend;
   memset(&backend, 0, sizeof(backend));
@@ -114,7 +135,8 @@ static WebPEncoderAccelerator MakeBackend(FakeContext* context) {
                    WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN |
                    WEBP_ACCELERATOR_STAGE_RGB_TO_YUV |
                    WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS |
-                   WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS;
+                   WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS |
+                   WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR;
   backend.properties = WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS |
                        WEBP_ACCELERATOR_PROPERTY_TRANSACTIONAL_OUTPUT |
                        WEBP_ACCELERATOR_PROPERTY_DETERMINISTIC;
@@ -124,6 +146,7 @@ static WebPEncoderAccelerator MakeBackend(FakeContext* context) {
   backend.rgb_to_yuv = FakeRGBToYUV;
   backend.near_lossless = FakeNearLossless;
   backend.lossy_analysis = FakeLossyAnalysis;
+  backend.predictor = FakePredictor;
   backend.end_encode = FakeEndEncode;
   return backend;
 }
@@ -153,12 +176,19 @@ int main(void) {
   WebPAcceleratorLossyAnalysisResult analysis_result = {0};
   const WebPAcceleratorLossyAnalysisRequest lossy_analysis_request = {
       y, u, v, 5, 3, 2, 2, 4, 75, &analysis_result};
+  uint32_t predictor_source[2] = {11u, 12u};
+  uint32_t predictor_modes[1] = {13u};
+  int predictor_bits = 0;
+  const WebPAcceleratorPredictorRequest predictor_request = {
+      2, 1, 2, 5, 1, 1, 0, predictor_source, predictor_source,
+      predictor_modes, &predictor_bits};
 
   memset(&context, 0, sizeof(context));
   context.hash_result = WEBP_ACCELERATOR_SUCCESS;
   context.rgb_result = WEBP_ACCELERATOR_SUCCESS;
   context.near_lossless_result = WEBP_ACCELERATOR_SUCCESS;
   context.lossy_analysis_result = WEBP_ACCELERATOR_SUCCESS;
+  context.predictor_result = WEBP_ACCELERATOR_SUCCESS;
   backend = MakeBackend(&context);
   if (getenv("WEBP_ACCELERATOR") != NULL &&
       strcmp(getenv("WEBP_ACCELERATOR"), "none") == 0) {
@@ -226,11 +256,19 @@ int main(void) {
   assert(analysis_result.alpha == 46u);
   assert(WebPAcceleratorLossyAnalysisEnabled());
 
+  assert(WebPAcceleratePredictor(&predictor_request) ==
+         WEBP_ACCELERATOR_SUCCESS);
+  assert(context.predictor_calls == 1);
+  assert(predictor_source[0] == 47u);
+  assert(predictor_modes[0] == 0xff000b00u);
+  assert(predictor_bits == 5);
+
   assert(WebPAccelerateColorTransform(NULL) == WEBP_ACCELERATOR_NOT_RUN);
   assert(WebPAccelerateHashChain(NULL) == WEBP_ACCELERATOR_NOT_RUN);
   assert(WebPAccelerateRGBToYUV(NULL) == WEBP_ACCELERATOR_NOT_RUN);
   assert(WebPAccelerateNearLossless(NULL) == WEBP_ACCELERATOR_NOT_RUN);
   assert(WebPAccelerateLossyAnalysis(NULL) == WEBP_ACCELERATOR_NOT_RUN);
+  assert(WebPAcceleratePredictor(NULL) == WEBP_ACCELERATOR_NOT_RUN);
 
   backend.properties = WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS;
   assert(!WebPSetEncoderAcceleratorForTesting(&backend));

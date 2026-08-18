@@ -10,6 +10,7 @@ trap 'rm -rf "$temporary_dir"' EXIT HUP INT TERM
 cuda_log="$temporary_dir/cuda.log"
 cold_log="$temporary_dir/cold.log"
 lossy_default_log="$temporary_dir/lossy-default.log"
+predictor_default_log="$temporary_dir/predictor-default.log"
 
 if [ ! -x "$encoder" ] || [ ! -x "$decoder" ]; then
   echo "cwebp and dwebp not found in $binary_dir" >&2
@@ -48,6 +49,18 @@ if grep -q "WebP-CUDA: lossy analysis" "$lossy_default_log"; then
   exit 1
 fi
 
+# Predictor selection changes the lossless compression policy and remains
+# independently opt-in even when its size threshold is forced to zero.
+WEBP_ACCELERATOR=cuda WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 \
+  WEBP_CUDA_COLOR=0 WEBP_CUDA_HASH=0 WEBP_CUDA_VERBOSE=1 \
+  "$encoder" -quiet -lossless -exact -m 4 "$root_dir/examples/test_ref.ppm" \
+  -o "$temporary_dir/predictor-default.webp" 2>>"$predictor_default_log"
+cmp "$temporary_dir/cold-cpu.webp" "$temporary_dir/predictor-default.webp"
+if grep -q "WebP-CUDA: predictor selected" "$predictor_default_log"; then
+  echo "CUDA predictor ran without the WEBP_CUDA_PREDICTOR opt-in" >&2
+  exit 1
+fi
+
 for input do
   name=$(basename -- "$input")
 
@@ -57,10 +70,14 @@ for input do
 
   WEBP_ACCELERATOR=cuda WEBP_CUDA_MIN_PIXELS=0 \
     WEBP_CUDA_HASH_MIN_PIXELS=0 \
-    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_VERBOSE=1 \
+    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_PREDICTOR=1 \
+    WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 WEBP_CUDA_VERBOSE=1 \
     "$encoder" -quiet -lossless -exact -m 4 "$input" \
     -o "$temporary_dir/$name-cuda-1.webp" 2>>"$cuda_log"
   WEBP_ACCELERATOR=cuda WEBP_CUDA_MIN_PIXELS=0 \
+    WEBP_CUDA_HASH_MIN_PIXELS=0 \
+    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_PREDICTOR=1 \
+    WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 \
     "$encoder" -quiet -lossless -exact -m 4 "$input" \
     -o "$temporary_dir/$name-cuda-2.webp"
   cmp "$temporary_dir/$name-cuda-1.webp" \
@@ -120,6 +137,26 @@ for input do
         "$temporary_dir/$name-color-cuda.pam"
   done
 
+  # The parallel predictor deliberately uses a different selection policy,
+  # but its exact residuals must decode to the original pixels at every
+  # non-low-effort method.
+  for method in 1 2 3 4 5 6; do
+    WEBP_ACCELERATOR=none \
+      "$encoder" -quiet -lossless -exact -m "$method" "$input" \
+      -o "$temporary_dir/$name-predictor-cpu.webp"
+    WEBP_ACCELERATOR=cuda WEBP_CUDA_PREDICTOR=1 \
+      WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 WEBP_CUDA_COLOR=0 WEBP_CUDA_HASH=0 \
+      WEBP_CUDA_VERBOSE=1 \
+      "$encoder" -quiet -lossless -exact -m "$method" "$input" \
+      -o "$temporary_dir/$name-predictor-cuda.webp" 2>>"$cuda_log"
+    "$decoder" -quiet "$temporary_dir/$name-predictor-cpu.webp" -pam \
+      -o "$temporary_dir/$name-predictor-cpu.pam"
+    "$decoder" -quiet "$temporary_dir/$name-predictor-cuda.webp" -pam \
+      -o "$temporary_dir/$name-predictor-cuda.pam"
+    cmp "$temporary_dir/$name-predictor-cpu.pam" \
+        "$temporary_dir/$name-predictor-cuda.pam"
+  done
+
   # The opaque regular RGB/BGR conversion also promises the exact CPU stream.
   for settings in "25 0" "75 4" "95 6"; do
     set -- $settings
@@ -160,11 +197,16 @@ grep -q "WebP-CUDA: hash candidates" "$cuda_log"
 if [ "${WEBP_EXPECT_CUDA_RESIDENT_LOSSLESS:-1}" -ne 0 ]; then
   grep -q "WebP-CUDA: hash candidates.*resident pixels" "$cuda_log"
 fi
+if [ "${WEBP_EXPECT_CUDA_PREDICTOR:-1}" -ne 0 ]; then
+  grep -q "WebP-CUDA: predictor selected" "$cuda_log"
+  grep -q "WebP-CUDA: transformed.*resident input" "$cuda_log"
+fi
 grep -q "WebP-CUDA: lossy RGB->YUV" "$cuda_log"
 grep -q "WebP-CUDA: lossy analysis" "$cuda_log"
 if grep -q "WebP-CUDA: using" "$cold_log"; then
   echo "small default encode initialized CUDA before its cold threshold" >&2
   exit 1
 fi
-printf 'PASS: observed forced color/hash/resident-lossless/RGB/lossy-analysis/near-lossless CUDA stages\n'
+printf 'PASS: observed forced predictor/color/hash/resident-lossless/RGB/lossy-analysis/near-lossless CUDA stages\n'
 printf 'PASS: lossy CUDA remains opt-in by default\n'
+printf 'PASS: predictor-policy CUDA remains opt-in by default\n'

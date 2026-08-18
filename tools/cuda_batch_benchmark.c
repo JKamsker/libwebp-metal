@@ -181,6 +181,8 @@ static void ConfigureDispatch(const Options* const options,
     setenv("WEBP_CUDA_LOSSY_ANALYSIS", "1", 1);
     setenv("WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS", "0", 1);
     setenv("WEBP_CUDA_RESIDENT_LOSSLESS", "1", 1);
+    setenv("WEBP_CUDA_PREDICTOR", "1", 1);
+    setenv("WEBP_CUDA_PREDICTOR_MIN_PIXELS", "0", 1);
   } else {
     unsetenv("WEBP_CUDA_LOSSY");
     unsetenv("WEBP_CUDA_MIN_PIXELS");
@@ -190,6 +192,8 @@ static void ConfigureDispatch(const Options* const options,
     unsetenv("WEBP_CUDA_LOSSY_ANALYSIS");
     unsetenv("WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS");
     unsetenv("WEBP_CUDA_RESIDENT_LOSSLESS");
+    unsetenv("WEBP_CUDA_PREDICTOR");
+    unsetenv("WEBP_CUDA_PREDICTOR_MIN_PIXELS");
   }
   if (options->batch_aware) {
     snprintf(batch_size, sizeof(batch_size), "%d", options->batch_size);
@@ -203,18 +207,21 @@ static void ConfigureDispatch(const Options* const options,
   }
 }
 
-static uint32_t RequiredCUDAStages(EncodeMode mode) {
-  if (mode == MODE_LOSSY) {
+static uint32_t RequiredCUDAStages(const Options* options) {
+  if (options->mode == MODE_LOSSY) {
     return WEBP_ACCELERATOR_STAGE_RGB_TO_YUV |
            WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS;
   }
-  if (mode == MODE_NEAR_LOSSLESS) {
+  if (options->mode == MODE_NEAR_LOSSLESS) {
     return WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS |
            WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM |
            WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN;
   }
   return WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM |
-         WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN;
+         WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN |
+         (!options->force_cuda || options->method == 0
+              ? 0u
+              : WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR);
 }
 
 static int LoadInputs(Options* const options) {
@@ -345,8 +352,8 @@ static int Verify(const Options* const options) {
       WebPMemoryWriterClear(&cpu);
       return 0;
     }
-    if ((WebPCUDAGetSuccessfulStages() & RequiredCUDAStages(options->mode)) !=
-        RequiredCUDAStages(options->mode)) {
+    if ((WebPCUDAGetSuccessfulStages() & RequiredCUDAStages(options)) !=
+        RequiredCUDAStages(options)) {
       fprintf(stderr, "CUDA stage fallback during verification for %s\n",
               options->inputs[i].filename);
       WebPMemoryWriterClear(&cpu);

@@ -28,6 +28,7 @@ typedef struct {
   int method;
   int near_lossless_quality;
   int near_lossless_quality_set;
+  int alpha;
   int verify_only;
   int warmups;
   int samples;
@@ -39,6 +40,7 @@ static void Usage(const char* program) {
           "Usage: %s --operation color|hash|near-lossless|lossless|lossy "
           "--variant cpu|cuda --width N --height N --method 0..6 "
           "[--quality 0..99 (near-lossless only)] "
+          "[--alpha (lossless only)] "
           "[--warmups N] [--samples N] [--seed N] [--verify-only]\n",
           program);
 }
@@ -69,6 +71,10 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
     const char* value;
     if (!strcmp(flag, "--verify-only")) {
       options->verify_only = 1;
+      continue;
+    }
+    if (!strcmp(flag, "--alpha")) {
+      options->alpha = 1;
       continue;
     }
     value = i + 1 < argc ? argv[++i] : NULL;
@@ -118,6 +124,7 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
   }
   return options->operation_name != NULL && options->variant != NULL &&
          options->width > 0 && options->height > 0 &&
+         (!options->alpha || options->operation == OP_LOSSLESS) &&
          (!options->near_lossless_quality_set ||
           options->operation == OP_NEAR_LOSSLESS);
 }
@@ -142,7 +149,11 @@ static void GenerateRGBA(const Options* options, uint8_t* rgba) {
       rgba[offset + 0] = (uint8_t)((x * 5 + y * 3 + noise % 17u) & 255);
       rgba[offset + 1] = (uint8_t)((x * 2 + y * 7 + (noise >> 8) % 23u) & 255);
       rgba[offset + 2] = (uint8_t)((x + y * 11 + (noise >> 16) % 29u) & 255);
-      rgba[offset + 3] = 255u;
+      rgba[offset + 3] = options->alpha
+                             ? (uint8_t)((x * 13 + y * 17 +
+                                          (noise >> 24)) &
+                                         255)
+                             : 255u;
     }
   }
 }
@@ -186,11 +197,14 @@ static void ConfigureDispatch(const Options* options) {
          cuda && options->operation == OP_LOSSY ? "1" : "0", 1);
   setenv("WEBP_CUDA_RESIDENT_LOSSLESS",
          cuda && options->operation == OP_LOSSLESS ? "1" : "0", 1);
+  setenv("WEBP_CUDA_PREDICTOR",
+         cuda && options->operation == OP_LOSSLESS ? "1" : "0", 1);
   setenv("WEBP_CUDA_MIN_PIXELS", "0", 1);
   setenv("WEBP_CUDA_HASH_MIN_PIXELS", "0", 1);
   setenv("WEBP_CUDA_LOSSY_MIN_PIXELS", "0", 1);
   setenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "0", 1);
   setenv("WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS", "0", 1);
+  setenv("WEBP_CUDA_PREDICTOR_MIN_PIXELS", "0", 1);
 }
 
 static int Encode(const Options* options, const uint8_t* rgba,
@@ -278,8 +292,8 @@ static int RunOperation(const Options* options, const uint8_t* rgba,
   return Encode(options, rgba, elapsed_ns, output_hash, output_size);
 }
 
-static uint32_t RequiredCUDAStages(Operation operation) {
-  switch (operation) {
+static uint32_t RequiredCUDAStages(const Options* options) {
+  switch (options->operation) {
     case OP_COLOR:
       return WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM;
     case OP_HASH:
@@ -288,7 +302,10 @@ static uint32_t RequiredCUDAStages(Operation operation) {
       return WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS;
     case OP_LOSSLESS:
       return WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM |
-             WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN;
+             WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN |
+             (options->method == 0
+                  ? 0u
+                  : WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR);
     case OP_LOSSY:
       return WEBP_ACCELERATOR_STAGE_RGB_TO_YUV |
              WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS;
@@ -323,7 +340,7 @@ int main(int argc, const char* const argv[]) {
   if (!strcmp(options.variant, "cuda")) {
     uint64_t elapsed_ns, output_hash;
     size_t output_size;
-    const uint32_t required = RequiredCUDAStages(options.operation);
+    const uint32_t required = RequiredCUDAStages(&options);
     uint32_t observed;
     WebPCUDAResetSuccessfulStages();
     if (!RunOperation(&options, rgba, &elapsed_ns, &output_hash,
@@ -379,12 +396,13 @@ int main(int argc, const char* const argv[]) {
       return 1;
     }
     printf("{\"operation\":\"%s\",\"variant\":\"%s\","
-           "\"width\":%d,\"height\":%d,\"method\":%d,"
+           "\"width\":%d,\"height\":%d,\"method\":%d,\"alpha\":%s,"
            "\"encoder_quality\":75,\"near_lossless_quality\":%s,"
            "\"sequence\":%d,\"elapsed_ns\":%" PRIu64 ","
            "\"output_hash\":\"%016" PRIx64 "\",\"output_size\":%zu}\n",
            options.operation_name, options.variant, options.width,
-           options.height, options.method, near_lossless_quality,
+           options.height, options.method, options.alpha ? "true" : "false",
+           near_lossless_quality,
            sequence, elapsed_ns, output_hash, output_size);
   }
   free(rgba);
