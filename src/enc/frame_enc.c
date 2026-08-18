@@ -1225,6 +1225,7 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
     int cnt = max_count;
     AcceleratedDecimatePass accel_pass;
     int accelerated;
+    int skip_recon;
     // The final number of passes is not trivial to know in advance.
     const int pass_progress = remaining_progress / (2 + num_pass_left);
     remaining_progress -= pass_progress;
@@ -1244,6 +1245,12 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
       accelerated = TryAcceleratedDecimate(enc, &accel_pass);
       WebPProfileStageEnd(WEBP_PROFILE_LOSSY_DECIMATE, accel_start);
     }
+    // While the pass is accelerated and nothing consumes the per-MB
+    // reconstruction (no filter stats, no show_compressed export), the
+    // replay skips the yuv_out copies and the boundary saves; a CPU
+    // fallback rebuilds the top-row samples from the collected planes.
+    skip_recon = accelerated && enc->lf_stats == NULL &&
+                 !enc->config->show_compressed && enc->pic->stats == NULL;
     do {
       VP8ModeScore info;
       {
@@ -1276,6 +1283,26 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
             memcpy(enc->nz, accel_pass.record_nz,
                    (size_t)enc->mb_w * sizeof(*enc->nz));
           }
+          if (skip_recon && it.y > 0) {
+            // The replay skipped the per-MB reconstruction copies and the
+            // boundary saves; rebuild the top-row samples the CPU search
+            // reads from the collected reconstruction planes.
+            const uint8_t* const ry =
+                accel_pass.recon_y +
+                ((size_t)it.y * 16 - 1) * accel_pass.recon_y_stride;
+            const uint8_t* const ru =
+                accel_pass.recon_u +
+                ((size_t)it.y * 8 - 1) * accel_pass.recon_uv_stride;
+            const uint8_t* const rv =
+                accel_pass.recon_v +
+                ((size_t)it.y * 8 - 1) * accel_pass.recon_uv_stride;
+            int mx;
+            memcpy(enc->y_top, ry, (size_t)enc->mb_w * 16);
+            for (mx = 0; mx < enc->mb_w; ++mx) {
+              memcpy(enc->uv_top + mx * 16, ru + mx * 8, 8);
+              memcpy(enc->uv_top + mx * 16 + 8, rv + mx * 8, 8);
+            }
+          }
           accelerated = 0;
         }
         if (accelerated) {
@@ -1283,7 +1310,8 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
                             &accel_pass.results[it.y * enc->mb_w + it.x],
                             accel_pass.recon_y, accel_pass.recon_u,
                             accel_pass.recon_v, accel_pass.recon_y_stride,
-                            accel_pass.recon_uv_stride);
+                            accel_pass.recon_uv_stride,
+                            !accel_pass.record_pipeline, !skip_recon);
         } else {
           VP8Decimate(&it, &info, rd_opt);
         }
@@ -1317,7 +1345,7 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
         ok = VP8IteratorProgress(&it, pass_progress);
         WebPProfileStageEnd(WEBP_PROFILE_LOSSY_SIDE_INFO, side_start);
       }
-      {
+      if (!(accelerated && skip_recon)) {
         const uint64_t boundary_start =
             WebPProfileStageBegin(WEBP_PROFILE_LOSSY_SAVE_BOUNDARY);
         VP8IteratorSaveBoundary(&it);

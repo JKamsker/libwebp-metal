@@ -488,7 +488,8 @@ int VP8ReplayDecimate(VP8EncIterator* WEBP_RESTRICT const it,
                       const uint8_t* WEBP_RESTRICT const recon_y,
                       const uint8_t* WEBP_RESTRICT const recon_u,
                       const uint8_t* WEBP_RESTRICT const recon_v,
-                      int recon_y_stride, int recon_uv_stride);
+                      int recon_y_stride, int recon_uv_stride,
+                      int copy_levels, int copy_recon);
 
 // in alpha.c
 void VP8EncInitAlpha(VP8Encoder* const enc);   // initialize alpha compression
