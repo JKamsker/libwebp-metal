@@ -584,6 +584,25 @@ __device__ void CudaIntra4Preds(uint8_t* dst, const uint8_t* top) {
   CudaHU4(kCudaI4HU4 + dst, top);
 }
 
+// Single-mode variant so one lane per mode can build its own prediction.
+// The mode index matches kCudaVP8I4ModeOffsets / the B_*_PRED order.
+__device__ void CudaIntra4PredMode(uint8_t* dst, const uint8_t* top,
+                                   int mode) {
+  switch (mode) {
+    case 0: CudaDC4(kCudaI4DC4 + dst, top); break;
+    case 1: CudaTM4(kCudaI4TM4 + dst, top); break;
+    case 2: CudaVE4(kCudaI4VE4 + dst, top); break;
+    case 3: CudaHE4(kCudaI4HE4 + dst, top); break;
+    case 4: CudaRD4(kCudaI4RD4 + dst, top); break;
+    case 5: CudaVR4(kCudaI4VR4 + dst, top); break;
+    case 6: CudaLD4(kCudaI4LD4 + dst, top); break;
+    case 7: CudaVL4(kCudaI4VL4 + dst, top); break;
+    case 8: CudaHD4(kCudaI4HD4 + dst, top); break;
+    case 9: CudaHU4(kCudaI4HU4 + dst, top); break;
+    default: break;
+  }
+}
+
 //------------------------------------------------------------------------------
 // Metrics (SSE*_C and Disto*_C ports).
 

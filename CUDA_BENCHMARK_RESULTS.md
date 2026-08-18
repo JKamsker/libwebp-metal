@@ -164,17 +164,17 @@ lossless batch recorded 16 observed resident handoffs (texture and graphic
 inputs skip the donating cross-color transform, so a handoff per image is
 not expected on this corpus).
 
-| Method | baseline | + guided predictor | + exact-NL predictor | + GPU decimate | + tuning | + band streaming | + token partitions | + pipelined recording |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|
-| PNG lossy — batch | 0.95x | 1.01x | 1.03x | 2.00x | 2.60x | 2.91x | 3.28x | 3.46x |
-| JPEG lossy — batch | 0.96x | 1.02x | 1.03x | 1.94x | 2.45x | 2.77x | 2.99x | 3.20x |
-| PNG lossy — single | 0.57x | 0.61x | 0.79x | 0.79x | 0.90x | 0.96x | 0.93x | 0.95x |
-| PNG lossless — batch | 1.37x | 1.99x | 1.81x | 1.79x | 1.65x | 1.83x | 1.74x | 1.76x |
-| JPEG lossless — batch | 1.20x | 4.87x | 4.95x | 4.85x | 5.15x | 5.13x | 5.06x | 4.95x |
-| JPEG lossless — single | 0.88x | 2.76x | 2.66x | 2.88x | 2.84x | 2.76x | 2.71x | 2.67x |
-| PNG near-lossless — batch | 1.21x | 1.18x | 2.55x | 2.61x | 2.61x | 2.88x | 2.60x | 2.68x |
-| JPEG near-lossless — batch | 1.13x | 1.10x | 5.58x | 5.60x | 6.01x | 5.63x | 5.58x | 5.47x |
-| JPEG near-lossless — single | 0.93x | 0.96x | 2.99x | 3.16x | 3.09x | 3.23x | 3.14x | 3.10x |
+| Method | baseline | + guided predictor | + exact-NL predictor | + GPU decimate | + tuning | + band streaming | + token partitions | + pipelined recording | + kernel parallelization |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| PNG lossy — batch | 0.95x | 1.01x | 1.03x | 2.00x | 2.60x | 2.91x | 3.28x | 3.46x | 3.70x |
+| JPEG lossy — batch | 0.96x | 1.02x | 1.03x | 1.94x | 2.45x | 2.77x | 2.99x | 3.20x | 3.35x |
+| PNG lossy — single | 0.57x | 0.61x | 0.79x | 0.79x | 0.90x | 0.96x | 0.93x | 0.95x | 0.98x |
+| PNG lossless — batch | 1.37x | 1.99x | 1.81x | 1.79x | 1.65x | 1.83x | 1.74x | 1.76x | 1.87x |
+| JPEG lossless — batch | 1.20x | 4.87x | 4.95x | 4.85x | 5.15x | 5.13x | 5.06x | 4.95x | 4.80x |
+| JPEG lossless — single | 0.88x | 2.76x | 2.66x | 2.88x | 2.84x | 2.76x | 2.71x | 2.67x | 2.74x |
+| PNG near-lossless — batch | 1.21x | 1.18x | 2.55x | 2.61x | 2.61x | 2.88x | 2.60x | 2.68x | 2.55x |
+| JPEG near-lossless — batch | 1.13x | 1.10x | 5.58x | 5.60x | 6.01x | 5.63x | 5.58x | 5.47x | 5.55x |
+| JPEG near-lossless — single | 0.93x | 0.96x | 2.99x | 3.16x | 3.09x | 3.23x | 3.14x | 3.10x | 3.22x |
 
 Absolute CUDA times are the stable signal across runs; the CPU baseline
 varied by up to 8% between suite executions and moves the ratios. The
@@ -239,8 +239,28 @@ batches went 46.9 → 45.9 ms/image PNG (3.46x) and 53.0 → 51.0 ms/image
 JPEG (3.20x). `WEBP_TOKEN_RECORD_PIPELINE=0` records inline instead; the
 bytes are identical either way.
 
+The kernel-parallelization column attacks the device wall itself: an
+event-timed measurement put the wavefront at ~36 ms for a 100x75-MB image
+(~145 us per anti-diagonal — the per-macroblock block latency, since a
+diagonal's blocks run concurrently), making the GPU, not the CPU, the
+batch floor. This round parallelizes the source import across the block
+(one thread per destination byte instead of one thread total), runs the
+winner level/reconstruction copies of the intra16, intra4, and chroma
+selections across all threads, distributes the ten intra4 mode
+predictions over the four warp leaders, and computes the three
+independent intra4 metrics (residual cost, SSE + flatness, texture
+distortion) on separate warps — divergent branches inside one warp
+serialize, so extra parallelism must be warp-aligned. GPU wall:
+36.2 -> ~30.5 ms; lossy batches 45.9 -> 43.7 ms/image PNG (3.70x) and
+51.0 -> 50.0 ms/image JPEG (3.35x). Two negative results are recorded:
+a shared-memory copy of the residual-cost tables measured neutral (the
+serial walks are dependency-bound, and the tables stay L1-resident), and
+defaulting `thread_level=1` (threaded analysis) measured neutral on
+batches and was reverted. `WEBP_CUDA_DECIMATE_TIMING=1` prints each
+pass's device wall time; `=2` adds a per-phase cycle breakdown.
+
 Raw result sets:
-`libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl,-decimate,-tuned,-stream,-parts,-recpipe}`
+`libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl,-decimate,-tuned,-stream,-parts,-recpipe,-kernel}`
 under the operator's temp directory, comparable through the `report`
 subcommand.
 

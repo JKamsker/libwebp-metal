@@ -146,35 +146,49 @@ struct DeviceView {
   uint8_t* preds;                  // (4*mb_w+1) x (4*mb_h+1) with boundary
   int8_t* top_derr;                // per MB column: [mb_w][2][2]
   DeviceResult* results;
+  // Diagnostic (WEBP_CUDA_DECIMATE_TIMING=2): per-phase cycle accumulators
+  // [import, i16-numeric, i16-select, i4, uv-numeric, uv-select+assembly,
+  // recon-write]. nullptr in normal operation.
+  unsigned long long* phase_cycles;
 };
 
 // ---------------------------------------------------------------------------
 // Cost model (bit-exact ports from cost_enc.c / dsp/cost.c).
 
-__device__ __forceinline__ int BitCostDev(const StaticCostTables* t, int bit,
+// Pointers to the hot cost tables the serial residual-cost walks chase.
+// The kernel points these at shared-memory copies so the walks' dependent
+// loads hit shared latency instead of global.
+struct CostCache {
+  const uint16_t* level_costs;   // [4][8][3][68]
+  const uint8_t* probas;         // [4][8][3][11]
+  const uint16_t* entropy_cost;  // [256]
+  const uint16_t* level_fixed;   // [2048]
+};
+
+__device__ __forceinline__ int BitCostDev(const CostCache* c, int bit,
                                           uint8_t proba) {
-  return !bit ? t->entropy_cost[proba] : t->entropy_cost[255 - proba];
+  return !bit ? c->entropy_cost[proba] : c->entropy_cost[255 - proba];
 }
 
-__device__ __forceinline__ int LevelCostDev(const StaticCostTables* t,
+__device__ __forceinline__ int LevelCostDev(const CostCache* c,
                                             const uint16_t* table, int level) {
-  return t->level_fixed_costs[level] +
+  return c->level_fixed[level] +
          table[(level > kMaxVariableLevel) ? kMaxVariableLevel : level];
 }
 
 // level_costs layout: [type][band][ctx][68]; probas layout: [type][band][ctx][11].
 __device__ __forceinline__ const uint16_t* LevelCostTable(
-    const DeviceView* v, int type, int band, int ctx) {
-  return v->level_costs + (((type * 8) + band) * 3 + ctx) * 68;
+    const CostCache* c, int type, int band, int ctx) {
+  return c->level_costs + (((type * 8) + band) * 3 + ctx) * 68;
 }
 
-__device__ __forceinline__ uint8_t FirstProba(const DeviceView* v, int type,
+__device__ __forceinline__ uint8_t FirstProba(const CostCache* c, int type,
                                               int band, int ctx) {
-  return v->coeff_probas[(((type * 8) + band) * 3 + ctx) * 11];
+  return c->probas[(((type * 8) + band) * 3 + ctx) * 11];
 }
 
 // GetResidualCost_C for one 16-coefficient block. 'first' is 0 or 1.
-__device__ int ResidualCostDev(const DeviceView* v, int ctx0, int first,
+__device__ int ResidualCostDev(const CostCache* c, int ctx0, int first,
                                int coeff_type, const int16_t* coeffs) {
   int last = -1;
   for (int n = 15; n >= 0; --n) {
@@ -184,26 +198,26 @@ __device__ int ResidualCostDev(const DeviceView* v, int ctx0, int first,
     }
   }
   int n = first;
-  const int p0 = FirstProba(v, coeff_type, kEncBands[n], ctx0);
-  const uint16_t* t = LevelCostTable(v, coeff_type, kEncBands[n], ctx0);
-  int cost = (ctx0 == 0) ? BitCostDev(v->tables, 1, p0) : 0;
+  const int p0 = FirstProba(c, coeff_type, kEncBands[n], ctx0);
+  const uint16_t* t = LevelCostTable(c, coeff_type, kEncBands[n], ctx0);
+  int cost = (ctx0 == 0) ? BitCostDev(c, 1, p0) : 0;
   if (last < 0) {
-    return BitCostDev(v->tables, 0, p0);
+    return BitCostDev(c, 0, p0);
   }
   for (; n < last; ++n) {
     const int val = abs(coeffs[n]);
     const int ctx = (val >= 2) ? 2 : val;
-    cost += LevelCostDev(v->tables, t, val);
-    t = LevelCostTable(v, coeff_type, kEncBands[n + 1], ctx);
+    cost += LevelCostDev(c, t, val);
+    t = LevelCostTable(c, coeff_type, kEncBands[n + 1], ctx);
   }
   {
     const int val = abs(coeffs[n]);
-    cost += LevelCostDev(v->tables, t, val);
+    cost += LevelCostDev(c, t, val);
     if (n < 15) {
       const int b = kEncBands[n + 1];
       const int ctx = (val == 1) ? 1 : 2;
-      const int last_p0 = FirstProba(v, coeff_type, b, ctx);
-      cost += BitCostDev(v->tables, 0, last_p0);
+      const int last_p0 = FirstProba(c, coeff_type, b, ctx);
+      cost += BitCostDev(c, 0, last_p0);
     }
   }
   return cost;
@@ -387,6 +401,36 @@ __device__ void ImportMB(const DeviceView* v, const DecimateKernelParams* p,
                     8);
   ImportSourceBlock(vsrc, p->uv_stride, w->yuv_in + kCudaVOffEnc, uv_w, uv_h,
                     8);
+}
+
+// Thread-parallel ImportMB. The replicate-last-column-then-last-row rule is
+// the pure function dst(r, c) = src(min(r, h-1), min(c, w-1)), so every
+// destination element is independent.
+__device__ void ImportMBParallel(const DeviceView* v,
+                                 const DecimateKernelParams* p, int x, int y,
+                                 MBWork* w, int tid, int nthreads) {
+  const uint8_t* const ysrc = v->src_y + ((size_t)y * p->y_stride + x) * 16;
+  const uint8_t* const usrc = v->src_u + ((size_t)y * p->uv_stride + x) * 8;
+  const uint8_t* const vsrc = v->src_v + ((size_t)y * p->uv_stride + x) * 8;
+  const int iw = min((int)p->width - x * 16, 16);
+  const int ih = min((int)p->height - y * 16, 16);
+  const int uv_w = (iw + 1) >> 1;
+  const int uv_h = (ih + 1) >> 1;
+  for (int i = tid; i < 16 * 16 + 2 * 8 * 8; i += nthreads) {
+    if (i < 256) {
+      const int r = i >> 4, c = i & 15;
+      w->yuv_in[kCudaYOffEnc + r * kCudaBPS + c] =
+          ysrc[(size_t)min(r, ih - 1) * p->y_stride + min(c, iw - 1)];
+    } else if (i < 320) {
+      const int b = i - 256, r = b >> 3, c = b & 7;
+      w->yuv_in[kCudaUOffEnc + r * kCudaBPS + c] =
+          usrc[(size_t)min(r, uv_h - 1) * p->uv_stride + min(c, uv_w - 1)];
+    } else {
+      const int b = i - 320, r = b >> 3, c = b & 7;
+      w->yuv_in[kCudaVOffEnc + r * kCudaBPS + c] =
+          vsrc[(size_t)min(r, uv_h - 1) * p->uv_stride + min(c, uv_w - 1)];
+    }
+  }
 }
 
 // Rebuild the iterator's left/top borders from the reconstructed planes with
@@ -584,16 +628,27 @@ __device__ void LoadDiffusionErrors(const DeviceView* v,
 __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
     DeviceView v, DecimateKernelParams p, uint8_t* left_nz8) {
   __shared__ MBWork w;
+  __shared__ unsigned long long ph_ts[8];
   const int y = (int)(p.y_min + blockIdx.x);
   const int x = (int)p.diagonal - 2 * y;
   const int mb_index = y * (int)p.mb_w + x;
   const int tid = (int)threadIdx.x;
+  // A shared-memory copy of these tables measured neutral (the walks are
+  // dependency-bound and the tables stay L1-resident), so the cache points
+  // at the global tables directly.
+  const CostCache cc = {v.level_costs, v.coeff_probas,
+                        v.tables->entropy_cost, v.tables->level_fixed_costs};
+#define PHASE_TS(k) \
+  do { \
+    if (v.phase_cycles != nullptr && tid == 0) ph_ts[k] = clock64(); \
+  } while (0)
+  PHASE_TS(0);
   const DeviceSegment* const dqm = &v.segment_params[v.segments[mb_index]];
   const int tlambda = dqm->tlambda;
 
   // ---- Phase 0: import, borders, predictions (parallel-friendly setup).
+  ImportMBParallel(&v, &p, x, y, &w, tid, (int)blockDim.x);
   if (tid == 0) {
-    ImportMB(&v, &p, x, y, &w);
     BuildBorders(&v, &p, x, y, &w);
     // VP8MakeLuma16Preds / VP8MakeChroma8Preds NULL conventions.
     CudaIntra16Preds(w.yuv_p, (x > 0) ? w.y_left + 1 : NULL,
@@ -606,6 +661,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
     w.nz_ctx.left_nz[8] = (x > 0) ? left_nz8[mb_index - 1] : 0;
   }
   __syncthreads();
+  PHASE_TS(1);
 
   // ---- Phase 1 (parallel): intra16 transforms/quantization/reconstruction.
   if (tid < 64) {
@@ -666,6 +722,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
     }
   }
   __syncthreads();
+  PHASE_TS(2);
 
   // ---- Phase 2: intra16 selection (PickBestIntra16). The residual-cost
   // walks run one mode per warp; thread 0 then replays the CPU's exact
@@ -676,13 +733,13 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
   if (tid < 4 * 32 && (tid & 31) == 0) {
     const int mode = tid >> 5;
     NzContext c = w.nz_ctx;
-    long long R = ResidualCostDev(&v, c.top_nz[8] + c.left_nz[8], 0, 1,
+    long long R = ResidualCostDev(&cc, c.top_nz[8] + c.left_nz[8], 0, 1,
                                   w.i16_dc_levels[mode]);
     for (int by = 0; by < 4; ++by) {
       for (int bx = 0; bx < 4; ++bx) {
         const int ctx = c.top_nz[bx] + c.left_nz[by];
         const int16_t* const lv = w.i16_ac_levels[mode][bx + by * 4];
-        R += ResidualCostDev(&v, ctx, 1, 0, lv);
+        R += ResidualCostDev(&cc, ctx, 1, 0, lv);
         c.top_nz[bx] = c.left_nz[by] = BlockNonZero(lv);
       }
     }
@@ -739,28 +796,13 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
       SetRDScoreDev(dqm->lambda_mode, &final_rd);
       w.rd_score = final_rd.score;
     }
-    // Copy the winning levels and reconstruction into the running best.
-    for (int b = 0; b < 16; ++b) {
-      for (int k = 0; k < 16; ++k) {
-        w.rd.y_ac_levels[b][k] = w.i16_ac_levels[best_mode][b][k];
-      }
-    }
-    for (int k = 0; k < 16; ++k) {
-      w.rd.y_dc_levels[k] = w.i16_dc_levels[best_mode][k];
-    }
-    for (int r = 0; r < 16; ++r) {
-      for (int cx = 0; cx < 16; ++cx) {
-        w.yuv_out[kCudaYOffEnc + r * kCudaBPS + cx] =
-            w.i16_out[best_mode][r * kCudaBPS + cx];
-      }
-    }
     // StoreMaxDelta candidate, evaluated on the intra16 result like the CPU.
     w.rd.store_max_delta = 0;
     w.rd.max_delta = 0;
     if ((best_nz & 0x100ffffu) == 0x1000000u && best_D > dqm->min_disto) {
-      const int v0 = CudaAbs(w.rd.y_dc_levels[1]);
-      const int v1 = CudaAbs(w.rd.y_dc_levels[2]);
-      const int v2 = CudaAbs(w.rd.y_dc_levels[4]);
+      const int v0 = CudaAbs(w.i16_dc_levels[best_mode][1]);
+      const int v1 = CudaAbs(w.i16_dc_levels[best_mode][2]);
+      const int v2 = CudaAbs(w.i16_dc_levels[best_mode][4]);
       int max_v = (v1 > v0) ? v1 : v0;
       max_v = (v2 > max_v) ? v2 : max_v;
       w.rd.store_max_delta = 1;
@@ -768,6 +810,21 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
     }
   }
   __syncthreads();
+  // Winner copies in parallel (selection above published w.rd.mode_i16).
+  {
+    const int m = w.rd.mode_i16;
+    for (int i = tid; i < 16 * 16; i += (int)blockDim.x) {
+      w.rd.y_ac_levels[i >> 4][i & 15] = w.i16_ac_levels[m][i >> 4][i & 15];
+    }
+    if (tid < 16) w.rd.y_dc_levels[tid] = w.i16_dc_levels[m][tid];
+    for (int i = tid; i < 16 * 16; i += (int)blockDim.x) {
+      const int r = i >> 4, cx = i & 15;
+      w.yuv_out[kCudaYOffEnc + r * kCudaBPS + cx] =
+          w.i16_out[m][r * kCudaBPS + cx];
+    }
+  }
+  __syncthreads();
+  PHASE_TS(3);
 
   // ---- Phase 3: intra4 search (PickBestIntra4), sub-blocks in sequence.
   if (p.max_i4_header_bits > 0) {
@@ -798,40 +855,62 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
       // best_blocks accumulate in yuv_out2 luma.
     }
     __syncthreads();
-    // The whole intra4 search runs inside warp 0 (10 evaluation lanes plus
-    // the serial selection on lane 0); warp-scope synchronization avoids two
-    // block-wide barriers per sub-block on the wavefront's critical path.
-    if (tid < 32) {
-    for (int step = 0; step < 16 && !i4_abort; ++step) {
-      if (tid == 0) {
-        CudaIntra4Preds(w.yuv_p, w.i4_boundary + kTopLeftI4[i4_index]);
+    // Work inside a warp must stay divergence-free (divergent branches
+    // serialize), so parallelism beyond the 10 data-parallel mode lanes is
+    // spread across warps: predictions round-robin on the warp leaders, the
+    // transform chain on warp 0's lanes, and the three independent metrics
+    // (residual cost / SSE+flatness / texture distortion) each on their own
+    // warp. Block-wide barriers separate the stages.
+    for (int step = 0; step < 16; ++step) {
+      if (i4_abort) break;  // uniform: last written before a barrier
+      {
+        const int warp = tid >> 5, lane = tid & 31;
+        if (lane == 0 && warp < 4) {
+          for (int m = warp; m < kNumBModes; m += 4) {
+            CudaIntra4PredMode(w.yuv_p, w.i4_boundary + kTopLeftI4[i4_index],
+                               m);
+          }
+        }
       }
-      __syncwarp();
-      if (tid < kNumBModes) {
+      __syncthreads();
+      if (tid < kNumBModes) {  // data-parallel: same code, per-mode data
         const int mode = tid;
         const uint8_t* const src =
             w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[i4_index];
         const uint8_t* const ref = w.yuv_p + kCudaVP8I4ModeOffsets[mode];
-        const int bx = i4_index & 3, by = i4_index >> 2;
         CudaFTransform(src, ref, w.i4_tmp[mode]);
         w.i4_nz[mode] = CudaQuantizeBlock(w.i4_tmp[mode], w.i4_levels[mode],
                                           &dqm->y1);
         CudaITransformOne(ref, w.i4_tmp[mode], w.i4_out[mode]);
-        w.i4_sse[mode] = CudaSSE4x4(src, w.i4_out[mode]);
-        w.i4_sd[mode] =
-            tlambda ? CudaDisto4x4(src, w.i4_out[mode], kWeightY) : 0;
-        // Full residual cost precomputed for every mode: the CPU's early-out
-        // only skips this computation for modes it rejects anyway, so
-        // replaying its comparison order on complete values selects
-        // identically.
-        w.i4_flat[mode] =
-            (mode > 0) ? CudaIsFlat(w.i4_levels[mode], 1, kFlatnessLimitI4)
-                       : 0;
-        w.i4_rcost[mode] = ResidualCostDev(
-            &v, i4_ctx.top_nz[bx] + i4_ctx.left_nz[by], 0, 3,
-            w.i4_levels[mode]);
       }
-      __syncwarp();
+      __syncthreads();
+      {
+        const int warp = tid >> 5, mode = tid & 31;
+        if (mode < kNumBModes) {
+          const uint8_t* const src =
+              w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[i4_index];
+          const int bx = i4_index & 3, by = i4_index >> 2;
+          if (warp == 0) {
+            // Full residual cost precomputed for every mode: the CPU's
+            // early-out only skips this computation for modes it rejects
+            // anyway, so replaying its comparison order on complete values
+            // selects identically.
+            w.i4_rcost[mode] = ResidualCostDev(
+                &cc, i4_ctx.top_nz[bx] + i4_ctx.left_nz[by], 0, 3,
+                w.i4_levels[mode]);
+          } else if (warp == 1) {
+            w.i4_sse[mode] = CudaSSE4x4(src, w.i4_out[mode]);
+            w.i4_flat[mode] =
+                (mode > 0)
+                    ? CudaIsFlat(w.i4_levels[mode], 1, kFlatnessLimitI4)
+                    : 0;
+          } else if (warp == 2) {
+            w.i4_sd[mode] =
+                tlambda ? CudaDisto4x4(src, w.i4_out[mode], kWeightY) : 0;
+          }
+        }
+      }
+      __syncthreads();
       if (tid == 0) {
         // Mode cost context from neighboring prediction modes.
         const int bx = i4_index & 3, by = i4_index >> 2;
@@ -897,10 +976,8 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
           }
         }
       }
-      __syncwarp();
+      __syncthreads();
     }
-    }  // warp 0
-    __syncthreads();
     if (tid == 0 && !i4_abort) {
       // Intra4 wins: adopt its score, levels, and reconstruction.
       w.rd.is_i4 = 1;
@@ -910,20 +987,21 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
       w.rd_H = i4_best_H;
       w.rd_R = i4_best_R;
       w.rd_score = i4_best_score;
-      for (int b = 0; b < 16; ++b) {
-        for (int k = 0; k < 16; ++k) {
-          w.rd.y_ac_levels[b][k] = i4_best_levels[b][k];
-        }
+    }
+    __syncthreads();
+    if (!i4_abort) {
+      for (int i = tid; i < 16 * 16; i += (int)blockDim.x) {
+        w.rd.y_ac_levels[i >> 4][i & 15] = i4_best_levels[i >> 4][i & 15];
       }
-      for (int r = 0; r < 16; ++r) {
-        for (int cx = 0; cx < 16; ++cx) {
-          w.yuv_out[kCudaYOffEnc + r * kCudaBPS + cx] =
-              w.yuv_out2[kCudaYOffEnc + r * kCudaBPS + cx];
-        }
+      for (int i = tid; i < 16 * 16; i += (int)blockDim.x) {
+        const int r = i >> 4, cx = i & 15;
+        w.yuv_out[kCudaYOffEnc + r * kCudaBPS + cx] =
+            w.yuv_out2[kCudaYOffEnc + r * kCudaBPS + cx];
       }
     }
     __syncthreads();
   }
+  PHASE_TS(4);
 
   // ---- Phase 4 (parallel): chroma transforms per mode.
   if (tid < 32) {
@@ -972,6 +1050,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
               (unsigned long long)CudaSSE4x4(src, rec));
   }
   __syncthreads();
+  PHASE_TS(5);
 
   // ---- Phase 5: chroma selection (PickBestUV). Cost walks run one mode per
   // warp; thread 0 replays the CPU comparison order on precomputed values.
@@ -986,7 +1065,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
           const int b = ch * 2 + bx + by * 2;
           const int ctx = c.top_nz[4 + ch + bx] + c.left_nz[4 + ch + by];
           const int16_t* const lv = w.uv_levels_all[mode][b];
-          R += ResidualCostDev(&v, ctx, 0, 2, lv);
+          R += ResidualCostDev(&cc, ctx, 0, 2, lv);
           c.top_nz[4 + ch + bx] = c.left_nz[4 + ch + by] = BlockNonZero(lv);
         }
       }
@@ -1016,11 +1095,6 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
       }
     }
     w.rd.mode_uv = (uint8_t)best_mode;
-    for (int b = 0; b < 8; ++b) {
-      for (int k = 0; k < 16; ++k) {
-        w.rd.uv_levels[b][k] = w.uv_levels_all[best_mode][b][k];
-      }
-    }
     if (p.use_error_diffusion) {
       for (int ch = 0; ch < 2; ++ch) {
         for (int k = 0; k < 3; ++k) {
@@ -1032,20 +1106,28 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
         for (int k = 0; k < 3; ++k) w.rd.derr[ch][k] = 0;
       }
     }
-    // Copy the chosen chroma reconstruction into the running best.
-    for (int r = 0; r < 8; ++r) {
-      for (int cx = 0; cx < 16; ++cx) {
-        w.yuv_out[kCudaUOffEnc + r * kCudaBPS + cx] =
-            w.uv_out[best_mode][r * kCudaBPS + cx];
-      }
-    }
     // AddScore(rd, rd_best) for the totals the token loop consumes.
     w.rd.nz |= rd_best.nz;
     w.rd_D += rd_best.D;
     w.rd_H += rd_best.H;
     w.rd.distortion = (uint32_t)w.rd_D;
     w.rd.header_bits = (uint32_t)w.rd_H;
-
+  }
+  __syncthreads();
+  // Chroma winner copies in parallel (selection published w.rd.mode_uv).
+  {
+    const int m = w.rd.mode_uv;
+    for (int i = tid; i < 8 * 16; i += (int)blockDim.x) {
+      w.rd.uv_levels[i >> 4][i & 15] = w.uv_levels_all[m][i >> 4][i & 15];
+    }
+    for (int i = tid; i < 8 * 16; i += (int)blockDim.x) {
+      const int r = i >> 4, cx = i & 15;
+      w.yuv_out[kCudaUOffEnc + r * kCudaBPS + cx] =
+          w.uv_out[m][r * kCudaBPS + cx];
+    }
+  }
+  __syncthreads();
+  if (tid == 0) {
     // ---- Final: outgoing non-zero word (RecordTokens equivalent),
     // prediction-mode map, and the left-carried intra16-DC context.
     {
@@ -1084,9 +1166,19 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
         }
       }
     }
-    v.results[mb_index] = w.rd;
   }
   __syncthreads();
+  // Result struct store in parallel words.
+  {
+    const uint32_t* const src32 = (const uint32_t*)&w.rd;
+    uint32_t* const dst32 = (uint32_t*)&v.results[mb_index];
+    for (int i = tid; i < (int)(sizeof(DeviceResult) / 4);
+         i += (int)blockDim.x) {
+      dst32[i] = src32[i];
+    }
+  }
+  __syncthreads();
+  PHASE_TS(6);
 
   // ---- Phase 6 (parallel): write the reconstruction to the planes.
   for (int i = tid; i < 16 * 16; i += (int)blockDim.x) {
@@ -1101,6 +1193,14 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
     v.recon_v[((size_t)y * 8 + r) * p.recon_uv_stride + (size_t)x * 8 + cx] =
         w.yuv_out[kCudaUOffEnc + 8 + r * kCudaBPS + cx];
   }
+  __syncthreads();
+  PHASE_TS(7);
+  if (v.phase_cycles != nullptr && tid == 0) {
+    for (int k = 0; k < 7; ++k) {
+      atomicAdd(&v.phase_cycles[k], ph_ts[k + 1] - ph_ts[k]);
+    }
+  }
+#undef PHASE_TS
 }
 
 // ---------------------------------------------------------------------------
@@ -1143,6 +1243,13 @@ struct DecimateState {
   size_t pending_off_recon_u = 0;
   size_t pending_off_recon_v = 0;
   cudaEvent_t band_events[kMaxDecimateBands] = {};
+  // WEBP_CUDA_DECIMATE_TIMING=1: measure the device wall time of each pass
+  // (first diagonal launch to last diagonal completion) and print it.
+  bool timing = false;
+  int timing_level = 0;  // 2 adds per-phase kernel cycle accounting
+  unsigned long long* phase_cycles_dev = nullptr;
+  cudaEvent_t timing_begin = nullptr;
+  cudaEvent_t timing_end = nullptr;
 };
 
 DecimateState g_decimate_state;
@@ -1178,6 +1285,25 @@ bool DecimateInitialize(DecimateState* state) {
                                  cudaEventDisableTiming) != cudaSuccess) {
       state->quarantined = true;
       return false;
+    }
+  }
+  state->timing = DecimateFlag("WEBP_CUDA_DECIMATE_TIMING", false);
+  if (state->timing) {
+    const char* const level = getenv("WEBP_CUDA_DECIMATE_TIMING");
+    state->timing_level = (level != nullptr) ? atoi(level) : 1;
+    if (state->timing_level >= 2 &&
+        cudaMalloc((void**)&state->phase_cycles_dev,
+                   7 * sizeof(unsigned long long)) != cudaSuccess) {
+      state->phase_cycles_dev = nullptr;
+      state->timing_level = 1;
+      (void)cudaGetLastError();
+    }
+  }
+  if (state->timing) {
+    if (cudaEventCreate(&state->timing_begin) != cudaSuccess ||
+        cudaEventCreate(&state->timing_end) != cudaSuccess) {
+      state->timing = false;
+      (void)cudaGetLastError();
     }
   }
   state->available = true;
@@ -1450,6 +1576,11 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     view.preds = arena + off_preds + preds_w + 1;
     view.top_derr = nullptr;
     view.results = (DeviceResult*)(arena + off_results);
+    view.phase_cycles = state->phase_cycles_dev;
+    if (state->phase_cycles_dev != nullptr) {
+      (void)cudaMemsetAsync(state->phase_cycles_dev, 0,
+                            7 * sizeof(unsigned long long), state->stream);
+    }
 
     DecimateKernelParams params;
     params.width = (uint32_t)request->width;
@@ -1467,6 +1598,9 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     const int last_diagonal =
         (request->mb_w - 1) + 2 * (request->mb_h - 1);
     const int rows_per_band = (request->mb_h + band_count - 1) / band_count;
+    if (state->timing) {
+      (void)cudaEventRecord(state->timing_begin, state->stream);
+    }
     for (int d = 0; d <= last_diagonal && error == cudaSuccess; ++d) {
       const int y_min =
           (d > request->mb_w - 1) ? (d - (request->mb_w - 1) + 1) / 2 : 0;
@@ -1489,6 +1623,34 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
           if (d == (request->mb_w - 1) + 2 * (end_row - 1)) {
             error = cudaEventRecord(state->band_events[band], state->stream);
             break;
+          }
+        }
+      }
+    }
+    if (state->timing && error == cudaSuccess) {
+      (void)cudaEventRecord(state->timing_end, state->stream);
+      if (cudaEventSynchronize(state->timing_end) == cudaSuccess) {
+        float ms = 0.f;
+        if (cudaEventElapsedTime(&ms, state->timing_begin,
+                                 state->timing_end) == cudaSuccess) {
+          fprintf(stderr, "decimate GPU wall: %.2f ms (%dx%d MBs)\n", ms,
+                  request->mb_w, request->mb_h);
+        }
+        if (state->phase_cycles_dev != nullptr) {
+          unsigned long long cycles[7] = {0};
+          if (cudaMemcpy(cycles, state->phase_cycles_dev, sizeof(cycles),
+                         cudaMemcpyDeviceToHost) == cudaSuccess) {
+            static const char* const kPhaseNames[7] = {
+                "import", "i16-num", "i16-sel", "i4",
+                "uv-num", "uv-sel",  "recon"};
+            unsigned long long total = 0;
+            for (int k = 0; k < 7; ++k) total += cycles[k];
+            fprintf(stderr, "decimate phases (%% of block cycles):");
+            for (int k = 0; k < 7; ++k) {
+              fprintf(stderr, " %s %.1f%%", kPhaseNames[k],
+                      total ? 100.0 * (double)cycles[k] / (double)total : 0.0);
+            }
+            fprintf(stderr, "\n");
           }
         }
       }
