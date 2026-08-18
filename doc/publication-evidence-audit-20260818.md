@@ -52,6 +52,15 @@ gated candidate default off, but no A/B or production conclusion is supported.
 See
 [backref-cost-workspace-ab-experiment-evaluation-20260818.md](backref-cost-workspace-ab-experiment-evaluation-20260818.md).
 
+The independent row-13 remote v2 re-freeze passed its new path guard but stopped
+during source checkout: the frozen driver invoked `git bundle verify` outside a
+Git repository, before the remote operator, admission, lease, correctness, or
+timing. It likewise has zero samples and no medians or p95 values. Untimed
+identity, exactness, fallback, omission, and path/cleanup checks support
+retaining the candidate default off, but the missing all-gate matrix makes
+promotion impossible in this cycle. See
+[backref-cost-workspace-remote-v2-experiment-evaluation-20260818.md](backref-cost-workspace-remote-v2-experiment-evaluation-20260818.md).
+
 ## Evidence policy
 
 Publication-core claims must have committed raw evidence and inputs that are
@@ -75,6 +84,7 @@ reproduced by substituting a similarly named file.
 | Row 10 cache-size single-pass slab implementation | Publication corpus v1 correctness matrix plus graphic-medium tune and texture-large holdout; committed raw records, complete hash index, and independent evaluation | **Retained as bounded negative implementation evidence.** Exact correctness passed, but three of four required holdout medians failed; no production claim, threshold, or change is supported. |
 | Row 11 backref cost/traceback workspace | Committed fail-closed AC Low Power Mode refusal; no executor correctness, timing, resources, or evaluation records | **Not a performance result.** Default-off code is retained on independent untimed safety evidence, while promotion is unassessed/rejected for this cycle and no production claim or change is supported. |
 | Row 12 remote backref-cost workspace A/B | Committed fail-closed local driver refusal before remote source transfer, preflight, lease, correctness, timing, or returned evidence; zero samples for both variants | **Not a performance result.** The independently gated code remains default off; promotion is rejected for this cycle and no speedup, regression, resource, or production claim is supported. |
+| Row 13 remote v2 backref-cost workspace A/B | Committed infrastructure blocker during remote bundle verification before checkout, operator admission, lease, correctness, timing, or returned evidence; zero samples for both variants | **Not a performance result.** Untimed safety supports default-off retention, but all execution-time, transfer, resource, median, and p95 gates are absent; promotion is rejected for this cycle and no production claim or change is supported. |
 | `BENCHMARK_RESULTS.md` complete-lossless/hash tables and file-size/equality statements | Depends on the three unavailable files and lacks raw per-trial samples | **Quarantined as recorded-only history.** Not used by the publication core. |
 | Architecture, private API/ABI, build gates, defaults, and source-level fallback contracts | Established by repository source and untimed tests; not corpus-dependent | **Retained**, with device/runtime behavior limited to the executed tests. |
 
