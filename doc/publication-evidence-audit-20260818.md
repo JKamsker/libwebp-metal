@@ -34,6 +34,15 @@ change, and does not reuse either closed predecessor's samples. Its audit and
 execution-state limitations are in
 [cache-size-single-pass-slab-experiment-evaluation-20260818.md](cache-size-single-pass-slab-experiment-evaluation-20260818.md).
 
+The row-11 exact-sized backref cost/traceback workspace cycle then stopped
+fail-closed when preflight found Low Power Mode enabled on AC. No lease, build,
+correctness matrix, timing sample, resource record, or evaluation was produced.
+The default-off candidate passes independent untimed safety checks and is
+retained, but it supplies no performance or publication-core result; promotion
+is unassessed and rejected for this cycle. Its refusal evidence and schema
+limitations are audited in
+[backref-cost-traceback-experiment-evaluation-20260818.md](backref-cost-traceback-experiment-evaluation-20260818.md).
+
 ## Evidence policy
 
 Publication-core claims must have committed raw evidence and inputs that are
@@ -55,6 +64,7 @@ reproduced by substituting a similarly named file.
 | Row 8 focused cache-search diagnostic | Publication corpus v1 texture-medium tune and texture-large holdout; external raw records, complete hash index, committed evidence index, and machine-readable evaluation | **Retained as bounded synthetic diagnostic evidence.** Cache-search share passed, but one required median-overhead cell failed; the candidate is not accepted and supports no speedup or production claim. |
 | Row 9 cache-size serial-sweep implementation | Publication corpus v1 correctness matrix plus texture-medium tune and texture-large holdout; committed raw records, complete hash index, and independent evaluation | **Retained as bounded negative implementation evidence.** Exact correctness passed, but every performance cell failed; no production claim or change is supported. |
 | Row 10 cache-size single-pass slab implementation | Publication corpus v1 correctness matrix plus graphic-medium tune and texture-large holdout; committed raw records, complete hash index, and independent evaluation | **Retained as bounded negative implementation evidence.** Exact correctness passed, but three of four required holdout medians failed; no production claim, threshold, or change is supported. |
+| Row 11 backref cost/traceback workspace | Committed fail-closed AC Low Power Mode refusal; no executor correctness, timing, resources, or evaluation records | **Not a performance result.** Default-off code is retained on independent untimed safety evidence, while promotion is unassessed/rejected for this cycle and no production claim or change is supported. |
 | `BENCHMARK_RESULTS.md` complete-lossless/hash tables and file-size/equality statements | Depends on the three unavailable files and lacks raw per-trial samples | **Quarantined as recorded-only history.** Not used by the publication core. |
 | Architecture, private API/ABI, build gates, defaults, and source-level fallback contracts | Established by repository source and untimed tests; not corpus-dependent | **Retained**, with device/runtime behavior limited to the executed tests. |
 
