@@ -1,0 +1,5 @@
+ERROR: command failed (1): ssh -o BatchMode=yes -o ConnectTimeout=10 pandocs-agent set -eu; git bundle verify /Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v2/run.ucrqiS/source.bundle >/dev/null; git clone -q /Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v2/run.ucrqiS/source.bundle /Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v2/run.ucrqiS/source; cd /Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v2/run.ucrqiS/source; git checkout -q 7d56c91bbb4cb6e7e785ac23908b0c4e4da032ec; test "$(git rev-parse HEAD)" = 7d56c91bbb4cb6e7e785ac23908b0c4e4da032ec; test -z "$(git status --porcelain)"
+stdout:
+
+stderr:
+error: need a repository to verify a bundle

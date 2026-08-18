@@ -1,0 +1,76 @@
+{
+  "schema": "libwebp-backref-cost-workspace-remote-v2-executor-blocker-v1",
+  "experiment_id": "backref_cost_workspace_remote_v2",
+  "outcome": "blocked_before_admission",
+  "admission_occurred": false,
+  "protocol_refusal_count": 0,
+  "infrastructure_blocker_count": 1,
+  "timed_child_processes": 0,
+  "raw_sample_rows": 0,
+  "correctness_cells": 0,
+  "source": {
+    "current_head": "7d56c91bbb4cb6e7e785ac23908b0c4e4da032ec",
+    "frozen_protocol_commit": "7d56c91bbb4cb6e7e785ac23908b0c4e4da032ec",
+    "design_commit": "66c5bca06e4371923ebd038e0776524b7c78bb9e",
+    "base_commit": "d12036f790cce1dd4bef9fe3c963b0ef294d4c4a",
+    "worktree_clean_before_invocation": true,
+    "worktree_clean_after_invocation": true,
+    "frozen_manifest_sha256": "f31fba930b44fd5f55b1fc90505402af0a5a234c9970ed7320fa6352427e599b"
+  },
+  "invocation": {
+    "invoked_exactly_once": true,
+    "remote_host_alias": "pandocs-agent",
+    "entry_point": "scripts/execute_backref_cost_workspace_remote_v2.py",
+    "command": "WEBP_EXPECTED_BACKREF_COST_WORKSPACE_REMOTE_V2_COMMIT=7d56c91bbb4cb6e7e785ac23908b0c4e4da032ec WEBP_BENCHMARK_SESSION=exclusive python3 scripts/execute_backref_cost_workspace_remote_v2.py run /Users/jonaskamsker/.codex/worktrees/af4d/libwebp-metal/evidence/backref-cost-workspace-remote-v2-20260818-executor",
+    "local_evidence_path": "/Users/jonaskamsker/.codex/worktrees/af4d/libwebp-metal/evidence/backref-cost-workspace-remote-v2-20260818-executor"
+  },
+  "failure": {
+    "stage": "driver_remote_bundle_verify_and_checkout_before_operator_validation",
+    "operator_validate_started": false,
+    "operator_preflight_started": false,
+    "timing_started": false,
+    "error": "error: need a repository to verify a bundle",
+    "error_transcript": "driver-error.log"
+  },
+  "admission": {
+    "status": "not_reached",
+    "conditions_not_recorded_by_frozen_operator": [
+      "AC power",
+      "Low Power Mode off",
+      "sufficient available memory",
+      "sufficient available disk",
+      "supported Darwin arm64 Apple host",
+      "exact compiler and effective SDK",
+      "no Runner.Worker job",
+      "no other benchmark or CUDA process immediately before timing",
+      "sole synchronous execution immediately before timing"
+    ],
+    "pretransfer_process_guard": "driver invoked it and advanced; its hash/result was not emitted before the checkout failure",
+    "lease": {
+      "path": "~/.libwebp-metal-backref-cost-workspace-remote-v2.lock",
+      "acquired": false,
+      "record": "not_created; remote operator was never started"
+    }
+  },
+  "transfer_integrity": {
+    "local_git_bundle_created": true,
+    "source_transfer_reached_remote_checkout": true,
+    "source_bundle_sha256": "not_emitted_before_driver_temporary_cleanup",
+    "remote_source_bundle_sha256": "not_emitted_before_driver_temporary_cleanup",
+    "remote_evidence_archive_sha256": "not_created",
+    "local_evidence_archive_sha256": "not_created",
+    "returned_evidence_hashes": "not_created",
+    "local_evidence_directory_returned": false
+  },
+  "remote_cleanup": {
+    "remote_home": "/Users/pandocs-agent-001",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v2",
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v2/run.ucrqiS",
+    "driver_finally_cleanup_invoked": true,
+    "exact_child_absence_proved": true,
+    "checked_at_utc": "2026-08-18T16:28:56Z",
+    "installed_runner_directory_touched": false,
+    "proof": "cleanup-check.json"
+  },
+  "performance_evidence": "none; this record is not a timed performance result and carries no promotion consequence"
+}
