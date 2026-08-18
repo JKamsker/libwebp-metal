@@ -1,0 +1,107 @@
+{
+  "schema": "libwebp-backref-cost-workspace-remote-v4-evaluator-consequence-v1",
+  "evaluated_at_date": "2026-08-18",
+  "ancestry": [
+    {
+      "commit": "c66e0264cd7af4df7678a5b9af60c6fecbd8329d",
+      "parent": "933cb1898832494e937c4aafe90e622f570ca15d",
+      "role": "verified_main",
+      "tree": "7c22723d070d0ebab7ae4153cf3e431bce2648bc"
+    },
+    {
+      "commit": "6900c5448473d8070737e2c03ab98d39b853d970",
+      "parent": "c66e0264cd7af4df7678a5b9af60c6fecbd8329d",
+      "role": "design_and_frozen_protocol",
+      "tree": "1e35986b512353c1822aa6592665fe91dd442424"
+    },
+    {
+      "commit": "373f9b868b3dd4c1296a20665533fba5df728c70",
+      "parent": "6900c5448473d8070737e2c03ab98d39b853d970",
+      "role": "single_executor_evidence",
+      "tree": "da3a20278bfe0102642cf369a4f9347931978bf6"
+    }
+  ],
+  "frozen_authority": {
+    "boundary_projection_sha256": "77d14bb905980dfe53f75886b4270a6bfdd9d2ff46874aa0cea3aa480bedd533",
+    "catalog_schema_count": 17,
+    "frozen_artifact_count": 36,
+    "frozen_artifact_mismatches": 0,
+    "manifest_schema_link_failures": 0,
+    "manifest_sha256": "a7b54fb4a8c3779997cfacaccc421c8ddbf4a12e40aff317f6df7b95c3c29c3f",
+    "normalized_helper_body_sha256": "3128cbcef3b3f000926d69a117d5d7b79a68c59f0658fe5738eddbfeed33fdfd",
+    "schemas_sha256": "809f5a5b9241883b0de2765612a5f07de95c24806c0c446af499424c5b6c069b"
+  },
+  "single_pipeline": {
+    "archive_members": 0,
+    "archive_status": "rejected-before-creation",
+    "correctness_cells": 0,
+    "evaluation_cells": 0,
+    "extractions": 0,
+    "holdout_cells": 0,
+    "invocations": 1,
+    "lease_acquired": true,
+    "lease_released": true,
+    "pipeline_exit_code": 1,
+    "refusal": "remote cmake executable unavailable",
+    "timed_command_processes": 0,
+    "timed_workloads": 0,
+    "total_measured_samples": 0,
+    "warmup_samples": 0
+  },
+  "evidence_sha256": {
+    "archive-return.json": "2fe1c121779bd8ce22b7516af7fab9301287c96ad62d56c7d0051f81170363dc",
+    "cleanup-receipt.json": "a283f29e624ab0ac95d3ee2afebc2f6952a4810673d4db9783d14a41269e5ede",
+    "extraction.json": "a7a9d31e5d823d071db2465499596159002523bf8e3c7b69ef743a36fae47ec9",
+    "lease-record.json": "3651a9437556381994380f81901e412508a5280cf71ed2627e8f3c4e28099830",
+    "lease-transfer.json": "b0190e216345300fb34629d1fd2fe275abdfc0da8478f068cfddc758c41d222b",
+    "pipeline.stderr": "f314e5174ed16249189a3b5be9331c81152485cf2c2e8ce2e22627345352d1be",
+    "pipeline.stdout": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "returned-evidence-hashes.json": "98be2575c1298faaec4eb6582de1a6d62d0e4625ee5a942fdf08bc9b2af2c287",
+    "transfer-cleanup.json": "af8d7d58d602026d032e62d79b3ee501fbb5dc87e1cabe8e9f37b53816c264bd"
+  },
+  "evidence_audit": {
+    "admission_source_bundle_hash_match": true,
+    "archive_artifact_index_available": false,
+    "archive_builder_refusal": "artifact-hashes.json absent because the operator refused before producing normal evidence",
+    "cleanup_absence_proved": true,
+    "exact_child_removed": true,
+    "extraction_attempted": false,
+    "lease_hash_verified_before_archive_handling": true,
+    "local_returned_index_artifact_mismatches": 0,
+    "local_returned_index_artifacts": 7,
+    "repository_context_bundle_verification": true,
+    "runner_worker_matches_after_admission": 0,
+    "runner_worker_matches_before_transfer": 0,
+    "timed_host_resource_records_available": false
+  },
+  "frozen_expected_inventory": {
+    "command_processes": 408,
+    "correctness_cells": 26,
+    "evaluation_cells": 24,
+    "required_holdout_cells": 12,
+    "total_measured_samples": 1560,
+    "variant_measured_samples": 780,
+    "warmup_samples": 288
+  },
+  "acceptance": {
+    "all_conjunctive_gates_pass": false,
+    "paired_median_ratio_maximum": 0.99,
+    "paired_median_ratios_available": 0,
+    "p95_ratio_maximum": 1.01,
+    "p95_ratios_available": 0
+  },
+  "untimed_checks": {
+    "abi_installed_headers_and_exports": "PASS",
+    "archive_protocol": "PASS",
+    "canonical_admission_and_repository_context": "PASS",
+    "candidate_correctness_cells": 26,
+    "candidate_correctness_determinism_fallback_sanitizers": "PASS",
+    "experiment_guards": "PASS",
+    "python_syntax": "PASS",
+    "schema_hash_matrix_protocol": "PASS"
+  },
+  "decision": "reject_promotion_performance_unassessed",
+  "production_consequence": "retain_v4_default_off_research_and_evidence_return_repair",
+  "rerun_authorized": false,
+  "new_experiment_run": false
+}

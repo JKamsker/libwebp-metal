@@ -73,6 +73,17 @@ Default-off untimed exactness remains valid, but the missing conjunctive gates
 require rejecting promotion. See
 [backref-cost-workspace-remote-v3-experiment-evaluation-20260818.md](backref-cost-workspace-remote-v3-experiment-evaluation-20260818.md).
 
+The independent row-15 remote v4 re-freeze repaired that evidence-return path,
+but its one authorized pipeline failed closed before builds, correctness, or
+timing because remote `cmake` was unavailable. Source admission passed, the
+exclusive lease was acquired and released, and the lease and exact-child
+cleanup records were returned independently and hash verified. No archive was
+created because no normal artifact index existed, and no extraction was
+attempted. With zero executor correctness cells and zero samples, promotion is
+unassessed and rejected while the valid default-off candidate and evidence
+repair are retained. See
+[backref-cost-workspace-remote-v4-experiment-evaluation-20260818.md](backref-cost-workspace-remote-v4-experiment-evaluation-20260818.md).
+
 ## Evidence policy
 
 Publication-core claims must have committed raw evidence and inputs that are
@@ -98,6 +109,7 @@ reproduced by substituting a similarly named file.
 | Row 12 remote backref-cost workspace A/B | Committed fail-closed local driver refusal before remote source transfer, preflight, lease, correctness, timing, or returned evidence; zero samples for both variants | **Not a performance result.** The independently gated code remains default off; promotion is rejected for this cycle and no speedup, regression, resource, or production claim is supported. |
 | Row 13 remote v2 backref-cost workspace A/B | Committed infrastructure blocker during remote bundle verification before checkout, operator admission, lease, correctness, timing, or returned evidence; zero samples for both variants | **Not a performance result.** Untimed safety supports default-off retention, but all execution-time, transfer, resource, median, and p95 gates are absent; promotion is rejected for this cycle and no production claim or change is supported. |
 | Row 14 remote v3 backref-cost workspace A/B | Committed fail-closed evidence-return refusal after an unsafe archive member; the executor records a transient archive hash match, but extraction, artifact-index verification, lease receipt, exact-cleanup receipt, and every raw/correctness/statistical record are absent | **Not a performance result.** Untimed identity and safety support default-off retention only; zero samples make medians and p95 inapplicable, all-gate promotion is rejected, and no production claim or change is supported. |
+| Row 15 remote v4 backref-cost workspace A/B | Committed fail-closed missing-`cmake` refusal after exact source admission and lease acquisition; independent hash-verified lease release and exact-child cleanup receipts survive, but no normal artifact archive, executor correctness, command, sample, resource, or statistical record exists | **Not a performance result.** The repaired evidence-return path and exact candidate remain independently gated and default off; zero samples make every median and p95 gate unassessed, promotion is rejected, and no production claim or change is supported. |
 | `BENCHMARK_RESULTS.md` complete-lossless/hash tables and file-size/equality statements | Depends on the three unavailable files and lacks raw per-trial samples | **Quarantined as recorded-only history.** Not used by the publication core. |
 | Architecture, private API/ABI, build gates, defaults, and source-level fallback contracts | Established by repository source and untimed tests; not corpus-dependent | **Retained**, with device/runtime behavior limited to the executed tests. |
 
