@@ -107,10 +107,13 @@ pointers, packed four-byte RGB loads, 128-thread color/hash blocks, and
 256-thread RGB blocks. Page-locked host staging, fused RGB 2x2 work, alternate
 block widths, and stream-ordered allocation remain available for ablation but
 are off by default on the measured RTX 2080 SUPER. Build the non-installed
-`webp_cuda_benchmark` and concurrency runner with
-`-DWEBP_BUILD_CUDA_BENCHMARK=ON`; `scripts/test_cuda_variants.sh` validates both
-the default and all-strategies-disabled builds. Measurement details are in
-[CUDA_BENCHMARK_RESULTS.md](CUDA_BENCHMARK_RESULTS.md).
+`webp_cuda_benchmark`, `webp_cuda_batch_benchmark`, and concurrency runner with
+`-DWEBP_BUILD_CUDA_BENCHMARK=ON`; the batch runner supports persistent
+decode/encode batches and an explicit `--force-cuda` experiment flag.
+`scripts/test_cuda_variants.sh` validates both the default and
+all-strategies-disabled builds. Measurement details are in
+[CUDA_BENCHMARK_RESULTS.md](CUDA_BENCHMARK_RESULTS.md), and the concise batch
+decision is in [CUDA_EXPERIMENT_SUMMARY.md](CUDA_EXPERIMENT_SUMMARY.md#persistent-cuda-batch-follow-up).
 
 Additional, non-installed CUDA strategy prototypes can be built with
 `-DWEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS=ON`. See

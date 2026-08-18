@@ -81,6 +81,41 @@ The retained default requires 16,777,216 pixels and at least three passes when
 the backend is cold. An explicit `WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS` value
 remains a force/ablation override for every pass count.
 
+## Persistent CUDA batch follow-up
+
+The batch benchmark measured six PNG or JPEG inputs (three content types at
+small and medium sizes), quality 75, method 4, and near-lossless 40. These
+are persistent-process, forced-stage runs with page-cached `/tmp` file I/O;
+they do not justify lowering production cold thresholds.
+
+| Format | Mode | Batch 6 CPU/CUDA total ms | Batch 6 speedup | Batch 24 CPU/CUDA total ms | Batch 24 speedup |
+|---|---|---:|---:|---:|---:|
+| PNG | lossy | 602.791 / 614.401 | 0.9811x | 2445.182 / 2477.368 | 0.9870x |
+| PNG | lossless | 847.751 / 619.866 | 1.3676x | 3389.177 / 2460.732 | 1.3773x |
+| PNG | near-lossless | 1246.506 / 965.494 | 1.2911x | 4869.623 / 3911.262 | 1.2450x |
+| JPEG | lossy | 619.277 / 613.559 | 1.0093x | 2433.595 / 2405.487 | 1.0117x |
+| JPEG | lossless | 3988.384 / 3535.765 | 1.1280x | 16023.908 / 14449.061 | 1.1090x |
+| JPEG | near-lossless | 4820.437 / 4241.282 | 1.1366x | 18673.450 / 16503.490 | 1.1315x |
+
+CUDA is worthwhile for persistent lossless and near-lossless batches; lossy
+is effectively neutral. Batch sizes 6 and 24 have no material per-image
+throughput difference after warmup. Fresh per-image CUDA processes lost to CPU
+because each launch paid CUDA initialization:
+
+| Format | Mode | Fresh CPU/CUDA six-process median ms | Speedup |
+|---|---|---:|---:|
+| PNG | lossy | 645.322 / 1880.912 | 0.3431x |
+| PNG | lossless | 948.875 / 2101.623 | 0.4515x |
+| PNG | near-lossless | 2134.368 / 3158.435 | 0.6758x |
+| JPEG | lossy | 648.090 / 1865.276 | 0.3475x |
+| JPEG | lossless | 4388.008 / 5253.948 | 0.8352x |
+| JPEG | near-lossless | 3323.956 / 5163.455 | 0.6437x |
+
+All 120 persistent rows and 360 fresh rows were stable; all 180 fresh
+validation pairs passed decoded parity, including 60/60 exact lossy outputs.
+The complete raw rows and validation records are in
+`CUDA_BATCH_RESULTS_RAW.md`.
+
 ## Evidence locations
 
 - `CUDA_EXPERIMENT_RESULTS_RAW.md`: original 75-row capture plus matched
@@ -89,3 +124,5 @@ remains a force/ablation override for every pass count.
   and cold crossover medians.
 - `CUDA_ACCELERATION_EXPERIMENTS.md`: active lab build and measurement protocol.
 - `CUDA_BENCHMARK_RESULTS.md`: production encoder crossover and strategy context.
+- `CUDA_BATCH_RESULTS_RAW.md`: persistent and fresh-process batch rows,
+  validation records, and computed medians.

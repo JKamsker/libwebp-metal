@@ -37,6 +37,7 @@ typedef struct {
   int warmups;
   int samples;
   int include_file_io;
+  int force_cuda;
   int verify;
   int verify_only;
   Input* inputs;
@@ -48,7 +49,8 @@ static void Usage(const char* const program) {
           "Usage: %s --variant cpu|cuda --mode lossy|lossless|near-lossless "
           "--batch-size N [--method 0..6] [--quality 0..100] "
           "[--near-lossless 0..100] [--warmups N] [--samples N] "
-          "[--include-file-io] [--verify|--verify-only] INPUT [INPUT ...]\n",
+          "[--include-file-io] [--force-cuda] [--verify|--verify-only] "
+          "INPUT [INPUT ...]\n",
           program);
 }
 
@@ -81,6 +83,10 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
     const char* value;
     if (!strcmp(flag, "--include-file-io")) {
       options->include_file_io = 1;
+      continue;
+    }
+    if (!strcmp(flag, "--force-cuda")) {
+      options->force_cuda = 1;
       continue;
     }
     if (!strcmp(flag, "--verify")) {
@@ -145,7 +151,7 @@ static uint64_t HashBytes(uint64_t hash, const uint8_t* data, size_t size) {
   return hash;
 }
 
-static void ConfigureDispatch(const char* const variant) {
+static void ConfigureDispatch(const char* const variant, const int force_cuda) {
   const int cuda = !strcmp(variant, "cuda");
   setenv("WEBP_ACCELERATOR", cuda ? "cuda" : "none", 1);
   setenv("WEBP_CUDA", cuda ? "1" : "0", 1);
@@ -153,10 +159,17 @@ static void ConfigureDispatch(const char* const variant) {
   setenv("WEBP_CUDA_HASH", "1", 1);
   setenv("WEBP_CUDA_LOSSY", "1", 1);
   setenv("WEBP_CUDA_NEAR_LOSSLESS", "1", 1);
-  unsetenv("WEBP_CUDA_MIN_PIXELS");
-  unsetenv("WEBP_CUDA_HASH_MIN_PIXELS");
-  unsetenv("WEBP_CUDA_LOSSY_MIN_PIXELS");
-  unsetenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS");
+  if (force_cuda) {
+    setenv("WEBP_CUDA_MIN_PIXELS", "0", 1);
+    setenv("WEBP_CUDA_HASH_MIN_PIXELS", "0", 1);
+    setenv("WEBP_CUDA_LOSSY_MIN_PIXELS", "0", 1);
+    setenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "0", 1);
+  } else {
+    unsetenv("WEBP_CUDA_MIN_PIXELS");
+    unsetenv("WEBP_CUDA_HASH_MIN_PIXELS");
+    unsetenv("WEBP_CUDA_LOSSY_MIN_PIXELS");
+    unsetenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS");
+  }
 }
 
 static int LoadInputs(Options* const options) {
@@ -261,9 +274,9 @@ static int Verify(const Options* const options) {
     WebPMemoryWriter cpu, cuda;
     Options preflight = *options;
     preflight.include_file_io = 0;
-    ConfigureDispatch("cpu");
+    ConfigureDispatch("cpu", options->force_cuda);
     if (!EncodeInput(&preflight, &options->inputs[i], &cpu)) return 0;
-    ConfigureDispatch("cuda");
+    ConfigureDispatch("cuda", options->force_cuda);
     if (!EncodeInput(&preflight, &options->inputs[i], &cuda)) {
       WebPMemoryWriterClear(&cpu);
       return 0;
@@ -329,7 +342,7 @@ int main(int argc, const char* const argv[]) {
     FreeInputs(&options);
     return 0;
   }
-  ConfigureDispatch(options.variant);
+  ConfigureDispatch(options.variant, options.force_cuda);
   for (sequence = -options.warmups; sequence < options.samples; ++sequence) {
     uint64_t elapsed_ns, output_hash, output_bytes;
     if (!RunBatch(&options, &elapsed_ns, &output_hash, &output_bytes)) {
@@ -347,7 +360,8 @@ int main(int argc, const char* const argv[]) {
     printf("{\"operation\":\"decode_encode_batch\","
            "\"variant\":\"%s\",\"mode\":\"%s\","
            "\"batch_size\":%d,\"input_count\":%d,"
-           "\"include_file_io\":%s,\"method\":%d,\"quality\":%d,"
+           "\"include_file_io\":%s,\"force_cuda\":%s,"
+           "\"method\":%d,\"quality\":%d,"
            "\"near_lossless\":%d,\"sequence\":%d,"
            "\"elapsed_ns\":%" PRIu64 ",\"ns_per_image\":%.3f,"
            "\"images_per_second\":%.6f,"
@@ -355,6 +369,7 @@ int main(int argc, const char* const argv[]) {
            "\"output_bytes\":%" PRIu64 "}\n",
            options.variant, options.mode_name, options.batch_size,
            options.input_count, options.include_file_io ? "true" : "false",
+           options.force_cuda ? "true" : "false",
            options.method, options.quality, options.near_lossless, sequence,
            elapsed_ns, (double)elapsed_ns / options.batch_size,
            1e9 * options.batch_size / elapsed_ns, output_hash, output_bytes);
