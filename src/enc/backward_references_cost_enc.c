@@ -25,8 +25,19 @@
 #include "src/webp/format_constants.h"
 #include "src/webp/types.h"
 
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT) && \
+    defined(WEBP_USE_BACKREF_COST_WORKSPACE_AB_EXPERIMENT)
+#error "backref workspace experiments are mutually exclusive"
+#elif defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
 #include "src/enc/backref_cost_traceback_experiment_enc.h"
+#define WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE 1
+#elif defined(WEBP_USE_BACKREF_COST_WORKSPACE_AB_EXPERIMENT)
+#include "src/enc/backref_cost_workspace_ab_experiment_enc.h"
+#define WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE 1
+#define VP8LBackrefCostTracebackExperimentEnabled \
+  VP8LBackrefCostWorkspaceABExperimentEnabled
+#define VP8LBackrefCostTracebackExperimentMalloc \
+  VP8LBackrefCostWorkspaceABExperimentMalloc
 #endif
 
 #define VALUES_IN_BYTE 256
@@ -199,7 +210,7 @@ typedef struct {
   // These are regularly malloc'd remains. This list can't grow larger than than
   // size COST_CACHE_INTERVAL_SIZE_MAX - COST_MANAGER_MAX_FREE_LIST, note.
   CostInterval* recycled_intervals;
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
   // Candidate-only ownership. One exact-sized allocation contains costs,
   // cached-cost intervals and every non-inline interval permitted by the cap.
   void* workspace;
@@ -221,7 +232,7 @@ static int CostIntervalIsInFreeList(const CostManager* const manager,
           interval <= &manager->intervals[COST_MANAGER_MAX_FREE_LIST - 1]);
 }
 
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
 static int CostIntervalIsInWorkspace(const CostManager* const manager,
                                      const CostInterval* const interval) {
   const uintptr_t address = (uintptr_t)interval;
@@ -244,7 +255,7 @@ static void DeleteIntervalList(CostManager* const manager,
   while (interval != NULL) {
     const CostInterval* const next = interval->next;
     if (!CostIntervalIsInFreeList(manager, interval)
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
         && !CostIntervalIsInWorkspace(manager, interval)
 #endif
     ) {
@@ -257,12 +268,12 @@ static void DeleteIntervalList(CostManager* const manager,
 static void CostManagerClear(CostManager* const manager) {
   if (manager == NULL) return;
 
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
   if (manager->workspace == NULL) {
 #endif
     WebPSafeFree(manager->costs);
     WebPSafeFree(manager->cache_intervals);
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
   }
 #endif
 
@@ -272,7 +283,7 @@ static void CostManagerClear(CostManager* const manager) {
   DeleteIntervalList(manager, manager->recycled_intervals);
   manager->recycled_intervals = NULL;
 
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
   WebPSafeFree(manager->workspace);
 #endif
 
@@ -284,7 +295,7 @@ static void CostManagerClear(CostManager* const manager) {
 static int CostManagerInit(CostManager* const manager,
                            uint16_t* const dist_array, int pix_count,
                            const CostModel* const cost_model
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
                            ,
                            int use_experiment,
                            int* const experiment_setup_failed
@@ -300,7 +311,7 @@ static int CostManagerInit(CostManager* const manager,
   manager->count = 0;
   manager->dist_array = dist_array;
   CostManagerInitFreeList(manager);
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
   manager->workspace = NULL;
   manager->workspace_intervals = NULL;
   manager->workspace_intervals_end = NULL;
@@ -327,7 +338,7 @@ static int CostManagerInit(CostManager* const manager,
   // different cost, hence MAX_LENGTH but that is impossible with the current
   // implementation that spirals around a pixel.
   assert(manager->cache_intervals_size <= MAX_LENGTH);
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
   if (use_experiment) {
     const size_t workspace_interval_count =
         COST_CACHE_INTERVAL_SIZE_MAX - COST_MANAGER_MAX_FREE_LIST;
@@ -404,7 +415,7 @@ static int CostManagerInit(CostManager* const manager,
            manager->cache_intervals_size);
   }
 
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
   if (!use_experiment)
 #endif
   {
@@ -540,7 +551,7 @@ static WEBP_INLINE void InsertInterval(CostManager* const manager,
   } else if (manager->recycled_intervals != NULL) {
     interval_new = manager->recycled_intervals;
     manager->recycled_intervals = interval_new->next;
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
   } else if (manager->workspace_free_intervals != NULL) {
     interval_new = manager->workspace_free_intervals;
     manager->workspace_free_intervals = interval_new->next;
@@ -675,7 +686,7 @@ static int BackwardReferencesHashChainDistanceOnly(
     int xsize, int ysize, const uint32_t* const argb, int cache_bits,
     const VP8LHashChain* const hash_chain, const VP8LBackwardRefs* const refs,
     uint16_t* const dist_array
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
     ,
     int use_experiment, int* const experiment_setup_failed
 #endif
@@ -711,7 +722,7 @@ static int BackwardReferencesHashChainDistanceOnly(
   }
 
   if (!CostManagerInit(cost_manager, dist_array, pix_count, cost_model
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
                        ,
                        use_experiment, experiment_setup_failed
 #endif
@@ -893,7 +904,7 @@ int VP8LBackwardReferencesTraceBackwards(int xsize, int ysize,
 
   if (dist_array == NULL) goto Error;
 
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
   if (VP8LBackrefCostTracebackExperimentEnabled()) {
     int experiment_setup_failed = 0;
     if (!BackwardReferencesHashChainDistanceOnly(
@@ -911,7 +922,7 @@ int VP8LBackwardReferencesTraceBackwards(int xsize, int ysize,
   {
     if (!BackwardReferencesHashChainDistanceOnly(
             xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array
-#if defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
             ,
             /*use_experiment=*/0, NULL
 #endif

@@ -28,6 +28,12 @@ cache indexes, ties and edge sizes, deterministic repeats, injected workspace
 fallback, publication stream/decode identity, immutable inputs, build/runtime
 omission and sanitizer execution. It runs no timed protocol.
 
+`scripts/test_backref_cost_workspace_ab_experiment.py` independently re-freezes
+that unchanged workspace candidate behind new remote-A/B gates. It proves a
+canonical preprocessed-source match to main `e7c1be7d...`, old-gate isolation,
+default omission, exact publication-corpus streams and decoded pixels, injected
+fallback, missing-session refusal, and sanitizer coverage without timing.
+
 ## Building
 
 ### Fuzzers
