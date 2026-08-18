@@ -1,5 +1,11 @@
 # Frozen focused back-reference cache-search experiment
 
+> **Evaluation status:** the frozen matrix completed, but method-6 cold holdout
+> exceeded the 1.03 median recorder/control ceiling. The candidate is not
+> accepted under the all-cell rule; its default-off diagnostic is retained and
+> no production consequence is promoted. See
+> [backref-cache-search-experiment-evaluation-20260818.md](backref-cache-search-experiment-evaluation-20260818.md).
+
 ## Evidence audit and selection
 
 This design starts at default-branch merge

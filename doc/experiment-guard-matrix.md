@@ -59,7 +59,11 @@ Row 8 is the independently gated next-cycle diagnostic frozen in
 It does not rerun either rejected row: it measures only the evidence-supported
 cache-size search and inclusive backref boundary with a dedicated two-clock
 recorder. It cannot directly promote production code or support a GPU-speedup
-claim.
+claim. The completed matrix found cache-search majority share in every holdout
+cell, but method-6 cold exceeded the frozen median-overhead limit. Row 8 is
+therefore not accepted; it remains default-off reproduction instrumentation.
+See
+[backref-cache-search-experiment-evaluation-20260818.md](backref-cache-search-experiment-evaluation-20260818.md).
 
 ## Default and isolation guarantees
 

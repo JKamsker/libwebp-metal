@@ -14,6 +14,13 @@ boundary-selection results, not end-to-end speedup or production claims. Their
 evidence, procedural continuation exception, and limitations are audited in
 [next-boundary-experiment-evaluation-20260818.md](next-boundary-experiment-evaluation-20260818.md).
 
+The later row-8 focused cache-search matrix also completed on publication
+corpus v1. Its share and p95 criteria passed every required holdout, but
+method-6 cold failed the frozen median-overhead ceiling. The candidate was not
+accepted and no production consequence followed. Its hashes, raw inventory,
+statistics, and limitations are audited in
+[backref-cache-search-experiment-evaluation-20260818.md](backref-cache-search-experiment-evaluation-20260818.md).
+
 ## Evidence policy
 
 Publication-core claims must have committed raw evidence and inputs that are
@@ -32,6 +39,7 @@ reproduced by substituting a similarly named file.
 | Experiment 4 transform/hash candidates and external-image correctness loops | Depends on the three unavailable files below; raw timing artifacts are committed | **Removed from the publication core; retained as a historical appendix.** No optimization conclusion is published from these rows. |
 | Experiment 5 standalone predictor timing and external-image correctness | Depends on the three unavailable files below; raw CSV and validation are committed | **Removed from the publication core; retained as historical evidence.** Its existing default-off implementation disposition is unchanged, but the six-stratum result is not a reproducible publication claim. |
 | Rows 6--7 predictor/backref boundary continuation | Publication corpus v1 tune/holdout cases; external raw records and committed evidence indexes/evaluation | **Retained as bounded synthetic boundary-selection evidence.** Neither candidate passed every frozen criterion; no speedup or production claim is supported. |
+| Row 8 focused cache-search diagnostic | Publication corpus v1 texture-medium tune and texture-large holdout; external raw records, complete hash index, committed evidence index, and machine-readable evaluation | **Retained as bounded synthetic diagnostic evidence.** Cache-search share passed, but one required median-overhead cell failed; the candidate is not accepted and supports no speedup or production claim. |
 | `BENCHMARK_RESULTS.md` complete-lossless/hash tables and file-size/equality statements | Depends on the three unavailable files and lacks raw per-trial samples | **Quarantined as recorded-only history.** Not used by the publication core. |
 | Architecture, private API/ABI, build gates, defaults, and source-level fallback contracts | Established by repository source and untimed tests; not corpus-dependent | **Retained**, with device/runtime behavior limited to the executed tests. |
 

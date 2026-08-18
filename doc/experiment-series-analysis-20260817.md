@@ -15,6 +15,13 @@
 > backref boundaries and was rejected as dominant. No production change was
 > promoted. See
 > [next-boundary-experiment-evaluation-20260818.md](next-boundary-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 focused cache-search addendum:** a later independent row-8
+> diagnostic found majority cache-search share in every required texture
+> holdout, but method-6 cold failed its median-overhead gate. It was not
+> accepted, changes no predecessor disposition, and promotes no production
+> change. See
+> [backref-cache-search-experiment-evaluation-20260818.md](backref-cache-search-experiment-evaluation-20260818.md).
 
 ## Scope and evidence boundary
 

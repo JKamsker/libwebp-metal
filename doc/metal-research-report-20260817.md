@@ -15,6 +15,14 @@
 > required texture holdouts. No production code, threshold, or ABI was promoted.
 > See
 > [next-boundary-experiment-evaluation-20260818.md](next-boundary-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 focused cache-search addendum:** a new independent two-clock
+> diagnostic measured `CalculateBestCacheSize` at 60.90--64.15% of all
+> required holdout backref boundaries. Method-6 cold exceeded the frozen
+> median recorder/control ceiling, so the all-cell candidate was not accepted.
+> The diagnostic remains default off; no production or speedup claim follows.
+> See
+> [backref-cache-search-experiment-evaluation-20260818.md](backref-cache-search-experiment-evaluation-20260818.md).
 
 ## Abstract
 
@@ -405,6 +413,9 @@ this report and are not used to justify the 2x2 promotion or threshold policy.
 | 512-thread lossy kernel | inconclusive; promising alone, unmeasured with promoted 2x2 and on other devices |
 | Other lossy memory/command changes | rejected; small, inconsistent, or size-specific effects |
 | Standalone predictor residual | remains default-off; historical external-image result excluded from publication core |
+| Predictor selector-plus-apply boundary | not accepted; required recorder-overhead cell failed |
+| Standard exact-LZ77 boundary | rejected; only 3.13--4.29% of required holdout backref time and one p95 outlier |
+| Focused cache-size-search boundary | not accepted; majority share passed, but method-6 cold recorder/control median exceeded 1.03 |
 
 ## Correctness, determinism, and fallback contracts
 
@@ -473,6 +484,9 @@ matrix.
   timing, and cold processes. It is excluded from the publication core.
 - No experiment records GPU energy, peak retained allocation, queue contention,
   multi-threaded application behavior, or long-run thermal equilibrium.
+- The row-8 cache-search result uses one M4 Pro and synthetic textures. Its
+  nested clock is inclusive accounting, not an implementation speedup, and its
+  method-6 cold recorder overhead fails the predeclared all-cell rule.
 
 ## Reproducibility
 
