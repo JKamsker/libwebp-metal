@@ -5,6 +5,12 @@ Post-integration operator results and the final Sol dispositions are in
 That report promotes only the exact 2x2 lossy kernel; it leaves the recorded
 experiment guards and public compatibility boundary unchanged.
 
+The 2026-08-18 publication addendum is in
+[publication-evidence-audit-20260818.md](publication-evidence-audit-20260818.md).
+It retains generated-input claims, quarantines external-image results as
+historical-only, and adds publication corpus v1 without changing historical
+artifacts or defining a new timed experiment.
+
 ## Scope and ancestry
 
 This branch integrates the completed Metal research work onto clean main

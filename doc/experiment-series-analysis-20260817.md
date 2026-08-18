@@ -1,5 +1,13 @@
 # Metal experiment series: Sol analysis and disposition
 
+> **2026-08-18 publication boundary:** this document preserves the original
+> five-item interpretation. For publication support, experiment 4's
+> external-image transform/hash rows and all of experiment 5 are now
+> historical-only because the exact inputs have unresolved provenance and
+> redistribution rights. Experiments 1--3 and experiment 4's generated-input
+> lossy suite remain in the bounded core. See
+> [publication-evidence-audit-20260818.md](publication-evidence-audit-20260818.md).
+
 ## Scope and evidence boundary
 
 This report interprets the five serialized experiment runs committed from

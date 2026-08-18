@@ -5,6 +5,16 @@ experiment series is interpreted in
 [doc/experiment-series-analysis-20260817.md](doc/experiment-series-analysis-20260817.md);
 it changes the selected lossy kernel without rewriting these recorded numbers.
 
+**Publication quarantine:** the complete-lossless and hash tables, their
+file-size/equality statements, and their three named inputs are not part of the
+publishable reproducible core. Raw per-trial samples were not retained, and no
+source, author, license, or redistribution terms have been identified for
+`mitski.png`, `corgi.jpeg`, or `siamese.jpg`. These numbers remain immutable
+historical records only. See
+[the evidence audit](doc/publication-evidence-audit-20260818.md). The generated
+publication corpus must not be substituted into these rows or presented as a
+reproduction of them.
+
 Measured on 2026-08-17 on a 14-core Apple M4 Pro MacBook Pro with 24 GB of
 memory. macOS reported no thermal or power warnings. The migrated encoder was
 built at `-O3` from `v1.6.0-221-g4fe551df` plus the local Metal changes.

@@ -1,0 +1,136 @@
+{
+  "cases": [
+    {
+      "bytes": 786447,
+      "case_id": "photo-small",
+      "category": "photo",
+      "file": "photo-small.ppm",
+      "height": 512,
+      "pixels": 262144,
+      "sha256": "18a612146faf5cdc2d9f786ddcd946615235db992c83011d37c89b1728b90922",
+      "size_class": "small",
+      "width": 512
+    },
+    {
+      "bytes": 786447,
+      "case_id": "graphic-small",
+      "category": "graphic",
+      "file": "graphic-small.ppm",
+      "height": 512,
+      "pixels": 262144,
+      "sha256": "ddd376ba50104a0d7aea5498def73c9299d5304cd4ffe4c02f18d1107b6f79cf",
+      "size_class": "small",
+      "width": 512
+    },
+    {
+      "bytes": 786447,
+      "case_id": "texture-small",
+      "category": "texture",
+      "file": "texture-small.ppm",
+      "height": 512,
+      "pixels": 262144,
+      "sha256": "51c73a488d129f60eca7a110cc3dbf7117045a8e13104ee1bf87922707c651e6",
+      "size_class": "small",
+      "width": 512
+    },
+    {
+      "bytes": 5760017,
+      "case_id": "photo-medium",
+      "category": "photo",
+      "file": "photo-medium.ppm",
+      "height": 1200,
+      "pixels": 1920000,
+      "sha256": "a1a6ab156ae4b18666a780bcdf7eaf7d2124415eb192e091dc21e7adbf383c70",
+      "size_class": "medium",
+      "width": 1600
+    },
+    {
+      "bytes": 5760017,
+      "case_id": "graphic-medium",
+      "category": "graphic",
+      "file": "graphic-medium.ppm",
+      "height": 1200,
+      "pixels": 1920000,
+      "sha256": "c42deaa474e253db740384e7e93a208c82ff11cd66dc2930c34678a9e8279234",
+      "size_class": "medium",
+      "width": 1600
+    },
+    {
+      "bytes": 5760017,
+      "case_id": "texture-medium",
+      "category": "texture",
+      "file": "texture-medium.ppm",
+      "height": 1200,
+      "pixels": 1920000,
+      "sha256": "91d90466139f54ad441448bc7d352c637a4020ce928434dbff3a358c5a829385",
+      "size_class": "medium",
+      "width": 1600
+    },
+    {
+      "bytes": 18000017,
+      "case_id": "photo-large",
+      "category": "photo",
+      "file": "photo-large.ppm",
+      "height": 2000,
+      "pixels": 6000000,
+      "sha256": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612",
+      "size_class": "large",
+      "width": 3000
+    },
+    {
+      "bytes": 18000017,
+      "case_id": "graphic-large",
+      "category": "graphic",
+      "file": "graphic-large.ppm",
+      "height": 2000,
+      "pixels": 6000000,
+      "sha256": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc",
+      "size_class": "large",
+      "width": 3000
+    },
+    {
+      "bytes": 18000017,
+      "case_id": "texture-large",
+      "category": "texture",
+      "file": "texture-large.ppm",
+      "height": 2000,
+      "pixels": 6000000,
+      "sha256": "dd02badce31b757f9374f0f5de187e9de3158fe6878929207eeed24ea72d79e2",
+      "size_class": "large",
+      "width": 3000
+    }
+  ],
+  "categories": [
+    {
+      "description": "smooth gradients, bounded coordinate noise, and broad color variation",
+      "id": "photo"
+    },
+    {
+      "description": "six-color blocks with strong horizontal and vertical edges",
+      "id": "graphic"
+    },
+    {
+      "description": "high-frequency deterministic xorshift32 samples",
+      "id": "texture"
+    }
+  ],
+  "corpus_version": 1,
+  "format": "binary PPM (P6), opaque 8-bit RGB",
+  "generator": {
+    "algorithm": "integer formulas defined entirely in generator source",
+    "seed": 2654435769,
+    "seed_hex": "0x9e3779b9",
+    "source": "scripts/generate_publication_corpus.py",
+    "source_sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+    "version": 1
+  },
+  "license": {
+    "file": "COPYING",
+    "scope": "generator source, manifest, and generated PPM bytes",
+    "spdx": "BSD-3-Clause",
+    "third_party_media": false
+  },
+  "provenance": "Repository-generated synthetic pixels; no external or embedded image media, model output, network input, or runtime randomness.",
+  "schema": "libwebp-publication-corpus-manifest-v1",
+  "total_generated_bytes": 73639443
+}

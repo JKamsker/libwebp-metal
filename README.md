@@ -21,7 +21,8 @@ This fork adds optional Metal acceleration for lossless cross-color search,
 lossless backward-reference candidate search, and opaque RGB/BGR to YUV420
 conversion. It is based on current libwebp rather than the legacy libwebp 1.0.3
 tree. See [METAL_MIGRATION_TASK.md](METAL_MIGRATION_TASK.md) for the migration
-scope and maintenance strategy. Current CPU-versus-Metal measurements are in
+scope and maintenance strategy. Historical CPU-versus-Metal measurements are
+quarantined as recorded-only in
 [BENCHMARK_RESULTS.md](BENCHMARK_RESULTS.md). The private backend contract and
 CUDA revival plan are in
 [ACCELERATOR_BACKEND_DESIGN.md](ACCELERATOR_BACKEND_DESIGN.md). The reproducible
@@ -33,6 +34,10 @@ changes, is in
 The self-contained publication report, with the one-device/one-day boundary,
 corpus-provenance audit, reproducibility notes, and unresolved blockers, is in
 [doc/metal-research-report-20260817.md](doc/metal-research-report-20260817.md).
+The claim-by-claim publication audit and the deterministic, redistributable
+on-demand corpus are documented in
+[doc/publication-evidence-audit-20260818.md](doc/publication-evidence-audit-20260818.md)
+and [benchmarks/publication-corpus/README.md](benchmarks/publication-corpus/README.md).
 
 Project home: https://github.com/JKamsker/libwebp-metal
 
