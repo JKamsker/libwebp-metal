@@ -103,9 +103,12 @@ three selection thresholds.
 
 CMake enables Metal by default on Apple platforms, compiles Objective-C++, and
 links Foundation and Metal; `makefile.unix` also enables Metal by default on
-macOS. The standard Autotools inputs do not build the Metal translation units.
-That build-path asymmetry is a release blocker, not an undocumented support
-promise.
+macOS. At the evidence revision, the standard Autotools inputs did not build
+the Metal translation units. The 2026-08-18 release-hardening follow-up added
+an explicit `--enable-metal` policy, build/install/external-link CI, and
+Metal-off/on installed header/export comparison. Those later untimed checks
+close the previously described build-path asymmetry without changing experiment
+results or establishing every-toolchain packaging support.
 
 ## Methods
 
@@ -613,12 +616,16 @@ historical matrix from the final revision and label it the original experiment.
 3. **One-device/one-day scope:** there is no supported-device, different-day,
    OS, compiler, or cross-device determinism matrix. This blocks threshold and
    readiness claims.
-4. **Build/distribution gap:** Autotools omits Metal; installed-library ABI and
-   static-consumer framework linking have not been demonstrated across build
-   modes.
-5. **Correctness depth:** no sanitizer/fuzzer campaign, broad natural-image corpus,
-   adversarial dimensions/strides/formats, device-loss, cancellation, or
-   concurrent-encode campaign is part of this evidence package.
+4. **Build/distribution scope:** CMake static/shared and Autotools Metal-off/on
+   configure/build/install/external-link checks now pass, static consumers
+   carry framework dependencies, and installed headers/exports are compared.
+   Release coverage across supported Apple toolchains and downstream packaging
+   review remain.
+5. **Correctness depth:** forced-Metal adversarial dimension/stride/format and
+   bounded UBSan mutation checks exist, but no broad sanitizer/fuzzer campaign,
+   natural-image corpus, device-loss, or concurrent-encode campaign is part of
+   this evidence package. Cross-device cancellation and failure evidence also
+   remain limited.
 6. **Operational behavior:** runtime shader compilation, process-global
    environment selection, persistent buffers, serialized access, lack of trim,
    and coarse error classification remain unresolved support risks.
@@ -655,9 +662,10 @@ ready for upstream submission.
 - Design content and lifecycle eligibility only after the measurement matrix
   supports it. A single pixel threshold cannot represent the current cold/warm
   and photo/texture/palette differences.
-- Complete Metal-on/off build, install, link, ABI, sanitizer, fuzz, failure-
-  injection, cancellation, and concurrent-use CI before considering an
-  upstream experimental backend.
+- Extend the existing Metal-on/off build/install/link, ABI, adversarial, and
+  bounded UBSan checks across supported toolchains; add broader sanitizer,
+  fuzz, failure-injection, cancellation, and concurrent-use CI before
+  considering an upstream experimental backend.
 - Preserve the private synchronous ABI until ownership, memory limits,
   cancellation, and batch lifecycle have explicit contracts; do not expose
   accelerator handles in the public WebP API prematurely.
