@@ -11,6 +11,7 @@
 //
 
 #include "src/enc/backward_references_enc.h"
+#include "src/enc/backref_cache_search_experiment_enc.h"
 #include "src/enc/boundary_experiment_enc.h"
 
 #include <assert.h>
@@ -1026,12 +1027,15 @@ static int GetBackwardReferences(int width, int height,
 
       if (i == 0) {
         int cache_ok;
+        const uint64_t cache_search_start =
+            WebPBackrefCacheSearchStageBegin();
         uint64_t boundary_start = WebPBackrefExactStageBegin(
             WEBP_BACKREF_EXACT_CACHE_SEARCH);
         // Try with a color cache.
         cache_ok = CalculateBestCacheSize(argb, quality, refs_tmp, &cache_bits);
         WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_CACHE_SEARCH,
                                  boundary_start);
+        WebPBackrefCacheSearchStageEnd(cache_search_start);
         if (!cache_ok) {
           goto Error;
         }
@@ -1133,6 +1137,7 @@ int VP8LGetBackwardReferences(
     int* const percent) {
   const uint64_t boundary_start =
       WebPBackrefExactStageBegin(WEBP_BACKREF_EXACT_TOTAL);
+  const uint64_t cache_experiment_start = WebPBackrefCacheSearchTotalBegin();
   int result;
   if (low_effort) {
     VP8LBackwardRefs* refs_best;
@@ -1142,6 +1147,7 @@ int VP8LGetBackwardReferences(
     if (refs_best == NULL) {
       result = WebPEncodingSetError(pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
       WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_TOTAL, boundary_start);
+      WebPBackrefCacheSearchTotalEnd(cache_experiment_start);
       return result;
     }
     // Set it in first position.
@@ -1152,11 +1158,13 @@ int VP8LGetBackwardReferences(
                                cache_bits_best)) {
       result = WebPEncodingSetError(pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
       WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_TOTAL, boundary_start);
+      WebPBackrefCacheSearchTotalEnd(cache_experiment_start);
       return result;
     }
   }
 
   result = WebPReportProgress(pic, *percent + percent_range, percent);
   WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_TOTAL, boundary_start);
+  WebPBackrefCacheSearchTotalEnd(cache_experiment_start);
   return result;
 }

@@ -14,6 +14,7 @@ shared experimental build or runtime switch.
 | 5 predictor residual | `WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT` | `WEBP_USE_METAL_PREDICTOR_EXPERIMENT` | `WEBP_METAL_PREDICTOR=1` | predictor source and call-site hook |
 | 6 predictor boundary decomposition | `WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT` | `WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT` | `WEBP_PREDICTOR_BOUNDARY_EXPERIMENT=1` | boundary recorder, predictor/map probes, private repetition option |
 | 7 backref exact decomposition | `WEBP_BUILD_BACKREF_EXACT_EXPERIMENT` | `WEBP_USE_BACKREF_EXACT_EXPERIMENT` | `WEBP_BACKREF_EXACT_EXPERIMENT=1` | boundary recorder, backward-reference probes, private repetition option |
+| 8 focused backref cache search | `WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT` | `WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT` | `WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT=1` | dedicated two-clock recorder, cache-search probes, private repetition option |
 
 Every runtime value is exact: values other than `1` are disabled. Every timed
 launcher additionally requires `WEBP_BENCHMARK_SESSION=exclusive`. Correctness,
@@ -53,12 +54,24 @@ criterion. Neither boundary is accepted. Both rows remain default-off research
 diagnostics, and the complete evidence-to-decision audit is in
 [next-boundary-experiment-evaluation-20260818.md](next-boundary-experiment-evaluation-20260818.md).
 
+Row 8 is the independently gated next-cycle diagnostic frozen in
+[backref-cache-search-experiment-20260818.md](backref-cache-search-experiment-20260818.md).
+It does not rerun either rejected row: it measures only the evidence-supported
+cache-size search and inclusive backref boundary with a dedicated two-clock
+recorder. It cannot directly promote production code or support a GPU-speedup
+claim. The completed matrix found cache-search majority share in every holdout
+cell, but method-6 cold exceeded the frozen median-overhead limit. Row 8 is
+therefore not accepted; it remains default-off reproduction instrumentation.
+See
+[backref-cache-search-experiment-evaluation-20260818.md](backref-cache-search-experiment-evaluation-20260818.md).
+
 ## Default and isolation guarantees
 
 - Default CMake and Unix make builds define none of the private macros.
   Item 1's source and CLI hook, items 2--4's drivers/targets, item 3's private
-  batch symbol, item 5's source/call site, and rows 6--7's shared recorder,
-  probes, environment reads, symbols, and private repetition options are omitted.
+  batch symbol, item 5's source/call site, rows 6--7's shared recorder, and row
+  8's dedicated recorder, probes, environment reads, symbols, and private
+  repetition options are omitted.
 - An ordinary Metal build continues to include the supported transform, hash,
   and RGB-to-YUV acceleration. Item 4's alternate environment knobs are read
   only when both its build macro and exact runtime opt-in are present.
@@ -105,19 +118,23 @@ make -f makefile.unix WEBP_ENABLE_METAL=1 \
 # Item 7
 make -f makefile.unix WEBP_ENABLE_METAL=1 \
   WEBP_BUILD_BACKREF_EXACT_EXPERIMENT=1 examples/cwebp
+
+# Item 8
+make -f makefile.unix WEBP_ENABLE_METAL=1 \
+  WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT=1 examples/cwebp
 ```
 
-CMake uses the same names with `-D<name>=ON`. Items 2--5 also require
+CMake uses the same names with `-D<name>=ON`. Items 2--8 also require
 `-DWEBP_ENABLE_METAL=ON`; item 3 requires `-DBUILD_SHARED_LIBS=OFF`, and item 4
 requires `-DWEBP_BUILD_EXTRAS=ON`. Each experiment target is deliberately
 non-installed.
 
 ## Untimed guard validation
 
-The focused test does not grant the benchmark lease, read benchmark clocks, or
-run an encoder. It verifies default-off make commands, forced dry-run macro
-isolation for all seven rows, omitted driver targets, runtime refusal, lease
-refusal, the promoted item-4 default/legacy correctness mapping, and the fact
+The focused guard test does not grant the benchmark lease, read benchmark
+results, or run an encoder. It verifies default-off make commands, forced
+dry-run macro isolation for all eight rows, omitted driver targets, runtime
+refusal, lease refusal, the promoted item-4 default/legacy correctness mapping, and the fact
 that item 4's released timed matrix was not repurposed as a follow-up:
 
 ```sh

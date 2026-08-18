@@ -1,5 +1,11 @@
 # Next-boundary experiment evaluation (2026-08-18)
 
+> **Later focused result:** the independently gated row-8 cache-search
+> diagnostic did not reopen either decision below. Its cache-search share
+> passed every holdout cell, but method-6 cold failed the new diagnostic's
+> median-overhead ceiling, so it too was not accepted. See
+> [backref-cache-search-experiment-evaluation-20260818.md](backref-cache-search-experiment-evaluation-20260818.md).
+
 ## Outcome
 
 The separately released continuation ran both frozen timed matrices on one

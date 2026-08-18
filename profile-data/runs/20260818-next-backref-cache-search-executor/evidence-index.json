@@ -1,0 +1,129 @@
+{
+  "schema": "libwebp-backref-cache-search-executor-evidence-v1",
+  "executor_commit_type": "separate raw-evidence index and handoff; designer commit unchanged",
+  "base_commit": "297b9e5257ed1098503f7630f3223c1fddbef261",
+  "designer_commit": "90ceb5a3d81a761678c0e89d44f7c09e5ce18836",
+  "source_commit": "90ceb5a3d81a761678c0e89d44f7c09e5ce18836",
+  "manifest": "scripts/backref_cache_search_experiment_v1.json",
+  "manifest_sha256": "ed0c68b0e72fb013da5fe244d20453e3c86d1199cc7877725c2c4b4fb8041fe1",
+  "operator": "scripts/run_backref_cache_search_experiment.py",
+  "operator_sha256": "1a66c966dc1d5735e5bba6ef8b281f4b8093b542c399b451c72594d8084a1848",
+  "corpus_generator_sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+  "corpus_manifest_sha256": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+  "evidence_root": "/Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal-evidence/20260818-cycle3",
+  "experiment": {
+    "name": "backref_cache_search",
+    "status": "completed",
+    "exit_code": 0,
+    "timed_work_executed": true,
+    "lease_acquired": true,
+    "lease_released": true,
+    "lease_path": "/tmp/libwebp-metal-next-boundary.lock",
+    "evidence_path": "/Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal-evidence/20260818-cycle3/backref-cache-search",
+    "operator_report_path": "/Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal-evidence/20260818-cycle3/backref-cache-search/operator-report.md",
+    "artifact_hashes_path": "/Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal-evidence/20260818-cycle3/backref-cache-search/artifact-hashes.json",
+    "artifact_hashes_sha256": "55acf72755516c68fa9b6884589553ae8b9d1ba18679de85d7a97f29491e547d",
+    "artifact_count_excluding_hash_index": 89,
+    "exact_command": "WEBP_EXPECTED_DESIGNER_COMMIT=90ceb5a3d81a761678c0e89d44f7c09e5ce18836 WEBP_BENCHMARK_SESSION=exclusive WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT=1 python3 scripts/run_backref_cache_search_experiment.py run backref_cache_search /Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal-evidence/20260818-cycle3/backref-cache-search",
+    "executor_transcript_path": "/Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal/profile-data/runs/20260818-next-backref-cache-search-executor/executor-transcript.txt",
+    "executor_transcript_sha256": "02fc67f010727f5d919606f86a77f3658b00ce935606559021e865fa9614ae7a",
+    "operator_transcripts": {
+      "build": "/Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal-evidence/20260818-cycle3/backref-cache-search/build.log",
+      "commands": "/Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal-evidence/20260818-cycle3/backref-cache-search/commands.jsonl",
+      "records": "/Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal-evidence/20260818-cycle3/backref-cache-search/records.jsonl",
+      "correctness_records": "/Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal-evidence/20260818-cycle3/backref-cache-search/correctness-records.jsonl",
+      "per_command_stderr_directory": "/Users/jonaskamsker/.codex/worktrees/0351/libwebp-metal-evidence/20260818-cycle3/backref-cache-search/stderr",
+      "per_command_stderr_files": "0001.log through 0080.log"
+    },
+    "schemas": {
+      "command": "libwebp-backref-cache-search-command-v1",
+      "record": "libwebp-backref-cache-search-v1",
+      "correctness": "libwebp-backref-cache-search-correctness-v1"
+    },
+    "counts": {
+      "command_rows": 80,
+      "raw_timing_records": 200,
+      "raw_correctness_records": 54,
+      "correctness_summary_rows": 18,
+      "stderr_files": 80,
+      "cold_records": 56,
+      "discarded_warmups": 24,
+      "measured_warm_records": 120,
+      "measured_record_variant": 88,
+      "measured_control_variant": 88
+    },
+    "roles": {
+      "tune": "texture-medium",
+      "holdout": "texture-large",
+      "methods": [4, 6],
+      "cold_process_pairs_per_cell": 7,
+      "warm_process_pairs_per_cell": 3,
+      "warm_discarded_encodes_per_process": 1,
+      "warm_measured_encodes_per_process": 5
+    },
+    "raw_artifact_hashes": {
+      "preflight.json": "8576af36ee045bd55e38ac060754a8169aaf42c197bc0cf04d2ced8ff72892d3",
+      "machine.json": "47b8be5b13c92de63522425c0d2fa5111df3235dc69ae02623036f8a2757438e",
+      "build.log": "d33eae2104c1481d1d1ed9bfc1309dfeed8e38a40b425c52f6d24eecf590181c",
+      "commands.jsonl": "7a3da709b3a844ae0e81f52d0be09c00b541f86c657419903265e3814c1401af",
+      "records.jsonl": "84934cec908a89011de8c261cbb360fe01502bb6f7bc188726be29804debe85d",
+      "correctness-records.jsonl": "fd9033add77fdec3111207712e104bab63346fa45138b3557ba433f372702d10",
+      "correctness.json": "8ac8b012310c94c662969c94e6dc9b5f41b2e04e7b1962f71dafba9ed40f8cdd",
+      "resource-notes.json": "b7e2bda0ad3bb1f166c29b7e092e1f6155c42dbb0cad3280b4bdc2048cb002be",
+      "operator-report.md": "fe930deb8c8d5c0a4a61cf3c2e8f69a279af8065c7a251fba05e552048fab54c",
+      "stderr/*.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "preflight_and_execution_gates": {
+    "source_commit_matches_expected_environment": true,
+    "clean_worktree_before_run": true,
+    "base_commit_is_ancestor": true,
+    "frozen_output_path_was_fresh": true,
+    "corpus_generator_and_manifest_hashes": true,
+    "minimum_free_memory": {
+      "passed": true,
+      "observed_bytes": 10079453184,
+      "ceiling_bytes": 8589934592
+    },
+    "free_disk_prerequisite": true,
+    "physical_metal_device_count": {
+      "passed": true,
+      "observed": 1,
+      "required": 1
+    },
+    "single_benchmark_process": true,
+    "build": true,
+    "correctness": true,
+    "determinism_and_transactional_fallback": true,
+    "matrix_execution": true,
+    "inventory_validation": true,
+    "resource_ceilings": true,
+    "cuda_used": false,
+    "source_or_design_changes_during_execution": false,
+    "timed_interpretation": "not performed by executor"
+  },
+  "machine": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64",
+    "os": "ProductName: macOS; ProductVersion: 26.5.1; BuildVersion: 25F80",
+    "python": "3.9.6",
+    "compiler": "Apple clang version 17.0.0 (clang-1700.6.4.2), target arm64-apple-darwin25.5.0",
+    "gpu": "Apple M4 Pro",
+    "metal_family": "Metal 4",
+    "physical_metal_device_count": 1,
+    "sdk_diagnostic": "xcrun --show-sdk-version reported that /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk could not be located; the frozen build and experiment completed",
+    "power": "AC Power; internal battery 100%; charged",
+    "thermal": "No thermal warning level; no performance warning level; no CPU power status recorded",
+    "gpu_performance_claim": false,
+    "dispatch_evidence_required": false
+  },
+  "resource_and_lease": {
+    "elapsed_seconds": 87.91612601280212,
+    "maximum_observed_rss_bytes": 356171776,
+    "ending_load_average": [2.57763671875, 2.572265625, 2.3876953125],
+    "lease_released_reported_by_operator": true,
+    "lock_path_after_run": "/tmp/libwebp-metal-next-boundary.lock",
+    "lock_path_note": "The operator released the flock; its zero-byte bookkeeping path remained present after completion."
+  },
+  "raw_observation_policy": "Raw observations are preserved externally. No timing ratio, p95, acceptance criterion, candidate decision, or production consequence was calculated or interpreted by the executor."
+}
