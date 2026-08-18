@@ -158,6 +158,7 @@ struct CudaState {
   cudaEvent_t event_start = nullptr;
   cudaEvent_t event_stop = nullptr;
   uint32_t* pixels = nullptr;
+  uint32_t* resident_lossless_pixels = nullptr;
   uint32_t* transform = nullptr;
   int32_t* chain = nullptr;
   uint8_t* analysis_y = nullptr;
@@ -165,6 +166,7 @@ struct CudaState {
   uint8_t* analysis_v = nullptr;
   WebPAcceleratorLossyAnalysisResult* analysis_results = nullptr;
   size_t pixel_capacity = 0;
+  size_t resident_lossless_pixel_capacity = 0;
   size_t transform_capacity = 0;
   size_t chain_capacity = 0;
   size_t analysis_y_capacity = 0;
@@ -179,6 +181,10 @@ struct CudaState {
   size_t host_transform_capacity = 0;
   size_t host_chain_capacity = 0;
   size_t host_analysis_result_capacity = 0;
+  bool resident_lossless_pixels_valid = false;
+  const uint32_t* resident_lossless_host_pixels = nullptr;
+  size_t resident_lossless_pixel_count = 0;
+  int resident_lossless_xsize = 0;
   bool resident_yuv_valid = false;
   const uint8_t* resident_y = nullptr;
   const uint8_t* resident_u = nullptr;
@@ -1333,9 +1339,13 @@ cudaError_t FinishDownloads(cudaStream_t stream) {
 #endif  // WEBP_CUDA_HAS_ENCODER_STAGE
 
 void ReleaseStagingBuffers(CudaState* state) {
+  state->resident_lossless_pixels_valid = false;
   state->resident_yuv_valid = false;
 #if defined(WEBP_CUDA_ENABLE_STREAM_ORDERED_ALLOCATIONS)
   if (state->pixels != nullptr) (void)cudaFreeAsync(state->pixels, state->stream);
+  if (state->resident_lossless_pixels != nullptr) {
+    (void)cudaFreeAsync(state->resident_lossless_pixels, state->stream);
+  }
   if (state->transform != nullptr) {
     (void)cudaFreeAsync(state->transform, state->stream);
   }
@@ -1354,6 +1364,9 @@ void ReleaseStagingBuffers(CudaState* state) {
   }
 #else
   if (state->pixels != nullptr) (void)cudaFree(state->pixels);
+  if (state->resident_lossless_pixels != nullptr) {
+    (void)cudaFree(state->resident_lossless_pixels);
+  }
   if (state->transform != nullptr) (void)cudaFree(state->transform);
   if (state->chain != nullptr) (void)cudaFree(state->chain);
   if (state->analysis_y != nullptr) (void)cudaFree(state->analysis_y);
@@ -1364,6 +1377,7 @@ void ReleaseStagingBuffers(CudaState* state) {
   }
 #endif
   state->pixels = nullptr;
+  state->resident_lossless_pixels = nullptr;
   state->transform = nullptr;
   state->chain = nullptr;
   state->analysis_y = nullptr;
@@ -1371,6 +1385,7 @@ void ReleaseStagingBuffers(CudaState* state) {
   state->analysis_v = nullptr;
   state->analysis_results = nullptr;
   state->pixel_capacity = 0;
+  state->resident_lossless_pixel_capacity = 0;
   state->transform_capacity = 0;
   state->chain_capacity = 0;
   state->analysis_y_capacity = 0;
@@ -1418,6 +1433,7 @@ WebPAcceleratorResult CUDAColorTransformLocked(
   float elapsed_ms = 0.0f;
   bool verbose;
   bool timing;
+  bool capture_resident_pixels = false;
 
   if (!EnvironmentFlag("WEBP_CUDA", true) ||
       !EnvironmentFlag("WEBP_CUDA_COLOR", true)) {
@@ -1476,12 +1492,23 @@ WebPAcceleratorResult CUDAColorTransformLocked(
     return ReportError(state, "select device", error, true);
   }
   state->resident_yuv_valid = false;
+  state->resident_lossless_pixels_valid = false;
   error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
                              pixel_bytes, state->stream);
   if (error == cudaSuccess) {
     error = EnsureDeviceBuffer(&state->transform, &state->transform_capacity,
                                transform_bytes, state->stream);
   }
+#if defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+  capture_resident_pixels =
+      EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", false) &&
+      EnvironmentFlag("WEBP_CUDA_HASH", true);
+  if (error == cudaSuccess && capture_resident_pixels) {
+    error = EnsureDeviceBuffer(&state->resident_lossless_pixels,
+                               &state->resident_lossless_pixel_capacity,
+                               pixel_bytes, state->stream);
+  }
+#endif
   if (error != cudaSuccess) {
     return ReportError(state, "allocate staging buffers", error, false);
   }
@@ -1524,6 +1551,11 @@ WebPAcceleratorResult CUDAColorTransformLocked(
   if (error == cudaSuccess && timing) {
     error = cudaEventRecord(state->event_stop, state->stream);
   }
+  if (error == cudaSuccess && capture_resident_pixels) {
+    error = cudaMemcpyAsync(state->resident_lossless_pixels, state->pixels,
+                            pixel_bytes, cudaMemcpyDeviceToDevice,
+                            state->stream);
+  }
   if (error == cudaSuccess) {
     error = DownloadFromDevice(state->host_pixels, state->pixels, pixel_bytes,
                                state->stream);
@@ -1540,6 +1572,12 @@ WebPAcceleratorResult CUDAColorTransformLocked(
 
   memcpy(request->argb, state->host_pixels, pixel_bytes);
   memcpy(request->transform_image, state->host_transform, transform_bytes);
+  if (capture_resident_pixels) {
+    state->resident_lossless_host_pixels = request->argb;
+    state->resident_lossless_pixel_count = pixel_count;
+    state->resident_lossless_xsize = request->width;
+    state->resident_lossless_pixels_valid = true;
+  }
   if (verbose) {
     if (timing) {
       if (cudaEventElapsedTime(&elapsed_ms, state->event_start,
@@ -1737,6 +1775,8 @@ WebPAcceleratorResult CUDAHashChainLocked(
   float elapsed_ms = 0.0f;
   bool verbose;
   bool timing;
+  bool use_resident_pixels;
+  const uint32_t* device_pixels;
 
   if (!EnvironmentFlag("WEBP_CUDA", true) ||
       !EnvironmentFlag("WEBP_CUDA_HASH", true)) {
@@ -1776,8 +1816,21 @@ WebPAcceleratorResult CUDAHashChainLocked(
     return ReportError(state, "select device", error, true);
   }
   state->resident_yuv_valid = false;
-  error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity, bytes,
-                             state->stream);
+  use_resident_pixels =
+      EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", false) &&
+      state->resident_lossless_pixels_valid &&
+      state->resident_lossless_host_pixels == request->pixels &&
+      state->resident_lossless_pixel_count ==
+          static_cast<size_t>(request->size) &&
+      state->resident_lossless_xsize == request->xsize;
+  if (use_resident_pixels) {
+    device_pixels = state->resident_lossless_pixels;
+    error = cudaSuccess;
+  } else {
+    error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity, bytes,
+                               state->stream);
+    device_pixels = state->pixels;
+  }
   if (error == cudaSuccess) {
     error = EnsureDeviceBuffer(&state->chain, &state->chain_capacity, bytes,
                                state->stream);
@@ -1792,8 +1845,9 @@ WebPAcceleratorResult CUDAHashChainLocked(
   if (!EnsureHostBuffer(&state->host_transform,
                         &state->host_transform_capacity, bytes)
 #if defined(WEBP_CUDA_ENABLE_PINNED_HOST_MEMORY)
-      || !EnsureHostBuffer(&state->host_pixels, &state->host_pixel_capacity,
-                           bytes) ||
+      || (!use_resident_pixels &&
+          !EnsureHostBuffer(&state->host_pixels,
+                            &state->host_pixel_capacity, bytes)) ||
       !EnsureHostBuffer(&state->host_chain, &state->host_chain_capacity, bytes)
 #endif
   ) {
@@ -1803,16 +1857,23 @@ WebPAcceleratorResult CUDAHashChainLocked(
   timing = verbose && EnsureTimingEvents(state);
 
 #if defined(WEBP_CUDA_ENABLE_PINNED_HOST_MEMORY)
-  memcpy(state->host_pixels, request->pixels, bytes);
+  if (!use_resident_pixels) {
+    memcpy(state->host_pixels, request->pixels, bytes);
+  }
   memcpy(state->host_chain, request->chain, bytes);
-  error = UploadToDevice(state->pixels, state->host_pixels, bytes,
-                         state->stream);
+  error = use_resident_pixels
+              ? cudaSuccess
+              : UploadToDevice(state->pixels, state->host_pixels, bytes,
+                               state->stream);
   if (error == cudaSuccess) {
     error = UploadToDevice(state->chain, state->host_chain, bytes,
                            state->stream);
   }
 #else
-  error = UploadToDevice(state->pixels, request->pixels, bytes, state->stream);
+  error = use_resident_pixels
+              ? cudaSuccess
+              : UploadToDevice(state->pixels, request->pixels, bytes,
+                               state->stream);
   if (error == cudaSuccess) {
     error = UploadToDevice(state->chain, request->chain, bytes, state->stream);
   }
@@ -1829,7 +1890,7 @@ WebPAcceleratorResult CUDAHashChainLocked(
       (static_cast<uint32_t>(request->size) + kHashThreadsPerBlock - 1u) /
       kHashThreadsPerBlock;
   HashChainCandidatesKernel<<<blocks, kHashThreadsPerBlock, 0, state->stream>>>(
-      state->pixels, state->chain, state->transform, params);
+      device_pixels, state->chain, state->transform, params);
   error = cudaGetLastError();
   if (error == cudaSuccess && timing) {
     error = cudaEventRecord(state->event_stop, state->stream);
@@ -1851,8 +1912,9 @@ WebPAcceleratorResult CUDAHashChainLocked(
       (void)cudaGetLastError();
     }
     fprintf(stderr,
-            "WebP-CUDA: hash candidates for %d pixels in %.3f ms\n",
-            request->size, elapsed_ms);
+            "WebP-CUDA: hash candidates for %d pixels in %.3f ms%s\n",
+            request->size, elapsed_ms,
+            use_resident_pixels ? " (resident pixels)" : "");
   }
 #if !defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
   ReleaseStagingBuffers(state);
@@ -2339,6 +2401,7 @@ WebPAcceleratorResult CUDALossyAnalysis(
 void CUDAEndEncode(void* context) {
   CudaState* const state = static_cast<CudaState*>(context);
   LockCudaMutex(&g_cuda_mutex);
+  state->resident_lossless_pixels_valid = false;
   state->resident_yuv_valid = false;
   UnlockCudaMutex(&g_cuda_mutex);
 }

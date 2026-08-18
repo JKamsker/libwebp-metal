@@ -101,6 +101,9 @@ aborts its preflight if either RGB conversion or analysis falls back to the
 CPU. Historical rows in this document predate that stage and must not be used
 to claim its performance. A new result set is required before enabling
 `WEBP_CUDA_LOSSY_ANALYSIS` by default or selecting a crossover.
+Forced lossless rows also enable the experimental resident cross-color-to-hash
+handoff. Historical rows predate that handoff as well; they remain evidence for
+the older round-trip pipeline only.
 
 `scripts/benchmark_cuda_end_to_end.py` provides a portable comparison across
 systems. It creates a deterministic six-image corpus in both PNG and JPEG and

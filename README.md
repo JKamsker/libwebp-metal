@@ -90,6 +90,13 @@ candidates, `WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS=N` controls near-lossless
 preprocessing, and `WEBP_CUDA_LOSSY_MIN_PIXELS=N` controls RGB conversion.
 `WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS=N` controls the experimental lossy
 analysis stage.
+`WEBP_CUDA_RESIDENT_LOSSLESS=1` enables an experimental pipeline handoff: the
+cross-color stage preserves its transformed device pixels across transform-map
+encoding, and the matching main hash-chain stage reuses them instead of
+uploading the host copy again. Pointer identity, dimensions, and encode-end
+cleanup prevent reuse outside the originating image. It remains off by default
+until the portable suite establishes whether the saved upload outweighs the
+device-to-device preservation copy on a given system.
 `WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`, and
 `WEBP_CUDA_LOSSY=0` disable one stage. Lossy CUDA is off by default because it
 was neutral in persistent end-to-end batches and much slower in fresh

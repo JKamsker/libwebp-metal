@@ -234,10 +234,12 @@ quarantine. The color kernel preserves independent-tile semantics; hash output
 is replayed through the CPU's left-extension boundary; RGB conversion matches
 the eligible CPU import byte-for-byte. When both lossy stages run sequentially,
 analysis consumes the packed device YUV left by RGB conversion instead of
-uploading the just-downloaded host planes again. CMake/package integration,
-forced-device correctness, deterministic output, CPU override,
-unavailable-device fallback, compile-time ablations, and concurrent encodes are
-covered.
+uploading the just-downloaded host planes again. An independent runtime-gated
+lossless handoff preserves cross-color output in a dedicated device buffer
+across transform-map encoding and reuses it for the matching main hash request.
+CMake/package integration, forced-device correctness, deterministic output,
+CPU override, unavailable-device fallback, compile-time ablations, and
+concurrent encodes are covered.
 
 Every performance choice is independently preprocessor-gated: the five stages,
 persistent buffers, pinned staging, copy synchronization policy, hash matching

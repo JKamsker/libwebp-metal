@@ -55,7 +55,9 @@ for input do
     "$encoder" -quiet -lossless -exact -m 4 "$input" \
     -o "$temporary_dir/$name-cpu.webp"
 
-  WEBP_ACCELERATOR=cuda WEBP_CUDA_MIN_PIXELS=0 WEBP_CUDA_VERBOSE=1 \
+  WEBP_ACCELERATOR=cuda WEBP_CUDA_MIN_PIXELS=0 \
+    WEBP_CUDA_HASH_MIN_PIXELS=0 \
+    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_VERBOSE=1 \
     "$encoder" -quiet -lossless -exact -m 4 "$input" \
     -o "$temporary_dir/$name-cuda-1.webp" 2>>"$cuda_log"
   WEBP_ACCELERATOR=cuda WEBP_CUDA_MIN_PIXELS=0 \
@@ -155,11 +157,14 @@ done
 grep -q "WebP-CUDA: using" "$cuda_log"
 grep -q "WebP-CUDA: transformed" "$cuda_log"
 grep -q "WebP-CUDA: hash candidates" "$cuda_log"
+if [ "${WEBP_EXPECT_CUDA_RESIDENT_LOSSLESS:-1}" -ne 0 ]; then
+  grep -q "WebP-CUDA: hash candidates.*resident pixels" "$cuda_log"
+fi
 grep -q "WebP-CUDA: lossy RGB->YUV" "$cuda_log"
 grep -q "WebP-CUDA: lossy analysis" "$cuda_log"
 if grep -q "WebP-CUDA: using" "$cold_log"; then
   echo "small default encode initialized CUDA before its cold threshold" >&2
   exit 1
 fi
-printf 'PASS: observed forced color/hash/RGB/lossy-analysis/near-lossless CUDA stages\n'
+printf 'PASS: observed forced color/hash/resident-lossless/RGB/lossy-analysis/near-lossless CUDA stages\n'
 printf 'PASS: lossy CUDA remains opt-in by default\n'

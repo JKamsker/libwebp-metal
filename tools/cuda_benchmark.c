@@ -184,6 +184,8 @@ static void ConfigureDispatch(const Options* options) {
          cuda && options->operation == OP_NEAR_LOSSLESS ? "1" : "0", 1);
   setenv("WEBP_CUDA_LOSSY_ANALYSIS",
          cuda && options->operation == OP_LOSSY ? "1" : "0", 1);
+  setenv("WEBP_CUDA_RESIDENT_LOSSLESS",
+         cuda && options->operation == OP_LOSSLESS ? "1" : "0", 1);
   setenv("WEBP_CUDA_MIN_PIXELS", "0", 1);
   setenv("WEBP_CUDA_HASH_MIN_PIXELS", "0", 1);
   setenv("WEBP_CUDA_LOSSY_MIN_PIXELS", "0", 1);

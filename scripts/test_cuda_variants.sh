@@ -26,7 +26,13 @@ build_and_test() {
   "$cmake_command" --build "$build_dir" \
     --target cwebp dwebp webp_cuda_batch_benchmark cuda_concurrency_test \
       cuda_near_lossless_test -j
-  WEBP_TEST_BIN_DIR="$build_dir" "$root_dir/scripts/test_cuda.sh"
+  if [ "$name" = baseline ]; then
+    expect_resident_lossless=0
+  else
+    expect_resident_lossless=1
+  fi
+  WEBP_EXPECT_CUDA_RESIDENT_LOSSLESS="$expect_resident_lossless" \
+    WEBP_TEST_BIN_DIR="$build_dir" "$root_dir/scripts/test_cuda.sh"
   batch_log="$temporary_dir/$name-batch.log"
   WEBP_CUDA_VERBOSE=1 WEBP_CUDA_BATCH_MIN_PIXELS=1 \
     WEBP_CUDA_HASH_BATCH_MIN_PIXELS=1 \
