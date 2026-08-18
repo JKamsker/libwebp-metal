@@ -13,6 +13,9 @@
 #include "src/enc/backward_references_enc.h"
 #include "src/enc/backref_cache_search_experiment_enc.h"
 #include "src/enc/boundary_experiment_enc.h"
+#if defined(WEBP_USE_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT)
+#include "src/enc/cache_size_serial_sweep_enc.h"
+#endif
 
 #include <assert.h>
 #include <string.h>
@@ -803,9 +806,9 @@ static void BackwardReferences2DLocality(int xsize,
 // implies disabling the local color cache). The local color cache is also
 // disabled for the lower (<= 25) quality.
 // Returns 0 in case of memory error.
-static int CalculateBestCacheSize(const uint32_t* argb, int quality,
-                                  const VP8LBackwardRefs* const refs,
-                                  int* const best_cache_bits) {
+static int CalculateBestCacheSizeBaseline(const uint32_t* argb, int quality,
+                                          const VP8LBackwardRefs* const refs,
+                                          int* const best_cache_bits) {
   int i;
   const int cache_bits_max = (quality <= 25) ? 0 : *best_cache_bits;
   uint64_t entropy_min = WEBP_UINT64_MAX;
@@ -906,6 +909,44 @@ Error:
     VP8LFreeHistogram(histos[i]);
   }
   return ok;
+}
+
+#if defined(WEBP_USE_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT)
+int VP8LCompareCacheSizeSearchForTest(
+    const uint32_t* const argb, int quality,
+    const VP8LBackwardRefs* const refs, int cache_bits_max,
+    int* const baseline_bits, int* const candidate_bits) {
+  int baseline = cache_bits_max;
+  int candidate = cache_bits_max;
+  if (!CalculateBestCacheSizeBaseline(argb, quality, refs, &baseline) ||
+      !VP8LCalculateBestCacheSizeSerialSweep(argb, quality, refs,
+                                             &candidate)) {
+    return 0;
+  }
+  *baseline_bits = baseline;
+  *candidate_bits = candidate;
+  return 1;
+}
+#endif
+
+static int CalculateBestCacheSize(const uint32_t* const argb, int quality,
+                                  const VP8LBackwardRefs* const refs,
+                                  int* const best_cache_bits) {
+#if defined(WEBP_USE_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT)
+  const int runtime_state = VP8LCacheSizeSerialSweepRuntimeState();
+  if (runtime_state < 0) return 0;
+  if (runtime_state > 0) {
+    int candidate_bits = *best_cache_bits;
+    if (VP8LCalculateBestCacheSizeSerialSweep(argb, quality, refs,
+                                              &candidate_bits)) {
+      *best_cache_bits = candidate_bits;
+      return 1;
+    }
+    // Candidate failures are transactional. Run the unchanged baseline with
+    // the original maximum so normal encoder fallback behavior is preserved.
+  }
+#endif
+  return CalculateBestCacheSizeBaseline(argb, quality, refs, best_cache_bits);
 }
 
 // Update (in-place) backward references for specified cache_bits.

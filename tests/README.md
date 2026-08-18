@@ -5,10 +5,14 @@ fuzzing through the APIs. Additional test vector coverage can be found at:
 https://chromium.googlesource.com/webm/libwebp-test-data
 
 The repository-level `scripts/test_experiment_guards.py` test verifies that the
-five prepared encoder experiments are default-off, independently selectable,
+prepared encoder experiments are default-off, independently selectable,
 and fail closed at their runtime and timed-launch boundaries. It never grants a
 benchmark lease or runs timed work. See
 `doc/experiment-guard-matrix.md` for the exact flag matrix.
+
+`scripts/test_cache_size_serial_sweep_experiment.py` additionally verifies the
+recorder-free cache-size implementation candidate, exact baseline equivalence,
+transactional fallback, build omission, lease refusal, and sanitizer coverage.
 
 ## Building
 

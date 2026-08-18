@@ -15,6 +15,7 @@ shared experimental build or runtime switch.
 | 6 predictor boundary decomposition | `WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT` | `WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT` | `WEBP_PREDICTOR_BOUNDARY_EXPERIMENT=1` | boundary recorder, predictor/map probes, private repetition option |
 | 7 backref exact decomposition | `WEBP_BUILD_BACKREF_EXACT_EXPERIMENT` | `WEBP_USE_BACKREF_EXACT_EXPERIMENT` | `WEBP_BACKREF_EXACT_EXPERIMENT=1` | boundary recorder, backward-reference probes, private repetition option |
 | 8 focused backref cache search | `WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT` | `WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT` | `WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT=1` | dedicated two-clock recorder, cache-search probes, private repetition option |
+| 9 cache-size serial sweep | `WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT` | `WEBP_USE_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT` | `WEBP_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT=1` | recorder-free CPU implementation A/B, dedicated external runner, no CLI option |
 
 Every runtime value is exact: values other than `1` are disabled. Every timed
 launcher additionally requires `WEBP_BENCHMARK_SESSION=exclusive`. Correctness,
@@ -65,13 +66,21 @@ therefore not accepted; it remains default-off reproduction instrumentation.
 See
 [backref-cache-search-experiment-evaluation-20260818.md](backref-cache-search-experiment-evaluation-20260818.md).
 
+Row 9 is the recorder-free cache-size serial-sweep implementation A/B frozen in
+[cache-size-serial-sweep-experiment-20260818.md](cache-size-serial-sweep-experiment-20260818.md).
+All 18 correctness cells passed exactly, but every performance cell failed the
+paired-median and p95 limits. Row 9 is rejected and retained only as default-off
+negative research evidence. It changes no production behavior. See
+[cache-size-serial-sweep-experiment-evaluation-20260818.md](cache-size-serial-sweep-experiment-evaluation-20260818.md).
+
 ## Default and isolation guarantees
 
 - Default CMake and Unix make builds define none of the private macros.
   Item 1's source and CLI hook, items 2--4's drivers/targets, item 3's private
   batch symbol, item 5's source/call site, rows 6--7's shared recorder, and row
   8's dedicated recorder, probes, environment reads, symbols, and private
-  repetition options are omitted.
+  repetition options, and row 9's candidate source, runtime strings, symbols,
+  test target, and runner are omitted.
 - An ordinary Metal build continues to include the supported transform, hash,
   and RGB-to-YUV acceleration. Item 4's alternate environment knobs are read
   only when both its build macro and exact runtime opt-in are present.
@@ -122,18 +131,22 @@ make -f makefile.unix WEBP_ENABLE_METAL=1 \
 # Item 8
 make -f makefile.unix WEBP_ENABLE_METAL=1 \
   WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT=1 examples/cwebp
+
+# Item 9 (CPU-only implementation A/B)
+make -f makefile.unix WEBP_ENABLE_METAL=0 \
+  WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT=1 examples/cwebp
 ```
 
-CMake uses the same names with `-D<name>=ON`. Items 2--8 also require
-`-DWEBP_ENABLE_METAL=ON`; item 3 requires `-DBUILD_SHARED_LIBS=OFF`, and item 4
-requires `-DWEBP_BUILD_EXTRAS=ON`. Each experiment target is deliberately
-non-installed.
+CMake uses the same names with `-D<name>=ON`. Items 2--8 require
+`-DWEBP_ENABLE_METAL=ON`; item 9 explicitly uses Metal off. Item 3 requires
+`-DBUILD_SHARED_LIBS=OFF`, and item 4 requires `-DWEBP_BUILD_EXTRAS=ON`. Each
+experiment target is deliberately non-installed.
 
 ## Untimed guard validation
 
 The focused guard test does not grant the benchmark lease, read benchmark
 results, or run an encoder. It verifies default-off make commands, forced
-dry-run macro isolation for all eight rows, omitted driver targets, runtime
+dry-run macro isolation for all nine rows, omitted driver targets, runtime
 refusal, lease refusal, the promoted item-4 default/legacy correctness mapping, and the fact
 that item 4's released timed matrix was not repurposed as a follow-up:
 
