@@ -1352,32 +1352,39 @@ int VP8ReplayDecimate(VP8EncIterator* WEBP_RESTRICT const it,
                       const uint8_t* WEBP_RESTRICT const recon_y,
                       const uint8_t* WEBP_RESTRICT const recon_u,
                       const uint8_t* WEBP_RESTRICT const recon_v,
-                      int recon_y_stride, int recon_uv_stride) {
+                      int recon_y_stride, int recon_uv_stride,
+                      int copy_levels, int copy_recon) {
   VP8SegmentInfo* const dqm = &it->enc->dqm[it->mb->segment];
-  const uint8_t* const src_y =
-      recon_y + (size_t)it->y * 16 * recon_y_stride + (size_t)it->x * 16;
-  const uint8_t* const src_u =
-      recon_u + (size_t)it->y * 8 * recon_uv_stride + (size_t)it->x * 8;
-  const uint8_t* const src_v =
-      recon_v + (size_t)it->y * 8 * recon_uv_stride + (size_t)it->x * 8;
-  uint8_t* const out_y = it->yuv_out + Y_OFF_ENC;
-  uint8_t* const out_u = it->yuv_out + U_OFF_ENC;
-  uint8_t* const out_v = it->yuv_out + V_OFF_ENC;
   int i;
-  for (i = 0; i < 16; ++i) {
-    memcpy(out_y + i * BPS, src_y + (size_t)i * recon_y_stride, 16);
-  }
-  for (i = 0; i < 8; ++i) {
-    memcpy(out_u + i * BPS, src_u + (size_t)i * recon_uv_stride, 8);
-    memcpy(out_v + i * BPS, src_v + (size_t)i * recon_uv_stride, 8);
+  if (copy_recon) {
+    const uint8_t* const src_y =
+        recon_y + (size_t)it->y * 16 * recon_y_stride + (size_t)it->x * 16;
+    const uint8_t* const src_u =
+        recon_u + (size_t)it->y * 8 * recon_uv_stride + (size_t)it->x * 8;
+    const uint8_t* const src_v =
+        recon_v + (size_t)it->y * 8 * recon_uv_stride + (size_t)it->x * 8;
+    uint8_t* const out_y = it->yuv_out + Y_OFF_ENC;
+    uint8_t* const out_u = it->yuv_out + U_OFF_ENC;
+    uint8_t* const out_v = it->yuv_out + V_OFF_ENC;
+    for (i = 0; i < 16; ++i) {
+      memcpy(out_y + i * BPS, src_y + (size_t)i * recon_y_stride, 16);
+    }
+    for (i = 0; i < 8; ++i) {
+      memcpy(out_u + i * BPS, src_u + (size_t)i * recon_uv_stride, 8);
+      memcpy(out_v + i * BPS, src_v + (size_t)i * recon_uv_stride, 8);
+    }
   }
   InitScore(rd);
   rd->nz = result->nz;
   rd->D = (score_t)result->distortion;
   rd->H = (score_t)result->header_bits;
-  memcpy(rd->y_dc_levels, result->y_dc_levels, sizeof(rd->y_dc_levels));
-  memcpy(rd->y_ac_levels, result->y_ac_levels, sizeof(rd->y_ac_levels));
-  memcpy(rd->uv_levels, result->uv_levels, sizeof(rd->uv_levels));
+  if (copy_levels) {
+    // Only the inline RecordTokens consumes the levels; the pipelined
+    // recorder reads them straight from the results array.
+    memcpy(rd->y_dc_levels, result->y_dc_levels, sizeof(rd->y_dc_levels));
+    memcpy(rd->y_ac_levels, result->y_ac_levels, sizeof(rd->y_ac_levels));
+    memcpy(rd->uv_levels, result->uv_levels, sizeof(rd->uv_levels));
+  }
   rd->mode_i16 = result->mode_i16;
   rd->mode_uv = result->mode_uv;
   memcpy(rd->modes_i4, result->modes_i4, sizeof(rd->modes_i4));

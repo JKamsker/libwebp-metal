@@ -259,6 +259,21 @@ defaulting `thread_level=1` (threaded analysis) measured neutral on
 batches and was reverted. `WEBP_CUDA_DECIMATE_TIMING=1` prints each
 pass's device wall time; `=2` adds a per-phase cycle breakdown.
 
+Two follow-ups close the round. First, the selection walks became
+warp-cooperative (next paragraph). Second, a replay trim removes per-MB
+copies nothing consumes: when the pipelined recorder is active the replay
+skips the 800-byte level copies (the recorder reads the results array
+directly), and when nothing reads the reconstruction (no filter stats, no
+show_compressed, no picture stats) it also skips the yuv_out copies and
+boundary saves — a mid-image CPU fallback rebuilds the top-row samples
+from the collected reconstruction planes instead. The fallback path is
+fault-injectable via `WEBP_CUDA_DECIMATE_FAIL_COLLECT=<band>` and stays
+byte-identical at every band, which also caught and fixed a latent
+stale-nz-context bug the pipelined recorder had introduced there. Suite:
+PNG lossy batch 3.77x (43.6 ms/image), JPEG 3.52x (49.2 ms) — and the
+lossy fresh-process singles crossed parity for the first time (PNG
+1.03x, JPEG 1.05x).
+
 A follow-up makes the intra16 and chroma selection walks warp-cooperative:
 each coefficient's incoming context depends only on the previous
 coefficient's value, so sixteen lanes compute the costs in parallel (a
@@ -272,7 +287,7 @@ at ~28 ms the device wall now roughly equals the CPU-side serial chain
 sides together.
 
 Raw result sets:
-`libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl,-decimate,-tuned,-stream,-parts,-recpipe,-kernel}`
+`libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl,-decimate,-tuned,-stream,-parts,-recpipe,-kernel,-trim}`
 under the operator's temp directory, comparable through the `report`
 subcommand.
 
