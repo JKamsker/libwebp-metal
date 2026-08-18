@@ -1,0 +1,167 @@
+{
+  "schema": "libwebp-next-boundary-continuation-evaluation-v1",
+  "base_commit": "cdf2539b29bb767b1557e5069cfee9c111f07358",
+  "designer_commit": "cdf64a57790d3e7d52fe2685afe0976e41cbe633",
+  "runnable_source_commit": "a964bb6aac67a64f71fa105db5fc8b04649ab9f0",
+  "executor_evidence_commit": "44acf69940b5d7369a013ab5dbdb46f08b0b0433",
+  "manifest_sha256": "476c54607a463908ed44cf8e8d1b955af35f3def6f15d11da423a1bd90d6e969",
+  "operator_sha256": "a790796c2d715b3b6405b801de88401e379e710bbf09297d55038a98e993d054",
+  "timed_work_executed": true,
+  "performance_speedup_claim_supported": false,
+  "protocol": {
+    "experiment_order": ["predictor_boundary", "backref_exact"],
+    "strictly_serial": true,
+    "inter_experiment_gap_seconds": 50.093613147735596,
+    "single_physical_metal_device": true,
+    "lease_acquired_and_released_for_each": true,
+    "lease_present_after_audit": false,
+    "cuda_used": false,
+    "raw_artifact_hashes_verified": true,
+    "scientific_code_and_manifest_identical_to_designer": true,
+    "expected_commit_substitution": {
+      "original_literal_value": "cdf64a57790d3e7d52fe2685afe0976e41cbe633",
+      "executed_value": "a964bb6aac67a64f71fa105db5fc8b04649ab9f0",
+      "classification": "documented procedural continuation exception; scientifically admissible",
+      "reason": "the exact-source guard requires the value to equal runnable HEAD after the separately authorized preflight-only fix"
+    },
+    "dispatch_proof": {
+      "metal_build_and_device_verified": true,
+      "operator_forces_metal_environment": true,
+      "per_command_verbose_dispatch_marker_recorded": false,
+      "effect": "no dispatch-specific claim"
+    }
+  },
+  "sample_inventory_per_experiment": {
+    "command_rows": 80,
+    "raw_timing_records": 200,
+    "raw_correctness_records": 36,
+    "correctness_summary_rows": 18,
+    "cold_records": 56,
+    "discarded_warmups": 24,
+    "measured_warm_records": 120,
+    "measured_record_variant": 88,
+    "measured_control_variant": 88,
+    "cold_process_pairs_per_cell": 7,
+    "warm_process_pairs_per_cell": 3,
+    "warm_measured_records_per_variant_per_cell": 15
+  },
+  "statistics": {
+    "bootstrap_resamples": 10000,
+    "bootstrap_seed": 20260818,
+    "bootstrap_unit": "process-pair value after within-process warm median",
+    "p95": "nearest-rank within raw content/method/lifecycle/variant stratum",
+    "ratio_direction": "record/control"
+  },
+  "experiments": {
+    "predictor_boundary": {
+      "artifact_hashes_sha256": "2cc9b59bc1cd6948137470f180719e99f4f978e614f164e2290607fe6455f701",
+      "tune_case": "photo-medium",
+      "holdout_case": "photo-large",
+      "correctness_determinism_fallback": "pass",
+      "resource_ceilings": "pass",
+      "holdout_cells": [
+        {
+          "method": 4,
+          "lifecycle": "cold",
+          "selector_plus_apply_share": 0.8882280247145269,
+          "selector_share": 0.8516970827544685,
+          "predictor_map_share": 0.1117719752854731,
+          "record_control_median_ratio": 1.0023973346976511,
+          "record_control_p95_ratio": 0.998427194536363,
+          "criteria": "pass"
+        },
+        {
+          "method": 4,
+          "lifecycle": "warm",
+          "selector_plus_apply_share": 0.9973309467740357,
+          "selector_share": 0.9608331710988647,
+          "predictor_map_share": 0.0026690532259642974,
+          "record_control_median_ratio": 1.000135742193506,
+          "record_control_p95_ratio": 0.9818348087368696,
+          "criteria": "pass"
+        },
+        {
+          "method": 6,
+          "lifecycle": "cold",
+          "selector_plus_apply_share": 0.8859361371845456,
+          "selector_share": 0.8521420034519737,
+          "predictor_map_share": 0.1140638628154544,
+          "record_control_median_ratio": 1.0358972012783547,
+          "record_control_p95_ratio": 1.0563643208413618,
+          "criteria": "fail_median_and_p95_overhead"
+        },
+        {
+          "method": 6,
+          "lifecycle": "warm",
+          "selector_plus_apply_share": 0.9981812842353914,
+          "selector_share": 0.9570763044122582,
+          "predictor_map_share": 0.0018187157646085278,
+          "record_control_median_ratio": 0.99315255446357,
+          "record_control_p95_ratio": 1.0067626352247412,
+          "criteria": "pass"
+        }
+      ],
+      "share_criteria": "pass_all_required_cells",
+      "map_deferral_trigger": "not_triggered",
+      "overhead_criteria": "fail_method_6_cold",
+      "decision": "reject_or_do_not_accept_selector_plus_apply_under_all_cell_rule; retain_default_off_diagnostic"
+    },
+    "backref_exact": {
+      "artifact_hashes_sha256": "46b6247bb4f2658634dab472f2cacd0d12fe8db589c0dd022d3716f9935583f5",
+      "tune_case": "texture-medium",
+      "holdout_case": "texture-large",
+      "correctness_determinism_fallback": "pass",
+      "resource_ceilings": "pass",
+      "holdout_cells": [
+        {
+          "method": 4,
+          "lifecycle": "cold",
+          "standard_lz77_share": 0.04198359759917329,
+          "accounted_share": 0.9899140406898062,
+          "record_control_median_ratio": 1.0063097969567514,
+          "record_control_p95_ratio": 1.0102044414828864,
+          "criteria": "fail_standard_lz77_share"
+        },
+        {
+          "method": 4,
+          "lifecycle": "warm",
+          "standard_lz77_share": 0.031456826375701546,
+          "accounted_share": 0.9922100086447807,
+          "record_control_median_ratio": 1.0072512972150638,
+          "record_control_p95_ratio": 1.3458475522986444,
+          "criteria": "fail_standard_lz77_share_and_p95_overhead"
+        },
+        {
+          "method": 6,
+          "lifecycle": "cold",
+          "standard_lz77_share": 0.04289798695742326,
+          "accounted_share": 0.9901170474439307,
+          "record_control_median_ratio": 0.9940871335094279,
+          "record_control_p95_ratio": 0.990847013673156,
+          "criteria": "fail_standard_lz77_share"
+        },
+        {
+          "method": 6,
+          "lifecycle": "warm",
+          "standard_lz77_share": 0.031331348812272675,
+          "accounted_share": 0.9893949387059774,
+          "record_control_median_ratio": 1.0015003813461807,
+          "record_control_p95_ratio": 1.0005078281763986,
+          "criteria": "fail_standard_lz77_share"
+        }
+      ],
+      "accounted_share_criteria": "pass_all_required_cells",
+      "standard_lz77_share_criteria": "fail_all_required_cells",
+      "overhead_criteria": "fail_method_4_warm_p95",
+      "decision": "reject_standard_exact_lz77_as_dominant_candidate; retain_default_off_diagnostic"
+    }
+  },
+  "consequences": {
+    "production_encoder_change": false,
+    "threshold_or_policy_change": false,
+    "accelerator_abi_change": false,
+    "default_or_live_knob_change": false,
+    "new_experiment_defined": false,
+    "independent_ratios_multiplied": false
+  }
+}

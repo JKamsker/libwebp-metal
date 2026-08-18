@@ -7,6 +7,15 @@
 **Publication audit:** 2026-08-18 claim/corpus addendum
 **Status:** reproducible bounded research core; **not production-ready or upstream-ready**
 
+> **2026-08-18 next-boundary addendum:** a separately frozen continuation split
+> predictor selector/apply/map and exact backward-reference components on the
+> deterministic publication corpus. Neither proposed future boundary passed
+> every holdout criterion. Predictor shares were large but one required
+> recorder-overhead cell failed; standard exact LZ77 was only 3.13--4.29% of
+> required texture holdouts. No production code, threshold, or ABI was promoted.
+> See
+> [next-boundary-experiment-evaluation-20260818.md](next-boundary-experiment-evaluation-20260818.md).
+
 ## Abstract
 
 This report evaluates a private Metal backend for three encoder stages in a

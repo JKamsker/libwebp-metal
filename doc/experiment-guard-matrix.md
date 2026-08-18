@@ -46,7 +46,11 @@ The later next-cycle rows 6 and 7 are frozen in
 [next-dominant-boundary-experiments-20260818.md](next-dominant-boundary-experiments-20260818.md).
 They diagnose credible implementation boundaries and do not amend item 1--5.
 Both first execution attempts failed before lease acquisition or timing; the
-audited non-result and retained research disposition are in
+portable continuation then completed both serial matrices. Row 6 passed its
+share criteria but failed a required recorder-overhead cell; row 7 failed its
+standard-LZ77 share criterion in every required cell and one p95 overhead
+criterion. Neither boundary is accepted. Both rows remain default-off research
+diagnostics, and the complete evidence-to-decision audit is in
 [next-boundary-experiment-evaluation-20260818.md](next-boundary-experiment-evaluation-20260818.md).
 
 ## Default and isolation guarantees

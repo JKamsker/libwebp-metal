@@ -1,10 +1,13 @@
 # Frozen next-cycle dominant-boundary experiments
 
-> **2026-08-18 execution status:** both frozen commands stopped before lease
-> acquisition or timing because the Darwin Python runtime did not recognize
-> `SC_AVPHYS_PAGES`. No criterion was evaluated and no performance disposition
-> was made. The independent audit and narrowly scoped untimed portability
-> consequence are in
+> **2026-08-18 final execution status:** the first attempts stopped before the
+> lease on unsupported Darwin `SC_AVPHYS_PAGES`. After the separately released
+> preflight-only fix, both frozen matrices ran serially. Predictor
+> selector-plus-apply passed the share criteria but failed method-6 cold
+> recorder-overhead limits; standard exact LZ77 failed the 50% share criterion
+> in every required backref cell and one p95 overhead limit also failed. Neither
+> future boundary is accepted, and no production change is promoted. The
+> complete continuation audit is in
 > [next-boundary-experiment-evaluation-20260818.md](next-boundary-experiment-evaluation-20260818.md).
 
 ## Evidence reviewed before selection
