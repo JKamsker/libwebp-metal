@@ -32,6 +32,7 @@ WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT ?= 0
 WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT ?= 0
 WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT ?= 0
 WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT ?= 0
+WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT ?= 0
 
 ifneq ($(origin WEBP_BUILD_METAL_BENCHMARK),undefined)
   $(error WEBP_BUILD_METAL_BENCHMARK was replaced by WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT)
@@ -213,6 +214,9 @@ endif
 ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT),1)
   override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT=1
 endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT),1)
+  override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT=1
+endif
 INSTALL = install
 GROFF = /usr/bin/groff
 COL = /usr/bin/col
@@ -379,6 +383,9 @@ endif
 ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT),1)
 ENC_OBJS += src/enc/backref_cost_workspace_remote_v2_experiment_enc.o
 endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT),1)
+ENC_OBJS += src/enc/backref_cost_workspace_remote_v3_experiment_enc.o
+endif
 
 EX_FORMAT_DEC_OBJS = \
     imageio/image_dec.o \
@@ -539,6 +546,19 @@ tools/backref_cost_workspace_remote_v2_experiment_runner:
 	@echo "$@ requires WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT=1" >&2
 	@false
 .PHONY: tools/backref_cost_workspace_remote_v2_experiment_runner
+endif
+
+ifeq ($(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT),1)
+tools/backref_cost_workspace_remote_v3_experiment_runner: \
+    tools/backref_cost_workspace_remote_v3_experiment_runner.o
+tools/backref_cost_workspace_remote_v3_experiment_runner: \
+    src/libwebp.a sharpyuv/libsharpyuv.a
+	$(LINK) -o $@ $^ $(LDFLAGS)
+else
+tools/backref_cost_workspace_remote_v3_experiment_runner:
+	@echo "$@ requires WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT=1" >&2
+	@false
+.PHONY: tools/backref_cost_workspace_remote_v3_experiment_runner
 endif
 
 ex: $(OUT_EXAMPLES)
