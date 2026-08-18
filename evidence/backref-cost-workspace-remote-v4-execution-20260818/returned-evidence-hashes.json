@@ -1,0 +1,43 @@
+{
+  "artifacts": [
+    {
+      "bytes": 336,
+      "path": "return-protocol/archive-return.json",
+      "sha256": "2fe1c121779bd8ce22b7516af7fab9301287c96ad62d56c7d0051f81170363dc"
+    },
+    {
+      "bytes": 450,
+      "path": "return-protocol/cleanup-receipt.json",
+      "sha256": "a283f29e624ab0ac95d3ee2afebc2f6952a4810673d4db9783d14a41269e5ede"
+    },
+    {
+      "bytes": 143,
+      "path": "return-protocol/extraction.json",
+      "sha256": "a7a9d31e5d823d071db2465499596159002523bf8e3c7b69ef743a36fae47ec9"
+    },
+    {
+      "bytes": 322,
+      "path": "return-protocol/lease-record.json",
+      "sha256": "3651a9437556381994380f81901e412508a5280cf71ed2627e8f3c4e28099830"
+    },
+    {
+      "bytes": 280,
+      "path": "return-protocol/lease-transfer.json",
+      "sha256": "b0190e216345300fb34629d1fd2fe275abdfc0da8478f068cfddc758c41d222b"
+    },
+    {
+      "bytes": 52,
+      "path": "return-protocol/pipeline.stderr",
+      "sha256": "f314e5174ed16249189a3b5be9331c81152485cf2c2e8ce2e22627345352d1be"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/pipeline.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "excluded_after_index": [
+    "transfer-cleanup.json"
+  ],
+  "schema": "libwebp-backref-cost-workspace-remote-v4-returned-evidence-hashes-v1"
+}
