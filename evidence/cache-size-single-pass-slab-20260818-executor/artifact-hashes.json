@@ -1,0 +1,40 @@
+{
+  "artifacts": [
+    {
+      "bytes": 39286,
+      "path": "build.log",
+      "sha256": "c0f5e6424605ba917a091238157a89f46b003371644af835c87cc0e75d69bcea"
+    },
+    {
+      "bytes": 74429,
+      "path": "commands.jsonl",
+      "sha256": "ba357be4bbe7dc0864986ed33cd84129a33b831f6cc505f335e296eac57bca16"
+    },
+    {
+      "bytes": 9591,
+      "path": "correctness.json",
+      "sha256": "2c35673e0d0012a55e9d4ded24d9671bd28713019bf61545a7c4d067d2ad36e9"
+    },
+    {
+      "bytes": 2397,
+      "path": "evaluation.json",
+      "sha256": "31b7fec269b12ddc5f2ce5a6180db6188a144d0198a7ba9d14cdef2bfbe4e988"
+    },
+    {
+      "bytes": 310,
+      "path": "operator-report.md",
+      "sha256": "97241d10cee2e049da82cb7d5ad293654de94e33700602789b639626fd6aa7c4"
+    },
+    {
+      "bytes": 206190,
+      "path": "records.jsonl",
+      "sha256": "cd0de4846cba36da4d8b964064979bef5ff2a0da828c51646ceef951eb30cdd2"
+    },
+    {
+      "bytes": 359,
+      "path": "resources.json",
+      "sha256": "534b6703817becdcbce0ce0aade2b79ffda714ad709ca4bdccea8928169485a8"
+    }
+  ],
+  "schema": "libwebp-cache-size-single-pass-slab-artifact-hashes-v1"
+}

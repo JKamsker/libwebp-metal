@@ -1,0 +1,10 @@
+{
+  "available_memory_bytes_preflight": 10361896960,
+  "elapsed_seconds": 187.869625083,
+  "lease_released": true,
+  "maximum_child_rss_bytes": 282968064,
+  "output_bytes_before_index": 331893,
+  "parallel_benchmark_processes": 1,
+  "schema": "libwebp-cache-size-single-pass-slab-resources-v1",
+  "source_commit": "fa2400ebf4519b8f6bc3acde50e01cb1c2ab0117"
+}
