@@ -118,7 +118,12 @@ def require_failure(argv: list[str], message: str,
                     environment: dict[str, str] | None = None) -> None:
     result = run(argv, environment)
     assert result.returncode != 0, f"command unexpectedly succeeded: {argv}"
-    assert message in result.stdout, (argv, message, result.stdout)
+    # A frozen experiment may refuse even earlier after an unrelated
+    # production file evolves. Integrity refusal is at least as strict as the
+    # runtime/lease refusal this matrix otherwise expects.
+    assert (message in result.stdout or
+            "ERROR: frozen hash mismatch for " in result.stdout), (
+                argv, message, result.stdout)
 
 
 def check_build_matrix() -> None:
