@@ -2,6 +2,22 @@ name: Metal correctness
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/metal-correctness.yml"
+      - "CMakeLists.txt"
+      - "cmake/**"
+      - "examples/**"
+      - "imageio/**"
+      - "scripts/test_metal.sh"
+      - "sharpyuv/**"
+      - "src/**"
+      - "tests/metal_adversarial_test.c"
+      - "tests/metal_api_fuzzer.c"
+  schedule:
+    # Weekly Monday replay of the current default-branch revision (UTC).
+    - cron: "27 4 * * 1"
 
 permissions:
   contents: read
@@ -13,8 +29,14 @@ concurrency:
 jobs:
   real-metal:
     name: Physical Metal correctness (self-hosted ARM64)
-    # This manual workflow intentionally never executes pull-request code on a
-    # self-hosted runner. Dispatch only a reviewed, trusted commit.
+    # Trust boundary: automatic runs are restricted to main pushes/current main
+    # schedules. A manual dispatch is an operator assertion that its selected
+    # revision was reviewed. PR and PR-target events are neither subscribed to
+    # above nor admitted by this defense-in-depth event/ref guard.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'schedule' && github.ref == 'refs/heads/main')
     runs-on: [self-hosted, macOS, ARM64, metal]
     timeout-minutes: 45
     steps:
