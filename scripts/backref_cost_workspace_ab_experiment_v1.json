@@ -1,0 +1,197 @@
+{
+  "schema": "libwebp-backref-cost-workspace-ab-frozen-protocol-v1",
+  "protocol_version": 1,
+  "experiment_id": "backref_cost_workspace_ab",
+  "base_commit": "e7c1be7d4070103a9b41b8c30fbbc95cd18e5a5c",
+  "design_commit": "460a69a864bbabc2f5890ec6aea7b1c622944bca",
+  "required_expected_commit_environment": "WEBP_EXPECTED_BACKREF_COST_WORKSPACE_AB_COMMIT",
+  "closed_provenance": {
+    "experiment": "backref_cost_traceback",
+    "disposition": "closed refusal after local Low Power Mode preflight",
+    "timed_samples": 0,
+    "permitted_use": "candidate provenance only",
+    "forbidden": ["rerun old gates", "count as performance data", "pool", "relabel", "reuse samples", "reuse old schemas or lease"]
+  },
+  "candidate": {
+    "name": "unchanged exact-sized CostManager workspace",
+    "build_flag": "WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+    "compile_macro": "WEBP_USE_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+    "runtime_flag": "WEBP_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+    "runtime_value": "1",
+    "failure_injection_flag": "WEBP_BACKREF_COST_WORKSPACE_AB_EXPERIMENT_INJECT_FAILURE",
+    "source": "src/enc/backref_cost_workspace_ab_experiment_enc.c",
+    "header": "src/enc/backref_cost_workspace_ab_experiment_enc.h",
+    "implementation_boundary": "src/enc/backward_references_cost_enc.c",
+    "runner": "tools/backref_cost_workspace_ab_experiment_runner.c",
+    "runner_target": "backref_cost_workspace_ab_experiment_runner",
+    "equivalence": {
+      "merged_candidate_commit": "e7c1be7d4070103a9b41b8c30fbbc95cd18e5a5c",
+      "preprocessed_boundary_projection_sha256": "b571080f12fee7abe8608696269e35e6bc3184e3a9cf49286cd47075d5a34eea",
+      "normalized_helper_body_sha256": "28c03ce78195d02baa69dde46ecc043d2b641489188a48c592172140fa3cacd0",
+      "canonicalization": "only private helper symbols, gate names, and assert source locations",
+      "semantics": ["integer costs", "strict ties", "update order", "490 workspace nodes after ten inline nodes", "traceback", "reference order", "cache choice", "transactional allocation-failure fallback"]
+    }
+  },
+  "forbidden_environment": [
+    "WEBP_BACKREF_COST_TRACEBACK_EXPERIMENT",
+    "WEBP_BACKREF_COST_TRACEBACK_EXPERIMENT_INJECT_FAILURE",
+    "WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT",
+    "WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT",
+    "CUDA_VISIBLE_DEVICES",
+    "MallocNanoZone"
+  ],
+  "remote_host": {
+    "ssh_alias": "pandocs-agent",
+    "system": "Darwin",
+    "architecture": "arm64",
+    "hardware_model": "Mac16,10",
+    "cpu_brand": "Apple M4",
+    "physical_memory_bytes": 25769803776,
+    "compiler_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "compiler_version_lines": [
+      "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+      "Target: arm64-apple-darwin25.2.0",
+      "Thread model: posix",
+      "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+    ],
+    "sdk_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+    "sdk_version": "26.2",
+    "required_thermal_lines": [
+      "No thermal warning level has been recorded",
+      "No performance warning level has been recorded",
+      "No CPU power status has been recorded"
+    ],
+    "runner_policy": "Runner.Listener may remain active; any Runner.Worker/job fails closed and no service may be stopped or modified",
+    "temporary_root": "$HOME/.cache/libwebp-metal-experiments/backref-cost-workspace-ab-v1/run.XXXXXX",
+    "installed_runner_tree_forbidden": "$HOME/github-runners",
+    "source_transfer": "exact local git bundle, SHA-256 verified, cloned and checked out at expected commit",
+    "evidence_return": "tar.gz SHA-256 verified before safe extraction",
+    "cleanup": "only the validated per-run temporary directory after lease release"
+  },
+  "corpus": {
+    "generator": "scripts/generate_publication_corpus.py",
+    "manifest": "benchmarks/publication-corpus/manifest.json",
+    "correctness_matrix": [
+      {"case_id": "photo-small", "quality": 75, "methods": [4, 6]},
+      {"case_id": "graphic-small", "quality": 75, "methods": [4, 6]},
+      {"case_id": "texture-small", "quality": 75, "methods": [4, 6]},
+      {"case_id": "photo-medium", "quality": 75, "methods": [4, 6]},
+      {"case_id": "graphic-medium", "quality": 75, "methods": [4, 6]},
+      {"case_id": "texture-medium", "quality": 75, "methods": [4, 6]},
+      {"case_id": "photo-large", "quality": 75, "methods": [4, 6]},
+      {"case_id": "graphic-large", "quality": 75, "methods": [4, 6]},
+      {"case_id": "texture-large", "quality": 75, "methods": [4, 6]},
+      {"case_id": "graphic-small", "quality": 24, "methods": [4, 6]},
+      {"case_id": "graphic-small", "quality": 25, "methods": [4, 6]},
+      {"case_id": "graphic-small", "quality": 26, "methods": [4, 6]},
+      {"case_id": "graphic-small", "quality": 100, "methods": [4, 6]}
+    ],
+    "timed": [
+      {"role": "tune", "case_id": "photo-medium", "sha256": "a1a6ab156ae4b18666a780bcdf7eaf7d2124415eb192e091dc21e7adbf383c70"},
+      {"role": "tune", "case_id": "graphic-medium", "sha256": "c42deaa474e253db740384e7e93a208c82ff11cd66dc2930c34678a9e8279234"},
+      {"role": "tune", "case_id": "texture-medium", "sha256": "91d90466139f54ad441448bc7d352c637a4020ce928434dbff3a358c5a829385"},
+      {"role": "holdout", "case_id": "photo-large", "sha256": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612"},
+      {"role": "holdout", "case_id": "graphic-large", "sha256": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc"},
+      {"role": "holdout", "case_id": "texture-large", "sha256": "dd02badce31b757f9374f0f5de187e9de3158fe6878929207eeed24ea72d79e2"}
+    ]
+  },
+  "builds": {
+    "common": [
+      "-DWEBP_ENABLE_METAL=OFF",
+      "-DBUILD_SHARED_LIBS=OFF",
+      "-DWEBP_BUILD_EXTRAS=OFF",
+      "-DWEBP_BUILD_CWEBP=ON",
+      "-DWEBP_BUILD_DWEBP=ON",
+      "-DCMAKE_BUILD_TYPE=Release",
+      "-DCMAKE_OSX_ARCHITECTURES=arm64",
+      "-DCMAKE_OSX_SYSROOT=/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk"
+    ],
+    "baseline": "ordinary default build; new option absent",
+    "candidate": "common flags plus only WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT=ON",
+    "timed_parallelism": 1,
+    "forbidden_backend": "CUDA"
+  },
+  "protocol": {
+    "recorders": "none",
+    "timing_authority": "runner-local mach_continuous_time around WebPEncode only",
+    "encoder": {"lossless": true, "exact": true, "quality": 75, "thread_level": 0},
+    "methods": [4, 6],
+    "execution_order": ["tune cases before holdout cases", "photo before graphic before texture", "method 4 before 6", "cold before warm", "pair order below"],
+    "lifecycles": {
+      "cold": {"process_pairs": 11, "discarded_warmups_per_process": 0, "measured_encodes_per_process": 1},
+      "warm": {"process_pairs": 6, "discarded_warmups_per_process": 2, "measured_encodes_per_process": 9}
+    },
+    "pair_order": [
+      "baseline-candidate", "candidate-baseline", "baseline-candidate",
+      "candidate-baseline", "baseline-candidate", "candidate-baseline",
+      "baseline-candidate", "candidate-baseline", "baseline-candidate",
+      "candidate-baseline", "baseline-candidate"
+    ],
+    "statistics": {
+      "warm_process_reduction": "median of nine retained encodes after two discarded warmups",
+      "paired_location": "median of candidate-process/baseline-process ratios",
+      "tail": "nearest-rank p95 in each raw variant stratum, then candidate divided by baseline",
+      "pooling_forbidden": ["category", "case", "method", "lifecycle", "tune_holdout", "process"]
+    },
+    "acceptance": {
+      "required_cells": "every holdout case x methods 4/6 x cold/warm",
+      "paired_median_ratio_maximum": 0.99,
+      "p95_ratio_maximum": 1.01,
+      "tune": "descriptive only",
+      "correctness": "all 26 cells exact for streams, decoded pixels, repeats, fault fallback, defaults, immutable inputs",
+      "decision": "promote only if every correctness, identity, isolation, resource, inventory, median, and p95 gate passes"
+    },
+    "expected_inventory": {
+      "command_processes": 408,
+      "cold_measured_samples": 264,
+      "warmup_samples": 288,
+      "warm_measured_samples": 1296,
+      "total_measured_samples": 1560,
+      "variant_measured_samples": 780,
+      "correctness_cells": 26,
+      "evaluation_cells": 24,
+      "required_holdout_cells": 12
+    }
+  },
+  "resources": {
+    "lease_path": "~/.cache/libwebp-metal-experiments/leases/backref-cost-workspace-ab-v1.lock",
+    "minimum_available_memory_bytes": 4294967296,
+    "minimum_available_disk_bytes": 8589934592,
+    "maximum_child_rss_bytes": 4294967296,
+    "maximum_output_bytes": 2147483648,
+    "maximum_command_seconds": 300,
+    "maximum_total_seconds": 3600,
+    "parallel_timed_processes": 1
+  },
+  "schemas": {
+    "catalog": "scripts/backref_cost_workspace_ab_schemas_v1.json",
+    "preflight": "libwebp-backref-cost-workspace-ab-preflight-v1",
+    "source_hashes": "libwebp-backref-cost-workspace-ab-source-hashes-v1",
+    "lease": "libwebp-backref-cost-workspace-ab-lease-v1",
+    "correctness": "libwebp-backref-cost-workspace-ab-correctness-v1",
+    "sample": "libwebp-backref-cost-workspace-ab-sample-v1",
+    "command": "libwebp-backref-cost-workspace-ab-command-v1",
+    "evaluation": "libwebp-backref-cost-workspace-ab-evaluation-v1",
+    "resources": "libwebp-backref-cost-workspace-ab-resources-v1",
+    "artifact_hashes": "libwebp-backref-cost-workspace-ab-artifact-hashes-v1",
+    "transfer_cleanup": "libwebp-backref-cost-workspace-ab-transfer-cleanup-v1",
+    "returned_evidence_hashes": "libwebp-backref-cost-workspace-ab-returned-evidence-hashes-v1"
+  },
+  "frozen_artifacts": [
+    {"path": "CMakeLists.txt", "sha256": "e31b276a473d03cd0fc778e698313a81e9ed7fd46c4a3dfbc5a8b23845f2e8cf"},
+    {"path": "makefile.unix", "sha256": "9a141a6f2a91b0b5ae61e9adce07d7bd6df74f4dc25f8e1c324edd9d3f1ffeb3"},
+    {"path": "doc/backref-cost-workspace-ab-design-report-20260818.md", "sha256": "6e874763f4a817687e63a5da29802e545581348a9f6932d1c43656fd3d37068e"},
+    {"path": "doc/backref-cost-workspace-ab-remote-protocol-v1-20260818.md", "sha256": "99fef25e2507e535e380a45665b9a77063ebbdc6416b4bfb9d968326d1a5a3f6"},
+    {"path": "scripts/backref_cost_workspace_ab_schemas_v1.json", "sha256": "d2db2c631ed2258e24e38046c311c90f6edabc3181533e84ca4b6c074e36fa84"},
+    {"path": "scripts/run_backref_cost_workspace_ab_experiment.py", "sha256": "86cf089b734499ace04ec15562a6c4f7869ee494b71908df85816c069481831d"},
+    {"path": "scripts/execute_backref_cost_workspace_ab_remote_v1.py", "sha256": "3d331d5c720ab48c2924a7493c34678a6db3cbbd874a045caefd10904c23411e"},
+    {"path": "scripts/test_backref_cost_workspace_ab_experiment.py", "sha256": "336469f17116c37c5e6e7a5fa15d2d8464377861b0dca084e70a82b65ea7b212"},
+    {"path": "scripts/test_backref_cost_workspace_ab_protocol.py", "sha256": "92aae9da6397654dcc3475f38c9bf77b069778404cf3ee1e1c92b65ee8fe7df0"},
+    {"path": "scripts/generate_publication_corpus.py", "sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007"},
+    {"path": "benchmarks/publication-corpus/manifest.json", "sha256": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff"},
+    {"path": "src/enc/backref_cost_workspace_ab_experiment_enc.c", "sha256": "6b90d952fe959d4d275da0b96caff8374d147517500c40d9acb34e514b5c5c85"},
+    {"path": "src/enc/backref_cost_workspace_ab_experiment_enc.h", "sha256": "399fb28a2498ebd2a96810ad96867fae7871d63ef9c0509a98e0f60de427abd5"},
+    {"path": "src/enc/backward_references_cost_enc.c", "sha256": "db3ec625e04a03f4a4be4527f44204220f1280a743a78a9de88e53ef4f11284f"},
+    {"path": "tools/backref_cost_workspace_ab_experiment_runner.c", "sha256": "07f3939859e82afcc9531d53e1a2901ebdcb6aa89c218e94e0b56730b58c8f26"}
+  ]
+}

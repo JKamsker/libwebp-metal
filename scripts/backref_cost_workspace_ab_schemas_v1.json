@@ -1,0 +1,40 @@
+{
+  "catalog_schema": "libwebp-backref-cost-workspace-ab-schema-catalog-v1",
+  "experiment_id": "backref_cost_workspace_ab",
+  "protocol_version": 1,
+  "schemas": {
+    "libwebp-backref-cost-workspace-ab-preflight-v1": {
+      "required": ["schema", "stage", "captured_at_utc", "hardware_model", "cpu_brand", "physical_memory_bytes", "available_memory_bytes", "available_disk_bytes", "compiler_path", "compiler_version_lines", "sdk_path", "sdk_version", "pmset_batt", "pmset_custom", "pmset_thermal", "system_profiler_power", "process_isolation"]
+    },
+    "libwebp-backref-cost-workspace-ab-source-hashes-v1": {
+      "required": ["schema", "source_commit", "manifest_sha256", "frozen_artifacts", "candidate_equivalence"]
+    },
+    "libwebp-backref-cost-workspace-ab-lease-v1": {
+      "required": ["schema", "path", "acquired", "released"]
+    },
+    "libwebp-backref-cost-workspace-ab-correctness-v1": {
+      "required": ["schema", "case_id", "quality", "method", "input_sha256", "bitstream_sha256", "decoded_sha256", "candidate_deterministic", "fallback_exact", "default_build_independent"]
+    },
+    "libwebp-backref-cost-workspace-ab-sample-v1": {
+      "required": ["schema", "case_id", "lifecycle", "variant", "method", "iteration", "sample_role", "elapsed_ns", "bitstream_bytes", "bitstream_fnv1a64", "role", "pair", "order", "sequence"]
+    },
+    "libwebp-backref-cost-workspace-ab-command-v1": {
+      "required": ["schema", "role", "case_id", "method", "lifecycle", "pair", "order", "variant", "argv", "wall_seconds", "sample_rows", "stderr_log"]
+    },
+    "libwebp-backref-cost-workspace-ab-evaluation-v1": {
+      "required": ["schema", "timing_authority", "command_processes", "sample_rows", "measured_samples", "cells", "decision"]
+    },
+    "libwebp-backref-cost-workspace-ab-resources-v1": {
+      "required": ["schema", "source_commit", "elapsed_seconds", "maximum_child_rss_bytes", "output_bytes_before_index", "parallel_timed_processes", "lease_released"]
+    },
+    "libwebp-backref-cost-workspace-ab-artifact-hashes-v1": {
+      "required": ["schema", "artifacts"]
+    },
+    "libwebp-backref-cost-workspace-ab-transfer-cleanup-v1": {
+      "required": ["schema", "source_commit", "remote_host_alias", "remote_temporary_directory", "source_bundle_sha256", "remote_validation", "remote_evidence_archive_sha256", "local_evidence_archive_sha256", "archive_hashes_match", "lease_released", "remote_cleanup_complete", "installed_runner_directory_touched"]
+    },
+    "libwebp-backref-cost-workspace-ab-returned-evidence-hashes-v1": {
+      "required": ["schema", "artifacts"]
+    }
+  }
+}

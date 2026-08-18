@@ -317,6 +317,11 @@ def check_runtime_and_lease_refusals() -> None:
         for argv, runtime_message, lease_message, runtime_environment in timed:
             require_failure(argv, runtime_message)
             require_failure(argv, lease_message, runtime_environment)
+        require_failure(
+            [python, "scripts/run_backref_cost_workspace_ab_experiment.py",
+             "run", output],
+            "WEBP_BENCHMARK_SESSION=exclusive",
+        )
 
 
 def main() -> int:
