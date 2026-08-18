@@ -1,0 +1,15 @@
+{
+  "base_commit": "c472599ce8d3aee1e4f5bcf70b56b9c354351660",
+  "baseline_preprocessed_sha256": "093bf6afa6cf7a191836b8471020b2ed6a6fd3fea8dc38a0111542c1ae98a04e",
+  "candidate_preprocessed_sha256": "4bce83a0d21538437e6222a898aec40aed75955d2e1e28c52119bd2bc44cb4ac",
+  "cost_manager_baseline_bytes": 33224,
+  "cost_manager_v2_bytes": 33224,
+  "cost_manager_v3_bytes": 33224,
+  "equal_start_uses_baseline_path": true,
+  "local_lifetime_only": true,
+  "normalized_v2_v3_candidate_identical": true,
+  "normalized_v2_v3_candidate_sha256": "c45f3bc4337f7986fadff6caff53213252d5a914025bb17cf746f0b06e9eae2a",
+  "persistent_tail_bookkeeping": false,
+  "schema": "libwebp-backref-cost-interval-search-v3-candidate-identity-v1",
+  "status": "PASS"
+}

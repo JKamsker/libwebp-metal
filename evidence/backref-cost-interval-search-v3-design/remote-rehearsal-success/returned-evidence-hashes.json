@@ -1,0 +1,93 @@
+{
+  "artifacts": [
+    {
+      "bytes": 1475,
+      "path": "artifact-hashes.json",
+      "sha256": "083978a01c4fa9de9a0f49660f913e7f93b56f6881b35bd8810b9f0190d38a8c"
+    },
+    {
+      "bytes": 9393,
+      "path": "build-commands.json",
+      "sha256": "6803b203df2f3eddd98f9def4023f8443e42012fe1443a8a4e2850d9ddd14a3b"
+    },
+    {
+      "bytes": 169212,
+      "path": "build.log",
+      "sha256": "6e348dd1c0f137a1d64424a4c424c3e7bac0ff8688c71c932f117299e6d24a2a"
+    },
+    {
+      "bytes": 13571,
+      "path": "correctness.json",
+      "sha256": "31de1e12fb5e69d78b50cec14b97dcbcff1a599d63f2d5dfdcf25f6591a8c5c0"
+    },
+    {
+      "bytes": 159,
+      "path": "lease-record.json",
+      "sha256": "a9c493a0faf499b8e37b5fa34ea01098a10bb7732844b9ba1f69c466406c551e"
+    },
+    {
+      "bytes": 162,
+      "path": "operator-status.json",
+      "sha256": "077c829f4218b4ffecd7772e2e4c0bdf3512ddb4b36982ffa4f003fd256fb1fa"
+    },
+    {
+      "bytes": 94267,
+      "path": "processes-rehearsal.txt",
+      "sha256": "37cc752c96cd9c2cc7be4bc45fe6a9f8c5d7ade96a66dc7a6c5cd31712b7df0e"
+    },
+    {
+      "bytes": 9222,
+      "path": "rehearsal.json",
+      "sha256": "fe4cd4ed67f0dff879e99802623c02a08a938d2bcc7c4cb83db5dc60f21b54e6"
+    },
+    {
+      "bytes": 2932,
+      "path": "return-protocol/archive-return.json",
+      "sha256": "550966830d3299bb754fd7644d5d42cfb89d151ddb8cd01bbc8b418ea7a15313"
+    },
+    {
+      "bytes": 447,
+      "path": "return-protocol/cleanup-receipt.json",
+      "sha256": "394a788065fdd03284342e05fa0a8cff830a9d4d387e9ffdb00b1807bd91e154"
+    },
+    {
+      "bytes": 1351,
+      "path": "return-protocol/extraction.json",
+      "sha256": "316194e71f19fd46d418b52a5f546e99928b6ab9638305fa0eba47a6d5220d94"
+    },
+    {
+      "bytes": 159,
+      "path": "return-protocol/lease-record.json",
+      "sha256": "a9c493a0faf499b8e37b5fa34ea01098a10bb7732844b9ba1f69c466406c551e"
+    },
+    {
+      "bytes": 280,
+      "path": "return-protocol/lease-transfer.json",
+      "sha256": "1ed3664fc3c62807f0e1ead8c17c20631a220d19835b5bac2b626da2c068a2df"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/pipeline.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/pipeline.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 224,
+      "path": "work-metric-summary.json",
+      "sha256": "873bde4676afd80cad48b61b3607d7d24c3f4d1b6362519a4edc8d871e7016e5"
+    },
+    {
+      "bytes": 13150,
+      "path": "work-metrics.jsonl",
+      "sha256": "63ae29c35a0c3a470172a6d1b1d823b6eb867e6f18f3b52bc7a9d6879536eca8"
+    }
+  ],
+  "excluded_after_index": [
+    "transfer-cleanup.json"
+  ],
+  "schema": "libwebp-backref-cost-interval-search-v3-returned-evidence-hashes-v1"
+}

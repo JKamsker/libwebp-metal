@@ -1,0 +1,93 @@
+{
+  "archive": {
+    "bytes": 31148,
+    "hashes_match": true,
+    "local_sha256": "060999647916b986ca7eaff5ff4211faa83b606a19c4453245334bac62d1c05c",
+    "path": "evidence.tar.gz",
+    "remote_sha256": "060999647916b986ca7eaff5ff4211faa83b606a19c4453245334bac62d1c05c"
+  },
+  "builder_exit_code": 0,
+  "builder_stderr": "",
+  "builder_stdout": "{\"archive_bytes\": 31148, \"archive_sha256\": \"060999647916b986ca7eaff5ff4211faa83b606a19c4453245334bac62d1c05c\", \"inventory_sha256\": \"19766c5598e387d2c09b15932b5a40efad1a6a0d46136ef1020e0f54dc2f1f29\", \"member_count\": 10, \"schema\": \"libwebp-backref-cost-interval-search-v3-archive-v1\", \"status\": \"accepted\"}\n",
+  "digest": {
+    "bytes": 319,
+    "hashes_match": true,
+    "local_sha256": "e0015bc220ec095fb374553aa985a8c54dd2ccc269017128625b3abf8b95166f",
+    "path": "archive-digest.json",
+    "remote_sha256": "e0015bc220ec095fb374553aa985a8c54dd2ccc269017128625b3abf8b95166f"
+  },
+  "digest_record": {
+    "archive_bytes": 31148,
+    "archive_sha256": "060999647916b986ca7eaff5ff4211faa83b606a19c4453245334bac62d1c05c",
+    "inventory_sha256": "19766c5598e387d2c09b15932b5a40efad1a6a0d46136ef1020e0f54dc2f1f29",
+    "member_count": 10,
+    "schema": "libwebp-backref-cost-interval-search-v3-archive-v1",
+    "status": "accepted"
+  },
+  "inventory": {
+    "bytes": 1187,
+    "hashes_match": true,
+    "local_sha256": "19766c5598e387d2c09b15932b5a40efad1a6a0d46136ef1020e0f54dc2f1f29",
+    "path": "archive-inventory.json",
+    "remote_sha256": "19766c5598e387d2c09b15932b5a40efad1a6a0d46136ef1020e0f54dc2f1f29"
+  },
+  "member_inventory": {
+    "member_count": 10,
+    "members": [
+      {
+        "name": "evidence/artifact-hashes.json",
+        "size": 1475,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build-commands.json",
+        "size": 9393,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build.log",
+        "size": 169212,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness.json",
+        "size": 13571,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/lease-record.json",
+        "size": 159,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-status.json",
+        "size": 162,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-rehearsal.txt",
+        "size": 94267,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/rehearsal.json",
+        "size": 9222,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/work-metric-summary.json",
+        "size": 224,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/work-metrics.jsonl",
+        "size": 13150,
+        "type": "regular"
+      }
+    ],
+    "offending": null,
+    "schema": "libwebp-backref-cost-interval-search-v3-archive-inventory-v1",
+    "status": "accepted"
+  },
+  "status": "accepted"
+}

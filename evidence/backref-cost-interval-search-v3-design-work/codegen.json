@@ -1,0 +1,11 @@
+{
+  "command_flags": "-O3 -DNDEBUG",
+  "compiler": "Apple clang 17.0.0",
+  "normalized_v2_sha256": "7c75943dd1e7287d69f7b77b596ccf7f034c11baeee4253e7dc762ea13953215",
+  "normalized_v2_v3_assembly_identical": true,
+  "normalized_v3_sha256": "7c75943dd1e7287d69f7b77b596ccf7f034c11baeee4253e7dc762ea13953215",
+  "raw_v2_sha256": "af42945ada367b237b5bd737052b75f8dd9f35ba4a4b50dbdf3ef6bdb99edefc",
+  "raw_v3_sha256": "82d927aa1080cd1a10790de435d0d880d1c2ff1d208f25603a3865a2fa6a639f",
+  "schema": "libwebp-backref-cost-interval-search-v3-codegen-identity-v1",
+  "status": "PASS"
+}

@@ -32,7 +32,8 @@
      defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT) + \
      defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT) + \
      defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT) + \
-     defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)) > 1
+     defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT) + \
+     defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT)) > 1
 #error "overlapping backref cost experiments are mutually exclusive"
 #elif defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
 #include "src/enc/backref_cost_traceback_experiment_enc.h"
@@ -76,6 +77,20 @@
 #include "src/enc/backref_cost_interval_search_v1_experiment_enc.h"
 #elif defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
 #include "src/enc/backref_cost_interval_search_v2_experiment_enc.h"
+#define WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT 1
+#define INTERVAL_SEARCH_VERSIONED(name) \
+  VP8LBackrefCostIntervalSearchV2##name
+#if defined(WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_RECORDER)
+#define WEBP_BACKREF_COST_INTERVAL_SEARCH_LOCAL_RECORDER 1
+#endif
+#elif defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT)
+#include "src/enc/backref_cost_interval_search_v3_experiment_enc.h"
+#define WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT 1
+#define INTERVAL_SEARCH_VERSIONED(name) \
+  VP8LBackrefCostIntervalSearchV3##name
+#if defined(WEBP_BACKREF_COST_INTERVAL_SEARCH_V3_RECORDER)
+#define WEBP_BACKREF_COST_INTERVAL_SEARCH_LOCAL_RECORDER 1
+#endif
 #endif
 
 #if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT) && \
@@ -85,11 +100,11 @@
 #define INTERVAL_SEARCH_RECORD_V1(call) ((void)0)
 #endif
 
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT) && \
-    defined(WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_RECORDER)
-#define INTERVAL_SEARCH_RECORD_V2(call) call
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT) && \
+    defined(WEBP_BACKREF_COST_INTERVAL_SEARCH_LOCAL_RECORDER)
+#define INTERVAL_SEARCH_RECORD_LOCAL(call) call
 #else
-#define INTERVAL_SEARCH_RECORD_V2(call) ((void)0)
+#define INTERVAL_SEARCH_RECORD_LOCAL(call) ((void)0)
 #endif
 
 #define VALUES_IN_BYTE 256
@@ -521,8 +536,8 @@ static WEBP_INLINE void UpdateCostPerInterval(CostManager* const manager,
   for (i = start; i < end; ++i) {
     INTERVAL_SEARCH_RECORD_V1(
         VP8LBackrefCostIntervalSearchV1RecordUpdate());
-    INTERVAL_SEARCH_RECORD_V2(
-        VP8LBackrefCostIntervalSearchV2RecordUpdate());
+    INTERVAL_SEARCH_RECORD_LOCAL(
+        INTERVAL_SEARCH_VERSIONED(RecordUpdate)());
     UpdateCost(manager, i, position, cost);
   }
 }
@@ -549,7 +564,7 @@ static WEBP_INLINE void PopInterval(CostManager* const manager,
   if (interval == NULL) return;
 
   INTERVAL_SEARCH_RECORD_V1(VP8LBackrefCostIntervalSearchV1RecordPop());
-  INTERVAL_SEARCH_RECORD_V2(VP8LBackrefCostIntervalSearchV2RecordPop());
+  INTERVAL_SEARCH_RECORD_LOCAL(INTERVAL_SEARCH_VERSIONED(RecordPop)());
 
   ConnectIntervals(manager, interval->previous, interval->next);
   if (CostIntervalIsInFreeList(manager, interval)) {
@@ -608,16 +623,16 @@ static WEBP_INLINE void PositionOrphanInterval(CostManager* const manager,
   while (previous != NULL && current->start < previous->start) {
     INTERVAL_SEARCH_RECORD_V1(
         VP8LBackrefCostIntervalSearchV1RecordPositionBackwardStep());
-    INTERVAL_SEARCH_RECORD_V2(
-        VP8LBackrefCostIntervalSearchV2RecordPositionBackwardStep());
+    INTERVAL_SEARCH_RECORD_LOCAL(
+        INTERVAL_SEARCH_VERSIONED(RecordPositionBackwardStep)());
     previous = previous->previous;
   }
   while (previous != NULL && previous->next != NULL &&
          previous->next->start < current->start) {
     INTERVAL_SEARCH_RECORD_V1(
         VP8LBackrefCostIntervalSearchV1RecordPositionForwardStep());
-    INTERVAL_SEARCH_RECORD_V2(
-        VP8LBackrefCostIntervalSearchV2RecordPositionForwardStep());
+    INTERVAL_SEARCH_RECORD_LOCAL(
+        INTERVAL_SEARCH_VERSIONED(RecordPositionForwardStep)());
     previous = previous->next;
   }
 
@@ -631,7 +646,7 @@ static WEBP_INLINE void PositionOrphanInterval(CostManager* const manager,
 
 // Insert an interval in the list contained in the manager by starting at
 // 'interval_in' as a hint. The intervals are sorted by 'start' value.
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
 static WEBP_INLINE CostInterval*
 #else
 static WEBP_INLINE void
@@ -640,19 +655,19 @@ InsertInterval(CostManager* const manager,
                                        CostInterval* const interval_in,
                                        int64_t cost, int position, int start,
                                        int end
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
                                        ,
                                        int had_null_hint
 #endif
 ) {
   CostInterval* interval_new;
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT) && \
-    !defined(WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_RECORDER)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT) && \
+    !defined(WEBP_BACKREF_COST_INTERVAL_SEARCH_LOCAL_RECORDER)
   (void)had_null_hint;
 #endif
 
   if (start >= end) {
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
     return NULL;
 #else
     return;
@@ -660,12 +675,12 @@ InsertInterval(CostManager* const manager,
   }
   INTERVAL_SEARCH_RECORD_V1(
       VP8LBackrefCostIntervalSearchV1RecordInsert(interval_in == NULL));
-  INTERVAL_SEARCH_RECORD_V2(
-      VP8LBackrefCostIntervalSearchV2RecordInsert(had_null_hint));
+  INTERVAL_SEARCH_RECORD_LOCAL(
+      INTERVAL_SEARCH_VERSIONED(RecordInsert)(had_null_hint));
   if (manager->count >= COST_CACHE_INTERVAL_SIZE_MAX) {
     // Serialize the interval if we cannot store it.
     UpdateCostPerInterval(manager, start, end, position, cost);
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
     return NULL;
 #else
     return;
@@ -687,7 +702,7 @@ InsertInterval(CostManager* const manager,
     if (interval_new == NULL) {
       // Write down the interval if we cannot create it.
       UpdateCostPerInterval(manager, start, end, position, cost);
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
       return NULL;
 #else
       return;
@@ -704,9 +719,9 @@ InsertInterval(CostManager* const manager,
   ++manager->count;
   INTERVAL_SEARCH_RECORD_V1(
       VP8LBackrefCostIntervalSearchV1RecordLiveIntervals(manager->count));
-  INTERVAL_SEARCH_RECORD_V2(
-      VP8LBackrefCostIntervalSearchV2RecordLiveIntervals(manager->count));
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+  INTERVAL_SEARCH_RECORD_LOCAL(
+      INTERVAL_SEARCH_VERSIONED(RecordLiveIntervals)(manager->count));
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
   return interval_new;
 #endif
 }
@@ -718,7 +733,7 @@ InsertInterval(CostManager* const manager,
 static WEBP_INLINE void PushInterval(CostManager* const manager,
                                      int64_t distance_cost, int position,
                                      int len
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
                                      ,
                                      int use_append_hint
 #endif
@@ -726,7 +741,7 @@ static WEBP_INLINE void PushInterval(CostManager* const manager,
   size_t i;
   CostInterval* interval = manager->head;
   CostInterval* interval_next;
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
   CostInterval* append_hint = NULL;
   CostInterval* inserted;
   CostInterval* position_hint;
@@ -740,8 +755,8 @@ static WEBP_INLINE void PushInterval(CostManager* const manager,
 
   INTERVAL_SEARCH_RECORD_V1(
       VP8LBackrefCostIntervalSearchV1RecordPush(len < kSkipDistance));
-  INTERVAL_SEARCH_RECORD_V2(
-      VP8LBackrefCostIntervalSearchV2RecordPush(len < kSkipDistance));
+  INTERVAL_SEARCH_RECORD_LOCAL(
+      INTERVAL_SEARCH_VERSIONED(RecordPush)(len < kSkipDistance));
 
   if (len < kSkipDistance) {
     int j;
@@ -771,21 +786,21 @@ static WEBP_INLINE void PushInterval(CostManager* const manager,
 
     INTERVAL_SEARCH_RECORD_V1(
         VP8LBackrefCostIntervalSearchV1RecordCacheSegment());
-    INTERVAL_SEARCH_RECORD_V2(
-        VP8LBackrefCostIntervalSearchV2RecordCacheSegment());
+    INTERVAL_SEARCH_RECORD_LOCAL(
+        INTERVAL_SEARCH_VERSIONED(RecordCacheSegment)());
 
     for (; interval != NULL && interval->start < end;
          interval = interval_next) {
       interval_next = interval->next;
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
       if (use_append_hint) append_hint = interval;
 #endif
 
       INTERVAL_SEARCH_RECORD_V1(
           VP8LBackrefCostIntervalSearchV1RecordOverlapScan(
               start >= interval->end));
-      INTERVAL_SEARCH_RECORD_V2(
-          VP8LBackrefCostIntervalSearchV2RecordOverlapScan(
+      INTERVAL_SEARCH_RECORD_LOCAL(
+          INTERVAL_SEARCH_VERSIONED(RecordOverlapScan)(
               start >= interval->end));
 
       // Make sure we have some overlap
@@ -800,24 +815,24 @@ static WEBP_INLINE void PushInterval(CostManager* const manager,
         // If we are worse than what we already have, add whatever we have so
         // far up to interval.
         const int start_new = interval->end;
-        #if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+        #if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
         inserted =
         #endif
         InsertInterval(manager, interval, cost, position, start,
                        interval->start
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
                        ,
                        /*had_null_hint=*/0
 #endif
         );
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
         if (use_append_hint && inserted != NULL) {
-          INTERVAL_SEARCH_RECORD_V2(
-              VP8LBackrefCostIntervalSearchV2RecordAppendHintUpdateCheck());
+          INTERVAL_SEARCH_RECORD_LOCAL(
+              INTERVAL_SEARCH_VERSIONED(RecordAppendHintUpdateCheck)());
           if (inserted->next == NULL) {
             append_hint = inserted;
-            INTERVAL_SEARCH_RECORD_V2(
-                VP8LBackrefCostIntervalSearchV2RecordAppendHintUpdate());
+            INTERVAL_SEARCH_RECORD_LOCAL(
+                INTERVAL_SEARCH_VERSIONED(RecordAppendHintUpdate)());
           }
         }
 #endif
@@ -833,14 +848,14 @@ static WEBP_INLINE void PushInterval(CostManager* const manager,
           // [**************************************************************[
           // start                                                        end
           // We can safely remove the old interval as it is fully included.
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
           if (use_append_hint) {
-            INTERVAL_SEARCH_RECORD_V2(
-                VP8LBackrefCostIntervalSearchV2RecordPopTailBranchCheck());
+            INTERVAL_SEARCH_RECORD_LOCAL(
+                INTERVAL_SEARCH_VERSIONED(RecordPopTailBranchCheck)());
             if (interval_next == NULL) {
               append_hint = interval->previous;
-              INTERVAL_SEARCH_RECORD_V2(
-                  VP8LBackrefCostIntervalSearchV2RecordPopTailUpdate());
+              INTERVAL_SEARCH_RECORD_LOCAL(
+                  INTERVAL_SEARCH_VERSIONED(RecordPopTailUpdate)());
             }
           }
 #endif
@@ -862,24 +877,24 @@ static WEBP_INLINE void PushInterval(CostManager* const manager,
           // We have to split the old interval as it fully contains the new one.
           const int end_original = interval->end;
           interval->end = start;
-          #if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+          #if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
           inserted =
           #endif
           InsertInterval(manager, interval, interval->cost, interval->index,
                          end, end_original
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
                          ,
                          /*had_null_hint=*/0
 #endif
           );
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
           if (use_append_hint && inserted != NULL) {
-            INTERVAL_SEARCH_RECORD_V2(
-                VP8LBackrefCostIntervalSearchV2RecordAppendHintUpdateCheck());
+            INTERVAL_SEARCH_RECORD_LOCAL(
+                INTERVAL_SEARCH_VERSIONED(RecordAppendHintUpdateCheck)());
             if (inserted->next == NULL) {
               append_hint = inserted;
-              INTERVAL_SEARCH_RECORD_V2(
-                  VP8LBackrefCostIntervalSearchV2RecordAppendHintUpdate());
+              INTERVAL_SEARCH_RECORD_LOCAL(
+                  INTERVAL_SEARCH_VERSIONED(RecordAppendHintUpdate)());
             }
           }
 #endif
@@ -895,22 +910,22 @@ static WEBP_INLINE void PushInterval(CostManager* const manager,
       }
     }
     // Insert the remaining interval from start to end.
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
     position_hint = interval;
     used_append_hint = 0;
     if (use_append_hint && position_hint == NULL) {
-      INTERVAL_SEARCH_RECORD_V2(
-          VP8LBackrefCostIntervalSearchV2RecordAppendHintBranchCheck());
-      INTERVAL_SEARCH_RECORD_V2(
-          VP8LBackrefCostIntervalSearchV2RecordAppendHintLoad());
+      INTERVAL_SEARCH_RECORD_LOCAL(
+          INTERVAL_SEARCH_VERSIONED(RecordAppendHintBranchCheck)());
+      INTERVAL_SEARCH_RECORD_LOCAL(
+          INTERVAL_SEARCH_VERSIONED(RecordAppendHintLoad)());
       if (append_hint != NULL) {
-        INTERVAL_SEARCH_RECORD_V2(
-            VP8LBackrefCostIntervalSearchV2RecordAppendHintStartLoad());
+        INTERVAL_SEARCH_RECORD_LOCAL(
+            INTERVAL_SEARCH_VERSIONED(RecordAppendHintStartLoad)());
         if (start > append_hint->start) {
           position_hint = append_hint;
           used_append_hint = 1;
-          INTERVAL_SEARCH_RECORD_V2(
-              VP8LBackrefCostIntervalSearchV2RecordAppendHintFastPath());
+          INTERVAL_SEARCH_RECORD_LOCAL(
+              INTERVAL_SEARCH_VERSIONED(RecordAppendHintFastPath)());
         }
       }
     }
@@ -920,15 +935,15 @@ static WEBP_INLINE void PushInterval(CostManager* const manager,
     if (use_append_hint && inserted != NULL) {
       if (used_append_hint) {
         append_hint = inserted;
-        INTERVAL_SEARCH_RECORD_V2(
-            VP8LBackrefCostIntervalSearchV2RecordAppendHintUpdate());
+        INTERVAL_SEARCH_RECORD_LOCAL(
+            INTERVAL_SEARCH_VERSIONED(RecordAppendHintUpdate)());
       } else {
-        INTERVAL_SEARCH_RECORD_V2(
-            VP8LBackrefCostIntervalSearchV2RecordAppendHintUpdateCheck());
+        INTERVAL_SEARCH_RECORD_LOCAL(
+            INTERVAL_SEARCH_VERSIONED(RecordAppendHintUpdateCheck)());
         if (inserted->next == NULL) {
           append_hint = inserted;
-          INTERVAL_SEARCH_RECORD_V2(
-              VP8LBackrefCostIntervalSearchV2RecordAppendHintUpdate());
+          INTERVAL_SEARCH_RECORD_LOCAL(
+              INTERVAL_SEARCH_VERSIONED(RecordAppendHintUpdate)());
         }
       }
     }
@@ -950,7 +965,7 @@ static int BackwardReferencesHashChainDistanceOnly(
     ,
     int use_interval_search_v1
 #endif
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
     ,
     int use_interval_search_v2
 #endif
@@ -1023,7 +1038,7 @@ static int BackwardReferencesHashChainDistanceOnly(
         offset_cost = GetDistanceCost(cost_model, code);
         first_offset_is_constant = 1;
         PushInterval(cost_manager, prev_cost + offset_cost, i, len
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
                      ,
                      use_interval_search_v2
 #endif
@@ -1069,7 +1084,7 @@ static int BackwardReferencesHashChainDistanceOnly(
 
           PushInterval(cost_manager, cost_manager->costs[j - 1] + offset_cost,
                        j, len_j
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
                        ,
                        use_interval_search_v2
 #endif
@@ -1200,13 +1215,13 @@ int VP8LBackwardReferencesTraceBackwards(int xsize, int ysize,
       goto Error;
     }
   } else
-#elif defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
-  if (VP8LBackrefCostIntervalSearchV2ExperimentEnabled()) {
-    INTERVAL_SEARCH_RECORD_V2(
-        VP8LBackrefCostIntervalSearchV2RecordActivation());
-    if (VP8LBackrefCostIntervalSearchV2ExperimentInjectFallback()) {
-      INTERVAL_SEARCH_RECORD_V2(
-          VP8LBackrefCostIntervalSearchV2RecordInjectedFallback());
+#elif defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
+  if (INTERVAL_SEARCH_VERSIONED(ExperimentEnabled)()) {
+    INTERVAL_SEARCH_RECORD_LOCAL(
+        INTERVAL_SEARCH_VERSIONED(RecordActivation)());
+    if (INTERVAL_SEARCH_VERSIONED(ExperimentInjectFallback)()) {
+      INTERVAL_SEARCH_RECORD_LOCAL(
+          INTERVAL_SEARCH_VERSIONED(RecordInjectedFallback)());
       if (!BackwardReferencesHashChainDistanceOnly(
               xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array,
               /*use_interval_search_v2=*/0)) {
@@ -1244,7 +1259,7 @@ int VP8LBackwardReferencesTraceBackwards(int xsize, int ysize,
             ,
             /*use_interval_search_v1=*/0
 #endif
-#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_LOCAL_EXPERIMENT)
             ,
             /*use_interval_search_v2=*/0
 #endif

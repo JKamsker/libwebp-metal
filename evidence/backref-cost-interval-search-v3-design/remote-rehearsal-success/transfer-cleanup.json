@@ -1,0 +1,297 @@
+{
+  "admission": {
+    "admission": {
+      "bundle_hash_match": true,
+      "bundle_path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v3/run.AXanM7/source.bundle",
+      "bundle_sha256": "fafdf620e64424ac3ae0dbdce391760e0d3a48d304ce174715a0d78d8d1769fe",
+      "bundle_verified_in_repository_context": true,
+      "bundle_verify_command": [
+        "git",
+        "-C",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v3/run.AXanM7/verify.git",
+        "bundle",
+        "verify",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v3/run.AXanM7/source.bundle"
+      ],
+      "bundle_verify_repository": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v3/run.AXanM7/verify.git",
+      "clean_status": true,
+      "clone": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v3/run.AXanM7/source",
+      "source_commit": "0ed73d55dbf193902550f7787d3c3937275958ca",
+      "source_hashes": {
+        "CMakeLists.txt": "7bfa6c16c6db2db1ca92fceac6af4ee49f9894dea6f95c6fc5e460c5099ae96d",
+        "benchmarks/publication-corpus/manifest.json": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+        "doc/backref-cost-interval-search-v3-operator-20260819.md": "dca643f3ee705d6ac437e10ff429a60d81cb0fea1a8227943d34b169ab27dcc9",
+        "doc/backref-cost-interval-search-v3-protocol-20260819.md": "437ed66a27106046827f6c468ec8b7642daea09bcd9aea6c15fe6d96634b945e",
+        "makefile.unix": "e97d37d77cef80b881fdd5472dd4cf06b4947b1c42ef97810b96a9216b045f31",
+        "scripts/backref_cost_interval_search_v3_admission.py": "c285d51f0ba84503a053c1f6ee93342e9dafe71f75720fc17c713858a52d12fe",
+        "scripts/backref_cost_interval_search_v3_archive.py": "8bf977bf42f77fd73ccd975aefedff3b13de6eb61b7368a660bdf401368a8833",
+        "scripts/backref_cost_interval_search_v3_manifest.json": "28f70c850cba69ac365088965c3776d69f0c488f7d6c70af2f6b6d3b0e7e7ef0",
+        "scripts/backref_cost_interval_search_v3_paths.py": "350fc76e41d5d02d50cc75fc9f4ae9bf9bc71e217f93512cc789f883cbe069d6",
+        "scripts/backref_cost_interval_search_v3_schemas.json": "9fffd2ba867e17318c8b0f830d8bfc91ae499e087ab28c02b62aca0b3c458a2b",
+        "scripts/execute_backref_cost_interval_search_v3.py": "a46175be90ced5f2fe162279d42978328f4d39c4dce88d940d8b67e145d18d5f",
+        "scripts/generate_publication_corpus.py": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+        "scripts/run_backref_cost_interval_search_v3_experiment.py": "9fc2447dc41777e7529b4b7a2e4512e6af6f568966ce8df8e8d7880766c4ac1d",
+        "scripts/test_backref_cost_interval_search_v3_archive.py": "619e9fd1dd716181416217de7b293ef19b594881cc92cb1d1d10c1f0f64e8337",
+        "scripts/test_backref_cost_interval_search_v3_protocol.py": "bc07890450c08fcb89591e62c81138b0b3b0af315e57979572bf85e092df061d",
+        "src/enc/backref_cost_interval_search_v3_experiment_enc.c": "9cdf462bf5ea8e780632c120e3e51a5dda00f119c5bd7a141182bbb8b70caaaf",
+        "src/enc/backref_cost_interval_search_v3_experiment_enc.h": "4523b247a340d54549c9464aef2b1fc56bd0e31bae5fc0cde29ec7f7745fff24",
+        "src/enc/backward_references_cost_enc.c": "2a6364f683692247def2febbc2e9734d25bba397a348c5e858fb3840009be4d2",
+        "tools/backref_cost_interval_search_v3_experiment_runner.c": "3af0f5034417ae1220c2dd00225abca27ec7cf3656e6fb00349f35aeb58412e4"
+      },
+      "source_tree": "aaf8cbd4c497928a78ba3fbab28dc2f5e916ab3c",
+      "verification_repository_removed": true
+    },
+    "finished": true,
+    "home": "/Users/pandocs-agent-001",
+    "malformed_bundle": {
+      "clone_absent": true,
+      "exit_code": 1,
+      "hash_match": true,
+      "local_sha256": "44c574d111f293b90de22227706277f259ecf6ab84352366796eb6241793f528",
+      "rejected": true,
+      "remote_sha256": "44c574d111f293b90de22227706277f259ecf6ab84352366796eb6241793f528",
+      "stderr": "ERROR: repository-context bundle verification rejected transfer: error: '/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v3/run.AXanM7/malformed.bundle' does not look like a v2 or v3 bundle file\n",
+      "verification_repository_absent": true
+    },
+    "path_generation": {
+      "generator": "mktemp -d",
+      "home": "/Users/pandocs-agent-001",
+      "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v3/run.AXanM7",
+      "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v3",
+      "token": "run.AXanM7",
+      "validated": true
+    },
+    "post_admission_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "process_table_sha256": "35d7afac954c0f37cb2dd9cdf4940add12704f5b5342a83a76993b7db54fdc85",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "pretransfer_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "process_table_sha256": "837c6af7c00fddbd139f24077ebcd3e5c6e8e1b12ab766f09b1178724b3c745c",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "receipt_version": 1,
+    "remote_source_bundle_sha256": "fafdf620e64424ac3ae0dbdce391760e0d3a48d304ce174715a0d78d8d1769fe",
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v3/run.AXanM7",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v3",
+    "schema": "libwebp-backref-cost-interval-search-v3-source-admission-receipt-v1",
+    "source_bundle_sha256": "fafdf620e64424ac3ae0dbdce391760e0d3a48d304ce174715a0d78d8d1769fe",
+    "source_commit": "0ed73d55dbf193902550f7787d3c3937275958ca",
+    "source_hashes": {
+      "CMakeLists.txt": "7bfa6c16c6db2db1ca92fceac6af4ee49f9894dea6f95c6fc5e460c5099ae96d",
+      "benchmarks/publication-corpus/manifest.json": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+      "doc/backref-cost-interval-search-v3-operator-20260819.md": "dca643f3ee705d6ac437e10ff429a60d81cb0fea1a8227943d34b169ab27dcc9",
+      "doc/backref-cost-interval-search-v3-protocol-20260819.md": "437ed66a27106046827f6c468ec8b7642daea09bcd9aea6c15fe6d96634b945e",
+      "makefile.unix": "e97d37d77cef80b881fdd5472dd4cf06b4947b1c42ef97810b96a9216b045f31",
+      "scripts/backref_cost_interval_search_v3_admission.py": "c285d51f0ba84503a053c1f6ee93342e9dafe71f75720fc17c713858a52d12fe",
+      "scripts/backref_cost_interval_search_v3_archive.py": "8bf977bf42f77fd73ccd975aefedff3b13de6eb61b7368a660bdf401368a8833",
+      "scripts/backref_cost_interval_search_v3_manifest.json": "28f70c850cba69ac365088965c3776d69f0c488f7d6c70af2f6b6d3b0e7e7ef0",
+      "scripts/backref_cost_interval_search_v3_paths.py": "350fc76e41d5d02d50cc75fc9f4ae9bf9bc71e217f93512cc789f883cbe069d6",
+      "scripts/backref_cost_interval_search_v3_schemas.json": "9fffd2ba867e17318c8b0f830d8bfc91ae499e087ab28c02b62aca0b3c458a2b",
+      "scripts/execute_backref_cost_interval_search_v3.py": "a46175be90ced5f2fe162279d42978328f4d39c4dce88d940d8b67e145d18d5f",
+      "scripts/generate_publication_corpus.py": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+      "scripts/run_backref_cost_interval_search_v3_experiment.py": "9fc2447dc41777e7529b4b7a2e4512e6af6f568966ce8df8e8d7880766c4ac1d",
+      "scripts/test_backref_cost_interval_search_v3_archive.py": "619e9fd1dd716181416217de7b293ef19b594881cc92cb1d1d10c1f0f64e8337",
+      "scripts/test_backref_cost_interval_search_v3_protocol.py": "bc07890450c08fcb89591e62c81138b0b3b0af315e57979572bf85e092df061d",
+      "src/enc/backref_cost_interval_search_v3_experiment_enc.c": "9cdf462bf5ea8e780632c120e3e51a5dda00f119c5bd7a141182bbb8b70caaaf",
+      "src/enc/backref_cost_interval_search_v3_experiment_enc.h": "4523b247a340d54549c9464aef2b1fc56bd0e31bae5fc0cde29ec7f7745fff24",
+      "src/enc/backward_references_cost_enc.c": "2a6364f683692247def2febbc2e9734d25bba397a348c5e858fb3840009be4d2",
+      "tools/backref_cost_interval_search_v3_experiment_runner.c": "3af0f5034417ae1220c2dd00225abca27ec7cf3656e6fb00349f35aeb58412e4"
+    },
+    "source_tree": "aaf8cbd4c497928a78ba3fbab28dc2f5e916ab3c"
+  },
+  "benchmark_lease_acquisition_attempted": false,
+  "evidence_transfer": {
+    "archive": {
+      "archive": {
+        "bytes": 31148,
+        "hashes_match": true,
+        "local_sha256": "060999647916b986ca7eaff5ff4211faa83b606a19c4453245334bac62d1c05c",
+        "path": "evidence.tar.gz",
+        "remote_sha256": "060999647916b986ca7eaff5ff4211faa83b606a19c4453245334bac62d1c05c"
+      },
+      "builder_exit_code": 0,
+      "builder_stderr": "",
+      "builder_stdout": "{\"archive_bytes\": 31148, \"archive_sha256\": \"060999647916b986ca7eaff5ff4211faa83b606a19c4453245334bac62d1c05c\", \"inventory_sha256\": \"19766c5598e387d2c09b15932b5a40efad1a6a0d46136ef1020e0f54dc2f1f29\", \"member_count\": 10, \"schema\": \"libwebp-backref-cost-interval-search-v3-archive-v1\", \"status\": \"accepted\"}\n",
+      "digest": {
+        "bytes": 319,
+        "hashes_match": true,
+        "local_sha256": "e0015bc220ec095fb374553aa985a8c54dd2ccc269017128625b3abf8b95166f",
+        "path": "archive-digest.json",
+        "remote_sha256": "e0015bc220ec095fb374553aa985a8c54dd2ccc269017128625b3abf8b95166f"
+      },
+      "digest_record": {
+        "archive_bytes": 31148,
+        "archive_sha256": "060999647916b986ca7eaff5ff4211faa83b606a19c4453245334bac62d1c05c",
+        "inventory_sha256": "19766c5598e387d2c09b15932b5a40efad1a6a0d46136ef1020e0f54dc2f1f29",
+        "member_count": 10,
+        "schema": "libwebp-backref-cost-interval-search-v3-archive-v1",
+        "status": "accepted"
+      },
+      "inventory": {
+        "bytes": 1187,
+        "hashes_match": true,
+        "local_sha256": "19766c5598e387d2c09b15932b5a40efad1a6a0d46136ef1020e0f54dc2f1f29",
+        "path": "archive-inventory.json",
+        "remote_sha256": "19766c5598e387d2c09b15932b5a40efad1a6a0d46136ef1020e0f54dc2f1f29"
+      },
+      "member_inventory": {
+        "member_count": 10,
+        "members": [
+          {
+            "name": "evidence/artifact-hashes.json",
+            "size": 1475,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/build-commands.json",
+            "size": 9393,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/build.log",
+            "size": 169212,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness.json",
+            "size": 13571,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/lease-record.json",
+            "size": 159,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/operator-status.json",
+            "size": 162,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-rehearsal.txt",
+            "size": 94267,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/rehearsal.json",
+            "size": 9222,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/work-metric-summary.json",
+            "size": 224,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/work-metrics.jsonl",
+            "size": 13150,
+            "type": "regular"
+          }
+        ],
+        "offending": null,
+        "schema": "libwebp-backref-cost-interval-search-v3-archive-inventory-v1",
+        "status": "accepted"
+      },
+      "status": "accepted"
+    },
+    "extraction": {
+      "member_inventory": {
+        "member_count": 10,
+        "members": [
+          {
+            "name": "evidence/artifact-hashes.json",
+            "size": 1475,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/build-commands.json",
+            "size": 9393,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/build.log",
+            "size": 169212,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness.json",
+            "size": 13571,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/lease-record.json",
+            "size": 159,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/operator-status.json",
+            "size": 162,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-rehearsal.txt",
+            "size": 94267,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/rehearsal.json",
+            "size": 9222,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/work-metric-summary.json",
+            "size": 224,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/work-metrics.jsonl",
+            "size": 13150,
+            "type": "regular"
+          }
+        ],
+        "offending": null,
+        "schema": "libwebp-backref-cost-interval-search-v3-archive-inventory-v1",
+        "status": "accepted"
+      },
+      "status": "accepted"
+    },
+    "lease": {
+      "bytes": 159,
+      "hashes_match": true,
+      "local_sha256": "a9c493a0faf499b8e37b5fa34ea01098a10bb7732844b9ba1f69c466406c551e",
+      "path": "evidence/lease-record.json",
+      "remote_sha256": "a9c493a0faf499b8e37b5fa34ea01098a10bb7732844b9ba1f69c466406c551e",
+      "status": "accepted"
+    }
+  },
+  "failure": null,
+  "installed_runner_directory_touched": false,
+  "lease_released": false,
+  "mode": "rehearse",
+  "pipeline_exit_code": 0,
+  "pipeline_stderr_path": "return-protocol/pipeline.stderr",
+  "pipeline_stdout_path": "return-protocol/pipeline.stdout",
+  "rehearsal_refusal_fixture": null,
+  "remote_cleanup_complete": true,
+  "remote_cleanup_proof": {
+    "absence_proved": true,
+    "home": "/Users/pandocs-agent-001",
+    "removed_exact_validated_child": true,
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v3/run.AXanM7",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v3",
+    "schema": "libwebp-backref-cost-interval-search-v3-cleanup-receipt-v1",
+    "status": "complete",
+    "token": "run.AXanM7",
+    "validated": true
+  },
+  "remote_host_alias": "pandocs-agent",
+  "schema": "libwebp-backref-cost-interval-search-v3-transfer-cleanup-v1",
+  "source_bundle_sha256": "fafdf620e64424ac3ae0dbdce391760e0d3a48d304ce174715a0d78d8d1769fe",
+  "source_commit": "0ed73d55dbf193902550f7787d3c3937275958ca",
+  "status": "complete",
+  "timed_binary_invoked": false
+}

@@ -1,0 +1,61 @@
+{
+  "member_inventory": {
+    "member_count": 10,
+    "members": [
+      {
+        "name": "evidence/artifact-hashes.json",
+        "size": 1475,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build-commands.json",
+        "size": 9393,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build.log",
+        "size": 169212,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness.json",
+        "size": 13571,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/lease-record.json",
+        "size": 159,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-status.json",
+        "size": 162,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-rehearsal.txt",
+        "size": 94267,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/rehearsal.json",
+        "size": 9222,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/work-metric-summary.json",
+        "size": 224,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/work-metrics.jsonl",
+        "size": 13150,
+        "type": "regular"
+      }
+    ],
+    "offending": null,
+    "schema": "libwebp-backref-cost-interval-search-v3-archive-inventory-v1",
+    "status": "accepted"
+  },
+  "status": "accepted"
+}

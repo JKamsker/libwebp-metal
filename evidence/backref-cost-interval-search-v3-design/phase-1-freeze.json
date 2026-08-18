@@ -1,0 +1,41 @@
+{
+  "base_commit": "c472599ce8d3aee1e4f5bcf70b56b9c354351660",
+  "benchmark_leases": 0,
+  "commands": {
+    "local_validate": "env -u WEBP_BENCHMARK_SESSION WEBP_EXPECTED_BACKREF_COST_INTERVAL_SEARCH_V3_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_interval_search_v3.py validate",
+    "phase_2_run": "env WEBP_BENCHMARK_SESSION=exclusive WEBP_EXPECTED_BACKREF_COST_INTERVAL_SEARCH_V3_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_interval_search_v3.py run /Users/jonaskamsker/.codex/worktrees/f379/libwebp-metal/evidence/backref-cost-interval-search-v3-execution-20260819",
+    "remote_refusal_rehearsal": "env -u WEBP_BENCHMARK_SESSION WEBP_EXPECTED_BACKREF_COST_INTERVAL_SEARCH_V3_COMMIT=0ed73d55dbf193902550f7787d3c3937275958ca python3 scripts/execute_backref_cost_interval_search_v3.py rehearse /Users/jonaskamsker/.codex/worktrees/f379/libwebp-metal/evidence/backref-cost-interval-search-v3-design/remote-rehearsal-refusal --refusal-fixture missing",
+    "remote_success_rehearsal": "env -u WEBP_BENCHMARK_SESSION WEBP_EXPECTED_BACKREF_COST_INTERVAL_SEARCH_V3_COMMIT=0ed73d55dbf193902550f7787d3c3937275958ca python3 scripts/execute_backref_cost_interval_search_v3.py rehearse /Users/jonaskamsker/.codex/worktrees/f379/libwebp-metal/evidence/backref-cost-interval-search-v3-design/remote-rehearsal-success"
+  },
+  "manifest_sha256": "ba1d460ffd1a9b301472fa1886b0da00b2ed79b0de62352394284982933d5bc2",
+  "rehearsal_source_commit": "0ed73d55dbf193902550f7787d3c3937275958ca",
+  "schema": "libwebp-backref-cost-interval-search-v3-phase-1-freeze-v1",
+  "schema_catalog_sha256": "48a7b79dbeaf2f642cd41f8f7606359ba045e7b7a61c111fc282709e2b4bb9d0",
+  "source_hashes": {
+    "CMakeLists.txt": "7bfa6c16c6db2db1ca92fceac6af4ee49f9894dea6f95c6fc5e460c5099ae96d",
+    "makefile.unix": "e97d37d77cef80b881fdd5472dd4cf06b4947b1c42ef97810b96a9216b045f31",
+    "scripts/backref_cost_interval_search_v3_schemas.json": "48a7b79dbeaf2f642cd41f8f7606359ba045e7b7a61c111fc282709e2b4bb9d0",
+    "scripts/execute_backref_cost_interval_search_v3.py": "a46175be90ced5f2fe162279d42978328f4d39c4dce88d940d8b67e145d18d5f",
+    "scripts/run_backref_cost_interval_search_v3_experiment.py": "9fc2447dc41777e7529b4b7a2e4512e6af6f568966ce8df8e8d7880766c4ac1d",
+    "src/enc/backref_cost_interval_search_v3_experiment_enc.c": "9cdf462bf5ea8e780632c120e3e51a5dda00f119c5bd7a141182bbb8b70caaaf",
+    "src/enc/backref_cost_interval_search_v3_experiment_enc.h": "4523b247a340d54549c9464aef2b1fc56bd0e31bae5fc0cde29ec7f7745fff24",
+    "src/enc/backward_references_cost_enc.c": "2a6364f683692247def2febbc2e9734d25bba397a348c5e858fb3840009be4d2",
+    "tools/backref_cost_interval_search_v3_experiment_runner.c": "3af0f5034417ae1220c2dd00225abca27ec7cf3656e6fb00349f35aeb58412e4"
+  },
+  "status": "PASS",
+  "tests": {
+    "api_abi_default_omission_gate_isolation": "PASS",
+    "archive_builder_extractor_and_malicious_fixtures": "PASS",
+    "correctness_bitstream_pixels_determinism_inputs_fallback": "PASS (26 cells)",
+    "mode_environment_truth_table": "PASS",
+    "normalized_v2_v3_candidate_and_cost_manager_layout": "PASS (33224 bytes)",
+    "normalized_v2_v3_optimized_codegen": "PASS",
+    "receipt_missing_renamed_type_unequal_hash_version_fixtures": "PASS",
+    "remote_controlled_indexed_refusal_return_cleanup": "PASS",
+    "remote_exact_untimed_rehearsal_return_cleanup": "PASS",
+    "sanitizers_and_fuzzed_boundaries": "PASS",
+    "work_counters": "PASS (99.047% local full-corpus; 99.065% remote tune/holdout)"
+  },
+  "timed_execution_authorized": true,
+  "timed_samples": 0
+}

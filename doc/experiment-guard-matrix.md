@@ -25,6 +25,7 @@ shared experimental build or runtime switch.
 | 16 independent v5 remote backref-cost workspace A/B | `WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT` | `WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT` | `WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT=1` | unchanged recorder-free candidate with admitted makefile toolchain and indexed evidence on every controlled refusal |
 | 17 backref-cost interval-search v1 | `WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT` | `WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT` | `WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=1` | strictly-after-tail null-hint positioning index; separate untimed recorder build and recorder-free timed runner |
 | 18 backref-cost interval-search v2 | `WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT` | `WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT` | `WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT=1` | PushInterval-local scan-derived append hint with narrow in-call maintenance; separate untimed recorder build and recorder-free timed runner |
+| 19 backref-cost interval-search v3 | `WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT` | `WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT` | `WEBP_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT=1` | exact v2 PushInterval-local candidate under repaired receipt/mode infrastructure; separate v3-only untimed recorder and recorder-free timed runner |
 
 Every runtime value is exact: values other than `1` are disabled. Every timed
 launcher additionally requires `WEBP_BENCHMARK_SESSION=exclusive`. Correctness,
@@ -177,6 +178,7 @@ WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT=1 examples/cwebp
 
 WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=1 examples/cwebp
 WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT=1 examples/cwebp
+WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT=1 examples/cwebp
 ```
 
 CMake uses the same names with `-D<name>=ON`. Items 2--8 require

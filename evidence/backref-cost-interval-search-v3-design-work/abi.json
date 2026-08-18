@@ -1,0 +1,11 @@
+{
+  "base_commit": "c472599ce8d3aee1e4f5bcf70b56b9c354351660",
+  "candidate_recorder_build_used_for_public_symbol_projection": true,
+  "exported_public_symbol_count": 193,
+  "exported_public_symbols_match": true,
+  "exported_public_symbols_sha256_gate_off": "bb5709f25626a5b150eb42e68e4c9760eddec5dcd85a499ae88b8a9a8db91b5c",
+  "exported_public_symbols_sha256_gate_on": "bb5709f25626a5b150eb42e68e4c9760eddec5dcd85a499ae88b8a9a8db91b5c",
+  "public_header_changes_from_base": 0,
+  "schema": "libwebp-backref-cost-interval-search-v3-abi-v1",
+  "status": "PASS"
+}
