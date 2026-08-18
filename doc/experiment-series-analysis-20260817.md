@@ -22,6 +22,12 @@
 > accepted, changes no predecessor disposition, and promotes no production
 > change. See
 > [backref-cache-search-experiment-evaluation-20260818.md](backref-cache-search-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 serial-sweep addendum:** the row-9 recorder-free implementation
+> preserved exact output and fallback behavior in all 18 cells, but was about
+> 7.6--8.9% slower by paired median and failed p95 in every performance cell.
+> It is rejected, remains default off, and promotes no production change. See
+> [cache-size-serial-sweep-experiment-evaluation-20260818.md](cache-size-serial-sweep-experiment-evaluation-20260818.md).
 
 ## Scope and evidence boundary
 
