@@ -29,6 +29,17 @@ promoted as a supported default. Under row 4 only,
 `legacy_per_pixel` regression control. The historical operator matrix and raw
 evidence retain their original `block_2x2` candidate name and values.
 
+The 2026-08-18 publication audit adds no timing experiment. The bounded core
+already has generated-input evidence, so there is no sixth build flag, runtime
+flag, timing entry point, or reuse of rows 1--5. Publication corpus generation
+and verification are untimed data-integrity operations:
+
+```sh
+python3 scripts/generate_publication_corpus.py \
+  --output /tmp/libwebp-publication-corpus --verify
+python3 scripts/test_publication_corpus.py
+```
+
 ## Default and isolation guarantees
 
 - Default CMake and Unix make builds define none of the five private macros.

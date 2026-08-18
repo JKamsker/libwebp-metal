@@ -62,6 +62,13 @@ Repository settings:
 
 ## Measurement protocol
 
+The weekly regression signal below is operational monitoring, not evidence for
+the publication report. Publication-corpus provenance, license, canonical
+hashes, and untimed verification are in
+`benchmarks/publication-corpus/README.md`. A future publication experiment may
+use those generated inputs only under a newly predefined protocol and new
+independent experiment gates; it must not relabel an item 1--5 historical run.
+
 `generate_performance_corpus.py` creates two deterministic 2560x1920 PPM
 inputs and records byte hashes in `manifest.json`; no external corpus or secret
 path is assumed. `run_performance.py` records end-to-end cold-process cases for

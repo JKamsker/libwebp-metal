@@ -12,14 +12,10 @@ import statistics
 import subprocess
 import sys
 
+import generate_publication_corpus as publication_corpus
+
 
 SCHEMA = "libwebp-encoder-stage-v1"
-SIZES = {
-    "small": (512, 512),
-    "medium": (1600, 1200),
-    "large": (3000, 2000),
-}
-CONTENT_CLASSES = ("photo", "graphic", "texture")
 
 
 def write_json(path, value):
@@ -35,63 +31,30 @@ def sha256(path):
     return digest.hexdigest()
 
 
-def ppm_row(content_class, width, height, y):
-    row = bytearray(width * 3)
-    state = (0x9E3779B9 ^ (y * 0x85EBCA6B)) & 0xFFFFFFFF
-    for x in range(width):
-        if content_class == "photo":
-            noise = ((x * 17 + y * 29 + ((x ^ y) * 7)) & 31) - 16
-            r = max(0, min(255, (180 * x // max(1, width - 1)) + 35 + noise))
-            g = max(0, min(255, (150 * y // max(1, height - 1)) + 45 + noise // 2))
-            b = max(0, min(255, (r + g) // 2 + ((x // 64 + y // 64) & 15)))
-        elif content_class == "graphic":
-            palette = ((238, 238, 232), (38, 62, 96), (225, 82, 65),
-                       (247, 190, 66), (50, 150, 105), (103, 78, 167))
-            index = ((x // max(8, width // 12)) +
-                     3 * (y // max(8, height // 9))) % len(palette)
-            if abs(x - width // 2) < max(2, width // 150) or \
-                    abs(y - height // 2) < max(2, height // 150):
-                index = 1
-            r, g, b = palette[index]
-        else:
-            state ^= (state << 13) & 0xFFFFFFFF
-            state ^= state >> 17
-            state ^= (state << 5) & 0xFFFFFFFF
-            r = state & 255
-            g = (state >> 8) & 255
-            b = (state >> 16) & 255
-        offset = 3 * x
-        row[offset:offset + 3] = bytes((r, g, b))
-    return row
-
-
 def prepare_dataset(dataset_dir):
-    dataset_dir.mkdir(parents=True, exist_ok=True)
-    cases = []
-    for size_class, (width, height) in SIZES.items():
-        for content_class in CONTENT_CLASSES:
-            case_id = f"{content_class}-{size_class}"
-            path = dataset_dir / f"{case_id}.ppm"
-            if not path.exists():
-                with path.open("wb") as output:
-                    output.write(f"P6\n{width} {height}\n255\n".encode("ascii"))
-                    for y in range(height):
-                        output.write(ppm_row(content_class, width, height, y))
-            cases.append({
-                "case_id": case_id,
-                "content_class": content_class,
-                "size_class": size_class,
-                "width": width,
-                "height": height,
-                "pixels": width * height,
-                "path": str(path.resolve()),
-                "sha256": sha256(path),
-            })
+    canonical = publication_corpus.generate(dataset_dir)
+    publication_corpus.verify(canonical, publication_corpus.CANONICAL_MANIFEST)
+    cases = [
+        {
+            "case_id": case["case_id"],
+            "content_class": case["category"],
+            "size_class": case["size_class"],
+            "width": case["width"],
+            "height": case["height"],
+            "pixels": case["pixels"],
+            "path": str((dataset_dir / case["file"]).resolve()),
+            "sha256": case["sha256"],
+        }
+        for case in canonical["cases"]
+    ]
     manifest = {
         "schema": "libwebp-stage-profile-dataset-v1",
-        "generator": str(pathlib.Path(__file__).resolve()),
+        "generator": str((pathlib.Path(__file__).parent /
+                          "generate_publication_corpus.py").resolve()),
         "format": "binary PPM (P6), opaque RGB",
-        "seed_policy": "fixed formulas embedded in generator",
+        "publication_corpus_schema": canonical["schema"],
+        "publication_corpus_version": canonical["corpus_version"],
+        "seed_policy": canonical["generator"],
         "cases": cases,
     }
     write_json(dataset_dir / "manifest.json", manifest)
@@ -309,7 +272,9 @@ def main():
     if args.command == "prepare":
         manifest = prepare_dataset(args.dataset_dir.resolve())
         print(args.dataset_dir.resolve() / "manifest.json")
-        assert len(manifest["cases"]) == len(SIZES) * len(CONTENT_CLASSES)
+        assert len(manifest["cases"]) == (
+            len(publication_corpus.SIZES) * len(publication_corpus.CATEGORIES)
+        )
     elif args.command == "run":
         run_profiles(args)
     else:

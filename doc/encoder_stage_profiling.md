@@ -36,15 +36,17 @@ debug or sanitizer build for baseline records.
 Generate the deterministic dataset before the serialized benchmark slot:
 
 ```sh
-python3 scripts/encoder_stage_profile.py prepare \
-  --dataset-dir profile-data/dataset
+python3 scripts/generate_publication_corpus.py \
+  --output profile-data/dataset --verify
 ```
 
-The manifest records absolute paths and SHA-256 hashes. It contains a full
-3-by-3 matrix: `photo`, `graphic`, and `texture` content at 512x512,
-1600x1200, and 3000x2000. Inputs are opaque binary PPM so decoder libraries,
-metadata, alpha handling, and input conversion cannot vary between machines.
-The formulas and seeds are fixed in the generator.
+The portable publication-corpus manifest records schema/version, generator
+source/version, seed, license/provenance, dimensions, byte counts, and SHA-256
+hashes. It contains a full 3-by-3 matrix: `photo`, `graphic`, and `texture`
+content at 512x512, 1600x1200, and 3000x2000. Inputs are opaque binary PPM so
+decoder libraries, metadata, alpha handling, and input conversion cannot vary
+between machines. `encoder_stage_profile.py run` verifies the canonical hashes
+again and writes its historical run-manifest shape with resolved local paths.
 
 ## Exact benchmark command
 

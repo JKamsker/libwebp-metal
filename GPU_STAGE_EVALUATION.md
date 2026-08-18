@@ -181,6 +181,12 @@ The operator later ran this cold protocol under the serialized benchmark lease.
 It is retained for provenance, not as an instruction to rerun without a new
 release:
 
+The three exact inputs have unresolved source, author, license, and
+redistribution terms. The timing and external-image correctness results are
+historical-only and excluded from the publication core. Do not substitute the
+generated publication corpus under these names or reuse item 5's gates for a
+new experiment. See `doc/publication-evidence-audit-20260818.md`.
+
 ```sh
 make -f makefile.unix clean
 make -f makefile.unix -j8 WEBP_ENABLE_METAL=1 \

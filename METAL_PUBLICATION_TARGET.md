@@ -146,6 +146,15 @@ Interpretation:
 
 ## Risks and missing evidence
 
+The 2026-08-18 corpus audit closes the redistribution/reproducibility gap for
+the bounded generated-input publication core, not for historical external-image
+rows. Publication corpus v1 has explicit source, version, seed, categories,
+dimensions, hashes, provenance, BSD-3-Clause redistribution terms, and an
+untimed two-generation verifier. Experiment 4 transform/hash, experiment 5,
+and the old aggregate baseline remain historical-only because the rights for
+their exact three inputs are unresolved. See
+`doc/publication-evidence-audit-20260818.md`.
+
 | Area | Risk now | Evidence needed before raising the target |
 |---|---|---|
 | Codec semantics | Cross-color output can differ; GPU floating-point behavior has not been compared across Apple GPU families. | Corpus-wide decode, bitstream/size/quality policy, repeated-run and cross-device determinism results. |
