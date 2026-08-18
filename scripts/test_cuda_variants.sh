@@ -29,12 +29,15 @@ build_and_test() {
   if [ "$name" = baseline ]; then
     expect_resident_lossless=0
     expect_predictor=0
+    expect_fused_lossy=0
   else
     expect_resident_lossless=1
     expect_predictor=1
+    expect_fused_lossy=1
   fi
   WEBP_EXPECT_CUDA_RESIDENT_LOSSLESS="$expect_resident_lossless" \
     WEBP_EXPECT_CUDA_PREDICTOR="$expect_predictor" \
+    WEBP_EXPECT_CUDA_FUSED_LOSSY_ANALYSIS="$expect_fused_lossy" \
     WEBP_TEST_BIN_DIR="$build_dir" "$root_dir/scripts/test_cuda.sh"
   batch_log="$temporary_dir/$name-batch.log"
   WEBP_CUDA_VERBOSE=1 WEBP_CUDA_BATCH_MIN_PIXELS=1 \
@@ -59,6 +62,7 @@ build_and_test defaults
 build_and_test baseline \
   -DWEBP_CUDA_ENABLE_COLOR_SHARED_TILE=OFF \
   -DWEBP_CUDA_ENABLE_NEAR_LOSSLESS=OFF \
+  -DWEBP_CUDA_ENABLE_FUSED_LOSSY_ANALYSIS=OFF \
   -DWEBP_CUDA_ENABLE_PREDICTOR=OFF \
   -DWEBP_CUDA_ENABLE_PERSISTENT_BUFFERS=OFF \
   -DWEBP_CUDA_ENABLE_PINNED_HOST_MEMORY=OFF \
@@ -82,6 +86,7 @@ all_disabled_dir="$temporary_dir/all-stages-disabled"
   -DWEBP_CUDA_ENABLE_RGB_TO_YUV=OFF \
   -DWEBP_CUDA_ENABLE_NEAR_LOSSLESS=OFF \
   -DWEBP_CUDA_ENABLE_LOSSY_ANALYSIS=OFF \
+  -DWEBP_CUDA_ENABLE_FUSED_LOSSY_ANALYSIS=OFF \
   -DWEBP_CUDA_ENABLE_PREDICTOR=OFF
 "$cmake_command" --build "$all_disabled_dir" --target webp -j
 

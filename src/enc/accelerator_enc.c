@@ -18,6 +18,29 @@
   (WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS |                    \
    WEBP_ACCELERATOR_PROPERTY_TRANSACTIONAL_OUTPUT)
 
+#if defined(_MSC_VER)
+#define WEBP_ACCELERATOR_TLS __declspec(thread)
+#define WEBP_ACCELERATOR_HAS_TLS 1
+#elif defined(__GNUC__) || defined(__clang__)
+#define WEBP_ACCELERATOR_TLS __thread
+#define WEBP_ACCELERATOR_HAS_TLS 1
+#elif defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+#define WEBP_ACCELERATOR_TLS _Thread_local
+#define WEBP_ACCELERATOR_HAS_TLS 1
+#else
+#define WEBP_ACCELERATOR_TLS
+#define WEBP_ACCELERATOR_HAS_TLS 0
+#endif
+
+typedef struct {
+  int active;
+  int lossless;
+  int method;
+  int quality;
+} WebPAcceleratorEncodeContext;
+
+static WEBP_ACCELERATOR_TLS WebPAcceleratorEncodeContext g_encode_context;
+
 #if defined(WEBP_ACCELERATOR_TESTING)
 static const WebPEncoderAccelerator* g_test_backend = NULL;
 #endif
@@ -131,9 +154,18 @@ WebPAcceleratorResult WebPAccelerateRGBToYUV(
   const WebPEncoderAccelerator* backends[4];
   const size_t count =
       GetBackends(backends, sizeof(backends) / sizeof(*backends));
+  WebPAcceleratorRGBToYUVRequest enriched;
   size_t i;
   if (request == NULL || count == 0 || IsDisabledByEnvironment()) {
     return WEBP_ACCELERATOR_NOT_RUN;
+  }
+  enriched = *request;
+  if (g_encode_context.active && !g_encode_context.lossless) {
+    enriched.method = g_encode_context.method;
+    enriched.quality = g_encode_context.quality;
+  } else {
+    enriched.method = -1;
+    enriched.quality = -1;
   }
   for (i = 0; i < count; ++i) {
     const WebPEncoderAccelerator* const backend = backends[i];
@@ -144,7 +176,8 @@ WebPAcceleratorResult WebPAccelerateRGBToYUV(
       continue;
     }
     if (backend->rgb_to_yuv == NULL) return WEBP_ACCELERATOR_ERROR;
-    result = NormalizeResult(backend->rgb_to_yuv(backend->context, request));
+    result =
+        NormalizeResult(backend->rgb_to_yuv(backend->context, &enriched));
     if (result != WEBP_ACCELERATOR_NOT_RUN) return result;
   }
   return WEBP_ACCELERATOR_NOT_RUN;
@@ -244,11 +277,27 @@ int WebPAcceleratorLossyAnalysisEnabled(void) {
   return 0;
 }
 
+void WebPAcceleratorBeginEncode(int lossless, int method, int quality) {
+#if WEBP_ACCELERATOR_HAS_TLS
+  g_encode_context.active = 1;
+  g_encode_context.lossless = lossless != 0;
+  g_encode_context.method = method;
+  g_encode_context.quality = quality;
+#else
+  (void)lossless;
+  (void)method;
+  (void)quality;
+#endif
+}
+
 void WebPAcceleratorEndEncode(void) {
   const WebPEncoderAccelerator* backends[4];
   const size_t count =
       GetBackends(backends, sizeof(backends) / sizeof(*backends));
   size_t i;
+#if WEBP_ACCELERATOR_HAS_TLS
+  memset(&g_encode_context, 0, sizeof(g_encode_context));
+#endif
   if (count == 0) return;
   for (i = 0; i < count; ++i) {
     const WebPEncoderAccelerator* const backend = backends[i];

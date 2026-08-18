@@ -54,6 +54,13 @@ namespace {
 #define WEBP_CUDA_HAS_ENCODER_STAGE 1
 #endif
 
+#if defined(WEBP_CUDA_ENABLE_FUSED_LOSSY_ANALYSIS) && \
+    defined(WEBP_CUDA_ENABLE_RGB_TO_YUV) && \
+    defined(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS) && \
+    defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+#define WEBP_CUDA_HAS_FUSED_LOSSY_ANALYSIS 1
+#endif
+
 // The batch cutoffs conservatively amortize the measured cold runtime cost
 // using the batch-6 PNG/JPEG crossover. Callers can recalibrate every value
 // through the corresponding environment override.
@@ -209,6 +216,17 @@ struct CudaState {
   int resident_height = 0;
   size_t resident_y_size = 0;
   size_t resident_uv_size = 0;
+  bool fused_lossy_analysis_valid = false;
+  const uint8_t* fused_lossy_y = nullptr;
+  const uint8_t* fused_lossy_u = nullptr;
+  const uint8_t* fused_lossy_v = nullptr;
+  int fused_lossy_y_stride = 0;
+  int fused_lossy_uv_stride = 0;
+  int fused_lossy_width = 0;
+  int fused_lossy_height = 0;
+  int fused_lossy_method = 0;
+  int fused_lossy_quality = 0;
+  size_t fused_lossy_result_count = 0;
   bool gamma_initialized = false;
   uint32_t successful_stages = 0;
   char device_name[256] = {0};
@@ -1568,6 +1586,7 @@ cudaError_t FinishDownloads(cudaStream_t stream) {
 void ReleaseStagingBuffers(CudaState* state) {
   state->resident_lossless_pixels_valid = false;
   state->resident_yuv_valid = false;
+  state->fused_lossy_analysis_valid = false;
 #if defined(WEBP_CUDA_ENABLE_STREAM_ORDERED_ALLOCATIONS)
   if (state->pixels != nullptr) (void)cudaFreeAsync(state->pixels, state->stream);
   if (state->resident_lossless_pixels != nullptr) {
@@ -2447,6 +2466,15 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
   float elapsed_ms = 0.0f;
   bool verbose;
   bool timing;
+  const char* fusion_suffix = "";
+#if defined(WEBP_CUDA_HAS_FUSED_LOSSY_ANALYSIS)
+  size_t fused_result_count = 0;
+  size_t fused_result_bytes = 0;
+  uint32_t fused_mb_width = 0;
+  uint32_t fused_mb_height = 0;
+  LossyAnalysisKernelParams fused_params = {};
+  bool fuse_analysis = false;
+#endif
 
   if (!EnvironmentFlag("WEBP_CUDA", true) ||
       !EnvironmentFlag("WEBP_CUDA_LOSSY", false)) {
@@ -2497,6 +2525,42 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
     return WEBP_ACCELERATOR_ERROR;
   }
   output_size = pixel_count + 2u * uv_size;
+#if defined(WEBP_CUDA_HAS_FUSED_LOSSY_ANALYSIS)
+  fused_mb_width = (static_cast<uint32_t>(request->width) + 15u) >> 4;
+  fused_mb_height = (static_cast<uint32_t>(request->height) + 15u) >> 4;
+  fused_result_count =
+      static_cast<size_t>(fused_mb_width) * fused_mb_height;
+  if (fused_result_count > std::numeric_limits<size_t>::max() /
+                               sizeof(WebPAcceleratorLossyAnalysisResult)) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  fused_result_bytes =
+      fused_result_count * sizeof(WebPAcceleratorLossyAnalysisResult);
+  fuse_analysis =
+      EnvironmentFlag("WEBP_CUDA_FUSED_LOSSY_ANALYSIS", false) &&
+      EnvironmentFlag("WEBP_CUDA_LOSSY_ANALYSIS", false) &&
+      request->method >= 0 && request->method <= 6 && request->quality >= 0 &&
+      request->quality <= 100 &&
+      fused_result_count >= EnvironmentSize(
+                                  "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS",
+                                  0u);
+  if (!fuse_analysis &&
+      EnvironmentFlag("WEBP_CUDA_FUSED_LOSSY_ANALYSIS", false) &&
+      EnvironmentFlag("WEBP_CUDA_VERBOSE", false)) {
+    fprintf(stderr,
+            "WebP-CUDA: fused lossy analysis declined "
+            "(method=%d quality=%d)\n",
+            request->method, request->quality);
+  }
+  if (fuse_analysis) {
+    fused_params = {static_cast<uint32_t>(request->width),
+                    static_cast<uint32_t>(request->height), uv_width,
+                    uv_height, fused_mb_width,
+                    static_cast<uint32_t>(request->method),
+                    static_cast<uint32_t>(request->quality)};
+    fusion_suffix = " (fused analysis)";
+  }
+#endif
   const size_t maximum_channel_offset =
       std::max(red_offset, std::max(green_offset, blue_offset));
   const size_t last_row_extent =
@@ -2540,17 +2604,31 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
     return ReportError(state, "initialize gamma tables", error, true);
   }
   state->resident_yuv_valid = false;
+  state->fused_lossy_analysis_valid = false;
   error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
                              source_size, state->stream);
   if (error == cudaSuccess) {
     error = EnsureDeviceBuffer(&state->transform, &state->transform_capacity,
                                output_size, state->stream);
   }
+#if defined(WEBP_CUDA_HAS_FUSED_LOSSY_ANALYSIS)
+  if (error == cudaSuccess && fuse_analysis) {
+    error = EnsureDeviceBuffer(&state->analysis_results,
+                               &state->analysis_result_capacity,
+                               fused_result_bytes, state->stream);
+  }
+#endif
   if (error != cudaSuccess) {
     return ReportError(state, "allocate RGB staging buffers", error, false);
   }
   if (!EnsureHostBuffer(&state->host_transform,
                         &state->host_transform_capacity, output_size)
+#if defined(WEBP_CUDA_HAS_FUSED_LOSSY_ANALYSIS)
+      || (fuse_analysis &&
+          !EnsureHostBuffer(&state->host_analysis_results,
+                            &state->host_analysis_result_capacity,
+                            fused_result_bytes))
+#endif
 #if defined(WEBP_CUDA_ENABLE_PINNED_HOST_MEMORY)
       || !EnsureHostBuffer(&state->host_pixels, &state->host_pixel_capacity,
                            source_size)
@@ -2589,6 +2667,18 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
       reinterpret_cast<const uint8_t*>(state->pixels),
       reinterpret_cast<uint8_t*>(state->transform), params);
   error = cudaGetLastError();
+#if defined(WEBP_CUDA_HAS_FUSED_LOSSY_ANALYSIS)
+  if (error == cudaSuccess && fuse_analysis) {
+    const uint8_t* const device_y =
+        reinterpret_cast<const uint8_t*>(state->transform);
+    const uint8_t* const device_u = device_y + pixel_count;
+    const uint8_t* const device_v = device_u + uv_size;
+    LossyAnalysisKernel<<<static_cast<uint32_t>(fused_result_count), 256u, 0,
+                          state->stream>>>(
+        device_y, device_u, device_v, state->analysis_results, fused_params);
+    error = cudaGetLastError();
+  }
+#endif
   if (error == cudaSuccess && timing) {
     error = cudaEventRecord(state->event_stop, state->stream);
   }
@@ -2596,6 +2686,13 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
     error = DownloadFromDevice(state->host_transform, state->transform,
                                output_size, state->stream);
   }
+#if defined(WEBP_CUDA_HAS_FUSED_LOSSY_ANALYSIS)
+  if (error == cudaSuccess && fuse_analysis) {
+    error = DownloadFromDevice(state->host_analysis_results,
+                               state->analysis_results, fused_result_bytes,
+                               state->stream);
+  }
+#endif
   if (error == cudaSuccess) error = FinishDownloads(state->stream);
   if (error != cudaSuccess) {
     (void)cudaStreamSynchronize(state->stream);
@@ -2628,6 +2725,21 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
   state->resident_y_size = pixel_count;
   state->resident_uv_size = uv_size;
   state->resident_yuv_valid = true;
+#if defined(WEBP_CUDA_HAS_FUSED_LOSSY_ANALYSIS)
+  if (fuse_analysis) {
+    state->fused_lossy_y = request->y;
+    state->fused_lossy_u = request->u;
+    state->fused_lossy_v = request->v;
+    state->fused_lossy_y_stride = request->y_stride;
+    state->fused_lossy_uv_stride = request->uv_stride;
+    state->fused_lossy_width = request->width;
+    state->fused_lossy_height = request->height;
+    state->fused_lossy_method = request->method;
+    state->fused_lossy_quality = request->quality;
+    state->fused_lossy_result_count = fused_result_count;
+    state->fused_lossy_analysis_valid = true;
+  }
+#endif
 #endif
   if (verbose) {
     if (timing && cudaEventElapsedTime(&elapsed_ms, state->event_start,
@@ -2635,8 +2747,8 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
       elapsed_ms = 0.0f;
       (void)cudaGetLastError();
     }
-    fprintf(stderr, "WebP-CUDA: lossy RGB->YUV %dx%d in %.3f ms\n",
-            request->width, request->height, elapsed_ms);
+    fprintf(stderr, "WebP-CUDA: lossy RGB->YUV %dx%d in %.3f ms%s\n",
+            request->width, request->height, elapsed_ms, fusion_suffix);
   }
 #if !defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
   ReleaseStagingBuffers(state);
@@ -2727,6 +2839,32 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
             static_cast<uint32_t>(request->height), uv_width, uv_height,
             mb_width, static_cast<uint32_t>(request->method),
             static_cast<uint32_t>(request->quality)};
+
+#if defined(WEBP_CUDA_HAS_FUSED_LOSSY_ANALYSIS)
+  if (state->fused_lossy_analysis_valid &&
+      state->fused_lossy_y == request->y &&
+      state->fused_lossy_u == request->u &&
+      state->fused_lossy_v == request->v &&
+      state->fused_lossy_y_stride == request->y_stride &&
+      state->fused_lossy_uv_stride == request->uv_stride &&
+      state->fused_lossy_width == request->width &&
+      state->fused_lossy_height == request->height &&
+      state->fused_lossy_method == request->method &&
+      state->fused_lossy_quality == request->quality &&
+      state->fused_lossy_result_count == result_count) {
+    memcpy(request->results, state->host_analysis_results, result_bytes);
+    state->fused_lossy_analysis_valid = false;
+    state->resident_yuv_valid = false;
+    if (EnvironmentFlag("WEBP_CUDA_VERBOSE", false)) {
+      fprintf(stderr,
+              "WebP-CUDA: lossy analysis %ux%u macroblocks "
+              "(fused result)\n",
+              mb_width, mb_height);
+    }
+    return WEBP_ACCELERATOR_SUCCESS;
+  }
+  state->fused_lossy_analysis_valid = false;
+#endif
 
   if (state->quarantined) return WEBP_ACCELERATOR_NOT_RUN;
   const WebPAcceleratorResult initialized = Initialize(state);
@@ -2860,6 +2998,7 @@ void CUDAEndEncode(void* context) {
   LockCudaMutex(&g_cuda_mutex);
   state->resident_lossless_pixels_valid = false;
   state->resident_yuv_valid = false;
+  state->fused_lossy_analysis_valid = false;
   UnlockCudaMutex(&g_cuda_mutex);
 }
 

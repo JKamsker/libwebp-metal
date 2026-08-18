@@ -364,6 +364,9 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
     return ok;
   }
 
+  WebPAcceleratorBeginEncode(config->lossless, config->method,
+                             (int)config->quality);
+
   if (pic->stats != NULL) memset(pic->stats, 0, sizeof(*pic->stats));
   WebPProfileBeginSession(config, pic);
   WebPPredictorBoundaryBegin(config, pic);

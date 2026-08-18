@@ -4,7 +4,7 @@
 
 This is the private interface between the current libwebp encoder and optional
 compute backends. It is deliberately not a public WebP API and not a generic
-GPU runtime. ABI version 5 describes the complete stages already in this tree:
+GPU runtime. ABI version 6 describes the complete stages already in this tree:
 
 - `VP8LColorSpaceTransform()`: lossless cross-color transform search and
   application;
@@ -36,7 +36,7 @@ removes the encoder-to-Metal dependency without changing those kernel caches.
 
 ## ABI and capability discovery
 
-`src/enc/accelerator_enc.h` defines ABI version 5. A backend returns one static,
+`src/enc/accelerator_enc.h` defines ABI version 6. A backend returns one static,
 immutable `WebPEncoderAccelerator` descriptor with:
 
 - a name used by `WEBP_ACCELERATOR=auto|none|metal|cuda` selection;
@@ -72,8 +72,8 @@ override a Metal stage-specific disable or threshold.
 ## Lifecycle and resource ownership
 
 Backend descriptors have process lifetime. Backend initialization must be lazy
-and thread-safe because libwebp has no global accelerator init/shutdown API and
-the lossy import call occurs before either encoder object exists. A backend may
+and thread-safe because libwebp has no global accelerator init/shutdown API. A
+backend may
 retain its device, compiled pipelines/modules, streams/queues, events, and
 private staging buffers across encodes. It must not retain any pointer from a
 request for later access. A synchronous pipeline may retain pointer values only
@@ -81,13 +81,20 @@ as opaque identity tokens: CUDA uses the Y/U/V plane identities and geometry to
 connect RGB conversion to analysis, never dereferences them after the callback,
 and clears the tokens at the end of every encode.
 
+The common dispatcher holds the active encode's lossless flag, method, and
+quality in thread-local storage between `WebPAcceleratorBeginEncode()` and
+`WebPAcceleratorEndEncode()`. It copies method and quality into an RGB request
+only during a lossy `WebPEncode()` call. Direct picture-conversion calls receive
+`-1` for both values, and toolchains without supported thread-local storage
+decline this optional context rather than sharing it across threads.
+
 All request buffers are borrowed until the synchronous callback returns:
 
 | Stage | Borrowed input | Mutable output committed only on success |
 | --- | --- | --- |
 | Lossless color transform | dimensions, transform bits, quality, original `argb` | transformed `argb`, tile `transform_image` |
 | Lossless hash chain | `pixels`, CPU-built `chain`, search parameters | one packed candidate per pixel |
-| RGB to YUV420 | packed-channel pointers, source step/stride, dimensions | caller-allocated Y/U/V planes and their strides |
+| RGB to YUV420 | packed-channel pointers, source step/stride, dimensions, and optional active-encode method/quality | caller-allocated Y/U/V planes and their strides |
 | Near-lossless | original ARGB and preprocessing parameters | tightly packed preprocessed ARGB |
 | Lossy analysis | Y/U/V planes, geometry, method, quality | one susceptibility/mode record per macroblock |
 | Lossless predictor | ARGB, allowed tile-bit range, exact/quantization semantics | residual ARGB, predictor map, selected tile bits |
@@ -171,6 +178,12 @@ global k-means segment assignment, and retains progress/cancellation. CUDA
 reproduces the integer forward transform, coefficient histogram, edge
 replication, prediction defaults, comparisons, and tie behavior. The stage is
 runtime opt-in until matched end-to-end measurements establish a crossover.
+With the separate fused experiment enabled, RGB conversion launches this exact
+analysis kernel on the same stream before the first synchronization and
+downloads both outputs together. The later analysis callback accepts the
+cached host result only after matching plane identity, strides, geometry,
+method, quality, and result count. A mismatch invalidates the cache and follows
+the normal path, so the cross-stage optimization changes performance only.
 
 The experimental CUDA predictor deliberately changes the lossless selection
 heuristic while preserving codec semantics. Independent tiles evaluate all 14
@@ -236,15 +249,17 @@ tree:
 5. Compare decoded pixels and stage output as required above before enabling a
    stage by default. Performance threshold work is separate from this design.
 
-All six ABI-v5 stages are implemented in `src/enc/cuda_enc.cu`. They share a
+All six ABI-v6 stages are implemented in `src/enc/cuda_enc.cu`. They share a
 private nonblocking stream, optional events, geometrically grown device/host
 staging, serialized access, transactional output commits, and device-loss
 quarantine. The color kernel preserves independent-tile semantics; hash output
 is replayed through the CPU's left-extension boundary; RGB conversion matches
 the eligible CPU import byte-for-byte. When both lossy stages run sequentially,
 analysis consumes the packed device YUV left by RGB conversion instead of
-uploading the just-downloaded host planes again. An independent runtime-gated
-lossless handoff preserves cross-color output in a dedicated device buffer
+uploading the just-downloaded host planes again. A runtime-gated fused mode
+instead launches conversion and exact analysis before a single synchronization;
+its later callback consumes the identity-matched cached analysis result. An
+independent runtime-gated lossless handoff preserves cross-color output in a dedicated device buffer
 across transform-map encoding and reuses it for the matching main hash request.
 When predictor and residency are both enabled, cross-color consumes the
 resident predictor residuals directly. The synchronous callback still commits
@@ -257,8 +272,8 @@ concurrent encodes are covered.
 Every performance choice is independently preprocessor-gated: the six stages,
 persistent buffers, pinned staging, copy synchronization policy, hash matching
 unroll, read-only cache loads, restrict-qualified pointers, per-stage block
-width, fused 2x2 RGB work, packed four-byte RGB loads, and stream-ordered device
-allocation. Defaults are selected from warm/cold measurements on an RTX 2080
+width, fused 2x2 RGB work, packed four-byte RGB loads, fused lossy import and
+analysis, and stream-ordered device allocation. Defaults are selected from warm/cold measurements on an RTX 2080
 SUPER; experimental alternatives stay buildable for later hardware matrices.
 
 ## Migration plan and compatibility risks

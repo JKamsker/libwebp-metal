@@ -179,6 +179,7 @@ static void ConfigureDispatch(const Options* const options,
     setenv("WEBP_CUDA_LOSSY_MIN_PIXELS", "0", 1);
     setenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "0", 1);
     setenv("WEBP_CUDA_LOSSY_ANALYSIS", "1", 1);
+    setenv("WEBP_CUDA_FUSED_LOSSY_ANALYSIS", "1", 1);
     setenv("WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS", "0", 1);
     setenv("WEBP_CUDA_RESIDENT_LOSSLESS", "1", 1);
     setenv("WEBP_CUDA_PREDICTOR", "1", 1);
@@ -190,6 +191,7 @@ static void ConfigureDispatch(const Options* const options,
     unsetenv("WEBP_CUDA_LOSSY_MIN_PIXELS");
     unsetenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS");
     unsetenv("WEBP_CUDA_LOSSY_ANALYSIS");
+    unsetenv("WEBP_CUDA_FUSED_LOSSY_ANALYSIS");
     unsetenv("WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS");
     unsetenv("WEBP_CUDA_RESIDENT_LOSSLESS");
     unsetenv("WEBP_CUDA_PREDICTOR");
@@ -296,7 +298,8 @@ static int EncodeInput(const Options* const options, const Input* const input,
     owns_data = 1;
   }
   if (!InitConfig(options, &config) || !WebPPictureInit(&picture)) goto end;
-  picture.use_argb = config.lossless;
+  picture.use_argb = config.lossless ||
+                     (options->force_cuda && options->mode == MODE_LOSSY);
   reader = WebPGuessImageReader(data, data_size);
   if (!reader(data, data_size, &picture, 1, NULL)) {
     fprintf(stderr, "failed to decode %s (enabled: %s)\n", input->filename,

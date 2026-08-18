@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 5u
+#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 6u
 
 // These are deliberately encoder stages, not low-level GPU kernels. A backend
 // advertises only the stages whose complete CPU call-site contract it can
@@ -90,6 +90,10 @@ typedef struct {
   uint8_t* v;
   int y_stride;
   int uv_stride;
+  // Filled by the common dispatcher while WebPEncode() is active. Direct
+  // picture-conversion API calls receive -1 for both fields.
+  int method;
+  int quality;
 } WebPAcceleratorRGBToYUVRequest;
 
 typedef struct {
@@ -194,6 +198,7 @@ WebPAcceleratorResult WebPAccelerateLossyAnalysis(
 WebPAcceleratorResult WebPAcceleratePredictor(
     const WebPAcceleratorPredictorRequest* request);
 int WebPAcceleratorLossyAnalysisEnabled(void);
+void WebPAcceleratorBeginEncode(int lossless, int method, int quality);
 void WebPAcceleratorEndEncode(void);
 
 #if defined(WEBP_ACCELERATOR_TESTING)

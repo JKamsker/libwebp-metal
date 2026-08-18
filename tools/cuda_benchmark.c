@@ -195,6 +195,8 @@ static void ConfigureDispatch(const Options* options) {
          cuda && options->operation == OP_NEAR_LOSSLESS ? "1" : "0", 1);
   setenv("WEBP_CUDA_LOSSY_ANALYSIS",
          cuda && options->operation == OP_LOSSY ? "1" : "0", 1);
+  setenv("WEBP_CUDA_FUSED_LOSSY_ANALYSIS",
+         cuda && options->operation == OP_LOSSY ? "1" : "0", 1);
   setenv("WEBP_CUDA_RESIDENT_LOSSLESS",
          cuda && options->operation == OP_LOSSLESS ? "1" : "0", 1);
   setenv("WEBP_CUDA_PREDICTOR",
@@ -223,7 +225,8 @@ static int Encode(const Options* options, const uint8_t* rgba,
   if (!WebPValidateConfig(&config)) return 0;
   picture.width = options->width;
   picture.height = options->height;
-  picture.use_argb = config.lossless;
+  picture.use_argb =
+      config.lossless || options->operation == OP_LOSSY;
   WebPMemoryWriterInit(&writer);
   picture.writer = WebPMemoryWrite;
   picture.custom_ptr = &writer;

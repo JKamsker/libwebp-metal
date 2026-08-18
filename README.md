@@ -118,6 +118,15 @@ persistent buffers enabled, it consumes the device-resident YUV produced by the
 CUDA RGB stage and avoids a redundant upload; an end-of-encode hook clears any
 unconsumed handoff safely. No production crossover is claimed until the
 portable end-to-end suite is rerun.
+`WEBP_CUDA_FUSED_LOSSY_ANALYSIS=1` additionally asks `cwebp` and the benchmark
+tools to defer regular lossy conversion until the encoder has supplied its
+method and quality. When RGB conversion, lossy analysis, and persistent buffers
+are all compiled in and enabled, CUDA launches both exact kernels on one stream,
+queues both readbacks, and synchronizes once. The later analysis callback
+consumes the cached result only when its plane pointers, strides, dimensions,
+method, quality, and result count still match; otherwise it safely runs the
+ordinary analysis path. This experiment is also off by default and has
+correctness evidence only.
 Defaults are adaptive: a stage pays the
 roughly 140 ms runtime/device initialization cost only for large inputs, then
 uses a lower warm-process threshold once another CUDA stage initialized the
@@ -147,10 +156,12 @@ CMake option. The default strategy uses dynamically sized shared source tiles
 for cross-color search, persistent buffers, stream-ordered copies,
 four-at-a-time hash matching, read-only hash loads, restrict-qualified kernel
 pointers, packed four-byte RGB loads, 128-thread color/hash blocks, and
-256-thread RGB blocks. The predictor stage is built but runtime-off pending
-time and compressed-size measurements. Page-locked host staging, fused RGB 2x2
-work, alternate block widths, and stream-ordered allocation remain available
-for ablation but are off by default on the measured RTX 2080 SUPER. Build the
+256-thread RGB blocks. The predictor and fused lossy-analysis stages are built
+but runtime-off pending time, and for predictor compressed-size, measurements.
+`WEBP_CUDA_ENABLE_FUSED_LOSSY_ANALYSIS=OFF` provides a compile-time ablation.
+Page-locked host staging, fused RGB 2x2 work, alternate block widths, and
+stream-ordered allocation remain available for ablation but are off by default
+on the measured RTX 2080 SUPER. Build the
 non-installed `webp_cuda_benchmark`, `webp_cuda_batch_benchmark`, and
 concurrency runner with
 `-DWEBP_BUILD_CUDA_BENCHMARK=ON`; the batch runner supports persistent

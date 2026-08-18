@@ -22,6 +22,8 @@ typedef struct {
   int lossy_analysis_calls;
   int predictor_calls;
   int end_encode_calls;
+  int expected_rgb_method;
+  int expected_rgb_quality;
 } FakeContext;
 
 static void FakeEndEncode(void* opaque) {
@@ -69,6 +71,8 @@ static WebPAcceleratorResult FakeRGBToYUV(
   assert(request->height == 2);
   assert(request->y_stride == 5);
   assert(request->uv_stride == 3);
+  assert(request->method == context->expected_rgb_method);
+  assert(request->quality == context->expected_rgb_quality);
   if (context->rgb_result == WEBP_ACCELERATOR_SUCCESS) {
     request->y[0] = 42u;
     request->u[0] = 43u;
@@ -168,7 +172,7 @@ int main(void) {
   uint8_t u[3] = {8u};
   uint8_t v[3] = {9u};
   const WebPAcceleratorRGBToYUVRequest rgb_request = {
-      rgba, rgba + 1, rgba + 2, 4, 13, 2, 2, y, u, v, 5, 3};
+      rgba, rgba + 1, rgba + 2, 4, 13, 2, 2, y, u, v, 5, 3, -1, -1};
   const uint32_t near_source[9] = {0};
   uint32_t near_output[6] = {10u};
   const WebPAcceleratorNearLosslessRequest near_lossless_request = {
@@ -189,6 +193,8 @@ int main(void) {
   context.near_lossless_result = WEBP_ACCELERATOR_SUCCESS;
   context.lossy_analysis_result = WEBP_ACCELERATOR_SUCCESS;
   context.predictor_result = WEBP_ACCELERATOR_SUCCESS;
+  context.expected_rgb_method = 5;
+  context.expected_rgb_quality = 63;
   backend = MakeBackend(&context);
   if (getenv("WEBP_ACCELERATOR") != NULL &&
       strcmp(getenv("WEBP_ACCELERATOR"), "none") == 0) {
@@ -241,9 +247,15 @@ int main(void) {
   assert(context.hash_calls == 1);
   assert(candidates[0] == 99u);
 
+  WebPAcceleratorBeginEncode(0, 5, 63);
   assert(WebPAccelerateRGBToYUV(&rgb_request) == WEBP_ACCELERATOR_SUCCESS);
   assert(context.rgb_calls == 1);
   assert(y[0] == 42u && u[0] == 43u && v[0] == 44u);
+  WebPAcceleratorEndEncode();
+  context.expected_rgb_method = -1;
+  context.expected_rgb_quality = -1;
+  assert(WebPAccelerateRGBToYUV(&rgb_request) == WEBP_ACCELERATOR_SUCCESS);
+  assert(context.rgb_calls == 2);
 
   assert(WebPAccelerateNearLossless(&near_lossless_request) ==
          WEBP_ACCELERATOR_SUCCESS);

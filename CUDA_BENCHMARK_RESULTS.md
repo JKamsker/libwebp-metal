@@ -101,6 +101,10 @@ aborts its preflight if either RGB conversion or analysis falls back to the
 CPU. Historical rows in this document predate that stage and must not be used
 to claim its performance. A new result set is required before enabling
 `WEBP_CUDA_LOSSY_ANALYSIS` by default or selecting a crossover.
+Forced lossy rows now also enable fused RGB conversion plus exact analysis,
+which defers regular lossy import until method/quality are available and uses a
+single completion boundary. Historical rows predate this fused mode too; they
+provide no evidence for its performance.
 Forced lossless rows also enable the experimental resident cross-color-to-hash
 handoff. Historical rows predate that handoff as well; they remain evidence for
 the older round-trip pipeline only.

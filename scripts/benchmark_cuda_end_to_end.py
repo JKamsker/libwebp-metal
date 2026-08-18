@@ -47,6 +47,7 @@ CUDA_ENVIRONMENT_NAMES = (
     "WEBP_CUDA_LOSSY",
     "WEBP_CUDA_NEAR_LOSSLESS",
     "WEBP_CUDA_LOSSY_ANALYSIS",
+    "WEBP_CUDA_FUSED_LOSSY_ANALYSIS",
     "WEBP_CUDA_RESIDENT_LOSSLESS",
     "WEBP_CUDA_PREDICTOR",
     "WEBP_CUDA_MIN_PIXELS",
@@ -124,6 +125,7 @@ def clean_environment(
                 "WEBP_CUDA_LOSSY": "1",
                 "WEBP_CUDA_NEAR_LOSSLESS": "1",
                 "WEBP_CUDA_LOSSY_ANALYSIS": "1",
+                "WEBP_CUDA_FUSED_LOSSY_ANALYSIS": "1",
                 "WEBP_CUDA_RESIDENT_LOSSLESS": "1",
                 "WEBP_CUDA_PREDICTOR": "1",
                 "WEBP_CUDA_MIN_PIXELS": "0",
@@ -783,6 +785,9 @@ def run_suite(args: argparse.Namespace) -> int:
             "cuda_policy": "forced stages for matched CPU/CUDA comparison",
             "cuda_lossy_analysis": (
                 "forced exact macroblock analysis with resident YUV handoff"
+            ),
+            "cuda_fused_lossy_analysis": (
+                "forced RGB conversion plus exact analysis before one sync"
             ),
             "cuda_lossless_handoff": (
                 "forced transformed-pixel reuse from color to main hash"
