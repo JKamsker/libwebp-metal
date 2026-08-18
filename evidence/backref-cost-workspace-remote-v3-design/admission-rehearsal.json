@@ -1,0 +1,102 @@
+{
+  "admission": {
+    "admission": {
+      "bundle_hash_match": true,
+      "bundle_path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3/run.RaTDMU/source.bundle",
+      "bundle_sha256": "580aba4ce6e0c076002d88ba207f6c491dc03c3d262977f67422a66dc3b16390",
+      "bundle_verified_in_repository_context": true,
+      "bundle_verify_command": [
+        "git",
+        "-C",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3/run.RaTDMU/verify.git",
+        "bundle",
+        "verify",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3/run.RaTDMU/source.bundle"
+      ],
+      "bundle_verify_repository": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3/run.RaTDMU/verify.git",
+      "clean_status": true,
+      "clone": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3/run.RaTDMU/source",
+      "source_commit": "1b6f6b707e79bfcfc1d912bf1b4c916b3f7b58e5",
+      "source_hashes": {
+        "CMakeLists.txt": "66eae91c93e17d84cefcff15080dc95129fcf1469e6c92a199cf58480290a329",
+        "makefile.unix": "5fc49dbb8dd3c8ed5816dbe5372bad3d2b0d90bb7a1911a460ff72dbbbffa96d",
+        "scripts/backref_cost_workspace_remote_v3_admission.py": "c61dab4bf19ccd91ecbc0553fc96d3d1a9f1e9f38064db433f6ee526b8c8e28e",
+        "scripts/backref_cost_workspace_remote_v3_paths.py": "963a80b757e19dde249df746fca52e6b370526e3a06d0f70a8bf3c1ba161d8b8",
+        "scripts/execute_backref_cost_workspace_remote_v3.py": "605bc0b78e37338d504792095199ce795c810c11e03d0bc2cd2e1e03d529ac82",
+        "src/enc/backref_cost_workspace_remote_v3_experiment_enc.c": "2cd4638a7b7cb5d8ad09adc0f17fa6cfc8c431c40f578393809c30d9f77e8507",
+        "src/enc/backref_cost_workspace_remote_v3_experiment_enc.h": "e6276dab0ceb6989b0ceaec45a1fd3a2aecec1a1e314006a09eae4eba71df980",
+        "src/enc/backward_references_cost_enc.c": "75d55496b345aa97241f2776f485b1d971e31a891a01fef296bedd317810b436",
+        "tools/backref_cost_workspace_remote_v3_experiment_runner.c": "772f7d21aba0187c9b63e2afe2f4422310a9efd9154fa953f09b32550413aeea"
+      },
+      "source_tree": "f01a0ff85503865582195703c6b091966ffa4da7",
+      "verification_repository_removed": true
+    },
+    "finished": true,
+    "home": "/Users/pandocs-agent-001",
+    "malformed_bundle": {
+      "clone_absent": true,
+      "exit_code": 1,
+      "hash_match": true,
+      "local_sha256": "44c574d111f293b90de22227706277f259ecf6ab84352366796eb6241793f528",
+      "rejected": true,
+      "remote_sha256": "44c574d111f293b90de22227706277f259ecf6ab84352366796eb6241793f528",
+      "stderr": "ERROR: repository-context bundle verification rejected transfer: error: '/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3/run.RaTDMU/malformed.bundle' does not look like a v2 or v3 bundle file\n",
+      "verification_repository_absent": true
+    },
+    "path_generation": {
+      "generator": "mktemp -d",
+      "home": "/Users/pandocs-agent-001",
+      "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3/run.RaTDMU",
+      "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3",
+      "token": "run.RaTDMU",
+      "validated": true
+    },
+    "post_admission_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "process_table_sha256": "1fd4cfa14cf10bb836dbe60eb402487fe750e748c447627bf83e05efac7b754c",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "pretransfer_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "process_table_sha256": "2182d06d684c4719ccfbb47f96eaf42df688a629868f4c1d4a6610bf171355c2",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "remote_source_bundle_sha256": "580aba4ce6e0c076002d88ba207f6c491dc03c3d262977f67422a66dc3b16390",
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3/run.RaTDMU",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3",
+    "source_bundle_sha256": "580aba4ce6e0c076002d88ba207f6c491dc03c3d262977f67422a66dc3b16390",
+    "source_commit": "1b6f6b707e79bfcfc1d912bf1b4c916b3f7b58e5",
+    "source_hashes": {
+      "CMakeLists.txt": "66eae91c93e17d84cefcff15080dc95129fcf1469e6c92a199cf58480290a329",
+      "makefile.unix": "5fc49dbb8dd3c8ed5816dbe5372bad3d2b0d90bb7a1911a460ff72dbbbffa96d",
+      "scripts/backref_cost_workspace_remote_v3_admission.py": "c61dab4bf19ccd91ecbc0553fc96d3d1a9f1e9f38064db433f6ee526b8c8e28e",
+      "scripts/backref_cost_workspace_remote_v3_paths.py": "963a80b757e19dde249df746fca52e6b370526e3a06d0f70a8bf3c1ba161d8b8",
+      "scripts/execute_backref_cost_workspace_remote_v3.py": "605bc0b78e37338d504792095199ce795c810c11e03d0bc2cd2e1e03d529ac82",
+      "src/enc/backref_cost_workspace_remote_v3_experiment_enc.c": "2cd4638a7b7cb5d8ad09adc0f17fa6cfc8c431c40f578393809c30d9f77e8507",
+      "src/enc/backref_cost_workspace_remote_v3_experiment_enc.h": "e6276dab0ceb6989b0ceaec45a1fd3a2aecec1a1e314006a09eae4eba71df980",
+      "src/enc/backward_references_cost_enc.c": "75d55496b345aa97241f2776f485b1d971e31a891a01fef296bedd317810b436",
+      "tools/backref_cost_workspace_remote_v3_experiment_runner.c": "772f7d21aba0187c9b63e2afe2f4422310a9efd9154fa953f09b32550413aeea"
+    },
+    "source_tree": "f01a0ff85503865582195703c6b091966ffa4da7"
+  },
+  "benchmark_lease_acquisition_attempted": false,
+  "cleanup": {
+    "absence_proved": true,
+    "home": "/Users/pandocs-agent-001",
+    "removed_exact_validated_child": true,
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3/run.RaTDMU",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3",
+    "token": "run.RaTDMU",
+    "validated": true
+  },
+  "host_settings_changed": false,
+  "mode": "admission-only",
+  "runner_directories_or_services_touched": false,
+  "schema": "libwebp-backref-cost-workspace-remote-v3-admission-rehearsal-v1",
+  "shared_implementation": "admission.admit_source",
+  "source_commit": "1b6f6b707e79bfcfc1d912bf1b4c916b3f7b58e5",
+  "status": "PASS",
+  "timed_binary_invoked": false
+}

@@ -1,0 +1,20 @@
+{
+  "schema": "libwebp-backref-cost-workspace-remote-v3-artifact-hashes-v1",
+  "artifacts": [
+    {
+      "path": "driver-error.log",
+      "bytes": 38,
+      "sha256": "0dd1509c0b127a6119dd4960244187ecf5bafcea0d28ec1d9a91a6e99bf0342d"
+    },
+    {
+      "path": "operator-report.md",
+      "bytes": 1323,
+      "sha256": "2789b8b56d03319a70e00ce34712feaeaee5d0a612373fc3b9ee187c3f53643f"
+    },
+    {
+      "path": "refusal.json",
+      "bytes": 5726,
+      "sha256": "7fe77caa9218f6e31fb46bac0ba594cab46e89a03a8c3bec7d84f0cd0e25212b"
+    }
+  ]
+}

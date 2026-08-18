@@ -1,0 +1,114 @@
+{
+  "schema": "libwebp-backref-cost-workspace-remote-v3-executor-refusal-v1",
+  "experiment_id": "backref_cost_workspace_remote_v3",
+  "status": "refused_on_evidence_return_integrity",
+  "captured_at_utc": "2026-08-18T17:23:52Z",
+  "source": {
+    "base_commit": "805e5ac4341ccf0d1ef960adb9107275652c973f",
+    "design_commit": "1b6f6b707e79bfcfc1d912bf1b4c916b3f7b58e5",
+    "frozen_protocol_commit": "9617a720a882bef739caca019a76e45d8a9b17e6",
+    "source_tree": "34ebeeca0ea835c7f8dc874ec03a921424d1cd42",
+    "worktree_clean_before_invocation": true,
+    "worktree_clean_after_invocation": true,
+    "manifest_sha256": "86f81b75c00a6e3cb87849ccdb112c885eae8e4f230f28e284e615ba57519de5",
+    "operator_sha256": "1bc27f6d17ed58ae16485e5133a717cdc2f4e1b206549b9e54ac6d0223dac1ef",
+    "driver_sha256": "605bc0b78e37338d504792095199ce795c810c11e03d0bc2cd2e1e03d529ac82",
+    "candidate_equivalence_from_untimed_validation": {
+      "boundary_projection_sha256": "5950bd122c5affc30585568c938815db316f7e89b01f38613d8634dcb33eb21f",
+      "normalized_helper_body_sha256": "78d176a6828c205102e69ad801a97a7546beaac481da2b8044fa42829f3860fc"
+    },
+    "candidate_source_hashes_from_frozen_manifest": {
+      "src/enc/backref_cost_workspace_remote_v3_experiment_enc.c": "2cd4638a7b7cb5d8ad09adc0f17fa6cfc8c431c40f578393809c30d9f77e8507",
+      "src/enc/backref_cost_workspace_remote_v3_experiment_enc.h": "e6276dab0ceb6989b0ceaec45a1fd3a2aecec1a1e314006a09eae4eba71df980",
+      "src/enc/backward_references_cost_enc.c": "75d55496b345aa97241f2776f485b1d971e31a891a01fef296bedd317810b436",
+      "tools/backref_cost_workspace_remote_v3_experiment_runner.c": "772f7d21aba0187c9b63e2afe2f4422310a9efd9154fa953f09b32550413aeea"
+    }
+  },
+  "untimed_validation": {
+    "py_compile": "PASS",
+    "admission_test": "PASS",
+    "experiment_test": "PASS",
+    "protocol_test": "PASS",
+    "path_round_trip": {
+      "status": "PASS",
+      "remote_home": "/Users/pandocs-agent-001",
+      "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3",
+      "temporary_child": "run.PEWtm4",
+      "absence_proved": true
+    },
+    "performance_evidence": false
+  },
+  "invocation": {
+    "invoked_exactly_once": true,
+    "retry_count": 0,
+    "remote_host_alias": "pandocs-agent",
+    "entry_point": "scripts/execute_backref_cost_workspace_remote_v3.py",
+    "command": "WEBP_EXPECTED_BACKREF_COST_WORKSPACE_REMOTE_V3_COMMIT=9617a720a882bef739caca019a76e45d8a9b17e6 WEBP_BENCHMARK_SESSION=exclusive python3 scripts/execute_backref_cost_workspace_remote_v3.py run /Users/jonaskamsker/.codex/worktrees/1150/libwebp-metal/evidence/backref-cost-workspace-remote-v3-execution-20260818",
+    "driver_exit_code": 1,
+    "local_frozen_output_directory_created": false,
+    "refusal_evidence_directory_created_after_failure": true
+  },
+  "admission_and_state": {
+    "shared_admission_implementation": "admission.admit_source",
+    "remote_safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v3",
+    "timed_run_child_returned": false,
+    "remote_admission_record_returned": false,
+    "precondition_refusal_observed": false,
+    "preflight_records_returned": false,
+    "immediately_pre_timing_state_returned": false,
+    "immediately_post_timing_state_returned": false,
+    "compiler_sdk_power_lpm_thermal_memory_disk_process_records": "not returned after evidence extraction refusal",
+    "sole_synchronous_execution_record": "not returned after evidence extraction refusal"
+  },
+  "evidence_return": {
+    "remote_archive_reached_local_safe_extractor": true,
+    "archive_sha256_match_before_extraction": true,
+    "returned_evidence_extracted": false,
+    "returned_artifact_index_verified": false,
+    "remote_source_bundle_sha256": "not returned",
+    "local_source_bundle_sha256": "not retained by frozen driver",
+    "remote_evidence_archive_sha256": "not retained by frozen driver",
+    "local_evidence_archive_sha256": "not retained by frozen driver",
+    "returned_evidence_hashes": "not created",
+    "error": "unsafe returned archive member",
+    "error_transcript": "driver-error.log"
+  },
+  "counts": {
+    "returned_command_processes": 0,
+    "returned_raw_sample_rows": 0,
+    "returned_measured_samples": 0,
+    "returned_warmup_samples": 0,
+    "returned_correctness_cells": 0,
+    "returned_evaluation_cells": 0,
+    "committed_command_processes": 0,
+    "committed_raw_sample_rows": 0,
+    "committed_measured_samples": 0,
+    "committed_warmup_samples": 0,
+    "committed_correctness_cells": 0,
+    "committed_evaluation_cells": 0,
+    "remote_matrix_counts": "not returned; no remote count is asserted",
+    "frozen_expected_command_processes": 408,
+    "frozen_expected_retained_samples": 1560,
+    "frozen_expected_warmup_samples": 288,
+    "frozen_expected_correctness_cells": 26,
+    "frozen_expected_evaluation_cells": 24
+  },
+  "lease_and_cleanup": {
+    "operator_lease_record_returned": false,
+    "operator_release_path": "frozen operator finally path",
+    "driver_cleanup_path": "frozen driver finally path after safe_extract failure",
+    "post_failure_safe_root_exists": true,
+    "post_failure_safe_root_children": [],
+    "post_failure_safe_root_child_absence_observed": true,
+    "exact_timed_child_cleanup_record_returned": false,
+    "installed_runner_directory_touched": false,
+    "runner_services_touched": false,
+    "host_settings_changed": false
+  },
+  "refusal": {
+    "gate": "evidence_return_integrity",
+    "reason": "The frozen safe extractor rejected a returned archive member.",
+    "action": "fail closed; no retry, alternate extractor, local fallback, or performance interpretation",
+    "performance_decision": "not produced"
+  }
+}

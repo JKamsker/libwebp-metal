@@ -25,12 +25,10 @@
 #include "src/webp/format_constants.h"
 #include "src/webp/types.h"
 
-#if (defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT) && \
-     defined(WEBP_USE_BACKREF_COST_WORKSPACE_AB_EXPERIMENT)) || \
-    (defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT) && \
-     defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT)) || \
-    (defined(WEBP_USE_BACKREF_COST_WORKSPACE_AB_EXPERIMENT) && \
-     defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT))
+#if (defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT) + \
+     defined(WEBP_USE_BACKREF_COST_WORKSPACE_AB_EXPERIMENT) + \
+     defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT) + \
+     defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT)) > 1
 #error "backref workspace experiments are mutually exclusive"
 #elif defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
 #include "src/enc/backref_cost_traceback_experiment_enc.h"
@@ -49,6 +47,13 @@
   VP8LBackrefCostWorkspaceRemoteV2ExperimentEnabled
 #define VP8LBackrefCostTracebackExperimentMalloc \
   VP8LBackrefCostWorkspaceRemoteV2ExperimentMalloc
+#elif defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT)
+#include "src/enc/backref_cost_workspace_remote_v3_experiment_enc.h"
+#define WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE 1
+#define VP8LBackrefCostTracebackExperimentEnabled \
+  VP8LBackrefCostWorkspaceRemoteV3ExperimentEnabled
+#define VP8LBackrefCostTracebackExperimentMalloc \
+  VP8LBackrefCostWorkspaceRemoteV3ExperimentMalloc
 #endif
 
 #define VALUES_IN_BYTE 256

@@ -61,6 +61,18 @@ retaining the candidate default off, but the missing all-gate matrix makes
 promotion impossible in this cycle. See
 [backref-cost-workspace-remote-v2-experiment-evaluation-20260818.md](backref-cost-workspace-remote-v2-experiment-evaluation-20260818.md).
 
+The independent row-14 remote v3 re-freeze passed its design-time
+repository-context admission rehearsal and the one authorized invocation
+reached evidence return, but the frozen safe extractor rejected an unsafe
+archive member. The executor records a transient archive hash match, but the
+digests were not retained, extraction and remote artifact-index verification
+did not occur, the lease and exact-cleanup receipts were not returned, and the
+frozen driver never creates its required local returned-evidence index.
+Committed counts are zero, so no median or p95 criterion is applicable.
+Default-off untimed exactness remains valid, but the missing conjunctive gates
+require rejecting promotion. See
+[backref-cost-workspace-remote-v3-experiment-evaluation-20260818.md](backref-cost-workspace-remote-v3-experiment-evaluation-20260818.md).
+
 ## Evidence policy
 
 Publication-core claims must have committed raw evidence and inputs that are
@@ -85,6 +97,7 @@ reproduced by substituting a similarly named file.
 | Row 11 backref cost/traceback workspace | Committed fail-closed AC Low Power Mode refusal; no executor correctness, timing, resources, or evaluation records | **Not a performance result.** Default-off code is retained on independent untimed safety evidence, while promotion is unassessed/rejected for this cycle and no production claim or change is supported. |
 | Row 12 remote backref-cost workspace A/B | Committed fail-closed local driver refusal before remote source transfer, preflight, lease, correctness, timing, or returned evidence; zero samples for both variants | **Not a performance result.** The independently gated code remains default off; promotion is rejected for this cycle and no speedup, regression, resource, or production claim is supported. |
 | Row 13 remote v2 backref-cost workspace A/B | Committed infrastructure blocker during remote bundle verification before checkout, operator admission, lease, correctness, timing, or returned evidence; zero samples for both variants | **Not a performance result.** Untimed safety supports default-off retention, but all execution-time, transfer, resource, median, and p95 gates are absent; promotion is rejected for this cycle and no production claim or change is supported. |
+| Row 14 remote v3 backref-cost workspace A/B | Committed fail-closed evidence-return refusal after an unsafe archive member; the executor records a transient archive hash match, but extraction, artifact-index verification, lease receipt, exact-cleanup receipt, and every raw/correctness/statistical record are absent | **Not a performance result.** Untimed identity and safety support default-off retention only; zero samples make medians and p95 inapplicable, all-gate promotion is rejected, and no production claim or change is supported. |
 | `BENCHMARK_RESULTS.md` complete-lossless/hash tables and file-size/equality statements | Depends on the three unavailable files and lacks raw per-trial samples | **Quarantined as recorded-only history.** Not used by the publication core. |
 | Architecture, private API/ABI, build gates, defaults, and source-level fallback contracts | Established by repository source and untimed tests; not corpus-dependent | **Retained**, with device/runtime behavior limited to the executed tests. |
 

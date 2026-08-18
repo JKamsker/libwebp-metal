@@ -40,6 +40,15 @@ validated candidate projection, all 26 method-4/6 correctness cells,
 transactional fallback, sanitizers, prior-gate isolation, and complete default
 artifact omission without invoking the recorder-free timing runner.
 
+`scripts/test_backref_cost_workspace_remote_v3_experiment.py` re-establishes
+the unchanged candidate behind wholly new v3 gates from baseline `805e5ac...`.
+It verifies semantic projection, all 26 method-4/6 correctness cells,
+transactional fallback, old-gate isolation, sanitizers, and default source,
+symbol, target, runtime, and fault-string omission. The companion admission
+test exercises canonical paths, an empty repository-context bundle verify,
+exact commit/tree/source hashes, malformed rejection, cleanup, and the shared
+admission-only/executor implementation without timing.
+
 ## Building
 
 ### Fuzzers
