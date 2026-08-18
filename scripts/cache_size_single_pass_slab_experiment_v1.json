@@ -1,0 +1,158 @@
+{
+  "schema": "libwebp-cache-size-single-pass-slab-frozen-v1",
+  "protocol_version": 1,
+  "experiment_id": "cache_size_single_pass_slab",
+  "base_commit": "e7900b9a4bf71e799001d343721c86f4aad96316",
+  "required_expected_commit_environment": "WEBP_EXPECTED_CACHE_SIZE_SINGLE_PASS_SLAB_COMMIT",
+  "license": "BSD-3-Clause",
+  "closed_evidence": [
+    {
+      "name": "backref_cache_search",
+      "status": "closed; recorder-overhead gate failed",
+      "historical_context_only": "CalculateBestCacheSize was approximately 61--64 percent of the measured boundary",
+      "forbidden": ["rerun", "relabel", "promotion", "sample reuse", "ratio multiplication"]
+    },
+    {
+      "name": "cache_size_serial_sweep",
+      "status": "closed and rejected; every frozen performance cell regressed",
+      "historical_context_only": "recorder-free candidate regression was approximately 7.6--8.9 percent",
+      "forbidden": ["rerun", "reproduction", "sample reuse", "ratio multiplication"]
+    }
+  ],
+  "upstream_semantics": {
+    "audited_upstream_main": "178d2bc03b73aa15fc1186c1fd1c383e092a26a8",
+    "relevant_source_diff_from_fork_base": "none outside private experiment dispatch and measurement wrappers",
+    "reference_traversals": 1,
+    "cache_state_update_order": "maximum cache bits down through 1 for each literal or changed copy pixel",
+    "selection_order": "cache bits 0 through maximum with strict entropy improvement only",
+    "tie_rule": "retain the lower cache-bit value",
+    "quality_rule": "quality <= 25 disables the cache",
+    "failure_rule": "allocation failure returns failure to the caller",
+    "candidate_fallback": "candidate failure leaves the requested maximum unchanged and runs the baseline"
+  },
+  "candidate": {
+    "name": "single-pass contiguous cache-state slab",
+    "build_flag": "WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT",
+    "compile_macro": "WEBP_USE_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT",
+    "runtime_flag": "WEBP_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT",
+    "runtime_value": "1",
+    "failure_injection_flag": "WEBP_CACHE_SIZE_SINGLE_PASS_SLAB_INJECT_FAILURE",
+    "source": "src/enc/cache_size_single_pass_slab_enc.c",
+    "source_sha256": "cecf0e49d6f1ff920b4385525abfc7e43aaf9eebebe0882e27eeca2af873955a",
+    "header": "src/enc/cache_size_single_pass_slab_enc.h",
+    "runner": "tools/cache_size_single_pass_slab_runner.c",
+    "runner_sha256": "ba261325ed8a3196885630b588ef820097d8c623347a5742373be1c857ff6c80",
+    "protocol_document": "doc/cache-size-single-pass-slab-experiment-20260818.md",
+    "protocol_document_sha256": "5c076d60f9af6c4e26b8592eedb3da5fc080b6b29c9f809f558692452e7a0313",
+    "design_report": "doc/cache-size-single-pass-slab-design-report-20260818.md",
+    "design_report_sha256": "2a7df58e7f47586cd1fbbded12197107be8e62ce999e08603db62cef3021e9c4",
+    "mechanism": "one zero-filled allocation contains descriptors, all candidate histograms and variable literal arrays, and all color-cache arrays; the immutable reference stream is traversed exactly once",
+    "not_serial_sweep": "all cache-bit states remain simultaneously live and no candidate replays the reference stream",
+    "scope": "CalculateBestCacheSize only",
+    "preserves": [
+      "selected cache bits", "strict order and ties", "quality semantics",
+      "bitstream bytes", "decoded pixels", "transactional fallback",
+      "immutable inputs", "public ABI and API", "production defaults"
+    ]
+  },
+  "corpus": {
+    "generator": "scripts/generate_publication_corpus.py",
+    "generator_sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+    "manifest": "benchmarks/publication-corpus/manifest.json",
+    "manifest_sha256": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+    "correctness_cases": [
+      "photo-small", "graphic-small", "texture-small",
+      "photo-medium", "graphic-medium", "texture-medium",
+      "photo-large", "graphic-large", "texture-large"
+    ],
+    "timed": [
+      {
+        "role": "tune",
+        "case_id": "graphic-medium",
+        "sha256": "c42deaa474e253db740384e7e93a208c82ff11cd66dc2930c34678a9e8279234"
+      },
+      {
+        "role": "holdout",
+        "case_id": "texture-large",
+        "sha256": "dd02badce31b757f9374f0f5de187e9de3158fe6878929207eeed24ea72d79e2"
+      }
+    ]
+  },
+  "builds": {
+    "common": [
+      "-DWEBP_ENABLE_METAL=OFF", "-DBUILD_SHARED_LIBS=OFF",
+      "-DWEBP_BUILD_EXTRAS=OFF", "-DWEBP_BUILD_CWEBP=ON",
+      "-DWEBP_BUILD_DWEBP=ON", "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    "baseline": "ordinary build with candidate option absent",
+    "candidate": "common flags plus only -DWEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT=ON",
+    "forbidden_backend": "CUDA",
+    "runner_linkage": "the same runner source is linked separately against each static library"
+  },
+  "protocol": {
+    "timing_authority": "external runner elapsed WebPEncode only",
+    "recorders": "none",
+    "encoder": {"lossless": true, "exact": true, "quality": 75, "thread_level": 0},
+    "methods": [4, 6],
+    "execution_order": [
+      "tune:graphic-medium", "holdout:texture-large",
+      "method:4-before-6", "lifecycle:cold-before-warm"
+    ],
+    "lifecycles": {
+      "cold": {"process_pairs": 11, "discarded_warmups_per_process": 0, "measured_encodes_per_process": 1},
+      "warm": {"process_pairs": 6, "discarded_warmups_per_process": 2, "measured_encodes_per_process": 9}
+    },
+    "pair_order": [
+      "baseline-candidate", "candidate-baseline", "baseline-candidate",
+      "candidate-baseline", "baseline-candidate", "candidate-baseline",
+      "baseline-candidate", "candidate-baseline", "baseline-candidate",
+      "candidate-baseline", "baseline-candidate"
+    ],
+    "statistics": {
+      "warm_process_reduction": "median of nine measured encodes after two discarded warmups",
+      "paired_location": "median of candidate-process/baseline-process ratios",
+      "tail": "nearest-rank p95 within each raw variant stratum, then candidate divided by baseline",
+      "pooling_forbidden": ["case", "method", "lifecycle", "tune_holdout"]
+    },
+    "acceptance": {
+      "authority": "end-to-end only",
+      "required_cells": "holdout:texture-large x methods 4/6 x cold/warm",
+      "paired_median_ratio_maximum": 0.99,
+      "p95_ratio_maximum": 1.01,
+      "correctness": "all nine publication cases at methods 4 and 6 must have exact baseline/candidate/repeat/fallback/default-environment bitstreams and decoded pixels",
+      "decision": "accept only if every required correctness, integrity, resource, median, and p95 gate passes"
+    },
+    "expected_inventory": {
+      "command_processes": 136,
+      "cold_measured_samples": 88,
+      "warmup_samples": 96,
+      "warm_measured_samples": 432,
+      "total_measured_samples": 520,
+      "variant_measured_samples": 260,
+      "correctness_cells": 18
+    }
+  },
+  "resources": {
+    "lease_path": "/tmp/libwebp-metal-cache-size-single-pass-slab.lock",
+    "parallel_benchmark_processes": 1,
+    "minimum_available_memory_bytes": 4294967296,
+    "maximum_child_rss_bytes": 2147483648,
+    "maximum_output_bytes": 2147483648,
+    "maximum_command_seconds": 300,
+    "maximum_total_seconds": 5400
+  },
+  "schemas": {
+    "catalog": "scripts/cache_size_single_pass_slab_schemas_v1.json",
+    "catalog_sha256": "4f33c2f9a33b06ee2ed98b074cad248b582c595213359865347ffbd77f1c565d",
+    "sample": "libwebp-cache-size-single-pass-slab-sample-v1",
+    "command": "libwebp-cache-size-single-pass-slab-command-v1",
+    "correctness": "libwebp-cache-size-single-pass-slab-correctness-v1",
+    "evaluation": "libwebp-cache-size-single-pass-slab-evaluation-v1",
+    "resources": "libwebp-cache-size-single-pass-slab-resources-v1",
+    "artifact_hashes": "libwebp-cache-size-single-pass-slab-artifact-hashes-v1"
+  },
+  "operator": {
+    "path": "scripts/run_cache_size_single_pass_slab_experiment.py",
+    "sha256": "c797c4ba75c2241bb9e209c0ce9eb911c3a5c1b07d95fe4dc6ff26695f8a4728"
+  }
+}

@@ -16,6 +16,9 @@
 #if defined(WEBP_USE_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT)
 #include "src/enc/cache_size_serial_sweep_enc.h"
 #endif
+#if defined(WEBP_USE_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT)
+#include "src/enc/cache_size_single_pass_slab_enc.h"
+#endif
 
 #include <assert.h>
 #include <string.h>
@@ -929,6 +932,24 @@ int VP8LCompareCacheSizeSearchForTest(
 }
 #endif
 
+#if defined(WEBP_USE_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT)
+int VP8LCompareCacheSizeSinglePassSlabForTest(
+    const uint32_t* const argb, int quality,
+    const VP8LBackwardRefs* const refs, int cache_bits_max,
+    int* const baseline_bits, int* const candidate_bits) {
+  int baseline = cache_bits_max;
+  int candidate = cache_bits_max;
+  if (!CalculateBestCacheSizeBaseline(argb, quality, refs, &baseline) ||
+      !VP8LCalculateBestCacheSizeSinglePassSlab(argb, quality, refs,
+                                                &candidate)) {
+    return 0;
+  }
+  *baseline_bits = baseline;
+  *candidate_bits = candidate;
+  return 1;
+}
+#endif
+
 static int CalculateBestCacheSize(const uint32_t* const argb, int quality,
                                   const VP8LBackwardRefs* const refs,
                                   int* const best_cache_bits) {
@@ -944,6 +965,22 @@ static int CalculateBestCacheSize(const uint32_t* const argb, int quality,
     }
     // Candidate failures are transactional. Run the unchanged baseline with
     // the original maximum so normal encoder fallback behavior is preserved.
+  }
+#endif
+#if defined(WEBP_USE_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT)
+  {
+    const int runtime_state = VP8LCacheSizeSinglePassSlabRuntimeState();
+    if (runtime_state < 0) return 0;
+    if (runtime_state > 0) {
+      int candidate_bits = *best_cache_bits;
+      if (VP8LCalculateBestCacheSizeSinglePassSlab(
+              argb, quality, refs, &candidate_bits)) {
+        *best_cache_bits = candidate_bits;
+        return 1;
+      }
+      // Allocation and injected failures are transactional: preserve the
+      // requested maximum and run the unchanged baseline.
+    }
   }
 #endif
   return CalculateBestCacheSizeBaseline(argb, quality, refs, best_cache_bits);

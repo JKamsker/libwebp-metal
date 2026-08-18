@@ -16,6 +16,7 @@ shared experimental build or runtime switch.
 | 7 backref exact decomposition | `WEBP_BUILD_BACKREF_EXACT_EXPERIMENT` | `WEBP_USE_BACKREF_EXACT_EXPERIMENT` | `WEBP_BACKREF_EXACT_EXPERIMENT=1` | boundary recorder, backward-reference probes, private repetition option |
 | 8 focused backref cache search | `WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT` | `WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT` | `WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT=1` | dedicated two-clock recorder, cache-search probes, private repetition option |
 | 9 cache-size serial sweep | `WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT` | `WEBP_USE_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT` | `WEBP_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT=1` | recorder-free CPU implementation A/B, dedicated external runner, no CLI option |
+| 10 cache-size single-pass slab | `WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT` | `WEBP_USE_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT` | `WEBP_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT=1` | recorder-free one-allocation CPU implementation A/B, dedicated external runner, no CLI option |
 
 Every runtime value is exact: values other than `1` are disabled. Every timed
 launcher additionally requires `WEBP_BENCHMARK_SESSION=exclusive`. Correctness,
@@ -73,6 +74,13 @@ paired-median and p95 limits. Row 9 is rejected and retained only as default-off
 negative research evidence. It changes no production behavior. See
 [cache-size-serial-sweep-experiment-evaluation-20260818.md](cache-size-serial-sweep-experiment-evaluation-20260818.md).
 
+Row 10 is the wholly independent, recorder-free single-pass contiguous slab
+candidate frozen in
+[cache-size-single-pass-slab-experiment-20260818.md](cache-size-single-pass-slab-experiment-20260818.md).
+It preserves row 9's opposite topology: all cache-bit states stay live and the
+reference stream is traversed exactly once. Row 9's samples and ratios are not
+inputs to row 10.
+
 ## Default and isolation guarantees
 
 - Default CMake and Unix make builds define none of the private macros.
@@ -80,7 +88,8 @@ negative research evidence. It changes no production behavior. See
   batch symbol, item 5's source/call site, rows 6--7's shared recorder, and row
   8's dedicated recorder, probes, environment reads, symbols, and private
   repetition options, and row 9's candidate source, runtime strings, symbols,
-  test target, and runner are omitted.
+  test target, and runner, plus row 10's candidate source, runtime strings,
+  symbols, test target, and runner are omitted.
 - An ordinary Metal build continues to include the supported transform, hash,
   and RGB-to-YUV acceleration. Item 4's alternate environment knobs are read
   only when both its build macro and exact runtime opt-in are present.
@@ -135,10 +144,14 @@ make -f makefile.unix WEBP_ENABLE_METAL=1 \
 # Item 9 (CPU-only implementation A/B)
 make -f makefile.unix WEBP_ENABLE_METAL=0 \
   WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT=1 examples/cwebp
+
+# Item 10 (CPU-only implementation A/B)
+make -f makefile.unix WEBP_ENABLE_METAL=0 \
+  WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT=1 examples/cwebp
 ```
 
 CMake uses the same names with `-D<name>=ON`. Items 2--8 require
-`-DWEBP_ENABLE_METAL=ON`; item 9 explicitly uses Metal off. Item 3 requires
+`-DWEBP_ENABLE_METAL=ON`; items 9--10 explicitly use Metal off. Item 3 requires
 `-DBUILD_SHARED_LIBS=OFF`, and item 4 requires `-DWEBP_BUILD_EXTRAS=ON`. Each
 experiment target is deliberately non-installed.
 
@@ -146,7 +159,7 @@ experiment target is deliberately non-installed.
 
 The focused guard test does not grant the benchmark lease, read benchmark
 results, or run an encoder. It verifies default-off make commands, forced
-dry-run macro isolation for all nine rows, omitted driver targets, runtime
+dry-run macro isolation for all ten rows, omitted driver targets, runtime
 refusal, lease refusal, the promoted item-4 default/legacy correctness mapping, and the fact
 that item 4's released timed matrix was not repurposed as a follow-up:
 
