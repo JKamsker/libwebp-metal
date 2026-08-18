@@ -120,14 +120,16 @@ Huffman preparation. It uploads the encoder's at-most-16 linked command spans
 directly, without a CPU flattening pass, while entropy estimation, local
 histogram construction, merging, and tie-sensitive decisions stay on the CPU.
 `WEBP_CUDA_HISTOGRAM_MIN_COMMANDS=N` controls its command-count threshold. This
-stage is off by default and has correctness evidence only.
-`WEBP_CUDA_RESIDENT_LOSSLESS=1` enables an experimental pipeline handoff: the
-cross-color stage preserves its transformed device pixels across transform-map
-encoding, and the matching main hash-chain stage reuses them instead of
-uploading the host copy again. Pointer identity, dimensions, and encode-end
-cleanup prevent reuse outside the originating image. It remains off by default
-until the portable suite establishes whether the saved upload outweighs the
-device-to-device preservation copy on a given system.
+stage stays off by default: forced-threshold A/B encodes measured it as
+neutral within noise on an RTX 5070 Ti Laptop (its population counting is a
+small share of the CPU histogram stage), so no profitable crossover is known.
+`WEBP_CUDA_RESIDENT_LOSSLESS=0` disables the resident pipeline handoff: the
+predictor and cross-color stages preserve their transformed device pixels, and
+the matching main hash-chain stage reuses them instead of uploading the host
+copy again. Pointer identity, dimensions, and encode-end cleanup prevent reuse
+outside the originating image. It is on by default: measured single-process
+lossless encodes were up to 17% faster and never slower, with byte-identical
+output, so the saved upload outweighs the device-side preservation copy.
 `WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`,
 `WEBP_CUDA_PREDICTOR=0`, `WEBP_CUDA_HISTOGRAM=0`, and `WEBP_CUDA_LOSSY=0`
 disable one stage. Lossy CUDA
@@ -163,8 +165,7 @@ uses a lower warm-process threshold once another CUDA stage initialized the
 backend: color and the predictor use 4,000,000 cold / 16,384 warm pixels,
 hash uses 8,000,000 / 4,000,000, histogram uses 1,000,000 /
 65,536 commands, near-lossless uses 16,777,216 cold / 65,536 warm pixels, and
-RGB uses 80,000,000 / 4,000,000. Histogram thresholds are provisional because
-the stage has not yet been timed. Cold
+RGB uses 80,000,000 / 4,000,000. Cold
 near-lossless requests with fewer than three
 passes stay on the CPU because no safe crossover was measured; an explicit
 near-lossless threshold overrides that conservative gate as well as both

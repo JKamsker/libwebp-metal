@@ -2194,7 +2194,7 @@ WebPAcceleratorResult CUDAColorTransformLocked(
   }
   state->resident_yuv_valid = false;
   use_resident_pixels =
-      EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", false) &&
+      EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", true) &&
       state->resident_lossless_pixels_valid &&
       state->resident_lossless_host_pixels == request->argb &&
       state->resident_lossless_pixel_count == pixel_count &&
@@ -2214,7 +2214,7 @@ WebPAcceleratorResult CUDAColorTransformLocked(
   }
 #if defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
   capture_resident_pixels =
-      EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", false) &&
+      EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", true) &&
       EnvironmentFlag("WEBP_CUDA_HASH", true);
   if (error == cudaSuccess && capture_resident_pixels) {
     error = EnsureDeviceBuffer(&state->resident_lossless_pixels,
@@ -2676,7 +2676,7 @@ WebPAcceleratorResult CUDAPredictorLocked(
   memcpy(request->mode_image, state->host_chain, mode_bytes);
   *request->best_bits = request->max_bits;
 #if defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
-  if (EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", false)) {
+  if (EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", true)) {
     state->resident_lossless_host_pixels = request->residuals;
     state->resident_lossless_pixel_count = pixel_count;
     state->resident_lossless_xsize = request->width;
@@ -2770,7 +2770,7 @@ WebPAcceleratorResult CUDAHashChainLocked(
   }
   state->resident_yuv_valid = false;
   use_resident_pixels =
-      EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", false) &&
+      EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", true) &&
       state->resident_lossless_pixels_valid &&
       state->resident_lossless_host_pixels == request->pixels &&
       state->resident_lossless_pixel_count ==
