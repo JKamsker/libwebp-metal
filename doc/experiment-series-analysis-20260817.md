@@ -28,6 +28,13 @@
 > 7.6--8.9% slower by paired median and failed p95 in every performance cell.
 > It is rejected, remains default off, and promotes no production change. See
 > [cache-size-serial-sweep-experiment-evaluation-20260818.md](cache-size-serial-sweep-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 single-pass slab addendum:** the independent row-10 candidate
+> preserved selected cache bits, bitstreams, decoded pixels, deterministic
+> output, fallback, and default-build independence. Three of four required
+> holdout cells nevertheless missed the paired-median limit. It is rejected,
+> remains default off, and promotes no production or threshold change. See
+> [cache-size-single-pass-slab-experiment-evaluation-20260818.md](cache-size-single-pass-slab-experiment-evaluation-20260818.md).
 
 ## Scope and evidence boundary
 

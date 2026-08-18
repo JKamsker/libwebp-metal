@@ -29,6 +29,13 @@
 > performance limits in all eight cells. It is rejected and retained default
 > off; no production cache behavior, threshold, API, or ABI changes. See
 > [cache-size-serial-sweep-experiment-evaluation-20260818.md](cache-size-serial-sweep-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 single-pass slab consequence:** the independent recorder-free
+> slab candidate passed exact correctness, but three of four required holdout
+> cells failed the paired-median limit. It is rejected and retained default
+> off. No cache threshold, API/ABI, fallback, Metal, or CUDA policy changes.
+> See
+> [cache-size-single-pass-slab-experiment-evaluation-20260818.md](cache-size-single-pass-slab-experiment-evaluation-20260818.md).
 
 ## Abstract
 
@@ -498,6 +505,12 @@ matrix.
   methods 4 and 6, and one execution. Its effective timed-build SDK is not
   conclusively recorded, and Low Power Mode was omitted from preflight state.
   Those limitations do not rescue a candidate that failed every A/B cell.
+- The row-10 implementation result uses one execution, synthetic graphic and
+  texture inputs, methods 4 and 6, quality 75, and single-threaded end-to-end
+  timing. Its frozen artifacts omit execution-time device/power/thermal/disk/
+  sole-host records and separate timed-child stderr. Current-host checks only
+  corroborate, rather than prove, that timed state. Those limitations do not
+  rescue three failed required holdout medians.
 
 ## Reproducibility
 

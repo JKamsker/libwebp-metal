@@ -79,7 +79,11 @@ candidate frozen in
 [cache-size-single-pass-slab-experiment-20260818.md](cache-size-single-pass-slab-experiment-20260818.md).
 It preserves row 9's opposite topology: all cache-bit states stay live and the
 reference stream is traversed exactly once. Row 9's samples and ratios are not
-inputs to row 10.
+inputs to row 10. Its 18 correctness cells pass, but three of four required
+holdout cells fail the paired-median limit. Row 10 is rejected and retained
+default off as bounded negative research evidence; it changes no production
+behavior. See
+[cache-size-single-pass-slab-experiment-evaluation-20260818.md](cache-size-single-pass-slab-experiment-evaluation-20260818.md).
 
 ## Default and isolation guarantees
 
