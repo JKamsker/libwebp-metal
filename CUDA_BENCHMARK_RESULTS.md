@@ -164,14 +164,15 @@ lossless batch recorded 16 observed resident handoffs (texture and graphic
 inputs skip the donating cross-color transform, so a handoff per image is
 not expected on this corpus).
 
-| Method | baseline | + prewarm | + guided predictor | merged stages |
-|---|---:|---:|---:|---:|
-| PNG lossless — batch | 1.37x | 1.31x | 1.99x | 1.82x |
-| JPEG lossless — batch | 1.20x | 1.10x | 4.87x | 4.97x |
-| JPEG lossless — single | 0.88x | 1.00x | 2.76x | 2.52x |
-| JPEG lossy — batch | 0.96x | 0.93x | 1.02x | 1.08x |
-| PNG near-lossless — batch | 1.21x | 1.25x | 1.18x | 1.25x |
-| JPEG near-lossless — batch | 1.13x | 1.08x | 1.10x | 1.03x |
+| Method | baseline | + prewarm | + guided predictor | merged stages | + exact-NL predictor |
+|---|---:|---:|---:|---:|---:|
+| PNG lossless — batch | 1.37x | 1.31x | 1.99x | 1.82x | 1.81x |
+| JPEG lossless — batch | 1.20x | 1.10x | 4.87x | 4.97x | 4.95x |
+| JPEG lossless — single | 0.88x | 1.00x | 2.76x | 2.52x | 2.66x |
+| JPEG lossy — batch | 0.96x | 0.93x | 1.02x | 1.08x | 1.03x |
+| PNG near-lossless — batch | 1.21x | 1.25x | 1.18x | 1.25x | 2.55x |
+| JPEG near-lossless — batch | 1.13x | 1.08x | 1.10x | 1.03x | 5.58x |
+| JPEG near-lossless — single | 0.93x | 1.02x | 0.96x | 0.94x | 2.99x |
 
 Absolute CUDA times are the stable signal across runs; the CPU baseline
 varied by up to 8% between suite executions and moves the ratios. The
@@ -179,11 +180,14 @@ guided predictor accounts for the lossless step change (photo encodes are
 predictor plus cross-color dominated), the fused lossy import and analysis
 gives lossy its first above-noise batch win, and the resident handoff and
 histogram forcing left lossless CUDA times within noise of the
-predictor-only run. Single-process rows include roughly 140 ms of
-unhideable CUDA initialization and teardown; the prewarm overlaps part of
-it with decode, which is why only long encodes (JPEG lossless) win as
-fresh processes.
+predictor-only run. The near-lossless step change comes from accepting
+exact requests in the predictor stage: exact encoding bypasses
+near-lossless residual quantization, so the earlier decline on
+max_quantization was refusing byte-equivalent work. Single-process rows
+include roughly 140 ms of unhideable CUDA initialization and teardown;
+the prewarm overlaps part of it with decode, which is why only long
+encodes (JPEG lossless and near-lossless) win as fresh processes.
 
-Raw result sets: `libwebp-cuda-results-win{,-prewarm,-predictor,-merged}`
+Raw result sets: `libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl}`
 under the operator's temp directory, comparable through the `report`
 subcommand.
