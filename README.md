@@ -106,6 +106,11 @@ are off by default on the measured RTX 2080 SUPER. Build the non-installed
 the default and all-strategies-disabled builds. Measurement details are in
 [CUDA_BENCHMARK_RESULTS.md](CUDA_BENCHMARK_RESULTS.md).
 
+Additional, non-installed CUDA strategy prototypes can be built with
+`-DWEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS=ON`. See
+[CUDA_ACCELERATION_EXPERIMENTS.md](CUDA_ACCELERATION_EXPERIMENTS.md) for the
+correctness runner and raw-measurement protocol.
+
 Additional encoder-stage research is documented in
 [GPU_STAGE_EVALUATION.md](GPU_STAGE_EVALUATION.md). Its predictor-residual
 prototype is excluded from normal builds and remains disabled at runtime unless

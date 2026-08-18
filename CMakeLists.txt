@@ -43,6 +43,8 @@ option(WEBP_BUILD_METAL_ABLATION_EXPERIMENT
        "Build the non-installed Metal ablation benchmark tool." OFF)
 option(WEBP_BUILD_CUDA_BENCHMARK
        "Build non-installed CUDA benchmark and concurrency tools." OFF)
+option(WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS
+       "Build the non-installed CUDA acceleration experiment lab." OFF)
 option(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT
        "Build the opt-in experimental Metal predictor-residual stage." OFF)
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
@@ -150,6 +152,11 @@ endif()
 if(WEBP_BUILD_CUDA_BENCHMARK AND NOT WEBP_ENABLE_CUDA)
   message(FATAL_ERROR
           "WEBP_BUILD_CUDA_BENCHMARK requires WEBP_ENABLE_CUDA=ON.")
+endif()
+if(WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS AND NOT WEBP_ENABLE_CUDA)
+  message(FATAL_ERROR
+          "WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS requires "
+          "WEBP_ENABLE_CUDA=ON.")
 endif()
 if(WEBP_BUILD_CUDA_BENCHMARK AND NOT UNIX)
   message(FATAL_ERROR "WEBP_BUILD_CUDA_BENCHMARK currently requires POSIX.")
@@ -640,6 +647,20 @@ target_include_directories(
   webp PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
               $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+if(WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS)
+  add_executable(
+    cuda_acceleration_experiments
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/cuda_acceleration_experiments.cu)
+  target_link_libraries(cuda_acceleration_experiments
+                        PRIVATE CUDA::cudart Threads::Threads)
+  target_include_directories(
+    cuda_acceleration_experiments
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+  set_target_properties(
+    cuda_acceleration_experiments
+    PROPERTIES CUDA_STANDARD 11 CUDA_STANDARD_REQUIRED ON)
+endif()
 
 if(WEBP_BUILD_METAL_BATCH_EXPERIMENT)
   add_executable(
