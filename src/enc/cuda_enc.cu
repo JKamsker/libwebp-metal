@@ -1065,7 +1065,10 @@ struct NearLosslessKernelParams {
 };
 
 // One block per (tile, mode): replay the CPU's per-tile quantized recurrence
-// and export the residual histogram for the selection kernel.
+// and export the residual histogram for the selection kernel. The tile
+// capacity is a template parameter so common small tiles do not pay the
+// occupancy cost of the 64-pixel shared-memory footprint.
+template <uint32_t kTileCapacity>
 __global__ void NearLosslessTileHistogramKernel(
     const uint32_t* WEBP_CUDA_RESTRICT source,
     uint32_t* WEBP_CUDA_RESTRICT histograms, uint32_t tile_row,
@@ -1083,9 +1086,9 @@ __global__ void NearLosslessTileHistogramKernel(
   // original[r][c] and reconstructed[r][c] hold image pixel
   // (x0 + c - 1, y0 + r - 1); original has one extra row below for the
   // max-diff "down" neighbor.
-  constexpr uint32_t kStride = kNearLosslessMaxTileSize + 2u;
-  __shared__ uint32_t original[(kNearLosslessMaxTileSize + 2u) * kStride];
-  __shared__ uint32_t reconstructed[(kNearLosslessMaxTileSize + 1u) * kStride];
+  constexpr uint32_t kStride = kTileCapacity + 2u;
+  __shared__ uint32_t original[(kTileCapacity + 2u) * kStride];
+  __shared__ uint32_t reconstructed[(kTileCapacity + 1u) * kStride];
   __shared__ unsigned int histogram[4u * 256u];
 
   const uint32_t rows = tile_height + 2u;
@@ -3002,10 +3005,22 @@ WebPAcceleratorResult CUDAPredictorLocked(
             static_cast<uint32_t>(request->max_bits), tile_columns,
             static_cast<uint32_t>(request->max_quantization),
             static_cast<uint32_t>(request->used_subtract_green)};
-        NearLosslessTileHistogramKernel<<<
-            dim3(tile_columns, kPredictorNumModes), kNearLosslessTileThreads,
-            0, state->stream>>>(state->pixels, state->transform, tile_row,
-                                nl_params);
+        if (tile_size <= 16u) {
+          NearLosslessTileHistogramKernel<16u><<<
+              dim3(tile_columns, kPredictorNumModes), kNearLosslessTileThreads,
+              0, state->stream>>>(state->pixels, state->transform, tile_row,
+                                  nl_params);
+        } else if (tile_size <= 32u) {
+          NearLosslessTileHistogramKernel<32u><<<
+              dim3(tile_columns, kPredictorNumModes), kNearLosslessTileThreads,
+              0, state->stream>>>(state->pixels, state->transform, tile_row,
+                                  nl_params);
+        } else {
+          NearLosslessTileHistogramKernel<64u><<<
+              dim3(tile_columns, kPredictorNumModes), kNearLosslessTileThreads,
+              0, state->stream>>>(state->pixels, state->transform, tile_row,
+                                  nl_params);
+        }
         error = cudaGetLastError();
         if (error == cudaSuccess) {
           NearLosslessSelectRowKernel<<<tile_columns,
