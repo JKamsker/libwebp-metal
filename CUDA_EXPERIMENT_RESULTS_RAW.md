@@ -394,3 +394,266 @@ CUDA errors, oracle mismatches, benchmark failures, or checksum instability
 were observed. The base image had no CMake executable on `PATH`; the build
 used an unprivileged temporary CMake 3.28.3 extraction, while the repository
 and implementation sources remained unchanged.
+
+## Follow-up matched lifecycle controls
+
+These rows were captured after adding equivalent controls. Each named case ran
+in a separate process with `--benchmark --iterations 100`; the leading field is
+the repetition number. All preflights passed and matched pairs retained equal
+checksums.
+
+```text
+1,context_serial,100,72.415603,0.724156,1458512bb9454275
+1,context_pool,100,105.199655,1.051997,1458512bb9454275
+1,staged_lossless_pipeline,100,287.582406,2.875824,eb409c0a5af49b66
+1,resident_lossless_pipeline,100,42.060947,0.420609,eb409c0a5af49b66
+1,double_buffer_launches,100,76.307184,0.763072,1458512bb9454275
+1,graphs_double_buffer,100,76.589971,0.765900,1458512bb9454275
+2,context_serial,100,72.311619,0.723116,1458512bb9454275
+2,context_pool,100,99.265760,0.992658,1458512bb9454275
+2,staged_lossless_pipeline,100,285.926596,2.859266,eb409c0a5af49b66
+2,resident_lossless_pipeline,100,41.812485,0.418125,eb409c0a5af49b66
+2,double_buffer_launches,100,76.282580,0.762826,1458512bb9454275
+2,graphs_double_buffer,100,77.240835,0.772408,1458512bb9454275
+3,context_serial,100,71.950708,0.719507,1458512bb9454275
+3,context_pool,100,99.273566,0.992736,1458512bb9454275
+3,staged_lossless_pipeline,100,281.434850,2.814348,eb409c0a5af49b66
+3,resident_lossless_pipeline,100,41.943610,0.419436,eb409c0a5af49b66
+3,double_buffer_launches,100,86.232028,0.862320,1458512bb9454275
+3,graphs_double_buffer,100,76.655094,0.766551,1458512bb9454275
+4,context_serial,100,72.194083,0.721941,1458512bb9454275
+4,context_pool,100,99.250465,0.992505,1458512bb9454275
+4,staged_lossless_pipeline,100,281.136899,2.811369,eb409c0a5af49b66
+4,resident_lossless_pipeline,100,41.903115,0.419031,eb409c0a5af49b66
+4,double_buffer_launches,100,76.843025,0.768430,1458512bb9454275
+4,graphs_double_buffer,100,76.429034,0.764290,1458512bb9454275
+5,context_serial,100,71.917849,0.719178,1458512bb9454275
+5,context_pool,100,99.249414,0.992494,1458512bb9454275
+5,staged_lossless_pipeline,100,282.245718,2.822457,eb409c0a5af49b66
+5,resident_lossless_pipeline,100,41.571839,0.415718,eb409c0a5af49b66
+5,double_buffer_launches,100,79.440056,0.794401,1458512bb9454275
+5,graphs_double_buffer,100,76.612718,0.766127,1458512bb9454275
+```
+
+## Follow-up matched stage controls
+
+These rows add setup-inclusive CPU controls for the three retained feasibility
+cases whose work can be reproduced exactly in the lab. Each pair retained an
+identical checksum. The leading field is the fresh-process repetition number.
+
+```text
+1,predictor_search_residual_cpu,20,160.936394,8.046820,d53a6cc1b6e54b4f
+1,predictor_search_residual,20,7.607895,0.380395,d53a6cc1b6e54b4f
+1,near_lossless_stencil_cpu,20,522.716241,26.135812,5265a0bbabf36860
+1,near_lossless_stencil,20,14.105610,0.705280,5265a0bbabf36860
+1,lossless_histogram_cpu,20,42.290561,2.114528,e00d13e613731c45
+1,lossless_histogram,20,14.218610,0.710931,e00d13e613731c45
+2,predictor_search_residual_cpu,20,155.654056,7.782703,d53a6cc1b6e54b4f
+2,predictor_search_residual,20,7.715936,0.385797,d53a6cc1b6e54b4f
+2,near_lossless_stencil_cpu,20,538.649093,26.932455,5265a0bbabf36860
+2,near_lossless_stencil,20,13.970077,0.698504,5265a0bbabf36860
+2,lossless_histogram_cpu,20,41.964173,2.098209,e00d13e613731c45
+2,lossless_histogram,20,14.608127,0.730406,e00d13e613731c45
+3,predictor_search_residual_cpu,20,157.209398,7.860470,d53a6cc1b6e54b4f
+3,predictor_search_residual,20,7.506476,0.375324,d53a6cc1b6e54b4f
+3,near_lossless_stencil_cpu,20,540.101085,27.005054,5265a0bbabf36860
+3,near_lossless_stencil,20,14.490868,0.724543,5265a0bbabf36860
+3,lossless_histogram_cpu,20,41.490329,2.074516,e00d13e613731c45
+3,lossless_histogram,20,14.798291,0.739915,e00d13e613731c45
+4,predictor_search_residual_cpu,20,152.126142,7.606307,d53a6cc1b6e54b4f
+4,predictor_search_residual,20,7.714203,0.385710,d53a6cc1b6e54b4f
+4,near_lossless_stencil_cpu,20,542.419291,27.120965,5265a0bbabf36860
+4,near_lossless_stencil,20,13.961241,0.698062,5265a0bbabf36860
+4,lossless_histogram_cpu,20,41.601797,2.080090,e00d13e613731c45
+4,lossless_histogram,20,14.491450,0.724573,e00d13e613731c45
+5,predictor_search_residual_cpu,20,152.899515,7.644976,d53a6cc1b6e54b4f
+5,predictor_search_residual,20,7.491038,0.374552,d53a6cc1b6e54b4f
+5,near_lossless_stencil_cpu,20,516.328028,25.816401,5265a0bbabf36860
+5,near_lossless_stencil,20,13.993661,0.699683,5265a0bbabf36860
+5,lossless_histogram_cpu,20,40.963939,2.048197,e00d13e613731c45
+5,lossless_histogram,20,14.171333,0.708567,e00d13e613731c45
+```
+
+Median matched results are 20.46x for predictor search/residuals
+(155.654056/7.607895 ms), 38.49x for the near-lossless stencil
+(538.649093/13.993661 ms), and 2.87x for histogram construction
+(41.601797/14.491450 ms). All are experiment-runner results; only the
+near-lossless case has since been implemented with the full production
+algorithm and is subject to a separate direct crossover measurement.
+ 
+## Follow-up matched SharpYUV and lossy-scoring controls
+
+Measurement date: 2026-08-18. Release CUDA build on NVIDIA GeForce RTX 2080
+SUPER, CUDA Toolkit 12.0, GCC/G++ 13.3.0, CMake 4.4.2. The existing
+experiment implementation and all earlier raw sections were left unchanged.
+
+The lab was rebuilt and run with `--verify` before timing. Each named case
+below ran in five fresh processes with `--benchmark --iterations 20`. The
+CPU and CUDA cases are matched workloads; every row retained the same checksum
+within its pair.
+
+### Verbatim environment, build, and verification output
+
+```text
+$ nvidia-smi
+Tue Aug 18 11:20:47 2026       
++-----------------------------------------------------------------------------------------+
+| NVIDIA-SMI 595.84                 Driver Version: 595.84         CUDA Version: 13.2     |
++-----------------------------------------+------------------------+----------------------+
+| GPU  Name                 Persistence-M | Bus-Id          Disp.A | Volatile Uncorr. ECC |
+| Fan  Temp   Perf          Pwr:Usage/Cap |           Memory-Usage | GPU-Util  Compute M. |
+|                                         |                        |               MIG M. |
+|=========================================+========================+======================|
+|   0  NVIDIA GeForce RTX 2080 ...    Off |   00000000:0A:00.0  On |                  N/A |
+|  0%   28C    P8             15W /  250W |       9MiB /   8192MiB |      0%      Default |
+|                                         |                        |                  N/A |
++-----------------------------------------+------------------------+----------------------+
+
++-----------------------------------------------------------------------------------------+
+| Processes:                                                                              |
+|  GPU   GI   CI              PID   Type   Process name                        GPU Memory |
+|        ID   ID                                                               Usage      |
+|=========================================================================================|
+|  No running processes found                                                             |
++-----------------------------------------------------------------------------------------+
+$ nvcc --version
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2023 NVIDIA Corporation
+Built on Fri_Jan__6_16:45:21_PST_2023
+Cuda compilation tools, release 12.0, V12.0.140
+Build cuda_12.0.r12.0/compiler.32267302_0
+$ gcc --version | head -1
+gcc (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+$ g++ --version | head -1
+g++ (Ubuntu 13.3.0-6ubuntu2~24.04.1) 13.3.0
+$ cmake --version
+cmake version 4.4.2
+
+CMake suite maintained and supported by Kitware (kitware.com/cmake).
+$ cmake --build /tmp/libwebp-cuda-experiment-followup --target cuda_acceleration_experiments -j
+[100%] Built target cuda_acceleration_experiments
+$ /tmp/libwebp-cuda-experiment-followup/cuda_acceleration_experiments --verify
+device=NVIDIA GeForce RTX 2080 SUPER mode=verify iterations=1
+color_baseline                  PASS checksum=5e40fe7c4b95d8d7
+color_shared_tile               PASS checksum=5e40fe7c4b95d8d7
+staged_lossless_pipeline        PASS checksum=eb409c0a5af49b66
+resident_lossless_pipeline      PASS checksum=eb409c0a5af49b66
+predictor_search_residual_cpu   PASS checksum=d53a6cc1b6e54b4f
+predictor_search_residual       PASS checksum=d53a6cc1b6e54b4f
+sharpyuv_iterative_cpu          PASS checksum=39204d15c730fffa
+sharpyuv_iterative              PASS checksum=39204d15c730fffa
+near_lossless_stencil_cpu       PASS checksum=5265a0bbabf36860
+near_lossless_stencil           PASS checksum=5265a0bbabf36860
+lossless_histogram_cpu          PASS checksum=e00d13e613731c45
+lossless_histogram              PASS checksum=e00d13e613731c45
+lossy_macroblock_scoring_cpu    PASS checksum=8b646761439d9e9d
+lossy_macroblock_scoring        PASS checksum=8b646761439d9e9d
+```
+
+### SharpYUV iterative raw output
+
+```text
+run=1 experiment=sharpyuv_iterative_cpu
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+sharpyuv_iterative_cpu,20,136.046849,6.802342,39204d15c730fffa
+run=2 experiment=sharpyuv_iterative_cpu
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+sharpyuv_iterative_cpu,20,132.008941,6.600447,39204d15c730fffa
+run=3 experiment=sharpyuv_iterative_cpu
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+sharpyuv_iterative_cpu,20,133.811918,6.690596,39204d15c730fffa
+run=4 experiment=sharpyuv_iterative_cpu
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+sharpyuv_iterative_cpu,20,135.878085,6.793904,39204d15c730fffa
+run=5 experiment=sharpyuv_iterative_cpu
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+sharpyuv_iterative_cpu,20,131.317120,6.565856,39204d15c730fffa
+
+run=1 experiment=sharpyuv_iterative
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+sharpyuv_iterative,20,3.377155,0.168858,39204d15c730fffa
+run=2 experiment=sharpyuv_iterative
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+sharpyuv_iterative,20,3.404185,0.170209,39204d15c730fffa
+run=3 experiment=sharpyuv_iterative
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+sharpyuv_iterative,20,3.349222,0.167461,39204d15c730fffa
+run=4 experiment=sharpyuv_iterative
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+sharpyuv_iterative,20,3.382354,0.169118,39204d15c730fffa
+run=5 experiment=sharpyuv_iterative
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+sharpyuv_iterative,20,3.359632,0.167982,39204d15c730fffa
+```
+
+### Lossy macroblock scoring raw output
+
+```text
+run=1 experiment=lossy_macroblock_scoring_cpu
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+lossy_macroblock_scoring_cpu,20,35.682644,1.784132,8b646761439d9e9d
+run=2 experiment=lossy_macroblock_scoring_cpu
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+lossy_macroblock_scoring_cpu,20,34.866901,1.743345,8b646761439d9e9d
+run=3 experiment=lossy_macroblock_scoring_cpu
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+lossy_macroblock_scoring_cpu,20,35.459397,1.772970,8b646761439d9e9d
+run=4 experiment=lossy_macroblock_scoring_cpu
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+lossy_macroblock_scoring_cpu,20,34.887911,1.744396,8b646761439d9e9d
+run=5 experiment=lossy_macroblock_scoring_cpu
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+lossy_macroblock_scoring_cpu,20,37.242135,1.862107,8b646761439d9e9d
+
+run=1 experiment=lossy_macroblock_scoring
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+lossy_macroblock_scoring,20,16.121666,0.806083,8b646761439d9e9d
+run=2 experiment=lossy_macroblock_scoring
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+lossy_macroblock_scoring,20,15.773266,0.788663,8b646761439d9e9d
+run=3 experiment=lossy_macroblock_scoring
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+lossy_macroblock_scoring,20,15.820395,0.791020,8b646761439d9e9d
+run=4 experiment=lossy_macroblock_scoring
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+lossy_macroblock_scoring,20,15.927374,0.796369,8b646761439d9e9d
+run=5 experiment=lossy_macroblock_scoring
+device=NVIDIA GeForce RTX 2080 SUPER mode=benchmark iterations=20
+experiment,iterations,total_ms,ms_per_iteration,checksum
+lossy_macroblock_scoring,20,15.470972,0.773549,8b646761439d9e9d
+```
+
+### Computed medians
+
+Medians are across the five fresh-process rows. Speedup is CPU
+milliseconds-per-iteration divided by CUDA milliseconds-per-iteration.
+
+| Matched pair | CPU median total ms | CUDA median total ms | CPU median ms/iteration | CUDA median ms/iteration | Speedup | Stable checksum |
+|---|---:|---:|---:|---:|---:|:--|
+| `SharpYUV iterative` | 133.811918 | 3.377155 | 6.690596 | 0.168858 | 39.6226x | 39204d15c730fffa |
+| `Lossy macroblock scoring` | 35.459397 | 15.820395 | 1.772970 | 0.791020 | 2.2414x | 8b646761439d9e9d |
+
+Both matched pairs are internally correct under the lab oracle. The GPU
+result is 39.6226x faster for the SharpYUV-shaped iterative workload and
+2.2414x faster for lossy macroblock scoring in this corpus. These remain
+experiment-runner results rather than production integrations; the workloads
+do not yet prove end-to-end encoder benefit or full public-algorithm coverage.
