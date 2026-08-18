@@ -1,0 +1,74 @@
+{
+  "acceptance": {
+    "holdout_cells": 12,
+    "holdout_conjunctive_passes": 0,
+    "holdout_median_passes": 0,
+    "holdout_p95_passes": 9,
+    "paired_median_ratio_maximum": 0.99,
+    "p95_ratio_maximum": 1.01,
+    "tune_conjunctive_passes": 0
+  },
+  "ancestry": {
+    "design_commit": "13374003895d81f4e85b6cf77ad82a48f9fc5bc4",
+    "executor_commit": "32f48560198dba36c81e1e52d80d90502f6c71d0",
+    "verified_main": "978e1b3e12e710c25f465fe1c8a68c359a38004e"
+  },
+  "audit": {
+    "abi": "pass",
+    "ancestry": "pass",
+    "archive_index_transfer_extraction": "pass",
+    "candidate_identity": "pass",
+    "cleanup_absence": "pass",
+    "correctness_cells": "pass:26/26",
+    "default_omission_and_gate_isolation": "pass",
+    "frozen_hashes_and_schemas": "pass",
+    "holdout_medians": "fail:0/12",
+    "holdout_p95": "fail:9/12 pass",
+    "host_device_power_process": "pass",
+    "lease_acquire_release_return": "pass",
+    "raw_inventory_order_and_statistics": "pass",
+    "resources": "pass",
+    "source_and_repository_context_admission": "pass",
+    "toolchain_and_build": "pass"
+  },
+  "candidate_equivalence": {
+    "normalized_helper_body_sha256": "3128cbcef3b3f000926d69a117d5d7b79a68c59f0658fe5738eddbfeed33fdfd",
+    "preprocessed_boundary_projection_sha256": "77d14bb905980dfe53f75886b4270a6bfdd9d2ff46874aa0cea3aa480bedd533"
+  },
+  "decision": "reject",
+  "evidence_hashes": {
+    "archive_inventory_sha256": "c7c7cad2eb9bad44067f591a900ab6a2cf47bbd16373643c0225cfc59ca6be4f",
+    "archive_sha256": "d9b3945d68464fafaaa742844751c7b09bb7cd806ce93e74425c8cf21e4c5ecf",
+    "cleanup_receipt_sha256": "05ebc24ed735442148cbffe5ac178333a5dee5eb7e974d6cdc8c19634d908db3",
+    "correctness_sha256": "b445a72eece191e3feaee051eede2f1c78623e02ada1a2fc80d851aa79348dd8",
+    "manifest_sha256": "892c185be44d9773f5a8a30aac4fdb6c8865786ff8578746adacd6fbd47c86e3",
+    "raw_evaluation_sha256": "1d4a1d13855c21cd881b7dea91edd5f2c0c5936b21bc860c4160ab5981027dc1",
+    "records_sha256": "ff47b72540f2517f2f82d5a38217999c4b045adbca1f6f1d91dc70c6354b4e89",
+    "remote_artifact_index_sha256": "f9f1f0f40429a6b05c93eec2864036d3cf78051840126b5ff3f41b86395741e5",
+    "returned_index_sha256": "780683883af61d18dbf05929ce0f6c5fdacf6e0ce5e9b4ae6bdd1cb9b0bec8e2",
+    "schema_catalog_sha256": "a27cb4587ed86a9d39e7f1b85be0802890f625fffb82a0b3e62a39e32fe0a573",
+    "source_bundle_sha256": "53e8fa968a1b625c00c2288ff0efb6238e59163d38eafa6e56a81bed383ec7c4"
+  },
+  "independent_recomputation_matches_raw_evaluation": true,
+  "inventory": {
+    "candidate_measurements": 780,
+    "cold_measurements": 264,
+    "command_processes": 408,
+    "correctness_cells": 26,
+    "evaluation_cells": 24,
+    "raw_sample_rows": 1848,
+    "retained_measurements": 1560,
+    "warm_measurements": 1296,
+    "warmups": 288
+  },
+  "no_run_lead": {
+    "build_gate": "WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT",
+    "compile_gate": "WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT",
+    "description": "Design a semantics-preserving reduction of PushInterval interval-search or update work; require fresh profiling and a new frozen protocol.",
+    "runtime_gate": "WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=1",
+    "status": "proposal_only_not_built_or_run"
+  },
+  "production_consequence": "retain_default_off_negative_research_and_provenance; no production change",
+  "raw_evidence": "evidence/backref-cost-workspace-remote-v5-execution-20260818",
+  "schema": "libwebp-backref-cost-workspace-remote-v5-evaluation-consequence-v1"
+}
