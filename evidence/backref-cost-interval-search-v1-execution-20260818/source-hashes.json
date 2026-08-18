@@ -1,0 +1,162 @@
+{
+  "candidate_equivalence": {
+    "algorithm": "maintain a candidate-only tail pointer; for null-hint insertion use it only when new start is strictly greater than tail start; otherwise execute the exact baseline search",
+    "semantics": [
+      "integer costs",
+      "strict comparisons and ties",
+      "interval ordering and lifetimes",
+      "update order",
+      "traceback",
+      "reference order",
+      "cache choice",
+      "input immutability",
+      "pre-DP injected exact baseline fallback"
+    ],
+    "validated_candidate_commit": "frozen handoff commit supplied by source admission"
+  },
+  "frozen_artifacts": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "d8ffb112da886142d76beb7b97d2b03536c206f0de57e0e095a5cf0ffc561b82"
+    },
+    {
+      "path": "makefile.unix",
+      "sha256": "eaed463efd9954198e3d541d52d5c36f4ec8a417273acfb524b26bdfa25d799c"
+    },
+    {
+      "path": "doc/backref-cost-interval-search-v1-design-20260818.md",
+      "sha256": "2797e11d0906e13384ef16e057518a21baec68772366d92074f103ef17f24e9d"
+    },
+    {
+      "path": "doc/backref-cost-interval-search-v1-protocol-20260818.md",
+      "sha256": "24fe1655138d052f80e68e5768b61cdc13a05f8b2247ab9da37313113097cdb0"
+    },
+    {
+      "path": "doc/backref-cost-interval-search-v1-operator-20260818.md",
+      "sha256": "87f6d5b3d3bb3ae7a6414dde932b511461f816491f8f127656a0e36b8a114a9e"
+    },
+    {
+      "path": "scripts/backref_cost_interval_search_v1_schemas.json",
+      "sha256": "6cd85d69c19aac7be5048aa6a9b42c1d17cd445ccb24c43a26fca6191613e0dd"
+    },
+    {
+      "path": "scripts/backref_cost_interval_search_v1_archive.py",
+      "sha256": "fb29df140e329fd7890b29aafb25719f0dd1146aa7819a493e1293ce247ea060"
+    },
+    {
+      "path": "scripts/run_backref_cost_interval_search_v1_experiment.py",
+      "sha256": "a361841faf6f9a775e632af01d907b819c525f91115f694e0d5909700095617b"
+    },
+    {
+      "path": "scripts/execute_backref_cost_interval_search_v1.py",
+      "sha256": "60d843e0b22fb65c6331a8e327dc601307b0eacb1f3859668e8d5d8df7340728"
+    },
+    {
+      "path": "scripts/backref_cost_interval_search_v1_admission.py",
+      "sha256": "e936b6c785ec4f39b853c6abeb74d9999d8a578d437868c4f14cfac244e172e2"
+    },
+    {
+      "path": "scripts/backref_cost_interval_search_v1_paths.py",
+      "sha256": "3ccf7bbbe4cdee4ccad2b2afa0f04443ad700b836cb1951c6b6b53bbd78cb31d"
+    },
+    {
+      "path": "scripts/validate_backref_cost_interval_search_v1_evidence_return.py",
+      "sha256": "8975ed0f1028b08bdf7b29efee99d3d8ce9617c25737fd8c34a4cb05961d9c17"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_search_v1_experiment.py",
+      "sha256": "1def238e0018fbba538a601a0cac198fd60bd3594dda3ed4aec26769a318b90b"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_search_v1_admission.py",
+      "sha256": "94b4ea7766674e3ecf86261037b48bd6371d97c262b6e2799ed8548d03dee0d5"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_search_v1_archive.py",
+      "sha256": "ff784f138c191b82234cd93a56562a814e498d1c25e9382db602db179902d43a"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_search_v1_protocol.py",
+      "sha256": "65ed7897ffd57b93d9d312b3f2d025b7ebe86ebe90b65571dea6a5a710fcfd3b"
+    },
+    {
+      "path": "scripts/collect_backref_cost_interval_search_v1_work.py",
+      "sha256": "2dda6c9dff5802849cbd3a245eda4664430fa3e674fcc4f78829b2983313267b"
+    },
+    {
+      "path": "scripts/test_experiment_guards.py",
+      "sha256": "667268e3f14107e731ff0ca14ce38613187a9aa9746a68276c8656bda35a6211"
+    },
+    {
+      "path": "scripts/generate_publication_corpus.py",
+      "sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007"
+    },
+    {
+      "path": "benchmarks/publication-corpus/manifest.json",
+      "sha256": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff"
+    },
+    {
+      "path": "src/enc/backref_cost_interval_search_v1_experiment_enc.c",
+      "sha256": "a115f3dd59a9afdff63beedf6d22b2823dc0630562ac7e4150521247d6b9fb60"
+    },
+    {
+      "path": "src/enc/backref_cost_interval_search_v1_experiment_enc.h",
+      "sha256": "6dd1a43b8518e514b0f7b79fd57529e531244749b49a98f0e70e54abecc9a6bb"
+    },
+    {
+      "path": "src/enc/backward_references_cost_enc.c",
+      "sha256": "52cb5323ec012d4aebe8bbfd7da6c0d57d196b9dfe7b37d497a6e06cd032f20a"
+    },
+    {
+      "path": "tools/backref_cost_interval_search_v1_experiment_runner.c",
+      "sha256": "a584447beede6c237c5e8a73616a43ea4c9156bc38e665fd4041447f24b5c907"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v1-design-work/work-metrics.jsonl",
+      "sha256": "7b58885c06311d228683f35d65b451e4b4bf999723a4d9d86539a490ed1fe838"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v1-design-work/summary.json",
+      "sha256": "968ea8c69eac65fdfcbfd6db5a1215957662cbb627255e42c2c46be10c514712"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v1-design-work/abi.json",
+      "sha256": "37184228d553833779ca61ba5d3e84e6bae3f7b03ab07ae35f9e28cfe0f93e15"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v1-design/live-validation.json",
+      "sha256": "7837e0b502bf30baaef50a87626899f892f235f5f5b46a6c2ba2af913ac00806"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v1-design/runner-toolchain-inspection.json",
+      "sha256": "7b7ad4f8c6b4cb8924d0f3a2423ae2250786b119e3e0ffa552fb0727c9cb2dca"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v1-design/remote-rehearsal.json",
+      "sha256": "53f5578a1bc3255a39687ec13286baa76140b8bb71e7698c9a89c86215a2a9c1"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v1-design/early-refusal-return.json",
+      "sha256": "48839d990d6e01f03f2db3a340e8111b69168ac213b63fda05d5cdb96a44fa88"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v1-design/stalled-malformed-transfer-cleanup.json",
+      "sha256": "a846d81960bdb227a0dbc1e50b69488bf7d60fadac57b71e4aef77d3453ba710"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v1-design/remote-rehearsal-returned/work-metric-summary.json",
+      "sha256": "aab88f7aaacd38c887f3b5fcbdaf66176e4015b6783d3ffbb03507f82c34aa18"
+    },
+    {
+      "path": "doc/experiment-guard-matrix.md",
+      "sha256": "797b482d98ba423f66e7fc24573c013e209a97e7590afeeeb8141084e30b3e8e"
+    },
+    {
+      "path": "tests/README.md",
+      "sha256": "2eead592bd4ba5d12d1a8b72323befa6d220ff2a2da3f3462d84721405b1f192"
+    }
+  ],
+  "manifest_sha256": "d1f768dad557d6a41969a23ed206d616eed67dbee16a3e588b15aeaea39515c3",
+  "schema": "libwebp-backref-cost-interval-search-v1-source-hashes-v1",
+  "source_commit": "218032e2f47a3b1df84933f7cf2b08bb9c69ff64"
+}

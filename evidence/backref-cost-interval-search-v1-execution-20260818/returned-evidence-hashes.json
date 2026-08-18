@@ -1,0 +1,158 @@
+{
+  "artifacts": [
+    {
+      "bytes": 3460,
+      "path": "artifact-hashes.json",
+      "sha256": "c73d034d0e516ef5aa8a69fbcd7c1f4939a14f04a84d078b5ec012246a9e29cd"
+    },
+    {
+      "bytes": 9333,
+      "path": "build-commands.json",
+      "sha256": "7ec9eede1002d800371d96c06abc83b3b6ddc5965cd8e3817802376395ae71dc"
+    },
+    {
+      "bytes": 169140,
+      "path": "build.log",
+      "sha256": "28b19b68d575289d94e8f57c6fea52cdc89e7db96110c62f011f918b83fc8130"
+    },
+    {
+      "bytes": 174469,
+      "path": "commands.jsonl",
+      "sha256": "bc8119b604a97844d0f2770e77d95bf6dd106fd9f56a812a743ac02f7d5c9f9a"
+    },
+    {
+      "bytes": 13571,
+      "path": "correctness.json",
+      "sha256": "c54c460d7314978eb3fbd687938fc5b6868a422de76ab88c38f2ae99a287fd76"
+    },
+    {
+      "bytes": 4469,
+      "path": "evaluation.json",
+      "sha256": "131c913730be0a5390c350e6e710a5944ab1f278c1670b58c0369b2a836cc46f"
+    },
+    {
+      "bytes": 320,
+      "path": "lease-record.json",
+      "sha256": "11e1d45e29c0d1763c3de344b826d0d03cd991183b4e3311ea845120b497e47b"
+    },
+    {
+      "bytes": 376,
+      "path": "operator-report.md",
+      "sha256": "efc3f18f33f2e7c19ad2f055a20cc2574c0f9777ed10d32271a2e2eacdc0804f"
+    },
+    {
+      "bytes": 135,
+      "path": "operator-stage.json",
+      "sha256": "f13c26308be0e2a3a4ad1b30c574f3450e42bd8f5cddf5410cbab19fc75c437c"
+    },
+    {
+      "bytes": 162,
+      "path": "operator-status.json",
+      "sha256": "e17e9917448e9107b69edcc4850dbc22f4178bad6b5dc6385f662db61538eb48"
+    },
+    {
+      "bytes": 3397,
+      "path": "post-timing.json",
+      "sha256": "8ff15043222b512d6b798277dc48335c1e8a2490dba4ddc9468e0dbb1a229968"
+    },
+    {
+      "bytes": 3395,
+      "path": "pre-timing.json",
+      "sha256": "ab845d2d0d7035b5bdc244726ce7970e7de5570b52e526319f8fd2c77b1f4fc6"
+    },
+    {
+      "bytes": 3393,
+      "path": "preflight.json",
+      "sha256": "482247d791f46cdc8566e73d68a3c054bd5d8b5778d32f103c311e7e3e369abf"
+    },
+    {
+      "bytes": 93422,
+      "path": "processes-post-timing.txt",
+      "sha256": "01514a92339fe85575abc351a2c1ae87b170ede14882cd59d49f3dd6ff5b698a"
+    },
+    {
+      "bytes": 94963,
+      "path": "processes-pre-timing.txt",
+      "sha256": "a551cd60c1cbe752de77e112d904549332852ebd7caf1e783329c778f4f6dbde"
+    },
+    {
+      "bytes": 93475,
+      "path": "processes-preflight.txt",
+      "sha256": "c4e437d3ee9ab9f76c30e4e500c06ffd2c401f33d9d9df394882db23697f92c5"
+    },
+    {
+      "bytes": 415648,
+      "path": "records.jsonl",
+      "sha256": "abb6c360cb6a7b34873e716b0877667b44b908a1eb4720fe2a39dcfa07ba9c33"
+    },
+    {
+      "bytes": 519,
+      "path": "resources.json",
+      "sha256": "004a2f3a27bf686dc02d054d5203936f44ba81af249c98ad1cd5873d9aa9a896"
+    },
+    {
+      "bytes": 4384,
+      "path": "return-protocol/archive-return.json",
+      "sha256": "417268f6f755ad336cd356e5e44eeaad45554a97e3620bec7353f933640ed65b"
+    },
+    {
+      "bytes": 447,
+      "path": "return-protocol/cleanup-receipt.json",
+      "sha256": "b61f538bd37ea70e1282f7ffa0ad25d1e516be81a381550043c0e207f3cc8b5f"
+    },
+    {
+      "bytes": 2803,
+      "path": "return-protocol/extraction.json",
+      "sha256": "2d363cdff7ed966a6e33290fbaa02da08d1f6b0d68485c050a9989c30ae06699"
+    },
+    {
+      "bytes": 320,
+      "path": "return-protocol/lease-record.json",
+      "sha256": "11e1d45e29c0d1763c3de344b826d0d03cd991183b4e3311ea845120b497e47b"
+    },
+    {
+      "bytes": 280,
+      "path": "return-protocol/lease-transfer.json",
+      "sha256": "980d905a6e01b1e8bcc0a77961730e58168a53d470e65279989d64b4275b6058"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/pipeline.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/pipeline.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 6737,
+      "path": "source-hashes.json",
+      "sha256": "23fb546060827b69bdae1e7fe1cb5ab3fad5df19e1c86f3feb333567e48e819f"
+    },
+    {
+      "bytes": 28169,
+      "path": "timed-child-stderr.log",
+      "sha256": "7baefa3ce810f1c70b250b9a9b469bc04a21e581cd6f61ac6402172804ee4004"
+    },
+    {
+      "bytes": 7848,
+      "path": "toolchain.json",
+      "sha256": "bff6e5e986abac7b6f0bc21e4ff81fe75118a4eec01ef18215185142a6e68f03"
+    },
+    {
+      "bytes": 224,
+      "path": "work-metric-summary.json",
+      "sha256": "aab88f7aaacd38c887f3b5fcbdaf66176e4015b6783d3ffbb03507f82c34aa18"
+    },
+    {
+      "bytes": 9710,
+      "path": "work-metrics.jsonl",
+      "sha256": "265c537b1bab26f6f13cdb35f31c0ead064855698df513e301a00c5c2cc1e1c6"
+    }
+  ],
+  "excluded_after_index": [
+    "transfer-cleanup.json"
+  ],
+  "schema": "libwebp-backref-cost-interval-search-v1-returned-evidence-hashes-v1"
+}
