@@ -3,9 +3,14 @@ set(WEBP_VERSION ${WebP_VERSION})
 
 @PACKAGE_INIT@
 
-if(@WEBP_USE_THREAD@)
+if(@WEBP_USE_THREAD@ OR @WEBP_ENABLE_CUDA@)
   include(CMakeFindDependencyMacro)
+endif()
+if(@WEBP_USE_THREAD@ OR @WEBP_ENABLE_CUDA@)
   find_dependency(Threads REQUIRED)
+endif()
+if(@WEBP_ENABLE_CUDA@)
+  find_dependency(CUDAToolkit REQUIRED)
 endif()
 
 include("${CMAKE_CURRENT_LIST_DIR}/@PROJECT_NAME@Targets.cmake")

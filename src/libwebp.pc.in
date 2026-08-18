@@ -9,4 +9,4 @@ Version: @PACKAGE_VERSION@
 Requires.private: libsharpyuv
 Cflags: -I${includedir}
 Libs: -L${libdir} -l@webp_libname_prefix@webp
-Libs.private: -lm @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @METAL_LIBS@
+Libs.private: -lm @PTHREAD_CFLAGS@ @PTHREAD_LIBS@ @METAL_LIBS@ @CUDA_LIBS@

@@ -35,6 +35,10 @@ libwebpencode_la_SOURCES += vp8l_enc.c
 libwebpencode_la_SOURCES += vp8li_enc.h
 libwebpencode_la_SOURCES += webp_enc.c
 
+# CUDA is currently an opt-in CMake backend. Keep its private implementation in
+# release archives without asking portable Autotools builds to compile .cu.
+EXTRA_DIST = cuda_enc.cu cuda_enc.h
+
 if ENABLE_METAL
 libwebpencode_la_SOURCES += metal_enc.c
 libwebpencode_la_SOURCES += picture_csp_enc_metal.mm

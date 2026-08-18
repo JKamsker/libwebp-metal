@@ -50,11 +50,13 @@ stage without its typed callback is rejected as an accelerator error and the
 CPU implementation remains the authority.
 
 The built-in registry is compile-time, not a dynamic plugin ABI. Metal is added
-under `WEBP_USE_METAL`. A CUDA port should add `WebPGetCUDAEncoderAccelerator()`
-under `WEBP_USE_CUDA` to the same short registry. In automatic mode, a backend
-that returns `NOT_RUN` permits the next backend to try the stage; an attempted
-backend error goes directly to CPU fallback. An explicit, unknown backend name
-selects none, which is safer than silently selecting a different accelerator.
+under `WEBP_USE_METAL`, and CUDA is added under `WEBP_USE_CUDA` through
+`WebPGetCUDAEncoderAccelerator()`. The current CUDA descriptor advertises the
+lossless color-transform, lossless hash-candidate, and opaque RGB-to-YUV
+stages. In automatic mode, a backend that returns
+`NOT_RUN` permits the next backend to try the stage; an attempted backend error
+goes directly to CPU fallback. An explicit, unknown backend name selects none,
+which is safer than silently selecting a different accelerator.
 
 The existing Metal controls remain compatible and are evaluated inside Metal:
 `WEBP_METAL`, `WEBP_METAL_HASH`, `WEBP_METAL_LOSSY`, their minimum-pixel
@@ -110,9 +112,11 @@ state should be quarantined by the backend so later calls decline cheaply.
 Callbacks must be thread-safe. They return only after command completion and
 host visibility. The current Metal backends use shared-storage buffers,
 `waitUntilCompleted`, a completion-status check, then `memcpy`, all under a
-mutex. A CUDA backend should use a private stream plus events or stream
-synchronization, copy into host outputs only after success, and serialize any
-shared staging allocation. Synchronizing the entire CUDA device is unnecessary.
+mutex. CUDA uses a private nonblocking stream plus stream synchronization,
+copies into host outputs only after success, and serializes its shared staging
+allocation. Even the synchronous-copy experiment keeps transfers on that
+private stream; the default stream would not order them with a nonblocking
+stream. Synchronizing the entire CUDA device is unnecessary.
 
 Progress and cancellation remain in the CPU call sites. The GPU work is one
 synchronous stage; after success the lossless call sites continue current
@@ -156,9 +160,9 @@ Persistence is advertised explicitly so threshold policy can account for warm
 pipelines and reused buffers. Backends should grow staging capacity
 geometrically or in bounded pages, never shrink on the hot path, and serialize
 reuse or maintain a small pool. The current Metal path rounds buffers and keeps
-them for the process. A CUDA port should create its context/module/stream once
-and reuse allocations rather than repeating the historical `cudaMalloc` and
-`cudaFree` sequence.
+them for the process. CUDA creates its context/stream once and reuses
+geometrically grown allocations rather than repeating the historical
+`cudaMalloc` and `cudaFree` sequence.
 
 Batch submission is intentionally a hook, not active behavior: no common
 encoder session currently spans lossy import and both lossless stages without a
@@ -184,7 +188,8 @@ interface. The Metal implementation still owns two caches (lossless/hash and
 lossy import). Consolidating them behind one shared device/queue allocator is a
 safe follow-up, not required for backend neutrality.
 
-A CUDA implementation should be introduced without reviving the old tree:
+A CUDA implementation was introduced stage by stage without reviving the old
+tree:
 
 1. Add an opt-in `WEBP_ENABLE_CUDA` build choice and define `WEBP_USE_CUDA`
    only for supported toolchains; do not make CUDA a project-wide required
@@ -201,6 +206,23 @@ A CUDA implementation should be introduced without reviving the old tree:
    cases.
 5. Compare decoded pixels and stage output as required above before enabling a
    stage by default. Performance threshold work is separate from this design.
+
+All three ABI-v1 stages are implemented in `src/enc/cuda_enc.cu`. They share a
+private nonblocking stream, optional events, geometrically grown device/host
+staging, serialized access, transactional output commits, and device-loss
+quarantine. The color kernel preserves independent-tile semantics; hash output
+is replayed through the CPU's left-extension boundary; RGB conversion matches
+the eligible CPU import byte-for-byte. CMake/package integration,
+forced-device correctness, deterministic output, CPU override,
+unavailable-device fallback, compile-time ablations, and concurrent encodes are
+covered.
+
+Every performance choice is independently preprocessor-gated: the three stages,
+persistent buffers, pinned staging, copy synchronization policy, hash matching
+unroll, read-only cache loads, restrict-qualified pointers, per-stage block
+width, fused 2x2 RGB work, packed four-byte RGB loads, and stream-ordered device
+allocation. Defaults are selected from warm/cold measurements on an RTX 2080
+SUPER; experimental alternatives stay buildable for later hardware matrices.
 
 ## Migration plan and compatibility risks
 

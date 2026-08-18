@@ -59,6 +59,53 @@ Metal operations were selected. `WEBP_ACCELERATOR=none` is a backend-neutral
 CPU-only override; `auto` (the default) or `metal` selects the Metal descriptor.
 Selected lossy imports use the exact 2x2 Metal kernel by default.
 
+## CUDA acceleration
+
+CUDA acceleration for the lossless cross-color transform, lossless hash-chain
+candidates, and opaque regular RGB-to-YUV420 conversion is available as an
+opt-in CMake backend. It requires CMake 3.17 or newer and a CUDA toolkit, and is
+enabled with
+`-DWEBP_ENABLE_CUDA=ON`. The CUDA language is enabled only for this build mode;
+CPU-only and Metal builds do not require the toolkit. For example:
+
+```sh
+cmake -S . -B build-cuda -DWEBP_ENABLE_CUDA=ON
+cmake --build build-cuda -j
+WEBP_TEST_BIN_DIR="$PWD/build-cuda" scripts/test_cuda.sh
+```
+
+The backend retains its device, private stream, events, and geometrically grown
+staging buffers across encodes. Calls sharing those resources are serialized.
+It copies results into caller buffers only after successful completion, so
+initialization, allocation, launch, or device errors fall back to the CPU
+without exposing partial output.
+
+At runtime, `WEBP_ACCELERATOR=cuda` explicitly selects CUDA and
+`WEBP_ACCELERATOR=none` forces the CPU path. `WEBP_CUDA=0` disables CUDA,
+`WEBP_CUDA_DEVICE=N` selects a device, `WEBP_CUDA_MIN_PIXELS=N` controls the
+lossless transform threshold, `WEBP_CUDA_HASH_MIN_PIXELS=N` controls hash
+candidates, and `WEBP_CUDA_LOSSY_MIN_PIXELS=N` controls RGB conversion.
+`WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, and `WEBP_CUDA_LOSSY=0` disable one
+stage. `WEBP_CUDA_VERBOSE=1` reports device and dispatch timings. Set a threshold
+to zero for forced correctness tests. Defaults are adaptive: a stage pays the
+roughly 140 ms runtime/device initialization cost only for large inputs, then
+uses a lower warm-process threshold once another CUDA stage initialized the
+backend: color uses 4,000,000 cold / 16,384 warm pixels, hash uses 8,000,000 /
+4,000,000, and RGB uses 80,000,000 / 4,000,000. An explicit stage threshold
+overrides both defaults.
+
+Every CUDA stage and optimization has an independent `WEBP_CUDA_ENABLE_*`
+CMake option. The default strategy uses persistent buffers, stream-ordered
+copies, four-at-a-time hash matching, read-only hash loads, restrict-qualified
+kernel pointers, packed four-byte RGB loads, 128-thread color/hash blocks, and
+256-thread RGB blocks. Page-locked host staging, fused RGB 2x2 work, alternate
+block widths, and stream-ordered allocation remain available for ablation but
+are off by default on the measured RTX 2080 SUPER. Build the non-installed
+`webp_cuda_benchmark` and concurrency runner with
+`-DWEBP_BUILD_CUDA_BENCHMARK=ON`; `scripts/test_cuda_variants.sh` validates both
+the default and all-strategies-disabled builds. Measurement details are in
+[CUDA_BENCHMARK_RESULTS.md](CUDA_BENCHMARK_RESULTS.md).
+
 Additional encoder-stage research is documented in
 [GPU_STAGE_EVALUATION.md](GPU_STAGE_EVALUATION.md). Its predictor-residual
 prototype is excluded from normal builds and remains disabled at runtime unless

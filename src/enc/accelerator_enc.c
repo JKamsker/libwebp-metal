@@ -10,6 +10,9 @@
 #if defined(WEBP_USE_METAL)
 #include "src/enc/metal_enc.h"
 #endif
+#if defined(WEBP_USE_CUDA)
+#include "src/enc/cuda_enc.h"
+#endif
 
 #define WEBP_ACCELERATOR_REQUIRED_PROPERTIES                  \
   (WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS |                    \
@@ -45,7 +48,8 @@ static int IsValidBackend(const WebPEncoderAccelerator* const backend) {
 static size_t GetBackends(const WebPEncoderAccelerator** backends,
                           size_t capacity) {
   size_t count = 0;
-#if !defined(WEBP_ACCELERATOR_TESTING) && !defined(WEBP_USE_METAL)
+#if !defined(WEBP_ACCELERATOR_TESTING) && !defined(WEBP_USE_METAL) && \
+    !defined(WEBP_USE_CUDA)
   (void)backends;
   (void)capacity;
 #endif
@@ -56,6 +60,9 @@ static size_t GetBackends(const WebPEncoderAccelerator** backends,
 #else
 #if defined(WEBP_USE_METAL)
   if (count < capacity) backends[count++] = WebPGetMetalEncoderAccelerator();
+#endif
+#if defined(WEBP_USE_CUDA)
+  if (count < capacity) backends[count++] = WebPGetCUDAEncoderAccelerator();
 #endif
 #endif
   return count;

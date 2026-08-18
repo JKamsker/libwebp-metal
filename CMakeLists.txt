@@ -32,6 +32,7 @@ option(WEBP_ENABLE_SIMD "Enable any SIMD optimization."
        ${WEBP_ENABLE_SIMD_DEFAULT})
 option(WEBP_ENABLE_METAL "Enable Metal encoder acceleration on Apple platforms."
        ${APPLE})
+option(WEBP_ENABLE_CUDA "Enable CUDA encoder acceleration." OFF)
 option(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT
        "Build the internal encoder stage profiling experiment." OFF)
 option(WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT
@@ -40,6 +41,8 @@ option(WEBP_BUILD_METAL_BATCH_EXPERIMENT
        "Build non-installed Metal lifecycle/batching experiment tools." OFF)
 option(WEBP_BUILD_METAL_ABLATION_EXPERIMENT
        "Build the non-installed Metal ablation benchmark tool." OFF)
+option(WEBP_BUILD_CUDA_BENCHMARK
+       "Build non-installed CUDA benchmark and concurrency tools." OFF)
 option(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT
        "Build the opt-in experimental Metal predictor-residual stage." OFF)
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
@@ -85,11 +88,71 @@ if(WEBP_ENABLE_METAL)
   set(CMAKE_OBJCXX_VISIBILITY_PRESET hidden)
   set(METAL_LIBS "-framework Foundation -framework Metal -lc++")
 endif()
+if(WEBP_ENABLE_CUDA)
+  if(CMAKE_VERSION VERSION_LESS 3.17)
+    message(FATAL_ERROR "WEBP_ENABLE_CUDA requires CMake 3.17 or newer.")
+  endif()
+  if(POLICY CMP0104)
+    cmake_policy(SET CMP0104 NEW)
+  endif()
+  enable_language(CUDA)
+  find_package(CUDAToolkit REQUIRED)
+  find_package(Threads REQUIRED)
+  set(CMAKE_CUDA_STANDARD 11)
+  set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+  add_definitions(-DWEBP_USE_CUDA=1)
+  set(CUDA_LIBS "-L${CUDAToolkit_LIBRARY_DIR} -lcudart")
+
+  # Every CUDA stage and optimization is independently compiled so benchmark
+  # builds can isolate effects without changing runtime code paths.
+  option(WEBP_CUDA_ENABLE_COLOR_TRANSFORM
+         "Build the CUDA lossless cross-color stage." ON)
+  option(WEBP_CUDA_ENABLE_HASH_CHAIN
+         "Build the CUDA lossless hash-candidate stage." ON)
+  option(WEBP_CUDA_ENABLE_RGB_TO_YUV
+         "Build the CUDA opaque RGB-to-YUV420 stage." ON)
+  option(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS
+         "Retain CUDA staging allocations across encoder calls." ON)
+  option(WEBP_CUDA_ENABLE_PINNED_HOST_MEMORY
+         "Use persistent page-locked CUDA host staging buffers." OFF)
+  option(WEBP_CUDA_ENABLE_ASYNC_COPIES
+         "Use stream-ordered asynchronous CUDA transfers." ON)
+  option(WEBP_CUDA_ENABLE_HASH_MATCH4
+         "Compare four hash-chain pixels per loop iteration." ON)
+  option(WEBP_CUDA_ENABLE_RGB_BLOCK_2X2
+         "Fuse four luma samples with each CUDA chroma thread." OFF)
+  option(WEBP_CUDA_ENABLE_COLOR_256_THREAD_BLOCKS
+         "Use 256-thread CUDA color-transform blocks instead of 128." OFF)
+  option(WEBP_CUDA_ENABLE_HASH_256_THREAD_BLOCKS
+         "Use 256-thread CUDA hash-chain blocks instead of 128." OFF)
+  option(WEBP_CUDA_ENABLE_RGB_256_THREAD_BLOCKS
+         "Use 256-thread CUDA RGB-to-YUV blocks instead of 128." ON)
+  option(WEBP_CUDA_ENABLE_READ_ONLY_CACHE
+         "Use CUDA read-only loads in the hash-chain traversal." ON)
+  option(WEBP_CUDA_ENABLE_RESTRICT_POINTERS
+         "Expose non-aliasing CUDA kernel pointers to the compiler." ON)
+  option(WEBP_CUDA_ENABLE_RGB_PACKED4_LOADS
+         "Load aligned four-byte RGB(A) source pixels in one transaction." ON)
+  option(WEBP_CUDA_ENABLE_STREAM_ORDERED_ALLOCATIONS
+         "Use CUDA stream-ordered device allocation (experimental)." OFF)
+  if(WEBP_CUDA_ENABLE_STREAM_ORDERED_ALLOCATIONS AND
+     CUDAToolkit_VERSION VERSION_LESS 11.2)
+    message(FATAL_ERROR
+            "Stream-ordered CUDA allocation requires CUDA Toolkit 11.2.")
+  endif()
+endif()
 if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
   if(NOT WEBP_ENABLE_METAL)
     message(FATAL_ERROR
             "WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT requires WEBP_ENABLE_METAL.")
   endif()
+endif()
+if(WEBP_BUILD_CUDA_BENCHMARK AND NOT WEBP_ENABLE_CUDA)
+  message(FATAL_ERROR
+          "WEBP_BUILD_CUDA_BENCHMARK requires WEBP_ENABLE_CUDA=ON.")
+endif()
+if(WEBP_BUILD_CUDA_BENCHMARK AND NOT UNIX)
+  message(FATAL_ERROR "WEBP_BUILD_CUDA_BENCHMARK currently requires POSIX.")
 endif()
 
 if(DEFINED WEBP_BUILD_METAL_BENCHMARK)
@@ -355,6 +418,9 @@ else()
        ${WEBP_SRC_DIR}/enc/metal_enc.c
        ${WEBP_SRC_DIR}/enc/picture_csp_enc_metal.mm)
 endif()
+if(WEBP_ENABLE_CUDA)
+  list(APPEND WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/cuda_enc.cu)
+endif()
 if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
   list(APPEND WEBP_ENC_SRCS
        ${WEBP_SRC_DIR}/enc/predictor_enc_metal.mm)
@@ -506,6 +572,19 @@ add_library(webpencode OBJECT ${WEBP_ENC_SRCS})
 target_include_directories(
   webpencode PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
                      ${CMAKE_CURRENT_SOURCE_DIR}/src)
+if(WEBP_ENABLE_CUDA)
+  foreach(CUDA_OPTION
+          COLOR_TRANSFORM HASH_CHAIN RGB_TO_YUV PERSISTENT_BUFFERS
+          PINNED_HOST_MEMORY ASYNC_COPIES HASH_MATCH4 RGB_BLOCK_2X2
+          COLOR_256_THREAD_BLOCKS HASH_256_THREAD_BLOCKS
+          RGB_256_THREAD_BLOCKS READ_ONLY_CACHE RESTRICT_POINTERS
+          RGB_PACKED4_LOADS STREAM_ORDERED_ALLOCATIONS)
+    if(WEBP_CUDA_ENABLE_${CUDA_OPTION})
+      target_compile_definitions(
+        webpencode PRIVATE WEBP_CUDA_ENABLE_${CUDA_OPTION}=1)
+    endif()
+  endforeach()
+endif()
 add_library(webpdsp OBJECT ${WEBP_DSP_COMMON_SRCS} ${WEBP_DSP_DEC_SRCS}
                            ${WEBP_DSP_ENC_SRCS})
 target_include_directories(webpdsp PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
@@ -553,6 +632,9 @@ target_link_libraries(webp PRIVATE ${WEBP_DEP_LIBRARIES})
 if(WEBP_ENABLE_METAL)
   target_link_libraries(webp PRIVATE ${WEBP_FOUNDATION_FRAMEWORK}
                                      ${WEBP_METAL_FRAMEWORK} "-lc++")
+endif()
+if(WEBP_ENABLE_CUDA)
+  target_link_libraries(webp PRIVATE CUDA::cudart Threads::Threads)
 endif()
 target_include_directories(
   webp PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
@@ -708,6 +790,19 @@ if(WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT)
                              PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
   target_compile_definitions(
     webp_metal_benchmark PRIVATE WEBP_USE_METAL_CROSSOVER_EXPERIMENT=1)
+endif()
+
+if(WEBP_BUILD_CUDA_BENCHMARK)
+  # Internal, non-installed runners for warm-process strategy comparisons and
+  # shared-state stress testing on a physical CUDA device.
+  add_executable(webp_cuda_benchmark tools/cuda_benchmark.c)
+  target_link_libraries(webp_cuda_benchmark PRIVATE webp)
+  target_include_directories(webp_cuda_benchmark
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
+  add_executable(cuda_concurrency_test tests/cuda_concurrency_test.c)
+  target_link_libraries(cuda_concurrency_test PRIVATE webp Threads::Threads)
+  target_include_directories(cuda_concurrency_test
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
 endif()
 
 if(WEBP_BUILD_LIBWEBPMUX)
