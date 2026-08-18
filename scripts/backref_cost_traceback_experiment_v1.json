@@ -1,0 +1,171 @@
+{
+  "schema": "libwebp-backref-cost-traceback-frozen-v1",
+  "protocol_version": 1,
+  "experiment_id": "backref_cost_traceback",
+  "base_commit": "3142ff3fe31cd1666c5615c5c4ee7dec2ef891f8",
+  "required_expected_commit_environment": "WEBP_EXPECTED_BACKREF_COST_TRACEBACK_COMMIT",
+  "license": "BSD-3-Clause",
+  "closed_evidence": [
+    {
+      "name": "backref_cache_search",
+      "kind": "observational recorder",
+      "disposition": "closed by its frozen evaluation",
+      "forbidden": ["rerun", "relabel", "pool", "promotion", "sample reuse", "ratio multiplication"]
+    },
+    {
+      "name": "cache_size_serial_sweep",
+      "kind": "recorder-free exact implementation",
+      "disposition": "closed and rejected by its frozen all-cell rules",
+      "forbidden": ["rerun", "relabel", "pool", "promotion", "sample reuse", "ratio multiplication"]
+    },
+    {
+      "name": "cache_size_single_pass_slab",
+      "kind": "recorder-free exact implementation",
+      "disposition": "closed and rejected by its frozen all-cell rules",
+      "forbidden": ["rerun", "relabel", "pool", "promotion", "sample reuse", "ratio multiplication"]
+    }
+  ],
+  "candidate": {
+    "name": "exact-sized CostManager workspace",
+    "build_flag": "WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT",
+    "compile_macro": "WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT",
+    "runtime_flag": "WEBP_BACKREF_COST_TRACEBACK_EXPERIMENT",
+    "runtime_value": "1",
+    "failure_injection_flag": "WEBP_BACKREF_COST_TRACEBACK_EXPERIMENT_INJECT_FAILURE",
+    "source": "src/enc/backref_cost_traceback_experiment_enc.c",
+    "header": "src/enc/backref_cost_traceback_experiment_enc.h",
+    "implementation_boundary": "src/enc/backward_references_cost_enc.c",
+    "runner": "tools/backref_cost_traceback_experiment_runner.c",
+    "protocol_document": "doc/backref-cost-traceback-experiment-20260818.md",
+    "design_report": "doc/backref-cost-traceback-design-report-20260818.md",
+    "mechanism": "one exact-sized allocation owns costs, cached-cost intervals, and 490 additional interval nodes while the ten inline nodes remain first",
+    "preserves": [
+      "integer costs", "DP update order", "interval ordering", "strict ties",
+      "dist_array", "chosen path", "reference sequence", "cache decisions",
+      "bitstream", "decoded pixels", "fallback", "public ABI", "defaults"
+    ]
+  },
+  "corpus": {
+    "generator": "scripts/generate_publication_corpus.py",
+    "manifest": "benchmarks/publication-corpus/manifest.json",
+    "correctness_matrix": [
+      {"case_id": "photo-small", "quality": 75, "methods": [4, 6]},
+      {"case_id": "graphic-small", "quality": 75, "methods": [4, 6]},
+      {"case_id": "texture-small", "quality": 75, "methods": [4, 6]},
+      {"case_id": "photo-medium", "quality": 75, "methods": [4, 6]},
+      {"case_id": "graphic-medium", "quality": 75, "methods": [4, 6]},
+      {"case_id": "texture-medium", "quality": 75, "methods": [4, 6]},
+      {"case_id": "photo-large", "quality": 75, "methods": [4, 6]},
+      {"case_id": "graphic-large", "quality": 75, "methods": [4, 6]},
+      {"case_id": "texture-large", "quality": 75, "methods": [4, 6]},
+      {"case_id": "graphic-small", "quality": 24, "methods": [4, 6]},
+      {"case_id": "graphic-small", "quality": 25, "methods": [4, 6]},
+      {"case_id": "graphic-small", "quality": 26, "methods": [4, 6]},
+      {"case_id": "graphic-small", "quality": 100, "methods": [4, 6]}
+    ],
+    "timed": [
+      {"role": "tune", "case_id": "photo-medium", "sha256": "a1a6ab156ae4b18666a780bcdf7eaf7d2124415eb192e091dc21e7adbf383c70"},
+      {"role": "tune", "case_id": "graphic-medium", "sha256": "c42deaa474e253db740384e7e93a208c82ff11cd66dc2930c34678a9e8279234"},
+      {"role": "tune", "case_id": "texture-medium", "sha256": "91d90466139f54ad441448bc7d352c637a4020ce928434dbff3a358c5a829385"},
+      {"role": "holdout", "case_id": "photo-large", "sha256": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612"},
+      {"role": "holdout", "case_id": "graphic-large", "sha256": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc"},
+      {"role": "holdout", "case_id": "texture-large", "sha256": "dd02badce31b757f9374f0f5de187e9de3158fe6878929207eeed24ea72d79e2"}
+    ]
+  },
+  "builds": {
+    "common": [
+      "-DWEBP_ENABLE_METAL=OFF", "-DBUILD_SHARED_LIBS=OFF",
+      "-DWEBP_BUILD_EXTRAS=OFF", "-DWEBP_BUILD_CWEBP=ON",
+      "-DWEBP_BUILD_DWEBP=ON", "-DCMAKE_BUILD_TYPE=Release"
+    ],
+    "baseline": "ordinary build with candidate option absent",
+    "candidate": "common flags plus only -DWEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT=ON",
+    "forbidden_backend": "CUDA",
+    "runner_linkage": "identical runner source linked separately to each static library"
+  },
+  "protocol": {
+    "timing_authority": "external elapsed WebPEncode only",
+    "recorders": "none",
+    "encoder": {"lossless": true, "exact": true, "quality": 75, "thread_level": 0},
+    "methods": [4, 6],
+    "execution_order": [
+      "tune:photo-medium", "tune:graphic-medium", "tune:texture-medium",
+      "holdout:photo-large", "holdout:graphic-large", "holdout:texture-large",
+      "method:4-before-6", "lifecycle:cold-before-warm"
+    ],
+    "lifecycles": {
+      "cold": {"process_pairs": 11, "discarded_warmups_per_process": 0, "measured_encodes_per_process": 1},
+      "warm": {"process_pairs": 6, "discarded_warmups_per_process": 2, "measured_encodes_per_process": 9}
+    },
+    "pair_order": [
+      "baseline-candidate", "candidate-baseline", "baseline-candidate",
+      "candidate-baseline", "baseline-candidate", "candidate-baseline",
+      "baseline-candidate", "candidate-baseline", "baseline-candidate",
+      "candidate-baseline", "baseline-candidate"
+    ],
+    "statistics": {
+      "warm_process_reduction": "median of nine retained encodes after two discarded warmups",
+      "paired_location": "median of candidate-process/baseline-process ratios",
+      "tail": "nearest-rank p95 within each raw retained variant stratum, then candidate divided by baseline",
+      "pooling_forbidden": ["category", "case", "method", "lifecycle", "tune_holdout", "process"]
+    },
+    "acceptance": {
+      "authority": "end-to-end only",
+      "required_cells": "all holdout cases x methods 4/6 x cold/warm",
+      "paired_median_ratio_maximum": 0.99,
+      "p95_ratio_maximum": 1.01,
+      "tune": "descriptive only",
+      "correctness": "all 26 matrix cells require exact streams, decoded pixels, repeats, workspace-fault fallback, default-build independence, and immutable inputs",
+      "decision": "accept only if every required correctness, integrity, inventory, resource, median, and p95 gate passes"
+    },
+    "expected_inventory": {
+      "command_processes": 408,
+      "cold_measured_samples": 264,
+      "warmup_samples": 288,
+      "warm_measured_samples": 1296,
+      "total_measured_samples": 1560,
+      "variant_measured_samples": 780,
+      "correctness_cells": 26,
+      "evaluation_cells": 24,
+      "required_holdout_cells": 12
+    }
+  },
+  "resources": {
+    "lease_path": "/tmp/libwebp-metal-backref-cost-traceback.lock",
+    "parallel_benchmark_processes": 1,
+    "minimum_available_memory_bytes": 4294967296,
+    "maximum_child_rss_bytes": 2147483648,
+    "maximum_output_bytes": 2147483648,
+    "maximum_command_seconds": 300,
+    "maximum_total_seconds": 3600
+  },
+  "schemas": {
+    "catalog": "scripts/backref_cost_traceback_schemas_v1.json",
+    "sample": "libwebp-backref-cost-traceback-sample-v1",
+    "command": "libwebp-backref-cost-traceback-command-v1",
+    "correctness": "libwebp-backref-cost-traceback-correctness-v1",
+    "evaluation": "libwebp-backref-cost-traceback-evaluation-v1",
+    "resources": "libwebp-backref-cost-traceback-resources-v1",
+    "artifact_hashes": "libwebp-backref-cost-traceback-artifact-hashes-v1"
+  },
+  "operator": {"path": "scripts/run_backref_cost_traceback_experiment.py"},
+  "frozen_artifacts": [
+    {"path": "CMakeLists.txt", "sha256": "f143cb5d034fb7ef369e6def35b11b3002cc93cacdbe021505dd19009914c8ca"},
+    {"path": "makefile.unix", "sha256": "805edbb6cc55bc39d88e978aea536fd179fcc92730a38b57ee251af21acdf4df"},
+    {"path": "doc/backref-cost-traceback-design-report-20260818.md", "sha256": "7d8aa30ea5aa98e6febb97cb9ee316edb26755c13f3710640f000a4663fade7b"},
+    {"path": "doc/backref-cost-traceback-experiment-20260818.md", "sha256": "8468b00cbdf3a16400ed9f9f3b4c20bfbec911d7169fc7f3023821d967677379"},
+    {"path": "doc/experiment-guard-matrix.md", "sha256": "603b5d8c65b4c963a03928780534115c628f73e2968a6dd8e049b2a7bfbbd824"},
+    {"path": "scripts/backref_cost_traceback_schemas_v1.json", "sha256": "56448224ba69cf1fff4550adbe107d957b176216922bcaa4027b46b71e13ba73"},
+    {"path": "scripts/run_backref_cost_traceback_experiment.py", "sha256": "00e259fbba76fd3721f7e3d432e1e5fd5d13ee5d20dbedd63ee9bdfbb56b7d72"},
+    {"path": "scripts/test_backref_cost_traceback_experiment.py", "sha256": "c335a1866d25680717d849d3ce871456efe24d89b7a9570ab85332ee80e48c6a"},
+    {"path": "scripts/test_experiment_guards.py", "sha256": "29131b22571282e62e53693fb9c12eed7a9e40a66a5d87757878d10a698419f2"},
+    {"path": "scripts/generate_publication_corpus.py", "sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007"},
+    {"path": "benchmarks/publication-corpus/manifest.json", "sha256": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff"},
+    {"path": "src/enc/backward_references_cost_enc.c", "sha256": "7a4a5d124aec642603374e9f4ff790a8d913598bf6aaae2057c51a2e50e006d0"},
+    {"path": "src/enc/backref_cost_traceback_experiment_enc.c", "sha256": "1efec4acd747dc4fb1eee45c22d6b7b2b2fbafa4aab0885fec4f24b294be9d40"},
+    {"path": "src/enc/backref_cost_traceback_experiment_enc.h", "sha256": "084a7bbf4d3d8d8e29bf5f9acb1dd56a00b83c70118fd5d6760584b0d5134846"},
+    {"path": "tests/backref_cost_traceback_experiment_test.c", "sha256": "d633b90130db922b3026600825345665ca046d418529454818397975b4898371"},
+    {"path": "tests/README.md", "sha256": "c15d09c01e09712f6b1b7faaa6a124586a571d9bb97c2b28cbd2f2f9874b86fe"},
+    {"path": "tools/backref_cost_traceback_experiment_runner.c", "sha256": "f2e15321fd0b079c02b8750e5f4dcedc22e603b2fad6fd4beb2e235aeb4643f4"}
+  ]
+}
