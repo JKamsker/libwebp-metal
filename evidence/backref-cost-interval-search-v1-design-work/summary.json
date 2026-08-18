@@ -1,0 +1,16 @@
+{
+  "active_case_method_pairs": 12,
+  "baseline_position_backward_steps": 53769,
+  "baseline_position_forward_steps": 5585685,
+  "candidate_position_backward_steps": 53769,
+  "candidate_position_forward_steps": 0,
+  "candidate_runtime_activations": 37,
+  "candidate_tail_fast_paths": 1062260,
+  "case_method_pairs": 18,
+  "inactive_case_method_pairs": 6,
+  "records_sha256": "7b58885c06311d228683f35d65b451e4b4bf999723a4d9d86539a490ed1fe838",
+  "rows": 36,
+  "schema": "libwebp-backref-cost-interval-search-v1-design-work-summary-v1",
+  "status": "PASS",
+  "timing_fields_recorded": false
+}

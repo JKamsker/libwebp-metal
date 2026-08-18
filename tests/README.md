@@ -65,6 +65,15 @@ plus traversal, absolute, symlink, hardlink, FIFO, and nonregular rejection.
 The frozen live design record exercises the same builder/extractor over ssh on
 `pandocs-agent` without a benchmark session, lease, runner, or timed command.
 
+`scripts/test_backref_cost_interval_search_v1_experiment.py` verifies the new
+strictly-after-tail CostManager positioning index across 26 publication cells,
+candidate-off and predecessor-gate isolation, deterministic repeat, injected
+pre-DP exact fallback, decoded pixels, ordinary-build omission, and sanitizer
+coverage. Its separate recorder is untimed and omitted from timed binaries;
+the protocol/admission/archive tests retain the proven indexed return,
+independent lease/cleanup, and noninteractive Unix-make admission structure
+under new v1 identities.
+
 ## Building
 
 ### Fuzzers

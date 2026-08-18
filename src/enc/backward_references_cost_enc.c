@@ -30,8 +30,9 @@
      defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT) + \
      defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT) + \
      defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT) + \
-     defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT)) > 1
-#error "backref workspace experiments are mutually exclusive"
+     defined(WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT) + \
+     defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)) > 1
+#error "overlapping backref cost experiments are mutually exclusive"
 #elif defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
 #include "src/enc/backref_cost_traceback_experiment_enc.h"
 #define WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE 1
@@ -70,6 +71,15 @@
   VP8LBackrefCostWorkspaceRemoteV5ExperimentEnabled
 #define VP8LBackrefCostTracebackExperimentMalloc \
   VP8LBackrefCostWorkspaceRemoteV5ExperimentMalloc
+#elif defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
+#include "src/enc/backref_cost_interval_search_v1_experiment_enc.h"
+#endif
+
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT) && \
+    defined(WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_RECORDER)
+#define INTERVAL_SEARCH_RECORD(call) call
+#else
+#define INTERVAL_SEARCH_RECORD(call) ((void)0)
 #endif
 
 #define VALUES_IN_BYTE 256
@@ -228,6 +238,12 @@ typedef struct {
 #define COST_MANAGER_MAX_FREE_LIST 10
 typedef struct {
   CostInterval* head;
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
+  // Candidate-only end index. It is maintained with the list and used only
+  // when an insertion is provably strictly after the current tail.
+  CostInterval* tail;
+  int use_interval_search_v1;
+#endif
   int count;  // The number of stored intervals.
   CostCacheInterval* cache_intervals;
   size_t cache_intervals_size;
@@ -332,6 +348,10 @@ static int CostManagerInit(CostManager* const manager,
                            int use_experiment,
                            int* const experiment_setup_failed
 #endif
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
+                           ,
+                           int use_interval_search_v1
+#endif
 ) {
   int i;
   const int cost_cache_size = (pix_count > MAX_LENGTH) ? MAX_LENGTH : pix_count;
@@ -339,6 +359,10 @@ static int CostManagerInit(CostManager* const manager,
   manager->costs = NULL;
   manager->cache_intervals = NULL;
   manager->head = NULL;
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
+  manager->tail = NULL;
+  manager->use_interval_search_v1 = use_interval_search_v1;
+#endif
   manager->recycled_intervals = NULL;
   manager->count = 0;
   manager->dist_array = dist_array;
@@ -484,7 +508,10 @@ static WEBP_INLINE void UpdateCostPerInterval(CostManager* const manager,
                                               int start, int end, int position,
                                               int64_t cost) {
   int i;
-  for (i = start; i < end; ++i) UpdateCost(manager, i, position, cost);
+  for (i = start; i < end; ++i) {
+    INTERVAL_SEARCH_RECORD(VP8LBackrefCostIntervalSearchV1RecordUpdate());
+    UpdateCost(manager, i, position, cost);
+  }
 }
 
 // Given two intervals, make 'prev' be the previous one of 'next' in 'manager'.
@@ -498,12 +525,17 @@ static WEBP_INLINE void ConnectIntervals(CostManager* const manager,
   }
 
   if (next != NULL) next->previous = prev;
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
+  if (next == NULL) manager->tail = prev;
+#endif
 }
 
 // Pop an interval in the manager.
 static WEBP_INLINE void PopInterval(CostManager* const manager,
                                     CostInterval* const interval) {
   if (interval == NULL) return;
+
+  INTERVAL_SEARCH_RECORD(VP8LBackrefCostIntervalSearchV1RecordPop());
 
   ConnectIntervals(manager, interval->previous, interval->next);
   if (CostIntervalIsInFreeList(manager, interval)) {
@@ -546,12 +578,28 @@ static WEBP_INLINE void PositionOrphanInterval(CostManager* const manager,
                                                CostInterval* previous) {
   assert(current != NULL);
 
-  if (previous == NULL) previous = manager->head;
+  if (previous == NULL) {
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
+    if (manager->use_interval_search_v1 && manager->tail != NULL &&
+        current->start > manager->tail->start) {
+      previous = manager->tail;
+      INTERVAL_SEARCH_RECORD(
+          VP8LBackrefCostIntervalSearchV1RecordTailFastPath());
+    } else
+#endif
+    {
+      previous = manager->head;
+    }
+  }
   while (previous != NULL && current->start < previous->start) {
+    INTERVAL_SEARCH_RECORD(
+        VP8LBackrefCostIntervalSearchV1RecordPositionBackwardStep());
     previous = previous->previous;
   }
   while (previous != NULL && previous->next != NULL &&
          previous->next->start < current->start) {
+    INTERVAL_SEARCH_RECORD(
+        VP8LBackrefCostIntervalSearchV1RecordPositionForwardStep());
     previous = previous->next;
   }
 
@@ -572,6 +620,8 @@ static WEBP_INLINE void InsertInterval(CostManager* const manager,
   CostInterval* interval_new;
 
   if (start >= end) return;
+  INTERVAL_SEARCH_RECORD(
+      VP8LBackrefCostIntervalSearchV1RecordInsert(interval_in == NULL));
   if (manager->count >= COST_CACHE_INTERVAL_SIZE_MAX) {
     // Serialize the interval if we cannot store it.
     UpdateCostPerInterval(manager, start, end, position, cost);
@@ -604,6 +654,8 @@ static WEBP_INLINE void InsertInterval(CostManager* const manager,
   PositionOrphanInterval(manager, interval_new, interval_in);
 
   ++manager->count;
+  INTERVAL_SEARCH_RECORD(
+      VP8LBackrefCostIntervalSearchV1RecordLiveIntervals(manager->count));
 }
 
 // Given a new cost interval defined by its start at position, its length value
@@ -621,6 +673,9 @@ static WEBP_INLINE void PushInterval(CostManager* const manager,
   // If the interval is small enough, no need to deal with the heavy
   // interval logic, just serialize it right away. This constant is empirical.
   const int kSkipDistance = 10;
+
+  INTERVAL_SEARCH_RECORD(
+      VP8LBackrefCostIntervalSearchV1RecordPush(len < kSkipDistance));
 
   if (len < kSkipDistance) {
     int j;
@@ -648,9 +703,15 @@ static WEBP_INLINE void PushInterval(CostManager* const manager,
         (cost_cache_intervals[i].end > len ? len : cost_cache_intervals[i].end);
     const int64_t cost = distance_cost + cost_cache_intervals[i].cost;
 
+    INTERVAL_SEARCH_RECORD(
+        VP8LBackrefCostIntervalSearchV1RecordCacheSegment());
+
     for (; interval != NULL && interval->start < end;
          interval = interval_next) {
       interval_next = interval->next;
+
+      INTERVAL_SEARCH_RECORD(VP8LBackrefCostIntervalSearchV1RecordOverlapScan(
+          start >= interval->end));
 
       // Make sure we have some overlap
       if (start >= interval->end) continue;
@@ -722,6 +783,10 @@ static int BackwardReferencesHashChainDistanceOnly(
     ,
     int use_experiment, int* const experiment_setup_failed
 #endif
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
+    ,
+    int use_interval_search_v1
+#endif
 ) {
   int i;
   int ok = 0;
@@ -757,6 +822,10 @@ static int BackwardReferencesHashChainDistanceOnly(
 #if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
                        ,
                        use_experiment, experiment_setup_failed
+#endif
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
+                       ,
+                       use_interval_search_v1
 #endif
                        )) {
     goto Error;
@@ -936,7 +1005,25 @@ int VP8LBackwardReferencesTraceBackwards(int xsize, int ysize,
 
   if (dist_array == NULL) goto Error;
 
-#if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
+  if (VP8LBackrefCostIntervalSearchV1ExperimentEnabled()) {
+    INTERVAL_SEARCH_RECORD(
+        VP8LBackrefCostIntervalSearchV1RecordActivation());
+    if (VP8LBackrefCostIntervalSearchV1ExperimentInjectFallback()) {
+      INTERVAL_SEARCH_RECORD(
+          VP8LBackrefCostIntervalSearchV1RecordInjectedFallback());
+      if (!BackwardReferencesHashChainDistanceOnly(
+              xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array,
+              /*use_interval_search_v1=*/0)) {
+        goto Error;
+      }
+    } else if (!BackwardReferencesHashChainDistanceOnly(
+                   xsize, ysize, argb, cache_bits, hash_chain, refs_src,
+                   dist_array, /*use_interval_search_v1=*/1)) {
+      goto Error;
+    }
+  } else
+#elif defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
   if (VP8LBackrefCostTracebackExperimentEnabled()) {
     int experiment_setup_failed = 0;
     if (!BackwardReferencesHashChainDistanceOnly(
@@ -957,6 +1044,10 @@ int VP8LBackwardReferencesTraceBackwards(int xsize, int ysize,
 #if defined(WEBP_USE_BACKREF_COST_WORKSPACE_CANDIDATE)
             ,
             /*use_experiment=*/0, NULL
+#endif
+#if defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
+            ,
+            /*use_interval_search_v1=*/0
 #endif
             )) {
       goto Error;

@@ -1,0 +1,18 @@
+{
+  "benchmark_lease_attempted": false,
+  "cleanup_receipt": {
+    "absence_proved": true,
+    "home": "/Users/pandocs-agent-001",
+    "removed_exact_validated_child": true,
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v1/run.II2kvQ",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v1",
+    "token": "run.II2kvQ",
+    "validated": true
+  },
+  "failure_stage": "admission-only malformed-bundle scp fixture",
+  "reason": "local fixture transfer stalled; only the phase-owned local scp/ssh/parent processes were terminated",
+  "remote_safe_root_children_after_cleanup": 0,
+  "schema": "libwebp-backref-cost-interval-search-v1-controlled-rehearsal-cleanup-v1",
+  "status": "CONTROLLED_CLEANUP",
+  "timed_runner_invoked": false
+}

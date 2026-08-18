@@ -1,0 +1,9 @@
+{
+  "acquired": true,
+  "acquired_at_utc": "2026-08-18T21:15:13Z",
+  "acquisition_attempted": true,
+  "path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v1.lock",
+  "released": true,
+  "released_at_utc": "2026-08-18T21:24:01Z",
+  "schema": "libwebp-backref-cost-interval-search-v1-lease-v1"
+}
