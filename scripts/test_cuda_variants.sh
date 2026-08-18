@@ -58,4 +58,14 @@ build_and_test baseline \
   -DWEBP_CUDA_ENABLE_RGB_PACKED4_LOADS=OFF \
   -DWEBP_CUDA_ENABLE_STREAM_ORDERED_ALLOCATIONS=OFF
 
-printf 'PASS: default and baseline CUDA compile-time variants\n'
+all_disabled_dir="$temporary_dir/all-stages-disabled"
+"$cmake_command" -S "$root_dir" -B "$all_disabled_dir" \
+  -DWEBP_ENABLE_CUDA=ON \
+  -DWEBP_BUILD_EXTRAS=OFF \
+  -DWEBP_CUDA_ENABLE_COLOR_TRANSFORM=OFF \
+  -DWEBP_CUDA_ENABLE_HASH_CHAIN=OFF \
+  -DWEBP_CUDA_ENABLE_RGB_TO_YUV=OFF \
+  -DWEBP_CUDA_ENABLE_NEAR_LOSSLESS=OFF
+"$cmake_command" --build "$all_disabled_dir" --target webp -j
+
+printf 'PASS: default, baseline, and all-stage-disabled CUDA variants\n'

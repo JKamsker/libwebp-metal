@@ -40,9 +40,17 @@ static void UnlockCudaMutex(CudaMutex* mutex) {
 }
 #endif
 
+#include <algorithm>
 #include <limits>
 
 namespace {
+
+#if defined(WEBP_CUDA_ENABLE_COLOR_TRANSFORM) || \
+    defined(WEBP_CUDA_ENABLE_HASH_CHAIN) || \
+    defined(WEBP_CUDA_ENABLE_RGB_TO_YUV) || \
+    defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS)
+#define WEBP_CUDA_HAS_ENCODER_STAGE 1
+#endif
 
 // The batch cutoffs conservatively amortize the measured cold runtime cost
 // using the batch-6 PNG/JPEG crossover. Callers can recalibrate every value
@@ -90,7 +98,9 @@ constexpr unsigned int kRGBThreadsPerBlock = 256u;
 constexpr unsigned int kRGBThreadsPerBlock = 128u;
 #endif
 #endif
+#if defined(WEBP_CUDA_HAS_ENCODER_STAGE)
 constexpr size_t kMinimumAllocation = 16u * 1024u;
+#endif
 
 #if defined(WEBP_CUDA_ENABLE_RESTRICT_POINTERS)
 #define WEBP_CUDA_RESTRICT __restrict__
@@ -149,6 +159,7 @@ struct CudaState {
   size_t host_transform_capacity = 0;
   size_t host_chain_capacity = 0;
   bool gamma_initialized = false;
+  uint32_t successful_stages = 0;
   char device_name[256] = {0};
 };
 
@@ -163,6 +174,7 @@ bool EnvironmentFlag(const char* name, bool default_value) {
          WEBP_CUDA_STRCASECMP(value, "no") != 0;
 }
 
+#if defined(WEBP_CUDA_HAS_ENCODER_STAGE)
 bool ParseEnvironmentSize(const char* name, size_t* parsed_value) {
   const char* const value = getenv(name);
   char* end = nullptr;
@@ -215,7 +227,9 @@ bool HasProfitableNearLosslessBatchHint(void) {
                       kDefaultNearLosslessBatchMinimumPixels));
 }
 #endif
+#endif  // WEBP_CUDA_HAS_ENCODER_STAGE
 
+#if defined(WEBP_CUDA_HAS_ENCODER_STAGE)
 int EnvironmentDevice(void) {
   const char* const value = getenv("WEBP_CUDA_DEVICE");
   char* end = nullptr;
@@ -229,6 +243,7 @@ int EnvironmentDevice(void) {
   }
   return static_cast<int>(parsed);
 }
+#endif  // WEBP_CUDA_HAS_ENCODER_STAGE
 
 #if defined(WEBP_CUDA_ENABLE_COLOR_TRANSFORM)
 
@@ -808,6 +823,7 @@ __global__ void RGBToYUV420Kernel(
 
 #endif  // WEBP_CUDA_ENABLE_RGB_TO_YUV
 
+#if defined(WEBP_CUDA_HAS_ENCODER_STAGE)
 WebPAcceleratorResult Initialize(CudaState* state) {
   int device_count = 0;
   cudaError_t error;
@@ -865,7 +881,9 @@ WebPAcceleratorResult Initialize(CudaState* state) {
   }
   return WEBP_ACCELERATOR_SUCCESS;
 }
+#endif  // WEBP_CUDA_HAS_ENCODER_STAGE
 
+#if defined(WEBP_CUDA_HAS_ENCODER_STAGE)
 bool EnsureTimingEvents(CudaState* state) {
   cudaError_t error;
   if (state->event_start != nullptr && state->event_stop != nullptr) {
@@ -888,6 +906,8 @@ bool EnsureTimingEvents(CudaState* state) {
   return false;
 }
 
+// All staging capacities are byte counts. The buffer templates preserve the
+// typed pointer only; requested and new_capacity deliberately remain bytes.
 bool RoundedCapacity(size_t requested, size_t current, size_t* capacity) {
   size_t result = current < kMinimumAllocation ? kMinimumAllocation : current;
   while (result < requested) {
@@ -961,6 +981,7 @@ bool EnsureHostBuffer(T** buffer, size_t* capacity, size_t requested) {
   *capacity = new_capacity;
   return true;
 }
+#endif  // WEBP_CUDA_HAS_ENCODER_STAGE
 
 template <typename T>
 void FreeHostBuffer(T* buffer) {
@@ -971,6 +992,7 @@ void FreeHostBuffer(T* buffer) {
 #endif
 }
 
+#if defined(WEBP_CUDA_HAS_ENCODER_STAGE)
 cudaError_t UploadToDevice(void* destination, const void* source, size_t bytes,
                            cudaStream_t stream) {
   cudaError_t error = cudaMemcpyAsync(destination, source, bytes,
@@ -999,6 +1021,7 @@ cudaError_t FinishDownloads(cudaStream_t stream) {
   return cudaSuccess;
 #endif
 }
+#endif  // WEBP_CUDA_HAS_ENCODER_STAGE
 
 void ReleaseStagingBuffers(CudaState* state) {
 #if defined(WEBP_CUDA_ENABLE_STREAM_ORDERED_ALLOCATIONS)
@@ -1199,6 +1222,10 @@ WebPAcceleratorResult CUDAColorTransform(
   WebPAcceleratorResult result;
   LockCudaMutex(&g_cuda_mutex);
   result = CUDAColorTransformLocked(context, request);
+  if (result == WEBP_ACCELERATOR_SUCCESS) {
+    g_cuda_state.successful_stages |=
+        WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM;
+  }
   UnlockCudaMutex(&g_cuda_mutex);
   return result;
 }
@@ -1233,6 +1260,9 @@ WebPAcceleratorResult CUDANearLosslessLocked(
     return WEBP_ACCELERATOR_ERROR;
   }
   pixel_count = static_cast<size_t>(request->width) * request->height;
+  if (pixel_count > std::numeric_limits<uint32_t>::max()) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
   const bool profitable_batch = HasProfitableNearLosslessBatchHint();
   // One- and two-pass CPU preprocessing remained faster than a cold CUDA
   // runtime at the largest measured size. An explicit threshold remains a
@@ -1244,11 +1274,13 @@ WebPAcceleratorResult CUDANearLosslessLocked(
       !has_explicit_threshold) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
-  if (pixel_count < EnvironmentSize(
-                        "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS",
-                        state->available || profitable_batch
-                            ? kDefaultNearLosslessWarmMinimumPixels
-                            : kDefaultNearLosslessColdMinimumPixels)) {
+  const size_t threshold =
+      has_explicit_threshold
+          ? explicit_threshold
+          : state->available || profitable_batch
+                ? kDefaultNearLosslessWarmMinimumPixels
+                : kDefaultNearLosslessColdMinimumPixels;
+  if (pixel_count < threshold) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
   if (pixel_count > std::numeric_limits<size_t>::max() / sizeof(uint32_t)) {
@@ -1344,6 +1376,9 @@ WebPAcceleratorResult CUDANearLossless(
   WebPAcceleratorResult result;
   LockCudaMutex(&g_cuda_mutex);
   result = CUDANearLosslessLocked(context, request);
+  if (result == WEBP_ACCELERATOR_SUCCESS) {
+    g_cuda_state.successful_stages |= WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS;
+  }
   UnlockCudaMutex(&g_cuda_mutex);
   return result;
 }
@@ -1488,6 +1523,10 @@ WebPAcceleratorResult CUDAHashChain(
   WebPAcceleratorResult result;
   LockCudaMutex(&g_cuda_mutex);
   result = CUDAHashChainLocked(context, request);
+  if (result == WEBP_ACCELERATOR_SUCCESS) {
+    g_cuda_state.successful_stages |=
+        WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN;
+  }
   UnlockCudaMutex(&g_cuda_mutex);
   return result;
 }
@@ -1597,17 +1636,23 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
     return WEBP_ACCELERATOR_ERROR;
   }
   output_size = pixel_count + 2u * uv_size;
-  const size_t last_row_size =
-      static_cast<size_t>(request->width) * request->step;
-  if (static_cast<size_t>(request->source_stride) < last_row_size ||
+  const size_t maximum_channel_offset =
+      std::max(red_offset, std::max(green_offset, blue_offset));
+  const size_t last_row_extent =
+      static_cast<size_t>(request->width - 1) * request->step +
+      maximum_channel_offset + 1u;
+  if (static_cast<size_t>(request->source_stride) < last_row_extent ||
       static_cast<size_t>(request->height - 1) >
-          (std::numeric_limits<size_t>::max() - last_row_size) /
+          (std::numeric_limits<size_t>::max() - last_row_extent) /
               static_cast<size_t>(request->source_stride)) {
     return WEBP_ACCELERATOR_ERROR;
   }
   source_size = static_cast<size_t>(request->height - 1) *
                     request->source_stride +
-                last_row_size;
+                last_row_extent;
+  if (source_size > std::numeric_limits<uint32_t>::max()) {
+    return WEBP_ACCELERATOR_NOT_RUN;
+  }
   params = {static_cast<uint32_t>(request->width),
             static_cast<uint32_t>(request->height),
             static_cast<uint32_t>(request->step),
@@ -1618,7 +1663,9 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
             static_cast<uint32_t>(pixel_count),
             static_cast<uint32_t>(uv_size),
             static_cast<uint32_t>(request->step == 4 &&
-                                  request->source_stride % 4 == 0)};
+                                  request->source_stride % 4 == 0 &&
+                                  maximum_channel_offset + 1u ==
+                                      static_cast<size_t>(request->step))};
 
   if (state->quarantined) return WEBP_ACCELERATOR_NOT_RUN;
   const WebPAcceleratorResult initialized = Initialize(state);
@@ -1728,6 +1775,9 @@ WebPAcceleratorResult CUDARGBToYUV(
   WebPAcceleratorResult result;
   LockCudaMutex(&g_cuda_mutex);
   result = CUDARGBToYUVLocked(context, request);
+  if (result == WEBP_ACCELERATOR_SUCCESS) {
+    g_cuda_state.successful_stages |= WEBP_ACCELERATOR_STAGE_RGB_TO_YUV;
+  }
   UnlockCudaMutex(&g_cuda_mutex);
   return result;
 }
@@ -1823,4 +1873,18 @@ static const WebPEncoderAccelerator kCUDAEncoderAccelerator = {
 
 extern "C" const WebPEncoderAccelerator* WebPGetCUDAEncoderAccelerator(void) {
   return &kCUDAEncoderAccelerator;
+}
+
+extern "C" void WebPCUDAResetSuccessfulStages(void) {
+  LockCudaMutex(&g_cuda_mutex);
+  g_cuda_state.successful_stages = 0;
+  UnlockCudaMutex(&g_cuda_mutex);
+}
+
+extern "C" uint32_t WebPCUDAGetSuccessfulStages(void) {
+  uint32_t stages;
+  LockCudaMutex(&g_cuda_mutex);
+  stages = g_cuda_state.successful_stages;
+  UnlockCudaMutex(&g_cuda_mutex);
+  return stages;
 }

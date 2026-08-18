@@ -135,13 +135,13 @@ The portable file-to-WebP suite measures real PNG and JPEG inputs in both a
 persistent 24-item process and fresh `cwebp` processes. It requires Python
 3.9 or newer, Pillow, and a build with PNG and JPEG input support:
 
-~~~sh
+```sh
 python3 scripts/benchmark_cuda_end_to_end.py run \
   --build-dir build-cuda --output-dir /tmp/webp-cuda-results \
   --label "workstation / RTX 2080 SUPER"
 python3 scripts/benchmark_cuda_end_to_end.py report \
   system-a/results.json system-b/results.json
-~~~
+```
 
 Each run preserves all samples and commands in `raw.jsonl`, normalized system,
 binary, corpus, and aggregate metadata in `results.json`, and a human-readable

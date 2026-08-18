@@ -155,5 +155,5 @@ if grep -q "WebP-CUDA: using" "$cold_log"; then
   echo "small default encode initialized CUDA before its cold threshold" >&2
   exit 1
 fi
-printf 'PASS: observed forced color/hash/RGB CUDA stages\n'
+printf 'PASS: observed forced color/hash/RGB/near-lossless CUDA stages\n'
 printf 'PASS: lossy CUDA remains opt-in by default\n'

@@ -6,6 +6,7 @@
 
 #define _POSIX_C_SOURCE 200809L
 
+#include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -184,6 +185,59 @@ cleanup:
   return ok;
 }
 
+static int TestOversizedKernelExtents(int require_near_lossless) {
+  uint32_t near_source = 0xff123456u;
+  uint32_t near_output = 0xdeadbeefu;
+  uint8_t rgb_source[3] = {1, 2, 3};
+  uint8_t y[4] = {0xaa, 0xaa, 0xaa, 0xaa};
+  uint8_t u[2] = {0xbb, 0xbb};
+  uint8_t v[2] = {0xcc, 0xcc};
+  WebPAcceleratorNearLosslessRequest near_request;
+  WebPAcceleratorRGBToYUVRequest rgb_request;
+  WebPAcceleratorResult result;
+
+  setenv("WEBP_ACCELERATOR", "cuda", 1);
+  setenv("WEBP_CUDA", "1", 1);
+  setenv("WEBP_CUDA_NEAR_LOSSLESS", "1", 1);
+  setenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "0", 1);
+  near_request.source = &near_source;
+  near_request.source_stride = INT_MAX;
+  near_request.width = INT_MAX;
+  near_request.height = 3;
+  near_request.limit_bits = 3;
+  near_request.output = &near_output;
+  result = WebPAccelerateNearLossless(&near_request);
+  if ((require_near_lossless && result != WEBP_ACCELERATOR_ERROR) ||
+      (!require_near_lossless && result != WEBP_ACCELERATOR_NOT_RUN) ||
+      near_output != 0xdeadbeefu) {
+    fprintf(stderr, "oversized near-lossless extent returned %d\n",
+            (int)result);
+    return 0;
+  }
+
+  setenv("WEBP_CUDA_LOSSY", "1", 1);
+  setenv("WEBP_CUDA_LOSSY_MIN_PIXELS", "0", 1);
+  rgb_request.red = rgb_source;
+  rgb_request.green = rgb_source + 1;
+  rgb_request.blue = rgb_source + 2;
+  rgb_request.step = 3;
+  rgb_request.source_stride = INT_MAX;
+  rgb_request.width = 1;
+  rgb_request.height = 4;
+  rgb_request.y = y;
+  rgb_request.u = u;
+  rgb_request.v = v;
+  rgb_request.y_stride = 1;
+  rgb_request.uv_stride = 1;
+  result = WebPAccelerateRGBToYUV(&rgb_request);
+  if (result != WEBP_ACCELERATOR_NOT_RUN || y[0] != 0xaa || u[0] != 0xbb ||
+      v[0] != 0xcc) {
+    fprintf(stderr, "oversized RGB source extent returned %d\n", (int)result);
+    return 0;
+  }
+  return 1;
+}
+
 int main(int argc, const char* const argv[]) {
   static const Dimensions kDimensions[] = {
       {64, 3}, {65, 67}, {257, 129}, {1024, 768}};
@@ -197,6 +251,7 @@ int main(int argc, const char* const argv[]) {
     return 2;
   }
   if (!TestDeclinePreservesOutput()) return 1;
+  if (!TestOversizedKernelExtents(require_cuda)) return 1;
   for (i = 0; i < sizeof(kDimensions) / sizeof(kDimensions[0]); ++i) {
     for (bits = 1; bits <= 5; ++bits) {
       if (!RunCase(kDimensions[i], bits, require_cuda)) return 1;

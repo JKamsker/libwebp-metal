@@ -356,7 +356,7 @@ static int RunBatch(const Options* const options, uint64_t* const elapsed_ns,
     WebPMemoryWriterClear(&writer);
   }
   end = NowNanoseconds();
-  if (begin == 0 || end < begin) return 0;
+  if (begin == 0 || end <= begin) return 0;
   *elapsed_ns = end - begin;
   *output_hash = hash;
   *output_bytes = bytes;

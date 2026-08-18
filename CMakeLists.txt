@@ -17,8 +17,10 @@ project(WebP C)
 # Options for coder / decoder executables.
 if(BUILD_SHARED_LIBS)
   set(WEBP_LINK_STATIC_DEFAULT OFF)
+  set(WEBP_BUILD_SHARED ON)
 else()
   set(WEBP_LINK_STATIC_DEFAULT ON)
+  set(WEBP_BUILD_SHARED OFF)
 endif()
 option(WEBP_LINK_STATIC
        "Link using static libraries. If OFF, use dynamic libraries."

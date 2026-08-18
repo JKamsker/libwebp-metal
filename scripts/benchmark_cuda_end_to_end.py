@@ -444,7 +444,17 @@ def validate_single(
                     decoded_equal = (
                         decoded_paths[0].read_bytes() == decoded_paths[1].read_bytes()
                     )
-                    passed = output_equal if mode == "lossy" else decoded_equal
+                    # The RGB-to-YUV stage promises the exact CPU bitstream.
+                    # Lossless color search may choose a different valid
+                    # transform, so those modes promise decoded-pixel parity.
+                    required_equality = (
+                        "encoded_bytes" if mode == "lossy" else "decoded_pixels"
+                    )
+                    passed = (
+                        output_equal
+                        if required_equality == "encoded_bytes"
+                        else decoded_equal
+                    )
                     record = {
                         "operation": "single_validation",
                         "format": image_format,
@@ -453,6 +463,7 @@ def validate_single(
                         "repetition": repetition,
                         "output_equal": output_equal,
                         "decoded_equal": decoded_equal,
+                        "required_equality": required_equality,
                         "cpu_output_sha256": cpu["output_sha256"],
                         "cuda_output_sha256": cuda["output_sha256"],
                         "cpu_decoded_sha256": sha256(decoded_paths[0]),
@@ -632,7 +643,9 @@ def system_metadata(args: argparse.Namespace, pillow_version: str) -> dict[str, 
             "--format=csv,noheader",
         ]
     )
-    label = args.label or f"{socket.gethostname()} / {gpu.splitlines()[0]}"
+    gpu_lines = gpu.splitlines()
+    gpu_name = gpu_lines[0] if gpu_lines else "unknown gpu"
+    label = args.label or f"{socket.gethostname()} / {gpu_name}"
     return {
         "label": label,
         "hostname": socket.gethostname(),
@@ -740,6 +753,11 @@ def run_suite(args: argparse.Namespace) -> int:
             "near_lossless": 40,
             "file_io": "page-cached unless the operator documents otherwise",
             "cuda_policy": "forced stages for matched CPU/CUDA comparison",
+            "validation_policy": {
+                "lossy": "encoded_bytes",
+                "lossless": "decoded_pixels",
+                "near-lossless": "decoded_pixels",
+            },
             "outputs_retained": args.keep_outputs,
             "binaries": {
                 name: {"path": str(path), "sha256": sha256(path)}
@@ -755,6 +773,12 @@ def run_suite(args: argparse.Namespace) -> int:
         "validation_counts": {
             "total": len(single_validation),
             "passed": sum(row["pass"] for row in single_validation),
+            "encoded_exact": sum(
+                row["output_equal"] for row in single_validation
+            ),
+            "decoded_exact": sum(
+                row["decoded_equal"] for row in single_validation
+            ),
             "lossy_exact": sum(
                 row["mode"] == "lossy" and row["output_equal"]
                 for row in single_validation
@@ -787,6 +811,12 @@ def report_results(args: argparse.Namespace) -> int:
         if result.get("schema") != SCHEMA:
             raise RuntimeError(
                 f"{path}: unsupported schema {result.get('schema')!r}"
+            )
+        if result.get("configuration", {}).get("verify_only") or not result.get(
+            "summary"
+        ):
+            raise RuntimeError(
+                f"{path}: verify-only results contain no summary to report"
             )
     reference = results[0]
     reference_corpus = {

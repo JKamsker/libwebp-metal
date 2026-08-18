@@ -15,7 +15,7 @@ the active runner; their original raw rows remain preserved in
 
 | Idea | Experiment names | What is exercised |
 |---|---|---|
-| Cross-color redesign | `color_baseline`, `color_shared_tile` | Matched per-tile transform histogram control and the retained shared-pixel strategy |
+| Cross-color redesign | `color_histogram_throughput`, `color_baseline`, `color_shared_tile` | Separate histogram-throughput checksum plus transfer-equivalent score controls for the retained shared-pixel strategy |
 | Device-resident lossless pipeline | `staged_lossless_pipeline`, `resident_lossless_pipeline` | Matched per-stage round-trip control and one-upload pipeline across predictor residuals, subtract-green, cross-color, and hash-signature generation |
 | Predictor search/residuals | `predictor_search_residual_cpu`, `predictor_search_residual` | Matched CPU/GPU batched tile mode scoring followed by residual generation |
 | SharpYUV | `sharpyuv_iterative_cpu`, `sharpyuv_iterative` | Matched CPU/GPU fixed-point 2x2 RGB-to-YUV conversion with four chroma correction iterations |

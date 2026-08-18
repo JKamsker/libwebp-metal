@@ -357,13 +357,22 @@ iterations. Matched speedup is `median(control) / median(case)`; values above
 1x are faster than the matched control. The checksum column is the single
 checksum observed for all five repetitions of that case.
 
+**Correction:** the five historical color cases below are not valid matched
+comparisons. `color_baseline` copied full histograms to the host and reduced
+them on the CPU, while the other cases copied device-reduced scores. Their raw
+times and checksums are preserved, but their displayed historical ratios must
+not be used. The runner now exposes the old work separately as
+`color_histogram_throughput`; the new `color_baseline` performs device
+reduction and transfers the same score bytes as `color_shared_tile`. No
+replacement timing has been collected yet.
+
 | Experiment | Median total ms (100 iters) | Median ms/iteration | Matched control | Speedup | Stable checksum |
 | --- | ---: | ---: | --- | ---: | --- |
-| `color_baseline` | 22.498958 | 0.224990 | `color_baseline` | 1.0000x | `5e40fe7c4b95d8d7` |
-| `color_shared_tile` | 11.487743 | 0.114877 | `color_baseline` | 1.9585x | `5e40fe7c4b95d8d7` |
-| `color_warp_histograms` | 47.530613 | 0.475306 | `color_baseline` | 0.4734x | `5e40fe7c4b95d8d7` |
-| `color_parallel_entropy` | 103.496822 | 1.034968 | `color_baseline` | 0.2174x | `5e40fe7c4b95d8d7` |
-| `color_specialized_kernel` | 89.581876 | 0.895819 | `color_baseline` | 0.2512x | `5e40fe7c4b95d8d7` |
+| `color_baseline` | 22.498958 | 0.224990 | invalid transfer-heavy control | — | `5e40fe7c4b95d8d7` |
+| `color_shared_tile` | 11.487743 | 0.114877 | none | — | `5e40fe7c4b95d8d7` |
+| `color_warp_histograms` | 47.530613 | 0.475306 | none | — | `5e40fe7c4b95d8d7` |
+| `color_parallel_entropy` | 103.496822 | 1.034968 | none | — | `5e40fe7c4b95d8d7` |
+| `color_specialized_kernel` | 89.581876 | 0.895819 | none | — | `5e40fe7c4b95d8d7` |
 | `context_pool` | 96.894932 | 0.968949 | none | — | `1458512bb9454275` |
 | `resident_lossless_pipeline` | 39.372590 | 0.393726 | none | — | `eb409c0a5af49b66` |
 | `predictor_search_residual` | 7.128868 | 0.071289 | none | — | `d53a6cc1b6e54b4f` |
@@ -375,11 +384,9 @@ checksum observed for all five repetitions of that case.
 | `lossy_macroblock_scoring` | 72.377518 | 0.723775 | none | — | `8b646761439d9e9d` |
 | `graphs_double_buffer` | 73.783292 | 0.737833 | none | — | `1458512bb9454275` |
 
-The color variants have a valid matched control: `color_shared_tile` is
-1.9585x faster, while `color_warp_histograms`, `color_parallel_entropy`,
-and `color_specialized_kernel` are slower than `color_baseline` under this
-runner. The hash warp-cooperative case is 0.2446x as fast as `hash_scalar`
-(about 4.09x slower).
+The historical color variants have no valid matched control because their
+transfer and reduction work differed. The hash warp-cooperative case remains
+0.2446x as fast as `hash_scalar` (about 4.09x slower).
 
 `context_pool`, `resident_lossless_pipeline`, and `graphs_double_buffer`
 are lifecycle/transfer or resident-pipeline cases and have no valid matched

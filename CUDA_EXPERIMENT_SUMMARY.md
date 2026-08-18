@@ -9,10 +9,10 @@ that hardware and workload.
 
 | Strategy | Measured result | Decision |
 |---|---:|---|
-| Cross-color shared source tile | Lab: 1.9585x faster than its matched control. Production kernel: 7.8% faster at 1024x1024 and 8.1% faster at 2048x2048. | Integrated with actual-size dynamic shared memory; enabled by default. |
-| Cross-color warp-private histograms | 0.4734x control speed, or 2.11x slower. | Removed. |
-| Cross-color parallel score/entropy reduction | 0.2174x control speed, or 4.60x slower. | Removed. Atomic reduction and extra synchronization overwhelmed the work saved. |
-| Combined specialized color kernel | 0.2512x control speed, or 3.98x slower. | Removed. This was confounded by also enabling the losing warp/parallel paths, so specialization alone remains unproven. |
+| Cross-color shared source tile | Historical lab ratio invalid: its control copied full histograms and reduced on the CPU. Production kernel: 7.8% faster at 1024x1024 and 8.1% faster at 2048x2048. | Integrated from the valid production A/B with actual-size dynamic shared memory; enabled by default. |
+| Cross-color warp-private histograms | Historical control ratio invalid because transfer and reduction work differed. | Removed; no valid matched performance claim is retained. |
+| Cross-color parallel score/entropy reduction | Historical control ratio invalid because transfer and reduction work differed. | Removed; atomic reduction and synchronization remain unpromising, but the old ratio is not evidence. |
+| Combined specialized color kernel | Historical control ratio invalid and also confounded by the warp/parallel paths. | Removed; specialization alone remains unproven. |
 | Warp-cooperative hash matching | 0.2446x scalar speed, or 4.09x slower. | Removed. The lane-per-match mapping wasted work on the short matches in this corpus. |
 | Four-context pool | 0.992494 ms/iteration versus 0.721941 ms serial: 0.7274x control speed, or 37.5% slower. | Removed. Extra streams, buffers, and smaller launches lost to the simple serial path. |
 | Resident lossless pipeline | 0.419031 ms/iteration versus 2.822457 ms with equivalent stage round trips: 6.74x faster. | Retained as the highest-priority pipeline experiment; production semantics and ownership still need implementation. |
@@ -24,8 +24,11 @@ that hardware and workload.
 | CUDA graphs plus double buffering | 0.766127 ms/iteration versus 0.768430 ms with direct launches: 1.0030x, a noise-level 0.3%. The simpler serial path was faster than either. | Removed. No material graph benefit at this launch count, and buffering added overhead. |
 
 All original and follow-up benchmark rows produced stable expected checksums.
-The active lab no longer builds rejected implementations; their code was
-removed, while their measurements remain in the raw artifact.
+The historical color rows remain raw evidence, but their ratios are not matched
+comparisons because the baseline transferred and reduced different data. The
+active lab now separates that histogram-throughput case and gives the matched
+baseline a device reduction plus the same score transfer as the shared-tile
+case. Rejected implementations remain removed.
 
 The matched CPU-control follow-ups used 20 setup-inclusive iterations in each
 of five fresh runs. Predictor, SharpYUV, near-lossless, histogram, and lossy

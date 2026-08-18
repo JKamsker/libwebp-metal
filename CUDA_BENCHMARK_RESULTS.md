@@ -33,6 +33,12 @@ different cold and warm defaults. A stage that declines does not initialize the
 runtime, while any successful CUDA stage makes later stages eligible for their
 lower warm threshold.
 
+The backend has one process-wide mutex and one shared staging set. Concurrent
+encoder calls therefore queue at every CUDA stage; these warm thresholds and
+throughput measurements describe one active caller. A per-thread or bounded
+resource pool remains future work if concurrent GPU throughput becomes a
+target.
+
 Forced-stage PNG/JPEG measurements refined that policy. Persistent lossy
 batches ranged from 0.981x to 1.012x, so lossy CUDA is now runtime opt-in.
 Fresh-process CUDA was slower for every measured encoding mode because each
@@ -104,7 +110,11 @@ measures each configuration with:
 The CUDA side deliberately forces every eligible CUDA stage. This isolates
 hardware capability from the conservative production dispatch policy. Before
 timing, the runner checks deterministic encoded hashes and decoded-pixel
-parity. It records the randomized execution order, exact commands, raw
+parity. Lossy RGB conversion requires byte-identical CPU/CUDA WebP output;
+lossless and near-lossless require decoded-pixel parity because accelerated
+color search may legitimately choose a different valid transform. Each raw
+validation row records which equality policy applies. The runner records the
+randomized execution order, exact commands, raw
 nanosecond samples, output hashes, corpus hashes, binary hashes, build revision,
 CPU, GPU, driver, CUDA toolkit, and relevant software versions. Its
 `report.md` uses the compact `Method | CPU time | CUDA time | Speedup`

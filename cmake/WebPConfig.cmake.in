@@ -9,7 +9,7 @@ endif()
 if(@WEBP_USE_THREAD@ OR @WEBP_ENABLE_CUDA@)
   find_dependency(Threads REQUIRED)
 endif()
-if(@WEBP_ENABLE_CUDA@)
+if(@WEBP_ENABLE_CUDA@ AND NOT @WEBP_BUILD_SHARED@)
   find_dependency(CUDAToolkit REQUIRED)
 endif()
 

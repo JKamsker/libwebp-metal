@@ -13,6 +13,9 @@ delegation.
 1. Define one bounded task with its exact repository, branch or immutable
    commit, allowed files, expected artifact, validation, and completion
    criteria.
+   For a benchmark or experiment, assign exactly one predefined measurement
+   row and include its command, build option, runtime opt-in, corpus or preset,
+   output directory, and exclusive output lease.
 2. Create or resume the worker task with the user-requested model and reasoning
    effort. Record its task/thread ID and host ID when available.
 3. Include the originating task ID in the worker prompt.
@@ -67,6 +70,8 @@ The lifecycle is complete only when all four conditions hold:
 
 - Assign branch and worktree ownership explicitly. Never let two active tasks
   assume exclusive ownership of the same mutable checkout.
+- Give each benchmark or experiment worker an exclusive output lease. Never
+  assign multiple measurement rows or a shared output directory to one worker.
 - Prefer an immutable starting commit for measurements and reviews.
 - Tell the worker whether it may edit, commit, push, or update a PR.
 - Require a narrow commit scope when the worker produces raw evidence.

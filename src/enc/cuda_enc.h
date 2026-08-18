@@ -13,6 +13,11 @@ extern "C" {
 
 const WebPEncoderAccelerator* WebPGetCUDAEncoderAccelerator(void);
 
+// Internal benchmark instrumentation. Stage bits are set only after a CUDA
+// callback returns SUCCESS.
+void WebPCUDAResetSuccessfulStages(void);
+uint32_t WebPCUDAGetSuccessfulStages(void);
+
 #ifdef __cplusplus
 }  // extern "C"
 #endif

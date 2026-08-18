@@ -12,6 +12,7 @@
 #include <string.h>
 #include <time.h>
 
+#include "src/enc/cuda_enc.h"
 #include "src/enc/vp8li_enc.h"
 #include "webp/encode.h"
 
@@ -26,6 +27,8 @@ typedef struct {
   int height;
   int method;
   int near_lossless_quality;
+  int near_lossless_quality_set;
+  int verify_only;
   int warmups;
   int samples;
   uint32_t seed;
@@ -35,7 +38,8 @@ static void Usage(const char* program) {
   fprintf(stderr,
           "Usage: %s --operation color|hash|near-lossless|lossless|lossy "
           "--variant cpu|cuda --width N --height N --method 0..6 "
-          "[--quality 0..99] [--warmups N] [--samples N] [--seed N]\n",
+          "[--quality 0..99 (near-lossless only)] "
+          "[--warmups N] [--samples N] [--seed N] [--verify-only]\n",
           program);
 }
 
@@ -62,7 +66,12 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
   options->seed = 1;
   for (i = 1; i < argc; ++i) {
     const char* const flag = argv[i];
-    const char* value = i + 1 < argc ? argv[++i] : NULL;
+    const char* value;
+    if (!strcmp(flag, "--verify-only")) {
+      options->verify_only = 1;
+      continue;
+    }
+    value = i + 1 < argc ? argv[++i] : NULL;
     if (value == NULL) return 0;
     if (!strcmp(flag, "--operation")) {
       options->operation_name = value;
@@ -94,6 +103,7 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
       if (!ParseInt(value, 0, 6, &options->method)) return 0;
     } else if (!strcmp(flag, "--quality")) {
       if (!ParseInt(value, 0, 99, &options->near_lossless_quality)) return 0;
+      options->near_lossless_quality_set = 1;
     } else if (!strcmp(flag, "--warmups")) {
       if (!ParseInt(value, 0, 1000, &options->warmups)) return 0;
     } else if (!strcmp(flag, "--samples")) {
@@ -107,7 +117,9 @@ static int ParseOptions(int argc, const char* const argv[], Options* options) {
     }
   }
   return options->operation_name != NULL && options->variant != NULL &&
-         options->width > 0 && options->height > 0;
+         options->width > 0 && options->height > 0 &&
+         (!options->near_lossless_quality_set ||
+          options->operation == OP_NEAR_LOSSLESS);
 }
 
 static uint32_t Random32(uint32_t* state) {
@@ -202,7 +214,7 @@ static int Encode(const Options* options, const uint8_t* rgba,
     goto cleanup;
   }
   end = NowNanoseconds();
-  if (begin == 0 || end < begin) goto cleanup;
+  if (begin == 0 || end <= begin) goto cleanup;
   *elapsed_ns = end - begin;
   *output_hash = HashBytes(writer.mem, writer.size);
   *output_size = writer.size;
@@ -237,7 +249,7 @@ static int PreprocessNearLossless(const Options* options, const uint8_t* rgba,
     goto cleanup;
   }
   end = NowNanoseconds();
-  if (begin == 0 || end < begin) goto cleanup;
+  if (begin == 0 || end <= begin) goto cleanup;
   *elapsed_ns = end - begin;
   *output_size = pixel_count * sizeof(*output);
   *output_hash = HashBytes((const uint8_t*)output, *output_size);
@@ -249,9 +261,39 @@ cleanup:
 }
 #endif
 
+static int RunOperation(const Options* options, const uint8_t* rgba,
+                        uint64_t* elapsed_ns, uint64_t* output_hash,
+                        size_t* output_size) {
+#if (WEBP_NEAR_LOSSLESS == 1)
+  if (options->operation == OP_NEAR_LOSSLESS) {
+    return PreprocessNearLossless(options, rgba, elapsed_ns, output_hash,
+                                  output_size);
+  }
+#endif
+  return Encode(options, rgba, elapsed_ns, output_hash, output_size);
+}
+
+static uint32_t RequiredCUDAStages(Operation operation) {
+  switch (operation) {
+    case OP_COLOR:
+      return WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM;
+    case OP_HASH:
+      return WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN;
+    case OP_NEAR_LOSSLESS:
+      return WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS;
+    case OP_LOSSLESS:
+      return WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM |
+             WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN;
+    case OP_LOSSY:
+      return WEBP_ACCELERATOR_STAGE_RGB_TO_YUV;
+  }
+  return 0;
+}
+
 int main(int argc, const char* const argv[]) {
   Options options;
   uint8_t* rgba;
+  char near_lossless_quality[16];
   uint64_t reference_hash = 0;
   int sequence;
   if (!ParseOptions(argc, argv, &options)) {
@@ -265,18 +307,56 @@ int main(int argc, const char* const argv[]) {
   rgba = (uint8_t*)malloc((size_t)options.width * options.height * 4u);
   if (rgba == NULL) return 2;
   GenerateRGBA(&options, rgba);
+  if (options.operation == OP_NEAR_LOSSLESS) {
+    snprintf(near_lossless_quality, sizeof(near_lossless_quality), "%d",
+             options.near_lossless_quality);
+  } else {
+    snprintf(near_lossless_quality, sizeof(near_lossless_quality), "null");
+  }
   ConfigureDispatch(&options);
+  if (!strcmp(options.variant, "cuda")) {
+    uint64_t elapsed_ns, output_hash;
+    size_t output_size;
+    const uint32_t required = RequiredCUDAStages(options.operation);
+    uint32_t observed;
+    WebPCUDAResetSuccessfulStages();
+    if (!RunOperation(&options, rgba, &elapsed_ns, &output_hash,
+                      &output_size)) {
+      fprintf(stderr, "CUDA stage preflight failed\n");
+      free(rgba);
+      return 1;
+    }
+    observed = WebPCUDAGetSuccessfulStages();
+    if ((observed & required) != required) {
+      fprintf(stderr,
+              "CUDA stage preflight fell back: required=0x%08x "
+              "observed=0x%08x\n",
+              required, observed);
+      free(rgba);
+      return 1;
+    }
+  }
+  if (options.verify_only) {
+    if (!strcmp(options.variant, "cpu")) {
+      uint64_t elapsed_ns, output_hash;
+      size_t output_size;
+      if (!RunOperation(&options, rgba, &elapsed_ns, &output_hash,
+                        &output_size)) {
+        fprintf(stderr, "CPU verification failed\n");
+        free(rgba);
+        return 1;
+      }
+    }
+    fprintf(stderr, "verified %s %s operation\n", options.variant,
+            options.operation_name);
+    free(rgba);
+    return 0;
+  }
   for (sequence = -options.warmups; sequence < options.samples; ++sequence) {
     uint64_t elapsed_ns, output_hash;
     size_t output_size;
-    const int ok =
-#if (WEBP_NEAR_LOSSLESS == 1)
-        options.operation == OP_NEAR_LOSSLESS
-            ? PreprocessNearLossless(&options, rgba, &elapsed_ns, &output_hash,
-                                     &output_size)
-            :
-#endif
-              Encode(&options, rgba, &elapsed_ns, &output_hash, &output_size);
+    const int ok = RunOperation(&options, rgba, &elapsed_ns, &output_hash,
+                                &output_size);
     if (!ok) {
       fprintf(stderr, "%s failed at sequence %d\n",
               options.operation == OP_NEAR_LOSSLESS ? "preprocessing"
@@ -294,11 +374,11 @@ int main(int argc, const char* const argv[]) {
     }
     printf("{\"operation\":\"%s\",\"variant\":\"%s\","
            "\"width\":%d,\"height\":%d,\"method\":%d,"
-           "\"quality\":%d,"
+           "\"encoder_quality\":75,\"near_lossless_quality\":%s,"
            "\"sequence\":%d,\"elapsed_ns\":%" PRIu64 ","
            "\"output_hash\":\"%016" PRIx64 "\",\"output_size\":%zu}\n",
            options.operation_name, options.variant, options.width,
-           options.height, options.method, options.near_lossless_quality,
+           options.height, options.method, near_lossless_quality,
            sequence, elapsed_ns, output_hash, output_size);
   }
   free(rgba);

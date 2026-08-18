@@ -110,6 +110,19 @@ __global__ void ColorBaselineKernel(const uint32_t* pixels, int width,
   }
 }
 
+__global__ void ColorHistogramScoreKernel(const unsigned int* histograms,
+                                          int score_count,
+                                          uint64_t* scores) {
+  const int score = blockIdx.x * blockDim.x + threadIdx.x;
+  if (score >= score_count) return;
+  uint64_t sum = 0;
+  for (int bin = 0; bin < 256; ++bin) {
+    const unsigned int count = histograms[score * 256 + bin];
+    sum += static_cast<uint64_t>(count) * count;
+  }
+  scores[score] = sum;
+}
+
 __global__ void ColorSharedTileKernel(const uint32_t* pixels, int width,
                                       int height, uint64_t* scores) {
   __shared__ uint32_t cache[kTile * kTile];
@@ -164,7 +177,11 @@ void ColorOracle(const std::vector<uint32_t>& pixels,
   }
 }
 
-enum ColorVariant { kColorBaseline, kColorTileCache };
+enum ColorVariant {
+  kColorHistogramThroughput,
+  kColorBaseline,
+  kColorTileCache
+};
 
 uint64_t RunColor(ColorVariant variant, int iterations, bool* valid) {
   const std::vector<uint32_t> input = MakePixels();
@@ -176,12 +193,14 @@ uint64_t RunColor(ColorVariant variant, int iterations, bool* valid) {
                         cudaMemcpyHostToDevice));
   const dim3 grid((kWidth + 15) / 16, (kHeight + 15) / 16);
   for (int iter = 0; iter < iterations; ++iter) {
-    if (variant == kColorBaseline) {
+    if (variant != kColorTileCache) {
       if (d_hist == nullptr) d_hist = DeviceAlloc<unsigned int>(tiles * 4 * 256);
       CUDA_CHECK(cudaMemset(d_hist, 0, tiles * 4 * 256 * sizeof(unsigned int)));
       ColorBaselineKernel<<<grid, 256>>>(d_input, kWidth, kHeight, d_hist);
-      // Reuse the parallel reducer by copying global histograms is deliberately
-      // avoided: baseline is a histogram-throughput control and is checksummed.
+      if (variant == kColorBaseline) {
+        ColorHistogramScoreKernel<<<(tiles * 4 + 127) / 128, 128>>>(
+            d_hist, tiles * 4, d_scores);
+      }
     } else {
       ColorSharedTileKernel<<<grid, 256>>>(d_input, kWidth, kHeight,
                                            d_scores);
@@ -190,7 +209,7 @@ uint64_t RunColor(ColorVariant variant, int iterations, bool* valid) {
   CUDA_CHECK(cudaGetLastError());
   CUDA_CHECK(cudaDeviceSynchronize());
   uint64_t checksum = 0;
-  if (variant == kColorBaseline) {
+  if (variant == kColorHistogramThroughput) {
     std::vector<unsigned int> got(tiles * 4 * 256);
     CUDA_CHECK(cudaMemcpy(got.data(), d_hist, got.size() * sizeof(got[0]),
                           cudaMemcpyDeviceToHost));
@@ -205,7 +224,7 @@ uint64_t RunColor(ColorVariant variant, int iterations, bool* valid) {
     } else {
       *valid = true;
     }
-    checksum = Checksum(reduced.data(), reduced.size() * sizeof(reduced[0]));
+    checksum = Checksum(got.data(), got.size() * sizeof(got[0]));
   } else {
     std::vector<uint64_t> got(tiles * 4);
     CUDA_CHECK(cudaMemcpy(got.data(), d_scores, got.size() * sizeof(got[0]),
@@ -693,12 +712,21 @@ uint64_t RunLossyScoreCPU(int iterations, bool* valid) {
 
 uint64_t RunLossyScore(int iterations, bool* valid) {
   const std::vector<uint8_t> y = MakeLuma();
-  const int bx = (kWidth + 15) / 16, by = (kHeight + 15) / 16, count = bx * by * 4;
-  uint8_t* d_y = DeviceAlloc<uint8_t>(y.size()); unsigned long long* d_scores = DeviceAlloc<unsigned long long>(count);
+  const int bx = (kWidth + 15) / 16;
+  const int by = (kHeight + 15) / 16;
+  const int count = bx * by * 4;
+  uint8_t* d_y = DeviceAlloc<uint8_t>(y.size());
+  unsigned long long* d_scores =
+      DeviceAlloc<unsigned long long>(count);
   CUDA_CHECK(cudaMemcpy(d_y, y.data(), y.size(), cudaMemcpyHostToDevice));
-  for (int i = 0; i < iterations; ++i) LossyScoreKernel<<<dim3(bx, by), 256>>>(d_y, kWidth, kHeight, d_scores);
-  CUDA_CHECK(cudaDeviceSynchronize()); std::vector<unsigned long long> got(count);
-  CUDA_CHECK(cudaMemcpy(got.data(), d_scores, count * sizeof(got[0]), cudaMemcpyDeviceToHost));
+  for (int i = 0; i < iterations; ++i) {
+    LossyScoreKernel<<<dim3(bx, by), 256>>>(d_y, kWidth, kHeight,
+                                            d_scores);
+  }
+  CUDA_CHECK(cudaDeviceSynchronize());
+  std::vector<unsigned long long> got(count);
+  CUDA_CHECK(cudaMemcpy(got.data(), d_scores, count * sizeof(got[0]),
+                        cudaMemcpyDeviceToHost));
   if (g_verify_outputs) {
     std::vector<unsigned long long> expected;
     LossyScoreOracle(y, &expected);
@@ -706,7 +734,11 @@ uint64_t RunLossyScore(int iterations, bool* valid) {
   } else {
     *valid = true;
   }
-  const uint64_t result = Checksum(got.data(), got.size() * sizeof(got[0])); DeviceFree(d_scores); DeviceFree(d_y); return result;
+  const uint64_t result =
+      Checksum(got.data(), got.size() * sizeof(got[0]));
+  DeviceFree(d_scores);
+  DeviceFree(d_y);
+  return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -803,10 +835,18 @@ struct Experiment {
   uint64_t (*run)(int, bool*);
 };
 
-uint64_t ColorBaseline(int n, bool* ok) { return RunColor(kColorBaseline, n, ok); }
-uint64_t ColorTile(int n, bool* ok) { return RunColor(kColorTileCache, n, ok); }
+uint64_t ColorHistogramThroughput(int n, bool* ok) {
+  return RunColor(kColorHistogramThroughput, n, ok);
+}
+uint64_t ColorBaseline(int n, bool* ok) {
+  return RunColor(kColorBaseline, n, ok);
+}
+uint64_t ColorTile(int n, bool* ok) {
+  return RunColor(kColorTileCache, n, ok);
+}
 
 const Experiment kExperiments[] = {
+    {"color_histogram_throughput", ColorHistogramThroughput},
     {"color_baseline", ColorBaseline},
     {"color_shared_tile", ColorTile},
     {"staged_lossless_pipeline", RunStagedLosslessPipeline},

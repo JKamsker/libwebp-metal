@@ -4,7 +4,10 @@
 from __future__ import annotations
 
 import importlib.util
+import json
+import tempfile
 from pathlib import Path
+from types import SimpleNamespace
 
 
 SCRIPT = Path(__file__).with_name("benchmark_cuda_end_to_end.py")
@@ -119,6 +122,38 @@ def main() -> int:
 Bottom line: CUDA helps persistent lossless batches, is neutral for lossy batches, and is substantially worse when starting a fresh process for each image.
 """
     assert measured_report == expected
+
+    original_command_output = cuda_e2e.command_output
+    cuda_e2e.command_output = lambda command: ""
+    try:
+        metadata = cuda_e2e.system_metadata(
+            SimpleNamespace(label=None), "test-pillow"
+        )
+    finally:
+        cuda_e2e.command_output = original_command_output
+    assert metadata["label"].endswith(" / unknown gpu")
+    assert metadata["gpu"] == ""
+
+    with tempfile.TemporaryDirectory() as directory:
+        verification = Path(directory) / "verification.json"
+        verification.write_text(
+            json.dumps(
+                {
+                    "schema": cuda_e2e.SCHEMA,
+                    "configuration": {"verify_only": True},
+                    "corpus": [],
+                }
+            ),
+            encoding="utf-8",
+        )
+        try:
+            cuda_e2e.report_results(
+                SimpleNamespace(results=[verification], output=None)
+            )
+        except RuntimeError as error:
+            assert "verify-only results contain no summary" in str(error)
+        else:
+            raise AssertionError("verify-only report input was accepted")
     print("PASS: CUDA end-to-end benchmark aggregation and Markdown report")
     return 0
 
