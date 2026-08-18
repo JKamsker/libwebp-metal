@@ -22,6 +22,12 @@ runtime and lease refusal, build independence, determinism, and array-bounds,
 pointer-overflow, undefined-behavior, and integer-sanitizer coverage. It runs no
 timed protocol.
 
+`scripts/test_backref_cost_traceback_experiment.py` verifies the private,
+default-off CostManager workspace candidate: exact reconstructed references and
+cache indexes, ties and edge sizes, deterministic repeats, injected workspace
+fallback, publication stream/decode identity, immutable inputs, build/runtime
+omission and sanitizer execution. It runs no timed protocol.
+
 ## Building
 
 ### Fuzzers

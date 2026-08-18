@@ -52,6 +52,8 @@ option(WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT
        "Build the cache-size serial-sweep implementation experiment." OFF)
 option(WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT
        "Build the cache-size single-pass slab implementation experiment." OFF)
+option(WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT
+       "Build the backward-reference cost/traceback workspace experiment." OFF)
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
 option(WEBP_BUILD_CWEBP "Build the cwebp command line tool." ON)
 option(WEBP_BUILD_DWEBP "Build the dwebp command line tool." ON)
@@ -372,6 +374,10 @@ if(WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT)
   list(APPEND WEBP_ENC_SRCS
        ${WEBP_SRC_DIR}/enc/cache_size_single_pass_slab_enc.c)
 endif()
+if(WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT)
+  list(APPEND WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/backref_cost_traceback_experiment_enc.c)
+endif()
 
 if(WEBP_ENABLE_METAL)
   set_source_files_properties(
@@ -585,6 +591,10 @@ if(WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT)
   target_compile_definitions(
     webpencode PRIVATE WEBP_USE_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT=1)
 endif()
+if(WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT=1)
+endif()
 add_library(webp $<TARGET_OBJECTS:webpdecode> $<TARGET_OBJECTS:webpdsp>
                  $<TARGET_OBJECTS:webpencode> $<TARGET_OBJECTS:webputils>)
 if(WEBP_ENABLE_FBOUNDS_SAFETY)
@@ -627,6 +637,23 @@ if(WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT)
   target_include_directories(
     cache_size_single_pass_slab_test PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
                                              ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
+if(WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT)
+  add_executable(
+    backref_cost_traceback_experiment_test
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/backref_cost_traceback_experiment_test.c)
+  target_link_libraries(backref_cost_traceback_experiment_test PRIVATE webp)
+  target_include_directories(
+    backref_cost_traceback_experiment_test
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+  add_executable(
+    backref_cost_traceback_experiment_runner
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/backref_cost_traceback_experiment_runner.c)
+  target_link_libraries(backref_cost_traceback_experiment_runner PRIVATE webp)
+  target_include_directories(
+    backref_cost_traceback_experiment_runner
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 
 if(WEBP_BUILD_METAL_BATCH_EXPERIMENT)
