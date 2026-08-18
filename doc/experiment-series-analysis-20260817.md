@@ -44,6 +44,14 @@
 > unassessed and promotion is rejected for this cycle. No production or
 > follow-up gate is added. See
 > [backref-cost-traceback-experiment-evaluation-20260818.md](backref-cost-traceback-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 remote workspace A/B addendum:** the row-12 remote re-freeze
+> stopped before source transfer, preflight, lease, correctness, or timing when
+> the frozen driver rejected its generated temporary path. No rerun or repair
+> occurred. Both variants have zero samples, so performance remains unassessed
+> and promotion is rejected for this cycle. The exact candidate passes untimed
+> equivalence and safety checks and remains default off. See
+> [backref-cost-workspace-ab-experiment-evaluation-20260818.md](backref-cost-workspace-ab-experiment-evaluation-20260818.md).
 
 ## Scope and evidence boundary
 

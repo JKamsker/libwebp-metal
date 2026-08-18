@@ -45,6 +45,14 @@
 > and rejected for this cycle; API/ABI, integer/tie semantics, thresholds,
 > fallback, Metal, CUDA, and production defaults remain unchanged. See
 > [backref-cost-traceback-experiment-evaluation-20260818.md](backref-cost-traceback-experiment-evaluation-20260818.md).
+>
+> **2026-08-18 remote workspace A/B consequence:** the independent row-12
+> remote re-freeze produced zero samples because its frozen driver rejected the
+> generated temporary path before transfer, preflight, lease, correctness, or
+> timing. Untimed equivalence, fallback, omission, guard, and sanitizer checks
+> pass, so the code is retained default off. No performance or production
+> conclusion follows. See
+> [backref-cost-workspace-ab-experiment-evaluation-20260818.md](backref-cost-workspace-ab-experiment-evaluation-20260818.md).
 
 ## Abstract
 
@@ -526,6 +534,12 @@ matrix.
   cells, 24 evaluation cells, and the resource record are absent. Untimed
   safety checks justify retaining default-off code but cannot establish a
   speedup, regression, resource ceiling, or production consequence.
+- Row 12 also has no implementation timing result. The frozen transfer driver
+  rejected its own generated temporary path before source transfer or remote
+  preflight. Baseline and candidate each have zero samples; execution-time
+  host, runner, power, thermal, resource, transfer, median, and p95 evidence is
+  absent. The refusal validates fail-closed execution only and supports no
+  performance direction or production promotion.
 
 ## Reproducibility
 
