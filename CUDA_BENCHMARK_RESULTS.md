@@ -191,3 +191,15 @@ encodes (JPEG lossless and near-lossless) win as fresh processes.
 Raw result sets: `libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl}`
 under the operator's temp directory, comparable through the `report`
 subcommand.
+
+### Lossy ceiling (2026-08-18 profile)
+
+An instrumented-stage profile of the twelve-case lossy corpus on the same
+machine attributes 92.6% of lossy CPU time to the VP8 encode loop
+(per-macroblock mode decisions, quantization, and entropy coding with
+reconstructed-neighbor and coder-state dependencies), 4.8% to analysis, and
+1.6% to import. The accelerated import and analysis stages therefore bound
+lossy at roughly 1.05x regardless of their own speed; moving lossy further
+requires offloading the encode loop itself, which is a ground-up
+GPU-encoder project rather than a stage port. Recorded so future lossy
+work starts from the loop, not from the remaining small stages.
