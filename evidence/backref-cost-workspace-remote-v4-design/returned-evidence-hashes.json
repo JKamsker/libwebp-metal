@@ -1,0 +1,56 @@
+{
+  "artifacts": [
+    {
+      "bytes": 168,
+      "path": "fixtures/absolute.tar.gz",
+      "sha256": "1aab4dc0258ce2498219529dea0a60e730cfc5bf802c4fc4a1a1ad7ebe147b79"
+    },
+    {
+      "bytes": 161,
+      "path": "fixtures/fifo.tar.gz",
+      "sha256": "19dc9d0402a4c1f6b5375390583225a3e05d73145771cf7967843abcbf3c4789"
+    },
+    {
+      "bytes": 173,
+      "path": "fixtures/hardlink.tar.gz",
+      "sha256": "d153d44ed554d840b275c9c35d9eb3bc66ce85ad65a7033864ae52c39c044798"
+    },
+    {
+      "bytes": 172,
+      "path": "fixtures/symlink.tar.gz",
+      "sha256": "2271122407e1d85c837f48e50fe28917dc36342c836339be222d7e798326a094"
+    },
+    {
+      "bytes": 162,
+      "path": "fixtures/traversal.tar.gz",
+      "sha256": "9bf59a1ee45efa018228ed55da60c65a719ee013914f89ebeddd6bfbffbba0e0"
+    },
+    {
+      "bytes": 10206,
+      "path": "live-validation.json",
+      "sha256": "7ecfbd0332011228e15151b306ef9c4fc8faec8f41996019f2cf88dd177efe85"
+    },
+    {
+      "bytes": 549,
+      "path": "returned/artifact-hashes.json",
+      "sha256": "62ca2ad09b8ae37e9685c8d9b4d2d5e4ad8e10a46022e6c733725ce400d99414"
+    },
+    {
+      "bytes": 152,
+      "path": "returned/lease-record.json",
+      "sha256": "88446b56a729feb898a910a1bf655c4fcdd879d4d8c96584e74e1e6dd69a84d0"
+    },
+    {
+      "bytes": 32,
+      "path": "returned/nested/deeper/record.json",
+      "sha256": "44b47c5c16d22761f5fb220dc5b502775be10150714d70aa90ba10e8a6d65b7e"
+    },
+    {
+      "bytes": 29,
+      "path": "returned/root.txt",
+      "sha256": "4362b416ab8b3ce817bbd5e2006b7eafcf4b73e010713e81546dd081cb7ee9cb"
+    }
+  ],
+  "excluded_after_index": [],
+  "schema": "libwebp-backref-cost-workspace-remote-v4-returned-evidence-hashes-v1"
+}

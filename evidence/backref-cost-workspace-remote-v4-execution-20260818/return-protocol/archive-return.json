@@ -1,0 +1,6 @@
+{
+  "builder_exit_code": 1,
+  "builder_stderr": "",
+  "builder_stdout": "{\"offending_member\": \"<archive>\", \"reason\": \"[Errno 2] No such file or directory: '/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v4/run.0LaIs9/evidence/artifact-hashes.json'\", \"status\": \"rejected\"}\n",
+  "status": "rejected"
+}
