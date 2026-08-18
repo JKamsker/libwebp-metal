@@ -150,6 +150,8 @@ if(WEBP_ENABLE_CUDA)
          "Build the CUDA lossless predictor stage." ON)
   option(WEBP_CUDA_ENABLE_HISTOGRAM
          "Build experimental CUDA lossless histogram counting." ON)
+  option(WEBP_CUDA_ENABLE_LOSSY_DECIMATE
+         "Build the experimental CUDA lossy macroblock decimation." ON)
   option(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS
          "Retain CUDA staging allocations across encoder calls." ON)
   option(WEBP_CUDA_ENABLE_PINNED_HOST_MEMORY
@@ -496,6 +498,9 @@ else()
 endif()
 if(WEBP_ENABLE_CUDA)
   list(APPEND WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/cuda_enc.cu)
+  if(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+    list(APPEND WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/cuda_decimate_enc.cu)
+  endif()
 endif()
 if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
   list(APPEND WEBP_ENC_SRCS
@@ -651,7 +656,7 @@ if(WEBP_ENABLE_CUDA)
   foreach(CUDA_OPTION
           COLOR_TRANSFORM COLOR_SHARED_TILE HASH_CHAIN RGB_TO_YUV
           NEAR_LOSSLESS LOSSY_ANALYSIS FUSED_LOSSY_ANALYSIS PREDICTOR HISTOGRAM
-          PERSISTENT_BUFFERS
+          LOSSY_DECIMATE PERSISTENT_BUFFERS
           PINNED_HOST_MEMORY ASYNC_COPIES HASH_MATCH4 RGB_BLOCK_2X2
           COLOR_256_THREAD_BLOCKS HASH_256_THREAD_BLOCKS
           RGB_256_THREAD_BLOCKS READ_ONLY_CACHE RESTRICT_POINTERS

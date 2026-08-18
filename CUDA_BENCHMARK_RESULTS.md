@@ -164,15 +164,16 @@ lossless batch recorded 16 observed resident handoffs (texture and graphic
 inputs skip the donating cross-color transform, so a handoff per image is
 not expected on this corpus).
 
-| Method | baseline | + prewarm | + guided predictor | merged stages | + exact-NL predictor |
-|---|---:|---:|---:|---:|---:|
-| PNG lossless — batch | 1.37x | 1.31x | 1.99x | 1.82x | 1.81x |
-| JPEG lossless — batch | 1.20x | 1.10x | 4.87x | 4.97x | 4.95x |
-| JPEG lossless — single | 0.88x | 1.00x | 2.76x | 2.52x | 2.66x |
-| JPEG lossy — batch | 0.96x | 0.93x | 1.02x | 1.08x | 1.03x |
-| PNG near-lossless — batch | 1.21x | 1.25x | 1.18x | 1.25x | 2.55x |
-| JPEG near-lossless — batch | 1.13x | 1.08x | 1.10x | 1.03x | 5.58x |
-| JPEG near-lossless — single | 0.93x | 1.02x | 0.96x | 0.94x | 2.99x |
+| Method | baseline | + guided predictor | + exact-NL predictor | + GPU decimate |
+|---|---:|---:|---:|---:|
+| PNG lossy — batch | 0.95x | 1.01x | 1.03x | 2.00x |
+| JPEG lossy — batch | 0.96x | 1.02x | 1.03x | 1.94x |
+| PNG lossless — batch | 1.37x | 1.99x | 1.81x | 1.79x |
+| JPEG lossless — batch | 1.20x | 4.87x | 4.95x | 4.85x |
+| JPEG lossless — single | 0.88x | 2.76x | 2.66x | 2.88x |
+| PNG near-lossless — batch | 1.21x | 1.18x | 2.55x | 2.61x |
+| JPEG near-lossless — batch | 1.13x | 1.10x | 5.58x | 5.60x |
+| JPEG near-lossless — single | 0.93x | 0.96x | 2.99x | 3.16x |
 
 Absolute CUDA times are the stable signal across runs; the CPU baseline
 varied by up to 8% between suite executions and moves the ratios. The
@@ -188,7 +189,14 @@ include roughly 140 ms of unhideable CUDA initialization and teardown;
 the prewarm overlaps part of it with decode, which is why only long
 encodes (JPEG lossless and near-lossless) win as fresh processes.
 
-Raw result sets: `libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl}`
+The lossy step change is the whole-pass GPU macroblock decimation: a
+byte-exact device port of VP8Decimate covering 74% of the lossy CPU encode
+(mode search, quantization, reconstruction), processed in skewed
+anti-diagonal wavefront order and enabled by this fork's stable in-pass
+cost tables. Every lossy validation pair remains byte-identical.
+
+Raw result sets:
+`libwebp-cuda-results-win{,-prewarm,-predictor,-merged,-nl,-decimate}`
 under the operator's temp directory, comparable through the `report`
 subcommand.
 

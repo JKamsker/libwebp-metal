@@ -208,6 +208,7 @@ static int ConfigureDispatch(const Options* const options,
     ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_PREDICTOR_MIN_PIXELS", "0");
     ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_HISTOGRAM", "1");
     ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_HISTOGRAM_MIN_COMMANDS", "0");
+    ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY_DECIMATE", "1");
   } else {
     ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_LOSSY");
     ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_MIN_PIXELS");
@@ -223,6 +224,7 @@ static int ConfigureDispatch(const Options* const options,
     ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_PREDICTOR_MIN_PIXELS");
     ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_HISTOGRAM");
     ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_HISTOGRAM_MIN_COMMANDS");
+    ok &= WebPBenchmarkUnsetEnvironment("WEBP_CUDA_LOSSY_DECIMATE");
   }
   if (options->batch_aware) {
     snprintf(batch_size, sizeof(batch_size), "%d", options->batch_size);

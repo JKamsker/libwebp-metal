@@ -106,6 +106,17 @@ candidates, `WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS=N` controls near-lossless
 preprocessing, and `WEBP_CUDA_LOSSY_MIN_PIXELS=N` controls RGB conversion.
 `WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS=N` controls the experimental lossy
 analysis stage.
+The lossy macroblock decimation (mode search, quantization, and
+reconstruction — 74% of the lossy CPU encode) runs whole passes on the
+device in skewed anti-diagonal order, reproducing the raster scan's neighbor
+reconstruction, non-zero contexts, prediction modes, and error-diffusion
+state with integer-exact arithmetic: the emitted bitstream is byte-identical
+to this fork's CPU encoder. It requires the basic (non-trellis) search
+(methods 2–4) and this fork's stable in-pass cost tables; restoring the
+upstream refresh cadence via `WEBP_TOKEN_REFRESH_SHIFT` declines it.
+`WEBP_CUDA_LOSSY_DECIMATE=0` disables it and
+`WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS=N` overrides its dispatch threshold
+(64 macroblocks warm, 4,000 cold).
 The predictor stage takes both tile-mode selection and exact residual
 application; `WEBP_CUDA_PREDICTOR_MIN_PIXELS=N` controls its threshold. Tile
 rows are scored in launch order against the accumulated residual histogram of
