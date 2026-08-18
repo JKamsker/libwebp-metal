@@ -437,13 +437,136 @@ typedef struct {
   int band_count;
   int rows_per_band;
   int bands_collected;
+  // Pipelined token recording: a single worker thread records each
+  // collected band's macroblocks in raster order (the exact CPU order, so
+  // the saturating probability statistics evolve identically) while the
+  // main thread replays the same band. All the recorder needs — levels,
+  // modes, and non-zero context words — lives in 'results'.
+  WebPWorker record_worker;
+  int record_worker_started;  // Reset() succeeded; thread must be ended
+  int record_pipeline;        // pipeline enabled for this pass
+  int record_active;          // a job is launched and not yet synced
+  int record_ok;              // sticky recording success (main thread only)
+  int record_rows;            // rows handed to the recorder so far
+  int record_job_start;       // row range of the in-flight job
+  int record_job_end;
+  uint32_t* record_nz;        // shadow nz words of the last recorded row
 } AcceleratedDecimatePass;
+
+// RecordTokens for a range of rows, reading everything from the collected
+// GPU results instead of the iterator. The nz-context bookkeeping mirrors
+// VP8IteratorNzToBytes/BytesToNz exactly: the top words come from the shadow
+// row, the left word is the previously packed word of this row (0 at the
+// border, like enc->nz[-1]), and the left-DC context is carried separately
+// and reset per row (like InitLeft).
+static int RecordTokensFromResults(VP8Encoder* const enc,
+                                   AcceleratedDecimatePass* const pass,
+                                   int start_row, int end_row) {
+#define NZ_BIT(word, n) (!!((word) & (1u << (n))))
+  const int mb_w = enc->mb_w;
+  int row;
+  for (row = start_row; row < end_row; ++row) {
+    uint32_t lnz = 0;   // left border word (enc->nz[-1] is the constant 0)
+    int left_nz8 = 0;   // left-DC context, reset at each row start
+    int mb_x;
+    for (mb_x = 0; mb_x < mb_w; ++mb_x) {
+      const WebPAcceleratorDecimateResult* const r =
+          &pass->results[row * mb_w + mb_x];
+      VP8TBuffer* const tokens = &enc->tokens[row & (enc->num_parts - 1)];
+      const uint32_t tnz = pass->record_nz[mb_x];
+      int top_nz[9], left_nz[9];
+      VP8Residual res;
+      uint32_t nz = 0;
+      int bx, by, ch;
+      top_nz[0] = NZ_BIT(tnz, 12);
+      top_nz[1] = NZ_BIT(tnz, 13);
+      top_nz[2] = NZ_BIT(tnz, 14);
+      top_nz[3] = NZ_BIT(tnz, 15);
+      top_nz[4] = NZ_BIT(tnz, 18);
+      top_nz[5] = NZ_BIT(tnz, 19);
+      top_nz[6] = NZ_BIT(tnz, 22);
+      top_nz[7] = NZ_BIT(tnz, 23);
+      top_nz[8] = NZ_BIT(tnz, 24);
+      left_nz[0] = NZ_BIT(lnz, 3);
+      left_nz[1] = NZ_BIT(lnz, 7);
+      left_nz[2] = NZ_BIT(lnz, 11);
+      left_nz[3] = NZ_BIT(lnz, 15);
+      left_nz[4] = NZ_BIT(lnz, 17);
+      left_nz[5] = NZ_BIT(lnz, 19);
+      left_nz[6] = NZ_BIT(lnz, 21);
+      left_nz[7] = NZ_BIT(lnz, 23);
+      left_nz[8] = left_nz8;
+      if (!r->is_i4) {  // i16x16
+        const int ctx = top_nz[8] + left_nz[8];
+        VP8InitResidual(0, 1, enc, &res);
+        VP8SetResidualCoeffs(r->y_dc_levels, &res);
+        top_nz[8] = left_nz[8] = VP8RecordCoeffTokens(ctx, &res, tokens);
+        VP8InitResidual(1, 0, enc, &res);
+      } else {
+        VP8InitResidual(0, 3, enc, &res);
+      }
+      for (by = 0; by < 4; ++by) {
+        for (bx = 0; bx < 4; ++bx) {
+          const int ctx = top_nz[bx] + left_nz[by];
+          VP8SetResidualCoeffs(r->y_ac_levels[bx + by * 4], &res);
+          top_nz[bx] = left_nz[by] = VP8RecordCoeffTokens(ctx, &res, tokens);
+        }
+      }
+      VP8InitResidual(0, 2, enc, &res);
+      for (ch = 0; ch <= 2; ch += 2) {
+        for (by = 0; by < 2; ++by) {
+          for (bx = 0; bx < 2; ++bx) {
+            const int ctx = top_nz[4 + ch + bx] + left_nz[4 + ch + by];
+            VP8SetResidualCoeffs(r->uv_levels[ch * 2 + bx + by * 2], &res);
+            top_nz[4 + ch + bx] = left_nz[4 + ch + by] =
+                VP8RecordCoeffTokens(ctx, &res, tokens);
+          }
+        }
+      }
+      nz |= (top_nz[0] << 12) | (top_nz[1] << 13);
+      nz |= (top_nz[2] << 14) | (top_nz[3] << 15);
+      nz |= (top_nz[4] << 18) | (top_nz[5] << 19);
+      nz |= (top_nz[6] << 22) | (top_nz[7] << 23);
+      nz |= (top_nz[8] << 24);
+      nz |= (left_nz[0] << 3) | (left_nz[1] << 7);
+      nz |= (left_nz[2] << 11);
+      nz |= (left_nz[4] << 17) | (left_nz[6] << 21);
+      pass->record_nz[mb_x] = nz;
+      lnz = nz;
+      left_nz8 = left_nz[8];
+      if (tokens->error) return 0;
+    }
+  }
+  return 1;
+#undef NZ_BIT
+}
+
+static int RecordBandJobHook(void* arg1, void* arg2) {
+  AcceleratedDecimatePass* const pass = (AcceleratedDecimatePass*)arg1;
+  VP8Encoder* const enc = (VP8Encoder*)arg2;
+  return RecordTokensFromResults(enc, pass, pass->record_job_start,
+                                 pass->record_job_end);
+}
+
+// Waits for any in-flight recording job; folds its status into record_ok.
+// Only the main thread touches record_ok, always at these sync points.
+static int AcceleratedDecimateSyncRecorder(AcceleratedDecimatePass* const
+                                               pass) {
+  if (pass->record_active) {
+    if (!WebPGetWorkerInterface()->Sync(&pass->record_worker)) {
+      pass->record_ok = 0;
+    }
+    pass->record_active = 0;
+  }
+  return pass->record_ok;
+}
 
 // Collects result bands up to the one containing macroblock row 'mb_y'.
 // Returns 0 when a collection fails; the caller then falls back to the CPU
 // decimate for the remaining macroblocks (the replayed state is complete, so
 // the switch is seamless).
-static int AcceleratedDecimateEnsureRow(AcceleratedDecimatePass* const pass,
+static int AcceleratedDecimateEnsureRow(VP8Encoder* const enc,
+                                        AcceleratedDecimatePass* const pass,
                                         int mb_y) {
   while (pass->bands_collected * pass->rows_per_band <= mb_y) {
     pass->request.phase = WEBP_ACCELERATOR_DECIMATE_COLLECT;
@@ -453,11 +576,35 @@ static int AcceleratedDecimateEnsureRow(AcceleratedDecimatePass* const pass,
       return 0;
     }
     ++pass->bands_collected;
+    if (pass->record_pipeline) {
+      int end_row = pass->bands_collected * pass->rows_per_band;
+      if (end_row > enc->mb_h) end_row = enc->mb_h;
+      // one in-flight job at a time keeps the raster recording order exact
+      AcceleratedDecimateSyncRecorder(pass);
+      if (pass->record_ok && end_row > pass->record_rows) {
+        pass->record_job_start = pass->record_rows;
+        pass->record_job_end = end_row;
+        pass->record_rows = end_row;
+        if (pass->record_worker_started) {
+          WebPGetWorkerInterface()->Launch(&pass->record_worker);
+          pass->record_active = 1;
+        } else if (!RecordBandJobHook(pass, enc)) {
+          pass->record_ok = 0;
+        }
+      }
+    }
   }
   return 1;
 }
 
 static void AcceleratedDecimateClear(AcceleratedDecimatePass* const pass) {
+  if (pass->record_worker_started) {
+    const WebPWorkerInterface* const worker_interface =
+        WebPGetWorkerInterface();
+    worker_interface->Sync(&pass->record_worker);
+    worker_interface->End(&pass->record_worker);
+  }
+  WebPSafeFree(pass->record_nz);
   WebPSafeFree(pass->results);
   WebPSafeFree(pass->recon);
   WebPSafeFree(pass->segments);
@@ -549,9 +696,33 @@ static int TryAcceleratedDecimate(VP8Encoder* const enc,
   request->recon_uv_stride = pass->recon_uv_stride;
   // Stream the pass in bands so macroblock replay and token recording can
   // overlap with the device still computing later rows.
-  pass->band_count = (enc->mb_h >= 8) ? 4 : 1;
+  pass->band_count = (enc->mb_h >= 16) ? 8 : (enc->mb_h >= 8) ? 4 : 1;
   pass->rows_per_band = (enc->mb_h + pass->band_count - 1) / pass->band_count;
   pass->bands_collected = 0;
+  // Pipelined recording: WEBP_TOKEN_RECORD_PIPELINE=0 records inline on the
+  // main thread instead (the emitted bytes are identical either way).
+  pass->record_ok = 1;
+  pass->record_pipeline = 1;
+  {
+    const char* const env = getenv("WEBP_TOKEN_RECORD_PIPELINE");
+    if (env != NULL && !strcmp(env, "0")) pass->record_pipeline = 0;
+  }
+  if (pass->record_pipeline) {
+    pass->record_nz =
+        (uint32_t*)WebPSafeCalloc(enc->mb_w, sizeof(*pass->record_nz));
+    if (pass->record_nz == NULL) {
+      pass->record_pipeline = 0;
+    } else {
+      const WebPWorkerInterface* const worker_interface =
+          WebPGetWorkerInterface();
+      worker_interface->Init(&pass->record_worker);
+      pass->record_worker.data1 = pass;
+      pass->record_worker.data2 = enc;
+      pass->record_worker.hook = RecordBandJobHook;
+      // no thread: bands still record synchronously at each collect point
+      pass->record_worker_started = worker_interface->Reset(&pass->record_worker);
+    }
+  }
   request->phase = WEBP_ACCELERATOR_DECIMATE_BEGIN;
   request->band_count = pass->band_count;
   request->band_index = 0;
@@ -1090,9 +1261,11 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
         const uint64_t decimate_start =
             WebPProfileStageBegin(WEBP_PROFILE_LOSSY_DECIMATE);
         if (accelerated &&
-            !AcceleratedDecimateEnsureRow(&accel_pass, it.y)) {
+            !AcceleratedDecimateEnsureRow(enc, &accel_pass, it.y)) {
           // A band collection failed; the replayed state is complete up to
-          // this macroblock, so the CPU search continues seamlessly.
+          // this macroblock, so the CPU search continues seamlessly. Stop
+          // the recorder first so the CPU path appends tokens after it.
+          AcceleratedDecimateSyncRecorder(&accel_pass);
           accelerated = 0;
         }
         if (accelerated) {
@@ -1109,8 +1282,14 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
       {
         const uint64_t record_start =
             WebPProfileStageBegin(WEBP_PROFILE_LOSSY_RECORD_TOKENS);
-        ok = RecordTokens(&it, &info,
-                          &enc->tokens[it.y & (enc->num_parts - 1)]);
+        if (accelerated && accel_pass.record_pipeline) {
+          ok = accel_pass.record_ok;  // the worker records this band
+        } else if (accel_pass.record_pipeline && !accel_pass.record_ok) {
+          ok = 0;  // pipelined recording failed before the CPU fallback
+        } else {
+          ok = RecordTokens(&it, &info,
+                            &enc->tokens[it.y & (enc->num_parts - 1)]);
+        }
         WebPProfileStageEnd(WEBP_PROFILE_LOSSY_RECORD_TOKENS, record_start);
       }
       if (!ok) {
@@ -1135,6 +1314,10 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
         WebPProfileStageEnd(WEBP_PROFILE_LOSSY_SAVE_BOUNDARY, boundary_start);
       }
     } while (ok && VP8IteratorNext(&it));
+    if (ok && accel_pass.record_pipeline &&
+        !AcceleratedDecimateSyncRecorder(&accel_pass)) {
+      ok = WebPEncodingSetError(enc->pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
+    }
     AcceleratedDecimateClear(&accel_pass);
     if (!ok) break;
 

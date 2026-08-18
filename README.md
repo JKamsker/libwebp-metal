@@ -124,6 +124,10 @@ the partitions runs on parallel worker threads for CPU and CUDA encodes
 alike. `WEBP_TOKEN_PARTITIONS=0..3` selects 1/2/4/8 partitions (0 restores
 the upstream single-partition stream) and `WEBP_TOKEN_EMIT_THREADS=0`
 forces serial emission without changing the bitstream.
+On the accelerated decimate path a worker thread additionally records each
+collected band's tokens (in exact raster order, from the GPU results) while
+the main thread replays the band; `WEBP_TOKEN_RECORD_PIPELINE=0` records
+inline instead. The bytes are identical either way.
 The predictor stage takes both tile-mode selection and exact residual
 application; `WEBP_CUDA_PREDICTOR_MIN_PIXELS=N` controls its threshold. Tile
 rows are scored in launch order against the accumulated residual histogram of
