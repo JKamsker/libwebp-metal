@@ -229,6 +229,8 @@ static int TestOversizedKernelExtents(int require_near_lossless) {
   rgb_request.v = v;
   rgb_request.y_stride = 1;
   rgb_request.uv_stride = 1;
+  rgb_request.method = -1;
+  rgb_request.quality = -1.f;
   result = WebPAccelerateRGBToYUV(&rgb_request);
   if (result != WEBP_ACCELERATOR_NOT_RUN || y[0] != 0xaa || u[0] != 0xbb ||
       v[0] != 0xcc) {

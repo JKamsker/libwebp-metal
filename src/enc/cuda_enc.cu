@@ -1,8 +1,7 @@
 // Copyright 2026
 //
-// CUDA acceleration for the encoder's lossless cross-color, lossless
-// hash-candidate, and opaque RGB-to-YUV stages. The adapter owns all runtime
-// state behind the private accelerator ABI.
+// CUDA acceleration for selected lossless and lossy encoder stages. The
+// adapter owns all runtime state behind the private accelerator ABI.
 
 #include "src/enc/cuda_enc.h"
 
@@ -50,7 +49,8 @@ namespace {
     defined(WEBP_CUDA_ENABLE_RGB_TO_YUV) || \
     defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS) || \
     defined(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS) || \
-    defined(WEBP_CUDA_ENABLE_PREDICTOR)
+    defined(WEBP_CUDA_ENABLE_PREDICTOR) || \
+    defined(WEBP_CUDA_ENABLE_HISTOGRAM)
 #define WEBP_CUDA_HAS_ENCODER_STAGE 1
 #endif
 
@@ -66,9 +66,16 @@ namespace {
 // through the corresponding environment override.
 #if defined(WEBP_CUDA_ENABLE_COLOR_TRANSFORM) || \
     defined(WEBP_CUDA_ENABLE_HASH_CHAIN) || \
-    defined(WEBP_CUDA_ENABLE_PREDICTOR)
+    defined(WEBP_CUDA_ENABLE_PREDICTOR) || \
+    defined(WEBP_CUDA_ENABLE_HISTOGRAM)
 constexpr size_t kDefaultLosslessBatchMinimumImages = 6u;
 constexpr size_t kDefaultLosslessBatchMinimumPixels = 6u * 1000u * 1000u;
+#endif
+#if defined(WEBP_CUDA_ENABLE_HISTOGRAM)
+constexpr size_t kDefaultHistogramColdMinimumCommands = 1u * 1000u * 1000u;
+constexpr size_t kDefaultHistogramWarmMinimumCommands = 64u * 1024u;
+constexpr unsigned int kHistogramThreadsPerBlock = 256u;
+constexpr size_t kHistogramFixedBins = 3u * 256u + 40u;
 #endif
 #if defined(WEBP_CUDA_ENABLE_COLOR_TRANSFORM)
 constexpr size_t kDefaultColorColdMinimumPixels = 4u * 1000u * 1000u;
@@ -186,6 +193,8 @@ struct CudaState {
   uint8_t* analysis_u = nullptr;
   uint8_t* analysis_v = nullptr;
   WebPAcceleratorLossyAnalysisResult* analysis_results = nullptr;
+  WebPAcceleratorHistogramCommand* histogram_commands = nullptr;
+  uint32_t* histogram_counts = nullptr;
   size_t pixel_capacity = 0;
   size_t resident_lossless_pixel_capacity = 0;
   size_t transform_capacity = 0;
@@ -194,14 +203,18 @@ struct CudaState {
   size_t analysis_u_capacity = 0;
   size_t analysis_v_capacity = 0;
   size_t analysis_result_capacity = 0;
+  size_t histogram_command_capacity = 0;
+  size_t histogram_count_capacity = 0;
   uint32_t* host_pixels = nullptr;
   uint32_t* host_transform = nullptr;
   int32_t* host_chain = nullptr;
   WebPAcceleratorLossyAnalysisResult* host_analysis_results = nullptr;
+  uint32_t* host_histogram_counts = nullptr;
   size_t host_pixel_capacity = 0;
   size_t host_transform_capacity = 0;
   size_t host_chain_capacity = 0;
   size_t host_analysis_result_capacity = 0;
+  size_t host_histogram_count_capacity = 0;
   bool resident_lossless_pixels_valid = false;
   const uint32_t* resident_lossless_host_pixels = nullptr;
   size_t resident_lossless_pixel_count = 0;
@@ -267,7 +280,8 @@ size_t EnvironmentSize(const char* name, size_t default_value) {
 #if defined(WEBP_CUDA_ENABLE_COLOR_TRANSFORM) || \
     defined(WEBP_CUDA_ENABLE_HASH_CHAIN) || \
     defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS) || \
-    defined(WEBP_CUDA_ENABLE_PREDICTOR)
+    defined(WEBP_CUDA_ENABLE_PREDICTOR) || \
+    defined(WEBP_CUDA_ENABLE_HISTOGRAM)
 bool HasProfitableBatchHint(size_t minimum_images, size_t minimum_pixels) {
   size_t images;
   size_t pixels;
@@ -279,7 +293,8 @@ bool HasProfitableBatchHint(size_t minimum_images, size_t minimum_pixels) {
 
 #if defined(WEBP_CUDA_ENABLE_COLOR_TRANSFORM) || \
     defined(WEBP_CUDA_ENABLE_HASH_CHAIN) || \
-    defined(WEBP_CUDA_ENABLE_PREDICTOR)
+    defined(WEBP_CUDA_ENABLE_PREDICTOR) || \
+    defined(WEBP_CUDA_ENABLE_HISTOGRAM)
 bool HasProfitableLosslessBatchHint(void) {
   return HasProfitableBatchHint(
       EnvironmentSize("WEBP_CUDA_BATCH_MIN_IMAGES",
@@ -959,6 +974,215 @@ __global__ void HashChainCandidatesKernel(
 
 #endif  // WEBP_CUDA_ENABLE_HASH_CHAIN
 
+#if defined(WEBP_CUDA_ENABLE_HISTOGRAM)
+
+WebPAcceleratorResult Initialize(CudaState* state);
+bool EnsureTimingEvents(CudaState* state);
+template <typename T>
+cudaError_t EnsureDeviceBuffer(T** buffer, size_t* capacity, size_t requested,
+                               cudaStream_t stream);
+template <typename T>
+bool EnsureHostBuffer(T** buffer, size_t* capacity, size_t requested);
+cudaError_t UploadToDevice(void* destination, const void* source, size_t bytes,
+                           cudaStream_t stream);
+cudaError_t DownloadFromDevice(void* destination, const void* source,
+                               size_t bytes, cudaStream_t stream);
+cudaError_t FinishDownloads(cudaStream_t stream);
+void ReleaseStagingBuffers(CudaState* state);
+WebPAcceleratorResult ReportError(CudaState* state, const char* operation,
+                                  cudaError_t error, bool quarantine);
+__global__ void HistogramCountKernel(
+    const WebPAcceleratorHistogramCommand* commands, size_t command_count,
+    size_t literal_count, uint32_t* counts);
+
+WebPAcceleratorResult CUDAHistogramLocked(
+    void* context, const WebPAcceleratorHistogramRequest* request) {
+  CudaState* const state = static_cast<CudaState*>(context);
+  size_t expected_literal_count;
+  size_t command_bytes;
+  size_t count_bins;
+  size_t count_bytes;
+  size_t uploaded_commands = 0;
+  cudaError_t error;
+  bool verbose;
+  bool timing;
+  float elapsed_ms = 0.0f;
+
+  if (!EnvironmentFlag("WEBP_CUDA", true) ||
+      !EnvironmentFlag("WEBP_CUDA_HISTOGRAM", false)) {
+    return WEBP_ACCELERATOR_NOT_RUN;
+  }
+  if (request == nullptr || request->spans == nullptr ||
+      request->span_count == 0 ||
+      request->span_count > WEBP_ACCELERATOR_MAX_HISTOGRAM_SPANS ||
+      request->command_count == 0 || request->cache_bits < 0 ||
+      request->cache_bits > 10 || request->literal == nullptr ||
+      request->red == nullptr || request->blue == nullptr ||
+      request->alpha == nullptr || request->distance == nullptr) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  expected_literal_count =
+      256u + 24u +
+      (request->cache_bits > 0 ? (size_t{1} << request->cache_bits) : 0u);
+  if (request->literal_count != expected_literal_count) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  for (size_t i = 0; i < request->span_count; ++i) {
+    const WebPAcceleratorHistogramSpan& span = request->spans[i];
+    if (span.commands == nullptr || span.count == 0 ||
+        span.count > std::numeric_limits<size_t>::max() - uploaded_commands) {
+      return WEBP_ACCELERATOR_ERROR;
+    }
+    uploaded_commands += span.count;
+  }
+  if (uploaded_commands != request->command_count) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  const bool profitable_batch = HasProfitableLosslessBatchHint();
+  if (request->command_count <
+      EnvironmentSize("WEBP_CUDA_HISTOGRAM_MIN_COMMANDS",
+                      state->available || profitable_batch
+                          ? kDefaultHistogramWarmMinimumCommands
+                          : kDefaultHistogramColdMinimumCommands)) {
+    return WEBP_ACCELERATOR_NOT_RUN;
+  }
+  if (request->command_count >
+      std::numeric_limits<size_t>::max() /
+          sizeof(WebPAcceleratorHistogramCommand)) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  command_bytes =
+      request->command_count * sizeof(WebPAcceleratorHistogramCommand);
+  if (request->literal_count >
+      std::numeric_limits<size_t>::max() - kHistogramFixedBins - 1u) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  count_bins = request->literal_count + kHistogramFixedBins + 1u;
+  if (count_bins >
+      std::numeric_limits<size_t>::max() / sizeof(uint32_t)) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  count_bytes = count_bins * sizeof(uint32_t);
+
+  if (state->quarantined) return WEBP_ACCELERATOR_NOT_RUN;
+  const WebPAcceleratorResult initialized = Initialize(state);
+  if (initialized != WEBP_ACCELERATOR_SUCCESS) return initialized;
+  error = cudaSetDevice(state->device);
+  if (error != cudaSuccess) {
+    return ReportError(state, "select device", error, true);
+  }
+  error = EnsureDeviceBuffer(&state->histogram_commands,
+                             &state->histogram_command_capacity,
+                             command_bytes, state->stream);
+  if (error == cudaSuccess) {
+    error = EnsureDeviceBuffer(&state->histogram_counts,
+                               &state->histogram_count_capacity, count_bytes,
+                               state->stream);
+  }
+  if (error != cudaSuccess) {
+    return ReportError(state, "allocate histogram staging buffers", error,
+                       false);
+  }
+  if (!EnsureHostBuffer(&state->host_histogram_counts,
+                        &state->host_histogram_count_capacity, count_bytes)) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  verbose = EnvironmentFlag("WEBP_CUDA_VERBOSE", false);
+  timing = verbose && EnsureTimingEvents(state);
+
+  uploaded_commands = 0;
+  error = cudaMemsetAsync(state->histogram_counts, 0, count_bytes,
+                          state->stream);
+  for (size_t i = 0; error == cudaSuccess && i < request->span_count; ++i) {
+    const WebPAcceleratorHistogramSpan& span = request->spans[i];
+    const size_t span_bytes =
+        span.count * sizeof(WebPAcceleratorHistogramCommand);
+    error = UploadToDevice(state->histogram_commands + uploaded_commands,
+                           span.commands, span_bytes, state->stream);
+    uploaded_commands += span.count;
+  }
+  if (error == cudaSuccess && timing) {
+    error = cudaEventRecord(state->event_start, state->stream);
+  }
+  if (error != cudaSuccess) {
+    (void)cudaStreamSynchronize(state->stream);
+    return ReportError(state, "histogram upload", error, true);
+  }
+  (void)cudaGetLastError();
+  const size_t block_count =
+      (request->command_count + kHistogramThreadsPerBlock - 1u) /
+      kHistogramThreadsPerBlock;
+  if (block_count > std::numeric_limits<uint32_t>::max()) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  HistogramCountKernel<<<static_cast<uint32_t>(block_count),
+                         kHistogramThreadsPerBlock, 0, state->stream>>>(
+      state->histogram_commands, request->command_count,
+      request->literal_count, state->histogram_counts);
+  error = cudaGetLastError();
+  if (error == cudaSuccess && timing) {
+    error = cudaEventRecord(state->event_stop, state->stream);
+  }
+  if (error == cudaSuccess) {
+    error = DownloadFromDevice(state->host_histogram_counts,
+                               state->histogram_counts, count_bytes,
+                               state->stream);
+  }
+  if (error == cudaSuccess) error = FinishDownloads(state->stream);
+  if (error != cudaSuccess) {
+    (void)cudaStreamSynchronize(state->stream);
+    return ReportError(state, "histogram count", error, true);
+  }
+  if (state->host_histogram_counts[count_bins - 1u] != 0u) {
+    if (verbose) {
+      fprintf(stderr, "WebP-CUDA: histogram rejected invalid commands\n");
+    }
+    return WEBP_ACCELERATOR_ERROR;
+  }
+
+  const uint32_t* source = state->host_histogram_counts;
+  memcpy(request->literal, source,
+         request->literal_count * sizeof(*request->literal));
+  source += request->literal_count;
+  memcpy(request->red, source, 256u * sizeof(*request->red));
+  source += 256u;
+  memcpy(request->blue, source, 256u * sizeof(*request->blue));
+  source += 256u;
+  memcpy(request->alpha, source, 256u * sizeof(*request->alpha));
+  source += 256u;
+  memcpy(request->distance, source, 40u * sizeof(*request->distance));
+  if (verbose) {
+    if (timing && cudaEventElapsedTime(&elapsed_ms, state->event_start,
+                                       state->event_stop) != cudaSuccess) {
+      elapsed_ms = 0.0f;
+      (void)cudaGetLastError();
+    }
+    fprintf(stderr,
+            "WebP-CUDA: histogram counted %zu commands in %.3f ms "
+            "(%zu spans)\n",
+            request->command_count, elapsed_ms, request->span_count);
+  }
+#if !defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+  ReleaseStagingBuffers(state);
+#endif
+  return WEBP_ACCELERATOR_SUCCESS;
+}
+
+WebPAcceleratorResult CUDAHistogram(
+    void* context, const WebPAcceleratorHistogramRequest* request) {
+  WebPAcceleratorResult result;
+  LockCudaMutex(&g_cuda_mutex);
+  result = CUDAHistogramLocked(context, request);
+  if (result == WEBP_ACCELERATOR_SUCCESS) {
+    g_cuda_state.successful_stages |=
+        WEBP_ACCELERATOR_STAGE_LOSSLESS_HISTOGRAM;
+  }
+  UnlockCudaMutex(&g_cuda_mutex);
+  return result;
+}
+
+#endif  // WEBP_CUDA_ENABLE_HISTOGRAM
+
 #if defined(WEBP_CUDA_ENABLE_RGB_TO_YUV)
 
 __device__ __constant__ uint16_t kGammaToLinear[256];
@@ -1383,6 +1607,68 @@ __global__ void LossyAnalysisKernel(
 
 #endif  // WEBP_CUDA_ENABLE_LOSSY_ANALYSIS
 
+#if defined(WEBP_CUDA_ENABLE_HISTOGRAM)
+
+__device__ __forceinline__ int HistogramPrefixCode(uint32_t value) {
+  if (value <= 2u) return static_cast<int>(value) - 1;
+  const uint32_t decremented = value - 1u;
+  const int highest_bit = 31 - __clz(decremented);
+  const int second_highest_bit =
+      static_cast<int>((decremented >> (highest_bit - 1)) & 1u);
+  return 2 * highest_bit + second_highest_bit;
+}
+
+__global__ void HistogramCountKernel(
+    const WebPAcceleratorHistogramCommand* WEBP_CUDA_RESTRICT commands,
+    size_t command_count, size_t literal_count,
+    uint32_t* WEBP_CUDA_RESTRICT counts) {
+  const size_t index =
+      static_cast<size_t>(blockIdx.x) * blockDim.x + threadIdx.x;
+  if (index >= command_count) return;
+  const WebPAcceleratorHistogramCommand command = commands[index];
+  uint32_t* const red = counts + literal_count;
+  uint32_t* const blue = red + 256u;
+  uint32_t* const alpha = blue + 256u;
+  uint32_t* const distance = alpha + 256u;
+  uint32_t* const invalid = distance + 40u;
+  if (command.mode == 0u) {
+    if (command.length != 1u) {
+      atomicAdd(invalid, 1u);
+      return;
+    }
+    atomicAdd(&alpha[(command.value >> 24) & 255u], 1u);
+    atomicAdd(&red[(command.value >> 16) & 255u], 1u);
+    atomicAdd(&counts[(command.value >> 8) & 255u], 1u);
+    atomicAdd(&blue[command.value & 255u], 1u);
+  } else if (command.mode == 1u) {
+    const size_t literal_index = 256u + 24u + command.value;
+    if (command.length != 1u || literal_index >= literal_count) {
+      atomicAdd(invalid, 1u);
+      return;
+    }
+    atomicAdd(&counts[literal_index], 1u);
+  } else if (command.mode == 2u) {
+    if (command.length == 0u || command.length > 4095u ||
+        command.value == 0u || command.value > (1u << 20)) {
+      atomicAdd(invalid, 1u);
+      return;
+    }
+    const int length_code = HistogramPrefixCode(command.length);
+    const int distance_code = HistogramPrefixCode(command.value);
+    if (length_code < 0 || length_code >= 24 || distance_code < 0 ||
+        distance_code >= 40) {
+      atomicAdd(invalid, 1u);
+      return;
+    }
+    atomicAdd(&counts[256u + static_cast<size_t>(length_code)], 1u);
+    atomicAdd(&distance[distance_code], 1u);
+  } else {
+    atomicAdd(invalid, 1u);
+  }
+}
+
+#endif  // WEBP_CUDA_ENABLE_HISTOGRAM
+
 #if defined(WEBP_CUDA_HAS_ENCODER_STAGE)
 WebPAcceleratorResult Initialize(CudaState* state) {
   int device_count = 0;
@@ -1608,6 +1894,12 @@ void ReleaseStagingBuffers(CudaState* state) {
   if (state->analysis_results != nullptr) {
     (void)cudaFreeAsync(state->analysis_results, state->stream);
   }
+  if (state->histogram_commands != nullptr) {
+    (void)cudaFreeAsync(state->histogram_commands, state->stream);
+  }
+  if (state->histogram_counts != nullptr) {
+    (void)cudaFreeAsync(state->histogram_counts, state->stream);
+  }
 #else
   if (state->pixels != nullptr) (void)cudaFree(state->pixels);
   if (state->resident_lossless_pixels != nullptr) {
@@ -1621,6 +1913,12 @@ void ReleaseStagingBuffers(CudaState* state) {
   if (state->analysis_results != nullptr) {
     (void)cudaFree(state->analysis_results);
   }
+  if (state->histogram_commands != nullptr) {
+    (void)cudaFree(state->histogram_commands);
+  }
+  if (state->histogram_counts != nullptr) {
+    (void)cudaFree(state->histogram_counts);
+  }
 #endif
   state->pixels = nullptr;
   state->resident_lossless_pixels = nullptr;
@@ -1630,6 +1928,8 @@ void ReleaseStagingBuffers(CudaState* state) {
   state->analysis_u = nullptr;
   state->analysis_v = nullptr;
   state->analysis_results = nullptr;
+  state->histogram_commands = nullptr;
+  state->histogram_counts = nullptr;
   state->pixel_capacity = 0;
   state->resident_lossless_pixel_capacity = 0;
   state->transform_capacity = 0;
@@ -1638,18 +1938,23 @@ void ReleaseStagingBuffers(CudaState* state) {
   state->analysis_u_capacity = 0;
   state->analysis_v_capacity = 0;
   state->analysis_result_capacity = 0;
+  state->histogram_command_capacity = 0;
+  state->histogram_count_capacity = 0;
   FreeHostBuffer(state->host_pixels);
   FreeHostBuffer(state->host_transform);
   FreeHostBuffer(state->host_chain);
   FreeHostBuffer(state->host_analysis_results);
+  FreeHostBuffer(state->host_histogram_counts);
   state->host_pixels = nullptr;
   state->host_transform = nullptr;
   state->host_chain = nullptr;
   state->host_analysis_results = nullptr;
+  state->host_histogram_counts = nullptr;
   state->host_pixel_capacity = 0;
   state->host_transform_capacity = 0;
   state->host_chain_capacity = 0;
   state->host_analysis_result_capacity = 0;
+  state->host_histogram_count_capacity = 0;
 }
 
 WebPAcceleratorResult ReportError(CudaState* state, const char* operation,
@@ -3051,6 +3356,9 @@ constexpr uint32_t kCUDAStages =
 #if defined(WEBP_CUDA_ENABLE_PREDICTOR)
     | WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR
 #endif
+#if defined(WEBP_CUDA_ENABLE_HISTOGRAM)
+    | WEBP_ACCELERATOR_STAGE_LOSSLESS_HISTOGRAM
+#endif
     ;
 
 constexpr uint32_t kCUDAProperties =
@@ -3099,6 +3407,11 @@ static const WebPEncoderAccelerator kCUDAEncoderAccelerator = {
 #endif
 #if defined(WEBP_CUDA_ENABLE_PREDICTOR)
     CUDAPredictor,
+#else
+    nullptr,
+#endif
+#if defined(WEBP_CUDA_ENABLE_HISTOGRAM)
+    CUDAHistogram,
 #else
     nullptr,
 #endif

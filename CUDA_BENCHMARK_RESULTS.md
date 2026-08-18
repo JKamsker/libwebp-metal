@@ -111,6 +111,10 @@ the older round-trip pipeline only.
 They now also force the experimental parallel predictor selector/residual
 stage and require observed dispatch. Historical rows predate it and provide no
 evidence for its speed or compressed-size effect.
+Forced lossless rows now force exact CUDA full-stream histogram population
+counting and require observed dispatch. Historical rows also predate this
+stage and provide no evidence for its performance; its current evidence is
+correctness-only.
 
 `scripts/benchmark_cuda_end_to_end.py` provides a portable comparison across
 systems. It creates a deterministic six-image corpus in both PNG and JPEG and

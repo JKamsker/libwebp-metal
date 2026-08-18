@@ -793,13 +793,11 @@ static int EncodeImageNoHuffman(VP8LBitWriter* const bw,
     WebPEncodingSetError(pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
     goto Error;
   }
-  VP8LHistogramSetClear(histogram_image);
-
   // Build histogram image and symbols from backward references.
   profile_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSLESS_HISTOGRAM);
-  VP8LHistogramStoreRefs(refs, /*distance_modifier=*/NULL,
-                         /*distance_modifier_arg0=*/0,
-                         histogram_image->histograms[0]);
+  // This is a full-image histogram with unmodified distances, so it can use
+  // the same exact accelerator path as backward-reference cost evaluation.
+  VP8LHistogramCreate(histogram_image->histograms[0], refs, cache_bits);
   WebPProfileStageEnd(WEBP_PROFILE_LOSSLESS_HISTOGRAM, profile_start);
 
   // Create Huffman bit lengths and codes for each histogram image.

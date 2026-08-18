@@ -50,12 +50,14 @@ CUDA_ENVIRONMENT_NAMES = (
     "WEBP_CUDA_FUSED_LOSSY_ANALYSIS",
     "WEBP_CUDA_RESIDENT_LOSSLESS",
     "WEBP_CUDA_PREDICTOR",
+    "WEBP_CUDA_HISTOGRAM",
     "WEBP_CUDA_MIN_PIXELS",
     "WEBP_CUDA_HASH_MIN_PIXELS",
     "WEBP_CUDA_LOSSY_MIN_PIXELS",
     "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS",
     "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS",
     "WEBP_CUDA_PREDICTOR_MIN_PIXELS",
+    "WEBP_CUDA_HISTOGRAM_MIN_COMMANDS",
     "WEBP_CUDA_BATCH_SIZE",
     "WEBP_CUDA_BATCH_PIXELS",
     "WEBP_CUDA_BATCH_MIN_IMAGES",
@@ -128,12 +130,14 @@ def clean_environment(
                 "WEBP_CUDA_FUSED_LOSSY_ANALYSIS": "1",
                 "WEBP_CUDA_RESIDENT_LOSSLESS": "1",
                 "WEBP_CUDA_PREDICTOR": "1",
+                "WEBP_CUDA_HISTOGRAM": "1",
                 "WEBP_CUDA_MIN_PIXELS": "0",
                 "WEBP_CUDA_HASH_MIN_PIXELS": "0",
                 "WEBP_CUDA_LOSSY_MIN_PIXELS": "0",
                 "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS": "0",
                 "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS": "0",
                 "WEBP_CUDA_PREDICTOR_MIN_PIXELS": "0",
+                "WEBP_CUDA_HISTOGRAM_MIN_COMMANDS": "0",
             }
         )
     return environment
@@ -794,6 +798,9 @@ def run_suite(args: argparse.Namespace) -> int:
             ),
             "cuda_predictor": (
                 "forced parallel 14-mode tile selector and exact residuals"
+            ),
+            "cuda_histogram": (
+                "forced exact global backward-reference population counts"
             ),
             "validation_policy": {
                 "lossy": "encoded_bytes",

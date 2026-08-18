@@ -4,7 +4,7 @@
 
 This is the private interface between the current libwebp encoder and optional
 compute backends. It is deliberately not a public WebP API and not a generic
-GPU runtime. ABI version 6 describes the complete stages already in this tree:
+GPU runtime. ABI version 7 describes the complete stages already in this tree:
 
 - `VP8LColorSpaceTransform()`: lossless cross-color transform search and
   application;
@@ -15,7 +15,10 @@ GPU runtime. ABI version 6 describes the complete stages already in this tree:
 - exact near-lossless preprocessing; and
 - the independent macroblock susceptibility and initial-mode work performed by
   `VP8EncAnalyze()`, with global segment assignment retained on the CPU; and
-- an experimental lossless predictor selector plus exact residual transform.
+- an experimental lossless predictor selector plus exact residual transform;
+  and
+- exact population counting for full-stream lossless backward-reference
+  histograms, with entropy and merge policy retained on the CPU.
 
 The local `15418-Final-Project` repository was reviewed at commit `b55ba547`.
 Its final CUDA path installs a `VP8LColorSpaceTransform` function pointer,
@@ -36,7 +39,7 @@ removes the encoder-to-Metal dependency without changing those kernel caches.
 
 ## ABI and capability discovery
 
-`src/enc/accelerator_enc.h` defines ABI version 6. A backend returns one static,
+`src/enc/accelerator_enc.h` defines ABI version 7. A backend returns one static,
 immutable `WebPEncoderAccelerator` descriptor with:
 
 - a name used by `WEBP_ACCELERATOR=auto|none|metal|cuda` selection;
@@ -56,8 +59,8 @@ The built-in registry is compile-time, not a dynamic plugin ABI. Metal is added
 under `WEBP_USE_METAL`, and CUDA is added under `WEBP_USE_CUDA` through
 `WebPGetCUDAEncoderAccelerator()`. The current CUDA descriptor advertises the
 lossless color-transform, lossless hash-candidate, opaque RGB-to-YUV, exact
-near-lossless, experimental lossy-analysis, and experimental lossless
-predictor stages. In automatic mode, a
+near-lossless, experimental lossy-analysis, experimental lossless predictor,
+and exact lossless histogram-counting stages. In automatic mode, a
 backend that returns
 `NOT_RUN` permits the next backend to try the stage; an attempted backend error
 goes directly to CPU fallback. An explicit, unknown backend name selects none,
@@ -98,6 +101,7 @@ All request buffers are borrowed until the synchronous callback returns:
 | Near-lossless | original ARGB and preprocessing parameters | tightly packed preprocessed ARGB |
 | Lossy analysis | Y/U/V planes, geometry, method, quality | one susceptibility/mode record per macroblock |
 | Lossless predictor | ARGB, allowed tile-bit range, exact/quantization semantics | residual ARGB, predictor map, selected tile bits |
+| Lossless histogram | at most 16 linked command spans, command count, cache bits | five complete population-count arrays |
 
 Backends should upload into private buffers, run, validate device completion,
 then copy to caller outputs. In-place or zero-copy execution is allowed only if
@@ -196,6 +200,14 @@ produce a different-size but pixel-identical lossless stream. Runtime remains
 off until E2E time and output-size measurements establish that the parallel
 policy is worthwhile.
 
+The CUDA histogram callback consumes the encoder's existing full-image linked
+backward-reference blocks directly. It computes the five exact integer symbol
+counts used by candidate-cost evaluation and final Huffman preparation, then
+commits all arrays only after kernel completion and command validation. It does
+not accelerate distance-remapped local histogram images, entropy estimates,
+histogram merging, or Huffman construction. The runtime opt-in remains off
+until matched end-to-end measurements establish a crossover.
+
 ## Persistence, batching, and instrumentation
 
 Persistence is advertised explicitly so threshold policy can account for warm
@@ -249,7 +261,7 @@ tree:
 5. Compare decoded pixels and stage output as required above before enabling a
    stage by default. Performance threshold work is separate from this design.
 
-All six ABI-v6 stages are implemented in `src/enc/cuda_enc.cu`. They share a
+All seven ABI-v7 stages are implemented in `src/enc/cuda_enc.cu`. They share a
 private nonblocking stream, optional events, geometrically grown device/host
 staging, serialized access, transactional output commits, and device-loss
 quarantine. The color kernel preserves independent-tile semantics; hash output
@@ -269,7 +281,7 @@ CMake/package integration, forced-device correctness, deterministic output,
 CPU override, unavailable-device fallback, compile-time ablations, and
 concurrent encodes are covered.
 
-Every performance choice is independently preprocessor-gated: the six stages,
+Every performance choice is independently preprocessor-gated: the seven stages,
 persistent buffers, pinned staging, copy synchronization policy, hash matching
 unroll, read-only cache loads, restrict-qualified pointers, per-stage block
 width, fused 2x2 RGB work, packed four-byte RGB loads, fused lossy import and

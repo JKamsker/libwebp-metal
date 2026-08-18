@@ -184,6 +184,8 @@ static void ConfigureDispatch(const Options* const options,
     setenv("WEBP_CUDA_RESIDENT_LOSSLESS", "1", 1);
     setenv("WEBP_CUDA_PREDICTOR", "1", 1);
     setenv("WEBP_CUDA_PREDICTOR_MIN_PIXELS", "0", 1);
+    setenv("WEBP_CUDA_HISTOGRAM", "1", 1);
+    setenv("WEBP_CUDA_HISTOGRAM_MIN_COMMANDS", "0", 1);
   } else {
     unsetenv("WEBP_CUDA_LOSSY");
     unsetenv("WEBP_CUDA_MIN_PIXELS");
@@ -196,6 +198,8 @@ static void ConfigureDispatch(const Options* const options,
     unsetenv("WEBP_CUDA_RESIDENT_LOSSLESS");
     unsetenv("WEBP_CUDA_PREDICTOR");
     unsetenv("WEBP_CUDA_PREDICTOR_MIN_PIXELS");
+    unsetenv("WEBP_CUDA_HISTOGRAM");
+    unsetenv("WEBP_CUDA_HISTOGRAM_MIN_COMMANDS");
   }
   if (options->batch_aware) {
     snprintf(batch_size, sizeof(batch_size), "%d", options->batch_size);
@@ -217,10 +221,16 @@ static uint32_t RequiredCUDAStages(const Options* options) {
   if (options->mode == MODE_NEAR_LOSSLESS) {
     return WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS |
            WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM |
-           WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN;
+           WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN |
+           (options->force_cuda
+                ? WEBP_ACCELERATOR_STAGE_LOSSLESS_HISTOGRAM
+                : 0u);
   }
   return WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM |
          WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN |
+         (options->force_cuda
+              ? WEBP_ACCELERATOR_STAGE_LOSSLESS_HISTOGRAM
+              : 0u) |
          (!options->force_cuda || options->method == 0
               ? 0u
               : WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR);

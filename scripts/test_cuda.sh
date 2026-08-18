@@ -11,6 +11,7 @@ cuda_log="$temporary_dir/cuda.log"
 cold_log="$temporary_dir/cold.log"
 lossy_default_log="$temporary_dir/lossy-default.log"
 predictor_default_log="$temporary_dir/predictor-default.log"
+histogram_default_log="$temporary_dir/histogram-default.log"
 
 if [ ! -x "$encoder" ] || [ ! -x "$decoder" ]; then
   echo "cwebp and dwebp not found in $binary_dir" >&2
@@ -61,6 +62,18 @@ if grep -q "WebP-CUDA: predictor selected" "$predictor_default_log"; then
   exit 1
 fi
 
+# Global lossless histogram counting also remains independently opt-in until
+# matched end-to-end measurements establish a useful command-count crossover.
+WEBP_ACCELERATOR=cuda WEBP_CUDA_HISTOGRAM_MIN_COMMANDS=0 \
+  WEBP_CUDA_COLOR=0 WEBP_CUDA_HASH=0 WEBP_CUDA_VERBOSE=1 \
+  "$encoder" -quiet -lossless -exact -m 4 "$root_dir/examples/test_ref.ppm" \
+  -o "$temporary_dir/histogram-default.webp" 2>>"$histogram_default_log"
+cmp "$temporary_dir/cold-cpu.webp" "$temporary_dir/histogram-default.webp"
+if grep -q "WebP-CUDA: histogram counted" "$histogram_default_log"; then
+  echo "CUDA histogram ran without the WEBP_CUDA_HISTOGRAM opt-in" >&2
+  exit 1
+fi
+
 for input do
   name=$(basename -- "$input")
 
@@ -71,13 +84,15 @@ for input do
   WEBP_ACCELERATOR=cuda WEBP_CUDA_MIN_PIXELS=0 \
     WEBP_CUDA_HASH_MIN_PIXELS=0 \
     WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_PREDICTOR=1 \
-    WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 WEBP_CUDA_VERBOSE=1 \
+    WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 WEBP_CUDA_HISTOGRAM=1 \
+    WEBP_CUDA_HISTOGRAM_MIN_COMMANDS=0 WEBP_CUDA_VERBOSE=1 \
     "$encoder" -quiet -lossless -exact -m 4 "$input" \
     -o "$temporary_dir/$name-cuda-1.webp" 2>>"$cuda_log"
   WEBP_ACCELERATOR=cuda WEBP_CUDA_MIN_PIXELS=0 \
     WEBP_CUDA_HASH_MIN_PIXELS=0 \
     WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_PREDICTOR=1 \
-    WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 \
+    WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 WEBP_CUDA_HISTOGRAM=1 \
+    WEBP_CUDA_HISTOGRAM_MIN_COMMANDS=0 \
     "$encoder" -quiet -lossless -exact -m 4 "$input" \
     -o "$temporary_dir/$name-cuda-2.webp"
   cmp "$temporary_dir/$name-cuda-1.webp" \
@@ -106,11 +121,27 @@ for input do
       "$encoder" -quiet -lossless -exact -m "$method" "$input" \
       -o "$temporary_dir/$name-hash-cpu.webp"
     WEBP_ACCELERATOR=cuda WEBP_CUDA_COLOR=0 WEBP_CUDA_HASH=1 \
+      WEBP_CUDA_HISTOGRAM=0 \
       WEBP_CUDA_HASH_MIN_PIXELS=0 WEBP_CUDA_VERBOSE=1 \
       "$encoder" -quiet -lossless -exact -m "$method" "$input" \
       -o "$temporary_dir/$name-hash-cuda.webp" 2>>"$cuda_log"
     cmp "$temporary_dir/$name-hash-cpu.webp" \
         "$temporary_dir/$name-hash-cuda.webp"
+  done
+
+  # Histogram population counts are exact and must preserve the CPU bitstream
+  # across every encoder effort level when isolated from other CUDA stages.
+  for method in 0 1 2 3 4 5 6; do
+    WEBP_ACCELERATOR=none \
+      "$encoder" -quiet -lossless -exact -m "$method" "$input" \
+      -o "$temporary_dir/$name-histogram-cpu.webp"
+    WEBP_ACCELERATOR=cuda WEBP_CUDA_COLOR=0 WEBP_CUDA_HASH=0 \
+      WEBP_CUDA_PREDICTOR=0 WEBP_CUDA_HISTOGRAM=1 \
+      WEBP_CUDA_HISTOGRAM_MIN_COMMANDS=0 WEBP_CUDA_VERBOSE=1 \
+      "$encoder" -quiet -lossless -exact -m "$method" "$input" \
+      -o "$temporary_dir/$name-histogram-cuda.webp" 2>>"$cuda_log"
+    cmp "$temporary_dir/$name-histogram-cpu.webp" \
+        "$temporary_dir/$name-histogram-cuda.webp"
   done
 
   # Cross-color output may choose a different valid transform than the CPU,
@@ -201,6 +232,9 @@ if [ "${WEBP_EXPECT_CUDA_PREDICTOR:-1}" -ne 0 ]; then
   grep -q "WebP-CUDA: predictor selected" "$cuda_log"
   grep -q "WebP-CUDA: transformed.*resident input" "$cuda_log"
 fi
+if [ "${WEBP_EXPECT_CUDA_HISTOGRAM:-1}" -ne 0 ]; then
+  grep -q "WebP-CUDA: histogram counted" "$cuda_log"
+fi
 grep -q "WebP-CUDA: lossy RGB->YUV" "$cuda_log"
 grep -q "WebP-CUDA: lossy analysis" "$cuda_log"
 if [ "${WEBP_EXPECT_CUDA_FUSED_LOSSY_ANALYSIS:-1}" -ne 0 ]; then
@@ -211,6 +245,7 @@ if grep -q "WebP-CUDA: using" "$cold_log"; then
   echo "small default encode initialized CUDA before its cold threshold" >&2
   exit 1
 fi
-printf 'PASS: observed forced predictor/color/hash/resident-lossless/RGB/fused-lossy-analysis/near-lossless CUDA stages\n'
+printf 'PASS: observed forced predictor/color/hash/histogram/resident-lossless/RGB/fused-lossy-analysis/near-lossless CUDA stages\n'
 printf 'PASS: lossy CUDA remains opt-in by default\n'
 printf 'PASS: predictor-policy CUDA remains opt-in by default\n'
+printf 'PASS: histogram CUDA remains opt-in by default\n'
