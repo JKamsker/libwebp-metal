@@ -1,0 +1,8 @@
+{
+  "command_processes": 0,
+  "reason": "timing is unauthorized and the diagnostic refusal preceded all workload stages",
+  "sample_rows": 0,
+  "status": "zero",
+  "timed_runner_invoked": false,
+  "timed_samples": 0
+}

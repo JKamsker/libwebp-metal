@@ -1,0 +1,8 @@
+{
+  "acquired": false,
+  "acquisition_attempted": false,
+  "path": null,
+  "reason": "session-guard refusal occurred before the frozen rehearsal can lease",
+  "released": false,
+  "schema": "libwebp-backref-cost-interval-search-v2-lease-v1"
+}

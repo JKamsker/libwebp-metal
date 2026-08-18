@@ -1,0 +1,57 @@
+{
+  "archive_return": {
+    "reason": "controlled refusal occurred before remote evidence archive build",
+    "status": "not_attempted"
+  },
+  "artifact_index_verified_after_extraction": false,
+  "benchmark_lease_attempted": false,
+  "cleanup_receipt": {
+    "absence_proved": true,
+    "home": "/Users/pandocs-agent-001",
+    "removed_exact_validated_child": true,
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.SMd9dq",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2",
+    "token": "run.SMd9dq",
+    "validated": true
+  },
+  "extraction_inventory": {
+    "reason": "no remote evidence archive was returned",
+    "status": "not_attempted"
+  },
+  "lease_record": {
+    "acquired": false,
+    "acquisition_attempted": false,
+    "path": null,
+    "reason": "session-guard refusal occurred before the frozen rehearsal can lease",
+    "released": false,
+    "schema": "libwebp-backref-cost-interval-search-v2-lease-v1"
+  },
+  "lease_transfer": {
+    "reason": "remote rehearsal produced no evidence directory",
+    "status": "not_attempted"
+  },
+  "operator_exit_code": 1,
+  "refusal": {
+    "controlled_exit": true,
+    "error_type": "RuntimeError",
+    "lease_record_present": true,
+    "reason": "rehearsal requires WEBP_BENCHMARK_SESSION unset",
+    "schema": "libwebp-backref-cost-interval-search-v2-refusal-v1",
+    "stage": "rehearsal-session-guard",
+    "status": "refused",
+    "timing_samples_present": false
+  },
+  "schema": "libwebp-backref-cost-interval-search-v2-refusal-return-rehearsal-v1",
+  "source_admission": {
+    "bundle_field_values_match": true,
+    "nested_bundle_field": "admission.bundle_sha256",
+    "nested_bundle_sha256": "b8a3445a01d2f29e6c9a3d2c2b56915df67ee30665a45da72b63152b50421079",
+    "source_commit": "d93f7b1d50ddf65d775689618f13b00a3057d1ba",
+    "source_tree": "495f3d4427edfbe340f6ee208f281854d2389c5d",
+    "status": "PASS",
+    "top_level_bundle_field": "source_bundle_sha256",
+    "top_level_bundle_sha256": "b8a3445a01d2f29e6c9a3d2c2b56915df67ee30665a45da72b63152b50421079"
+  },
+  "status": "BLOCKED",
+  "timed_runner_invoked": false
+}
