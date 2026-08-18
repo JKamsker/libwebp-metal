@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 7u
+#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 8u
 #define WEBP_ACCELERATOR_MAX_HISTOGRAM_SPANS 16u
 
 // These are deliberately encoder stages, not low-level GPU kernels. A backend
@@ -152,6 +152,11 @@ typedef struct {
   uint32_t* residuals;
   uint32_t* mode_image;
   int* best_bits;
+  // Out. A backend that can select modes but not apply them (near-lossless
+  // residual quantization applies modes with scan-order source rewrites) sets
+  // this to 1 on SUCCESS after filling only mode_image and best_bits; the
+  // caller then applies the prediction itself. The caller initializes it to 0.
+  int* modes_only;
 } WebPAcceleratorPredictorRequest;
 
 // This layout intentionally matches the encoder's private PixOrCopy command.

@@ -944,6 +944,354 @@ __global__ void PredictorResidualKernel(
       source[index], PredictorForPosition(source, x, y, mode, params));
 }
 
+// Near-lossless mode selection. The quantized residual path reconstructs the
+// source in scan order (each pixel's prediction context contains previously
+// reconstructed pixels), so residuals cannot be evaluated independently. The
+// CPU selection restarts that recurrence from original pixels at every tile
+// and mode, which makes each (tile, mode) recurrence self-contained: one
+// thread replays it exactly over a shared-memory copy of the tile while the
+// block cooperates on loading and histogram export. Mode selection itself
+// stays on the guided accumulated-histogram cost in a separate kernel, and
+// the residual application is left to the CPU (modes-only contract).
+
+// Largest tile edge the shared-memory recurrence supports (bits <= 6).
+constexpr uint32_t kNearLosslessMaxTileSize = 64u;
+constexpr unsigned int kNearLosslessTileThreads = 64u;
+
+__device__ __forceinline__ uint32_t NearLosslessAddPixels(uint32_t a,
+                                                          uint32_t b) {
+  const uint32_t alpha_and_green = (a & 0xff00ff00u) + (b & 0xff00ff00u);
+  const uint32_t red_and_blue = (a & 0x00ff00ffu) + (b & 0x00ff00ffu);
+  return (alpha_and_green & 0xff00ff00u) | (red_and_blue & 0x00ff00ffu);
+}
+
+__device__ __forceinline__ uint32_t NearLosslessAddGreen(uint32_t argb) {
+  const uint32_t green = (argb >> 8) & 0xffu;
+  uint32_t red_blue = argb & 0x00ff00ffu;
+  red_blue += (green << 16) | green;
+  red_blue &= 0x00ff00ffu;
+  return (argb & 0xff00ff00u) | red_blue;
+}
+
+__device__ __forceinline__ int NearLosslessMaxDiffBetween(uint32_t p1,
+                                                          uint32_t p2) {
+  const int diff_a = abs(static_cast<int>(p1 >> 24) -
+                         static_cast<int>(p2 >> 24));
+  const int diff_r = abs(static_cast<int>((p1 >> 16) & 0xffu) -
+                         static_cast<int>((p2 >> 16) & 0xffu));
+  const int diff_g = abs(static_cast<int>((p1 >> 8) & 0xffu) -
+                         static_cast<int>((p2 >> 8) & 0xffu));
+  const int diff_b = abs(static_cast<int>(p1 & 0xffu) -
+                         static_cast<int>(p2 & 0xffu));
+  return max(max(diff_a, diff_r), max(diff_g, diff_b));
+}
+
+__device__ __forceinline__ uint8_t NearLosslessDiffDevice(uint8_t a,
+                                                          uint8_t b) {
+  return static_cast<uint8_t>((static_cast<int>(a) - static_cast<int>(b)) &
+                              0xff);
+}
+
+// Exact port of NearLosslessComponent: quantize the residual to a multiple of
+// quantization, modulo 256, without crossing the inclusive boundary.
+__device__ uint8_t NearLosslessComponentDevice(uint8_t value, uint8_t predict,
+                                               uint8_t boundary,
+                                               int quantization) {
+  const int residual = (value - predict) & 0xff;
+  const int boundary_residual = (boundary - predict) & 0xff;
+  const int lower = residual & ~(quantization - 1);
+  const int upper = lower + quantization;
+  const int bias = ((boundary - value) & 0xff) < boundary_residual;
+  if (residual - lower < upper - residual + bias) {
+    if (residual > boundary_residual && lower <= boundary_residual) {
+      return static_cast<uint8_t>(lower + (quantization >> 1));
+    }
+    return static_cast<uint8_t>(lower);
+  } else {
+    if (residual <= boundary_residual && upper > boundary_residual) {
+      return static_cast<uint8_t>(lower + (quantization >> 1));
+    }
+    return static_cast<uint8_t>(upper & 0xff);
+  }
+}
+
+// Exact port of NearLossless (the quantized residual for one pixel).
+__device__ uint32_t NearLosslessResidualDevice(uint32_t value,
+                                               uint32_t predict,
+                                               int max_quantization,
+                                               int max_diff,
+                                               int used_subtract_green) {
+  int quantization;
+  uint8_t new_green = 0;
+  uint8_t green_diff = 0;
+  uint8_t a, r, g, b;
+  if (max_diff <= 2) {
+    return PredictorSubtractPixels(value, predict);
+  }
+  quantization = max_quantization;
+  while (quantization >= max_diff) {
+    quantization >>= 1;
+  }
+  if ((value >> 24) == 0u || (value >> 24) == 0xffu) {
+    a = NearLosslessDiffDevice((value >> 24) & 0xffu, (predict >> 24) & 0xffu);
+  } else {
+    a = NearLosslessComponentDevice(value >> 24, predict >> 24, 0xff,
+                                    quantization);
+  }
+  g = NearLosslessComponentDevice((value >> 8) & 0xffu, (predict >> 8) & 0xffu,
+                                  0xff, quantization);
+  if (used_subtract_green) {
+    new_green = static_cast<uint8_t>(((predict >> 8) + g) & 0xffu);
+    green_diff = NearLosslessDiffDevice(new_green, (value >> 8) & 0xffu);
+  }
+  r = NearLosslessComponentDevice(
+      NearLosslessDiffDevice((value >> 16) & 0xffu, green_diff),
+      (predict >> 16) & 0xffu, static_cast<uint8_t>(0xff - new_green),
+      quantization);
+  b = NearLosslessComponentDevice(
+      NearLosslessDiffDevice(value & 0xffu, green_diff),
+      predict & 0xffu, static_cast<uint8_t>(0xff - new_green), quantization);
+  return (static_cast<uint32_t>(a) << 24) | (static_cast<uint32_t>(r) << 16) |
+         (static_cast<uint32_t>(g) << 8) | b;
+}
+
+struct NearLosslessKernelParams {
+  uint32_t width;
+  uint32_t height;
+  uint32_t bits;
+  uint32_t tile_columns;
+  uint32_t max_quantization;
+  uint32_t used_subtract_green;
+};
+
+// One block per (tile, mode): replay the CPU's per-tile quantized recurrence
+// and export the residual histogram for the selection kernel.
+__global__ void NearLosslessTileHistogramKernel(
+    const uint32_t* WEBP_CUDA_RESTRICT source,
+    uint32_t* WEBP_CUDA_RESTRICT histograms, uint32_t tile_row,
+    NearLosslessKernelParams params) {
+  const uint32_t tile_x = blockIdx.x;
+  const int mode = static_cast<int>(blockIdx.y);
+  const uint32_t tile_size = 1u << params.bits;
+  const uint32_t x0 = tile_x * tile_size;
+  const uint32_t y0 = tile_row * tile_size;
+  const uint32_t tile_width =
+      tile_size < params.width - x0 ? tile_size : params.width - x0;
+  const uint32_t tile_height =
+      tile_size < params.height - y0 ? tile_size : params.height - y0;
+
+  // original[r][c] and reconstructed[r][c] hold image pixel
+  // (x0 + c - 1, y0 + r - 1); original has one extra row below for the
+  // max-diff "down" neighbor.
+  constexpr uint32_t kStride = kNearLosslessMaxTileSize + 2u;
+  __shared__ uint32_t original[(kNearLosslessMaxTileSize + 2u) * kStride];
+  __shared__ uint32_t reconstructed[(kNearLosslessMaxTileSize + 1u) * kStride];
+  __shared__ unsigned int histogram[4u * 256u];
+
+  const uint32_t rows = tile_height + 2u;
+  const uint32_t columns = tile_width + 2u;
+  for (uint32_t i = threadIdx.x; i < rows * columns; i += blockDim.x) {
+    const uint32_t r = i / columns;
+    const uint32_t c = i % columns;
+    // Clamp out-of-image context; clamped cells are never read because the
+    // boundary rules fall back to plain subtraction there.
+    const int32_t image_y =
+        min(max(static_cast<int32_t>(y0 + r) - 1, 0),
+            static_cast<int32_t>(params.height) - 1);
+    int32_t image_x = static_cast<int32_t>(x0 + c) - 1;
+    uint32_t value;
+    if (image_x >= static_cast<int32_t>(params.width)) {
+      // The top-right context of the last column wraps to the leftmost pixel
+      // of the next row, exactly like the CPU's one-past-the-row copy.
+      const int32_t wrap_y =
+          min(image_y + 1, static_cast<int32_t>(params.height) - 1);
+      value = source[static_cast<uint32_t>(wrap_y) * params.width];
+    } else {
+      image_x = max(image_x, 0);
+      value = source[static_cast<uint32_t>(image_y) * params.width +
+                     static_cast<uint32_t>(image_x)];
+    }
+    original[r * kStride + c] = value;
+    if (r < rows - 1u) reconstructed[r * kStride + c] = value;
+  }
+  for (uint32_t i = threadIdx.x; i < 4u * 256u; i += blockDim.x) {
+    histogram[i] = 0u;
+  }
+  __syncthreads();
+
+  if (threadIdx.x == 0u) {
+    for (uint32_t cy = 0u; cy < tile_height; ++cy) {
+      const uint32_t y = y0 + cy;
+      for (uint32_t cx = 0u; cx < tile_width; ++cx) {
+        const uint32_t x = x0 + cx;
+        uint32_t* const cell = &reconstructed[(cy + 1u) * kStride + cx + 1u];
+        const uint32_t current = *cell;
+        uint32_t prediction;
+        uint32_t residual;
+        if (y == 0u) {
+          prediction = (x == 0u) ? 0xff000000u
+                                 : reconstructed[(cy + 1u) * kStride + cx];
+        } else if (x == 0u) {
+          prediction = reconstructed[cy * kStride + cx + 1u];
+        } else {
+          prediction = PredictorPixel(
+              static_cast<uint32_t>(mode),
+              reconstructed[(cy + 1u) * kStride + cx],
+              reconstructed[cy * kStride + cx],
+              reconstructed[cy * kStride + cx + 1u],
+              reconstructed[cy * kStride + cx + 2u]);
+        }
+        if (params.max_quantization == 1u || mode == 0 || y == 0u ||
+            y == params.height - 1u || x == 0u || x == params.width - 1u) {
+          residual = PredictorSubtractPixels(current, prediction);
+        } else {
+          // Max diff around the pixel from original neighbors, with the green
+          // offset re-applied when subtract-green ran first.
+          uint32_t center = original[(cy + 1u) * kStride + cx + 1u];
+          uint32_t up = original[cy * kStride + cx + 1u];
+          uint32_t down = original[(cy + 2u) * kStride + cx + 1u];
+          uint32_t left = original[(cy + 1u) * kStride + cx];
+          uint32_t right = original[(cy + 1u) * kStride + cx + 2u];
+          if (params.used_subtract_green != 0u) {
+            center = NearLosslessAddGreen(center);
+            up = NearLosslessAddGreen(up);
+            down = NearLosslessAddGreen(down);
+            left = NearLosslessAddGreen(left);
+            right = NearLosslessAddGreen(right);
+          }
+          const int max_diff =
+              max(max(NearLosslessMaxDiffBetween(center, up),
+                      NearLosslessMaxDiffBetween(center, down)),
+                  max(NearLosslessMaxDiffBetween(center, left),
+                      NearLosslessMaxDiffBetween(center, right)));
+          residual = NearLosslessResidualDevice(
+              current, prediction,
+              static_cast<int>(params.max_quantization), max_diff,
+              static_cast<int>(params.used_subtract_green));
+          *cell = NearLosslessAddPixels(prediction, residual);
+        }
+        ++histogram[residual >> 24];
+        ++histogram[256u + ((residual >> 16) & 255u)];
+        ++histogram[512u + ((residual >> 8) & 255u)];
+        ++histogram[768u + (residual & 255u)];
+      }
+    }
+  }
+  __syncthreads();
+  {
+    uint32_t* const output =
+        histograms + (tile_x * static_cast<uint32_t>(kPredictorNumModes) +
+                      static_cast<uint32_t>(mode)) *
+                         4u * 256u;
+    for (uint32_t i = threadIdx.x; i < 4u * 256u; i += blockDim.x) {
+      output[i] = histogram[i];
+    }
+  }
+}
+
+// One block per tile: score the stored per-mode histograms against the
+// accumulated winners of previous rows and select the mode. Fold-in runs as a
+// separate launch so scoring never races with it.
+__global__ void NearLosslessSelectRowKernel(
+    const uint32_t* WEBP_CUDA_RESTRICT histograms,
+    uint32_t* WEBP_CUDA_RESTRICT modes,
+    const uint32_t* WEBP_CUDA_RESTRICT accumulated, uint32_t tile_row,
+    NearLosslessKernelParams params) {
+  const uint32_t tile_x = blockIdx.x;
+  const uint32_t tile_size = 1u << params.bits;
+  const uint32_t x0 = tile_x * tile_size;
+  const uint32_t y0 = tile_row * tile_size;
+  const uint32_t tile_width =
+      tile_size < params.width - x0 ? tile_size : params.width - x0;
+  const uint32_t tile_height =
+      tile_size < params.height - y0 ? tile_size : params.height - y0;
+  const uint32_t count = tile_width * tile_height;
+  const uint32_t tile_index = tile_row * params.tile_columns + tile_x;
+  int above_mode = -1;
+  if (tile_row > 0u) {
+    above_mode = static_cast<int>(
+        (modes[tile_index - params.tile_columns] >> 8) & 255u);
+  }
+  __shared__ double partial_slog[kPredictorThreadsPerBlock];
+  __shared__ double partial_bias[kPredictorThreadsPerBlock];
+  __shared__ double best_cost;
+  __shared__ int best_mode;
+  if (threadIdx.x == 0u) {
+    best_cost = 0.0;
+    best_mode = 0;
+  }
+  for (int mode = 0; mode < kPredictorNumModes; ++mode) {
+    const uint32_t* const histogram =
+        histograms + (tile_x * static_cast<uint32_t>(kPredictorNumModes) +
+                      static_cast<uint32_t>(mode)) *
+                         4u * 256u;
+    double slog = 0.0;
+    double bias = 0.0;
+    for (uint32_t i = threadIdx.x; i < 4u * 256u; i += blockDim.x) {
+      const uint32_t bin_count = histogram[i];
+      if (bin_count == 0u) continue;
+      const uint32_t accumulated_count = accumulated[i];
+      slog += PredictorSLog2Double(bin_count) +
+              PredictorSLog2Double(bin_count + accumulated_count) -
+              PredictorSLog2Double(accumulated_count);
+      bias += static_cast<double>(PredictorBiasWeight(i & 255u)) * bin_count;
+    }
+    partial_slog[threadIdx.x] = slog;
+    partial_bias[threadIdx.x] = bias;
+    __syncthreads();
+    for (uint32_t half = blockDim.x >> 1; half > 0u; half >>= 1) {
+      if (threadIdx.x < half) {
+        partial_slog[threadIdx.x] += partial_slog[threadIdx.x + half];
+        partial_bias[threadIdx.x] += partial_bias[threadIdx.x + half];
+      }
+      __syncthreads();
+    }
+    if (threadIdx.x == 0u) {
+      double cost = 4.0 * PredictorSLog2Double(count) - partial_slog[0] -
+                    partial_bias[0] * 0.1;
+      if (mode == above_mode) cost -= 15.0;
+      if (mode == 0 || cost < best_cost) {
+        best_cost = cost;
+        best_mode = mode;
+      }
+    }
+    __syncthreads();
+  }
+  if (threadIdx.x == 0u) {
+    modes[tile_index] =
+        0xff000000u | (static_cast<uint32_t>(best_mode) << 8);
+  }
+}
+
+// One block per tile: fold the selected mode's stored histogram into the
+// accumulation guiding the following tile rows.
+__global__ void NearLosslessAccumulateRowKernel(
+    const uint32_t* WEBP_CUDA_RESTRICT histograms,
+    const uint32_t* WEBP_CUDA_RESTRICT modes,
+    uint32_t* WEBP_CUDA_RESTRICT accumulated, uint32_t tile_row,
+    NearLosslessKernelParams params) {
+  const uint32_t tile_x = blockIdx.x;
+  const uint32_t tile_size = 1u << params.bits;
+  const uint32_t x0 = tile_x * tile_size;
+  const uint32_t y0 = tile_row * tile_size;
+  const uint32_t tile_width =
+      tile_size < params.width - x0 ? tile_size : params.width - x0;
+  const uint32_t tile_height =
+      tile_size < params.height - y0 ? tile_size : params.height - y0;
+  const uint32_t tile_index = tile_row * params.tile_columns + tile_x;
+  const uint32_t mode = (modes[tile_index] >> 8) & 255u;
+  const uint32_t* const histogram =
+      histograms +
+      (tile_x * static_cast<uint32_t>(kPredictorNumModes) + mode) * 4u * 256u;
+  for (uint32_t i = threadIdx.x; i < 4u * 256u; i += blockDim.x) {
+    const uint32_t bin_count = histogram[i];
+    if (bin_count != 0u) atomicAdd(accumulated + i, bin_count);
+  }
+  if (threadIdx.x == 0u) {
+    atomicAdd(accumulated + 1024u, tile_width * tile_height);
+  }
+}
+
 #endif  // WEBP_CUDA_ENABLE_PREDICTOR
 
 #if defined(WEBP_CUDA_ENABLE_HASH_CHAIN)
@@ -2510,18 +2858,24 @@ WebPAcceleratorResult CUDAPredictorLocked(
   }
   if (request == nullptr || request->source == nullptr ||
       request->residuals == nullptr || request->mode_image == nullptr ||
-      request->best_bits == nullptr || request->width <= 0 ||
+      request->best_bits == nullptr || request->modes_only == nullptr ||
+      request->width <= 0 ||
       request->height <= 0 || request->min_bits < 0 ||
       request->max_bits < request->min_bits || request->max_bits > 8 ||
       (request->used_subtract_green != 0 &&
        request->used_subtract_green != 1)) {
     return WEBP_ACCELERATOR_ERROR;
   }
-  // Near-lossless quantization rewrites source pixels in scan order and must
-  // retain the CPU implementation. Exact encoding bypasses that quantization
-  // entirely (GetResidual takes the PredictBatch branch for every
-  // max_quantization), so exact requests are accepted regardless.
-  if (request->max_quantization != 1 && request->exact == 0) {
+  // Exact encoding bypasses near-lossless residual quantization entirely
+  // (GetResidual takes the PredictBatch branch for every max_quantization),
+  // so exact requests behave as max_quantization == 1. Non-exact quantized
+  // requests replay the CPU's per-tile recurrence on the device and return
+  // only the mode image (modes-only contract); the shared-memory recurrence
+  // supports tile edges up to 64 pixels.
+  const bool near_lossless =
+      request->max_quantization != 1 && request->exact == 0;
+  if (near_lossless &&
+      (1u << request->max_bits) > kNearLosslessMaxTileSize) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
   if (static_cast<size_t>(request->width) >
@@ -2581,10 +2935,18 @@ WebPAcceleratorResult CUDAPredictorLocked(
   state->resident_lossless_pixels_valid = false;
   error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
                              pixel_bytes, state->stream);
-  if (error == cudaSuccess) {
+  if (error == cudaSuccess && !near_lossless) {
     error = EnsureDeviceBuffer(&state->resident_lossless_pixels,
                                &state->resident_lossless_pixel_capacity,
                                pixel_bytes, state->stream);
+  }
+  if (error == cudaSuccess && near_lossless) {
+    // Per-row scratch: one 4 x 256 histogram per (tile, mode).
+    error = EnsureDeviceBuffer(
+        &state->transform, &state->transform_capacity,
+        static_cast<size_t>(tile_columns) * kPredictorNumModes * 4u * 256u *
+            sizeof(uint32_t),
+        state->stream);
   }
   if (error == cudaSuccess) {
     error = EnsureDeviceBuffer(
@@ -2633,20 +2995,50 @@ WebPAcceleratorResult CUDAPredictorLocked(
     // separate launches so scoring reads a stable accumulated state.
     for (uint32_t tile_row = 0;
          error == cudaSuccess && tile_row < tile_rows; ++tile_row) {
-      PredictorSelectRowKernel<<<tile_columns, kPredictorThreadsPerBlock, 0,
-                                 state->stream>>>(
-          state->pixels, device_modes, accumulated, tile_row, params);
-      error = cudaGetLastError();
-      if (error == cudaSuccess) {
-        PredictorAccumulateRowKernel<<<tile_columns,
-                                       kPredictorThreadsPerBlock, 0,
-                                       state->stream>>>(
+      if (near_lossless) {
+        const NearLosslessKernelParams nl_params = {
+            static_cast<uint32_t>(request->width),
+            static_cast<uint32_t>(request->height),
+            static_cast<uint32_t>(request->max_bits), tile_columns,
+            static_cast<uint32_t>(request->max_quantization),
+            static_cast<uint32_t>(request->used_subtract_green)};
+        NearLosslessTileHistogramKernel<<<
+            dim3(tile_columns, kPredictorNumModes), kNearLosslessTileThreads,
+            0, state->stream>>>(state->pixels, state->transform, tile_row,
+                                nl_params);
+        error = cudaGetLastError();
+        if (error == cudaSuccess) {
+          NearLosslessSelectRowKernel<<<tile_columns,
+                                        kPredictorThreadsPerBlock, 0,
+                                        state->stream>>>(
+              state->transform, device_modes, accumulated, tile_row,
+              nl_params);
+          error = cudaGetLastError();
+        }
+        if (error == cudaSuccess) {
+          NearLosslessAccumulateRowKernel<<<tile_columns,
+                                            kPredictorThreadsPerBlock, 0,
+                                            state->stream>>>(
+              state->transform, device_modes, accumulated, tile_row,
+              nl_params);
+          error = cudaGetLastError();
+        }
+      } else {
+        PredictorSelectRowKernel<<<tile_columns, kPredictorThreadsPerBlock, 0,
+                                   state->stream>>>(
             state->pixels, device_modes, accumulated, tile_row, params);
         error = cudaGetLastError();
+        if (error == cudaSuccess) {
+          PredictorAccumulateRowKernel<<<tile_columns,
+                                         kPredictorThreadsPerBlock, 0,
+                                         state->stream>>>(
+              state->pixels, device_modes, accumulated, tile_row, params);
+          error = cudaGetLastError();
+        }
       }
     }
   }
-  if (error == cudaSuccess) {
+  if (error == cudaSuccess && !near_lossless) {
     const uint32_t blocks =
         (static_cast<uint32_t>(pixel_count) + kPredictorThreadsPerBlock - 1u) /
         kPredictorThreadsPerBlock;
@@ -2659,7 +3051,7 @@ WebPAcceleratorResult CUDAPredictorLocked(
   if (error == cudaSuccess && timing) {
     error = cudaEventRecord(state->event_stop, state->stream);
   }
-  if (error == cudaSuccess) {
+  if (error == cudaSuccess && !near_lossless) {
     error = DownloadFromDevice(state->host_pixels,
                                state->resident_lossless_pixels, pixel_bytes,
                                state->stream);
@@ -2674,11 +3066,14 @@ WebPAcceleratorResult CUDAPredictorLocked(
     return ReportError(state, "predictor", error, true);
   }
 
-  memcpy(request->residuals, state->host_pixels, pixel_bytes);
+  if (!near_lossless) {
+    memcpy(request->residuals, state->host_pixels, pixel_bytes);
+  }
   memcpy(request->mode_image, state->host_chain, mode_bytes);
   *request->best_bits = request->max_bits;
+  *request->modes_only = near_lossless ? 1 : 0;
 #if defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
-  if (EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", true)) {
+  if (!near_lossless && EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", true)) {
     state->resident_lossless_host_pixels = request->residuals;
     state->resident_lossless_pixel_count = pixel_count;
     state->resident_lossless_xsize = request->width;
@@ -2692,9 +3087,12 @@ WebPAcceleratorResult CUDAPredictorLocked(
       (void)cudaGetLastError();
     }
     fprintf(stderr,
-            "WebP-CUDA: predictor selected %zu tiles and transformed %dx%d "
+            "WebP-CUDA: predictor selected %zu tiles%s for %dx%d "
             "in %.3f ms%s\n",
-            mode_count, request->width, request->height, elapsed_ms,
+            mode_count,
+            near_lossless ? " (near-lossless, modes only)"
+                          : " and transformed",
+            request->width, request->height, elapsed_ms,
             state->resident_lossless_pixels_valid ? " (resident pixels)" :
                                                     "");
   }

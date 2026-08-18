@@ -793,22 +793,32 @@ int VP8LResidualImage(int width, int height, int min_bits, int max_bits,
     }
     *best_bits = max_bits;
   } else {
+    int modes_only = 0;
     const WebPAcceleratorPredictorRequest request = {
         width,          height,
         min_bits,       max_bits,
         max_quantization,
         exact,          used_subtract_green,
         argb,           argb,
-        image,          best_bits};
+        image,          best_bits,
+        &modes_only};
     // A backend's mode search follows this function's cost model but not its
     // exact arithmetic, so the predictor image is valid and the caller
     // promises decoded-pixel parity rather than byte identity (as with the
     // accelerated cross-color search). Optimizing the sampling afterwards is
     // sound because merged tiles carry identical modes, leaving the
-    // already-applied residuals unchanged.
+    // already-applied residuals unchanged. A backend may also select modes
+    // without applying them (near-lossless quantization applies with
+    // scan-order source rewrites); the CPU application below then matches this
+    // function's ordinary optimize-then-apply order.
     if (WebPAcceleratePredictor(&request) == WEBP_ACCELERATOR_SUCCESS) {
       VP8LOptimizeSampling(image, width, height, *best_bits,
                            MAX_TRANSFORM_BITS, best_bits);
+      if (modes_only) {
+        CopyImageWithPrediction(width, height, *best_bits, image, argb_scratch,
+                                argb, low_effort, max_quantization, exact,
+                                used_subtract_green);
+      }
       return WebPReportProgress(pic, percent_start + percent_range, percent);
     }
     // Allocate data to try all samplings from min_bits to max_bits.

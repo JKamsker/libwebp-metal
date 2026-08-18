@@ -202,9 +202,10 @@ int main(void) {
   uint32_t predictor_source[2] = {11u, 12u};
   uint32_t predictor_modes[1] = {13u};
   int predictor_bits = 0;
+  int predictor_modes_only = 0;
   const WebPAcceleratorPredictorRequest predictor_request = {
       2, 1, 2, 5, 1, 1, 0, predictor_source, predictor_source,
-      predictor_modes, &predictor_bits};
+      predictor_modes, &predictor_bits, &predictor_modes_only};
   const WebPAcceleratorHistogramCommand histogram_command = {0, 0, 1,
                                                               0xff000000u};
   const WebPAcceleratorHistogramSpan histogram_span = {&histogram_command, 1};

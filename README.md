@@ -111,11 +111,15 @@ application; `WEBP_CUDA_PREDICTOR_MIN_PIXELS=N` controls its threshold. Tile
 rows are scored in launch order against the accumulated residual histogram of
 the previous rows, mirroring the CPU cost model; the chosen predictor image is
 valid but not byte-identical to the CPU search, so lossless modes promise
-decoded-pixel parity (as with the accelerated cross-color search). It declines
-non-exact requests that would rewrite the source in scan order: near-lossless
-residual quantization and inputs containing fully transparent pixels. Exact
-encodes bypass both rewrites, so the stage accepts them at every
-near-lossless strength.
+decoded-pixel parity (as with the accelerated cross-color search). Exact
+encodes bypass near-lossless residual quantization entirely, so the stage
+accepts them at every near-lossless strength. Non-exact quantized requests
+replay the CPU's per-tile reconstruction recurrence on the device and return
+only the mode image; the encoder then applies the prediction itself
+(modes-only contract), so the output honors the same near-lossless error
+bound as the CPU search while its bytes may differ. Non-exact inputs
+containing fully transparent pixels still decline, because their RGB cleanup
+rewrites the source across tiles.
 `WEBP_CUDA_HISTOGRAM=1` enables exact population counting for the full-image
 backward-reference histograms used during candidate-cost evaluation and final
 Huffman preparation. It uploads the encoder's at-most-16 linked command spans
