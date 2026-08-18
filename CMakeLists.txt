@@ -66,6 +66,8 @@ option(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT
        "Build the independent v5 remote backref-cost workspace experiment." OFF)
 option(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT
        "Build the independent backref-cost interval-search v1 experiment." OFF)
+option(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT
+       "Build the independent backref-cost interval-search v2 experiment." OFF)
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
 option(WEBP_BUILD_CWEBP "Build the cwebp command line tool." ON)
 option(WEBP_BUILD_DWEBP "Build the dwebp command line tool." ON)
@@ -414,6 +416,10 @@ if(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
   list(APPEND WEBP_ENC_SRCS
        ${WEBP_SRC_DIR}/enc/backref_cost_interval_search_v1_experiment_enc.c)
 endif()
+if(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+  list(APPEND WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/backref_cost_interval_search_v2_experiment_enc.c)
+endif()
 
 if(WEBP_ENABLE_METAL)
   set_source_files_properties(
@@ -655,6 +661,10 @@ if(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
   target_compile_definitions(
     webpencode PRIVATE WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=1)
 endif()
+if(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT=1)
+endif()
 add_library(webp $<TARGET_OBJECTS:webpdecode> $<TARGET_OBJECTS:webpdsp>
                  $<TARGET_OBJECTS:webpencode> $<TARGET_OBJECTS:webputils>)
 if(WEBP_ENABLE_FBOUNDS_SAFETY)
@@ -778,6 +788,17 @@ if(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT)
     backref_cost_interval_search_v1_experiment_runner PRIVATE webp)
   target_include_directories(
     backref_cost_interval_search_v1_experiment_runner
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+
+if(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT)
+  add_executable(
+    backref_cost_interval_search_v2_experiment_runner
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/backref_cost_interval_search_v2_experiment_runner.c)
+  target_link_libraries(
+    backref_cost_interval_search_v2_experiment_runner PRIVATE webp)
+  target_include_directories(
+    backref_cost_interval_search_v2_experiment_runner
     PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
 endif()
 

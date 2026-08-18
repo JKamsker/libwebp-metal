@@ -74,6 +74,14 @@ the protocol/admission/archive tests retain the proven indexed return,
 independent lease/cleanup, and noninteractive Unix-make admission structure
 under new v1 identities.
 
+`scripts/test_backref_cost_interval_search_v2_experiment.py` verifies the
+PushInterval-local scan-derived append hint across the same 26 publication
+cells, candidate-off and predecessor-gate isolation, deterministic repeat,
+injected pre-DP fallback, decoded pixels, default omission, and sanitizer
+boundaries. Its recorder is untimed and absent from both timed binaries; the
+v2 protocol/admission/archive tests retain indexed safe return, independent
+lease/cleanup, exact-child absence, and admitted noninteractive Unix make.
+
 ## Building
 
 ### Fuzzers

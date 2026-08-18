@@ -1,0 +1,23 @@
+{
+  "schema": "libwebp-backref-cost-interval-search-v2-local-validation-v1",
+  "status": "PASS",
+  "base_commit": "22456df935cb3e9e834c0d06a3240db708ace2d7",
+  "timing_performed": false,
+  "correctness_cells": 26,
+  "publication_cases": 9,
+  "methods": [4, 6],
+  "qualities": [24, 25, 26, 75, 100],
+  "candidate_off_exact": true,
+  "invalid_runtime_exact": true,
+  "candidate_repeat_exact": true,
+  "fault_fallback_exact": true,
+  "predecessor_runtime_gates_isolated": true,
+  "default_build_runtime_environment_independent": true,
+  "decoded_pixels_exact": true,
+  "input_hashes_immutable": true,
+  "sanitizers": ["undefined,integer", "array-bounds,pointer-overflow"],
+  "generated_boundary_cases_per_sanitizer": 8,
+  "baseline_preprocessed_sha256": "d46195cd25db5063f787bbaaa6098850622a7362cc7bd384d4b8bb6da17aaa4f",
+  "candidate_preprocessed_sha256": "60a059cb6e953932f8724405c491e91d59550e8e6c17b51dd7473841a2e2f4ce",
+  "helper_sha256_at_validation": "683e8b2a52030c166f57138cb0cdda2b3088a5ddc624e24ab814a4f0baffa3ad"
+}

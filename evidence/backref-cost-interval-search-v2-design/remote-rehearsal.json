@@ -1,0 +1,68 @@
+{
+  "archive_return": {
+    "artifact_index": "remote-rehearsal-returned/artifact-hashes.json",
+    "returned_files_present": true,
+    "status": "incomplete-top-level-report"
+  },
+  "benchmark_lease_attempted": false,
+  "benchmark_session_present": false,
+  "cleanup_receipt": {
+    "absence_proved": true,
+    "captured_at_utc": "2026-08-18T22:32:26Z",
+    "exact_run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.mvmKuE",
+    "exact_run_exists": false,
+    "independent_schema_receipt_emitted": false,
+    "safe_root_children": 0,
+    "status": "read-only-post-failure-observation"
+  },
+  "extraction_inventory": {
+    "directory": "remote-rehearsal-returned",
+    "files_present": true,
+    "status": "present"
+  },
+  "failure": {
+    "controlled_fail_closed": true,
+    "error_type": "KeyError",
+    "field": "bundle_sha256",
+    "reason": "local evidence-return orchestrator read an absent top-level admission-result key",
+    "retry_attempted": false,
+    "stderr": "Traceback (most recent call last): File <stdin>, line 35, in <module>; KeyError: 'bundle_sha256'"
+  },
+  "lease_record": {
+    "path": "remote-rehearsal-returned/lease-record.json",
+    "value": {
+      "acquired": false,
+      "acquisition_attempted": false,
+      "released": false
+    }
+  },
+  "lease_transfer": {
+    "independent_transfer_record_emitted": false,
+    "status": "unavailable-after-wrapper-failure"
+  },
+  "operator_exit_code": 0,
+  "preflight": {
+    "correctness_cells": 26,
+    "exact_build_commands": 10,
+    "status": "PASS",
+    "timed_samples": 0,
+    "work_metric_rows": 16
+  },
+  "process_isolation": {
+    "post_failure_runner_worker_count": 0,
+    "rehearsal_record": "remote-rehearsal-returned/rehearsal.json"
+  },
+  "returned_artifact_index_verified": false,
+  "schema": "libwebp-backref-cost-interval-search-v2-remote-rehearsal-v1",
+  "source_admission": {
+    "contract": {
+      "local_bundle_field": "source_bundle_sha256",
+      "remote_bundle_field": "admission.bundle_sha256"
+    },
+    "source_commit": "6781a606087239b93db64b713f2ecc4076fc2b78",
+    "status": "PASS"
+  },
+  "source_commit": "6781a606087239b93db64b713f2ecc4076fc2b78",
+  "status": "BLOCKED",
+  "timed_runner_invoked": false
+}

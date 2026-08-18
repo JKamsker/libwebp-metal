@@ -1,0 +1,208 @@
+{
+  "benchmark_lease_attempted": false,
+  "benchmark_session_present": false,
+  "correctness_cells": 26,
+  "global_path_changed": false,
+  "host_settings_changed": false,
+  "process_isolation": {
+    "benchmark_or_cuda_matches": [],
+    "captured_at_utc": "2026-08-18T22:29:43Z",
+    "github_runner_listener_present": true,
+    "process_table_sha256": "b448d21f42170e4e0e17000082542361a8ca5ed6f60b30c6a46e46a4ed5691eb",
+    "runner_worker_matches": [],
+    "stage": "rehearsal"
+  },
+  "runner_directories_or_services_touched": false,
+  "schema": "libwebp-backref-cost-interval-search-v2-rehearsal-v1",
+  "source_commit": "6781a606087239b93db64b713f2ecc4076fc2b78",
+  "status": "PASS",
+  "timed_runner_invoked": false,
+  "timed_samples": 0,
+  "toolchain": {
+    "cmake_used": false,
+    "compiler_sdk_probe_sha256": "5562412ec41b05700c7ee94571641fe6cc15c00e274a991c39a426bdc846b93e",
+    "effective_compiler": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "effective_developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+    "effective_sdk_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+    "effective_sdk_version": "26.2",
+    "environment": {
+      "LANG": "C.UTF-8",
+      "LC_ALL": "C.UTF-8",
+      "PATH": "/usr/bin:/bin:/usr/sbin:/sbin"
+    },
+    "exact_build_commands": [
+      "/usr/bin/git clone --no-hardlinks --no-checkout {source} {build-variant}",
+      "/usr/bin/git checkout --detach {source_commit}",
+      "/usr/bin/make -f makefile.unix -j4 CC={clang} CXX={clang++} AR={ar} RANLIB={ranlib} CFLAGS=-O3 -DNDEBUG -arch arm64 -isysroot {sdk} LDFLAGS=-arch arm64 -isysroot {sdk} EXTRA_FLAGS= DWEBP_LIBS= CWEBP_LIBS= GIF_LIBS= WEBP_ENABLE_METAL=0 WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_DETERMINISTIC_BUILD=1 WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT={0|1} examples/cwebp examples/dwebp [candidate runner]",
+      "{clang} -O3 -DNDEBUG -arch arm64 -isysroot {sdk} -I{baseline} {runner.c} {baseline}/src/libwebp.a {baseline}/sharpyuv/libsharpyuv.a -o {baseline runner}"
+    ],
+    "executables": {
+      "ar": {
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+        "path_type": "regular",
+        "sha256": "e914ec3c1eb8ca99c7d5f2f9bd82ac3458d0ab14556a8a3441b28f37baaa77c9",
+        "version_argv": [
+          "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar"
+        ],
+        "version_exit_code": 1,
+        "version_lines": [
+          "usage:  ar -d [-TLsv] archive file ...",
+          "\tar -m [-TLsv] archive file ...",
+          "\tar -m [-abiTLsv] position archive file ...",
+          "\tar -p [-TLsv] archive [file ...]",
+          "\tar -q [-cTLsv] archive file ...",
+          "\tar -r [-cuTLsv] archive file ...",
+          "\tar -r [-abciuTLsv] position archive file ...",
+          "\tar -t [-TLsv] archive [file ...]",
+          "\tar -x [-ouTLsv] archive [file ...]"
+        ]
+      },
+      "clang": {
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "path_type": "regular",
+        "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+        "version_argv": [
+          "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "--version"
+        ],
+        "version_exit_code": 0,
+        "version_lines": [
+          "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+          "Target: arm64-apple-darwin25.2.0",
+          "Thread model: posix",
+          "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+        ]
+      },
+      "clang++": {
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+        "path_type": "symlink",
+        "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+        "version_argv": [
+          "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+          "--version"
+        ],
+        "version_exit_code": 0,
+        "version_lines": [
+          "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+          "Target: arm64-apple-darwin25.2.0",
+          "Thread model: posix",
+          "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+        ]
+      },
+      "git": {
+        "canonical_path": "/usr/bin/git",
+        "path": "/usr/bin/git",
+        "path_type": "regular",
+        "sha256": "3e7d30871a9740446f33a907b14d28f10ebe6d4e1c146a4c0788308f573a6609",
+        "version_argv": [
+          "/usr/bin/git",
+          "--version"
+        ],
+        "version_exit_code": 0,
+        "version_lines": [
+          "git version 2.50.1 (Apple Git-155)"
+        ]
+      },
+      "make": {
+        "canonical_path": "/usr/bin/make",
+        "path": "/usr/bin/make",
+        "path_type": "regular",
+        "sha256": "3e7d30871a9740446f33a907b14d28f10ebe6d4e1c146a4c0788308f573a6609",
+        "version_argv": [
+          "/usr/bin/make",
+          "--version"
+        ],
+        "version_exit_code": 0,
+        "version_lines": [
+          "GNU Make 3.81",
+          "Copyright (C) 2006  Free Software Foundation, Inc.",
+          "This is free software; see the source for copying conditions.",
+          "There is NO warranty; not even for MERCHANTABILITY or FITNESS FOR A",
+          "PARTICULAR PURPOSE.",
+          "",
+          "This program built for i386-apple-darwin11.3.0"
+        ]
+      },
+      "python3": {
+        "canonical_path": "/usr/bin/python3",
+        "path": "/usr/bin/python3",
+        "path_type": "regular",
+        "sha256": "3e7d30871a9740446f33a907b14d28f10ebe6d4e1c146a4c0788308f573a6609",
+        "version_argv": [
+          "/usr/bin/python3",
+          "--version"
+        ],
+        "version_exit_code": 0,
+        "version_lines": [
+          "Python 3.9.6"
+        ]
+      },
+      "ranlib": {
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+        "path_type": "symlink",
+        "sha256": "779903653ff38059513ef4f34846ab8b53f71f9cb7c066b29a47e520527b6cfa",
+        "version_argv": [
+          "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib"
+        ],
+        "version_exit_code": 1,
+        "version_lines": [
+          "error: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: no archives specified",
+          "Usage: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib [-sactfqLT] [-] archive [...]"
+        ]
+      },
+      "shasum": {
+        "canonical_path": "/usr/bin/shasum",
+        "path": "/usr/bin/shasum",
+        "path_type": "regular",
+        "sha256": "0812595f981a26f813d98dc380af14d4af427626c9339eda29eb849ae13de1e3",
+        "version_argv": [
+          "/usr/bin/shasum",
+          "--version"
+        ],
+        "version_exit_code": 0,
+        "version_lines": [
+          "6.02"
+        ]
+      },
+      "xcrun": {
+        "canonical_path": "/usr/bin/xcrun",
+        "path": "/usr/bin/xcrun",
+        "path_type": "regular",
+        "sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152",
+        "version_argv": [
+          "/usr/bin/xcrun",
+          "--version"
+        ],
+        "version_exit_code": 0,
+        "version_lines": [
+          "xcrun version 72."
+        ]
+      }
+    },
+    "homebrew_used": false,
+    "host_or_global_path_changed": false,
+    "schema": "libwebp-backref-cost-interval-search-v2-toolchain-v1",
+    "status": "admitted",
+    "xcrun_resolved": {
+      "ar": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+      "clang": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "clang++": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+      "ranlib": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib"
+    }
+  },
+  "toolchain_refusal_fixtures": {
+    "missing_make": {
+      "reason": "required tool is absent: make",
+      "refused": true
+    },
+    "wrong_make": {
+      "reason": "wrong executable admitted for make",
+      "refused": true
+    }
+  },
+  "work_metric_rows": 16
+}

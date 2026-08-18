@@ -1,0 +1,122 @@
+{
+  "admission": {
+    "admission": {
+      "bundle_hash_match": true,
+      "bundle_path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.Klhlh7/source.bundle",
+      "bundle_sha256": "4ebf3defa685990f4e2239c1a8db452491560d92d69c1d48053b0f2b83da4cb1",
+      "bundle_verified_in_repository_context": true,
+      "bundle_verify_command": [
+        "git",
+        "-C",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.Klhlh7/verify.git",
+        "bundle",
+        "verify",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.Klhlh7/source.bundle"
+      ],
+      "bundle_verify_repository": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.Klhlh7/verify.git",
+      "clean_status": true,
+      "clone": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.Klhlh7/source",
+      "source_commit": "38be3f12e8e8512c6882444c22b3bc0d6acc9f50",
+      "source_hashes": {
+        "CMakeLists.txt": "3e874e74e9fb515ef774293f68f3e5a66ce4781c8eafaecd5f358e73e61bb4a9",
+        "benchmarks/publication-corpus/manifest.json": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+        "doc/backref-cost-interval-search-v2-operator-20260818.md": "bb244964da6ac8c33e1f2d27d25dc7b6eef24400948b153c63ad0b17924fb88b",
+        "doc/backref-cost-interval-search-v2-protocol-20260818.md": "8288dfd0e4002aece54a74ec4b9bfa99550cc610906d077dbae263e7d181fd21",
+        "makefile.unix": "728a330e466a8b8a8b90d6d0a518e559f3de29739d0dd5c6b42120c30150815c",
+        "scripts/backref_cost_interval_search_v2_admission.py": "4b21d43127a8682e6040471e845ec013495f609bc5d98ee4ececc24c86fdb0f3",
+        "scripts/backref_cost_interval_search_v2_archive.py": "8ec1cc51a10d1f3fcd1d4d33ddb85e82e2485cd89fff56f40297a79fb3f0a77d",
+        "scripts/backref_cost_interval_search_v2_manifest.json": "45235dbdf148285706d81dd39c1a3ec7a08d0d80e0bf4bb07629bb1d9916a253",
+        "scripts/backref_cost_interval_search_v2_paths.py": "304cd2f0ef0a43aaaaee398ebae8da6ebfd71b0e22e4e33fee070bf1d5c78721",
+        "scripts/backref_cost_interval_search_v2_schemas.json": "af116c02e95e43c13f1013dceda1ccd6fbcf7ce438f476c1a70ceebb144d65ed",
+        "scripts/execute_backref_cost_interval_search_v2.py": "d01866cd8ca17a2abe1826ef318e1b65e64ac9b05c2f32673613fdc23eeb6bff",
+        "scripts/generate_publication_corpus.py": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+        "scripts/run_backref_cost_interval_search_v2_experiment.py": "74fe719f8ae1149b6ba19636f05d78edc23742b8ecedfa9185183ff1aecf2b00",
+        "scripts/test_backref_cost_interval_search_v2_archive.py": "a46445b18a54cf5aff353a63c0ad7012a938fefa34a213c7febb1a75e76277b9",
+        "scripts/test_backref_cost_interval_search_v2_protocol.py": "098f98149a90464ba94eb6722e45da49ea42acf326cbeae8a234172f7e876d1f",
+        "src/enc/backref_cost_interval_search_v2_experiment_enc.c": "683e8b2a52030c166f57138cb0cdda2b3088a5ddc624e24ab814a4f0baffa3ad",
+        "src/enc/backref_cost_interval_search_v2_experiment_enc.h": "2d0e5afddc65952159e828307342b286bc4fffd09e2176aa0cb4dd5c1fcd52fc",
+        "src/enc/backward_references_cost_enc.c": "e97dcf053feebaf2519cd477b6a809bd6eb2d07f9070af1589ac337f478052ae",
+        "tools/backref_cost_interval_search_v2_experiment_runner.c": "84cc581bccf8f9dafb983c51572fa2028dd34288d5994c26f22dfdf4fd8b28f9"
+      },
+      "source_tree": "20a4cd0286f6273036046d5ba9b6563be9dd381a",
+      "verification_repository_removed": true
+    },
+    "finished": true,
+    "home": "/Users/pandocs-agent-001",
+    "malformed_bundle": {
+      "clone_absent": true,
+      "exit_code": 1,
+      "hash_match": true,
+      "local_sha256": "44c574d111f293b90de22227706277f259ecf6ab84352366796eb6241793f528",
+      "rejected": true,
+      "remote_sha256": "44c574d111f293b90de22227706277f259ecf6ab84352366796eb6241793f528",
+      "stderr": "ERROR: repository-context bundle verification rejected transfer: error: '/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.Klhlh7/malformed.bundle' does not look like a v2 or v3 bundle file\n",
+      "verification_repository_absent": true
+    },
+    "path_generation": {
+      "generator": "mktemp -d",
+      "home": "/Users/pandocs-agent-001",
+      "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.Klhlh7",
+      "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2",
+      "token": "run.Klhlh7",
+      "validated": true
+    },
+    "post_admission_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "process_table_sha256": "3f66a11b0c48e105f9640cb2b97576500fbdd45016390789418bd862d80dbad3",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "pretransfer_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "process_table_sha256": "ef10e50e90fc361fcbe05f3983feea5b7c4e7c5517992e7802e4f4ea5477d3b3",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "remote_source_bundle_sha256": "4ebf3defa685990f4e2239c1a8db452491560d92d69c1d48053b0f2b83da4cb1",
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.Klhlh7",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2",
+    "source_bundle_sha256": "4ebf3defa685990f4e2239c1a8db452491560d92d69c1d48053b0f2b83da4cb1",
+    "source_commit": "38be3f12e8e8512c6882444c22b3bc0d6acc9f50",
+    "source_hashes": {
+      "CMakeLists.txt": "3e874e74e9fb515ef774293f68f3e5a66ce4781c8eafaecd5f358e73e61bb4a9",
+      "benchmarks/publication-corpus/manifest.json": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+      "doc/backref-cost-interval-search-v2-operator-20260818.md": "bb244964da6ac8c33e1f2d27d25dc7b6eef24400948b153c63ad0b17924fb88b",
+      "doc/backref-cost-interval-search-v2-protocol-20260818.md": "8288dfd0e4002aece54a74ec4b9bfa99550cc610906d077dbae263e7d181fd21",
+      "makefile.unix": "728a330e466a8b8a8b90d6d0a518e559f3de29739d0dd5c6b42120c30150815c",
+      "scripts/backref_cost_interval_search_v2_admission.py": "4b21d43127a8682e6040471e845ec013495f609bc5d98ee4ececc24c86fdb0f3",
+      "scripts/backref_cost_interval_search_v2_archive.py": "8ec1cc51a10d1f3fcd1d4d33ddb85e82e2485cd89fff56f40297a79fb3f0a77d",
+      "scripts/backref_cost_interval_search_v2_manifest.json": "45235dbdf148285706d81dd39c1a3ec7a08d0d80e0bf4bb07629bb1d9916a253",
+      "scripts/backref_cost_interval_search_v2_paths.py": "304cd2f0ef0a43aaaaee398ebae8da6ebfd71b0e22e4e33fee070bf1d5c78721",
+      "scripts/backref_cost_interval_search_v2_schemas.json": "af116c02e95e43c13f1013dceda1ccd6fbcf7ce438f476c1a70ceebb144d65ed",
+      "scripts/execute_backref_cost_interval_search_v2.py": "d01866cd8ca17a2abe1826ef318e1b65e64ac9b05c2f32673613fdc23eeb6bff",
+      "scripts/generate_publication_corpus.py": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+      "scripts/run_backref_cost_interval_search_v2_experiment.py": "74fe719f8ae1149b6ba19636f05d78edc23742b8ecedfa9185183ff1aecf2b00",
+      "scripts/test_backref_cost_interval_search_v2_archive.py": "a46445b18a54cf5aff353a63c0ad7012a938fefa34a213c7febb1a75e76277b9",
+      "scripts/test_backref_cost_interval_search_v2_protocol.py": "098f98149a90464ba94eb6722e45da49ea42acf326cbeae8a234172f7e876d1f",
+      "src/enc/backref_cost_interval_search_v2_experiment_enc.c": "683e8b2a52030c166f57138cb0cdda2b3088a5ddc624e24ab814a4f0baffa3ad",
+      "src/enc/backref_cost_interval_search_v2_experiment_enc.h": "2d0e5afddc65952159e828307342b286bc4fffd09e2176aa0cb4dd5c1fcd52fc",
+      "src/enc/backward_references_cost_enc.c": "e97dcf053feebaf2519cd477b6a809bd6eb2d07f9070af1589ac337f478052ae",
+      "tools/backref_cost_interval_search_v2_experiment_runner.c": "84cc581bccf8f9dafb983c51572fa2028dd34288d5994c26f22dfdf4fd8b28f9"
+    },
+    "source_tree": "20a4cd0286f6273036046d5ba9b6563be9dd381a"
+  },
+  "benchmark_lease_acquisition_attempted": false,
+  "cleanup": {
+    "absence_proved": true,
+    "home": "/Users/pandocs-agent-001",
+    "removed_exact_validated_child": true,
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.Klhlh7",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2",
+    "token": "run.Klhlh7",
+    "validated": true
+  },
+  "host_settings_changed": false,
+  "mode": "admission-only",
+  "runner_directories_or_services_touched": false,
+  "schema": "libwebp-backref-cost-interval-search-v2-admission-rehearsal-v1",
+  "shared_implementation": "admission.admit_source",
+  "source_commit": "38be3f12e8e8512c6882444c22b3bc0d6acc9f50",
+  "status": "PASS",
+  "timed_binary_invoked": false
+}

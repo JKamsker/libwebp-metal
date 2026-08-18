@@ -1,0 +1,20 @@
+{
+  "artifacts": [
+    {
+      "bytes": 151,
+      "path": "lease-record.json",
+      "sha256": "a2b851911d9ab89725dfb2015f6b07457e41f8f5d9c9126e0dadb0ca8b4eda5d"
+    },
+    {
+      "bytes": 32,
+      "path": "nested/deeper/record.json",
+      "sha256": "44b47c5c16d22761f5fb220dc5b502775be10150714d70aa90ba10e8a6d65b7e"
+    },
+    {
+      "bytes": 29,
+      "path": "root.txt",
+      "sha256": "4362b416ab8b3ce817bbd5e2006b7eafcf4b73e010713e81546dd081cb7ee9cb"
+    }
+  ],
+  "schema": "libwebp-backref-cost-interval-search-v2-artifact-hashes-v1"
+}

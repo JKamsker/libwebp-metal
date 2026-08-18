@@ -1,0 +1,7 @@
+{
+  "active_candidate_rows": 8,
+  "criterion": "candidate positioning steps <= 10% of baseline in every active cell",
+  "rows": 16,
+  "schema": "libwebp-backref-cost-interval-search-v2-work-summary-v1",
+  "status": "PASS"
+}
