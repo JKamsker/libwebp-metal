@@ -55,6 +55,7 @@ const WebPEncoderAccelerator* WebPGetMetalEncoderAccelerator(void) {
       MetalHashChain,
       MetalRGBToYUV,
       NULL,
+      NULL,
       NULL};
   return &backend;
 }

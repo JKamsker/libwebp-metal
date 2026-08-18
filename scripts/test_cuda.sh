@@ -74,6 +74,30 @@ for input do
         "$temporary_dir/$name-hash-cuda.webp"
   done
 
+  # Cross-color output may choose a different valid transform than the CPU,
+  # but it must remain deterministic and decode losslessly at every method.
+  for method in 0 1 2 3 4 5 6; do
+    WEBP_ACCELERATOR=none \
+      "$encoder" -quiet -lossless -exact -m "$method" "$input" \
+      -o "$temporary_dir/$name-color-cpu.webp"
+    WEBP_ACCELERATOR=cuda WEBP_CUDA_COLOR=1 WEBP_CUDA_HASH=0 \
+      WEBP_CUDA_MIN_PIXELS=0 WEBP_CUDA_VERBOSE=1 \
+      "$encoder" -quiet -lossless -exact -m "$method" "$input" \
+      -o "$temporary_dir/$name-color-cuda-1.webp" 2>>"$cuda_log"
+    WEBP_ACCELERATOR=cuda WEBP_CUDA_COLOR=1 WEBP_CUDA_HASH=0 \
+      WEBP_CUDA_MIN_PIXELS=0 \
+      "$encoder" -quiet -lossless -exact -m "$method" "$input" \
+      -o "$temporary_dir/$name-color-cuda-2.webp"
+    cmp "$temporary_dir/$name-color-cuda-1.webp" \
+        "$temporary_dir/$name-color-cuda-2.webp"
+    "$decoder" -quiet "$temporary_dir/$name-color-cpu.webp" -pam \
+      -o "$temporary_dir/$name-color-cpu.pam"
+    "$decoder" -quiet "$temporary_dir/$name-color-cuda-1.webp" -pam \
+      -o "$temporary_dir/$name-color-cuda.pam"
+    cmp "$temporary_dir/$name-color-cpu.pam" \
+        "$temporary_dir/$name-color-cuda.pam"
+  done
+
   # The opaque regular RGB/BGR conversion also promises the exact CPU stream.
   for settings in "25 0" "75 4" "95 6"; do
     set -- $settings
@@ -90,6 +114,20 @@ for input do
         "$temporary_dir/$name-lossy-cuda.webp"
   done
 
+  # Near-lossless preprocessing promises the exact CPU-preprocessed stream.
+  for quality in 20 60 90; do
+    WEBP_ACCELERATOR=none \
+      "$encoder" -quiet -lossless -near_lossless "$quality" -m 4 "$input" \
+      -o "$temporary_dir/$name-near-cpu.webp"
+    WEBP_ACCELERATOR=cuda WEBP_CUDA_COLOR=0 WEBP_CUDA_HASH=0 \
+      WEBP_CUDA_NEAR_LOSSLESS=1 WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS=0 \
+      WEBP_CUDA_VERBOSE=1 \
+      "$encoder" -quiet -lossless -near_lossless "$quality" -m 4 "$input" \
+      -o "$temporary_dir/$name-near-cuda.webp" 2>>"$cuda_log"
+    cmp "$temporary_dir/$name-near-cpu.webp" \
+        "$temporary_dir/$name-near-cuda.webp"
+  done
+
   printf 'PASS: CUDA color/hash/RGB correctness checks: %s\n' "$input"
 done
 
@@ -101,4 +139,4 @@ if grep -q "WebP-CUDA: using" "$cold_log"; then
   echo "small default encode initialized CUDA before its cold threshold" >&2
   exit 1
 fi
-printf 'PASS: observed all forced CUDA stages\n'
+printf 'PASS: observed forced color/hash/RGB CUDA stages\n'

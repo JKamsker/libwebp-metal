@@ -109,10 +109,14 @@ if(WEBP_ENABLE_CUDA)
   # builds can isolate effects without changing runtime code paths.
   option(WEBP_CUDA_ENABLE_COLOR_TRANSFORM
          "Build the CUDA lossless cross-color stage." ON)
+  option(WEBP_CUDA_ENABLE_COLOR_SHARED_TILE
+         "Cache CUDA cross-color source tiles in shared memory." ON)
   option(WEBP_CUDA_ENABLE_HASH_CHAIN
          "Build the CUDA lossless hash-candidate stage." ON)
   option(WEBP_CUDA_ENABLE_RGB_TO_YUV
          "Build the CUDA opaque RGB-to-YUV420 stage." ON)
+  option(WEBP_CUDA_ENABLE_NEAR_LOSSLESS
+         "Build CUDA near-lossless preprocessing." ON)
   option(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS
          "Retain CUDA staging allocations across encoder calls." ON)
   option(WEBP_CUDA_ENABLE_PINNED_HOST_MEMORY
@@ -581,7 +585,8 @@ target_include_directories(
                      ${CMAKE_CURRENT_SOURCE_DIR}/src)
 if(WEBP_ENABLE_CUDA)
   foreach(CUDA_OPTION
-          COLOR_TRANSFORM HASH_CHAIN RGB_TO_YUV PERSISTENT_BUFFERS
+          COLOR_TRANSFORM COLOR_SHARED_TILE HASH_CHAIN RGB_TO_YUV
+          NEAR_LOSSLESS PERSISTENT_BUFFERS
           PINNED_HOST_MEMORY ASYNC_COPIES HASH_MATCH4 RGB_BLOCK_2X2
           COLOR_256_THREAD_BLOCKS HASH_256_THREAD_BLOCKS
           RGB_256_THREAD_BLOCKS READ_ONLY_CACHE RESTRICT_POINTERS
@@ -818,12 +823,22 @@ if(WEBP_BUILD_CUDA_BENCHMARK)
   # shared-state stress testing on a physical CUDA device.
   add_executable(webp_cuda_benchmark tools/cuda_benchmark.c)
   target_link_libraries(webp_cuda_benchmark PRIVATE webp)
-  target_include_directories(webp_cuda_benchmark
-                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
+  target_include_directories(
+    webp_cuda_benchmark
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+            ${CMAKE_CURRENT_SOURCE_DIR})
   add_executable(cuda_concurrency_test tests/cuda_concurrency_test.c)
   target_link_libraries(cuda_concurrency_test PRIVATE webp Threads::Threads)
   target_include_directories(cuda_concurrency_test
                              PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
+  if(WEBP_NEAR_LOSSLESS)
+    add_executable(cuda_near_lossless_test tests/cuda_near_lossless_test.c)
+    target_link_libraries(cuda_near_lossless_test PRIVATE webp)
+    target_include_directories(
+      cuda_near_lossless_test
+      PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+              ${CMAKE_CURRENT_SOURCE_DIR})
+  endif()
 endif()
 
 if(WEBP_BUILD_LIBWEBPMUX)

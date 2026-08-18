@@ -47,11 +47,18 @@ namespace {
 #if defined(WEBP_CUDA_ENABLE_COLOR_TRANSFORM)
 constexpr size_t kDefaultColorColdMinimumPixels = 4u * 1000u * 1000u;
 constexpr size_t kDefaultColorWarmMinimumPixels = 128u * 128u;
+#if defined(WEBP_CUDA_ENABLE_COLOR_SHARED_TILE)
+constexpr uint32_t kMaximumCachedColorTileSize = 64u;
+#endif
 #if defined(WEBP_CUDA_ENABLE_COLOR_256_THREAD_BLOCKS)
 constexpr unsigned int kColorThreadsPerBlock = 256u;
 #else
 constexpr unsigned int kColorThreadsPerBlock = 128u;
 #endif
+#endif
+#if defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS)
+constexpr size_t kDefaultNearLosslessColdMinimumPixels = 4096u * 4096u;
+constexpr size_t kDefaultNearLosslessWarmMinimumPixels = 256u * 256u;
 #endif
 #if defined(WEBP_CUDA_ENABLE_HASH_CHAIN)
 constexpr size_t kDefaultHashColdMinimumPixels = 8u * 1000u * 1000u;
@@ -144,18 +151,24 @@ bool EnvironmentFlag(const char* name, bool default_value) {
          WEBP_CUDA_STRCASECMP(value, "no") != 0;
 }
 
-size_t EnvironmentSize(const char* name, size_t default_value) {
+bool ParseEnvironmentSize(const char* name, size_t* parsed_value) {
   const char* const value = getenv(name);
   char* end = nullptr;
   unsigned long long parsed;
-  if (value == nullptr || value[0] == '\0') return default_value;
+  if (value == nullptr || value[0] == '\0' || value[0] == '-') return false;
   errno = 0;
   parsed = strtoull(value, &end, 10);
   if (errno != 0 || end == value || *end != '\0' ||
       parsed > std::numeric_limits<size_t>::max()) {
-    return default_value;
+    return false;
   }
-  return static_cast<size_t>(parsed);
+  *parsed_value = static_cast<size_t>(parsed);
+  return true;
+}
+
+size_t EnvironmentSize(const char* name, size_t default_value) {
+  size_t parsed;
+  return ParseEnvironmentSize(name, &parsed) ? parsed : default_value;
 }
 
 int EnvironmentDevice(void) {
@@ -239,7 +252,26 @@ __device__ void ClearHistogram(unsigned int* histogram) {
   __syncthreads();
 }
 
-__device__ float EvaluateRed(const uint32_t* pixels, KernelParams params,
+__device__ __forceinline__ uint32_t LoadColorPixel(
+    const uint32_t* pixels, const uint32_t* tile_pixels, KernelParams params,
+    uint32_t tile_x, uint32_t tile_y, uint32_t tile_width, uint32_t i) {
+#if defined(WEBP_CUDA_ENABLE_COLOR_SHARED_TILE)
+  (void)pixels;
+  (void)params;
+  (void)tile_x;
+  (void)tile_y;
+  (void)tile_width;
+  return tile_pixels[i];
+#else
+  (void)tile_pixels;
+  const uint32_t x = tile_x + i % tile_width;
+  const uint32_t y = tile_y + i / tile_width;
+  return pixels[y * params.width + x];
+#endif
+}
+
+__device__ float EvaluateRed(const uint32_t* pixels,
+                             const uint32_t* tile_pixels, KernelParams params,
                              uint32_t tile_x, uint32_t tile_y,
                              uint32_t tile_width, uint32_t tile_height,
                              int green_to_red, unsigned int* histogram,
@@ -247,16 +279,17 @@ __device__ float EvaluateRed(const uint32_t* pixels, KernelParams params,
   ClearHistogram(histogram);
   const uint32_t count = tile_width * tile_height;
   for (uint32_t i = threadIdx.x; i < count; i += blockDim.x) {
-    const uint32_t x = tile_x + i % tile_width;
-    const uint32_t y = tile_y + i / tile_width;
-    atomicAdd(histogram + TransformedRed(pixels[y * params.width + x],
-                                         green_to_red),
+    const uint32_t pixel = LoadColorPixel(pixels, tile_pixels, params, tile_x,
+                                          tile_y, tile_width, i);
+    atomicAdd(histogram + TransformedRed(pixel, green_to_red),
               1u);
   }
   return ScoreHistogram(histogram, histogram_score);
 }
 
-__device__ float EvaluateBlue(const uint32_t* pixels, KernelParams params,
+__device__ float EvaluateBlue(const uint32_t* pixels,
+                              const uint32_t* tile_pixels,
+                              KernelParams params,
                               uint32_t tile_x, uint32_t tile_y,
                               uint32_t tile_width, uint32_t tile_height,
                               int green_to_blue, int red_to_blue,
@@ -265,10 +298,10 @@ __device__ float EvaluateBlue(const uint32_t* pixels, KernelParams params,
   ClearHistogram(histogram);
   const uint32_t count = tile_width * tile_height;
   for (uint32_t i = threadIdx.x; i < count; i += blockDim.x) {
-    const uint32_t x = tile_x + i % tile_width;
-    const uint32_t y = tile_y + i / tile_width;
-    atomicAdd(histogram + TransformedBlue(pixels[y * params.width + x],
-                                          green_to_blue, red_to_blue),
+    const uint32_t pixel = LoadColorPixel(pixels, tile_pixels, params, tile_x,
+                                          tile_y, tile_width, i);
+    atomicAdd(histogram +
+                  TransformedBlue(pixel, green_to_blue, red_to_blue),
               1u);
   }
   return ScoreHistogram(histogram, histogram_score);
@@ -292,12 +325,26 @@ __global__ void ColorSpaceTransformKernel(
       tile_size < remaining_height ? tile_size : remaining_height;
 
   __shared__ unsigned int histogram[256];
+#if defined(WEBP_CUDA_ENABLE_COLOR_SHARED_TILE)
+  extern __shared__ uint32_t tile_pixels[];
+#else
+  const uint32_t* const tile_pixels = nullptr;
+#endif
   __shared__ int best_red;
   __shared__ int best_green_blue;
   __shared__ int best_red_blue;
   __shared__ float best_score;
   __shared__ float histogram_score;
 
+  const uint32_t count = tile_width * tile_height;
+#if defined(WEBP_CUDA_ENABLE_COLOR_SHARED_TILE)
+  for (uint32_t i = threadIdx.x; i < count; i += blockDim.x) {
+    const uint32_t local_x = i % tile_width;
+    const uint32_t local_y = i / tile_width;
+    tile_pixels[i] =
+        pixels[(tile_y + local_y) * params.width + tile_x + local_x];
+  }
+#endif
   if (threadIdx.x == 0u) {
     best_red = 0;
     best_green_blue = 0;
@@ -305,8 +352,9 @@ __global__ void ColorSpaceTransformKernel(
   }
   __syncthreads();
 
-  float score = EvaluateRed(pixels, params, tile_x, tile_y, tile_width,
-                            tile_height, 0, histogram, &histogram_score);
+  float score = EvaluateRed(pixels, tile_pixels, params, tile_x, tile_y,
+                            tile_width, tile_height, 0, histogram,
+                            &histogram_score);
   if (threadIdx.x == 0u) best_score = score - 9.0f;
   __syncthreads();
 
@@ -315,8 +363,9 @@ __global__ void ColorSpaceTransformKernel(
     const int delta = 32 >> iteration;
     for (int sign = -1; sign <= 1; sign += 2) {
       const int candidate = best_red + sign * delta;
-      score = EvaluateRed(pixels, params, tile_x, tile_y, tile_width,
-                          tile_height, candidate, histogram, &histogram_score);
+      score = EvaluateRed(pixels, tile_pixels, params, tile_x, tile_y,
+                          tile_width, tile_height, candidate, histogram,
+                          &histogram_score);
       if (threadIdx.x == 0u) {
         if ((candidate & 255) == 0) score -= 6.0f;
         if (candidate == 0) score -= 3.0f;
@@ -329,8 +378,8 @@ __global__ void ColorSpaceTransformKernel(
     }
   }
 
-  score = EvaluateBlue(pixels, params, tile_x, tile_y, tile_width, tile_height,
-                       0, 0, histogram, &histogram_score);
+  score = EvaluateBlue(pixels, tile_pixels, params, tile_x, tile_y, tile_width,
+                       tile_height, 0, 0, histogram, &histogram_score);
   if (threadIdx.x == 0u) best_score = score - 18.0f;
   __syncthreads();
 
@@ -342,9 +391,9 @@ __global__ void ColorSpaceTransformKernel(
           best_green_blue + kColorAxes[axis][0] * kColorDeltas[iteration];
       const int candidate_red =
           best_red_blue + kColorAxes[axis][1] * kColorDeltas[iteration];
-      score = EvaluateBlue(pixels, params, tile_x, tile_y, tile_width,
-                           tile_height, candidate_green, candidate_red,
-                           histogram, &histogram_score);
+      score = EvaluateBlue(pixels, tile_pixels, params, tile_x, tile_y,
+                           tile_width, tile_height, candidate_green,
+                           candidate_red, histogram, &histogram_score);
       if (threadIdx.x == 0u) {
         if ((candidate_green & 255) == 0) score -= 6.0f;
         if ((candidate_red & 255) == 0) score -= 6.0f;
@@ -372,13 +421,13 @@ __global__ void ColorSpaceTransformKernel(
         (static_cast<uint32_t>(best_red) & 255u);
   }
 
-  const uint32_t count = tile_width * tile_height;
   for (uint32_t i = threadIdx.x; i < count; i += blockDim.x) {
     const uint32_t local_x = i % tile_width;
     const uint32_t local_y = i / tile_width;
     const uint32_t index =
         (tile_y + local_y) * params.width + tile_x + local_x;
-    const uint32_t pixel = pixels[index];
+    const uint32_t pixel = LoadColorPixel(pixels, tile_pixels, params, tile_x,
+                                          tile_y, tile_width, i);
     const uint32_t new_red = TransformedRed(pixel, best_red);
     const uint32_t new_blue =
         TransformedBlue(pixel, best_green_blue, best_red_blue);
@@ -387,6 +436,59 @@ __global__ void ColorSpaceTransformKernel(
 }
 
 #endif  // WEBP_CUDA_ENABLE_COLOR_TRANSFORM
+
+#if defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS)
+
+__device__ __forceinline__ uint32_t ClosestNearLosslessValue(uint32_t value,
+                                                             int bits) {
+  const uint32_t mask = (1u << bits) - 1u;
+  const uint32_t biased = value + (mask >> 1) + ((value >> bits) & 1u);
+  return biased > 255u ? 255u : biased & ~mask;
+}
+
+__device__ __forceinline__ bool NearLosslessPixelsAreNear(uint32_t a,
+                                                           uint32_t b,
+                                                           int limit) {
+  for (int shift = 0; shift < 32; shift += 8) {
+    const int delta = static_cast<int>((a >> shift) & 255u) -
+                      static_cast<int>((b >> shift) & 255u);
+    if (delta >= limit || delta <= -limit) return false;
+  }
+  return true;
+}
+
+__device__ __forceinline__ uint32_t QuantizeNearLosslessPixel(uint32_t pixel,
+                                                              int bits) {
+  return (ClosestNearLosslessValue(pixel >> 24, bits) << 24) |
+         (ClosestNearLosslessValue((pixel >> 16) & 255u, bits) << 16) |
+         (ClosestNearLosslessValue((pixel >> 8) & 255u, bits) << 8) |
+         ClosestNearLosslessValue(pixel & 255u, bits);
+}
+
+__global__ void NearLosslessKernel(
+    const uint32_t* WEBP_CUDA_RESTRICT source,
+    uint32_t* WEBP_CUDA_RESTRICT output, uint32_t width, uint32_t height,
+    int limit_bits) {
+  const uint32_t x = blockIdx.x * blockDim.x + threadIdx.x;
+  const uint32_t y = blockIdx.y * blockDim.y + threadIdx.y;
+  if (x >= width || y >= height) return;
+  const uint32_t index = y * width + x;
+  const uint32_t pixel = source[index];
+  if (x == 0u || y == 0u || x + 1u == width || y + 1u == height) {
+    output[index] = pixel;
+    return;
+  }
+  const int limit = 1 << limit_bits;
+  const bool smooth =
+      NearLosslessPixelsAreNear(pixel, source[index - 1u], limit) &&
+      NearLosslessPixelsAreNear(pixel, source[index + 1u], limit) &&
+      NearLosslessPixelsAreNear(pixel, source[index - width], limit) &&
+      NearLosslessPixelsAreNear(pixel, source[index + width], limit);
+  output[index] =
+      smooth ? pixel : QuantizeNearLosslessPixel(pixel, limit_bits);
+}
+
+#endif  // WEBP_CUDA_ENABLE_NEAR_LOSSLESS
 
 #if defined(WEBP_CUDA_ENABLE_HASH_CHAIN)
 
@@ -920,6 +1022,11 @@ WebPAcceleratorResult CUDAColorTransformLocked(
       request->quality < 0 || request->quality > 100) {
     return WEBP_ACCELERATOR_ERROR;
   }
+#if defined(WEBP_CUDA_ENABLE_COLOR_SHARED_TILE)
+  if ((1u << request->bits) > kMaximumCachedColorTileSize) {
+    return WEBP_ACCELERATOR_NOT_RUN;
+  }
+#endif
   if (static_cast<size_t>(request->width) >
       std::numeric_limits<size_t>::max() /
           static_cast<size_t>(request->height)) {
@@ -993,8 +1100,15 @@ WebPAcceleratorResult CUDAColorTransformLocked(
     return ReportError(state, "upload", error, true);
   }
   (void)cudaGetLastError();
+  const size_t shared_tile_bytes =
+#if defined(WEBP_CUDA_ENABLE_COLOR_SHARED_TILE)
+      static_cast<size_t>(tile_size) * tile_size * sizeof(uint32_t);
+#else
+      0u;
+#endif
   ColorSpaceTransformKernel<<<dim3(tile_columns, tile_rows),
-                              kColorThreadsPerBlock, 0, state->stream>>>(
+                              kColorThreadsPerBlock, shared_tile_bytes,
+                              state->stream>>>(
       state->pixels, state->transform, params);
   error = cudaGetLastError();
   if (error == cudaSuccess && timing) {
@@ -1043,6 +1157,150 @@ WebPAcceleratorResult CUDAColorTransform(
 }
 
 #endif  // WEBP_CUDA_ENABLE_COLOR_TRANSFORM
+
+#if defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS)
+
+WebPAcceleratorResult CUDANearLosslessLocked(
+    void* context, const WebPAcceleratorNearLosslessRequest* request) {
+  CudaState* const state = static_cast<CudaState*>(context);
+  size_t pixel_count;
+  size_t pixel_bytes;
+  cudaError_t error;
+  bool verbose;
+  bool timing;
+  float elapsed_ms = 0.0f;
+
+  if (!EnvironmentFlag("WEBP_CUDA", true) ||
+      !EnvironmentFlag("WEBP_CUDA_NEAR_LOSSLESS", true)) {
+    return WEBP_ACCELERATOR_NOT_RUN;
+  }
+  if (request == nullptr || request->source == nullptr ||
+      request->output == nullptr || request->width <= 0 ||
+      request->height < 3 || request->source_stride < request->width ||
+      request->limit_bits < 1 || request->limit_bits > 5) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  if (static_cast<size_t>(request->width) >
+      std::numeric_limits<size_t>::max() /
+          static_cast<size_t>(request->height)) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  pixel_count = static_cast<size_t>(request->width) * request->height;
+  // One- and two-pass CPU preprocessing remained faster than a cold CUDA
+  // runtime at the largest measured size. An explicit threshold remains a
+  // correctness/experimentation override for every pass count.
+  size_t explicit_threshold;
+  const bool has_explicit_threshold = ParseEnvironmentSize(
+      "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", &explicit_threshold);
+  if (!state->available && request->limit_bits < 3 &&
+      !has_explicit_threshold) {
+    return WEBP_ACCELERATOR_NOT_RUN;
+  }
+  if (pixel_count < EnvironmentSize(
+                        "WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS",
+                        state->available
+                            ? kDefaultNearLosslessWarmMinimumPixels
+                            : kDefaultNearLosslessColdMinimumPixels)) {
+    return WEBP_ACCELERATOR_NOT_RUN;
+  }
+  if (pixel_count > std::numeric_limits<size_t>::max() / sizeof(uint32_t)) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  pixel_bytes = pixel_count * sizeof(uint32_t);
+  if (state->quarantined) return WEBP_ACCELERATOR_NOT_RUN;
+  const WebPAcceleratorResult initialized = Initialize(state);
+  if (initialized != WEBP_ACCELERATOR_SUCCESS) return initialized;
+  error = cudaSetDevice(state->device);
+  if (error != cudaSuccess) {
+    return ReportError(state, "select device", error, true);
+  }
+  error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
+                             pixel_bytes, state->stream);
+  if (error == cudaSuccess) {
+    error = EnsureDeviceBuffer(&state->transform, &state->transform_capacity,
+                               pixel_bytes, state->stream);
+  }
+  if (error != cudaSuccess) {
+    return ReportError(state, "allocate near-lossless buffers", error, false);
+  }
+  if (!EnsureHostBuffer(&state->host_pixels, &state->host_pixel_capacity,
+                        pixel_bytes) ||
+      !EnsureHostBuffer(&state->host_transform,
+                        &state->host_transform_capacity, pixel_bytes)) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  for (int y = 0; y < request->height; ++y) {
+    memcpy(state->host_pixels + static_cast<size_t>(y) * request->width,
+           request->source + static_cast<size_t>(y) * request->source_stride,
+           static_cast<size_t>(request->width) * sizeof(uint32_t));
+  }
+  verbose = EnvironmentFlag("WEBP_CUDA_VERBOSE", false);
+  timing = verbose && EnsureTimingEvents(state);
+  error = UploadToDevice(state->pixels, state->host_pixels, pixel_bytes,
+                         state->stream);
+  if (error == cudaSuccess && timing) {
+    error = cudaEventRecord(state->event_start, state->stream);
+  }
+  if (error != cudaSuccess) {
+    (void)cudaStreamSynchronize(state->stream);
+    return ReportError(state, "near-lossless upload", error, true);
+  }
+  uint32_t* source = state->pixels;
+  uint32_t* output = state->transform;
+  const dim3 threads(16u, 16u);
+  const dim3 blocks((static_cast<uint32_t>(request->width) + 15u) / 16u,
+                    (static_cast<uint32_t>(request->height) + 15u) / 16u);
+  (void)cudaGetLastError();
+  for (int bits = request->limit_bits; bits > 0; --bits) {
+    NearLosslessKernel<<<blocks, threads, 0, state->stream>>>(
+        source, output, static_cast<uint32_t>(request->width),
+        static_cast<uint32_t>(request->height), bits);
+    uint32_t* const temporary = source;
+    source = output;
+    output = temporary;
+  }
+  error = cudaGetLastError();
+  if (error == cudaSuccess && timing) {
+    error = cudaEventRecord(state->event_stop, state->stream);
+  }
+  if (error == cudaSuccess) {
+    error = DownloadFromDevice(state->host_transform, source, pixel_bytes,
+                               state->stream);
+  }
+  if (error == cudaSuccess) error = FinishDownloads(state->stream);
+  if (error != cudaSuccess) {
+    (void)cudaStreamSynchronize(state->stream);
+    return ReportError(state, "near-lossless preprocess", error, true);
+  }
+  memcpy(request->output, state->host_transform, pixel_bytes);
+  if (verbose) {
+    if (timing &&
+        cudaEventElapsedTime(&elapsed_ms, state->event_start,
+                             state->event_stop) != cudaSuccess) {
+      elapsed_ms = 0.0f;
+      (void)cudaGetLastError();
+    }
+    fprintf(stderr,
+            "WebP-CUDA: near-lossless %dx%d in %.3f ms (%d passes)\n",
+            request->width, request->height, elapsed_ms,
+            request->limit_bits);
+  }
+#if !defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+  ReleaseStagingBuffers(state);
+#endif
+  return WEBP_ACCELERATOR_SUCCESS;
+}
+
+WebPAcceleratorResult CUDANearLossless(
+    void* context, const WebPAcceleratorNearLosslessRequest* request) {
+  WebPAcceleratorResult result;
+  LockCudaMutex(&g_cuda_mutex);
+  result = CUDANearLosslessLocked(context, request);
+  UnlockCudaMutex(&g_cuda_mutex);
+  return result;
+}
+
+#endif  // WEBP_CUDA_ENABLE_NEAR_LOSSLESS
 
 #if defined(WEBP_CUDA_ENABLE_HASH_CHAIN)
 
@@ -1463,6 +1721,9 @@ constexpr uint32_t kCUDAStages =
 #if defined(WEBP_CUDA_ENABLE_RGB_TO_YUV)
     | WEBP_ACCELERATOR_STAGE_RGB_TO_YUV
 #endif
+#if defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS)
+    | WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS
+#endif
     ;
 
 constexpr uint32_t kCUDAProperties =
@@ -1496,6 +1757,11 @@ static const WebPEncoderAccelerator kCUDAEncoderAccelerator = {
 #endif
 #if defined(WEBP_CUDA_ENABLE_RGB_TO_YUV)
     CUDARGBToYUV,
+#else
+    nullptr,
+#endif
+#if defined(WEBP_CUDA_ENABLE_NEAR_LOSSLESS)
+    CUDANearLossless,
 #else
     nullptr,
 #endif

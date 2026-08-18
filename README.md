@@ -62,9 +62,9 @@ Selected lossy imports use the exact 2x2 Metal kernel by default.
 ## CUDA acceleration
 
 CUDA acceleration for the lossless cross-color transform, lossless hash-chain
-candidates, and opaque regular RGB-to-YUV420 conversion is available as an
-opt-in CMake backend. It requires CMake 3.17 or newer and a CUDA toolkit, and is
-enabled with
+candidates, exact near-lossless preprocessing, and opaque regular
+RGB-to-YUV420 conversion is available as an opt-in CMake backend. It requires
+CMake 3.17 or newer and a CUDA toolkit, and is enabled with
 `-DWEBP_ENABLE_CUDA=ON`. The CUDA language is enabled only for this build mode;
 CPU-only and Metal builds do not require the toolkit. For example:
 
@@ -84,20 +84,26 @@ At runtime, `WEBP_ACCELERATOR=cuda` explicitly selects CUDA and
 `WEBP_ACCELERATOR=none` forces the CPU path. `WEBP_CUDA=0` disables CUDA,
 `WEBP_CUDA_DEVICE=N` selects a device, `WEBP_CUDA_MIN_PIXELS=N` controls the
 lossless transform threshold, `WEBP_CUDA_HASH_MIN_PIXELS=N` controls hash
-candidates, and `WEBP_CUDA_LOSSY_MIN_PIXELS=N` controls RGB conversion.
-`WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, and `WEBP_CUDA_LOSSY=0` disable one
-stage. `WEBP_CUDA_VERBOSE=1` reports device and dispatch timings. Set a threshold
-to zero for forced correctness tests. Defaults are adaptive: a stage pays the
+candidates, `WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS=N` controls near-lossless
+preprocessing, and `WEBP_CUDA_LOSSY_MIN_PIXELS=N` controls RGB conversion.
+`WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`, and
+`WEBP_CUDA_LOSSY=0` disable one stage. `WEBP_CUDA_VERBOSE=1` reports device and
+dispatch timings. Set a threshold to zero for forced correctness tests.
+Defaults are adaptive: a stage pays the
 roughly 140 ms runtime/device initialization cost only for large inputs, then
 uses a lower warm-process threshold once another CUDA stage initialized the
 backend: color uses 4,000,000 cold / 16,384 warm pixels, hash uses 8,000,000 /
-4,000,000, and RGB uses 80,000,000 / 4,000,000. An explicit stage threshold
-overrides both defaults.
+4,000,000, near-lossless uses 16,777,216 cold / 65,536 warm pixels, and RGB
+uses 80,000,000 / 4,000,000. Cold near-lossless requests with fewer than three
+passes stay on the CPU because no safe crossover was measured; an explicit
+near-lossless threshold overrides that conservative gate as well as both
+threshold defaults.
 
 Every CUDA stage and optimization has an independent `WEBP_CUDA_ENABLE_*`
-CMake option. The default strategy uses persistent buffers, stream-ordered
-copies, four-at-a-time hash matching, read-only hash loads, restrict-qualified
-kernel pointers, packed four-byte RGB loads, 128-thread color/hash blocks, and
+CMake option. The default strategy uses dynamically sized shared source tiles
+for cross-color search, persistent buffers, stream-ordered copies,
+four-at-a-time hash matching, read-only hash loads, restrict-qualified kernel
+pointers, packed four-byte RGB loads, 128-thread color/hash blocks, and
 256-thread RGB blocks. Page-locked host staging, fused RGB 2x2 work, alternate
 block widths, and stream-ordered allocation remain available for ablation but
 are off by default on the measured RTX 2080 SUPER. Build the non-installed
@@ -108,8 +114,9 @@ the default and all-strategies-disabled builds. Measurement details are in
 
 Additional, non-installed CUDA strategy prototypes can be built with
 `-DWEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS=ON`. See
-[CUDA_ACCELERATION_EXPERIMENTS.md](CUDA_ACCELERATION_EXPERIMENTS.md) for the
-correctness runner and raw-measurement protocol.
+[CUDA_EXPERIMENT_SUMMARY.md](CUDA_EXPERIMENT_SUMMARY.md) for the current
+decision ledger and [CUDA_ACCELERATION_EXPERIMENTS.md](CUDA_ACCELERATION_EXPERIMENTS.md)
+for the correctness runner and raw-measurement protocol.
 
 Additional encoder-stage research is documented in
 [GPU_STAGE_EVALUATION.md](GPU_STAGE_EVALUATION.md). Its predictor-residual

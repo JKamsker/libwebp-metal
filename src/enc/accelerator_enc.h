@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 1u
+#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 2u
 
 // These are deliberately encoder stages, not low-level GPU kernels. A backend
 // advertises only the stages whose complete CPU call-site contract it can
@@ -20,7 +20,8 @@ extern "C" {
 typedef enum {
   WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM = 1u << 0,
   WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN = 1u << 1,
-  WEBP_ACCELERATOR_STAGE_RGB_TO_YUV = 1u << 2
+  WEBP_ACCELERATOR_STAGE_RGB_TO_YUV = 1u << 2,
+  WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS = 1u << 3
 } WebPAcceleratorStage;
 
 // SUCCESS is the only result for which a caller may consume output buffers.
@@ -34,10 +35,10 @@ typedef enum {
 } WebPAcceleratorResult;
 
 typedef enum {
-  // Required by ABI v1. A callback returns only after its outputs are visible
+  // Required by the ABI. A callback returns only after its outputs are visible
   // to the host.
   WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS = 1u << 0,
-  // Required by ABI v1. Caller-owned outputs are unchanged on NOT_RUN/ERROR.
+  // Required by the ABI. Caller-owned outputs are unchanged on NOT_RUN/ERROR.
   WEBP_ACCELERATOR_PROPERTY_TRANSACTIONAL_OUTPUT = 1u << 1,
   // Repeated calls on one backend produce the same result for the same input.
   // This does not imply byte identity with the CPU encoder.
@@ -89,6 +90,17 @@ typedef struct {
   int uv_stride;
 } WebPAcceleratorRGBToYUVRequest;
 
+typedef struct {
+  // Borrowed source with source_stride pixels per row. output is tightly
+  // packed with width * height elements and is committed only on SUCCESS.
+  const uint32_t* source;
+  int source_stride;
+  int width;
+  int height;
+  int limit_bits;
+  uint32_t* output;
+} WebPAcceleratorNearLosslessRequest;
+
 typedef struct WebPEncoderAccelerator WebPEncoderAccelerator;
 
 struct WebPEncoderAccelerator {
@@ -105,9 +117,11 @@ struct WebPEncoderAccelerator {
       void* context, const WebPAcceleratorHashChainRequest* request);
   WebPAcceleratorResult (*rgb_to_yuv)(
       void* context, const WebPAcceleratorRGBToYUVRequest* request);
+  WebPAcceleratorResult (*near_lossless)(
+      void* context, const WebPAcceleratorNearLosslessRequest* request);
 
   // Optional lifecycle hooks for a future encoder-level batch boundary.
-  // ABI v1 operations are synchronous, so flush may be NULL. trim may release
+  // ABI operations are synchronous, so flush may be NULL. trim may release
   // cached backend-owned buffers, but must leave the descriptor usable.
   WebPAcceleratorResult (*flush)(void* context);
   void (*trim)(void* context);
@@ -119,6 +133,8 @@ WebPAcceleratorResult WebPAccelerateHashChain(
     const WebPAcceleratorHashChainRequest* request);
 WebPAcceleratorResult WebPAccelerateRGBToYUV(
     const WebPAcceleratorRGBToYUVRequest* request);
+WebPAcceleratorResult WebPAccelerateNearLossless(
+    const WebPAcceleratorNearLosslessRequest* request);
 
 #if defined(WEBP_ACCELERATOR_TESTING)
 // Installs one process-global fake backend. Test programs must not call this

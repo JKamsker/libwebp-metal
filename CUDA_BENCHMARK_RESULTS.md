@@ -47,3 +47,33 @@ copy with useful CPU work. Stream-ordered allocation was correct but about
 All choices remain independently available as `WEBP_CUDA_ENABLE_*` CMake
 options. Re-run `webp_cuda_benchmark` on each target GPU before changing a
 default; small differences here include normal system noise.
+
+### Shared cross-color source tile
+
+A follow-up production A/B cached each source tile once in dynamically sized
+shared memory. Across 35 warm samples per build, median color-kernel time fell
+from 2.347 to 2.163 ms at 1024x1024 (7.8%) and from 8.217 to 7.551 ms at
+2048x2048 (8.1%). Matched encoded hashes were identical. Full-encode timings
+at methods 2 and 6 also showed 8.0% and 2.1% kernel improvements at 1024x1024.
+Method 0 did not dispatch color for this workload. Full-encode timings did not
+show a gain because this kernel accounts for less than 1% of the
+CPU-dominated lossless encode; paired medians were noisy and slightly slower.
+The optimization is enabled by default but does not alter crossover thresholds.
+See `CUDA_EXPERIMENT_SUMMARY.md` for rejected designs and caveats.
+
+### Exact near-lossless preprocessing
+
+The promoted implementation reproduces the complete production algorithm and
+passed direct CPU/CUDA equality for all five pass counts, varied dimensions,
+and non-contiguous source strides. The direct benchmark retained 1,560 stable,
+matched-hash rows. Across 35 warm samples per case, CUDA was faster at every
+tested size and pass count; at the conservative 256x256 warm threshold,
+speedups ranged from 4.24x for one pass to 23.45x for five passes.
+
+Cold runtime initialization changes the decision. At 2048x2048, only the
+five-pass case was faster (1.09x); at 4096x4096, three and five passes were
+1.83x and 2.99x faster, while one pass remained 1.76x slower. The retained
+default therefore uses 16,777,216 cold / 65,536 warm pixels and declines cold
+one- and two-pass work. An explicit threshold still forces every pass count for
+testing. Full raw rows and computed medians are in
+`CUDA_NEAR_LOSSLESS_RESULTS_RAW.md`.

@@ -24,13 +24,20 @@ build_and_test() {
     -DWEBP_BUILD_WEBPMUX=OFF \
     "$@"
   "$cmake_command" --build "$build_dir" \
-    --target cwebp dwebp cuda_concurrency_test -j
+    --target cwebp dwebp cuda_concurrency_test cuda_near_lossless_test -j
   WEBP_TEST_BIN_DIR="$build_dir" "$root_dir/scripts/test_cuda.sh"
   "$build_dir/cuda_concurrency_test"
+  if [ "$name" = defaults ]; then
+    "$build_dir/cuda_near_lossless_test"
+  else
+    "$build_dir/cuda_near_lossless_test" --allow-fallback
+  fi
 }
 
 build_and_test defaults
 build_and_test baseline \
+  -DWEBP_CUDA_ENABLE_COLOR_SHARED_TILE=OFF \
+  -DWEBP_CUDA_ENABLE_NEAR_LOSSLESS=OFF \
   -DWEBP_CUDA_ENABLE_PERSISTENT_BUFFERS=OFF \
   -DWEBP_CUDA_ENABLE_PINNED_HOST_MEMORY=OFF \
   -DWEBP_CUDA_ENABLE_ASYNC_COPIES=OFF \

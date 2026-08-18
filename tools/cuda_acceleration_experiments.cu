@@ -84,8 +84,7 @@ __device__ __host__ uint32_t Pack(uint8_t a, uint8_t r, uint8_t g,
 }
 
 // -----------------------------------------------------------------------------
-// Cross-color search variants: tile cache, warp-private histograms, parallel
-// score reduction, and compile-time-specialized tile kernels.
+// Cross-color search control and the retained shared-tile strategy.
 
 __device__ __host__ uint8_t ColorResidual(uint32_t p, int coefficient) {
   const int red = Byte(p, 16);
@@ -111,47 +110,31 @@ __global__ void ColorBaselineKernel(const uint32_t* pixels, int width,
   }
 }
 
-template <bool kWarpPrivate, bool kParallelScore, int kSpecialTile>
-__global__ void ColorExperimentKernel(const uint32_t* pixels, int width,
+__global__ void ColorSharedTileKernel(const uint32_t* pixels, int width,
                                       int height, uint64_t* scores) {
-  constexpr int tile = kSpecialTile == 0 ? kTile : kSpecialTile;
-  __shared__ uint32_t cache[tile * tile];
-  __shared__ unsigned int histogram[8 * 256];
-  __shared__ unsigned long long score;
+  __shared__ uint32_t cache[kTile * kTile];
+  __shared__ unsigned int histogram[256];
   const int local = threadIdx.x;
-  const int tile_x = blockIdx.x * tile;
-  const int tile_y = blockIdx.y * tile;
-  const int x = tile_x + local % tile;
-  const int y = tile_y + local / tile;
+  const int tile_x = blockIdx.x * kTile;
+  const int tile_y = blockIdx.y * kTile;
+  const int x = tile_x + local % kTile;
+  const int y = tile_y + local / kTile;
   cache[local] = (x < width && y < height) ? pixels[y * width + x] : 0u;
-  const int warps = kWarpPrivate ? 8 : 1;
-  const int warp = kWarpPrivate ? local / 32 : 0;
   const int coefficients[4] = {-16, 0, 16, 32};
   const int tile_id = blockIdx.y * gridDim.x + blockIdx.x;
   __syncthreads();
   for (int c = 0; c < 4; ++c) {
-    for (int i = local; i < warps * 256; i += blockDim.x) histogram[i] = 0;
-    if (local == 0) score = 0;
+    histogram[local] = 0;
     __syncthreads();
     if (x < width && y < height) {
-      atomicAdd(histogram + warp * 256 +
-                    ColorResidual(cache[local], coefficients[c]),
+      atomicAdd(histogram + ColorResidual(cache[local], coefficients[c]),
                 1u);
     }
     __syncthreads();
-    if (kParallelScore) {
-      for (int bin = local; bin < 256; bin += blockDim.x) {
-        unsigned int count = 0;
-        for (int w = 0; w < warps; ++w) count += histogram[w * 256 + bin];
-        atomicAdd(&score, static_cast<unsigned long long>(count) * count);
-      }
-      __syncthreads();
-      if (local == 0) scores[tile_id * 4 + c] = score;
-    } else if (local == 0) {
+    if (local == 0) {
       uint64_t sum = 0;
       for (int bin = 0; bin < 256; ++bin) {
-        unsigned int count = 0;
-        for (int w = 0; w < warps; ++w) count += histogram[w * 256 + bin];
+        const unsigned int count = histogram[bin];
         sum += static_cast<uint64_t>(count) * count;
       }
       scores[tile_id * 4 + c] = sum;
@@ -181,8 +164,7 @@ void ColorOracle(const std::vector<uint32_t>& pixels,
   }
 }
 
-enum ColorVariant { kColorBaseline, kColorTileCache, kColorWarpHist,
-                    kColorParallelScore, kColorSpecialized };
+enum ColorVariant { kColorBaseline, kColorTileCache };
 
 uint64_t RunColor(ColorVariant variant, int iterations, bool* valid) {
   const std::vector<uint32_t> input = MakePixels();
@@ -200,18 +182,9 @@ uint64_t RunColor(ColorVariant variant, int iterations, bool* valid) {
       ColorBaselineKernel<<<grid, 256>>>(d_input, kWidth, kHeight, d_hist);
       // Reuse the parallel reducer by copying global histograms is deliberately
       // avoided: baseline is a histogram-throughput control and is checksummed.
-    } else if (variant == kColorTileCache) {
-      ColorExperimentKernel<false, false, 0><<<grid, 256>>>(
-          d_input, kWidth, kHeight, d_scores);
-    } else if (variant == kColorWarpHist) {
-      ColorExperimentKernel<true, false, 0><<<grid, 256>>>(
-          d_input, kWidth, kHeight, d_scores);
-    } else if (variant == kColorParallelScore) {
-      ColorExperimentKernel<true, true, 0><<<grid, 256>>>(
-          d_input, kWidth, kHeight, d_scores);
     } else {
-      ColorExperimentKernel<true, true, 16><<<grid, 256>>>(
-          d_input, kWidth, kHeight, d_scores);
+      ColorSharedTileKernel<<<grid, 256>>>(d_input, kWidth, kHeight,
+                                           d_scores);
     }
   }
   CUDA_CHECK(cudaGetLastError());
@@ -276,42 +249,6 @@ uint32_t TransformOracle(uint32_t p) {
            Byte(p, 0) - Byte(p, 8));
   return Pack(Byte(p, 24), Byte(p, 16) - (Byte(p, 8) >> 1), Byte(p, 8),
               Byte(p, 0) - (Byte(p, 16) >> 2));
-}
-
-uint64_t RunContextPool(int iterations, bool* valid) {
-  constexpr int kContexts = 4;
-  constexpr int kPerContext = kPixels / kContexts;
-  std::vector<uint32_t> input = MakePixels(kPerContext * kContexts), output(input.size());
-  cudaStream_t streams[kContexts];
-  uint32_t* buffers[kContexts];
-  for (int c = 0; c < kContexts; ++c) {
-    CUDA_CHECK(cudaStreamCreateWithFlags(&streams[c], cudaStreamNonBlocking));
-    buffers[c] = DeviceAlloc<uint32_t>(kPerContext);
-  }
-  for (int iter = 0; iter < iterations; ++iter) {
-    for (int c = 0; c < kContexts; ++c) {
-      CUDA_CHECK(cudaMemcpyAsync(buffers[c], input.data() + c * kPerContext,
-                                 kPerContext * sizeof(uint32_t),
-                                 cudaMemcpyHostToDevice, streams[c]));
-      SubtractGreenKernel<<<(kPerContext + 255) / 256, 256, 0, streams[c]>>>(
-          buffers[c], kPerContext);
-      FixedColorKernel<<<(kPerContext + 255) / 256, 256, 0, streams[c]>>>(
-          buffers[c], kPerContext);
-      CUDA_CHECK(cudaMemcpyAsync(output.data() + c * kPerContext, buffers[c],
-                                 kPerContext * sizeof(uint32_t),
-                                 cudaMemcpyDeviceToHost, streams[c]));
-    }
-  }
-  CUDA_CHECK(cudaDeviceSynchronize());
-  *valid = true;
-  if (g_verify_outputs)
-    for (size_t i = 0; i < output.size(); ++i)
-      if (output[i] != TransformOracle(input[i])) *valid = false;
-  for (int c = 0; c < kContexts; ++c) {
-    DeviceFree(buffers[c]);
-    CUDA_CHECK(cudaStreamDestroy(streams[c]));
-  }
-  return Checksum(output.data(), output.size() * sizeof(output[0]));
 }
 
 // -----------------------------------------------------------------------------
@@ -393,6 +330,17 @@ void PredictorOracle(const std::vector<uint32_t>& input,
   }
 }
 
+uint64_t RunPredictorCPU(int iterations, bool* valid) {
+  const std::vector<uint32_t> input = MakePixels();
+  std::vector<uint32_t> residuals;
+  std::vector<uint8_t> modes;
+  for (int iter = 0; iter < iterations; ++iter)
+    PredictorOracle(input, &modes, &residuals);
+  *valid = !residuals.empty() && !modes.empty();
+  return Checksum(residuals.data(), residuals.size() * sizeof(residuals[0])) ^
+         Checksum(modes.data(), modes.size());
+}
+
 uint64_t RunPredictor(int iterations, bool* valid) {
   const std::vector<uint32_t> input = MakePixels();
   const int tiles = ((kWidth + 15) / 16) * ((kHeight + 15) / 16);
@@ -422,75 +370,6 @@ uint64_t RunPredictor(int iterations, bool* valid) {
                           Checksum(modes.data(), modes.size());
   DeviceFree(d_modes); DeviceFree(d_residual); DeviceFree(d_input);
   return result;
-}
-
-// -----------------------------------------------------------------------------
-// Warp-cooperative hash matching.
-
-__global__ void HashScalarKernel(const uint32_t* input, int count,
-                                 uint16_t* lengths) {
-  const int base = blockIdx.x * blockDim.x + threadIdx.x;
-  if (base >= count) return;
-  const int candidate = base - 32;
-  int length = 0;
-  if (candidate >= 0)
-    while (length < 128 && base + length < count &&
-           input[base + length] == input[candidate + length]) ++length;
-  lengths[base] = length;
-}
-
-__global__ void HashWarpKernel(const uint32_t* input, int count,
-                               uint16_t* lengths) {
-  const int lane = threadIdx.x & 31;
-  const int warp = (blockIdx.x * blockDim.x + threadIdx.x) >> 5;
-  if (warp >= count) return;
-  const int candidate = warp - 32;
-  int length = 0;
-  if (candidate >= 0) {
-    for (int offset = 0; offset < 128 && warp + offset < count; offset += 32) {
-      const int pos = offset + lane;
-      const bool in_range = pos < 128 && warp + pos < count;
-      const bool equal = in_range && input[warp + pos] == input[candidate + pos];
-      const unsigned int active = __ballot_sync(0xffffffffu, in_range);
-      const unsigned int matches = __ballot_sync(0xffffffffu, equal);
-      const unsigned int mismatch = active & ~matches;
-      if (lane == 0) {
-        if (mismatch != 0) length = offset + (__ffs(mismatch) - 1);
-        else length = offset + __popc(active);
-      }
-      length = __shfl_sync(0xffffffffu, length, 0);
-      if (mismatch != 0 || active != 0xffffffffu) break;
-    }
-  }
-  if (lane == 0) lengths[warp] = length;
-}
-
-uint64_t RunHash(bool warp, int iterations, bool* valid) {
-  std::vector<uint32_t> input = MakePixels();
-  for (int i = 256; i < kPixels; i += 257)
-    for (int j = 0; j < 96 && i + j < kPixels; ++j) input[i + j] = input[i + j - 32];
-  uint32_t* d_input = DeviceAlloc<uint32_t>(input.size());
-  uint16_t* d_lengths = DeviceAlloc<uint16_t>(input.size());
-  CUDA_CHECK(cudaMemcpy(d_input, input.data(), input.size() * sizeof(input[0]),
-                        cudaMemcpyHostToDevice));
-  for (int i = 0; i < iterations; ++i) {
-    if (warp) HashWarpKernel<<<(kPixels * 32 + 255) / 256, 256>>>(d_input, kPixels, d_lengths);
-    else HashScalarKernel<<<(kPixels + 255) / 256, 256>>>(d_input, kPixels, d_lengths);
-  }
-  CUDA_CHECK(cudaDeviceSynchronize());
-  std::vector<uint16_t> got(input.size());
-  CUDA_CHECK(cudaMemcpy(got.data(), d_lengths, got.size() * sizeof(got[0]), cudaMemcpyDeviceToHost));
-  if (g_verify_outputs) {
-    std::vector<uint16_t> expected(input.size());
-    for (int base = 32; base < kPixels; ++base)
-      while (expected[base] < 128 && base + expected[base] < kPixels &&
-             input[base + expected[base]] == input[base - 32 + expected[base]]) ++expected[base];
-    *valid = got == expected;
-  } else {
-    *valid = true;
-  }
-  const uint64_t result = Checksum(got.data(), got.size() * sizeof(got[0]));
-  DeviceFree(d_lengths); DeviceFree(d_input); return result;
 }
 
 // -----------------------------------------------------------------------------
@@ -530,6 +409,60 @@ __global__ void SharpYUVKernel(const uint32_t* rgb, int width, int height,
   v_plane[by * uv_width + bx] = Clamp8(v + 128);
 }
 
+void SharpYUVOracle(const std::vector<uint32_t>& input,
+                    std::vector<uint8_t>* y, std::vector<uint8_t>* u,
+                    std::vector<uint8_t>* v) {
+  const int uv_width = (kWidth + 1) / 2;
+  const int uv_height = (kHeight + 1) / 2;
+  y->assign(input.size(), 0);
+  u->assign(uv_width * uv_height, 0);
+  v->assign(uv_width * uv_height, 0);
+  for (int by = 0; by < kHeight / 2; ++by) {
+    for (int bx = 0; bx < kWidth / 2; ++bx) {
+      int uu = 0, vv = 0, target_r = 0, target_b = 0;
+      for (int dy = 0; dy < 2; ++dy) {
+        for (int dx = 0; dx < 2; ++dx) {
+          const int pos = (by * 2 + dy) * kWidth + bx * 2 + dx;
+          const uint32_t p = input[pos];
+          const int r = Byte(p, 16), g = Byte(p, 8), b = Byte(p, 0);
+          (*y)[pos] = (77 * r + 150 * g + 29 * b + 128) >> 8;
+          uu += b - (*y)[pos];
+          vv += r - (*y)[pos];
+          target_r += r;
+          target_b += b;
+        }
+      }
+      uu /= 4;
+      vv /= 4;
+      for (int iter = 0; iter < 4; ++iter) {
+        int recon_r = 0, recon_b = 0;
+        for (int dy = 0; dy < 2; ++dy) {
+          for (int dx = 0; dx < 2; ++dx) {
+            const int yy = (*y)[(by * 2 + dy) * kWidth + bx * 2 + dx];
+            recon_r += Clamp8(yy + vv);
+            recon_b += Clamp8(yy + uu);
+          }
+        }
+        uu += (target_b - recon_b) / 8;
+        vv += (target_r - recon_r) / 8;
+      }
+      (*u)[by * uv_width + bx] = Clamp8(uu + 128);
+      (*v)[by * uv_width + bx] = Clamp8(vv + 128);
+    }
+  }
+}
+
+uint64_t RunSharpYUVCPU(int iterations, bool* valid) {
+  const std::vector<uint32_t> input = MakePixels();
+  std::vector<uint8_t> y, u, v;
+  for (int iter = 0; iter < iterations; ++iter) {
+    SharpYUVOracle(input, &y, &u, &v);
+  }
+  *valid = !y.empty() && !u.empty() && !v.empty();
+  return Checksum(y.data(), y.size()) ^ Checksum(u.data(), u.size()) ^
+         Checksum(v.data(), v.size());
+}
+
 uint64_t RunSharpYUV(int iterations, bool* valid) {
   const std::vector<uint32_t> input = MakePixels();
   const int uv_size = ((kWidth + 1) / 2) * ((kHeight + 1) / 2);
@@ -547,27 +480,8 @@ uint64_t RunSharpYUV(int iterations, bool* valid) {
   CUDA_CHECK(cudaMemcpy(u.data(), d_u, u.size(), cudaMemcpyDeviceToHost));
   CUDA_CHECK(cudaMemcpy(v.data(), d_v, v.size(), cudaMemcpyDeviceToHost));
   if (g_verify_outputs) {
-    std::vector<uint8_t> ey(y.size()), eu(u.size()), ev(v.size());
-    for (int by = 0; by < kHeight / 2; ++by) for (int bx = 0; bx < kWidth / 2; ++bx) {
-    int uu = 0, vv = 0, tr = 0, tb = 0;
-    for (int dy = 0; dy < 2; ++dy) for (int dx = 0; dx < 2; ++dx) {
-      const int pos = (by * 2 + dy) * kWidth + bx * 2 + dx;
-      const uint32_t p = input[pos]; const int r = Byte(p, 16), g = Byte(p, 8), b = Byte(p, 0);
-      ey[pos] = (77 * r + 150 * g + 29 * b + 128) >> 8;
-      uu += b - ey[pos]; vv += r - ey[pos]; tr += r; tb += b;
-    }
-    uu /= 4; vv /= 4;
-    for (int iter = 0; iter < 4; ++iter) {
-      int rr = 0, bb = 0;
-      for (int dy = 0; dy < 2; ++dy) for (int dx = 0; dx < 2; ++dx) {
-        const int yy = ey[(by * 2 + dy) * kWidth + bx * 2 + dx];
-        rr += Clamp8(yy + vv); bb += Clamp8(yy + uu);
-      }
-      uu += (tb - bb) / 8; vv += (tr - rr) / 8;
-    }
-    eu[by * (kWidth / 2) + bx] = Clamp8(uu + 128);
-    ev[by * (kWidth / 2) + bx] = Clamp8(vv + 128);
-    }
+    std::vector<uint8_t> ey, eu, ev;
+    SharpYUVOracle(input, &ey, &eu, &ev);
     *valid = y == ey && u == eu && v == ev;
   } else {
     *valid = true;
@@ -621,6 +535,17 @@ void NearOracle(std::vector<uint32_t>* pixels) {
   }
 }
 
+uint64_t RunNearLosslessCPU(int iterations, bool* valid) {
+  const std::vector<uint32_t> input = MakePixels();
+  std::vector<uint32_t> output;
+  for (int iter = 0; iter < iterations; ++iter) {
+    output = input;
+    NearOracle(&output);
+  }
+  *valid = !output.empty();
+  return Checksum(output.data(), output.size() * sizeof(output[0]));
+}
+
 uint64_t RunNearLossless(int iterations, bool* valid) {
   const std::vector<uint32_t> input = MakePixels();
   uint32_t* a = DeviceAlloc<uint32_t>(input.size()), *b = DeviceAlloc<uint32_t>(input.size());
@@ -647,6 +572,17 @@ uint64_t RunNearLossless(int iterations, bool* valid) {
 
 struct Token { uint16_t literal, red, blue, alpha, distance; };
 
+std::vector<Token> MakeTokens(int count) {
+  std::vector<Token> tokens(count);
+  for (int i = 0; i < count; ++i) {
+    const uint32_t v = Mix(i);
+    tokens[i] = {uint16_t(v & 255), uint16_t(v >> 8 & 255),
+                 uint16_t(v >> 16 & 255), uint16_t(v >> 24),
+                 uint16_t(v % 256)};
+  }
+  return tokens;
+}
+
 __global__ void HistogramKernel(const Token* tokens, int count, uint32_t* hist) {
   const int i = blockIdx.x * blockDim.x + threadIdx.x; if (i >= count) return;
   const Token t = tokens[i];
@@ -657,8 +593,7 @@ __global__ void HistogramKernel(const Token* tokens, int count, uint32_t* hist) 
 
 uint64_t RunHistogram(int iterations, bool* valid) {
   constexpr int count = 1 << 20, bins = 1280;
-  std::vector<Token> tokens(count);
-  for (int i = 0; i < count; ++i) { const uint32_t v = Mix(i); tokens[i] = {uint16_t(v & 255), uint16_t(v >> 8 & 255), uint16_t(v >> 16 & 255), uint16_t(v >> 24), uint16_t(v % 256)}; }
+  const std::vector<Token> tokens = MakeTokens(count);
   Token* d_tokens = DeviceAlloc<Token>(count); uint32_t* d_hist = DeviceAlloc<uint32_t>(bins);
   CUDA_CHECK(cudaMemcpy(d_tokens, tokens.data(), tokens.size() * sizeof(tokens[0]), cudaMemcpyHostToDevice));
   for (int iter = 0; iter < iterations; ++iter) { CUDA_CHECK(cudaMemset(d_hist, 0, bins * sizeof(uint32_t))); HistogramKernel<<<(count + 255) / 256, 256>>>(d_tokens, count, d_hist); }
@@ -672,6 +607,24 @@ uint64_t RunHistogram(int iterations, bool* valid) {
     *valid = true;
   }
   const uint64_t result = Checksum(got.data(), got.size() * sizeof(got[0])); DeviceFree(d_hist); DeviceFree(d_tokens); return result;
+}
+
+uint64_t RunHistogramCPU(int iterations, bool* valid) {
+  constexpr int count = 1 << 20, bins = 1280;
+  const std::vector<Token> tokens = MakeTokens(count);
+  std::vector<uint32_t> histogram(bins);
+  for (int iter = 0; iter < iterations; ++iter) {
+    std::fill(histogram.begin(), histogram.end(), 0u);
+    for (const Token& t : tokens) {
+      ++histogram[t.literal];
+      ++histogram[256 + t.red];
+      ++histogram[512 + t.blue];
+      ++histogram[768 + t.alpha];
+      ++histogram[1024 + t.distance];
+    }
+  }
+  *valid = !histogram.empty();
+  return Checksum(histogram.data(), histogram.size() * sizeof(histogram[0]));
 }
 
 // -----------------------------------------------------------------------------
@@ -694,8 +647,52 @@ __global__ void LossyScoreKernel(const uint8_t* y, int width, int height,
   __syncthreads(); if (threadIdx.x < 4) scores[(blockIdx.y * gridDim.x + blockIdx.x) * 4 + threadIdx.x] = local[threadIdx.x];
 }
 
+std::vector<uint8_t> MakeLuma() {
+  std::vector<uint8_t> y(kPixels);
+  for (int i = 0; i < kPixels; ++i) y[i] = Mix(i) & 255;
+  return y;
+}
+
+void LossyScoreOracle(const std::vector<uint8_t>& y,
+                      std::vector<unsigned long long>* scores) {
+  const int blocks_x = (kWidth + 15) / 16;
+  const int blocks_y = (kHeight + 15) / 16;
+  scores->assign(blocks_x * blocks_y * 4, 0);
+  for (int my = 0; my < blocks_y; ++my) {
+    for (int mx = 0; mx < blocks_x; ++mx) {
+      for (int yy = 0; yy < 16; ++yy) {
+        for (int xx = 0; xx < 16; ++xx) {
+          const int x = mx * 16 + xx, py = my * 16 + yy;
+          if (x >= kWidth || py >= kHeight) continue;
+          const int actual = y[py * kWidth + x];
+          const int top =
+              my ? y[(my * 16 - 1) * kWidth + x] : 127;
+          const int left =
+              mx ? y[py * kWidth + mx * 16 - 1] : 127;
+          const int dc = (top + left) / 2;
+          const int pred[4] = {dc, top, left, Clamp8(top + left - 127)};
+          for (int mode = 0; mode < 4; ++mode) {
+            const int delta = actual - pred[mode];
+            (*scores)[(my * blocks_x + mx) * 4 + mode] += delta * delta;
+          }
+        }
+      }
+    }
+  }
+}
+
+uint64_t RunLossyScoreCPU(int iterations, bool* valid) {
+  const std::vector<uint8_t> y = MakeLuma();
+  std::vector<unsigned long long> scores;
+  for (int iter = 0; iter < iterations; ++iter) {
+    LossyScoreOracle(y, &scores);
+  }
+  *valid = !scores.empty();
+  return Checksum(scores.data(), scores.size() * sizeof(scores[0]));
+}
+
 uint64_t RunLossyScore(int iterations, bool* valid) {
-  std::vector<uint8_t> y(kPixels); for (int i = 0; i < kPixels; ++i) y[i] = Mix(i) & 255;
+  const std::vector<uint8_t> y = MakeLuma();
   const int bx = (kWidth + 15) / 16, by = (kHeight + 15) / 16, count = bx * by * 4;
   uint8_t* d_y = DeviceAlloc<uint8_t>(y.size()); unsigned long long* d_scores = DeviceAlloc<unsigned long long>(count);
   CUDA_CHECK(cudaMemcpy(d_y, y.data(), y.size(), cudaMemcpyHostToDevice));
@@ -703,12 +700,8 @@ uint64_t RunLossyScore(int iterations, bool* valid) {
   CUDA_CHECK(cudaDeviceSynchronize()); std::vector<unsigned long long> got(count);
   CUDA_CHECK(cudaMemcpy(got.data(), d_scores, count * sizeof(got[0]), cudaMemcpyDeviceToHost));
   if (g_verify_outputs) {
-    std::vector<unsigned long long> expected(count);
-    for (int my = 0; my < by; ++my) for (int mx = 0; mx < bx; ++mx) for (int yy = 0; yy < 16; ++yy) for (int xx = 0; xx < 16; ++xx) {
-    const int x = mx * 16 + xx, py = my * 16 + yy; if (x >= kWidth || py >= kHeight) continue;
-    const int actual = y[py * kWidth + x], top = my ? y[(my * 16 - 1) * kWidth + x] : 127, left = mx ? y[py * kWidth + mx * 16 - 1] : 127, dc = (top + left) / 2;
-    const int pred[4] = {dc, top, left, Clamp8(top + left - 127)}; for (int m = 0; m < 4; ++m) { const int d = actual - pred[m]; expected[(my * bx + mx) * 4 + m] += d * d; }
-    }
+    std::vector<unsigned long long> expected;
+    LossyScoreOracle(y, &expected);
     *valid = got == expected;
   } else {
     *valid = true;
@@ -757,30 +750,52 @@ uint64_t RunResidentPipeline(int iterations, bool* valid) {
   const uint64_t result = Checksum(got.data(), got.size() * sizeof(got[0])); DeviceFree(d_sig); DeviceFree(d_pixels); DeviceFree(d_input); return result;
 }
 
-// -----------------------------------------------------------------------------
-// CUDA graph replay plus two pinned staging slots.
-
-uint64_t RunGraphsDoubleBuffer(int iterations, bool* valid) {
-  constexpr int slots = 2, count = kPixels / slots;
-  const std::vector<uint32_t> input = MakePixels(count * slots); std::vector<uint32_t> output(input.size());
-  cudaStream_t streams[slots]; cudaGraph_t graphs[slots]; cudaGraphExec_t execs[slots]; uint32_t* d[slots]; uint32_t* host[slots];
-  for (int s = 0; s < slots; ++s) {
-    CUDA_CHECK(cudaStreamCreateWithFlags(&streams[s], cudaStreamNonBlocking)); d[s] = DeviceAlloc<uint32_t>(count);
-    CUDA_CHECK(cudaMallocHost(&host[s], count * sizeof(uint32_t))); std::memcpy(host[s], input.data() + s * count, count * sizeof(uint32_t));
-    CUDA_CHECK(cudaStreamBeginCapture(streams[s], cudaStreamCaptureModeGlobal));
-    SubtractGreenKernel<<<(count + 255) / 256, 256, 0, streams[s]>>>(d[s], count);
-    FixedColorKernel<<<(count + 255) / 256, 256, 0, streams[s]>>>(d[s], count);
-    CUDA_CHECK(cudaStreamEndCapture(streams[s], &graphs[s])); CUDA_CHECK(cudaGraphInstantiate(&execs[s], graphs[s], nullptr, nullptr, 0));
+uint64_t RunStagedLosslessPipeline(int iterations, bool* valid) {
+  const std::vector<uint32_t> input = MakePixels();
+  std::vector<uint32_t> staging(input.size()), got(input.size());
+  uint32_t* d_input = DeviceAlloc<uint32_t>(input.size());
+  uint32_t* d_pixels = DeviceAlloc<uint32_t>(input.size());
+  uint32_t* d_sig = DeviceAlloc<uint32_t>(input.size());
+  const size_t bytes = input.size() * sizeof(input[0]);
+  for (int iter = 0; iter < iterations; ++iter) {
+    CUDA_CHECK(cudaMemcpy(d_input, input.data(), bytes, cudaMemcpyHostToDevice));
+    PredictorResidualFixedKernel<<<(kPixels + 255) / 256, 256>>>(
+        d_input, d_pixels, kWidth, kPixels);
+    CUDA_CHECK(cudaMemcpy(staging.data(), d_pixels, bytes,
+                          cudaMemcpyDeviceToHost));
+    CUDA_CHECK(cudaMemcpy(d_pixels, staging.data(), bytes,
+                          cudaMemcpyHostToDevice));
+    SubtractGreenKernel<<<(kPixels + 255) / 256, 256>>>(d_pixels, kPixels);
+    CUDA_CHECK(cudaMemcpy(staging.data(), d_pixels, bytes,
+                          cudaMemcpyDeviceToHost));
+    CUDA_CHECK(cudaMemcpy(d_pixels, staging.data(), bytes,
+                          cudaMemcpyHostToDevice));
+    FixedColorKernel<<<(kPixels + 255) / 256, 256>>>(d_pixels, kPixels);
+    CUDA_CHECK(cudaMemcpy(staging.data(), d_pixels, bytes,
+                          cudaMemcpyDeviceToHost));
+    CUDA_CHECK(cudaMemcpy(d_pixels, staging.data(), bytes,
+                          cudaMemcpyHostToDevice));
+    SignatureKernel<<<(kPixels + 255) / 256, 256>>>(d_pixels, kPixels, d_sig);
+    CUDA_CHECK(cudaMemcpy(got.data(), d_sig, bytes, cudaMemcpyDeviceToHost));
   }
-  for (int iter = 0; iter < iterations; ++iter) for (int s = 0; s < slots; ++s) {
-    CUDA_CHECK(cudaMemcpyAsync(d[s], host[s], count * sizeof(uint32_t), cudaMemcpyHostToDevice, streams[s])); CUDA_CHECK(cudaGraphLaunch(execs[s], streams[s]));
-    CUDA_CHECK(cudaMemcpyAsync(output.data() + s * count, d[s], count * sizeof(uint32_t), cudaMemcpyDeviceToHost, streams[s]));
+  *valid = true;
+  if (g_verify_outputs) {
+    std::vector<uint32_t> expected(input.size()), transformed(input.size());
+    for (int i = 0; i < kPixels; ++i) {
+      const uint32_t pred =
+          (i % kWidth) ? input[i - 1] : 0xff000000u;
+      transformed[i] = TransformOracle(PixelResidual(input[i], pred));
+      expected[i] = transformed[i] * 0x1e35a7bdu ^
+                    (i ? transformed[i - 1] : 0);
+    }
+    *valid = got == expected;
   }
-  CUDA_CHECK(cudaDeviceSynchronize()); *valid = true;
-  if (g_verify_outputs)
-    for (size_t i = 0; i < output.size(); ++i) if (output[i] != TransformOracle(input[i])) *valid = false;
-  for (int s = 0; s < slots; ++s) { CUDA_CHECK(cudaGraphExecDestroy(execs[s])); CUDA_CHECK(cudaGraphDestroy(graphs[s])); CUDA_CHECK(cudaFreeHost(host[s])); DeviceFree(d[s]); CUDA_CHECK(cudaStreamDestroy(streams[s])); }
-  return Checksum(output.data(), output.size() * sizeof(output[0]));
+  const uint64_t result =
+      Checksum(got.data(), got.size() * sizeof(got[0]));
+  DeviceFree(d_sig);
+  DeviceFree(d_pixels);
+  DeviceFree(d_input);
+  return result;
 }
 
 struct Experiment {
@@ -790,28 +805,22 @@ struct Experiment {
 
 uint64_t ColorBaseline(int n, bool* ok) { return RunColor(kColorBaseline, n, ok); }
 uint64_t ColorTile(int n, bool* ok) { return RunColor(kColorTileCache, n, ok); }
-uint64_t ColorWarp(int n, bool* ok) { return RunColor(kColorWarpHist, n, ok); }
-uint64_t ColorParallel(int n, bool* ok) { return RunColor(kColorParallelScore, n, ok); }
-uint64_t ColorSpecialized(int n, bool* ok) { return RunColor(kColorSpecialized, n, ok); }
-uint64_t HashScalar(int n, bool* ok) { return RunHash(false, n, ok); }
-uint64_t HashWarp(int n, bool* ok) { return RunHash(true, n, ok); }
 
 const Experiment kExperiments[] = {
     {"color_baseline", ColorBaseline},
     {"color_shared_tile", ColorTile},
-    {"color_warp_histograms", ColorWarp},
-    {"color_parallel_entropy", ColorParallel},
-    {"color_specialized_kernel", ColorSpecialized},
-    {"context_pool", RunContextPool},
+    {"staged_lossless_pipeline", RunStagedLosslessPipeline},
     {"resident_lossless_pipeline", RunResidentPipeline},
+    {"predictor_search_residual_cpu", RunPredictorCPU},
     {"predictor_search_residual", RunPredictor},
-    {"hash_scalar", HashScalar},
-    {"hash_warp_cooperative", HashWarp},
+    {"sharpyuv_iterative_cpu", RunSharpYUVCPU},
     {"sharpyuv_iterative", RunSharpYUV},
+    {"near_lossless_stencil_cpu", RunNearLosslessCPU},
     {"near_lossless_stencil", RunNearLossless},
+    {"lossless_histogram_cpu", RunHistogramCPU},
     {"lossless_histogram", RunHistogram},
+    {"lossy_macroblock_scoring_cpu", RunLossyScoreCPU},
     {"lossy_macroblock_scoring", RunLossyScore},
-    {"graphs_double_buffer", RunGraphsDoubleBuffer},
 };
 
 }  // namespace
