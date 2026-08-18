@@ -1,0 +1,14 @@
+{
+  "schema": "libwebp-backref-cost-traceback-artifact-hashes-v1",
+  "artifacts": [
+    {"path": "executor-commands.jsonl", "bytes": 684, "sha256": "3696399894516da0b697ab063014bf3af8bc1e7ba1e057f9c11e29807c60666a"},
+    {"path": "lease-record.json", "bytes": 446, "sha256": "b42f3083d81914d56a9c04046ac2d512825b2726f3713fce8755d0e14582387f"},
+    {"path": "operator-report.md", "bytes": 770, "sha256": "be56feac29ebdb418589399a22d9639fb9e448cca4a42fcf5930a2b755148774"},
+    {"path": "preflight.json", "bytes": 3240, "sha256": "c1d0cff88f386e6553548e15864303385529eafe8398c8f70a010b047f1c6ead"},
+    {"path": "refusal.json", "bytes": 1372, "sha256": "dcdf3ce4e4ddcc4d322e86a5aa4ae0d50f54e7e31521cddcd8c20baee533cb15"},
+    {"path": "schema-validation.json", "bytes": 897, "sha256": "c7e9691a5719c65743120e2a738f751052a41237022a386562a89d43cb9b7c4c"},
+    {"path": "source-hashes.json", "bytes": 2859, "sha256": "718cbcd4ba704c3adbfefd0a3c0f46ca75bdeee6e3d83e1687924da98f04aea9"},
+    {"path": "timed-child-stderr.log", "bytes": 103, "sha256": "1322596a6bde787444526999da7e46c191945166a5ed31899c7769d302dab3f9"},
+    {"path": "validate.stdout.log", "bytes": 229, "sha256": "0f7218bc3d88fdb09493d925f4892a3ac3be0cf0003fa4f461db284f202528bf"}
+  ]
+}
