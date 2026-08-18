@@ -28,7 +28,7 @@ may remain untimed and therefore do not all require the lease.
 
 The completed-series dispositions are in
 [experiment-series-analysis-20260817.md](experiment-series-analysis-20260817.md).
-All guard rows remain independent and default-off. The proposed production
+All five guard rows remain independent and default-off. The proposed production
 changes were assessed independently; only the exact 2x2 lossy kernel is
 promoted as a supported default. Under row 4 only,
 `WEBP_METAL_LOSSY_BLOCK_2X2=0` now selects the superseded per-pixel grid as the
@@ -86,16 +86,6 @@ default off as bounded negative research evidence; it changes no production
 behavior. See
 [cache-size-single-pass-slab-experiment-evaluation-20260818.md](cache-size-single-pass-slab-experiment-evaluation-20260818.md).
 
-Row 11 is the independent recorder-free `CostManager` workspace candidate
-frozen in
-[backref-cost-traceback-experiment-20260818.md](backref-cost-traceback-experiment-20260818.md).
-Its executor stopped fail-closed before build, lease acquisition, correctness,
-or timing because Low Power Mode was enabled on AC. Existing untimed
-equivalence, fallback, build-isolation, corpus, and sanitizer tests pass, so the
-candidate is retained default off. Performance is unassessed and promotion is
-rejected for this cycle; no follow-up gate or production change follows. See
-[backref-cost-traceback-experiment-evaluation-20260818.md](backref-cost-traceback-experiment-evaluation-20260818.md).
-
 ## Default and isolation guarantees
 
 - Default CMake and Unix make builds define none of the private macros.
@@ -104,8 +94,7 @@ rejected for this cycle; no follow-up gate or production change follows. See
   8's dedicated recorder, probes, environment reads, symbols, and private
   repetition options, and row 9's candidate source, runtime strings, symbols,
   test target, and runner, plus row 10's candidate source, runtime strings,
-  symbols, test target, and runner, plus row 11's workspace helper, private
-  symbols, runtime/fault strings, test target, and runner are omitted.
+  symbols, test target, and runner are omitted.
 - An ordinary Metal build continues to include the supported transform, hash,
   and RGB-to-YUV acceleration. Item 4's alternate environment knobs are read
   only when both its build macro and exact runtime opt-in are present.
