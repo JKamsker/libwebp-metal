@@ -232,6 +232,8 @@ decode/encode batches and an explicit `--force-cuda` experiment flag.
 all-strategies-disabled builds. Measurement details are in
 [CUDA_BENCHMARK_RESULTS.md](CUDA_BENCHMARK_RESULTS.md), and the concise batch
 decision is in [CUDA_EXPERIMENT_SUMMARY.md](CUDA_EXPERIMENT_SUMMARY.md#persistent-cuda-batch-follow-up).
+Per-system benchmark records are indexed in
+[doc/machine-reports/README.md](doc/machine-reports/README.md).
 
 The portable file-to-WebP suite measures real PNG and JPEG inputs in both a
 persistent 24-item process and fresh `cwebp` processes. It requires Python

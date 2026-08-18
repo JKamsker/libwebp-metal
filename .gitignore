@@ -43,7 +43,9 @@ CMakeFiles/
 cmake_install.cmake
 .gradle
 /build
+/build-*
 /profile-data
+__pycache__/
 extras/get_disto
 extras/vwebp_sdl
 extras/webp_quality
