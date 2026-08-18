@@ -121,7 +121,7 @@
     "seed": 2654435769,
     "seed_hex": "0x9e3779b9",
     "source": "scripts/generate_publication_corpus.py",
-    "source_sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+    "source_sha256": "623ff5fd445d843679bb9e1860d51af93d977744f6f68a2e7aa3f385c406d17c",
     "version": 1
   },
   "license": {

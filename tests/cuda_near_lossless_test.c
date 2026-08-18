@@ -4,7 +4,9 @@
 // avoids depending on the lossless encoder's content-dependent transform
 // selection to reach the preprocessing call site.
 
+#if !defined(_WIN32)
 #define _POSIX_C_SOURCE 200809L
+#endif
 
 #include <limits.h>
 #include <stdint.h>
@@ -14,6 +16,7 @@
 
 #include "src/enc/accelerator_enc.h"
 #include "src/enc/vp8li_enc.h"
+#include "tools/benchmark_platform.h"
 #include "webp/encode.h"
 
 typedef struct {
@@ -95,16 +98,16 @@ static int RunCase(Dimensions dimensions, int bits, int require_cuda) {
   picture.argb = source;
   picture.argb_stride = stride;
 
-  setenv("WEBP_ACCELERATOR", "none", 1);
+  WebPBenchmarkSetEnvironment("WEBP_ACCELERATOR", "none");
   if (!VP8ApplyNearLossless(&picture, (5 - bits) * 20, cpu)) {
     fprintf(stderr, "CPU near-lossless preprocessing failed\n");
     goto cleanup;
   }
 
-  setenv("WEBP_ACCELERATOR", "cuda", 1);
-  setenv("WEBP_CUDA", "1", 1);
-  setenv("WEBP_CUDA_NEAR_LOSSLESS", "1", 1);
-  setenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "0", 1);
+  WebPBenchmarkSetEnvironment("WEBP_ACCELERATOR", "cuda");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA", "1");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_NEAR_LOSSLESS", "1");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "0");
   request.source = source;
   request.source_stride = stride;
   request.width = dimensions.width;
@@ -157,11 +160,11 @@ static int TestDeclinePreservesOutput(void) {
   if (source == NULL || output == NULL) goto cleanup;
   FillSource(source, kStride, kWidth, kHeight);
   for (i = 0; i < (size_t)kWidth * kHeight; ++i) output[i] = 0xdeadbeefu;
-  setenv("WEBP_ACCELERATOR", "cuda", 1);
-  setenv("WEBP_CUDA", "1", 1);
-  setenv("WEBP_CUDA_NEAR_LOSSLESS", "1", 1);
-  setenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "18446744073709551615",
-         1);
+  WebPBenchmarkSetEnvironment("WEBP_ACCELERATOR", "cuda");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA", "1");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_NEAR_LOSSLESS", "1");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS",
+                              "18446744073709551615");
   request.source = source;
   request.source_stride = kStride;
   request.width = kWidth;
@@ -196,10 +199,10 @@ static int TestOversizedKernelExtents(int require_near_lossless) {
   WebPAcceleratorRGBToYUVRequest rgb_request;
   WebPAcceleratorResult result;
 
-  setenv("WEBP_ACCELERATOR", "cuda", 1);
-  setenv("WEBP_CUDA", "1", 1);
-  setenv("WEBP_CUDA_NEAR_LOSSLESS", "1", 1);
-  setenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "0", 1);
+  WebPBenchmarkSetEnvironment("WEBP_ACCELERATOR", "cuda");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA", "1");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_NEAR_LOSSLESS", "1");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "0");
   near_request.source = &near_source;
   near_request.source_stride = INT_MAX;
   near_request.width = INT_MAX;
@@ -215,8 +218,8 @@ static int TestOversizedKernelExtents(int require_near_lossless) {
     return 0;
   }
 
-  setenv("WEBP_CUDA_LOSSY", "1", 1);
-  setenv("WEBP_CUDA_LOSSY_MIN_PIXELS", "0", 1);
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY", "1");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY_MIN_PIXELS", "0");
   rgb_request.red = rgb_source;
   rgb_request.green = rgb_source + 1;
   rgb_request.blue = rgb_source + 2;

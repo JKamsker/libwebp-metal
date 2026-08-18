@@ -2,7 +2,9 @@
 //
 // Internal warm-process benchmark for CUDA compile-time strategy comparisons.
 
+#if !defined(_WIN32)
 #define _POSIX_C_SOURCE 200809L
+#endif
 
 #include <errno.h>
 #include <inttypes.h>
@@ -10,10 +12,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <time.h>
-
 #include "src/enc/cuda_enc.h"
 #include "src/enc/vp8li_enc.h"
+#include "tools/benchmark_platform.h"
 #include "webp/encode.h"
 
 typedef enum { OP_COLOR, OP_HASH, OP_NEAR_LOSSLESS, OP_LOSSLESS, OP_LOSSY }
@@ -156,36 +157,37 @@ static uint64_t HashBytes(const uint8_t* data, size_t size) {
   return hash;
 }
 
-static uint64_t NowNanoseconds(void) {
-  struct timespec now;
-  if (clock_gettime(CLOCK_MONOTONIC, &now) != 0) return 0;
-  return (uint64_t)now.tv_sec * UINT64_C(1000000000) + (uint64_t)now.tv_nsec;
-}
-
-static void ConfigureDispatch(const Options* options) {
+static int ConfigureDispatch(const Options* options) {
   const int cuda = !strcmp(options->variant, "cuda");
-  setenv("WEBP_ACCELERATOR", cuda ? "cuda" : "none", 1);
-  setenv("WEBP_CUDA", cuda ? "1" : "0", 1);
-  setenv("WEBP_CUDA_COLOR",
-         cuda && (options->operation == OP_COLOR ||
-                  options->operation == OP_LOSSLESS)
-             ? "1"
-             : "0",
-         1);
-  setenv("WEBP_CUDA_HASH",
-         cuda && (options->operation == OP_HASH ||
-                  options->operation == OP_LOSSLESS)
-             ? "1"
-             : "0",
-         1);
-  setenv("WEBP_CUDA_LOSSY",
-         cuda && options->operation == OP_LOSSY ? "1" : "0", 1);
-  setenv("WEBP_CUDA_NEAR_LOSSLESS",
-         cuda && options->operation == OP_NEAR_LOSSLESS ? "1" : "0", 1);
-  setenv("WEBP_CUDA_MIN_PIXELS", "0", 1);
-  setenv("WEBP_CUDA_HASH_MIN_PIXELS", "0", 1);
-  setenv("WEBP_CUDA_LOSSY_MIN_PIXELS", "0", 1);
-  setenv("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS", "0", 1);
+  int ok = 1;
+  ok &= WebPBenchmarkSetEnvironment("WEBP_ACCELERATOR",
+                                    cuda ? "cuda" : "none");
+  ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA", cuda ? "1" : "0");
+  ok &= WebPBenchmarkSetEnvironment(
+      "WEBP_CUDA_COLOR",
+      cuda && (options->operation == OP_COLOR ||
+               options->operation == OP_LOSSLESS)
+          ? "1"
+          : "0");
+  ok &= WebPBenchmarkSetEnvironment(
+      "WEBP_CUDA_HASH",
+      cuda && (options->operation == OP_HASH ||
+               options->operation == OP_LOSSLESS)
+          ? "1"
+          : "0");
+  ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY",
+                                    cuda && options->operation == OP_LOSSY
+                                        ? "1"
+                                        : "0");
+  ok &= WebPBenchmarkSetEnvironment(
+      "WEBP_CUDA_NEAR_LOSSLESS",
+      cuda && options->operation == OP_NEAR_LOSSLESS ? "1" : "0");
+  ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_MIN_PIXELS", "0");
+  ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_HASH_MIN_PIXELS", "0");
+  ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY_MIN_PIXELS", "0");
+  ok &= WebPBenchmarkSetEnvironment("WEBP_CUDA_NEAR_LOSSLESS_MIN_PIXELS",
+                                    "0");
+  return ok;
 }
 
 static int Encode(const Options* options, const uint8_t* rgba,
@@ -208,12 +210,12 @@ static int Encode(const Options* options, const uint8_t* rgba,
   WebPMemoryWriterInit(&writer);
   picture.writer = WebPMemoryWrite;
   picture.custom_ptr = &writer;
-  begin = NowNanoseconds();
+  begin = WebPBenchmarkNowNanoseconds();
   if (!WebPPictureImportRGBA(&picture, rgba, options->width * 4) ||
       !WebPEncode(&config, &picture)) {
     goto cleanup;
   }
-  end = NowNanoseconds();
+  end = WebPBenchmarkNowNanoseconds();
   if (begin == 0 || end <= begin) goto cleanup;
   *elapsed_ns = end - begin;
   *output_hash = HashBytes(writer.mem, writer.size);
@@ -244,11 +246,11 @@ static int PreprocessNearLossless(const Options* options, const uint8_t* rgba,
       !WebPPictureImportRGBA(&picture, rgba, options->width * 4)) {
     goto cleanup;
   }
-  begin = NowNanoseconds();
+  begin = WebPBenchmarkNowNanoseconds();
   if (!VP8ApplyNearLossless(&picture, options->near_lossless_quality, output)) {
     goto cleanup;
   }
-  end = NowNanoseconds();
+  end = WebPBenchmarkNowNanoseconds();
   if (begin == 0 || end <= begin) goto cleanup;
   *elapsed_ns = end - begin;
   *output_size = pixel_count * sizeof(*output);
@@ -313,7 +315,11 @@ int main(int argc, const char* const argv[]) {
   } else {
     snprintf(near_lossless_quality, sizeof(near_lossless_quality), "null");
   }
-  ConfigureDispatch(&options);
+  if (!ConfigureDispatch(&options)) {
+    fprintf(stderr, "failed to configure benchmark environment\n");
+    free(rgba);
+    return 1;
+  }
   if (!strcmp(options.variant, "cuda")) {
     uint64_t elapsed_ns, output_hash;
     size_t output_size;
