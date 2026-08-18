@@ -34,6 +34,12 @@ canonical preprocessed-source match to main `e7c1be7d...`, old-gate isolation,
 default omission, exact publication-corpus streams and decoded pixels, injected
 fallback, missing-session refusal, and sanitizer coverage without timing.
 
+`scripts/test_backref_cost_workspace_remote_v2_experiment.py` establishes the
+next independent v2 gate identity from main `d12036f...`. It checks the exact
+validated candidate projection, all 26 method-4/6 correctness cells,
+transactional fallback, sanitizers, prior-gate isolation, and complete default
+artifact omission without invoking the recorder-free timing runner.
+
 ## Building
 
 ### Fuzzers
