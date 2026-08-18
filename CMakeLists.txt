@@ -255,6 +255,7 @@ endif()
 # Include dependencies.
 if(WEBP_BUILD_ANIM_UTILS
    OR WEBP_BUILD_CWEBP
+   OR WEBP_BUILD_CUDA_BENCHMARK
    OR WEBP_BUILD_DWEBP
    OR WEBP_BUILD_EXTRAS
    OR WEBP_BUILD_GIF2WEBP
@@ -743,6 +744,7 @@ endif()
 # Build the executables if asked for.
 if(WEBP_BUILD_ANIM_UTILS
    OR WEBP_BUILD_CWEBP
+   OR WEBP_BUILD_CUDA_BENCHMARK
    OR WEBP_BUILD_DWEBP
    OR WEBP_BUILD_EXTRAS
    OR WEBP_BUILD_FUZZTEST
@@ -825,6 +827,12 @@ if(WEBP_BUILD_CUDA_BENCHMARK)
   target_link_libraries(webp_cuda_benchmark PRIVATE webp)
   target_include_directories(
     webp_cuda_benchmark
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+            ${CMAKE_CURRENT_SOURCE_DIR})
+  add_executable(webp_cuda_batch_benchmark tools/cuda_batch_benchmark.c)
+  target_link_libraries(webp_cuda_batch_benchmark PRIVATE imagedec webp)
+  target_include_directories(
+    webp_cuda_batch_benchmark
     PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
             ${CMAKE_CURRENT_SOURCE_DIR})
   add_executable(cuda_concurrency_test tests/cuda_concurrency_test.c)
