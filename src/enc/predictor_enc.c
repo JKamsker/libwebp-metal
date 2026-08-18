@@ -21,6 +21,7 @@
 #include "src/dsp/lossless.h"
 #include "src/dsp/lossless_common.h"
 #include "src/enc/accelerator_enc.h"
+#include "src/enc/boundary_experiment_enc.h"
 #if defined(WEBP_USE_METAL_PREDICTOR_EXPERIMENT)
 #include "src/enc/predictor_enc_metal.h"
 #endif
@@ -814,10 +815,16 @@ int VP8LResidualImage(int width, int height, int min_bits, int max_bits,
       modes[bits] = modes[bits - 1] + num_pixels[bits - 1];
     }
     // Find the best sampling.
-    GetBestPredictorsAndSubSampling(
-        width, height, min_bits, max_bits, argb_scratch, argb, max_quantization,
-        exact, used_subtract_green, pic, percent_range, percent,
-        &modes[min_bits], best_bits, &best_mode);
+    {
+      const uint64_t boundary_start = WebPPredictorBoundaryStageBegin(
+          WEBP_PREDICTOR_BOUNDARY_SELECT);
+      GetBestPredictorsAndSubSampling(
+          width, height, min_bits, max_bits, argb_scratch, argb,
+          max_quantization, exact, used_subtract_green, pic, percent_range,
+          percent, &modes[min_bits], best_bits, &best_mode);
+      WebPPredictorBoundaryStageEnd(WEBP_PREDICTOR_BOUNDARY_SELECT,
+                                    boundary_start);
+    }
     if (*best_bits == 0) {
       WebPSafeFree(modes_raw);
       return 0;
@@ -838,9 +845,15 @@ int VP8LResidualImage(int width, int height, int min_bits, int max_bits,
     return WebPReportProgress(pic, percent_start + percent_range, percent);
   }
 #endif
-  CopyImageWithPrediction(width, height, *best_bits, image, argb_scratch,
-                          argb, low_effort, max_quantization, exact,
-                          used_subtract_green);
+  {
+    const uint64_t boundary_start = WebPPredictorBoundaryStageBegin(
+        WEBP_PREDICTOR_BOUNDARY_APPLY);
+    CopyImageWithPrediction(width, height, *best_bits, image, argb_scratch,
+                            argb, low_effort, max_quantization, exact,
+                            used_subtract_green);
+    WebPPredictorBoundaryStageEnd(WEBP_PREDICTOR_BOUNDARY_APPLY,
+                                  boundary_start);
+  }
   return WebPReportProgress(pic, percent_start + percent_range, percent);
 }
 

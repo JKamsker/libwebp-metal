@@ -1,6 +1,6 @@
 # Research experiment guard matrix
 
-The five prepared encoder experiments are independently and fail-closed
+The prepared encoder experiments are independently and fail-closed
 guarded. `WEBP_ENABLE_METAL` controls ordinary supported Metal acceleration;
 it is not an experiment umbrella and never enables any row below. There is no
 shared experimental build or runtime switch.
@@ -12,6 +12,8 @@ shared experimental build or runtime switch.
 | 3 persistent batch | `WEBP_BUILD_METAL_BATCH_EXPERIMENT` | `WEBP_USE_METAL_BATCH_EXPERIMENT` | `WEBP_METAL_BATCH_EXPERIMENT=1` | batch symbol and `metal_encode_batch_experiment` |
 | 4 kernel/memory ablations | `WEBP_BUILD_METAL_ABLATION_EXPERIMENT` | `WEBP_USE_METAL_ABLATION_EXPERIMENT` | `WEBP_METAL_ABLATION_EXPERIMENT=1` | variant environment reads and `metal_import_bench` |
 | 5 predictor residual | `WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT` | `WEBP_USE_METAL_PREDICTOR_EXPERIMENT` | `WEBP_METAL_PREDICTOR=1` | predictor source and call-site hook |
+| 6 predictor boundary decomposition | `WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT` | `WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT` | `WEBP_PREDICTOR_BOUNDARY_EXPERIMENT=1` | boundary recorder, predictor/map probes, private repetition option |
+| 7 backref exact decomposition | `WEBP_BUILD_BACKREF_EXACT_EXPERIMENT` | `WEBP_USE_BACKREF_EXACT_EXPERIMENT` | `WEBP_BACKREF_EXACT_EXPERIMENT=1` | boundary recorder, backward-reference probes, private repetition option |
 
 Every runtime value is exact: values other than `1` are disabled. Every timed
 launcher additionally requires `WEBP_BENCHMARK_SESSION=exclusive`. Correctness,
@@ -29,7 +31,7 @@ promoted as a supported default. Under row 4 only,
 `legacy_per_pixel` regression control. The historical operator matrix and raw
 evidence retain their original `block_2x2` candidate name and values.
 
-The 2026-08-18 publication audit adds no timing experiment. The bounded core
+The 2026-08-18 publication audit itself adds no timing experiment. The bounded core
 already has generated-input evidence, so there is no sixth build flag, runtime
 flag, timing entry point, or reuse of rows 1--5. Publication corpus generation
 and verification are untimed data-integrity operations:
@@ -40,11 +42,16 @@ python3 scripts/generate_publication_corpus.py \
 python3 scripts/test_publication_corpus.py
 ```
 
+The later next-cycle rows 6 and 7 are frozen in
+[next-dominant-boundary-experiments-20260818.md](next-dominant-boundary-experiments-20260818.md).
+They diagnose credible implementation boundaries and do not amend item 1--5.
+
 ## Default and isolation guarantees
 
-- Default CMake and Unix make builds define none of the five private macros.
+- Default CMake and Unix make builds define none of the private macros.
   Item 1's source and CLI hook, items 2--4's drivers/targets, item 3's private
-  batch symbol, and item 5's source/call site are omitted.
+  batch symbol, item 5's source/call site, and rows 6--7's shared recorder,
+  probes, environment reads, symbols, and private repetition options are omitted.
 - An ordinary Metal build continues to include the supported transform, hash,
   and RGB-to-YUV acceleration. Item 4's alternate environment knobs are read
   only when both its build macro and exact runtime opt-in are present.
@@ -83,6 +90,14 @@ make -f makefile.unix WEBP_ENABLE_METAL=1 \
 # Item 5
 make -f makefile.unix WEBP_ENABLE_METAL=1 \
   WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT=1 examples/cwebp
+
+# Item 6
+make -f makefile.unix WEBP_ENABLE_METAL=1 \
+  WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT=1 examples/cwebp
+
+# Item 7
+make -f makefile.unix WEBP_ENABLE_METAL=1 \
+  WEBP_BUILD_BACKREF_EXACT_EXPERIMENT=1 examples/cwebp
 ```
 
 CMake uses the same names with `-D<name>=ON`. Items 2--5 also require
@@ -94,7 +109,7 @@ non-installed.
 
 The focused test does not grant the benchmark lease, read benchmark clocks, or
 run an encoder. It verifies default-off make commands, forced dry-run macro
-isolation for all five rows, omitted driver targets, runtime refusal, lease
+isolation for all seven rows, omitted driver targets, runtime refusal, lease
 refusal, the promoted item-4 default/legacy correctness mapping, and the fact
 that item 4's released timed matrix was not repurposed as a follow-up:
 

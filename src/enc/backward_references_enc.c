@@ -11,6 +11,7 @@
 //
 
 #include "src/enc/backward_references_enc.h"
+#include "src/enc/boundary_experiment_enc.h"
 
 #include <assert.h>
 #include <string.h>
@@ -983,18 +984,34 @@ static int GetBackwardReferences(int width, int height,
     if ((lz77_types_to_try & lz77_type) == 0) continue;
     switch (lz77_type) {
       case kLZ77RLE:
-        res = BackwardReferencesRle(width, height, argb, 0, refs_tmp);
+        {
+          const uint64_t boundary_start = WebPBackrefExactStageBegin(
+              WEBP_BACKREF_EXACT_RLE);
+          res = BackwardReferencesRle(width, height, argb, 0, refs_tmp);
+          WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_RLE, boundary_start);
+        }
         break;
       case kLZ77Standard:
         // Compute LZ77 with no cache (0 bits), as the ideal LZ77 with a color
         // cache is not that different in practice.
-        res = BackwardReferencesLz77(width, height, argb, 0, hash_chain,
-                                     refs_tmp);
+        {
+          const uint64_t boundary_start = WebPBackrefExactStageBegin(
+              WEBP_BACKREF_EXACT_STANDARD_LZ77);
+          res = BackwardReferencesLz77(width, height, argb, 0, hash_chain,
+                                       refs_tmp);
+          WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_STANDARD_LZ77,
+                                   boundary_start);
+        }
         break;
       case kLZ77Box:
         if (!VP8LHashChainInit(&hash_chain_box, width * height)) goto Error;
-        res = BackwardReferencesLz77Box(width, height, argb, 0, hash_chain,
-                                        &hash_chain_box, refs_tmp);
+        {
+          const uint64_t boundary_start = WebPBackrefExactStageBegin(
+              WEBP_BACKREF_EXACT_BOX);
+          res = BackwardReferencesLz77Box(width, height, argb, 0, hash_chain,
+                                          &hash_chain_box, refs_tmp);
+          WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_BOX, boundary_start);
+        }
         break;
       default:
         assert(0);
@@ -1008,12 +1025,24 @@ static int GetBackwardReferences(int width, int height,
       if (i == 1 && !do_no_cache) continue;
 
       if (i == 0) {
+        int cache_ok;
+        uint64_t boundary_start = WebPBackrefExactStageBegin(
+            WEBP_BACKREF_EXACT_CACHE_SEARCH);
         // Try with a color cache.
-        if (!CalculateBestCacheSize(argb, quality, refs_tmp, &cache_bits)) {
+        cache_ok = CalculateBestCacheSize(argb, quality, refs_tmp, &cache_bits);
+        WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_CACHE_SEARCH,
+                                 boundary_start);
+        if (!cache_ok) {
           goto Error;
         }
         if (cache_bits > 0) {
-          if (!BackwardRefsWithLocalCache(argb, cache_bits, refs_tmp)) {
+          int rewrite_ok;
+          boundary_start = WebPBackrefExactStageBegin(
+              WEBP_BACKREF_EXACT_CACHE_REWRITE);
+          rewrite_ok = BackwardRefsWithLocalCache(argb, cache_bits, refs_tmp);
+          WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_CACHE_REWRITE,
+                                   boundary_start);
+          if (!rewrite_ok) {
             goto Error;
           }
         }
@@ -1022,8 +1051,12 @@ static int GetBackwardReferences(int width, int height,
       if (i == 0 && do_no_cache && cache_bits == 0) {
         // No need to re-compute bit_cost as it was computed at i == 1.
       } else {
+        const uint64_t boundary_start = WebPBackrefExactStageBegin(
+            WEBP_BACKREF_EXACT_COST_EVALUATION);
         VP8LHistogramCreate(histo, refs_tmp, cache_bits);
         bit_cost = VP8LHistogramEstimateBits(histo);
+        WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_COST_EVALUATION,
+                                 boundary_start);
       }
 
       if (bit_cost < bit_costs_best[i]) {
@@ -1054,13 +1087,21 @@ static int GetBackwardReferences(int width, int height,
           (lz77_types_best[i] == kLZ77Standard) ? hash_chain : &hash_chain_box;
       const int cache_bits = (i == 1) ? 0 : *cache_bits_best;
       uint64_t bit_cost_trace;
-      if (!VP8LBackwardReferencesTraceBackwards(width, height, argb, cache_bits,
-                                                hash_chain_tmp, &refs[i],
-                                                refs_tmp)) {
+      int trace_ok;
+      uint64_t boundary_start = WebPBackrefExactStageBegin(
+          WEBP_BACKREF_EXACT_TRACE_BACK);
+      trace_ok = VP8LBackwardReferencesTraceBackwards(
+          width, height, argb, cache_bits, hash_chain_tmp, &refs[i], refs_tmp);
+      WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_TRACE_BACK, boundary_start);
+      if (!trace_ok) {
         goto Error;
       }
+      boundary_start = WebPBackrefExactStageBegin(
+          WEBP_BACKREF_EXACT_COST_EVALUATION);
       VP8LHistogramCreate(histo, refs_tmp, cache_bits);
       bit_cost_trace = VP8LHistogramEstimateBits(histo);
+      WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_COST_EVALUATION,
+                               boundary_start);
       if (bit_cost_trace < bit_costs_best[i]) {
         BackwardRefsSwap(refs_tmp, &refs[i]);
       }
@@ -1090,13 +1131,18 @@ int VP8LGetBackwardReferences(
     const VP8LHashChain* const hash_chain, VP8LBackwardRefs* const refs,
     int* const cache_bits_best, const WebPPicture* const pic, int percent_range,
     int* const percent) {
+  const uint64_t boundary_start =
+      WebPBackrefExactStageBegin(WEBP_BACKREF_EXACT_TOTAL);
+  int result;
   if (low_effort) {
     VP8LBackwardRefs* refs_best;
     *cache_bits_best = cache_bits_max;
     refs_best = GetBackwardReferencesLowEffort(
         width, height, argb, cache_bits_best, hash_chain, refs);
     if (refs_best == NULL) {
-      return WebPEncodingSetError(pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
+      result = WebPEncodingSetError(pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
+      WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_TOTAL, boundary_start);
+      return result;
     }
     // Set it in first position.
     BackwardRefsSwap(refs_best, &refs[0]);
@@ -1104,9 +1150,13 @@ int VP8LGetBackwardReferences(
     if (!GetBackwardReferences(width, height, argb, quality, lz77_types_to_try,
                                cache_bits_max, do_no_cache, hash_chain, refs,
                                cache_bits_best)) {
-      return WebPEncodingSetError(pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
+      result = WebPEncodingSetError(pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
+      WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_TOTAL, boundary_start);
+      return result;
     }
   }
 
-  return WebPReportProgress(pic, *percent + percent_range, percent);
+  result = WebPReportProgress(pic, *percent + percent_range, percent);
+  WebPBackrefExactStageEnd(WEBP_BACKREF_EXACT_TOTAL, boundary_start);
+  return result;
 }

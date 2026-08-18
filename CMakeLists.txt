@@ -42,6 +42,10 @@ option(WEBP_BUILD_METAL_ABLATION_EXPERIMENT
        "Build the non-installed Metal ablation benchmark tool." OFF)
 option(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT
        "Build the opt-in experimental Metal predictor-residual stage." OFF)
+option(WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT
+       "Build the predictor selector/map boundary measurement experiment." OFF)
+option(WEBP_BUILD_BACKREF_EXACT_EXPERIMENT
+       "Build the exact backward-reference boundary measurement experiment." OFF)
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
 option(WEBP_BUILD_CWEBP "Build the cwebp command line tool." ON)
 option(WEBP_BUILD_DWEBP "Build the dwebp command line tool." ON)
@@ -90,6 +94,11 @@ if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
     message(FATAL_ERROR
             "WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT requires WEBP_ENABLE_METAL.")
   endif()
+endif()
+if((WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT OR
+    WEBP_BUILD_BACKREF_EXACT_EXPERIMENT) AND NOT WEBP_ENABLE_METAL)
+  message(FATAL_ERROR
+          "Dominant-boundary experiments require WEBP_ENABLE_METAL=ON.")
 endif()
 
 if(DEFINED WEBP_BUILD_METAL_BENCHMARK)
@@ -340,6 +349,10 @@ parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_DEC_SRCS" "decode_[^ ]*")
 if(NOT WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT)
   list(REMOVE_ITEM WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/profile_enc.c)
 endif()
+if(WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT OR
+   WEBP_BUILD_BACKREF_EXACT_EXPERIMENT)
+  list(APPEND WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/boundary_experiment_enc.c)
+endif()
 
 if(WEBP_ENABLE_METAL)
   set_source_files_properties(
@@ -362,7 +375,6 @@ if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
     ${WEBP_SRC_DIR}/enc/predictor_enc_metal.mm
     PROPERTIES COMPILE_OPTIONS "-fblocks")
 endif()
-
 # Remove the files specific to SIMD we don't use.
 foreach(FILE ${WEBP_SIMD_FILES_NOT_TO_INCLUDE})
   list(REMOVE_ITEM WEBP_DSP_ENC_SRCS ${FILE})
@@ -534,6 +546,14 @@ if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
   target_compile_definitions(
     webpencode PRIVATE WEBP_USE_METAL_PREDICTOR_EXPERIMENT=1)
 endif()
+if(WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT=1)
+endif()
+if(WEBP_BUILD_BACKREF_EXACT_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_BACKREF_EXACT_EXPERIMENT=1)
+endif()
 add_library(webp $<TARGET_OBJECTS:webpdecode> $<TARGET_OBJECTS:webpdsp>
                  $<TARGET_OBJECTS:webpencode> $<TARGET_OBJECTS:webputils>)
 if(WEBP_ENABLE_FBOUNDS_SAFETY)
@@ -692,6 +712,14 @@ if(WEBP_BUILD_CWEBP)
   target_link_libraries(cwebp exampleutil imagedec webp sharpyuv)
   target_include_directories(
     cwebp PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src ${CMAKE_CURRENT_SOURCE_DIR})
+  if(WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT)
+    target_compile_definitions(
+      cwebp PRIVATE WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT=1)
+  endif()
+  if(WEBP_BUILD_BACKREF_EXACT_EXPERIMENT)
+    target_compile_definitions(
+      cwebp PRIVATE WEBP_USE_BACKREF_EXACT_EXPERIMENT=1)
+  endif()
   if(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT)
     target_compile_definitions(
       cwebp PRIVATE WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT=1)
