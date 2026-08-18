@@ -15,6 +15,7 @@ shared experimental build or runtime switch.
 | 6 predictor boundary decomposition | `WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT` | `WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT` | `WEBP_PREDICTOR_BOUNDARY_EXPERIMENT=1` | boundary recorder, predictor/map probes, private repetition option |
 | 7 backref exact decomposition | `WEBP_BUILD_BACKREF_EXACT_EXPERIMENT` | `WEBP_USE_BACKREF_EXACT_EXPERIMENT` | `WEBP_BACKREF_EXACT_EXPERIMENT=1` | boundary recorder, backward-reference probes, private repetition option |
 | 8 focused backref cache search | `WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT` | `WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT` | `WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT=1` | dedicated two-clock recorder, cache-search probes, private repetition option |
+| 9 cache-size serial sweep | `WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT` | `WEBP_USE_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT` | `WEBP_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT=1` | recorder-free CPU implementation A/B, dedicated external runner, no CLI option |
 
 Every runtime value is exact: values other than `1` are disabled. Every timed
 launcher additionally requires `WEBP_BENCHMARK_SESSION=exclusive`. Correctness,
