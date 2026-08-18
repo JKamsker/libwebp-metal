@@ -13,14 +13,17 @@
 
 #include <assert.h>
 #include <math.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "src/dec/common_dec.h"
 #include "src/dsp/dsp.h"
+#include "src/enc/accelerator_enc.h"
 #include "src/enc/cost_enc.h"
 #include "src/enc/vp8i_enc.h"
 #include "src/enc/profile_enc.h"
 #include "src/utils/bit_writer_utils.h"
+#include "src/utils/utils.h"
 #include "src/webp/encode.h"
 #include "src/webp/format_constants.h"  // RIFF constants
 #include "src/webp/types.h"
@@ -413,6 +416,115 @@ static void RecordResiduals(VP8EncIterator* const it,
 
 #if !defined(DISABLE_TOKEN_BUFFER)
 
+// Accelerated whole-pass decimate state. The backend computes every
+// macroblock's mode decision, levels, and reconstruction for one pass; the
+// loop then replays them through the ordinary token/side-info bookkeeping.
+typedef struct {
+  WebPAcceleratorDecimateResult* results;
+  uint8_t* recon;      // one allocation: Y plane then U then V
+  uint8_t* segments;
+  uint8_t* recon_y;
+  uint8_t* recon_u;
+  uint8_t* recon_v;
+  int recon_y_stride;
+  int recon_uv_stride;
+} AcceleratedDecimatePass;
+
+static void AcceleratedDecimateClear(AcceleratedDecimatePass* const pass) {
+  WebPSafeFree(pass->results);
+  WebPSafeFree(pass->recon);
+  WebPSafeFree(pass->segments);
+  memset(pass, 0, sizeof(*pass));
+}
+
+// Returns 1 and fills 'pass' when a backend computed the whole pass.
+static int TryAcceleratedDecimate(VP8Encoder* const enc,
+                                  AcceleratedDecimatePass* const pass) {
+  const int mb_count = enc->mb_w * enc->mb_h;
+  const size_t y_size = (size_t)enc->mb_w * 16 * enc->mb_h * 16;
+  const size_t uv_size = (size_t)enc->mb_w * 8 * enc->mb_h * 8;
+  WebPAcceleratorDecimateSegment segment_params[NUM_MB_SEGMENTS];
+  WebPAcceleratorDecimateRequest request;
+  int i;
+  memset(pass, 0, sizeof(*pass));
+  // The exact contract requires the basic (non-trellis) search and the
+  // fork's stable cost tables; a restored upstream mid-pass refresh cadence
+  // would serialize decisions on token statistics again.
+  if (enc->rd_opt_level != RD_OPT_BASIC || enc->method < 2 ||
+      getenv("WEBP_TOKEN_REFRESH_SHIFT") != NULL) {
+    return 0;
+  }
+  VP8CalculateLevelCosts(&enc->proba);
+  pass->results = (WebPAcceleratorDecimateResult*)WebPSafeMalloc(
+      mb_count, sizeof(*pass->results));
+  pass->recon = (uint8_t*)WebPSafeMalloc(1, y_size + 2 * uv_size);
+  pass->segments = (uint8_t*)WebPSafeMalloc(mb_count, 1);
+  if (pass->results == NULL || pass->recon == NULL ||
+      pass->segments == NULL) {
+    AcceleratedDecimateClear(pass);
+    return 0;
+  }
+  for (i = 0; i < mb_count; ++i) {
+    pass->segments[i] = enc->mb_info[i].segment;
+  }
+  for (i = 0; i < NUM_MB_SEGMENTS; ++i) {
+    const VP8SegmentInfo* const dqm = &enc->dqm[i];
+    WebPAcceleratorDecimateSegment* const params = &segment_params[i];
+    memcpy(params->y1.q, dqm->y1.q, sizeof(params->y1.q));
+    memcpy(params->y1.iq, dqm->y1.iq, sizeof(params->y1.iq));
+    memcpy(params->y1.bias, dqm->y1.bias, sizeof(params->y1.bias));
+    memcpy(params->y1.zthresh, dqm->y1.zthresh, sizeof(params->y1.zthresh));
+    memcpy(params->y1.sharpen, dqm->y1.sharpen, sizeof(params->y1.sharpen));
+    memcpy(params->y2.q, dqm->y2.q, sizeof(params->y2.q));
+    memcpy(params->y2.iq, dqm->y2.iq, sizeof(params->y2.iq));
+    memcpy(params->y2.bias, dqm->y2.bias, sizeof(params->y2.bias));
+    memcpy(params->y2.zthresh, dqm->y2.zthresh, sizeof(params->y2.zthresh));
+    memcpy(params->y2.sharpen, dqm->y2.sharpen, sizeof(params->y2.sharpen));
+    memcpy(params->uv.q, dqm->uv.q, sizeof(params->uv.q));
+    memcpy(params->uv.iq, dqm->uv.iq, sizeof(params->uv.iq));
+    memcpy(params->uv.bias, dqm->uv.bias, sizeof(params->uv.bias));
+    memcpy(params->uv.zthresh, dqm->uv.zthresh, sizeof(params->uv.zthresh));
+    memcpy(params->uv.sharpen, dqm->uv.sharpen, sizeof(params->uv.sharpen));
+    params->lambda_i16 = dqm->lambda_i16;
+    params->lambda_i4 = dqm->lambda_i4;
+    params->lambda_uv = dqm->lambda_uv;
+    params->lambda_mode = dqm->lambda_mode;
+    params->tlambda = dqm->tlambda;
+    params->min_disto = dqm->min_disto;
+  }
+  pass->recon_y = pass->recon;
+  pass->recon_u = pass->recon + y_size;
+  pass->recon_v = pass->recon + y_size + uv_size;
+  pass->recon_y_stride = enc->mb_w * 16;
+  pass->recon_uv_stride = enc->mb_w * 8;
+  request.width = enc->pic->width;
+  request.height = enc->pic->height;
+  request.mb_w = enc->mb_w;
+  request.mb_h = enc->mb_h;
+  request.y = enc->pic->y;
+  request.u = enc->pic->u;
+  request.v = enc->pic->v;
+  request.y_stride = enc->pic->y_stride;
+  request.uv_stride = enc->pic->uv_stride;
+  request.segments = pass->segments;
+  request.segment_params = segment_params;
+  request.level_costs = &enc->proba.level_cost[0][0][0][0];
+  request.coeff_probas = &enc->proba.coeffs[0][0][0][0];
+  request.max_i4_header_bits = enc->max_i4_header_bits;
+  request.use_error_diffusion = (enc->top_derr != NULL);
+  request.results = pass->results;
+  request.recon_y = pass->recon_y;
+  request.recon_u = pass->recon_u;
+  request.recon_v = pass->recon_v;
+  request.recon_y_stride = pass->recon_y_stride;
+  request.recon_uv_stride = pass->recon_uv_stride;
+  if (WebPAccelerateLossyDecimate(&request) != WEBP_ACCELERATOR_SUCCESS) {
+    AcceleratedDecimateClear(pass);
+    return 0;
+  }
+  return 1;
+}
+
 static int RecordTokens(VP8EncIterator* const it, const VP8ModeScore* const rd,
                         VP8TBuffer* const tokens) {
   int x, y, ch;
@@ -797,8 +909,23 @@ int VP8EncLoop(VP8Encoder* const enc) {
 #define MIN_COUNT 96  // minimum number of macroblocks before updating stats
 
 int VP8EncTokenLoop(VP8Encoder* const enc) {
-  // Roughly refresh the proba eight times per pass
-  int max_count = (enc->mb_w * enc->mb_h) >> 3;
+  // This fork does not refresh the cost tables mid-pass. Upstream refreshes
+  // them roughly eight times per pass, which serializes macroblock decisions
+  // on the token statistics of earlier rows and caps accelerated wavefront
+  // parallelism at the refresh-band height. Measured on the publication
+  // corpus, removing the refresh changes compressed sizes by under one
+  // percent in either direction (photos slightly smaller, textures slightly
+  // larger); the emitted probabilities are still finalized from full-image
+  // statistics before tokens are written. WEBP_TOKEN_REFRESH_SHIFT=3
+  // restores the upstream cadence for comparison.
+  int max_count = enc->mb_w * enc->mb_h;
+  {
+    const char* const refresh_shift = getenv("WEBP_TOKEN_REFRESH_SHIFT");
+    if (refresh_shift != NULL) {
+      const int shift = atoi(refresh_shift);
+      if (shift > 0 && shift < 31) max_count >>= shift;
+    }
+  }
   int num_pass_left = enc->config->pass;
   int remaining_progress = 40;  // percents
   const int do_search = enc->do_search;
@@ -828,6 +955,8 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
     uint64_t size_p0 = 0;
     uint64_t distortion = 0;
     int cnt = max_count;
+    AcceleratedDecimatePass accel_pass;
+    int accelerated;
     // The final number of passes is not trivial to know in advance.
     const int pass_progress = remaining_progress / (2 + num_pass_left);
     remaining_progress -= pass_progress;
@@ -838,6 +967,7 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
       VP8InitFilter(&it);  // don't collect stats until last pass (too costly)
     }
     VP8TBufferClear(&enc->tokens);
+    accelerated = TryAcceleratedDecimate(enc, &accel_pass);
     do {
       VP8ModeScore info;
       VP8IteratorImport(&it, NULL);
@@ -846,8 +976,26 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
         VP8CalculateLevelCosts(proba);  // refresh cost tables for rd-opt
         cnt = max_count;
       }
-      VP8Decimate(&it, &info, rd_opt);
-      ok = RecordTokens(&it, &info, &enc->tokens);
+      {
+        const uint64_t decimate_start =
+            WebPProfileStageBegin(WEBP_PROFILE_LOSSY_DECIMATE);
+        if (accelerated) {
+          VP8ReplayDecimate(&it, &info,
+                            &accel_pass.results[it.y * enc->mb_w + it.x],
+                            accel_pass.recon_y, accel_pass.recon_u,
+                            accel_pass.recon_v, accel_pass.recon_y_stride,
+                            accel_pass.recon_uv_stride);
+        } else {
+          VP8Decimate(&it, &info, rd_opt);
+        }
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSY_DECIMATE, decimate_start);
+      }
+      {
+        const uint64_t record_start =
+            WebPProfileStageBegin(WEBP_PROFILE_LOSSY_RECORD_TOKENS);
+        ok = RecordTokens(&it, &info, &enc->tokens);
+        WebPProfileStageEnd(WEBP_PROFILE_LOSSY_RECORD_TOKENS, record_start);
+      }
       if (!ok) {
         WebPEncodingSetError(enc->pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
         break;
@@ -862,6 +1010,7 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
       }
       VP8IteratorSaveBoundary(&it);
     } while (ok && VP8IteratorNext(&it));
+    AcceleratedDecimateClear(&accel_pass);
     if (!ok) break;
 
     size_p0 += enc->segment_hdr.size;

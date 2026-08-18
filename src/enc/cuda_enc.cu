@@ -3950,6 +3950,9 @@ constexpr uint32_t kCUDAStages =
 #if defined(WEBP_CUDA_ENABLE_HISTOGRAM)
     | WEBP_ACCELERATOR_STAGE_LOSSLESS_HISTOGRAM
 #endif
+#if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+    | WEBP_ACCELERATOR_STAGE_LOSSY_DECIMATE
+#endif
     ;
 
 constexpr uint32_t kCUDAProperties =
@@ -4003,6 +4006,11 @@ static const WebPEncoderAccelerator kCUDAEncoderAccelerator = {
 #endif
 #if defined(WEBP_CUDA_ENABLE_HISTOGRAM)
     CUDAHistogram,
+#else
+    nullptr,
+#endif
+#if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+    WebPCUDALossyDecimate,
 #else
     nullptr,
 #endif

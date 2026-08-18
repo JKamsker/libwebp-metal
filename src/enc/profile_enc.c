@@ -78,6 +78,8 @@ static const char* const kStageNames[WEBP_PROFILE_STAGE_COUNT] = {
     "lossy_analyze",
     "lossy_stat_loop",
     "lossy_encode_loop",
+    "lossy_decimate",
+    "lossy_record_tokens",
     "lossy_alpha",
     "lossy_write"};
 

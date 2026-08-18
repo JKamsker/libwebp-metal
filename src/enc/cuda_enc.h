@@ -13,6 +13,13 @@ extern "C" {
 
 const WebPEncoderAccelerator* WebPGetCUDAEncoderAccelerator(void);
 
+#if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+// Whole-pass lossy macroblock decimation, implemented in
+// cuda_decimate_enc.cu with its own device resources.
+WebPAcceleratorResult WebPCUDALossyDecimate(
+    void* context, const WebPAcceleratorDecimateRequest* request);
+#endif
+
 // Internal benchmark instrumentation. Stage bits are set only after a CUDA
 // callback returns SUCCESS. Reset also clears the resident-handoff counter.
 void WebPCUDAResetSuccessfulStages(void);

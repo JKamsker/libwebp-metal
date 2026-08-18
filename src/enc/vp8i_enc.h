@@ -474,6 +474,18 @@ void VP8SetSegmentParams(VP8Encoder* const enc, float quality);
 // Pick best modes and fills the levels. Returns true if skipped.
 int VP8Decimate(VP8EncIterator* WEBP_RESTRICT const it,
                 VP8ModeScore* WEBP_RESTRICT const rd, VP8RDLevel rd_opt);
+// Installs one accelerator-computed decimate decision (declared in
+// accelerator_enc.h) with VP8Decimate's exact side effects. Returns true if
+// the macroblock is skipped.
+struct WebPAcceleratorDecimateResultTag;  // see accelerator_enc.h
+int VP8ReplayDecimate(VP8EncIterator* WEBP_RESTRICT const it,
+                      VP8ModeScore* WEBP_RESTRICT const rd,
+                      const struct WebPAcceleratorDecimateResultTag*
+                          WEBP_RESTRICT const result,
+                      const uint8_t* WEBP_RESTRICT const recon_y,
+                      const uint8_t* WEBP_RESTRICT const recon_u,
+                      const uint8_t* WEBP_RESTRICT const recon_v,
+                      int recon_y_stride, int recon_uv_stride);
 
 // in alpha.c
 void VP8EncInitAlpha(VP8Encoder* const enc);   // initialize alpha compression
