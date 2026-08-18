@@ -42,6 +42,7 @@ CUDA_ENVIRONMENT_NAMES = (
     "WEBP_CUDA_DEVICE",
     "WEBP_CUDA_VERBOSE",
     "WEBP_CUDA_TIMING",
+    "WEBP_CUDA_HANDOFF_MARKERS",
     "WEBP_CUDA_COLOR",
     "WEBP_CUDA_HASH",
     "WEBP_CUDA_LOSSY",
@@ -107,6 +108,14 @@ def run_checked(
             f"stdout:\n{completed.stdout}\nstderr:\n{completed.stderr}"
         )
     return completed
+
+
+def observed_resident_lossless_handoff(stderr: str) -> bool:
+    return any(
+        line.startswith("WebP-CUDA: hash candidates")
+        and "(resident pixels)" in line
+        for line in stderr.splitlines()
+    )
 
 
 def clean_environment(
@@ -322,6 +331,14 @@ def run_persistent(
         if len(hashes) != 1:
             raise RuntimeError(f"{case_id}: unstable output hashes")
         for row in case_rows:
+            requires_resident_handoff = variant == "cuda" and mode != "lossy"
+            resident_handoff_observed = row.get(
+                "resident_lossless_handoff_observed", False
+            )
+            if requires_resident_handoff and not resident_handoff_observed:
+                raise RuntimeError(
+                    f"{case_id}: resident lossless handoff was not observed"
+                )
             row.update(
                 {
                     "lifecycle": "batch",
@@ -374,6 +391,8 @@ def run_single(
         )
         order.append(case_id)
         environment = clean_environment(variant, True, cuda_device)
+        if variant == "cuda" and mode != "lossy":
+            environment["WEBP_CUDA_HANDOFF_MARKERS"] = "1"
         begin = time.perf_counter_ns()
         completed = subprocess.run(
             command,
@@ -387,6 +406,17 @@ def run_single(
         if completed.returncode != 0:
             raise RuntimeError(
                 f"{case_id} failed ({completed.returncode}): {completed.stderr}"
+            )
+        resident_handoff_observed = observed_resident_lossless_handoff(
+            completed.stderr
+        )
+        if (
+            variant == "cuda"
+            and mode != "lossy"
+            and not resident_handoff_observed
+        ):
+            raise RuntimeError(
+                f"{case_id}: resident lossless handoff was not observed"
             )
         rows.append(
             {
@@ -403,6 +433,10 @@ def run_single(
                 "output_path": str(destination),
                 "case_id": case_id,
                 "command": command,
+                "stderr": completed.stderr,
+                "resident_lossless_handoff_observed": (
+                    resident_handoff_observed
+                ),
             }
         )
     return rows, order

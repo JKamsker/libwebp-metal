@@ -92,7 +92,9 @@ typedef struct {
   uint8_t* v;
   int y_stride;
   int uv_stride;
-  // Filled by the common dispatcher while WebPEncode() is active. Direct
+  // Filled by the common dispatcher while WebPEncode() is active. quality is
+  // the encoder's canonical integer analysis quality (VP8EncAnalyze truncates
+  // WebPConfig.quality before this stage's decisions). Direct
   // picture-conversion API calls receive -1 for both fields.
   int method;
   int quality;

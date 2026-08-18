@@ -14,9 +14,10 @@ extern "C" {
 const WebPEncoderAccelerator* WebPGetCUDAEncoderAccelerator(void);
 
 // Internal benchmark instrumentation. Stage bits are set only after a CUDA
-// callback returns SUCCESS.
+// callback returns SUCCESS. Reset also clears the resident-handoff counter.
 void WebPCUDAResetSuccessfulStages(void);
 uint32_t WebPCUDAGetSuccessfulStages(void);
+uint64_t WebPCUDAGetResidentLosslessHandoffCount(void);
 
 #ifdef __cplusplus
 }  // extern "C"

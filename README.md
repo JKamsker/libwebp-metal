@@ -201,6 +201,8 @@ binary, corpus, and aggregate metadata in `results.json`, and a human-readable
 `--verify-only` for correctness checks without collecting timing data, and
 `--cuda-device N` to select a GPU on multi-device systems. Pass multiple
 `results.json` paths to `report` when comparing separately copied system runs.
+Forced lossless rows also record observed resident color-to-hash handoffs and
+are rejected if the requested reuse did not actually occur.
 
 Additional, non-installed CUDA strategy prototypes can be built with
 `-DWEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS=ON`. See

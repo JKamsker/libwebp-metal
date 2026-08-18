@@ -242,6 +242,7 @@ struct CudaState {
   size_t fused_lossy_result_count = 0;
   bool gamma_initialized = false;
   uint32_t successful_stages = 0;
+  uint64_t resident_lossless_handoff_count = 0;
   char device_name[256] = {0};
 };
 
@@ -2686,6 +2687,7 @@ WebPAcceleratorResult CUDAHashChainLocked(
     return ReportError(state, "hash candidates", error, true);
   }
   memcpy(request->candidates, state->host_transform, bytes);
+  if (use_resident_pixels) ++state->resident_lossless_handoff_count;
   if (verbose) {
     if (timing && cudaEventElapsedTime(&elapsed_ms, state->event_start,
                                        state->event_stop) != cudaSuccess) {
@@ -2696,6 +2698,9 @@ WebPAcceleratorResult CUDAHashChainLocked(
             "WebP-CUDA: hash candidates for %d pixels in %.3f ms%s\n",
             request->size, elapsed_ms,
             use_resident_pixels ? " (resident pixels)" : "");
+  } else if (use_resident_pixels &&
+             EnvironmentFlag("WEBP_CUDA_HANDOFF_MARKERS", false)) {
+    fprintf(stderr, "WebP-CUDA: hash candidates (resident pixels)\n");
   }
 #if !defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
   ReleaseStagingBuffers(state);
@@ -3426,6 +3431,7 @@ extern "C" const WebPEncoderAccelerator* WebPGetCUDAEncoderAccelerator(void) {
 extern "C" void WebPCUDAResetSuccessfulStages(void) {
   LockCudaMutex(&g_cuda_mutex);
   g_cuda_state.successful_stages = 0;
+  g_cuda_state.resident_lossless_handoff_count = 0;
   UnlockCudaMutex(&g_cuda_mutex);
 }
 
@@ -3435,4 +3441,12 @@ extern "C" uint32_t WebPCUDAGetSuccessfulStages(void) {
   stages = g_cuda_state.successful_stages;
   UnlockCudaMutex(&g_cuda_mutex);
   return stages;
+}
+
+extern "C" uint64_t WebPCUDAGetResidentLosslessHandoffCount(void) {
+  uint64_t count;
+  LockCudaMutex(&g_cuda_mutex);
+  count = g_cuda_state.resident_lossless_handoff_count;
+  UnlockCudaMutex(&g_cuda_mutex);
+  return count;
 }

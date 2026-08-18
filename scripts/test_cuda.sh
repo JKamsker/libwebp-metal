@@ -64,7 +64,8 @@ fi
 
 # Global lossless histogram counting also remains independently opt-in until
 # matched end-to-end measurements establish a useful command-count crossover.
-WEBP_ACCELERATOR=cuda WEBP_CUDA_HISTOGRAM_MIN_COMMANDS=0 \
+WEBP_ACCELERATOR=cuda WEBP_CUDA_HISTOGRAM=0 \
+  WEBP_CUDA_HISTOGRAM_MIN_COMMANDS=0 \
   WEBP_CUDA_COLOR=0 WEBP_CUDA_HASH=0 WEBP_CUDA_VERBOSE=1 \
   "$encoder" -quiet -lossless -exact -m 4 "$root_dir/examples/test_ref.ppm" \
   -o "$temporary_dir/histogram-default.webp" 2>>"$histogram_default_log"
@@ -189,7 +190,9 @@ for input do
   done
 
   # The opaque regular RGB/BGR conversion also promises the exact CPU stream.
-  for settings in "25 0" "75 4" "95 6"; do
+  # Fractional WebP quality is included: production VP8 analysis intentionally
+  # truncates it to the canonical integer used by both CPU and CUDA analysis.
+  for settings in "25 0" "75 4" "75.5 4" "95 6"; do
     set -- $settings
     quality=$1
     method=$2

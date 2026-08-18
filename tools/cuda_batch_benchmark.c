@@ -373,6 +373,15 @@ static int Verify(const Options* const options) {
       WebPMemoryWriterClear(&cuda);
       return 0;
     }
+    if (options->force_cuda && options->mode != MODE_LOSSY &&
+        WebPCUDAGetResidentLosslessHandoffCount() != 1u) {
+      fprintf(stderr,
+              "resident lossless handoff was not observed for %s\n",
+              options->inputs[i].filename);
+      WebPMemoryWriterClear(&cpu);
+      WebPMemoryWriterClear(&cuda);
+      return 0;
+    }
     if (!DecodedOutputsEqual(&cpu, &cuda)) {
       fprintf(stderr, "CPU/CUDA decoded output mismatch for %s\n",
               options->inputs[i].filename);
@@ -437,8 +446,22 @@ int main(int argc, const char* const argv[]) {
   ConfigureDispatch(&options, options.variant);
   for (sequence = -options.warmups; sequence < options.samples; ++sequence) {
     uint64_t elapsed_ns, output_hash, output_bytes;
+    uint64_t resident_lossless_handoffs;
+    WebPCUDAResetSuccessfulStages();
     if (!RunBatch(&options, &elapsed_ns, &output_hash, &output_bytes)) {
       fprintf(stderr, "batch failed at sequence %d\n", sequence);
+      FreeInputs(&options);
+      return 1;
+    }
+    resident_lossless_handoffs =
+        WebPCUDAGetResidentLosslessHandoffCount();
+    if (!strcmp(options.variant, "cuda") && options.force_cuda &&
+        options.mode != MODE_LOSSY &&
+        resident_lossless_handoffs != (uint64_t)options.batch_size) {
+      fprintf(stderr,
+              "expected %d resident lossless handoffs, observed %" PRIu64
+              " at sequence %d\n",
+              options.batch_size, resident_lossless_handoffs, sequence);
       FreeInputs(&options);
       return 1;
     }
@@ -458,6 +481,8 @@ int main(int argc, const char* const argv[]) {
            "\"near_lossless\":%d,\"sequence\":%d,"
            "\"elapsed_ns\":%" PRIu64 ",\"ns_per_image\":%.3f,"
            "\"images_per_second\":%.6f,"
+           "\"resident_lossless_handoffs\":%" PRIu64 ","
+           "\"resident_lossless_handoff_observed\":%s,"
            "\"output_hash\":\"%016" PRIx64 "\","
            "\"output_bytes\":%" PRIu64 "}\n",
            options.variant, options.mode_name, options.batch_size,
@@ -466,7 +491,12 @@ int main(int argc, const char* const argv[]) {
            options.batch_aware ? "true" : "false", options.batch_pixels,
            options.method, options.quality, options.near_lossless, sequence,
            elapsed_ns, (double)elapsed_ns / options.batch_size,
-           1e9 * options.batch_size / elapsed_ns, output_hash, output_bytes);
+           1e9 * options.batch_size / elapsed_ns,
+           resident_lossless_handoffs,
+           resident_lossless_handoffs == (uint64_t)options.batch_size
+               ? "true"
+               : "false",
+           output_hash, output_bytes);
   }
   FreeInputs(&options);
   return 0;

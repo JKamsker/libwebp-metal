@@ -106,8 +106,12 @@ which defers regular lossy import until method/quality are available and uses a
 single completion boundary. Historical rows predate this fused mode too; they
 provide no evidence for its performance.
 Forced lossless rows also enable the experimental resident cross-color-to-hash
-handoff. Historical rows predate that handoff as well; they remain evidence for
-the older round-trip pipeline only.
+handoff. Each new persistent row records a successful-handoff count equal to
+its batch size; each fresh-process row retains the observed
+`hash candidates ... (resident pixels)` marker. The runner rejects a forced
+lossless or near-lossless row when that evidence is absent, because the
+environment opt-in alone does not prove reuse. Historical rows predate that
+handoff and remain evidence for the older round-trip pipeline only.
 They now also force the experimental parallel predictor selector/residual
 stage and require observed dispatch. Historical rows predate it and provide no
 evidence for its speed or compressed-size effect.
