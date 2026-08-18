@@ -13,8 +13,11 @@ build and linkage coverage, but are not presented as Metal runtime coverage.
   checks Autotools with its explicit Metal policy. The existing lossless smoke
   test keeps runtime Metal disabled on hosted runners. This is the required
   branch-protection check.
-- `Metal correctness` is a manual-only workflow on physical Apple silicon
-  labeled `self-hosted`, `macOS`, `ARM64`, and `metal`. It requires an actual
+- `Metal correctness` runs on physical Apple silicon labeled `self-hosted`,
+  `macOS`, `ARM64`, and `metal`. Automatic runs are limited to relevant pushes
+  to `main` and a conservative weekly replay of the current `main`; maintainers
+  may also dispatch an explicitly reviewed revision. It never subscribes to or
+  admits `pull_request` or `pull_request_target` events. It requires an actual
   Metal device, forces all three Metal operations, verifies pixel/bitstream
   promises, and proves that transform, hash, and lossy GPU dispatch each logged
   actual execution. It also covers odd dimensions, padded source and
@@ -37,24 +40,31 @@ would create a false correctness signal. GitHub documents GPU acceleration for
 which this project has not adopted or characterized.
 
 The self-hosted runner must be project-controlled, ephemeral or dedicated, and
-must not execute untrusted pull-request code. The workflow uses no repository
-secret, and checkout does not persist its read-only token.
+must not execute untrusted pull-request code. Pushes are trusted only after
+landing on protected `main`; scheduled runs use the current default-branch
+revision; and a manual dispatch means the operator has reviewed the selected
+revision. Do not add PR-family triggers or loosen the workflow's event/ref
+guard. The workflow uses no repository secret, and checkout does not persist
+its read-only token.
 
 Required self-hosted runner software is a supported macOS/Xcode command-line
 toolchain, CMake, Ninja, Python 3, Git, and a Metal-capable Apple-silicon GPU.
-Give the runner the custom label `metal` and, only if its power/thermal
-configuration is controlled, `performance`. Disable sleep and automatic OS
-updates during a run; keep the machine on AC power; avoid concurrent jobs. Do
-not apply `performance` to an ordinary developer laptop or a hosted VM.
+The repository-scoped correctness runner `pandocs-agent-metal` is an Apple M4
+with labels `self-hosted`, `macOS`, `ARM64`, and `metal`. Keep it dedicated,
+online for the weekly replay, on AC power, awake, free of automatic OS updates
+during a run, and limited to one job at a time. It is intentionally not labeled
+`performance`; performance jobs remain restricted to a separately characterized
+runner carrying that additional label.
 
 Repository settings:
 
 1. Protect `main` and require `Correctness / CMake (ubuntu-latest, Metal OFF)`
    and `Correctness / CMake (macos-14, Metal ON)`.
 2. Treat `Metal correctness / Physical Metal correctness (self-hosted ARM64)`
-   as a manual release gate. Dispatch only a reviewed, trusted commit. Inspect
-   its retained environment and dispatch logs when triaging a failure;
-   successful CPU fallback is intentionally impossible.
+   as the physical-device gate for relevant `main` changes and weekly drift
+   detection. Dispatch only a reviewed, trusted revision. Inspect its retained
+   environment and dispatch logs when triaging a failure; successful CPU
+   fallback is intentionally impossible.
 3. Do not require `Metal performance signal`. Subscribe maintainers to Actions
    failures so critical signals are noticed.
 4. Keep Actions cache and artifact retention enabled. Raw performance artifacts
