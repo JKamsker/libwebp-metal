@@ -1,0 +1,164 @@
+{
+  "catalog_schema": "libwebp-backref-cost-traceback-schema-catalog-v1",
+  "experiment_id": "backref_cost_traceback",
+  "schemas": {
+    "artifact_hashes": {
+      "id": "libwebp-backref-cost-traceback-artifact-hashes-v1",
+      "required": [
+        "schema",
+        "artifacts"
+      ],
+      "artifact_required": [
+        "path",
+        "bytes",
+        "sha256"
+      ],
+      "types": {
+        "schema": "string",
+        "artifacts": "array",
+        "path": "string",
+        "bytes": "integer>=0",
+        "sha256": "lowercase-hex-64"
+      }
+    },
+    "command": {
+      "id": "libwebp-backref-cost-traceback-command-v1",
+      "required": [
+        "schema",
+        "role",
+        "case_id",
+        "method",
+        "lifecycle",
+        "pair",
+        "order",
+        "variant",
+        "argv",
+        "wall_seconds",
+        "sample_rows"
+      ],
+      "types": {
+        "role": "tune|holdout",
+        "method": "4|6",
+        "lifecycle": "cold|warm",
+        "pair": "integer>=0",
+        "order": "0|1",
+        "variant": "baseline|candidate",
+        "argv": "array[string]",
+        "wall_seconds": "number>0",
+        "sample_rows": "integer>0"
+      }
+    },
+    "correctness": {
+      "id": "libwebp-backref-cost-traceback-correctness-v1",
+      "required": [
+        "schema",
+        "case_id",
+        "quality",
+        "method",
+        "input_sha256",
+        "bitstream_sha256",
+        "decoded_sha256",
+        "decoded_source_exact",
+        "candidate_deterministic",
+        "fallback_exact",
+        "default_build_independent"
+      ],
+      "types": {
+        "method": "4|6",
+        "input_sha256": "lowercase-hex-64",
+        "bitstream_sha256": "lowercase-hex-64",
+        "decoded_sha256": "lowercase-hex-64",
+        "decoded_source_exact": "true",
+        "candidate_deterministic": "true",
+        "fallback_exact": "true",
+        "default_build_independent": "true",
+        "quality": "integer:0..100"
+      }
+    },
+    "evaluation": {
+      "id": "libwebp-backref-cost-traceback-evaluation-v1",
+      "required": [
+        "schema",
+        "timing_authority",
+        "boundary_timing_available",
+        "command_processes",
+        "sample_rows",
+        "measured_samples",
+        "cells",
+        "decision"
+      ],
+      "cell_required": [
+        "role",
+        "case_id",
+        "method",
+        "lifecycle",
+        "process_pairs",
+        "paired_median_ratio",
+        "p95_ratio",
+        "passes_performance"
+      ],
+      "types": {
+        "boundary_timing_available": "false",
+        "decision": "accept|reject",
+        "paired_median_ratio": "number>0",
+        "p95_ratio": "number>0",
+        "passes_performance": "boolean"
+      }
+    },
+    "resources": {
+      "id": "libwebp-backref-cost-traceback-resources-v1",
+      "required": [
+        "schema",
+        "source_commit",
+        "elapsed_seconds",
+        "available_memory_bytes_preflight",
+        "maximum_child_rss_bytes",
+        "output_bytes_before_index",
+        "parallel_benchmark_processes",
+        "lease_released"
+      ],
+      "types": {
+        "source_commit": "lowercase-hex-40",
+        "elapsed_seconds": "number>0",
+        "available_memory_bytes_preflight": "integer>0",
+        "maximum_child_rss_bytes": "integer>=0",
+        "output_bytes_before_index": "integer>=0",
+        "parallel_benchmark_processes": "1",
+        "lease_released": "true"
+      }
+    },
+    "sample": {
+      "id": "libwebp-backref-cost-traceback-sample-v1",
+      "required": [
+        "schema",
+        "case_id",
+        "lifecycle",
+        "variant",
+        "method",
+        "iteration",
+        "sample_role",
+        "elapsed_ns",
+        "bitstream_bytes",
+        "bitstream_fnv1a64",
+        "role",
+        "pair",
+        "order",
+        "sequence"
+      ],
+      "types": {
+        "lifecycle": "cold|warm",
+        "variant": "baseline|candidate",
+        "method": "4|6",
+        "iteration": "integer>=0",
+        "sample_role": "warmup|cold|warm",
+        "elapsed_ns": "integer>0",
+        "bitstream_bytes": "integer>0",
+        "bitstream_fnv1a64": "lowercase-hex-16",
+        "role": "tune|holdout",
+        "pair": "integer>=0",
+        "order": "0|1",
+        "sequence": "integer>=0"
+      }
+    }
+  }
+}

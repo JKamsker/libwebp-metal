@@ -17,6 +17,7 @@ shared experimental build or runtime switch.
 | 8 focused backref cache search | `WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT` | `WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT` | `WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT=1` | dedicated two-clock recorder, cache-search probes, private repetition option |
 | 9 cache-size serial sweep | `WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT` | `WEBP_USE_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT` | `WEBP_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT=1` | recorder-free CPU implementation A/B, dedicated external runner, no CLI option |
 | 10 cache-size single-pass slab | `WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT` | `WEBP_USE_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT` | `WEBP_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT=1` | recorder-free one-allocation CPU implementation A/B, dedicated external runner, no CLI option |
+| 11 backref cost/traceback workspace | `WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT` | `WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT` | `WEBP_BACKREF_COST_TRACEBACK_EXPERIMENT=1` | recorder-free CostManager workspace A/B, private test and external runner |
 
 Every runtime value is exact: values other than `1` are disabled. Every timed
 launcher additionally requires `WEBP_BENCHMARK_SESSION=exclusive`. Correctness,
@@ -151,7 +152,11 @@ make -f makefile.unix WEBP_ENABLE_METAL=0 \
 
 # Item 10 (CPU-only implementation A/B)
 make -f makefile.unix WEBP_ENABLE_METAL=0 \
-  WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT=1 examples/cwebp
+WEBP_BUILD_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT=1 examples/cwebp
+```
+
+```sh
+WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT=1 examples/cwebp
 ```
 
 CMake uses the same names with `-D<name>=ON`. Items 2--8 require
