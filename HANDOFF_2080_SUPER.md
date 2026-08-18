@@ -76,7 +76,7 @@ optimization loop below.** Tick each box as it lands; 1–5 are the
 cross-hardware validation this machine exists for, and the loop's
 measurements are meaningless until they pass.
 
-- [ ] 1. **Build and gate.** Fresh build dir, `-DWEBP_ENABLE_CUDA=ON
+- [x] 1. **Build and gate.** Fresh build dir, `-DWEBP_ENABLE_CUDA=ON
   -DWEBP_BUILD_CUDA_BENCHMARK=ON -DWEBP_BUILD_CWEBP=ON
   -DWEBP_BUILD_DWEBP=ON`; build `cwebp dwebp webp_cuda_batch_benchmark
   cuda_concurrency_test cuda_near_lossless_test cuda_histogram_test`.
