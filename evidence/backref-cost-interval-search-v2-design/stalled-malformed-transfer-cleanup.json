@@ -1,0 +1,6 @@
+{
+  "prior_failure": "remote-rehearsal.json",
+  "reason": "not run because the first untimed remote return validation failed closed and retries were forbidden",
+  "schema": "libwebp-backref-cost-interval-search-v2-stalled-malformed-transfer-cleanup-v1",
+  "status": "NOT_RUN"
+}

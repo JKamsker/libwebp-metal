@@ -1,0 +1,61 @@
+{
+  "device_identity": "not_attempted",
+  "expected_remote_host": {
+    "architecture": "arm64",
+    "cleanup": "the exact canonical validated run child only; absence must be proved even when archive build, transfer, inspection, or extraction refuses",
+    "compiler_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "compiler_version_lines": [
+      "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+      "Target: arm64-apple-darwin25.2.0",
+      "Thread model: posix",
+      "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+    ],
+    "cpu_brand": "Apple M4",
+    "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+    "evidence_return": "frozen Python builder over the verified sorted artifact index; only explicit canonical-contained regular files and real directories with normalized names; remote/local archive and inventory SHA-256 match; full pre-extraction inventory; all-or-nothing safe extraction; artifact and local returned-evidence hashes verified; rejected extractor archives quarantined",
+    "hardware_model": "Mac16,10",
+    "independent_critical_returns": [
+      "lease record fetched and hash verified before extraction",
+      "cleanup receipt produced after exact-child deletion and fetched outside the archive"
+    ],
+    "physical_memory_bytes": 25769803776,
+    "required_thermal_lines": [
+      "No thermal warning level has been recorded",
+      "No performance warning level has been recorded",
+      "No CPU power status has been recorded"
+    ],
+    "runner_directories_and_services": "forbidden from access or modification",
+    "runner_policy": "Runner.Listener may remain active; any Runner.Worker/job fails closed and no service may be stopped or modified",
+    "safe_root_basename": ".libwebp-metal-backref-cost-interval-search-v2",
+    "sdk_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+    "sdk_version": "26.2",
+    "source_transfer": "exact local git bundle; local and remote SHA-256 match; empty scoped bare verification repository; git -C ABSOLUTE_VERIFY_REPOSITORY bundle verify ABSOLUTE_BUNDLE; verification repository removed; exact detached commit/tree/clean/source-hash checkout",
+    "ssh_alias": "pandocs-agent",
+    "system": "Darwin",
+    "temporary_root": "$HOME/.libwebp-metal-backref-cost-interval-search-v2/run.XXXXXX"
+  },
+  "post_admission_process_isolation": {
+    "benchmark_or_cuda_matches": [],
+    "process_table_sha256": "5ea58ccd87e25b3bd42a798e5bb48e57c8d4c9bdbf97e8e5fad478d285f845ea",
+    "runner_listener_present": true,
+    "runner_worker_matches": []
+  },
+  "post_refusal_process_isolation": {
+    "benchmark_or_cuda_matches": [],
+    "process_table_sha256": "a9ed8fa815f309f9bb4070077e4f493c1bb08769afb96a5ee01907afc2a35e19",
+    "runner_listener_present": true,
+    "runner_worker_matches": []
+  },
+  "power_thermal_state": "not_attempted",
+  "pre_admission_process_isolation": {
+    "benchmark_or_cuda_matches": [],
+    "process_table_sha256": "1471d792fe5ca68abe5c5106c648cd65f25714b5deb627cbc75adfce40cb9b14",
+    "runner_listener_present": true,
+    "runner_worker_matches": []
+  },
+  "reason": "frozen rehearsal session guard precedes toolchain/device/power/resource preflight; only the mandated process guards were reached",
+  "resource_snapshot": "not_attempted",
+  "runner_worker_or_competing_process_observed": false,
+  "status": "partial",
+  "toolchain_admission": "not_attempted"
+}

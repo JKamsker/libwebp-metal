@@ -37,6 +37,8 @@ WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT ?= 0
 WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT ?= 0
 WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT ?= 0
 WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_RECORDER ?= 0
+WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT ?= 0
+WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_RECORDER ?= 0
 
 ifneq ($(origin WEBP_BUILD_METAL_BENCHMARK),undefined)
   $(error WEBP_BUILD_METAL_BENCHMARK was replaced by WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT)
@@ -53,7 +55,8 @@ ifeq ($(strip $(shell uname)), Darwin)
   EXTRA_FLAGS += -DHAVE_GLUT_GLUT_H
   EXTRA_FLAGS += -Wno-deprecated-declarations
   ifeq ($(filter 1,$(WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_DETERMINISTIC_BUILD) \
-                     $(WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_DETERMINISTIC_BUILD)),)
+                     $(WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_DETERMINISTIC_BUILD) \
+                     $(WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_DETERMINISTIC_BUILD)),)
     EXTRA_FLAGS += -I/opt/local/include
     EXTRA_LIBS  += -L/opt/local/lib
     HOMEBREW_PREFIX := $(shell brew --prefix 2> /dev/null)
@@ -76,7 +79,8 @@ endif
 
 # SDL flags: use sdl-config if it exists
 ifneq ($(filter 1,$(WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_DETERMINISTIC_BUILD) \
-                    $(WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_DETERMINISTIC_BUILD)),)
+                    $(WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_DETERMINISTIC_BUILD) \
+                    $(WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_DETERMINISTIC_BUILD)),)
 SDL_CONFIG =
 else
 SDL_CONFIG = $(shell sdl2-config --version 2> /dev/null)
@@ -242,6 +246,14 @@ ifeq ($(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT),1)
   endif
 else ifeq ($(WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_RECORDER),1)
   $(error WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_RECORDER requires WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=1)
+endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT),1)
+  override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT=1
+  ifeq ($(WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_RECORDER),1)
+    override EXTRA_FLAGS += -DWEBP_BACKREF_COST_INTERVAL_SEARCH_V2_RECORDER=1
+  endif
+else ifeq ($(WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_RECORDER),1)
+  $(error WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_RECORDER requires WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT=1)
 endif
 INSTALL = install
 GROFF = /usr/bin/groff
@@ -421,6 +433,9 @@ endif
 ifeq ($(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT),1)
 ENC_OBJS += src/enc/backref_cost_interval_search_v1_experiment_enc.o
 endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT),1)
+ENC_OBJS += src/enc/backref_cost_interval_search_v2_experiment_enc.o
+endif
 
 EX_FORMAT_DEC_OBJS = \
     imageio/image_dec.o \
@@ -554,6 +569,7 @@ ifeq ($(MAKECMDGOALS),clean)
   OUTPUT += $(EXTRA_EXAMPLES) $(OTHER_EXAMPLES)
   OUTPUT += tools/webp_metal_benchmark
   OUTPUT += tools/backref_cost_interval_search_v1_experiment_runner
+  OUTPUT += tools/backref_cost_interval_search_v2_experiment_runner
   OUTPUT += src/demux/libwebpdemux.a src/mux/libwebpmux.a $(EXTRA_LIB)
   OUTPUT += examples/libgifdec.a examples/libanim_util.a
 endif
@@ -634,6 +650,19 @@ tools/backref_cost_interval_search_v1_experiment_runner:
 	@echo "$@ requires WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=1" >&2
 	@false
 .PHONY: tools/backref_cost_interval_search_v1_experiment_runner
+endif
+
+ifeq ($(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT),1)
+tools/backref_cost_interval_search_v2_experiment_runner: \
+    tools/backref_cost_interval_search_v2_experiment_runner.o
+tools/backref_cost_interval_search_v2_experiment_runner: \
+    src/libwebp.a sharpyuv/libsharpyuv.a
+	$(LINK) -o $@ $^ $(LDFLAGS)
+else
+tools/backref_cost_interval_search_v2_experiment_runner:
+	@echo "$@ requires WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT=1" >&2
+	@false
+.PHONY: tools/backref_cost_interval_search_v2_experiment_runner
 endif
 
 ex: $(OUT_EXAMPLES)

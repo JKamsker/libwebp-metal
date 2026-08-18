@@ -1,0 +1,21 @@
+{
+  "cleanup": {
+    "absence_proved": true,
+    "home": "/Users/pandocs-agent-001",
+    "removed_exact_validated_child": true,
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.SMd9dq",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2",
+    "token": "run.SMd9dq",
+    "validated": true
+  },
+  "evidence_archive": "not_attempted",
+  "evidence_transfer": "not_attempted",
+  "extraction": "not_attempted",
+  "returned_index": "pending",
+  "source_transfer": {
+    "hashes_match": true,
+    "local_bundle_sha256": "b8a3445a01d2f29e6c9a3d2c2b56915df67ee30665a45da72b63152b50421079",
+    "remote_bundle_sha256": "b8a3445a01d2f29e6c9a3d2c2b56915df67ee30665a45da72b63152b50421079",
+    "status": "accepted"
+  }
+}

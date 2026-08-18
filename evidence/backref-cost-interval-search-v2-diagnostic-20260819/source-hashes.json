@@ -1,0 +1,158 @@
+{
+  "candidate_equivalence": {
+    "algorithm": "derive an append hint only inside each PushInterval call from the existing monotonic overlap scan, update that local only after a successful tail insertion or an in-call tail pop, and use it for a null-hint insertion only when new start is strictly greater than hint start; otherwise execute the exact baseline search",
+    "semantics": [
+      "integer costs",
+      "strict comparisons and ties",
+      "interval ordering and lifetimes",
+      "update order",
+      "traceback",
+      "reference order",
+      "cache choice",
+      "input immutability",
+      "pre-DP injected exact baseline fallback"
+    ],
+    "validated_candidate_commit": "frozen handoff commit supplied by source admission"
+  },
+  "frozen_artifacts": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "3e874e74e9fb515ef774293f68f3e5a66ce4781c8eafaecd5f358e73e61bb4a9"
+    },
+    {
+      "path": "makefile.unix",
+      "sha256": "728a330e466a8b8a8b90d6d0a518e559f3de29739d0dd5c6b42120c30150815c"
+    },
+    {
+      "path": "doc/backref-cost-interval-search-v2-design-20260818.md",
+      "sha256": "be3c03d6cdb75aea32a3032bf42483f3fb1b4505210d6c200bf15e1f3f23c510"
+    },
+    {
+      "path": "doc/backref-cost-interval-search-v2-protocol-20260818.md",
+      "sha256": "46357b10fbabcf9946a8ba91ce685be0be285cbdd91ea9a1641f72e45e77e7df"
+    },
+    {
+      "path": "doc/backref-cost-interval-search-v2-operator-20260818.md",
+      "sha256": "c6285ea7943d2564173cc4b6dd4f9d1a7a14d11771c67efe152eb81cfc277866"
+    },
+    {
+      "path": "scripts/backref_cost_interval_search_v2_schemas.json",
+      "sha256": "af116c02e95e43c13f1013dceda1ccd6fbcf7ce438f476c1a70ceebb144d65ed"
+    },
+    {
+      "path": "scripts/backref_cost_interval_search_v2_archive.py",
+      "sha256": "8ec1cc51a10d1f3fcd1d4d33ddb85e82e2485cd89fff56f40297a79fb3f0a77d"
+    },
+    {
+      "path": "scripts/run_backref_cost_interval_search_v2_experiment.py",
+      "sha256": "74fe719f8ae1149b6ba19636f05d78edc23742b8ecedfa9185183ff1aecf2b00"
+    },
+    {
+      "path": "scripts/execute_backref_cost_interval_search_v2.py",
+      "sha256": "5a5aadb7bdd61f70d9f9277c9d342b771b8d59ea478d48befec394f3d609f97d"
+    },
+    {
+      "path": "scripts/backref_cost_interval_search_v2_admission.py",
+      "sha256": "4b21d43127a8682e6040471e845ec013495f609bc5d98ee4ececc24c86fdb0f3"
+    },
+    {
+      "path": "scripts/backref_cost_interval_search_v2_paths.py",
+      "sha256": "304cd2f0ef0a43aaaaee398ebae8da6ebfd71b0e22e4e33fee070bf1d5c78721"
+    },
+    {
+      "path": "scripts/validate_backref_cost_interval_search_v2_evidence_return.py",
+      "sha256": "cc8478ebac949ac6f25432a62af3dd5ba5b467941331c339d3ede9abfde73974"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_search_v2_experiment.py",
+      "sha256": "3fac325d57f88b50ffd45c8dc4e32ee3cb10fb995286490e541fa9227d9cece2"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_search_v2_admission.py",
+      "sha256": "2e4bda7b3017a050c7d4c4bdb509bba104baa18e453294d87507ee745763e490"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_search_v2_archive.py",
+      "sha256": "a46445b18a54cf5aff353a63c0ad7012a938fefa34a213c7febb1a75e76277b9"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_search_v2_protocol.py",
+      "sha256": "7966fef6082e075b4b7b09b66ad37c254c4a891495142f00826b2df1abf9e86d"
+    },
+    {
+      "path": "scripts/collect_backref_cost_interval_search_v2_work.py",
+      "sha256": "fa6c1ca19fdeedd5dc78698c73e4e72032d56bc15ac53250f7f7393cf9c683a1"
+    },
+    {
+      "path": "scripts/test_experiment_guards.py",
+      "sha256": "af80b169f0d0a757eee00202d6d6866e71f2a20a638abdde992bed4f7b657810"
+    },
+    {
+      "path": "scripts/generate_publication_corpus.py",
+      "sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007"
+    },
+    {
+      "path": "benchmarks/publication-corpus/manifest.json",
+      "sha256": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff"
+    },
+    {
+      "path": "src/enc/backref_cost_interval_search_v2_experiment_enc.c",
+      "sha256": "683e8b2a52030c166f57138cb0cdda2b3088a5ddc624e24ab814a4f0baffa3ad"
+    },
+    {
+      "path": "src/enc/backref_cost_interval_search_v2_experiment_enc.h",
+      "sha256": "2d0e5afddc65952159e828307342b286bc4fffd09e2176aa0cb4dd5c1fcd52fc"
+    },
+    {
+      "path": "src/enc/backward_references_cost_enc.c",
+      "sha256": "e97dcf053feebaf2519cd477b6a809bd6eb2d07f9070af1589ac337f478052ae"
+    },
+    {
+      "path": "tools/backref_cost_interval_search_v2_experiment_runner.c",
+      "sha256": "84cc581bccf8f9dafb983c51572fa2028dd34288d5994c26f22dfdf4fd8b28f9"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v2-design-work/work-metrics.jsonl",
+      "sha256": "faa3b720bbb1e4a6686ab231d31af787321ba9c29cf58276ddde66fed237a30a"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v2-design-work/summary.json",
+      "sha256": "9710fd7e658ce8183a855104861c385aa9a9b52c518b13df22bc187ff9525384"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v2-design-work/abi.json",
+      "sha256": "76b35e8917360cf13b64df525c946f3d468b68ce3494cb5fb7ab8d2eabba25b5"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v2-design/live-validation.json",
+      "sha256": "aefe74d87657de0987c0a515068ad405f3a1d1503cdf7ac5667f1cefe83fea62"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v2-design/runner-toolchain-inspection.json",
+      "sha256": "c05f70bb825a2ff0d134840d9307aa0394848156ba687aae02fcf0f2e0a37aa9"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v2-design/remote-rehearsal.json",
+      "sha256": "8e3ecb3a5855c98472ab4d2d3b8c9770b128e6b0867f70f3686a326f5ee06b4c"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v2-design/early-refusal-return.json",
+      "sha256": "0aaf8a3330378681e6d728b0d6c2a524ded70d3928c6337865614e33cf6bbfd8"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v2-design/stalled-malformed-transfer-cleanup.json",
+      "sha256": "368b572aec23ca58af8d95c68d028290fc0f9f8c1a3b031c4e8e3b188df057d9"
+    },
+    {
+      "path": "doc/experiment-guard-matrix.md",
+      "sha256": "5f0544527d6ea12efd7cddc7f3304c90a89bb8ca3900c57c27591491532b0872"
+    },
+    {
+      "path": "tests/README.md",
+      "sha256": "d1f0a06b3ea011190b18b5eaeaeac98ab1d1c94846b295f0ce7e64787d49237e"
+    }
+  ],
+  "manifest_sha256": "2fd1a222ab0329c69eaf9258626c4a9bcd9e76ed3589a49d17130a9bed46dbac",
+  "schema": "libwebp-backref-cost-interval-search-v2-source-hashes-v1",
+  "source_commit": "d93f7b1d50ddf65d775689618f13b00a3057d1ba"
+}

@@ -1,0 +1,485 @@
+
+*** Dumping AST Record Layout
+         0 | VP8LPrefixCode
+         0 |   int8_t code
+         1 |   int8_t extra_bits
+           | [sizeof=2, align=1]
+
+*** Dumping AST Record Layout
+         0 | struct __darwin_arm_exception_state
+         0 |   __uint32_t __exception
+         4 |   __uint32_t __fsr
+         8 |   __uint32_t __far
+           | [sizeof=12, align=4]
+
+*** Dumping AST Record Layout
+         0 | struct __darwin_arm_exception_state64
+         0 |   __uint64_t __far
+         8 |   __uint32_t __esr
+        12 |   __uint32_t __exception
+           | [sizeof=16, align=8]
+
+*** Dumping AST Record Layout
+         0 | union __sigaction_u
+         0 |   void (*)(int) __sa_handler
+         0 |   void (*)(int, struct __siginfo *, void *) __sa_sigaction
+           | [sizeof=8, align=8]
+
+*** Dumping AST Record Layout
+         0 | struct timeval
+         0 |   __darwin_time_t tv_sec
+         8 |   __darwin_suseconds_t tv_usec
+           | [sizeof=16, align=8]
+
+*** Dumping AST Record Layout
+         0 | struct WebPConfig
+         0 |   int lossless
+         4 |   float quality
+         8 |   int method
+        12 |   WebPImageHint image_hint
+        16 |   int target_size
+        20 |   float target_PSNR
+        24 |   int segments
+        28 |   int sns_strength
+        32 |   int filter_strength
+        36 |   int filter_sharpness
+        40 |   int filter_type
+        44 |   int autofilter
+        48 |   int alpha_compression
+        52 |   int alpha_filtering
+        56 |   int alpha_quality
+        60 |   int pass
+        64 |   int show_compressed
+        68 |   int preprocessing
+        72 |   int partitions
+        76 |   int partition_limit
+        80 |   int emulate_jpeg_size
+        84 |   int thread_level
+        88 |   int low_memory
+        92 |   int near_lossless
+        96 |   int exact
+       100 |   int use_delta_palette
+       104 |   int use_sharp_yuv
+       108 |   int qmin
+       112 |   int qmax
+           | [sizeof=116, align=4]
+
+*** Dumping AST Record Layout
+         0 | struct WebPPicture
+         0 |   int use_argb
+         4 |   WebPEncCSP colorspace
+         8 |   int width
+        12 |   int height
+        16 |   uint8_t * y
+        24 |   uint8_t * u
+        32 |   uint8_t * v
+        40 |   int y_stride
+        44 |   int uv_stride
+        48 |   uint8_t * a
+        56 |   int a_stride
+        60 |   uint32_t[2] pad1
+        72 |   uint32_t * argb
+        80 |   int argb_stride
+        84 |   uint32_t[3] pad2
+        96 |   WebPWriterFunction writer
+       104 |   void * custom_ptr
+       112 |   int extra_info_type
+       120 |   uint8_t * extra_info
+       128 |   WebPAuxStats * stats
+       136 |   WebPEncodingError error_code
+       144 |   WebPProgressHook progress_hook
+       152 |   void * user_data
+       160 |   uint32_t[3] pad3
+       176 |   uint8_t * pad4
+       184 |   uint8_t * pad5
+       192 |   uint32_t[8] pad6
+       224 |   void * memory_
+       232 |   void * memory_argb_
+       240 |   void *[2] pad7
+           | [sizeof=256, align=8]
+
+*** Dumping AST Record Layout
+         0 | PixOrCopy
+         0 |   uint8_t mode
+         2 |   uint16_t len
+         4 |   uint32_t argb_or_distance
+           | [sizeof=8, align=4]
+
+*** Dumping AST Record Layout
+         0 | struct VP8LHashChain
+         0 |   uint32_t * offset_length
+         8 |   int size
+           | [sizeof=16, align=8]
+
+*** Dumping AST Record Layout
+         0 | VP8LRefsCursor
+         0 |   PixOrCopy * cur_pos
+         8 |   PixOrCopyBlock * cur_block
+        16 |   const PixOrCopy * last_pos
+           | [sizeof=24, align=8]
+
+*** Dumping AST Record Layout
+         0 | struct WebPRGBABuffer
+         0 |   uint8_t * rgba
+         8 |   int stride
+        16 |   size_t size
+           | [sizeof=24, align=8]
+
+*** Dumping AST Record Layout
+         0 | struct WebPYUVABuffer
+         0 |   uint8_t * y
+         8 |   uint8_t * u
+        16 |   uint8_t * v
+        24 |   uint8_t * a
+        32 |   int y_stride
+        36 |   int u_stride
+        40 |   int v_stride
+        44 |   int a_stride
+        48 |   size_t y_size
+        56 |   size_t u_size
+        64 |   size_t v_size
+        72 |   size_t a_size
+           | [sizeof=80, align=8]
+
+*** Dumping AST Record Layout
+         0 | union WebPDecBuffer::(unnamed at ./src/webp/decode.h:234:3)
+         0 |   struct WebPRGBABuffer RGBA
+         0 |     uint8_t * rgba
+         8 |     int stride
+        16 |     size_t size
+         0 |   struct WebPYUVABuffer YUVA
+         0 |     uint8_t * y
+         8 |     uint8_t * u
+        16 |     uint8_t * v
+        24 |     uint8_t * a
+        32 |     int y_stride
+        36 |     int u_stride
+        40 |     int v_stride
+        44 |     int a_stride
+        48 |     size_t y_size
+        56 |     size_t u_size
+        64 |     size_t v_size
+        72 |     size_t a_size
+           | [sizeof=80, align=8]
+
+*** Dumping AST Record Layout
+         0 | struct WebPDecBuffer
+         0 |   WEBP_CSP_MODE colorspace
+         4 |   int width
+         8 |   int height
+        12 |   int is_external_memory
+        16 |   union WebPDecBuffer::(unnamed at ./src/webp/decode.h:234:3) u
+        16 |     struct WebPRGBABuffer RGBA
+        16 |       uint8_t * rgba
+        24 |       int stride
+        32 |       size_t size
+        16 |     struct WebPYUVABuffer YUVA
+        16 |       uint8_t * y
+        24 |       uint8_t * u
+        32 |       uint8_t * v
+        40 |       uint8_t * a
+        48 |       int y_stride
+        52 |       int u_stride
+        56 |       int v_stride
+        60 |       int a_stride
+        64 |       size_t y_size
+        72 |       size_t u_size
+        80 |       size_t v_size
+        88 |       size_t a_size
+        96 |   uint32_t[4] pad
+       112 |   uint8_t * private_memory
+           | [sizeof=120, align=8]
+
+*** Dumping AST Record Layout
+         0 | struct WebPBitstreamFeatures
+         0 |   int width
+         4 |   int height
+         8 |   int has_alpha
+        12 |   int has_animation
+        16 |   int format
+        20 |   uint32_t[5] pad
+           | [sizeof=40, align=4]
+
+*** Dumping AST Record Layout
+         0 | struct WebPDecoderOptions
+         0 |   int bypass_filtering
+         4 |   int no_fancy_upsampling
+         8 |   int use_cropping
+        12 |   int crop_left
+        16 |   int crop_top
+        20 |   int crop_width
+        24 |   int crop_height
+        28 |   int use_scaling
+        32 |   int scaled_width
+        36 |   int scaled_height
+        40 |   int use_threads
+        44 |   int dithering_strength
+        48 |   int flip
+        52 |   int alpha_dithering_strength
+        56 |   uint32_t[5] pad
+           | [sizeof=76, align=4]
+
+*** Dumping AST Record Layout
+         0 | struct WebPDecoderConfig
+         0 |   struct WebPBitstreamFeatures input
+         0 |     int width
+         4 |     int height
+         8 |     int has_alpha
+        12 |     int has_animation
+        16 |     int format
+        20 |     uint32_t[5] pad
+        40 |   struct WebPDecBuffer output
+        40 |     WEBP_CSP_MODE colorspace
+        44 |     int width
+        48 |     int height
+        52 |     int is_external_memory
+        56 |     union WebPDecBuffer::(unnamed at ./src/webp/decode.h:234:3) u
+        56 |       struct WebPRGBABuffer RGBA
+        56 |         uint8_t * rgba
+        64 |         int stride
+        72 |         size_t size
+        56 |       struct WebPYUVABuffer YUVA
+        56 |         uint8_t * y
+        64 |         uint8_t * u
+        72 |         uint8_t * v
+        80 |         uint8_t * a
+        88 |         int y_stride
+        92 |         int u_stride
+        96 |         int v_stride
+       100 |         int a_stride
+       104 |         size_t y_size
+       112 |         size_t u_size
+       120 |         size_t v_size
+       128 |         size_t a_size
+       136 |     uint32_t[4] pad
+       152 |     uint8_t * private_memory
+       160 |   struct WebPDecoderOptions options
+       160 |     int bypass_filtering
+       164 |     int no_fancy_upsampling
+       168 |     int use_cropping
+       172 |     int crop_left
+       176 |     int crop_top
+       180 |     int crop_width
+       184 |     int crop_height
+       188 |     int use_scaling
+       192 |     int scaled_width
+       196 |     int scaled_height
+       200 |     int use_threads
+       204 |     int dithering_strength
+       208 |     int flip
+       212 |     int alpha_dithering_strength
+       216 |     uint32_t[5] pad
+           | [sizeof=240, align=8]
+
+*** Dumping AST Record Layout
+         0 | VP8LHistogram
+         0 |   uint32_t * literal
+         8 |   uint32_t[256] red
+      1032 |   uint32_t[256] blue
+      2056 |   uint32_t[256] alpha
+      3080 |   uint32_t[40] distance
+      3240 |   int palette_code_bits
+      3244 |   uint16_t[5] trivial_symbol
+      3256 |   uint64_t bit_cost
+      3264 |   uint64_t[5] costs
+      3304 |   uint8_t[5] is_used
+      3310 |   uint16_t bin_id
+           | [sizeof=3312, align=8]
+
+*** Dumping AST Record Layout
+         0 | struct VP8LBackwardRefs
+         0 |   int block_size
+         4 |   int error
+         8 |   PixOrCopyBlock * refs
+        16 |   PixOrCopyBlock ** tail
+        24 |   PixOrCopyBlock * free_blocks
+        32 |   PixOrCopyBlock * last_block
+           | [sizeof=40, align=8]
+
+*** Dumping AST Record Layout
+         0 | VP8LColorCache
+         0 |   uint32_t * colors
+         8 |   int hash_shift
+        12 |   int hash_bits
+           | [sizeof=16, align=8]
+
+*** Dumping AST Record Layout
+         0 | CostModel
+         0 |   uint32_t[256] alpha
+      1024 |   uint32_t[256] red
+      2048 |   uint32_t[256] blue
+      3072 |   uint32_t[40] distance
+      3232 |   uint32_t * literal
+           | [sizeof=3240, align=8]
+
+*** Dumping AST Record Layout
+         0 | struct CostInterval
+         0 |   int64_t cost
+         8 |   int start
+        12 |   int end
+        16 |   int index
+        24 |   CostInterval * previous
+        32 |   CostInterval * next
+           | [sizeof=40, align=8]
+
+*** Dumping AST Record Layout
+         0 | CostManager
+         0 |   CostInterval * head
+         8 |   int count
+        16 |   CostCacheInterval * cache_intervals
+        24 |   size_t cache_intervals_size
+        32 |   int64_t[4095] cost_cache
+     32792 |   int64_t * costs
+     32800 |   uint16_t * dist_array
+     32808 |   CostInterval[10] intervals
+     33208 |   CostInterval * free_intervals
+     33216 |   CostInterval * recycled_intervals
+           | [sizeof=33224, align=8]
+
+*** Dumping IRgen Record Layout
+Record: RecordDecl 0xcbaf1b498 <./src/utils/color_cache_utils.h:32:9, line:36:1> line:32:9 struct definition
+|-FieldDecl 0xcbaf1b558 <line:33:3, col:54> col:54 referenced colors 'uint32_t *'
+|-FieldDecl 0xcbaf1b5c0 <line:34:3, col:7> col:7 referenced hash_shift 'int'
+`-FieldDecl 0xcbaf1b628 <line:35:3, col:7> col:7 hash_bits 'int'
+
+Layout: <CGRecordLayout
+  LLVMType:%struct.VP8LColorCache = type { ptr, i32, i32 }
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping IRgen Record Layout
+Record: RecordDecl 0xcbaf20438 <src/enc/backward_references_cost_enc.c:102:9, line:108:1> line:102:9 struct definition
+|-FieldDecl 0xcbaf20540 <line:103:3, col:32> col:12 referenced alpha 'uint32_t[256]'
+|-FieldDecl 0xcbaf205f0 <line:104:3, col:30> col:12 referenced red 'uint32_t[256]'
+|-FieldDecl 0xcbaf206a0 <line:105:3, col:31> col:12 referenced blue 'uint32_t[256]'
+|-FieldDecl 0xcbaf20750 <line:106:3, col:39> col:12 referenced distance 'uint32_t[40]'
+`-FieldDecl 0xcbaf207b8 <line:107:3, col:13> col:13 referenced literal 'uint32_t *'
+
+Layout: <CGRecordLayout
+  LLVMType:%struct.CostModel = type { [256 x i32], [256 x i32], [256 x i32], [40 x i32], ptr }
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping IRgen Record Layout
+Record: RecordDecl 0xcbaf26e18 prev 0xcbaf26cb0 <src/enc/backward_references_cost_enc.c:228:1, line:235:1> line:228:8 struct CostInterval definition
+|-FieldDecl 0xcbaf26ea8 <line:229:3, col:11> col:11 referenced cost 'int64_t':'long long'
+|-FieldDecl 0xcbaf26f10 <line:230:3, col:7> col:7 referenced start 'int'
+|-FieldDecl 0xcbaf26f78 <line:231:3, col:7> col:7 referenced end 'int'
+|-FieldDecl 0xcbaf26fe0 <line:232:3, col:7> col:7 referenced index 'int'
+|-FieldDecl 0xcbaf27108 <line:233:3, col:17> col:17 referenced previous 'CostInterval *'
+`-FieldDecl 0xcbaf27170 <line:234:3, col:17> col:17 referenced next 'CostInterval *'
+
+Layout: <CGRecordLayout
+  LLVMType:%struct.CostInterval = type { i64, i32, i32, i32, ptr, ptr }
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping IRgen Record Layout
+Record: RecordDecl 0xcbaf27458 <src/enc/backward_references_cost_enc.c:249:9, line:279:1> line:249:9 struct definition
+|-FieldDecl 0xcbaf27518 <line:250:3, col:17> col:17 referenced head 'CostInterval *'
+|-FieldDecl 0xcbaf27580 <line:257:3, col:7> col:7 referenced count 'int'
+|-FieldDecl 0xcbaf276a8 <line:258:3, col:22> col:22 referenced cache_intervals 'CostCacheInterval *'
+|-FieldDecl 0xcbaf27708 <line:259:3, col:10> col:10 referenced cache_intervals_size 'size_t':'unsigned long'
+|-FieldDecl 0xcbaf278e0 <line:261:3, col:32> col:11 referenced cost_cache 'int64_t[4095]'
+|-FieldDecl 0xcbaf27948 <line:262:3, col:12> col:12 referenced costs 'int64_t *'
+|-FieldDecl 0xcbaf279b0 <line:263:3, col:13> col:13 referenced dist_array 'uint16_t *'
+|-FieldDecl 0xcbaf27b40 <line:266:3, col:52> col:16 referenced intervals 'CostInterval[10]'
+|-FieldDecl 0xcbaf27ba8 <line:267:3, col:17> col:17 referenced free_intervals 'CostInterval *'
+`-FieldDecl 0xcbaf27c10 <line:270:3, col:17> col:17 referenced recycled_intervals 'CostInterval *'
+
+Layout: <CGRecordLayout
+  LLVMType:%struct.CostManager = type { ptr, i32, ptr, i64, [4095 x i64], ptr, ptr, [10 x %struct.CostInterval], ptr, ptr }
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping IRgen Record Layout
+Record: RecordDecl 0xcbb35f9e8 prev 0xcbb35f878 <./src/enc/backward_references_enc.h:168:1, line:175:1> line:168:8 struct VP8LBackwardRefs definition
+|-FieldDecl 0xcbb35fa80 <line:169:3, col:7> col:7 block_size 'int'
+|-FieldDecl 0xcbb35fae8 <line:170:3, col:7> col:7 referenced error 'int'
+|-FieldDecl 0xcbb35fc18 <line:171:3, col:19> col:19 refs 'PixOrCopyBlock *'
+|-FieldDecl 0xcbb35fce8 <line:172:3, col:20> col:20 tail 'PixOrCopyBlock **'
+|-FieldDecl 0xcbb35fd50 <line:173:3, col:19> col:19 free_blocks 'PixOrCopyBlock *'
+`-FieldDecl 0xcbb35fdb8 <line:174:3, col:19> col:19 last_block 'PixOrCopyBlock *'
+
+Layout: <CGRecordLayout
+  LLVMType:%struct.VP8LBackwardRefs = type { i32, i32, ptr, ptr, ptr, ptr }
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping IRgen Record Layout
+Record: RecordDecl 0xcbb363118 <./src/enc/histogram_enc.h:30:9, line:50:1> line:30:9 struct definition
+|-FieldDecl 0xcbb3631d8 <line:33:3, col:13> col:13 referenced literal 'uint32_t *'
+|-FieldDecl 0xcbb3632c0 <line:34:3, col:33> col:12 referenced red 'uint32_t[256]'
+|-FieldDecl 0xcbb363370 <line:35:3, col:34> col:12 referenced blue 'uint32_t[256]'
+|-FieldDecl 0xcbb363420 <line:36:3, col:35> col:12 referenced alpha 'uint32_t[256]'
+|-FieldDecl 0xcbb363530 <line:38:3, col:39> col:12 referenced distance 'uint32_t[40]'
+|-FieldDecl 0xcbb363598 <line:39:3, col:7> col:7 referenced palette_code_bits 'int'
+|-FieldDecl 0xcbb3636b0 <line:44:3, col:28> col:12 trivial_symbol 'uint16_t[5]'
+|-FieldDecl 0xcbb363710 <line:45:3, col:12> col:12 bit_cost 'uint64_t':'unsigned long long'
+|-FieldDecl 0xcbb363820 <line:47:3, col:19> col:12 costs 'uint64_t[5]'
+|-FieldDecl 0xcbb363930 <line:48:3, col:20> col:11 is_used 'uint8_t[5]'
+`-FieldDecl 0xcbb363990 <line:49:3, col:12> col:12 bin_id 'uint16_t':'unsigned short'
+
+Layout: <CGRecordLayout
+  LLVMType:%struct.VP8LHistogram = type { ptr, [256 x i32], [256 x i32], [256 x i32], [40 x i32], i32, [5 x i16], i64, [5 x i64], [5 x i8], i16 }
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping AST Record Layout
+         0 | CostCacheInterval
+         0 |   int64_t cost
+         8 |   int start
+        12 |   int end
+           | [sizeof=16, align=8]
+
+*** Dumping IRgen Record Layout
+Record: RecordDecl 0xcbaf271c0 <src/enc/backward_references_cost_enc.c:238:9, line:242:1> line:238:9 struct definition
+|-FieldDecl 0xcbaf27270 <line:239:3, col:11> col:11 referenced cost 'int64_t':'long long'
+|-FieldDecl 0xcbaf272d8 <line:240:3, col:7> col:7 referenced start 'int'
+`-FieldDecl 0xcbaf27340 <line:241:3, col:7> col:7 referenced end 'int'
+
+Layout: <CGRecordLayout
+  LLVMType:%struct.CostCacheInterval = type { i64, i32, i32 }
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping IRgen Record Layout
+Record: RecordDecl 0xcbb2eb988 <./src/dsp/lossless_common.h:138:9, line:141:1> line:138:9 struct definition
+|-FieldDecl 0xcbb2eba40 <line:139:3, col:10> col:10 referenced code 'int8_t':'signed char'
+`-FieldDecl 0xcbb2ebaa0 <line:140:3, col:10> col:10 referenced extra_bits 'int8_t':'signed char'
+
+Layout: <CGRecordLayout
+  LLVMType:%struct.VP8LPrefixCode = type { i8, i8 }
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping IRgen Record Layout
+Record: RecordDecl 0xcbb35d998 prev 0xcbb35d830 <./src/enc/backward_references_enc.h:119:1, line:129:1> line:119:8 struct VP8LHashChain definition
+|-FieldDecl 0xcbb35da30 <line:125:3, col:13> col:13 referenced offset_length 'uint32_t *'
+`-FieldDecl 0xcbb35da98 <line:128:3, col:7> col:7 size 'int'
+
+Layout: <CGRecordLayout
+  LLVMType:%struct.VP8LHashChain = type { ptr, i32 }
+  IsZeroInitializable:1
+  BitFields:[
+]>
+
+*** Dumping IRgen Record Layout
+Record: RecordDecl 0xcbb35af40 <./src/enc/backward_references_enc.h:35:9, line:40:1> line:35:9 struct definition
+|-FieldDecl 0xcbb35b000 <line:37:3, col:11> col:11 referenced mode 'uint8_t':'unsigned char'
+|-FieldDecl 0xcbb35b060 <line:38:3, col:12> col:12 referenced len 'uint16_t':'unsigned short'
+`-FieldDecl 0xcbb35b0c0 <line:39:3, col:12> col:12 referenced argb_or_distance 'uint32_t':'unsigned int'
+
+Layout: <CGRecordLayout
+  LLVMType:%struct.PixOrCopy = type { i8, i16, i32 }
+  IsZeroInitializable:1
+  BitFields:[
+]>

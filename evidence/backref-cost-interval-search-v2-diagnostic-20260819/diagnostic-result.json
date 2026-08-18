@@ -1,0 +1,95 @@
+{
+  "admission_error": null,
+  "archive_status": "not_attempted",
+  "cleanup_error": null,
+  "cleanup_receipt": {
+    "absence_proved": true,
+    "home": "/Users/pandocs-agent-001",
+    "removed_exact_validated_child": true,
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.SMd9dq",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2",
+    "token": "run.SMd9dq",
+    "validated": true
+  },
+  "elapsed_seconds": 19.559442281723022,
+  "extraction_status": "not_attempted",
+  "lease_acquisition_attempted": false,
+  "manifest_sha256": "2fd1a222ab0329c69eaf9258626c4a9bcd9e76ed3589a49d17130a9bed46dbac",
+  "post_refusal_process_isolation": {
+    "benchmark_or_cuda_matches": [],
+    "process_table_sha256": "a9ed8fa815f309f9bb4070077e4f493c1bb08769afb96a5ee01907afc2a35e19",
+    "runner_listener_present": true,
+    "runner_worker_matches": []
+  },
+  "purpose": "frozen untimed refusal-only contract diagnostic",
+  "refusal": {
+    "controlled_exit": true,
+    "error_type": "RuntimeError",
+    "lease_record_present": true,
+    "reason": "rehearsal requires WEBP_BENCHMARK_SESSION unset",
+    "schema": "libwebp-backref-cost-interval-search-v2-refusal-v1",
+    "stage": "rehearsal-session-guard",
+    "status": "refused",
+    "timing_samples_present": false
+  },
+  "remote_command": "set -eu; cd /Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.SMd9dq/source; WEBP_EXPECTED_BACKREF_COST_INTERVAL_SEARCH_V2_COMMIT=d93f7b1d50ddf65d775689618f13b00a3057d1ba WEBP_BENCHMARK_SESSION=exclusive python3 scripts/run_backref_cost_interval_search_v2_experiment.py rehearse /Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.SMd9dq/evidence",
+  "remote_command_exit_code": 1,
+  "remote_environment": {
+    "WEBP_BENCHMARK_SESSION": "exclusive",
+    "WEBP_EXPECTED_BACKREF_COST_INTERVAL_SEARCH_V2_COMMIT": "d93f7b1d50ddf65d775689618f13b00a3057d1ba"
+  },
+  "remote_host_alias": "pandocs-agent",
+  "schema": "libwebp-backref-cost-interval-search-v2-diagnostic-result-v1",
+  "source_admission_nested": {
+    "bundle_hash_match": true,
+    "bundle_path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.SMd9dq/source.bundle",
+    "bundle_sha256": "b8a3445a01d2f29e6c9a3d2c2b56915df67ee30665a45da72b63152b50421079",
+    "bundle_verified_in_repository_context": true,
+    "bundle_verify_command": [
+      "git",
+      "-C",
+      "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.SMd9dq/verify.git",
+      "bundle",
+      "verify",
+      "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.SMd9dq/source.bundle"
+    ],
+    "bundle_verify_repository": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.SMd9dq/verify.git",
+    "clean_status": true,
+    "clone": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v2/run.SMd9dq/source",
+    "source_commit": "d93f7b1d50ddf65d775689618f13b00a3057d1ba",
+    "source_hashes": {
+      "CMakeLists.txt": "3e874e74e9fb515ef774293f68f3e5a66ce4781c8eafaecd5f358e73e61bb4a9",
+      "benchmarks/publication-corpus/manifest.json": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff",
+      "doc/backref-cost-interval-search-v2-operator-20260818.md": "c6285ea7943d2564173cc4b6dd4f9d1a7a14d11771c67efe152eb81cfc277866",
+      "doc/backref-cost-interval-search-v2-protocol-20260818.md": "46357b10fbabcf9946a8ba91ce685be0be285cbdd91ea9a1641f72e45e77e7df",
+      "makefile.unix": "728a330e466a8b8a8b90d6d0a518e559f3de29739d0dd5c6b42120c30150815c",
+      "scripts/backref_cost_interval_search_v2_admission.py": "4b21d43127a8682e6040471e845ec013495f609bc5d98ee4ececc24c86fdb0f3",
+      "scripts/backref_cost_interval_search_v2_archive.py": "8ec1cc51a10d1f3fcd1d4d33ddb85e82e2485cd89fff56f40297a79fb3f0a77d",
+      "scripts/backref_cost_interval_search_v2_manifest.json": "2fd1a222ab0329c69eaf9258626c4a9bcd9e76ed3589a49d17130a9bed46dbac",
+      "scripts/backref_cost_interval_search_v2_paths.py": "304cd2f0ef0a43aaaaee398ebae8da6ebfd71b0e22e4e33fee070bf1d5c78721",
+      "scripts/backref_cost_interval_search_v2_schemas.json": "af116c02e95e43c13f1013dceda1ccd6fbcf7ce438f476c1a70ceebb144d65ed",
+      "scripts/execute_backref_cost_interval_search_v2.py": "5a5aadb7bdd61f70d9f9277c9d342b771b8d59ea478d48befec394f3d609f97d",
+      "scripts/generate_publication_corpus.py": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007",
+      "scripts/run_backref_cost_interval_search_v2_experiment.py": "74fe719f8ae1149b6ba19636f05d78edc23742b8ecedfa9185183ff1aecf2b00",
+      "scripts/test_backref_cost_interval_search_v2_archive.py": "a46445b18a54cf5aff353a63c0ad7012a938fefa34a213c7febb1a75e76277b9",
+      "scripts/test_backref_cost_interval_search_v2_protocol.py": "7966fef6082e075b4b7b09b66ad37c254c4a891495142f00826b2df1abf9e86d",
+      "src/enc/backref_cost_interval_search_v2_experiment_enc.c": "683e8b2a52030c166f57138cb0cdda2b3088a5ddc624e24ab814a4f0baffa3ad",
+      "src/enc/backref_cost_interval_search_v2_experiment_enc.h": "2d0e5afddc65952159e828307342b286bc4fffd09e2176aa0cb4dd5c1fcd52fc",
+      "src/enc/backward_references_cost_enc.c": "e97dcf053feebaf2519cd477b6a809bd6eb2d07f9070af1589ac337f478052ae",
+      "tools/backref_cost_interval_search_v2_experiment_runner.c": "84cc581bccf8f9dafb983c51572fa2028dd34288d5994c26f22dfdf4fd8b28f9"
+    },
+    "source_tree": "495f3d4427edfbe340f6ee208f281854d2389c5d",
+    "verification_repository_removed": true
+  },
+  "source_commit": "d93f7b1d50ddf65d775689618f13b00a3057d1ba",
+  "source_transfer": {
+    "hashes_match": true,
+    "local_bundle_sha256": "b8a3445a01d2f29e6c9a3d2c2b56915df67ee30665a45da72b63152b50421079",
+    "remote_bundle_sha256": "b8a3445a01d2f29e6c9a3d2c2b56915df67ee30665a45da72b63152b50421079",
+    "status": "accepted"
+  },
+  "source_tree": "495f3d4427edfbe340f6ee208f281854d2389c5d",
+  "status": "BLOCKED",
+  "timed_runner_invoked": false,
+  "timed_samples": 0
+}

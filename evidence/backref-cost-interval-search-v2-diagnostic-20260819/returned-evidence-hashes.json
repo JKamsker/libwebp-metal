@@ -1,0 +1,91 @@
+{
+  "artifacts": [
+    {
+      "bytes": 2537,
+      "path": "artifact-hashes.json",
+      "sha256": "28f1d04ee62f3a88f8b3157760c55484e73296e44856cef4d45d997a08681f4a"
+    },
+    {
+      "bytes": 184,
+      "path": "build.json",
+      "sha256": "77d4085a8f0a0962b1cd58f18c250f294ef18a8d6c141e9bb106ba9e5d48233e"
+    },
+    {
+      "bytes": 349,
+      "path": "cleanup-receipt.json",
+      "sha256": "4a5e9c6a7d83ab4f44b9188d4fb4e69730de0ed6c59e0db802e010d7218f1e0c"
+    },
+    {
+      "bytes": 105,
+      "path": "correctness.json",
+      "sha256": "e957e2afb01d36fb0627a06b9cdc10feaa75fc4b8473281e4eb4dd27105e36ca"
+    },
+    {
+      "bytes": 6040,
+      "path": "diagnostic-result.json",
+      "sha256": "4668529390733595c86acd5ca469816608436746d68721db562fa4dbec69244b"
+    },
+    {
+      "bytes": 3579,
+      "path": "host-state.json",
+      "sha256": "2a39ceddba57b2ee2eaddbb5a9f635b74519505c79251700fe6b5cf4780b6db9"
+    },
+    {
+      "bytes": 243,
+      "path": "lease-record.json",
+      "sha256": "7b33d7ef161407313f271d0347f2137f93e9460c34e2586a90e1dcd3bfb73de4"
+    },
+    {
+      "bytes": 2175,
+      "path": "refusal-return-rehearsal.json",
+      "sha256": "cfde53104f43e8d7c88a8264a448cab3a6cf7982f04fd6da7e82adac43b5c2a9"
+    },
+    {
+      "bytes": 319,
+      "path": "refusal.json",
+      "sha256": "2941fc2d813b890f8312547405bbff94afefff7090a882d129e53a5165896894"
+    },
+    {
+      "bytes": 55,
+      "path": "remote-command.stderr",
+      "sha256": "1cab9ce14e95044f8a893a83120b01d948cefc49d50df38d5c324790adccd0a6"
+    },
+    {
+      "bytes": 0,
+      "path": "remote-command.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 795,
+      "path": "return-protocol.json",
+      "sha256": "2371a8709c77222c39811a3007e822b5ce4a6531740d14428c5e574db1a54d40"
+    },
+    {
+      "bytes": 7816,
+      "path": "source-admission.json",
+      "sha256": "e865666cb30035937dda7e077989b34a2b248a085c95a0c5f2f1cf32d794eff0"
+    },
+    {
+      "bytes": 6671,
+      "path": "source-hashes.json",
+      "sha256": "82df3cea739192e9ee1b0ff2bd99a2016b1d91a28721c181bd8510354e2cd5b6"
+    },
+    {
+      "bytes": 218,
+      "path": "timing.json",
+      "sha256": "a9f7c370c87792ec0c7a96fd7a0e440476b5cef1a030ba2727ff21630ba296d3"
+    },
+    {
+      "bytes": 104,
+      "path": "work-metric-summary.json",
+      "sha256": "f288ae7052a00cede02cebe7001431146370fd0c0d2eca23d7b410b8c647fb19"
+    },
+    {
+      "bytes": 0,
+      "path": "work-metrics.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "excluded_after_index": [],
+  "schema": "libwebp-backref-cost-interval-search-v2-returned-evidence-hashes-v1"
+}

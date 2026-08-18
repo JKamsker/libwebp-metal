@@ -24,6 +24,7 @@ shared experimental build or runtime switch.
 | 15 independent v4 remote backref-cost workspace A/B | `WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT` | `WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT` | `WEBP_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT=1` | exact v3 candidate with indexed Python archive return and independent lease/cleanup evidence channels |
 | 16 independent v5 remote backref-cost workspace A/B | `WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT` | `WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT` | `WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT=1` | unchanged recorder-free candidate with admitted makefile toolchain and indexed evidence on every controlled refusal |
 | 17 backref-cost interval-search v1 | `WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT` | `WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT` | `WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=1` | strictly-after-tail null-hint positioning index; separate untimed recorder build and recorder-free timed runner |
+| 18 backref-cost interval-search v2 | `WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT` | `WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT` | `WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT=1` | PushInterval-local scan-derived append hint with narrow in-call maintenance; separate untimed recorder build and recorder-free timed runner |
 
 Every runtime value is exact: values other than `1` are disabled. Every timed
 launcher additionally requires `WEBP_BENCHMARK_SESSION=exclusive`. Correctness,
@@ -175,6 +176,7 @@ WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT=1 examples/cwebp
 WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT=1 examples/cwebp
 
 WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=1 examples/cwebp
+WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT=1 examples/cwebp
 ```
 
 CMake uses the same names with `-D<name>=ON`. Items 2--8 require
@@ -186,7 +188,7 @@ experiment target is deliberately non-installed.
 
 The focused guard test does not grant the benchmark lease, read benchmark
 results, or run an encoder. It verifies default-off make commands, forced
-dry-run macro isolation for all seventeen rows, omitted driver targets, runtime
+dry-run macro isolation for all eighteen rows, omitted driver targets, runtime
 refusal, lease refusal, the promoted item-4 default/legacy correctness mapping, and the fact
 that item 4's released timed matrix was not repurposed as a follow-up:
 

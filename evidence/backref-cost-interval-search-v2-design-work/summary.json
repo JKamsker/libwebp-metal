@@ -1,0 +1,23 @@
+{
+  "active_case_method_pairs": 12,
+  "baseline_position_backward_steps": 53769,
+  "baseline_position_forward_steps": 5585685,
+  "candidate_append_hint_branch_checks": 1123588,
+  "candidate_append_hint_fast_paths": 1062260,
+  "candidate_append_hint_loads": 1123588,
+  "candidate_append_hint_start_loads": 1062260,
+  "candidate_append_hint_update_checks": 117020,
+  "candidate_append_hint_updates": 1124012,
+  "candidate_pop_tail_branch_checks": 37438,
+  "candidate_pop_tail_updates": 15162,
+  "candidate_position_backward_steps": 53769,
+  "candidate_position_forward_steps": 0,
+  "candidate_runtime_activations": 37,
+  "case_method_pairs": 18,
+  "inactive_case_method_pairs": 6,
+  "records_sha256": "faa3b720bbb1e4a6686ab231d31af787321ba9c29cf58276ddde66fed237a30a",
+  "rows": 36,
+  "schema": "libwebp-backref-cost-interval-search-v2-design-work-summary-v1",
+  "status": "PASS",
+  "timing_fields_recorded": false
+}

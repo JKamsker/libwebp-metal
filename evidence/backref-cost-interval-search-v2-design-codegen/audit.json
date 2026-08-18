@@ -1,0 +1,50 @@
+{
+  "schema": "libwebp-backref-cost-interval-search-v2-static-causal-audit-v1",
+  "status": "PASS",
+  "base_commit": "22456df935cb3e9e834c0d06a3240db708ace2d7",
+  "timing_performed": false,
+  "v1_negative_result_reused_only_as_committed_evidence": true,
+  "layout": {
+    "cost_interval_bytes_all_variants": 40,
+    "cost_manager_baseline_bytes": 33224,
+    "cost_manager_v1_bytes": 33232,
+    "cost_manager_v2_bytes": 33224,
+    "v1_added_fields": ["tail pointer at offset 8", "use_interval_search_v1 int at offset 16"],
+    "v1_shifted_every_following_cost_manager_field": true,
+    "v2_added_cost_manager_fields": []
+  },
+  "v1_source_sites": {
+    "tail_write_sites": [
+      "ConnectIntervals: if next is null, store prev to manager->tail",
+      "CostManagerInit: initialize manager->tail to null"
+    ],
+    "tail_read_site": "PositionOrphanInterval null-hint path reads use flag, tail pointer, and tail start before choosing the strict-after-tail fast path",
+    "connect_calls_per_successful_insert": 2,
+    "connect_calls_per_pop": 1,
+    "update_sites": [
+      "PositionOrphanInterval first ConnectIntervals call after finding insertion predecessor",
+      "PositionOrphanInterval second ConnectIntervals call linking predecessor to current",
+      "PopInterval ConnectIntervals call unlinking an expired or dominated node"
+    ],
+    "strict_equal_start_exclusion": "current start must be strictly greater than tail start; equal starts retain baseline positioning and order"
+  },
+  "optimized_arm64_codegen": {
+    "compiler": "Apple clang 17.0.0 (clang-1700.6.4.2)",
+    "flags": "-O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+    "baseline": {"assembly_bytes": 62853, "ldr": 258, "ldur": 23, "ldp": 35, "str": 131, "stp": 38, "cmp": 152, "cbz": 29, "cbnz": 11, "tbnz": 3},
+    "v1": {"assembly_bytes": 64813, "ldr": 266, "ldur": 13, "ldp": 44, "str": 143, "stp": 40, "cmp": 157, "cbz": 30, "cbnz": 12, "tbnz": 3},
+    "v2": {"assembly_bytes": 67593, "ldr": 261, "ldur": 13, "ldp": 50, "str": 151, "stp": 38, "cmp": 158, "cbz": 37, "cbnz": 17, "tbnz": 4},
+    "interpretation": "v2 restores baseline CostManager layout and has five fewer scalar ldr instructions than v1 in the complete translation-unit assembly; its static text is larger, so promotion remains contingent on the frozen end-to-end median and p95 gates"
+  },
+  "active_remote_v1_and_untimed_v2_cells": [
+    {"case_id":"photo-medium","method":4,"v1_insert_calls":106250,"v1_interval_pops":106250,"v1_null_hint_checks":101485,"v1_connect_calls":318750,"v1_tail_fast_paths":95259,"exact_tail_writes_from_v2_equivalent_events":102685,"v2_fallback_update_checks":10991,"v2_in_call_pop_tail_checks":2923,"v1_bookkeeping_decision_sites":420235,"v2_bookkeeping_decision_sites":115399,"v2_to_v1_ratio":0.274606},
+    {"case_id":"photo-medium","method":6,"v1_insert_calls":107194,"v1_interval_pops":107194,"v1_null_hint_checks":102251,"v1_connect_calls":321582,"v1_tail_fast_paths":96002,"exact_tail_writes_from_v2_equivalent_events":103492,"v2_fallback_update_checks":11192,"v2_in_call_pop_tail_checks":3096,"v1_bookkeeping_decision_sites":423833,"v2_bookkeeping_decision_sites":116539,"v2_to_v1_ratio":0.274964},
+    {"case_id":"graphic-medium","method":4,"v1_insert_calls":8300,"v1_interval_pops":8299,"v1_null_hint_checks":8140,"v1_connect_calls":24899,"v1_tail_fast_paths":7994,"exact_tail_writes_from_v2_equivalent_events":8150,"v2_fallback_update_checks":306,"v2_in_call_pop_tail_checks":91,"v1_bookkeeping_decision_sites":33039,"v2_bookkeeping_decision_sites":8537,"v2_to_v1_ratio":0.258392},
+    {"case_id":"graphic-medium","method":6,"v1_insert_calls":8300,"v1_interval_pops":8299,"v1_null_hint_checks":8140,"v1_connect_calls":24899,"v1_tail_fast_paths":7994,"exact_tail_writes_from_v2_equivalent_events":8150,"v2_fallback_update_checks":306,"v2_in_call_pop_tail_checks":91,"v1_bookkeeping_decision_sites":33039,"v2_bookkeeping_decision_sites":8537,"v2_to_v1_ratio":0.258392},
+    {"case_id":"photo-large","method":4,"v1_insert_calls":422392,"v1_interval_pops":422392,"v1_null_hint_checks":401781,"v1_connect_calls":1267176,"v1_tail_fast_paths":379197,"exact_tail_writes_from_v2_equivalent_events":407868,"v2_fallback_update_checks":43195,"v2_in_call_pop_tail_checks":14279,"v1_bookkeeping_decision_sites":1668957,"v2_bookkeeping_decision_sites":459255,"v2_to_v1_ratio":0.275175},
+    {"case_id":"photo-large","method":6,"v1_insert_calls":423906,"v1_interval_pops":423906,"v1_null_hint_checks":402661,"v1_connect_calls":1271718,"v1_tail_fast_paths":380116,"exact_tail_writes_from_v2_equivalent_events":408869,"v2_fallback_update_checks":43790,"v2_in_call_pop_tail_checks":14722,"v1_bookkeeping_decision_sites":1674379,"v2_bookkeeping_decision_sites":461173,"v2_to_v1_ratio":0.275429},
+    {"case_id":"graphic-large","method":4,"v1_insert_calls":22484,"v1_interval_pops":22483,"v1_null_hint_checks":22411,"v1_connect_calls":67451,"v1_tail_fast_paths":22260,"exact_tail_writes_from_v2_equivalent_events":22421,"v2_fallback_update_checks":224,"v2_in_call_pop_tail_checks":23,"v1_bookkeeping_decision_sites":89862,"v2_bookkeeping_decision_sites":22658,"v2_to_v1_ratio":0.252142},
+    {"case_id":"graphic-large","method":6,"v1_insert_calls":22484,"v1_interval_pops":22483,"v1_null_hint_checks":22411,"v1_connect_calls":67451,"v1_tail_fast_paths":22260,"exact_tail_writes_from_v2_equivalent_events":22421,"v2_fallback_update_checks":224,"v2_in_call_pop_tail_checks":23,"v1_bookkeeping_decision_sites":89862,"v2_bookkeeping_decision_sites":22658,"v2_to_v1_ratio":0.252142}
+  ],
+  "limitations": "The committed v1 recorder did not directly count optimized machine branch outcomes or tail stores. Connect/null-hint counts are exact from v1 raw rows; exact tail-changing events are reconstructed from v2's semantics-equivalent untimed event counters and are not timing evidence. Whole-translation-unit opcode totals are static codegen inventory, not dynamic instruction counts."
+}

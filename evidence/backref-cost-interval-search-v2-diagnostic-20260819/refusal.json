@@ -1,0 +1,10 @@
+{
+  "controlled_exit": true,
+  "error_type": "RuntimeError",
+  "lease_record_present": true,
+  "reason": "rehearsal requires WEBP_BENCHMARK_SESSION unset",
+  "schema": "libwebp-backref-cost-interval-search-v2-refusal-v1",
+  "stage": "rehearsal-session-guard",
+  "status": "refused",
+  "timing_samples_present": false
+}
