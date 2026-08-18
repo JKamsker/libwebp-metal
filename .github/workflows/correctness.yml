@@ -22,6 +22,8 @@ jobs:
         include:
           - os: ubuntu-latest
             metal: OFF
+          - os: macos-14
+            metal: OFF
           # This verifies Objective-C++ and framework linkage. The smoke test
           # explicitly disables runtime Metal because hosted runners are not
           # stable, characterized GPU hosts.
@@ -42,10 +44,122 @@ jobs:
           -DWEBP_BUILD_IMG2WEBP=OFF
           -DWEBP_BUILD_VWEBP=OFF
           -DWEBP_BUILD_WEBPMUX=OFF
-      - name: Build encoder and decoder
-        run: cmake --build build --target cwebp dwebp --parallel 2
+      - name: Build installable targets
+        run: cmake --build build --parallel 2
       - name: Lossless round-trip smoke test
         env:
           WEBP_METAL: "0"
           WEBP_TEST_BIN_DIR: ${{ github.workspace }}/build
         run: scripts/test_roundtrip.sh
+      - name: Install and link external CMake consumer
+        run: |
+          cmake --install build --prefix "${{ runner.temp }}/webp-install"
+          scripts/test_cmake_package.sh "${{ runner.temp }}/webp-install"
+
+  cmake-shared:
+    name: CMake shared (${{ matrix.os }}, Metal ${{ matrix.metal }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            metal: OFF
+          - os: macos-14
+            metal: OFF
+          - os: macos-14
+            metal: ON
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Configure shared libraries
+        run: >-
+          cmake -S . -B build-shared -G Ninja
+          -DCMAKE_BUILD_TYPE=Release
+          -DBUILD_SHARED_LIBS=ON
+          -DWEBP_ENABLE_METAL=${{ matrix.metal }}
+          -DWEBP_BUILD_ANIM_UTILS=OFF
+          -DWEBP_BUILD_EXTRAS=OFF
+          -DWEBP_BUILD_GIF2WEBP=OFF
+          -DWEBP_BUILD_IMG2WEBP=OFF
+          -DWEBP_BUILD_VWEBP=OFF
+          -DWEBP_BUILD_WEBPMUX=OFF
+      - name: Build and install shared libraries
+        run: |
+          cmake --build build-shared --parallel 2
+          cmake --install build-shared \
+            --prefix "${{ runner.temp }}/webp-shared-install"
+      - name: Link external CMake consumer
+        run: >-
+          scripts/test_cmake_package.sh
+          "${{ runner.temp }}/webp-shared-install"
+
+  autotools:
+    name: Autotools (${{ matrix.os }}, Metal ${{ matrix.metal }})
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-latest
+            metal: disable
+          - os: macos-14
+            metal: disable
+          - os: macos-14
+            metal: enable
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Install Autotools prerequisites
+        if: runner.os == 'macOS'
+        run: brew install autoconf automake libtool pkg-config
+      - name: Generate configure
+        run: autoreconf -fi
+      - name: Configure
+        run: >-
+          ./configure
+          --${{ matrix.metal }}-metal
+          --prefix="${{ runner.temp }}/webp-autotools-install"
+      - name: Build and install
+        run: |
+          make -j2
+          make install
+      - name: Link external static pkg-config consumer
+        run: >-
+          scripts/test_pkg_config_package.sh
+          "${{ runner.temp }}/webp-autotools-install"
+
+  installed-abi:
+    name: Installed ABI (macos-14, Metal OFF vs ON)
+    runs-on: macos-14
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Configure, build, and install Metal OFF and ON
+        run: |
+          for metal in OFF ON; do
+            cmake -S . -B "build-$metal" -G Ninja \
+              -DCMAKE_BUILD_TYPE=Release \
+              -DBUILD_SHARED_LIBS=ON \
+              -DWEBP_ENABLE_METAL="$metal" \
+              -DWEBP_BUILD_ANIM_UTILS=OFF \
+              -DWEBP_BUILD_EXTRAS=OFF \
+              -DWEBP_BUILD_GIF2WEBP=OFF \
+              -DWEBP_BUILD_IMG2WEBP=OFF \
+              -DWEBP_BUILD_VWEBP=OFF \
+              -DWEBP_BUILD_WEBPMUX=OFF
+            cmake --build "build-$metal" --parallel 2
+            cmake --install "build-$metal" \
+              --prefix "${{ runner.temp }}/webp-$metal"
+          done
+      - name: Compare installed headers and exported symbols
+        run: >-
+          scripts/compare_installed_abi.sh
+          "${{ runner.temp }}/webp-OFF"
+          "${{ runner.temp }}/webp-ON"

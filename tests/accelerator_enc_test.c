@@ -10,8 +10,11 @@
 
 typedef struct {
   WebPAcceleratorResult color_result;
+  WebPAcceleratorResult hash_result;
+  WebPAcceleratorResult rgb_result;
   int color_calls;
   int hash_calls;
+  int rgb_calls;
 } FakeContext;
 
 static WebPAcceleratorResult FakeColorTransform(
@@ -34,7 +37,32 @@ static WebPAcceleratorResult FakeHashChain(
   FakeContext* const context = (FakeContext*)opaque;
   (void)request;
   ++context->hash_calls;
-  return WEBP_ACCELERATOR_SUCCESS;
+  assert(request->size == 3);
+  assert(request->xsize == 3);
+  assert(request->iter_max == 8);
+  assert(request->window_size == 32u);
+  if (context->hash_result == WEBP_ACCELERATOR_SUCCESS) {
+    request->candidates[0] = 99u;
+  }
+  return context->hash_result;
+}
+
+static WebPAcceleratorResult FakeRGBToYUV(
+    void* opaque, const WebPAcceleratorRGBToYUVRequest* request) {
+  FakeContext* const context = (FakeContext*)opaque;
+  ++context->rgb_calls;
+  assert(request->step == 4);
+  assert(request->source_stride == 13);
+  assert(request->width == 2);
+  assert(request->height == 2);
+  assert(request->y_stride == 5);
+  assert(request->uv_stride == 3);
+  if (context->rgb_result == WEBP_ACCELERATOR_SUCCESS) {
+    request->y[0] = 42u;
+    request->u[0] = 43u;
+    request->v[0] = 44u;
+  }
+  return context->rgb_result;
 }
 
 static WebPEncoderAccelerator MakeBackend(FakeContext* context) {
@@ -43,13 +71,16 @@ static WebPEncoderAccelerator MakeBackend(FakeContext* context) {
   backend.abi_version = WEBP_ENCODER_ACCELERATOR_ABI_VERSION;
   backend.struct_size = sizeof(backend);
   backend.name = "fake";
-  backend.stages = WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM;
+  backend.stages = WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM |
+                   WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN |
+                   WEBP_ACCELERATOR_STAGE_RGB_TO_YUV;
   backend.properties = WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS |
                        WEBP_ACCELERATOR_PROPERTY_TRANSACTIONAL_OUTPUT |
                        WEBP_ACCELERATOR_PROPERTY_DETERMINISTIC;
   backend.context = context;
   backend.color_transform = FakeColorTransform;
   backend.hash_chain = FakeHashChain;
+  backend.rgb_to_yuv = FakeRGBToYUV;
   return backend;
 }
 
@@ -65,8 +96,16 @@ int main(void) {
   uint32_t candidates[3] = {4u, 5u, 6u};
   const WebPAcceleratorHashChainRequest hash_request = {
       pixels, chain, 3, 3, 8, 32u, 0, candidates};
+  const uint8_t rgba[26] = {0};
+  uint8_t y[10] = {7u};
+  uint8_t u[3] = {8u};
+  uint8_t v[3] = {9u};
+  const WebPAcceleratorRGBToYUVRequest rgb_request = {
+      rgba, rgba + 1, rgba + 2, 4, 13, 2, 2, y, u, v, 5, 3};
 
   memset(&context, 0, sizeof(context));
+  context.hash_result = WEBP_ACCELERATOR_SUCCESS;
+  context.rgb_result = WEBP_ACCELERATOR_SUCCESS;
   backend = MakeBackend(&context);
   if (getenv("WEBP_ACCELERATOR") != NULL &&
       strcmp(getenv("WEBP_ACCELERATOR"), "none") == 0) {
@@ -104,9 +143,22 @@ int main(void) {
          WEBP_ACCELERATOR_ERROR);
   assert(argb[0] == 7u && transform_image[0] == 8u);
 
-  assert(WebPAccelerateHashChain(&hash_request) == WEBP_ACCELERATOR_NOT_RUN);
-  assert(context.hash_calls == 0);
-  assert(candidates[0] == 4u && candidates[1] == 5u && candidates[2] == 6u);
+  context.color_result = (WebPAcceleratorResult)99;
+  assert(WebPAccelerateColorTransform(&color_request) ==
+         WEBP_ACCELERATOR_ERROR);
+  assert(argb[0] == 7u && transform_image[0] == 8u);
+
+  assert(WebPAccelerateHashChain(&hash_request) == WEBP_ACCELERATOR_SUCCESS);
+  assert(context.hash_calls == 1);
+  assert(candidates[0] == 99u);
+
+  assert(WebPAccelerateRGBToYUV(&rgb_request) == WEBP_ACCELERATOR_SUCCESS);
+  assert(context.rgb_calls == 1);
+  assert(y[0] == 42u && u[0] == 43u && v[0] == 44u);
+
+  assert(WebPAccelerateColorTransform(NULL) == WEBP_ACCELERATOR_NOT_RUN);
+  assert(WebPAccelerateHashChain(NULL) == WEBP_ACCELERATOR_NOT_RUN);
+  assert(WebPAccelerateRGBToYUV(NULL) == WEBP_ACCELERATOR_NOT_RUN);
 
   backend.properties = WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS;
   assert(!WebPSetEncoderAcceleratorForTesting(&backend));
@@ -115,6 +167,16 @@ int main(void) {
   assert(WebPSetEncoderAcceleratorForTesting(&backend));
   assert(WebPAccelerateColorTransform(&color_request) ==
          WEBP_ACCELERATOR_ERROR);
+
+  backend = MakeBackend(&context);
+  backend.abi_version++;
+  assert(!WebPSetEncoderAcceleratorForTesting(&backend));
+  backend = MakeBackend(&context);
+  backend.struct_size--;
+  assert(!WebPSetEncoderAcceleratorForTesting(&backend));
+  backend = MakeBackend(&context);
+  backend.name = "";
+  assert(!WebPSetEncoderAcceleratorForTesting(&backend));
 
   assert(WebPSetEncoderAcceleratorForTesting(NULL));
   puts("PASS: accelerator interface");

@@ -27,11 +27,11 @@ changing the publication recommendation:
 These artifacts close the largest architecture, reproducibility, and CI-design
 gaps in the original audit. They do not establish production readiness: this
 integration ran no performance measurements; the crossover policy has no
-promoted thresholds; cross-device determinism, sanitizer/fuzzer coverage,
-installed-library ABI comparison, and broader failure/memory testing remain;
-and the standard Autotools path still does not build the Metal translation
-units. Local CMake validation also remains environment-dependent and must be
-reported separately by each integration run.
+promoted thresholds; and cross-device determinism plus broader failure,
+concurrency, and memory-pressure testing remain. The 2026-08-18 hardening
+follow-up adds sanitizer mutation coverage, installed ABI comparison, local
+CMake validation, and an explicit Autotools Metal path, but does not change the
+publication recommendation or establish production readiness.
 
 Accordingly, publish first as a research report. The backend-neutral patch
 series is now a better candidate for upstream design discussion, but the
@@ -109,8 +109,9 @@ support, and release commitment than current evidence justifies.
   optional optimized paths preserve codec semantics, and testing is automated.
   It is an inference from repository structure, not a statement of an
   upstream maintainer decision.
-* No ABI symbol comparison, sanitizer run, device-matrix test, source review
-  by a Metal specialist, or benchmark was performed for this memo.
+* The baseline memo performed no ABI comparison or sanitizer run. The
+  2026-08-18 hardening follow-up adds those checks; no device-matrix test,
+  Metal-specialist review, or new benchmark was performed.
 
 ## Scored comparison (fitness **now**, 1--5)
 
@@ -148,8 +149,8 @@ Interpretation:
 | Area | Risk now | Evidence needed before raising the target |
 |---|---|---|
 | Codec semantics | Cross-color output can differ; GPU floating-point behavior has not been compared across Apple GPU families. | Corpus-wide decode, bitstream/size/quality policy, repeated-run and cross-device determinism results. |
-| Correctness | Manual script covers narrow modes and fixtures; fuzzers do not exercise forced Metal paths. | Automated regression suite, adversarial dimensions/strides/formats/cancellation tests, fuzz/sanitizer evidence. |
-| Build and ABI | Autotools omits the backend; CMake was not independently configured here; static consumers may need framework-link verification. | CI builds with Metal on/off across every supported build/distribution mode, installed-library link and ABI comparison. |
+| Correctness | Automated forced-Metal checks now cover odd and minimal dimensions, padded source and output-plane strides, RGB/BGR/RGBA/BGRA/RGBX/BGRX, cancellation after an observed transform, fallback, byte-identity promises, decode fidelity, and a bounded UBSan mutation harness. Evidence remains from one Apple GPU family. | Cross-device repetition plus ASan on a compatible Apple toolchain and deeper failure-injection, concurrency, and memory-pressure evidence. |
+| Build and ABI | CMake static/shared and Autotools Metal-off/on policies now have configure/build/install/external-link CI; static consumers carry framework dependencies; installed headers and dylib exports are compared off/on. | Release CI evidence on each supported Apple toolchain and downstream packaging review. |
 | Performance | Tables lack retained corpus, commands, raw samples, variance, thermal/power data, and crossover study. | Versioned harness/corpus manifest, raw results, warm/cold latency, memory/energy and threshold analysis on a device matrix. |
 | Operations | Runtime shader compilation adds startup failure modes and a roughly 25 ms cost is noted in source; global buffers and mutexes affect concurrency and memory retention. | Failure-injection, memory/concurrency tests, lifecycle/telemetry policy, and either stable runtime-compilation justification or packaged shader strategy. |
 | Maintenance/upstream | 1,500-line mixed C/Objective-C++ patch touches encoder internals and two build systems only. | Small reviewable patch series, backend abstraction rationale, ownership/support plan, and upstream maintainer feedback. |

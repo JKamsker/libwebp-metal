@@ -168,6 +168,11 @@ libwebpdsp_mips_dsp_r2_la_CFLAGS = $(AM_CFLAGS)
 libwebpdsp_mips_dsp_r2_la_LIBADD = libwebpdspdecode_mips_dsp_r2.la
 
 libwebpdsp_la_SOURCES = $(COMMON_SOURCES) $(ENC_SOURCES)
+if ENABLE_METAL
+libwebpdsp_la_SOURCES += lossless_enc_metal.mm
+libwebpdsp_la_OBJCXXFLAGS = $(AM_OBJCXXFLAGS) -x objective-c++ \
+  -std=c++11 -fblocks -fvisibility=hidden
+endif
 
 noinst_HEADERS =
 noinst_HEADERS += ../dec/vp8_dec.h

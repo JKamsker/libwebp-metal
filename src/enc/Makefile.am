@@ -35,6 +35,13 @@ libwebpencode_la_SOURCES += vp8l_enc.c
 libwebpencode_la_SOURCES += vp8li_enc.h
 libwebpencode_la_SOURCES += webp_enc.c
 
+if ENABLE_METAL
+libwebpencode_la_SOURCES += metal_enc.c
+libwebpencode_la_SOURCES += picture_csp_enc_metal.mm
+libwebpencode_la_OBJCXXFLAGS = $(AM_OBJCXXFLAGS) -x objective-c++ \
+  -std=c++11 -fblocks -fvisibility=hidden
+endif
+
 libwebpencodeinclude_HEADERS =
 libwebpencodeinclude_HEADERS += ../webp/encode.h
 libwebpencodeinclude_HEADERS += ../webp/types.h

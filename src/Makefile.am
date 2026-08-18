@@ -31,6 +31,9 @@ libwebp_la_LIBADD += dec/libwebpdecode.la
 libwebp_la_LIBADD += dsp/libwebpdsp.la
 libwebp_la_LIBADD += enc/libwebpencode.la
 libwebp_la_LIBADD += utils/libwebputils.la
+if ENABLE_METAL
+libwebp_la_LIBADD += $(METAL_LIBS)
+endif
 
 # Use '-no-undefined' to declare that libwebp does not depend on any libraries
 # other than the ones listed on the command line, i.e., after linking, it will

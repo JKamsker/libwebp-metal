@@ -2,17 +2,6 @@ name: Metal correctness
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "17 3 * * 1"
-  push:
-    branches: [main]
-    paths:
-      - ".github/workflows/metal-correctness.yml"
-      - "CMakeLists.txt"
-      - "makefile.unix"
-      - "scripts/test_metal.sh"
-      - "src/dsp/**"
-      - "src/enc/**"
 
 permissions:
   contents: read
@@ -23,12 +12,15 @@ concurrency:
 
 jobs:
   real-metal:
-    # These labels intentionally select a project-owned physical Mac. Do not
-    # replace them with a generic hosted macOS image and call it GPU coverage.
+    name: Physical Metal correctness (self-hosted ARM64)
+    # This manual workflow intentionally never executes pull-request code on a
+    # self-hosted runner. Dispatch only a reviewed, trusted commit.
     runs-on: [self-hosted, macOS, ARM64, metal]
     timeout-minutes: 45
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
       - name: Record runner environment
         run: |
           mkdir -p artifacts
@@ -40,6 +32,19 @@ jobs:
           xcodebuild -version > artifacts/xcode.txt 2>&1 || true
           pmset -g batt > artifacts/power.txt 2>&1 || true
           pmset -g therm > artifacts/thermal.txt 2>&1 || true
+      - name: Require physical ARM64 Metal device
+        run: |
+          test "$RUNNER_ARCH" = ARM64
+          test "$(uname -m)" = arm64
+          xcrun swift -e '
+            import Metal
+            guard let device = MTLCreateSystemDefaultDevice() else {
+              fatalError("no Metal device")
+            }
+            print("name=\(device.name)")
+            print("registryID=\(device.registryID)")
+          ' > artifacts/metal-device.txt
+          cat artifacts/metal-device.txt
       - name: Configure Metal build
         run: >-
           cmake -S . -B build -G Ninja
@@ -57,7 +62,85 @@ jobs:
         env:
           WEBP_TEST_BIN_DIR: ${{ github.workspace }}/build
           WEBP_TEST_REQUIRE_METAL: "1"
-        run: scripts/test_metal.sh
+          WEBP_TEST_METAL_LOG: >-
+            ${{ github.workspace }}/artifacts/forced-metal-dispatch.log
+          WEBP_ACCELERATOR: metal
+          WEBP_METAL: "1"
+        run: |
+          status=0
+          scripts/test_metal.sh \
+            > artifacts/forced-metal.stdout \
+            2> artifacts/forced-metal.stderr || status=$?
+          cat artifacts/forced-metal.stdout
+          cat artifacts/forced-metal-dispatch.log >&2
+          cat artifacts/forced-metal.stderr >&2
+          exit "$status"
+      - name: Public API adversarial coverage
+        env:
+          WEBP_ACCELERATOR: metal
+        run: |
+          cc -std=c99 -Wall -Wextra -Werror \
+            -I"${{ github.workspace }}" \
+            -I"${{ github.workspace }}/src" \
+            tests/metal_adversarial_test.c \
+            build/libwebp.a build/libsharpyuv.a \
+            -framework Foundation -framework Metal -lc++ -lm \
+            -o build/metal_adversarial_test
+          for mode in matrix transform output-strides cancellation; do
+            build/metal_adversarial_test "$mode" \
+              2> "artifacts/adversarial-$mode.log"
+          done
+          grep -q "WebP-Metal: hash candidates" \
+            artifacts/adversarial-matrix.log
+          grep -q "WebP-Metal: transformed" \
+            artifacts/adversarial-transform.log
+          grep -q "WebP-Metal: lossy RGB->YUV" \
+            artifacts/adversarial-output-strides.log
+          grep -q "WebP-Metal: transformed" \
+            artifacts/adversarial-cancellation.log
+      - name: Configure sanitizer build
+        run: >-
+          cmake -S . -B build-sanitized -G Ninja
+          -DCMAKE_BUILD_TYPE=Debug
+          -DWEBP_ENABLE_METAL=ON
+          -DWEBP_BUILD_ANIM_UTILS=OFF
+          -DWEBP_BUILD_CWEBP=OFF
+          -DWEBP_BUILD_DWEBP=OFF
+          -DWEBP_BUILD_EXTRAS=OFF
+          -DWEBP_BUILD_GIF2WEBP=OFF
+          -DWEBP_BUILD_IMG2WEBP=OFF
+          -DWEBP_BUILD_VWEBP=OFF
+          -DWEBP_BUILD_WEBPINFO=OFF
+          -DWEBP_BUILD_WEBPMUX=OFF
+          -DCMAKE_C_FLAGS="-fsanitize=undefined -fno-omit-frame-pointer"
+          -DCMAKE_OBJCXX_FLAGS="-fsanitize=undefined -fno-omit-frame-pointer"
+          -DCMAKE_EXE_LINKER_FLAGS="-fsanitize=undefined"
+      - name: Forced Metal sanitizer fuzz replay
+        env:
+          WEBP_ACCELERATOR: metal
+          WEBP_METAL: "1"
+          WEBP_METAL_MIN_PIXELS: "0"
+          WEBP_METAL_HASH: "1"
+          WEBP_METAL_HASH_MIN_PIXELS: "0"
+          WEBP_METAL_LOSSY: "1"
+          WEBP_METAL_LOSSY_MIN_PIXELS: "0"
+          WEBP_METAL_VERBOSE: "1"
+          UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+        run: |
+          cmake --build build-sanitized --target webp --parallel 2
+          clang -std=c99 -Wall -Wextra -Werror \
+            -DWEBP_FUZZ_STANDALONE \
+            -fsanitize=undefined -fno-omit-frame-pointer \
+            -I"${{ github.workspace }}/src" \
+            tests/metal_api_fuzzer.c \
+            build-sanitized/libwebp.a build-sanitized/libsharpyuv.a \
+            -framework Foundation -framework Metal -lc++ -lm \
+            -o build-sanitized/metal_api_fuzzer_replay
+          build-sanitized/metal_api_fuzzer_replay \
+            2> artifacts/ubsan-metal.log
+          grep -q "WebP-Metal: transformed" artifacts/ubsan-metal.log
+          grep -q "WebP-Metal: hash candidates" artifacts/ubsan-metal.log
+          grep -q "WebP-Metal: lossy RGB->YUV" artifacts/ubsan-metal.log
       - name: Preserve diagnostics
         if: always()
         uses: actions/upload-artifact@v4

@@ -275,6 +275,13 @@ time. No descriptor bit, request, threshold, or default is added.
 
 All validation above is untimed. No new benchmark lease was requested or used.
 
+The 2026-08-18 release/build hardening follow-up added installed static/shared
+CMake consumers, explicit Autotools Metal off/on coverage, installed
+header/export comparison, adversarial public-API tests, and a forced-Metal
+UBSan mutation harness. This is correctness and distribution evidence
+only: it did not run timed workloads, change thresholds, or promote any
+research-only path.
+
 ## Remaining uncertainties
 
 - Performance evidence comes from one M4 Pro on one day. Transform candidates

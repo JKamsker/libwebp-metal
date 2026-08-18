@@ -7,7 +7,8 @@ encoder="$binary_dir/cwebp"
 decoder="$binary_dir/dwebp"
 temporary_dir=$(mktemp -d "${TMPDIR:-/tmp}/libwebp-metal-test.XXXXXX")
 trap 'rm -rf "$temporary_dir"' EXIT HUP INT TERM
-metal_log="$temporary_dir/metal.log"
+metal_log=${WEBP_TEST_METAL_LOG:-"$temporary_dir/metal.log"}
+: >"$metal_log"
 require_metal=${WEBP_TEST_REQUIRE_METAL:-0}
 run_ablation=${WEBP_METAL_ABLATION_EXPERIMENT:-0}
 metal_verbose=0
