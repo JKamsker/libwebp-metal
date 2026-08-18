@@ -1,0 +1,56 @@
+{
+  "schema": "libwebp-next-boundary-evaluation-v1",
+  "base_commit": "cdf2539b29bb767b1557e5069cfee9c111f07358",
+  "designer_commit": "cdf64a57790d3e7d52fe2685afe0976e41cbe633",
+  "executor_evidence_commit": "78eb0f2e8a47433e699bdd0efa3aee9b78f03408",
+  "manifest_sha256": "476c54607a463908ed44cf8e8d1b955af35f3def6f15d11da423a1bd90d6e969",
+  "timed_work_executed": false,
+  "performance_claim_supported": false,
+  "protocol": {
+    "designer_then_executor_commit_order_verified": true,
+    "exact_commands_recorded": true,
+    "declared_experiment_order": ["predictor_boundary", "backref_exact"],
+    "distinct_attempt_timestamps_available": false,
+    "lease_acquired": false,
+    "lease_present_after_audit": false,
+    "source_or_design_changed_by_executor": false,
+    "cuda_used": false,
+    "raw_artifact_hashes_verified": true
+  },
+  "blocker": {
+    "phase": "operator preflight before lease acquisition",
+    "failure": "ValueError: unrecognized configuration name",
+    "operation": "os.sysconf(\"SC_AVPHYS_PAGES\")",
+    "affected_experiments": ["predictor_boundary", "backref_exact"]
+  },
+  "experiments": {
+    "predictor_boundary": {
+      "status": "blocked_before_measurement",
+      "timing": "unobserved",
+      "correctness_and_determinism": "not_assessable_from_executor_run",
+      "cold_warm_strata": "unobserved",
+      "content_method_strata": "unobserved",
+      "median_mad_bootstrap_p95": "not_assessable",
+      "resource_ceilings": "not_evaluated",
+      "decision": "defer_without_performance_disposition_and_retain_research_code"
+    },
+    "backref_exact": {
+      "status": "blocked_before_measurement",
+      "timing": "unobserved",
+      "correctness_and_determinism": "not_assessable_from_executor_run",
+      "cold_warm_strata": "unobserved",
+      "content_method_strata": "unobserved",
+      "median_mad_bootstrap_p95": "not_assessable",
+      "resource_ceilings": "not_evaluated",
+      "decision": "defer_without_performance_disposition_and_retain_research_code"
+    }
+  },
+  "consequences": {
+    "production_encoder_change": false,
+    "threshold_or_policy_change": false,
+    "accelerator_abi_change": false,
+    "new_experiment_defined": false,
+    "research_operator_portability_fix": "Darwin vm_stat fallback with fail-closed parsing and an untimed regression guard",
+    "future_timing": "requires a separately released later cycle; none ran during evaluation"
+  }
+}

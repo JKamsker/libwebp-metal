@@ -7,6 +7,14 @@
 > redistribution rights. Experiments 1--3 and experiment 4's generated-input
 > lossy suite remain in the bounded core. See
 > [publication-evidence-audit-20260818.md](publication-evidence-audit-20260818.md).
+>
+> **2026-08-18 next-boundary addendum:** the later frozen predictor/backref
+> decomposition completed on publication corpus v1. Predictor
+> selector-plus-apply passed its share tests but failed a required recorder
+> overhead cell; standard exact LZ77 was only 3.13--4.29% of required holdout
+> backref boundaries and was rejected as dominant. No production change was
+> promoted. See
+> [next-boundary-experiment-evaluation-20260818.md](next-boundary-experiment-evaluation-20260818.md).
 
 ## Scope and evidence boundary
 
