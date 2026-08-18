@@ -1,0 +1,128 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/git",
+        "clone",
+        "--no-hardlinks",
+        "--no-checkout",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7/source",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-workspace-remote-v5-build-kf30b07c/build-baseline"
+      ],
+      "cwd": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7/source"
+    },
+    {
+      "argv": [
+        "/usr/bin/git",
+        "checkout",
+        "--detach",
+        "13374003895d81f4e85b6cf77ad82a48f9fc5bc4"
+      ],
+      "cwd": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-workspace-remote-v5-build-kf30b07c/build-baseline"
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "-f",
+        "makefile.unix",
+        "-j4",
+        "CC=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "CXX=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+        "AR=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+        "RANLIB=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+        "CFLAGS=-O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "LDFLAGS=-arch arm64 -isysroot /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "EXTRA_FLAGS=",
+        "DWEBP_LIBS=",
+        "CWEBP_LIBS=",
+        "GIF_LIBS=",
+        "WEBP_ENABLE_METAL=0",
+        "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_DETERMINISTIC_BUILD=1",
+        "WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT=0",
+        "examples/cwebp",
+        "examples/dwebp"
+      ],
+      "cwd": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-workspace-remote-v5-build-kf30b07c/build-baseline"
+    },
+    {
+      "argv": [
+        "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-O3",
+        "-DNDEBUG",
+        "-arch",
+        "arm64",
+        "-isysroot",
+        "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-I/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-workspace-remote-v5-build-kf30b07c/build-baseline",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-workspace-remote-v5-build-kf30b07c/build-baseline/tools/backref_cost_workspace_remote_v5_experiment_runner.c",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-workspace-remote-v5-build-kf30b07c/build-baseline/src/libwebp.a",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-workspace-remote-v5-build-kf30b07c/build-baseline/sharpyuv/libsharpyuv.a",
+        "-o",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-workspace-remote-v5-build-kf30b07c/build-baseline/tools/backref_cost_workspace_remote_v5_experiment_runner"
+      ],
+      "cwd": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-workspace-remote-v5-build-kf30b07c/build-baseline"
+    },
+    {
+      "argv": [
+        "/usr/bin/git",
+        "clone",
+        "--no-hardlinks",
+        "--no-checkout",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7/source",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-workspace-remote-v5-build-kf30b07c/build-candidate"
+      ],
+      "cwd": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5/run.3XLdC7/source"
+    },
+    {
+      "argv": [
+        "/usr/bin/git",
+        "checkout",
+        "--detach",
+        "13374003895d81f4e85b6cf77ad82a48f9fc5bc4"
+      ],
+      "cwd": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-workspace-remote-v5-build-kf30b07c/build-candidate"
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "-f",
+        "makefile.unix",
+        "-j4",
+        "CC=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "CXX=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+        "AR=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+        "RANLIB=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+        "CFLAGS=-O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "LDFLAGS=-arch arm64 -isysroot /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "EXTRA_FLAGS=",
+        "DWEBP_LIBS=",
+        "CWEBP_LIBS=",
+        "GIF_LIBS=",
+        "WEBP_ENABLE_METAL=0",
+        "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_DETERMINISTIC_BUILD=1",
+        "WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT=1",
+        "examples/cwebp",
+        "examples/dwebp",
+        "tools/backref_cost_workspace_remote_v5_experiment_runner"
+      ],
+      "cwd": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-workspace-remote-v5-build-kf30b07c/build-candidate"
+    }
+  ],
+  "outputs": {
+    "baseline": {
+      "examples/cwebp": "519da2bc3b924bef9cfaeada855295f1460fd9e128c5a9052207747cb34dc83d",
+      "examples/dwebp": "e71215c0e3c9925d2565ae48c67b0d6d6c2a7ba972440ba58767bd3178740e9c",
+      "sharpyuv/libsharpyuv.a": "e0b037797135a294d1dedd137660ec03ed9bd0dc3f9bb76faab822ad16568cf7",
+      "src/libwebp.a": "462e199962e25565b859c8b7c570852023351d18f73337923d2273007bc0efaf",
+      "tools/backref_cost_workspace_remote_v5_experiment_runner": "430fefe598b29c51c2b9d7faef44d29eb074b88bc3f5a7c52b96f005e5b5b3d7"
+    },
+    "candidate": {
+      "examples/cwebp": "7a854628fb3ddbcd457a4c9d69284020cea296a696da4bac2cb81e69bcf3cbce",
+      "examples/dwebp": "a051c9eafb226c71ef9aad643bbe95352bd3a2353c7c888cb4d0004c1a6c4a8d",
+      "sharpyuv/libsharpyuv.a": "f6e0b239cf1a54952d3d954ae7ec2e21f4285c1bd8a3cf7c694882f32096505c",
+      "src/libwebp.a": "ac74dece4a69f74b03c9a934c0d6553cffdc78a63f3985f0c6fa0ed4537d6f92",
+      "tools/backref_cost_workspace_remote_v5_experiment_runner": "a9f3d6a7da499fed72ed0f8d5ae5d704a5e4d3367caaf696c935c508ad1a14d4"
+    }
+  },
+  "schema": "libwebp-backref-cost-workspace-remote-v5-build-v1"
+}

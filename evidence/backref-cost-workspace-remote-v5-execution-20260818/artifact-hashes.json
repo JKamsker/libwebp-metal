@@ -1,0 +1,105 @@
+{
+  "artifacts": [
+    {
+      "bytes": 6637,
+      "path": "build-commands.json",
+      "sha256": "6d350c630cf8d50a260862c99de7571f33bef7e56bc834f1728cc76d7443518a"
+    },
+    {
+      "bytes": 105860,
+      "path": "build.log",
+      "sha256": "012287b31ac39da1b10a362009fb0d440a66e3e2ec937bbb2dadb122662622cc"
+    },
+    {
+      "bytes": 263687,
+      "path": "commands.jsonl",
+      "sha256": "e1b069a949d72ff2fd82b2e810e3742c5dc264e329b0ee0d420093b52fee0367"
+    },
+    {
+      "bytes": 13597,
+      "path": "correctness.json",
+      "sha256": "b445a72eece191e3feaee051eede2f1c78623e02ada1a2fc80d851aa79348dd8"
+    },
+    {
+      "bytes": 6595,
+      "path": "evaluation.json",
+      "sha256": "1d4a1d13855c21cd881b7dea91edd5f2c0c5936b21bc860c4160ab5981027dc1"
+    },
+    {
+      "bytes": 322,
+      "path": "lease-record.json",
+      "sha256": "9e139dd0843b0fff6867be68a1b1c9b782d2585f0f831356786ee795f97dfaa8"
+    },
+    {
+      "bytes": 320,
+      "path": "operator-report.md",
+      "sha256": "7877354bfd40b9b90c458dbbf5ee65ff94a079a80a64e5fcfafc5e63d0ad1a61"
+    },
+    {
+      "bytes": 136,
+      "path": "operator-stage.json",
+      "sha256": "e1fd7b8f42ec4addc99e0e22d7ac7efefc320114f8ee123a9b6edfd8fd74ee8c"
+    },
+    {
+      "bytes": 163,
+      "path": "operator-status.json",
+      "sha256": "919b2648b1594d77f60b5696cf55ba78e3b130adfae2bd992f7450b01574ffc3"
+    },
+    {
+      "bytes": 3398,
+      "path": "post-timing.json",
+      "sha256": "841663e5a526405a29db31630f5365ac5e4da4576cca75ed19562b4cd2972cbf"
+    },
+    {
+      "bytes": 3396,
+      "path": "pre-timing.json",
+      "sha256": "defd3e0d30e112e274f08ffdb50fa08661e36e46d403bc6c9ff62d731b5338b7"
+    },
+    {
+      "bytes": 3394,
+      "path": "preflight.json",
+      "sha256": "a4f9ac727a91978a9003eb7a1b7ff8e3380051931a267a2cd9189400b0708535"
+    },
+    {
+      "bytes": 94449,
+      "path": "processes-post-timing.txt",
+      "sha256": "0f982c88779e775b7328f56a7734a946011e200b5ee9acd954352a22bef8c4d0"
+    },
+    {
+      "bytes": 94965,
+      "path": "processes-pre-timing.txt",
+      "sha256": "01980065928b16028356234592e953a5236684fe86e7935bb255efe647d86351"
+    },
+    {
+      "bytes": 93477,
+      "path": "processes-preflight.txt",
+      "sha256": "822c0843584209d8d99a51405b01800bf3eff822811875c543389ac447af4e5a"
+    },
+    {
+      "bytes": 628416,
+      "path": "records.jsonl",
+      "sha256": "ff47b72540f2517f2f82d5a38217999c4b045adbca1f6f1d91dc70c6354b4e89"
+    },
+    {
+      "bytes": 516,
+      "path": "resources.json",
+      "sha256": "87bbe1c9da7c0940b80335d938f83cd057ff110aa460ccb2cf4ba0ae06a4fa87"
+    },
+    {
+      "bytes": 4971,
+      "path": "source-hashes.json",
+      "sha256": "8c80451c098b8b219f9d9bb9e8af7a41cd9d4bde89e586461d3f8b562a98332f"
+    },
+    {
+      "bytes": 42525,
+      "path": "timed-child-stderr.log",
+      "sha256": "4525407aef56751e29852e75a71b0db08c238e81ae6e94aa759c7c120303c28d"
+    },
+    {
+      "bytes": 7851,
+      "path": "toolchain.json",
+      "sha256": "7351ca05749749f5db4ce62cf4fa0234463d0a9a8a97393973f7684ef0152465"
+    }
+  ],
+  "schema": "libwebp-backref-cost-workspace-remote-v5-artifact-hashes-v1"
+}

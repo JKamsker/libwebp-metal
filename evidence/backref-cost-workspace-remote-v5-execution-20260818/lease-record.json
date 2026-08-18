@@ -1,0 +1,9 @@
+{
+  "acquired": true,
+  "acquired_at_utc": "2026-08-18T19:36:43Z",
+  "acquisition_attempted": true,
+  "path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-workspace-remote-v5.lock",
+  "released": true,
+  "released_at_utc": "2026-08-18T19:48:04Z",
+  "schema": "libwebp-backref-cost-workspace-remote-v5-lease-v1"
+}

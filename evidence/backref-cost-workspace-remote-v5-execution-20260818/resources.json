@@ -1,0 +1,14 @@
+{
+  "command_processes": 408,
+  "elapsed_seconds": 681.320089834,
+  "lease_released": true,
+  "maximum_child_rss_bytes": 281722880,
+  "measured_samples": 1560,
+  "output_bytes_before_index": 1373679,
+  "parallel_timed_processes": 1,
+  "post_timing_available_disk_bytes": 18950467584,
+  "pre_timing_available_disk_bytes": 18959142912,
+  "preflight_available_disk_bytes": 19113754624,
+  "schema": "libwebp-backref-cost-workspace-remote-v5-resources-v1",
+  "source_commit": "13374003895d81f4e85b6cf77ad82a48f9fc5bc4"
+}

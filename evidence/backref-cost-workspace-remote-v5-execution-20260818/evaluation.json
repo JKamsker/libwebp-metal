@@ -1,0 +1,250 @@
+{
+  "cells": [
+    {
+      "case_id": "photo-medium",
+      "lifecycle": "cold",
+      "method": 4,
+      "p95_ratio": 0.9929091528457221,
+      "paired_median_ratio": 1.0031601340302998,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "tune"
+    },
+    {
+      "case_id": "photo-medium",
+      "lifecycle": "warm",
+      "method": 4,
+      "p95_ratio": 0.9979279794467277,
+      "paired_median_ratio": 1.0022652972254351,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "tune"
+    },
+    {
+      "case_id": "photo-medium",
+      "lifecycle": "cold",
+      "method": 6,
+      "p95_ratio": 1.0123363599111914,
+      "paired_median_ratio": 1.0025027260330366,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "tune"
+    },
+    {
+      "case_id": "photo-medium",
+      "lifecycle": "warm",
+      "method": 6,
+      "p95_ratio": 1.0082511427276364,
+      "paired_median_ratio": 1.0064041241040451,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "tune"
+    },
+    {
+      "case_id": "graphic-medium",
+      "lifecycle": "cold",
+      "method": 4,
+      "p95_ratio": 1.0038613437804682,
+      "paired_median_ratio": 0.9959192796229434,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "tune"
+    },
+    {
+      "case_id": "graphic-medium",
+      "lifecycle": "warm",
+      "method": 4,
+      "p95_ratio": 0.9961661258819409,
+      "paired_median_ratio": 0.992469779489523,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "tune"
+    },
+    {
+      "case_id": "graphic-medium",
+      "lifecycle": "cold",
+      "method": 6,
+      "p95_ratio": 1.003781618237676,
+      "paired_median_ratio": 0.9961198366472518,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "tune"
+    },
+    {
+      "case_id": "graphic-medium",
+      "lifecycle": "warm",
+      "method": 6,
+      "p95_ratio": 0.9953050376312393,
+      "paired_median_ratio": 0.9977224135852869,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "tune"
+    },
+    {
+      "case_id": "texture-medium",
+      "lifecycle": "cold",
+      "method": 4,
+      "p95_ratio": 0.9871151182258433,
+      "paired_median_ratio": 1.002387917946042,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "tune"
+    },
+    {
+      "case_id": "texture-medium",
+      "lifecycle": "warm",
+      "method": 4,
+      "p95_ratio": 1.228303073461259,
+      "paired_median_ratio": 1.0281816334787846,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "tune"
+    },
+    {
+      "case_id": "texture-medium",
+      "lifecycle": "cold",
+      "method": 6,
+      "p95_ratio": 1.0044442577251886,
+      "paired_median_ratio": 0.9932072541276533,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "tune"
+    },
+    {
+      "case_id": "texture-medium",
+      "lifecycle": "warm",
+      "method": 6,
+      "p95_ratio": 1.0105029668909662,
+      "paired_median_ratio": 1.0017008530200897,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "tune"
+    },
+    {
+      "case_id": "photo-large",
+      "lifecycle": "cold",
+      "method": 4,
+      "p95_ratio": 1.0207195832997917,
+      "paired_median_ratio": 1.0048123373258806,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "holdout"
+    },
+    {
+      "case_id": "photo-large",
+      "lifecycle": "warm",
+      "method": 4,
+      "p95_ratio": 1.0027872613596747,
+      "paired_median_ratio": 1.0028065729940394,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "holdout"
+    },
+    {
+      "case_id": "photo-large",
+      "lifecycle": "cold",
+      "method": 6,
+      "p95_ratio": 1.0037286278050843,
+      "paired_median_ratio": 1.0025813014144669,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "holdout"
+    },
+    {
+      "case_id": "photo-large",
+      "lifecycle": "warm",
+      "method": 6,
+      "p95_ratio": 1.0013447360716432,
+      "paired_median_ratio": 1.0018490382571965,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "holdout"
+    },
+    {
+      "case_id": "graphic-large",
+      "lifecycle": "cold",
+      "method": 4,
+      "p95_ratio": 1.0383280053682549,
+      "paired_median_ratio": 0.9967796193069512,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "holdout"
+    },
+    {
+      "case_id": "graphic-large",
+      "lifecycle": "warm",
+      "method": 4,
+      "p95_ratio": 1.011375359911564,
+      "paired_median_ratio": 0.9973005459889661,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "holdout"
+    },
+    {
+      "case_id": "graphic-large",
+      "lifecycle": "cold",
+      "method": 6,
+      "p95_ratio": 0.9971660503949498,
+      "paired_median_ratio": 0.9913845934312032,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "holdout"
+    },
+    {
+      "case_id": "graphic-large",
+      "lifecycle": "warm",
+      "method": 6,
+      "p95_ratio": 1.0031512612529894,
+      "paired_median_ratio": 1.004241158453127,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "holdout"
+    },
+    {
+      "case_id": "texture-large",
+      "lifecycle": "cold",
+      "method": 4,
+      "p95_ratio": 0.9953717157054941,
+      "paired_median_ratio": 0.9994403230411536,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "holdout"
+    },
+    {
+      "case_id": "texture-large",
+      "lifecycle": "warm",
+      "method": 4,
+      "p95_ratio": 1.0023268716602596,
+      "paired_median_ratio": 1.0003153012652368,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "holdout"
+    },
+    {
+      "case_id": "texture-large",
+      "lifecycle": "cold",
+      "method": 6,
+      "p95_ratio": 0.8700868654084689,
+      "paired_median_ratio": 0.9926940276778004,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "holdout"
+    },
+    {
+      "case_id": "texture-large",
+      "lifecycle": "warm",
+      "method": 6,
+      "p95_ratio": 0.9972213484138261,
+      "paired_median_ratio": 1.0001263504888906,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "holdout"
+    }
+  ],
+  "command_processes": 408,
+  "decision": "reject",
+  "measured_samples": 1560,
+  "sample_rows": 1848,
+  "schema": "libwebp-backref-cost-workspace-remote-v5-evaluation-v1",
+  "timing_authority": "end-to-end WebPEncode only"
+}
