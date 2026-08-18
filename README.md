@@ -112,8 +112,10 @@ rows are scored in launch order against the accumulated residual histogram of
 the previous rows, mirroring the CPU cost model; the chosen predictor image is
 valid but not byte-identical to the CPU search, so lossless modes promise
 decoded-pixel parity (as with the accelerated cross-color search). It declines
-near-lossless residual quantization and non-exact inputs containing fully
-transparent pixels, whose RGB cleanup has scan-order dependencies.
+non-exact requests that would rewrite the source in scan order: near-lossless
+residual quantization and inputs containing fully transparent pixels. Exact
+encodes bypass both rewrites, so the stage accepts them at every
+near-lossless strength.
 `WEBP_CUDA_HISTOGRAM=1` enables exact population counting for the full-image
 backward-reference histograms used during candidate-cost evaluation and final
 Huffman preparation. It uploads the encoder's at-most-16 linked command spans

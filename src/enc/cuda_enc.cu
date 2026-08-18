@@ -2518,8 +2518,10 @@ WebPAcceleratorResult CUDAPredictorLocked(
     return WEBP_ACCELERATOR_ERROR;
   }
   // Near-lossless quantization rewrites source pixels in scan order and must
-  // retain the CPU implementation.
-  if (request->max_quantization != 1) {
+  // retain the CPU implementation. Exact encoding bypasses that quantization
+  // entirely (GetResidual takes the PredictBatch branch for every
+  // max_quantization), so exact requests are accepted regardless.
+  if (request->max_quantization != 1 && request->exact == 0) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
   if (static_cast<size_t>(request->width) >
