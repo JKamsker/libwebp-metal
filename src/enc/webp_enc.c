@@ -19,6 +19,7 @@
 #include "src/dec/common_dec.h"
 #include "src/dsp/dsp.h"
 #include "src/enc/cost_enc.h"
+#include "src/enc/backref_cache_search_experiment_enc.h"
 #include "src/enc/profile_enc.h"
 #include "src/enc/boundary_experiment_enc.h"
 #include "src/enc/vp8i_enc.h"
@@ -354,6 +355,7 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
   WebPProfileBeginSession(config, pic);
   WebPPredictorBoundaryBegin(config, pic);
   WebPBackrefExactBegin(config, pic);
+  WebPBackrefCacheSearchBegin(config, pic);
 
   if (!config->lossless) {
     VP8Encoder* enc = NULL;
@@ -368,6 +370,7 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
           WebPProfileEndSession(0, pic->error_code);
           WebPPredictorBoundaryEnd(0, pic->error_code);
           WebPBackrefExactEnd(0, pic->error_code);
+          WebPBackrefCacheSearchEnd(0, pic->error_code);
           return 0;
         }
       } else {
@@ -384,6 +387,7 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
           WebPProfileEndSession(0, pic->error_code);
           WebPPredictorBoundaryEnd(0, pic->error_code);
           WebPBackrefExactEnd(0, pic->error_code);
+          WebPBackrefCacheSearchEnd(0, pic->error_code);
           return 0;
         }
       }
@@ -438,6 +442,7 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
       WebPProfileEndSession(0, pic->error_code);
       WebPPredictorBoundaryEnd(0, pic->error_code);
       WebPBackrefExactEnd(0, pic->error_code);
+      WebPBackrefCacheSearchEnd(0, pic->error_code);
       return 0;
     }
 
@@ -452,5 +457,6 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
   WebPProfileEndSession(ok, pic->error_code);
   WebPPredictorBoundaryEnd(ok, pic->error_code);
   WebPBackrefExactEnd(ok, pic->error_code);
+  WebPBackrefCacheSearchEnd(ok, pic->error_code);
   return ok;
 }

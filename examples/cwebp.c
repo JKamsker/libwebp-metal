@@ -691,6 +691,9 @@ static void HelpLong(void) {
 #if defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT)
   printf("  -backref_exact_repetitions <n> repeat a discarded encode for the backref experiment\n");
 #endif
+#if defined(WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT)
+  printf("  -backref_cache_search_repetitions <n> repeat a discarded encode for the focused cache-search experiment\n");
+#endif
   printf("\n");
   printf("Supported input formats:\n  %s\n", WebPGetEnabledInputFileFormats());
 }
@@ -740,9 +743,10 @@ int main(int argc, const char* argv[]) {
   int profile_repetitions = 1;
 #endif
 #if defined(WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT)
   int boundary_repetitions = 1;
-  int boundary_experiment = 0;  // 1 predictor, 2 backref.
+  int boundary_experiment = 0;  // 1 predictor, 2 exact, 3 cache search.
 #endif
   int metadata_written = 0;
   WebPPicture picture;
@@ -888,6 +892,13 @@ int main(int argc, const char* argv[]) {
                c + 1 < argc) {
       boundary_repetitions = ExUtilGetInt(argv[++c], 0, &parse_error);
       boundary_experiment = 2;
+      if (boundary_repetitions < 1) parse_error = 1;
+#endif
+#if defined(WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT)
+    } else if (!strcmp(argv[c], "-backref_cache_search_repetitions") &&
+               c + 1 < argc) {
+      boundary_repetitions = ExUtilGetInt(argv[++c], 0, &parse_error);
+      boundary_experiment = 3;
       if (boundary_repetitions < 1) parse_error = 1;
 #endif
     } else if (!strcmp(argv[c], "-low_memory")) {
@@ -1103,11 +1114,14 @@ int main(int argc, const char* argv[]) {
   }
 #endif
 #if defined(WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT)
   if (boundary_experiment != 0) {
-    const char* const runtime_flag =
-        boundary_experiment == 1 ? "WEBP_PREDICTOR_BOUNDARY_EXPERIMENT"
-                                 : "WEBP_BACKREF_EXACT_EXPERIMENT";
+    const char* const runtime_flag = boundary_experiment == 1
+                                         ? "WEBP_PREDICTOR_BOUNDARY_EXPERIMENT"
+                                     : boundary_experiment == 2
+                                         ? "WEBP_BACKREF_EXACT_EXPERIMENT"
+                                         : "WEBP_BACKREF_CACHE_SEARCH_EXPERIMENT";
     if (getenv(runtime_flag) == NULL || strcmp(getenv(runtime_flag), "1") != 0) {
       fprintf(stderr, "Error! boundary repetitions require %s=1.\n",
               runtime_flag);
@@ -1283,7 +1297,8 @@ int main(int argc, const char* argv[]) {
   }
 #if defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT) || \
     defined(WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT)
   {
     int experiment_repetitions = 1;
     int experiment_iteration;
@@ -1291,7 +1306,8 @@ int main(int argc, const char* argv[]) {
     experiment_repetitions = profile_repetitions;
 #endif
 #if defined(WEBP_USE_PREDICTOR_BOUNDARY_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_EXACT_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT)
     if (boundary_experiment != 0) {
       experiment_repetitions = boundary_repetitions;
     }

@@ -46,6 +46,8 @@ option(WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT
        "Build the predictor selector/map boundary measurement experiment." OFF)
 option(WEBP_BUILD_BACKREF_EXACT_EXPERIMENT
        "Build the exact backward-reference boundary measurement experiment." OFF)
+option(WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT
+       "Build the focused backward-reference cache-search experiment." OFF)
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
 option(WEBP_BUILD_CWEBP "Build the cwebp command line tool." ON)
 option(WEBP_BUILD_DWEBP "Build the dwebp command line tool." ON)
@@ -96,7 +98,8 @@ if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
   endif()
 endif()
 if((WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT OR
-    WEBP_BUILD_BACKREF_EXACT_EXPERIMENT) AND NOT WEBP_ENABLE_METAL)
+    WEBP_BUILD_BACKREF_EXACT_EXPERIMENT OR
+    WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT) AND NOT WEBP_ENABLE_METAL)
   message(FATAL_ERROR
           "Dominant-boundary experiments require WEBP_ENABLE_METAL=ON.")
 endif()
@@ -353,6 +356,10 @@ if(WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT OR
    WEBP_BUILD_BACKREF_EXACT_EXPERIMENT)
   list(APPEND WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/boundary_experiment_enc.c)
 endif()
+if(WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT)
+  list(APPEND WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/backref_cache_search_experiment_enc.c)
+endif()
 
 if(WEBP_ENABLE_METAL)
   set_source_files_properties(
@@ -554,6 +561,10 @@ if(WEBP_BUILD_BACKREF_EXACT_EXPERIMENT)
   target_compile_definitions(
     webpencode PRIVATE WEBP_USE_BACKREF_EXACT_EXPERIMENT=1)
 endif()
+if(WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT=1)
+endif()
 add_library(webp $<TARGET_OBJECTS:webpdecode> $<TARGET_OBJECTS:webpdsp>
                  $<TARGET_OBJECTS:webpencode> $<TARGET_OBJECTS:webputils>)
 if(WEBP_ENABLE_FBOUNDS_SAFETY)
@@ -719,6 +730,10 @@ if(WEBP_BUILD_CWEBP)
   if(WEBP_BUILD_BACKREF_EXACT_EXPERIMENT)
     target_compile_definitions(
       cwebp PRIVATE WEBP_USE_BACKREF_EXACT_EXPERIMENT=1)
+  endif()
+  if(WEBP_BUILD_BACKREF_CACHE_SEARCH_EXPERIMENT)
+    target_compile_definitions(
+      cwebp PRIVATE WEBP_USE_BACKREF_CACHE_SEARCH_EXPERIMENT=1)
   endif()
   if(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT)
     target_compile_definitions(
