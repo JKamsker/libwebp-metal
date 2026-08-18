@@ -22,6 +22,7 @@ shared experimental build or runtime switch.
 | 13 independent v2 remote backref-cost workspace A/B | `WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT` | `WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT` | `WEBP_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT=1` | unchanged validated workspace candidate under wholly new v2 source/symbol/runner/protocol names |
 | 14 independent v3 remote backref-cost workspace A/B | `WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT` | `WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT` | `WEBP_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT=1` | unchanged validated workspace candidate with repository-context bundle admission and wholly new v3 identities |
 | 15 independent v4 remote backref-cost workspace A/B | `WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT` | `WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT` | `WEBP_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT=1` | exact v3 candidate with indexed Python archive return and independent lease/cleanup evidence channels |
+| 16 independent v5 remote backref-cost workspace A/B | `WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT` | `WEBP_USE_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT` | `WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT=1` | unchanged recorder-free candidate with admitted makefile toolchain and indexed evidence on every controlled refusal |
 
 Every runtime value is exact: values other than `1` are disabled. Every timed
 launcher additionally requires `WEBP_BENCHMARK_SESSION=exclusive`. Correctness,

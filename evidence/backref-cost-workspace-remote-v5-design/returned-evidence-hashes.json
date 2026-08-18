@@ -1,0 +1,126 @@
+{
+  "artifacts": [
+    {
+      "bytes": 12359,
+      "path": "early-refusal-return.json",
+      "sha256": "285948428bf6390979a285cb1652a88df2707b6e29d30106e670adfe0b979701"
+    },
+    {
+      "bytes": 550,
+      "path": "early-refusal-returned/artifact-hashes.json",
+      "sha256": "5a01e10a768a972539b542f89004bdfce0227318f37a1e969d4cb7f28a5caa6b"
+    },
+    {
+      "bytes": 160,
+      "path": "early-refusal-returned/lease-record.json",
+      "sha256": "40a1f73a9d28df906aeca387fad5994fd01d0eaf3760334d0fccbb23ecc270f7"
+    },
+    {
+      "bytes": 162,
+      "path": "early-refusal-returned/operator-status.json",
+      "sha256": "6665668f4467ec07e43b8a70f0497f5942381504cc2afe28336ce487b2d95942"
+    },
+    {
+      "bytes": 298,
+      "path": "early-refusal-returned/refusal.json",
+      "sha256": "040ced3b33cec2cd8e097c53f1a4eff65a7c476d2cd1235764c01d6f1d8e41bd"
+    },
+    {
+      "bytes": 168,
+      "path": "fixtures/absolute.tar.gz",
+      "sha256": "0ada3dcefaeab93b47cfa0e14e5541aaf3b2a056a1c3a4aae010d6f8baf57992"
+    },
+    {
+      "bytes": 161,
+      "path": "fixtures/fifo.tar.gz",
+      "sha256": "bf8f021a593df731018c4e83e7798e15134bd84ddf243da332a5c221e3078f9f"
+    },
+    {
+      "bytes": 173,
+      "path": "fixtures/hardlink.tar.gz",
+      "sha256": "78bb193d2bc05695bc44951d070db64fb6189be6963bad03d490a28893754aa7"
+    },
+    {
+      "bytes": 172,
+      "path": "fixtures/symlink.tar.gz",
+      "sha256": "8f078528c2e3c8b8ecc7aed3edb1d96850add40e357c4838eeb4ca62c37482c4"
+    },
+    {
+      "bytes": 162,
+      "path": "fixtures/traversal.tar.gz",
+      "sha256": "38c9e6417189b8ee4415fba6dfd22208bf5b8fc71e7d929210dcde6b8f58311f"
+    },
+    {
+      "bytes": 10206,
+      "path": "live-validation.json",
+      "sha256": "b17b17b262fe6a31cda42680c00d15d11e3aee9cfa89cb3db37a0dbdbb5d074d"
+    },
+    {
+      "bytes": 1010,
+      "path": "remote-rehearsal-returned/artifact-hashes.json",
+      "sha256": "e378a3c8e2d0b51c9b1e869b6bfa2270a1f9b872ef1b988bf73932ac54063bfb"
+    },
+    {
+      "bytes": 6685,
+      "path": "remote-rehearsal-returned/build-commands.json",
+      "sha256": "6be2f3b2bd514d7ce779546fed114c4f587bef1c66d297a531047888657ff275"
+    },
+    {
+      "bytes": 105894,
+      "path": "remote-rehearsal-returned/build.log",
+      "sha256": "d5f9e9cd955a89cf2be72dfa5caacba50570f154e233c9ea68b56f7d2c405b87"
+    },
+    {
+      "bytes": 13597,
+      "path": "remote-rehearsal-returned/correctness.json",
+      "sha256": "b445a72eece191e3feaee051eede2f1c78623e02ada1a2fc80d851aa79348dd8"
+    },
+    {
+      "bytes": 160,
+      "path": "remote-rehearsal-returned/lease-record.json",
+      "sha256": "40a1f73a9d28df906aeca387fad5994fd01d0eaf3760334d0fccbb23ecc270f7"
+    },
+    {
+      "bytes": 93708,
+      "path": "remote-rehearsal-returned/processes-rehearsal.txt",
+      "sha256": "741c982d32000604f1fa9fedaa031140a97dca8d7809aa23fa0bf6012238df4f"
+    },
+    {
+      "bytes": 9200,
+      "path": "remote-rehearsal-returned/rehearsal.json",
+      "sha256": "dda3cb74ee03ece8c586fd87187db58e55770fcb13522ecec32d3aaa0dc04bdf"
+    },
+    {
+      "bytes": 17199,
+      "path": "remote-rehearsal.json",
+      "sha256": "b70ac1f146a2495be342b3d68be4f1332c15c0b065fa4d5af3a72dcbbd660cca"
+    },
+    {
+      "bytes": 549,
+      "path": "returned/artifact-hashes.json",
+      "sha256": "e7960c1ed308655556dcbbc6b3dd83a57862f0a22135c4703b73e870f1c0dbb7"
+    },
+    {
+      "bytes": 152,
+      "path": "returned/lease-record.json",
+      "sha256": "b7cf407e52c127f7931a1bf27383b2b1e8d6a057cf79b5e0ec5064267aa885da"
+    },
+    {
+      "bytes": 32,
+      "path": "returned/nested/deeper/record.json",
+      "sha256": "44b47c5c16d22761f5fb220dc5b502775be10150714d70aa90ba10e8a6d65b7e"
+    },
+    {
+      "bytes": 29,
+      "path": "returned/root.txt",
+      "sha256": "4362b416ab8b3ce817bbd5e2006b7eafcf4b73e010713e81546dd081cb7ee9cb"
+    },
+    {
+      "bytes": 1297,
+      "path": "runner-toolchain-inspection.json",
+      "sha256": "7449b81877b7172d963b78d58ee9d7296ff417805149173ca289e459051d19f3"
+    }
+  ],
+  "excluded_after_index": [],
+  "schema": "libwebp-backref-cost-workspace-remote-v5-returned-evidence-hashes-v1"
+}

@@ -1,0 +1,85 @@
+{
+  "catalog_schema": "libwebp-backref-cost-workspace-remote-v5-schema-catalog-v1",
+  "experiment_id": "backref_cost_workspace_remote_v5",
+  "protocol_version": 5,
+  "schemas": {
+    "libwebp-backref-cost-workspace-remote-v5-preflight-v1": {
+      "required": ["schema", "stage", "captured_at_utc", "hardware_model", "cpu_brand", "physical_memory_bytes", "available_memory_bytes", "available_disk_bytes", "disk_record", "disk_record_path", "compiler_path", "compiler_version_lines", "sdk_path", "sdk_version", "effective_developer_dir", "effective_developer_dir_environment", "effective_sdkroot_environment", "effective_cc_environment", "low_power_mode_pmset_off", "low_power_mode_profiler_off", "ac_power_effective", "pmset_batt", "pmset_custom", "pmset_thermal", "system_profiler_power", "process_isolation"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-source-hashes-v1": {
+      "required": ["schema", "source_commit", "manifest_sha256", "frozen_artifacts", "candidate_equivalence"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-lease-v1": {
+      "required": ["schema", "path", "acquired", "released", "acquisition_attempted"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-correctness-v1": {
+      "required": ["schema", "case_id", "quality", "method", "input_sha256", "bitstream_sha256", "decoded_sha256", "candidate_deterministic", "fallback_exact", "default_build_independent"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-sample-v1": {
+      "required": ["schema", "case_id", "lifecycle", "variant", "method", "iteration", "sample_role", "elapsed_ns", "bitstream_bytes", "bitstream_fnv1a64", "role", "pair", "order", "sequence"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-command-v1": {
+      "required": ["schema", "role", "case_id", "method", "lifecycle", "pair", "order", "variant", "argv", "wall_seconds", "sample_rows", "stderr_log"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-evaluation-v1": {
+      "required": ["schema", "timing_authority", "command_processes", "sample_rows", "measured_samples", "cells", "decision"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-resources-v1": {
+      "required": ["schema", "source_commit", "elapsed_seconds", "maximum_child_rss_bytes", "output_bytes_before_index", "parallel_timed_processes", "command_processes", "measured_samples", "preflight_available_disk_bytes", "pre_timing_available_disk_bytes", "post_timing_available_disk_bytes", "lease_released"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-artifact-hashes-v1": {
+      "required": ["schema", "artifacts"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-transfer-cleanup-v1": {
+      "required": ["schema", "status", "source_commit", "remote_host_alias", "admission", "evidence_transfer", "lease_released", "remote_cleanup_proof", "remote_cleanup_complete", "installed_runner_directory_touched", "pipeline_exit_code", "pipeline_stdout_path", "pipeline_stderr_path", "failure"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-returned-evidence-hashes-v1": {
+      "required": ["schema", "artifacts", "excluded_after_index"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-archive-v1": {
+      "required": ["schema", "status", "archive_sha256", "archive_bytes", "member_count", "inventory_sha256"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-archive-inventory-v1": {
+      "required": ["schema", "status", "member_count", "members"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-cleanup-receipt-v1": {
+      "required": ["schema", "status", "home", "safe_root", "run_directory", "token", "validated", "removed_exact_validated_child", "absence_proved"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-live-return-validation-v1": {
+      "required": ["schema", "status", "remote_host_alias", "benchmark_lease_acquisition_attempted", "timed_binary_invoked", "host_settings_changed", "runner_directories_or_services_touched", "process_isolation", "path_generation", "transfers", "archive_digest", "full_member_inventory", "artifact_index_verified_after_extraction", "builder_rejections", "malicious_rejections", "cleanup_receipt", "local_returned_index_created_and_verified"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-path-round-trip-v1": {
+      "required": ["schema", "accepted", "rejected", "cleanup"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-admission-rehearsal-v1": {
+      "required": ["schema", "status", "mode", "source_commit", "shared_implementation", "benchmark_lease_acquisition_attempted", "timed_binary_invoked", "runner_directories_or_services_touched", "host_settings_changed", "admission", "cleanup"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-toolchain-v1": {
+      "required": ["schema", "status", "environment", "executables", "xcrun_resolved", "effective_compiler", "effective_sdk_path", "effective_sdk_version", "effective_developer_dir", "compiler_sdk_probe_sha256", "exact_build_commands", "cmake_used", "homebrew_used", "host_or_global_path_changed"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-build-v1": {
+      "required": ["schema", "commands", "outputs"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-refusal-v1": {
+      "required": ["schema", "status", "error_type", "reason", "stage", "lease_record_present", "timing_samples_present", "controlled_exit"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-operator-status-v1": {
+      "required": ["schema", "status", "artifact_index_written", "controlled_exit"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-stage-v1": {
+      "required": ["schema", "stage", "captured_at_utc"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-rehearsal-v1": {
+      "required": ["schema", "status", "source_commit", "toolchain", "toolchain_refusal_fixtures", "process_isolation", "correctness_cells", "benchmark_session_present", "benchmark_lease_attempted", "timed_runner_invoked", "timed_samples", "runner_directories_or_services_touched", "host_settings_changed", "global_path_changed"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-runner-toolchain-inspection-v1": {
+      "required": ["schema", "status", "noninteractive_path", "existing_tools_selected", "cmake_locations", "cmake_selected", "runner_worker_matches", "homebrew_used", "network_downloads", "host_or_global_path_changed"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-remote-rehearsal-v1": {
+      "required": ["schema", "status", "source_commit", "benchmark_session_present", "benchmark_lease_attempted", "timed_runner_invoked", "process_isolation", "source_admission", "preflight", "operator_exit_code", "lease_transfer", "lease_record", "archive_return", "extraction_inventory", "returned_artifact_index_verified", "cleanup_receipt"]
+    },
+    "libwebp-backref-cost-workspace-remote-v5-refusal-return-rehearsal-v1": {
+      "required": ["schema", "status", "source_admission", "operator_exit_code", "lease_transfer", "lease_record", "archive_return", "extraction_inventory", "refusal", "artifact_index_verified_after_extraction", "benchmark_lease_attempted", "timed_runner_invoked", "cleanup_receipt"]
+    }
+  }
+}
