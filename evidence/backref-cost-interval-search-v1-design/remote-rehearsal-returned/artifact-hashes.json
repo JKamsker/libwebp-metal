@@ -1,0 +1,45 @@
+{
+  "artifacts": [
+    {
+      "bytes": 9393,
+      "path": "build-commands.json",
+      "sha256": "7caa2c4c6379231a736bda5afa1877b04ae88543dcbed65cfbdfaccdd899201f"
+    },
+    {
+      "bytes": 169182,
+      "path": "build.log",
+      "sha256": "56d8880103ff67da2a7d88c8a333ee575e7d1e7a59aecd9541cb2fd5c8499f3f"
+    },
+    {
+      "bytes": 13571,
+      "path": "correctness.json",
+      "sha256": "c54c460d7314978eb3fbd687938fc5b6868a422de76ab88c38f2ae99a287fd76"
+    },
+    {
+      "bytes": 159,
+      "path": "lease-record.json",
+      "sha256": "a0ea31a5d0ee15042beacc2ac34bbbda3003c36acdb0ff6bee1a0c70b651882e"
+    },
+    {
+      "bytes": 93927,
+      "path": "processes-rehearsal.txt",
+      "sha256": "21c0dbbdc134be2df6d5d2bf95c60b7f80898ce28c28a561eee8522f35872575"
+    },
+    {
+      "bytes": 9222,
+      "path": "rehearsal.json",
+      "sha256": "1f1d4a770e681454137012959063f5a1896f811b037de8c56e0420c7fc711744"
+    },
+    {
+      "bytes": 224,
+      "path": "work-metric-summary.json",
+      "sha256": "aab88f7aaacd38c887f3b5fcbdaf66176e4015b6783d3ffbb03507f82c34aa18"
+    },
+    {
+      "bytes": 9710,
+      "path": "work-metrics.jsonl",
+      "sha256": "265c537b1bab26f6f13cdb35f31c0ead064855698df513e301a00c5c2cc1e1c6"
+    }
+  ],
+  "schema": "libwebp-backref-cost-interval-search-v1-artifact-hashes-v1"
+}

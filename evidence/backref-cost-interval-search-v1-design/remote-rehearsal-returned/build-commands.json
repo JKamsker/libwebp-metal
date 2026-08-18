@@ -1,0 +1,181 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/git",
+        "clone",
+        "--no-hardlinks",
+        "--no-checkout",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v1/run.Xqn6HZ/source",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-baseline"
+      ],
+      "cwd": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v1/run.Xqn6HZ/source"
+    },
+    {
+      "argv": [
+        "/usr/bin/git",
+        "checkout",
+        "--detach",
+        "419c9b3c84ff0a9e955975f386dd971206640a50"
+      ],
+      "cwd": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-baseline"
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "-f",
+        "makefile.unix",
+        "-j4",
+        "CC=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "CXX=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+        "AR=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+        "RANLIB=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+        "CFLAGS=-O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "LDFLAGS=-arch arm64 -isysroot /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "EXTRA_FLAGS=",
+        "DWEBP_LIBS=",
+        "CWEBP_LIBS=",
+        "GIF_LIBS=",
+        "WEBP_ENABLE_METAL=0",
+        "WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_DETERMINISTIC_BUILD=1",
+        "WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=0",
+        "examples/cwebp",
+        "examples/dwebp"
+      ],
+      "cwd": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-baseline"
+    },
+    {
+      "argv": [
+        "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "-O3",
+        "-DNDEBUG",
+        "-arch",
+        "arm64",
+        "-isysroot",
+        "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "-I/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-baseline",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-baseline/tools/backref_cost_interval_search_v1_experiment_runner.c",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-baseline/src/libwebp.a",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-baseline/sharpyuv/libsharpyuv.a",
+        "-o",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-baseline/tools/backref_cost_interval_search_v1_experiment_runner"
+      ],
+      "cwd": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-baseline"
+    },
+    {
+      "argv": [
+        "/usr/bin/git",
+        "clone",
+        "--no-hardlinks",
+        "--no-checkout",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v1/run.Xqn6HZ/source",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-candidate"
+      ],
+      "cwd": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v1/run.Xqn6HZ/source"
+    },
+    {
+      "argv": [
+        "/usr/bin/git",
+        "checkout",
+        "--detach",
+        "419c9b3c84ff0a9e955975f386dd971206640a50"
+      ],
+      "cwd": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-candidate"
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "-f",
+        "makefile.unix",
+        "-j4",
+        "CC=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "CXX=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+        "AR=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+        "RANLIB=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+        "CFLAGS=-O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "LDFLAGS=-arch arm64 -isysroot /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "EXTRA_FLAGS=",
+        "DWEBP_LIBS=",
+        "CWEBP_LIBS=",
+        "GIF_LIBS=",
+        "WEBP_ENABLE_METAL=0",
+        "WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_DETERMINISTIC_BUILD=1",
+        "WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=1",
+        "examples/cwebp",
+        "examples/dwebp",
+        "tools/backref_cost_interval_search_v1_experiment_runner"
+      ],
+      "cwd": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-candidate"
+    },
+    {
+      "argv": [
+        "/usr/bin/git",
+        "clone",
+        "--no-hardlinks",
+        "--no-checkout",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v1/run.Xqn6HZ/source",
+        "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-diagnostic"
+      ],
+      "cwd": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-search-v1/run.Xqn6HZ/source"
+    },
+    {
+      "argv": [
+        "/usr/bin/git",
+        "checkout",
+        "--detach",
+        "419c9b3c84ff0a9e955975f386dd971206640a50"
+      ],
+      "cwd": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-diagnostic"
+    },
+    {
+      "argv": [
+        "/usr/bin/make",
+        "-f",
+        "makefile.unix",
+        "-j4",
+        "CC=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "CXX=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+        "AR=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+        "RANLIB=/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+        "CFLAGS=-O3 -DNDEBUG -arch arm64 -isysroot /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "LDFLAGS=-arch arm64 -isysroot /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "EXTRA_FLAGS=",
+        "DWEBP_LIBS=",
+        "CWEBP_LIBS=",
+        "GIF_LIBS=",
+        "WEBP_ENABLE_METAL=0",
+        "WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_DETERMINISTIC_BUILD=1",
+        "WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=1",
+        "examples/cwebp",
+        "examples/dwebp",
+        "WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_RECORDER=1",
+        "tools/backref_cost_interval_search_v1_experiment_runner"
+      ],
+      "cwd": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-cost-interval-search-v1-rehearsal-uiz9us1f/build-diagnostic"
+    }
+  ],
+  "outputs": {
+    "baseline": {
+      "examples/cwebp": "519da2bc3b924bef9cfaeada855295f1460fd9e128c5a9052207747cb34dc83d",
+      "examples/dwebp": "e71215c0e3c9925d2565ae48c67b0d6d6c2a7ba972440ba58767bd3178740e9c",
+      "sharpyuv/libsharpyuv.a": "85d425fe85ba325d841e67a65a28304bef3c054df8d781565804fdff80d15d12",
+      "src/libwebp.a": "1771d94e4aede1bf62f6ff8cf22ecf3ec0cf16811e1f6a052d79c337a3b82492",
+      "tools/backref_cost_interval_search_v1_experiment_runner": "0a2f3548b1fcdb33d44c3196bbeca6f071513b785b666a49500bf64391be0871"
+    },
+    "candidate": {
+      "examples/cwebp": "b12a06a7fa1eb36c05d4a6bff0de2a0b0cf7df707c0bd9a5616fcac95d352861",
+      "examples/dwebp": "e34639e9c7ab810af4fc489afea1af5c25bab5867f649f62ce10058adeec6be3",
+      "sharpyuv/libsharpyuv.a": "4153c32098de03c47a4065172ae95525a8d4e26dbc0373fda536ee4a224e3f84",
+      "src/libwebp.a": "1ad6d6537aad7fa5924eaea202e928c8695e5fb7bf422a03f9359968ede484e7",
+      "tools/backref_cost_interval_search_v1_experiment_runner": "ec7796d1e4433ab25553921f2e01957885d9b535bffef6b0f0677d73cd38ac46"
+    },
+    "diagnostic": {
+      "examples/cwebp": "c1eaa744d26199f8a68333d58e77386f2f34c0c52eb9c03959f6a6679a0a4e0d",
+      "examples/dwebp": "48e4b38f0c2923612ae7287646724e8f32ea93cfec1b537db8a7570ad52d6f50",
+      "sharpyuv/libsharpyuv.a": "6dc2ea93070234ef0e73640cbcfa64bbaede77b586f76cbd8881e6766d452420",
+      "src/libwebp.a": "f99cd4c5fd4b010ff69e6b8eccc669805c6cef000dc7ef4ef23f1b636f62d292",
+      "tools/backref_cost_interval_search_v1_experiment_runner": "764a5754af6275f2df9bef3001032cbb857b2673bc4845bb2ec35731fabf4854"
+    }
+  },
+  "schema": "libwebp-backref-cost-interval-search-v1-build-v1"
+}

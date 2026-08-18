@@ -1,0 +1,11 @@
+{
+  "cmake_selected": false,
+  "compiler_sdk_probe_sha256": "5562412ec41b05700c7ee94571641fe6cc15c00e274a991c39a426bdc846b93e",
+  "effective_compiler": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+  "effective_sdk_version": "26.2",
+  "noninteractive_path": "/usr/bin:/bin:/usr/sbin:/sbin",
+  "rehearsal_evidence": "remote-rehearsal-returned/rehearsal.json",
+  "schema": "libwebp-backref-cost-interval-search-v1-toolchain-inspection-v1",
+  "status": "PASS",
+  "unix_make_selected": true
+}

@@ -1,0 +1,61 @@
+{
+  "archive_return": {
+    "artifact_index_sha256": "c2c8a9e295bb4c20cc9854cdf3754f367b2bcea6e1eb43edcd3c3097a6709883",
+    "member_count": 9,
+    "path": "remote-rehearsal-returned",
+    "status": "accepted"
+  },
+  "benchmark_lease_attempted": false,
+  "benchmark_session_present": false,
+  "cleanup_receipt": {
+    "absence_proved": true,
+    "cleanup_implementation": "admission.finish_admission -> exact validated child guard",
+    "post_rehearsal_safe_root_children": 0,
+    "removed_exact_validated_child": true,
+    "status": "complete"
+  },
+  "extraction_inventory": {
+    "member_count": 9,
+    "regular_members_only": true,
+    "status": "accepted"
+  },
+  "lease_record": {
+    "acquired": false,
+    "acquisition_attempted": false,
+    "path": null,
+    "released": false,
+    "schema": "libwebp-backref-cost-interval-search-v1-lease-v1",
+    "sha256": "a0ea31a5d0ee15042beacc2ac34bbbda3003c36acdb0ff6bee1a0c70b651882e"
+  },
+  "lease_transfer": {
+    "independently_returned": true,
+    "path": "remote-rehearsal-returned/lease-record.json",
+    "sha256": "a0ea31a5d0ee15042beacc2ac34bbbda3003c36acdb0ff6bee1a0c70b651882e",
+    "status": "accepted"
+  },
+  "operator_exit_code": 0,
+  "preflight": {
+    "benchmark_or_cuda_matches": [],
+    "process_table_sha256": "ff7e60ae415aee2cc4cec14a79a903762739cb33303475239fa5bd1ca69cfb0c",
+    "runner_worker_matches": [],
+    "toolchain_probe_sha256": "5562412ec41b05700c7ee94571641fe6cc15c00e274a991c39a426bdc846b93e"
+  },
+  "process_isolation": {
+    "benchmark_or_cuda_matches": [],
+    "runner_worker_matches": [],
+    "runner_listener_present": true
+  },
+  "returned_artifact_index_verified": true,
+  "schema": "libwebp-backref-cost-interval-search-v1-remote-rehearsal-v1",
+  "source_admission": {
+    "admission_receipt": "early-refusal-return.json#source_admission",
+    "bundle_hash_match": true,
+    "bundle_verified_in_repository_context": true,
+    "clean_status": true,
+    "source_commit": "419c9b3c84ff0a9e955975f386dd971206640a50",
+    "status": "admitted"
+  },
+  "source_commit": "419c9b3c84ff0a9e955975f386dd971206640a50",
+  "status": "PASS",
+  "timed_runner_invoked": false
+}

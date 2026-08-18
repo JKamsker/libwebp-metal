@@ -1,0 +1,12 @@
+{
+  "baseline_commit": "568d2476afef3465294bec6a4e099d1b598135f7",
+  "build_gate_off": false,
+  "build_gate_on": true,
+  "exported_symbol_count": 86,
+  "exported_symbols_match": true,
+  "exported_symbols_sha256_gate_off": "e91d9c2b44b49d51a64208438cb07a85570b3516fa84cefaddf2f2ed3338cfb4",
+  "exported_symbols_sha256_gate_on": "e91d9c2b44b49d51a64208438cb07a85570b3516fa84cefaddf2f2ed3338cfb4",
+  "public_header_changes_from_baseline": 0,
+  "schema": "libwebp-backref-cost-interval-search-v1-abi-v1",
+  "status": "PASS"
+}

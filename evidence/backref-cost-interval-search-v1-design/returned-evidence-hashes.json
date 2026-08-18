@@ -1,0 +1,141 @@
+{
+  "artifacts": [
+    {
+      "bytes": 11954,
+      "path": "early-refusal-return.json",
+      "sha256": "48839d990d6e01f03f2db3a340e8111b69168ac213b63fda05d5cdb96a44fa88"
+    },
+    {
+      "bytes": 549,
+      "path": "early-refusal-returned/artifact-hashes.json",
+      "sha256": "4ee58c44feed856722ec4534e40aee95fa44725d1aa60e6bd63c7a395d68a08d"
+    },
+    {
+      "bytes": 159,
+      "path": "early-refusal-returned/lease-record.json",
+      "sha256": "a0ea31a5d0ee15042beacc2ac34bbbda3003c36acdb0ff6bee1a0c70b651882e"
+    },
+    {
+      "bytes": 161,
+      "path": "early-refusal-returned/operator-status.json",
+      "sha256": "6c63c5c72fb02517151b7eae191991aa286773623c4a901b447b5f9a9148d5e0"
+    },
+    {
+      "bytes": 297,
+      "path": "early-refusal-returned/refusal.json",
+      "sha256": "f231b237479f28b22200b20a7230c5103e82edff79d304068b9f0f9f77664cd2"
+    },
+    {
+      "bytes": 168,
+      "path": "fixtures/absolute.tar.gz",
+      "sha256": "ae214cb851b66033aa731154fd8b86ac9e1598eb0da667689107df83c5543922"
+    },
+    {
+      "bytes": 161,
+      "path": "fixtures/fifo.tar.gz",
+      "sha256": "d8633d51e691d5e2deb5e9d32629f4946a60045ac85e5bcb8ea6d2f02146b8b6"
+    },
+    {
+      "bytes": 173,
+      "path": "fixtures/hardlink.tar.gz",
+      "sha256": "5d472388635d6325030234226dd389519a7545113bc33e89ca6d0a52d8118fcc"
+    },
+    {
+      "bytes": 172,
+      "path": "fixtures/symlink.tar.gz",
+      "sha256": "a6705f085525d062c5b354be55ca13f9df934b99a962d784e5d5dd2817031232"
+    },
+    {
+      "bytes": 162,
+      "path": "fixtures/traversal.tar.gz",
+      "sha256": "8a64747b5c1f5907861db4ab4c0e18a40c416d925987a9a5383bb9d5643057b6"
+    },
+    {
+      "bytes": 10193,
+      "path": "live-validation.json",
+      "sha256": "7837e0b502bf30baaef50a87626899f892f235f5f5b46a6c2ba2af913ac00806"
+    },
+    {
+      "bytes": 1320,
+      "path": "remote-rehearsal-returned/artifact-hashes.json",
+      "sha256": "c2c8a9e295bb4c20cc9854cdf3754f367b2bcea6e1eb43edcd3c3097a6709883"
+    },
+    {
+      "bytes": 9393,
+      "path": "remote-rehearsal-returned/build-commands.json",
+      "sha256": "7caa2c4c6379231a736bda5afa1877b04ae88543dcbed65cfbdfaccdd899201f"
+    },
+    {
+      "bytes": 169182,
+      "path": "remote-rehearsal-returned/build.log",
+      "sha256": "56d8880103ff67da2a7d88c8a333ee575e7d1e7a59aecd9541cb2fd5c8499f3f"
+    },
+    {
+      "bytes": 13571,
+      "path": "remote-rehearsal-returned/correctness.json",
+      "sha256": "c54c460d7314978eb3fbd687938fc5b6868a422de76ab88c38f2ae99a287fd76"
+    },
+    {
+      "bytes": 159,
+      "path": "remote-rehearsal-returned/lease-record.json",
+      "sha256": "a0ea31a5d0ee15042beacc2ac34bbbda3003c36acdb0ff6bee1a0c70b651882e"
+    },
+    {
+      "bytes": 93927,
+      "path": "remote-rehearsal-returned/processes-rehearsal.txt",
+      "sha256": "21c0dbbdc134be2df6d5d2bf95c60b7f80898ce28c28a561eee8522f35872575"
+    },
+    {
+      "bytes": 9222,
+      "path": "remote-rehearsal-returned/rehearsal.json",
+      "sha256": "1f1d4a770e681454137012959063f5a1896f811b037de8c56e0420c7fc711744"
+    },
+    {
+      "bytes": 224,
+      "path": "remote-rehearsal-returned/work-metric-summary.json",
+      "sha256": "aab88f7aaacd38c887f3b5fcbdaf66176e4015b6783d3ffbb03507f82c34aa18"
+    },
+    {
+      "bytes": 9710,
+      "path": "remote-rehearsal-returned/work-metrics.jsonl",
+      "sha256": "265c537b1bab26f6f13cdb35f31c0ead064855698df513e301a00c5c2cc1e1c6"
+    },
+    {
+      "bytes": 2148,
+      "path": "remote-rehearsal.json",
+      "sha256": "53f5578a1bc3255a39687ec13286baa76140b8bb71e7698c9a89c86215a2a9c1"
+    },
+    {
+      "bytes": 548,
+      "path": "returned/artifact-hashes.json",
+      "sha256": "cce72ba6f9370516fbd4d85347e98ea856084b2d3b0c7ce6965680dc8912222b"
+    },
+    {
+      "bytes": 151,
+      "path": "returned/lease-record.json",
+      "sha256": "6563193c7c39e8e0a95d8c1221f0e0270d6c6ef64647a245c0075d9ba0a35302"
+    },
+    {
+      "bytes": 32,
+      "path": "returned/nested/deeper/record.json",
+      "sha256": "44b47c5c16d22761f5fb220dc5b502775be10150714d70aa90ba10e8a6d65b7e"
+    },
+    {
+      "bytes": 29,
+      "path": "returned/root.txt",
+      "sha256": "4362b416ab8b3ce817bbd5e2006b7eafcf4b73e010713e81546dd081cb7ee9cb"
+    },
+    {
+      "bytes": 546,
+      "path": "runner-toolchain-inspection.json",
+      "sha256": "7b7ad4f8c6b4cb8924d0f3a2423ae2250786b119e3e0ffa552fb0727c9cb2dca"
+    },
+    {
+      "bytes": 811,
+      "path": "stalled-malformed-transfer-cleanup.json",
+      "sha256": "a846d81960bdb227a0dbc1e50b69488bf7d60fadac57b71e4aef77d3453ba710"
+    }
+  ],
+  "excluded_after_index": [],
+  "schema": "libwebp-backref-cost-interval-search-v1-returned-evidence-hashes-v1"
+}
