@@ -551,6 +551,9 @@ struct MBWork {
   long long i4_sd[kNumBModes];
   int i4_flat[kNumBModes];
   long long i4_rcost[kNumBModes];
+  long long i4_base_score[kNumBModes];
+  long long i4_full_score[kNumBModes];
+  uint16_t i4_mode_cost[kNumBModes];
   // Chroma per-mode scratch.
   int16_t uv_tmp[4][8][16];
   int16_t uv_levels_all[4][8][16];
@@ -1375,6 +1378,22 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
     // warp. Block-wide barriers separate the stages.
     for (int step = 0; step < 16; ++step) {
       if (i4_abort) break;  // uniform: last written before a barrier
+      // The mode context is common to all candidates. Fetch its ten header
+      // costs in parallel while the four warp leaders generate predictions.
+      if (tid < kNumBModes) {
+        const int bx = i4_index & 3, by = i4_index >> 2;
+        const int preds_w = 4 * (int)p.mb_w + 1;
+        const uint8_t* const preds_base =
+            v.preds + (size_t)(4 * y + by) * preds_w + (4 * x + bx);
+        const int left_mode = (bx == 0)
+                                  ? preds_base[-1]
+                                  : w.rd.modes_i4[i4_index - 1];
+        const int top_mode = (by == 0)
+                                 ? preds_base[-preds_w]
+                                 : w.rd.modes_i4[i4_index - 4];
+        w.i4_mode_cost[tid] =
+            v.tables->fixed_costs_i4[top_mode][left_mode][tid];
+      }
       {
         const int warp = tid >> 5, lane = tid & 31;
         if (lane == 0 && warp < 4) {
@@ -1439,20 +1458,24 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
         }
       }
       __syncthreads();
+      // Prepare both sides of the CPU early-out in parallel. Thread 0 below
+      // still replays the original mode order and exact >= / < tie behavior.
+      if (tid < kNumBModes) {
+        const long long D = w.i4_sse[tid];
+        const long long SD =
+            tlambda ? MULT_8B_DEV(tlambda, w.i4_sd[tid]) : 0;
+        const long long H = w.i4_mode_cost[tid];
+        const long long R = w.i4_flat[tid] ? kFlatnessPenalty : 0;
+        w.i4_base_score[tid] =
+            (R + H) * (long long)dqm->lambda_i4 +
+            kRDDistoMult * (D + SD);
+        w.i4_full_score[tid] =
+            (R + w.i4_rcost[tid] + H) * (long long)dqm->lambda_i4 +
+            kRDDistoMult * (D + SD);
+      }
+      if ((tid >> 5) == 0) __syncwarp();
       if (tid == 0) {
-        // Mode cost context from neighboring prediction modes.
         const int bx = i4_index & 3, by = i4_index >> 2;
-        const int preds_w = 4 * (int)p.mb_w + 1;
-        const uint8_t* const preds_base =
-            v.preds + (size_t)(4 * y + by) * preds_w + (4 * x + bx);
-        const int left_mode = (bx == 0)
-                                  ? preds_base[-1]
-                                  : w.rd.modes_i4[i4_index - 1];
-        const int top_mode = (by == 0)
-                                 ? preds_base[-preds_w]
-                                 : w.rd.modes_i4[i4_index - 4];
-        const uint16_t* const mode_costs =
-            v.tables->fixed_costs_i4[top_mode][left_mode];
         ModeScore rd_i4;
         int best_mode = -1;
         InitScoreDev(&rd_i4);
@@ -1460,20 +1483,24 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
           ModeScore rd_tmp;
           rd_tmp.D = w.i4_sse[mode];
           rd_tmp.SD = tlambda ? MULT_8B_DEV(tlambda, w.i4_sd[mode]) : 0;
-          rd_tmp.H = mode_costs[mode];
+          rd_tmp.H = w.i4_mode_cost[mode];
           rd_tmp.nz = (uint32_t)w.i4_nz[mode] << i4_index;
           rd_tmp.R = w.i4_flat[mode] ? kFlatnessPenalty : 0;
-          SetRDScoreDev(dqm->lambda_i4, &rd_tmp);
-          if (best_mode >= 0 && rd_tmp.score >= rd_i4.score) continue;
+          rd_tmp.score = w.i4_base_score[mode];
+          if (best_mode >= 0 && rd_tmp.score >= rd_i4.score) {
+            continue;
+          }
           rd_tmp.R += w.i4_rcost[mode];
-          SetRDScoreDev(dqm->lambda_i4, &rd_tmp);
+          rd_tmp.score = w.i4_full_score[mode];
           if (best_mode < 0 || rd_tmp.score < rd_i4.score) {
             CopyScoreDev(&rd_i4, &rd_tmp);
             best_mode = mode;
-            for (int k = 0; k < 16; ++k) {
-              i4_best_levels[i4_index][k] = w.i4_levels[mode][k];
-            }
           }
+        }
+        // Intermediate leaders are never observable. Copy the final winner
+        // once instead of copying every transient best during the scan.
+        for (int k = 0; k < 16; ++k) {
+          i4_best_levels[i4_index][k] = w.i4_levels[best_mode][k];
         }
         SetRDScoreDev(dqm->lambda_mode, &rd_i4);
         i4_best_D += rd_i4.D;
