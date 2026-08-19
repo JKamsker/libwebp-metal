@@ -30,6 +30,9 @@ showed the CPU probability layout did not compose with the lean GPU candidate.
 composition. `i4-balanced-chroma-overlap-parity.jsonl` contains the 105
 per-case CPU/CUDA and band-3 fallback SHA-256 comparisons; every row is exact.
 
+`i4-team-barrier-chroma-screen.jsonl` contains the 24 exact timing rows for
+the rejected team-local I4 barrier plus chroma-overlap composition.
+
 Inspect the sampling archives with:
 
 ```sh

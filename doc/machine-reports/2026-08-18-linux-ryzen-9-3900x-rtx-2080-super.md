@@ -961,3 +961,19 @@ RTX 2080 SUPER-only evidence and makes no Ampere+ performance claim. The two
 evidence directory as `i4-balanced-chroma-overlap-ab-block1.jsonl`,
 `i4-balanced-chroma-overlap-ab-block2.jsonl`, and
 `i4-balanced-chroma-overlap-parity.jsonl`.
+
+The next screen combined the lean candidate with the independently exact
+team-local I4 barrier schedule. Four per-team numeric barriers used separate
+128-thread named barriers; the two winner-publication and raster-order abort
+points remained CTA-wide. All seven CTests and all 24 timed outputs were
+exact. Two order-reversed native-sm_75 processes measured:
+
+| Format | Parent | Team-barrier/chroma | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.341 ms/image | 38.356 ms/image | 1.984 ms |
+| JPEG lossy | 40.213 ms/image | 38.815 ms/image | 1.398 ms |
+
+JPEG failed the 1.5 ms screen, so the composition was removed without a full
+gate. The result is specific to the RTX 2080 SUPER and makes no Ampere+
+performance claim. Raw rows are in
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-team-barrier-chroma-screen.jsonl`.

@@ -1020,3 +1020,12 @@ three content classes, and band-3 fallback for every method/content pair.
 JPEG remained 0.011 ms/image below the strict 1.5 ms gate, so the candidate
 was removed. This was measured only on the RTX 2080 SUPER; no Ampere+
 performance claim is made.
+
+Composing the lean candidate with the previously exact 128-thread team-local
+I4 barriers also failed to close the JPEG gap. The four independent numeric
+barriers were team-local while winner publication and raster-order abort
+remained CTA-wide. All seven CTests and all 24 screen outputs were exact, but
+two order-reversed native-sm_75 processes measured PNG 40.341 to 38.356
+ms/image (1.984 ms gain) and JPEG 40.213 to 38.815 (1.398 ms gain). The named
+barriers were therefore removed without a full gate. This is RTX 2080 SUPER-
+only evidence and is not an Ampere+ performance claim.
