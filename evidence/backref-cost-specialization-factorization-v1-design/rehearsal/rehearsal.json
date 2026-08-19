@@ -1,0 +1,39 @@
+{
+  "benchmark_lease_attempted": false,
+  "encoder_workloads": 0,
+  "performance_samples": 0,
+  "phase_2_fail_closed_prerequisites": [
+    "bitstream/pixel correctness before first profile",
+    "coarse monotonic timer records pass schema/count/accounting",
+    "all timed children remain serial and directly owned"
+  ],
+  "profile_commands_constructed": 36,
+  "profiler_invocations": 0,
+  "profiler_workloads": 0,
+  "representative_payload": {
+    "bytes": 2097152,
+    "compaction": "request bytes represented by exact size/SHA-256 only",
+    "finite_margin_ratio": 4.0,
+    "framed_stdin": true,
+    "generator": "client sha256(domain || uint64_be_counter) blocks",
+    "minimum_expected_run_archive_bytes": 524288,
+    "returned_path": null,
+    "returned_payload_bytes": 0,
+    "sha256": "60a1a48b8128a82eae9474a69c0dfe8364745747f04a886341c3da03fd5dee85"
+  },
+  "schema": "libwebp-backref-cost-specialization-factorization-v1-rehearsal-v1",
+  "source_commit": "cede7f5a3f075355b8e8894c137cb388508d422a",
+  "source_tree": "6a8e7566e1ed84cd01fc6e7ae148249323572930",
+  "status": "PASS",
+  "timer_accounting_validation": "not-run-in-rehearsal",
+  "timer_validation": {
+    "clock_reads": 4096,
+    "elapsed_ns": 156833,
+    "maximum_delta_ns": 250,
+    "mean_read_delta_ns": 38,
+    "minimum_positive_delta_ns": 41,
+    "monotonic": true,
+    "positive_deltas": 3754,
+    "schema": "libwebp-backref-cost-specialization-factorization-v1-timer-check-v1"
+  }
+}

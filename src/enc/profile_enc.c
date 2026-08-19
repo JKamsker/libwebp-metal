@@ -18,7 +18,9 @@
     !defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT) && \
     !defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V14_EXPERIMENT) && \
     !defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V15_EXPERIMENT) && \
-    !defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT)
+    !defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT) && \
+    !defined(                                                      \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
 #define WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT 1
 #endif
 #include "src/enc/profile_enc.h"
@@ -55,6 +57,9 @@
 #include "src/enc/backref_cost_attribution_v15_experiment_enc.h"
 #elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT)
 #include "src/enc/backref_cost_attribution_v16_experiment_enc.h"
+#elif defined(                                                          \
+    WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+#include "src/enc/backref_cost_specialization_factorization_v1_experiment_enc.h"
 #endif
 
 #include <stdio.h>
@@ -172,7 +177,9 @@ static uint64_t ProfileNowNs(void) {
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V14_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V15_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT) || \
+    defined(                                                       \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
 uint64_t WebPProfileClockNowForValidation(void) { return ProfileNowNs(); }
 #endif
 
@@ -327,6 +334,21 @@ void WebPProfileBeginSession(const WebPConfig* config,
     return;
   }
   if (!EnvironmentOptIn("WEBP_BACKREF_COST_ATTRIBUTION_V16_TIMERS")) return;
+#elif defined(                                                          \
+    WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+  {
+    const char* const variant =
+        getenv("WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_VARIANT");
+    if (variant == NULL ||
+        (strcmp(variant, "B") != 0 && strcmp(variant, "L") != 0 &&
+         strcmp(variant, "H") != 0)) {
+      return;
+    }
+  }
+  if (!EnvironmentOptIn(
+          "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_TIMERS")) {
+    return;
+  }
 #else
   if (!EnvironmentOptIn("WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT")) return;
 #endif
@@ -527,6 +549,18 @@ void WebPProfileEndSession(int ok, int error_code) {
                                   : "baseline";
   const char* const sample_set =
       getenv("WEBP_BACKREF_COST_ATTRIBUTION_V16_SAMPLE_SET");
+#elif defined(                                                          \
+    WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+  const char* const output_path = getenv(
+      "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_STAGE_OUTPUT");
+  const char* const run_id =
+      getenv("WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_RUN_ID");
+  const char* const case_id =
+      getenv("WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_CASE_ID");
+  const char* const backend =
+      getenv("WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_VARIANT");
+  const char* const sample_set =
+      getenv("WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_SAMPLE_SET");
 #else
   const char* const output_path = getenv("WEBP_STAGE_PROFILE_OUTPUT");
   const char* const run_id = getenv("WEBP_STAGE_PROFILE_RUN_ID");

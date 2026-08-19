@@ -1,0 +1,557 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v1-phase3-evaluation-consequence-v1",
+  "phase": "3",
+  "evaluator": "Sol/high",
+  "evaluation_date": "2026-08-19",
+  "evaluation_status": "REFUSAL_VALID_CAUSAL_ATTRIBUTION_UNRESOLVED",
+  "phase_2_authority": "NONE",
+  "timed_execution_authorized": false,
+  "production_promotion_authorized": false,
+  "commits": {
+    "main": "c6046dc7cde6e7ea1cc9d54a6a90c55f8a2f2edb",
+    "main_tree": "dd99d2a26bf6eb5c3ab441c24c4faaadcaf72d25",
+    "phase1a": "cede7f5a3f075355b8e8894c137cb388508d422a",
+    "phase1a_parent": "c6046dc7cde6e7ea1cc9d54a6a90c55f8a2f2edb",
+    "phase1a_tree": "6a8e7566e1ed84cd01fc6e7ae148249323572930",
+    "phase1b": "313b157286e602c4d3e6ef6d8b6c97268a66413b",
+    "phase1b_parent": "cede7f5a3f075355b8e8894c137cb388508d422a",
+    "phase1b_tree": "1bb98b32515deab217c02d8a7374544d00aaa25e",
+    "phase2": "4124ecf153e48655a822f41ebfc618faceeb77f8",
+    "phase2_parent": "313b157286e602c4d3e6ef6d8b6c97268a66413b",
+    "linear_ancestry_exact": true,
+    "phase1b_added_paths": 22,
+    "phase1b_modified_or_deleted_paths": 0
+  },
+  "frozen_hash_audit": {
+    "protocol": {
+      "path": "doc/backref-cost-specialization-factorization-v1-protocol-20260819.md",
+      "sha256": "774342dc80d59fd6154be6ff07a84126c271c495df0559f18598092245befa16"
+    },
+    "manifest": {
+      "path": "scripts/backref_cost_specialization_factorization_v1_manifest.json",
+      "sha256": "173ad4aca6a60ced82ac26b05da95e653894f326e726fd7e9f0d0707a9ef2629"
+    },
+    "schema_catalog": {
+      "path": "scripts/backref_cost_specialization_factorization_v1_schemas.json",
+      "sha256": "41782b4600289d685a2aadaf463d23bd9517b7486fa9d26c6c621da540bdabbc",
+      "protocol_version": 7,
+      "unique_schemas": 21
+    },
+    "transport_source": {
+      "path": "scripts/backref_cost_specialization_factorization_v1_transport.py",
+      "sha256": "3e39a81e2f12c03c909512d15b91b88ab5a1534ab5d4d6db5c0112a541a1d56d"
+    },
+    "phase1_local_validation": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-design/phase1-local-validation.json",
+      "sha256": "d53d351969f126e7f2c4e5b8a75de55d1f24859f239da1d9797bda3cd400ca22"
+    },
+    "phase1_local_codegen": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-design/phase1-local-codegen.json",
+      "sha256": "7399f9b61c98b8847ee3aac2a8e91885a804de3bea43f2de8f716a047c82c1bf"
+    },
+    "phase1_prior_evidence_audit": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-design/phase1-prior-evidence-audit.json",
+      "sha256": "761bd4e67966aabb72544034012e3d3ab734a05e0d84e8fbe0681fe9a2df1bd1"
+    },
+    "phase1b_authorization": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-design/phase1b-authorization.json",
+      "sha256": "2f761330d9045664637c4b7611927b331073444ee50d63e1d9dc0fd20b4af105"
+    },
+    "phase1b_rehearsal_hash_index": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-design/phase1b-rehearsal-hashes.json",
+      "sha256": "289a7f8028048208fae5341745981ef4c74885a274a3b68d88b16b51af19def4",
+      "indexed_files": 20,
+      "indexed_bytes": 129796,
+      "all_sizes_and_hashes_match": true,
+      "exact_tree_membership": true
+    },
+    "phase2_refusal_audit": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-design/phase2-refusal-audit.json",
+      "sha256": "76321352661a4a7a5d85fb06f94b03da1dbdaf3c1ea2e2503c80722d0b4cbc9f"
+    },
+    "phase1a_frozen_artifacts": 32,
+    "worktree_hash_mismatches": [],
+    "phase1a_hash_mismatches": [],
+    "all_frozen_bytes_match_worktree_and_exact_phase1a": true
+  },
+  "schema_and_identity_audit": {
+    "cycle_json_files_before_phase3": 24,
+    "json_parse_failures": [],
+    "schema_bearing_records": 19,
+    "profile_plan_array_records": 1,
+    "frozen_unversioned_structures": [
+      "rehearsal/build-identity.json",
+      "rehearsal/diagnostic-admission.json",
+      "rehearsal/resource-admission-admission.json",
+      "rehearsal/return-protocol/archive-build.json"
+    ],
+    "schema_observation": "All committed JSON parses. Every schema-bearing transport, authorization, hash-index, codegen, timer, cleanup, and status record has its frozen identity. The build, diagnostic, resource, and archive-builder receipts are intentionally unversioned structures in the frozen implementation and were checked field-by-field.",
+    "source_admission": {
+      "source_commit": "cede7f5a3f075355b8e8894c137cb388508d422a",
+      "source_tree": "6a8e7566e1ed84cd01fc6e7ae148249323572930",
+      "source_bundle_sha256": "290672f0418bec82faf0606078c31cef6437b080c14d39f8508833d6593ff114",
+      "clean_status": true,
+      "repository_context_verified": true,
+      "verification_repository_removed": true,
+      "source_receipt_hashes": 32,
+      "manifest_frozen_artifacts": 32,
+      "common_paths": 31,
+      "common_hash_mismatches": [],
+      "source_receipt_only": [
+        "scripts/backref_cost_specialization_factorization_v1_manifest.json"
+      ],
+      "manifest_frozen_only": [
+        "src/enc/backref_cost_factorization_layout_clone_enc.inc"
+      ],
+      "coverage_warning": "The receipt and frozen set have one path in each direction. Exact commit/tree and every common hash match, so this does not create authority, repair the stale payload identity, or support runtime attribution. A successor entry gate must require exact set equality."
+    },
+    "profile_plan": {
+      "rows": 36,
+      "ordinal_order_exact": true,
+      "case_order": [
+        "photo-large",
+        "graphic-large"
+      ],
+      "methods": [
+        4,
+        6
+      ],
+      "variant_orders": [
+        [
+          "B",
+          "L",
+          "H"
+        ],
+        [
+          "H",
+          "L",
+          "B"
+        ],
+        [
+          "L",
+          "B",
+          "H"
+        ]
+      ],
+      "per_variant_planned_profiles": 12,
+      "warmups_planned": 36,
+      "retained_timing_rows_planned": 144,
+      "runner_rows_planned": 180,
+      "stage_rows_planned": 180,
+      "correctness_encodes_planned": 24,
+      "work_rows_planned": 12,
+      "commands_constructed_only": true
+    }
+  },
+  "authority_audit": {
+    "frozen_representative_payload_bytes": 2097152,
+    "frozen_manifest_payload_sha256": "2e858dcda0cfd71415b1a7b1ea39a1b5488241a5dddbc75c70a594f05efc4d03",
+    "independently_regenerated_factorization_v1_payload_sha256": "60a1a48b8128a82eae9474a69c0dfe8364745747f04a886341c3da03fd5dee85",
+    "rehearsal_observed_payload_sha256": "60a1a48b8128a82eae9474a69c0dfe8364745747f04a886341c3da03fd5dee85",
+    "payload_identity_match": false,
+    "rehearsal_attempts": 1,
+    "retries": 0,
+    "reruns": 0,
+    "phase1b_additions_only": true,
+    "authority_conclusion": "NONE",
+    "reason": "Phase 1A froze a predecessor-domain payload identity. The sole fresh Factorization V1 rehearsal and an independent Phase 3 regeneration agree on a different identity. Additions-only Phase 1B cannot alter Phase 1A and no retry is permitted."
+  },
+  "transport_archive_cleanup_audit": {
+    "framed_stdout": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-design/rehearsal/return-protocol/framed-stdout.bin",
+      "bytes": 18226,
+      "sha256": "a860ff4a29a6f690a3f99e768b38c08d3f337b2b9c32a2e4fbaea111fb9092b0",
+      "exclusive_cap_bytes": 1048576,
+      "below_cap": true
+    },
+    "transport_stderr": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "decoded_frame_order": [
+      "source-admission",
+      "operator-status",
+      "archive-build",
+      "lease-state",
+      "bulk-declaration",
+      "bulk-chunk",
+      "integrity-footer",
+      "cleanup-footer"
+    ],
+    "decoded_frame_payload_bytes": [
+      6442,
+      531,
+      225,
+      213,
+      595,
+      7972,
+      406,
+      531
+    ],
+    "control_payload_cap_bytes": 8192,
+    "all_control_payloads_within_cap": true,
+    "archive": {
+      "bytes": 7972,
+      "sha256": "d49e1b1ed00f9e46e8a3525800a069e642a2d9f6cc9ebb952812d55a3a008de0",
+      "cap_bytes": 786432,
+      "within_cap": true,
+      "compression": "tar+gzip",
+      "chunks": 1,
+      "chunk_bytes": 262144,
+      "members": 9,
+      "inventory_sha256": "77f3e634553ea1af3619cc3d02ed49f792488a77e453d8326223bed5396c491c",
+      "safe_inspection": "PASS",
+      "fresh_local_extraction": "PASS",
+      "all_extracted_files_equal_retained_raw_bytes": true
+    },
+    "cleanup": {
+      "cleanup_footer_last": true,
+      "removed_exact_validated_child": true,
+      "absence_proved": true,
+      "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-specialization-factorization-v1",
+      "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-specialization-factorization-v1/run.4upkk9kz",
+      "post_run_remote_cleanup_operations": 0,
+      "prior_cycle_paths_contacted": false
+    }
+  },
+  "source_toolchain_device_resource_process_audit": {
+    "compiler": "Apple clang 17.0.0 (clang-1700.6.4.2), arm64-apple-darwin25.2.0",
+    "xcode_toolchain": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain",
+    "sdk": "MacOSX26.2.sdk",
+    "clang_sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+    "nm_sha256": "a42f25b6363f3d43b911733a276a46bdbed894f1ef8e764cb7461ebdb37a15e7",
+    "xcrun_sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152",
+    "device": "Apple M4 / Mac16,10",
+    "available_memory_bytes": 10882580480,
+    "available_disk_bytes": 18957021184,
+    "ac_power": true,
+    "low_power_mode": false,
+    "thermal_warning": false,
+    "settings_changed": false,
+    "external_profiler_invocations": 0,
+    "pre_operator_process_snapshot": {
+      "count": 750,
+      "sha256": "8d2bb78bc5fc7f19ebf2a75931b372c71dad496e4e1c975252b19551b8332f31"
+    },
+    "resource_process_snapshot": {
+      "count": 744,
+      "sha256": "3be749d279c168bc21de1f1bb24f3ebdcfeadbee3fbf60f89dbe4088b3942bf5"
+    },
+    "process_policy": "observe-only discovery; only a retained direct child may be stopped on its own timeout",
+    "discovered_pid_signals": 0,
+    "direct_child_timeout_signals": 0,
+    "exact_identity_conflicts": [],
+    "filesystem_identity_operations": [],
+    "benchmark_lease_attempted": false,
+    "lease_state": "not-attempted",
+    "lease_receipt_required": false,
+    "lease_release_required": false
+  },
+  "correctness_semantics_abi_guard_audit": {
+    "frozen_source_boundary": {
+      "selector_read_count_per_traceback": 1,
+      "selector_before_dist_array_mutation": true,
+      "closed_switch_targets": [
+        "BackwardReferencesHashChainDistanceOnly",
+        "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+        "BackwardReferencesHashChainDistanceOnlySpecialized"
+      ],
+      "exactly_one_selected_body": true,
+      "absent_selector": "B",
+      "invalid_selector": "fail-closed",
+      "shared_dp_template_sha256": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5",
+      "factorization_source_sha256": "13f933f20a9b05219e6199eda53d88e9d42472db639d23b3843a72bcdfe86202",
+      "layout_clone_source_sha256": "30f144d46895f210cf1969cda8696a7ad21fd7cf708c94ad32703f6caa675a7b",
+      "layout_clone_uses_baseline_dp_template": true,
+      "layout_clone_has_no_append_hint": true,
+      "strict_greater_than_cost_updates_preserved": true,
+      "integer_costs_ties_update_order_interval_order_preserved": true,
+      "allocation_failure_is_transactional_fail_closed": true,
+      "traceback_and_follow_chosen_path_are_shared_after_selection": true
+    },
+    "independent_phase3_local_revalidation": {
+      "performance_timing_samples": 0,
+      "benchmark_or_pipeline_runs": 0,
+      "ordinary_build_default_omission": "PASS",
+      "public_api_abi_equal": "PASS",
+      "selector_truth_table": {
+        "absent": 0,
+        "empty": -1,
+        "0": -1,
+        "B": 0,
+        "L": 1,
+        "H": 2,
+        "b": -1,
+        "HL": -1
+      },
+      "local_correctness_encodes": 3,
+      "b_l_h_bitstream_equality": "PASS",
+      "decoded_rgb_pixel_equality": "PASS",
+      "repeat_determinism": "NOT_INDEPENDENTLY_REPEATED_BY_LOCAL_FIXTURE",
+      "sanitizer_configurations": 2,
+      "sanitizer_boundary_encodes": 36,
+      "undefined_integer_boundary": "PASS_WITH_FROZEN_DECODER_UNSIGNED_SHIFT_BASE_EXCLUSION",
+      "array_bounds_pointer_overflow_boundary": "PASS",
+      "timed_recorder_free": "PASS",
+      "recorder_build_distinct": "PASS",
+      "matched_layout_codegen": "PASS",
+      "all_36_experiment_guards": "PASS",
+      "admission_archive_process_protocol_streaming_tests": "PASS"
+    },
+    "local_evidence_limit": "The Phase 1 local-validation receipt claims bitstream/pixel/determinism/input-immutability PASS, but its underlying retained test source performs one correctness encode per B/L/H variant and does not retain those temporary outputs or hash the input before and after. Phase 3 independently reproduced B/L/H bitstream equality and decoded-pixel equality only; it does not elevate same-variant repeat determinism or runtime input immutability to independently observed facts.",
+    "input_immutability": "The frozen full-run gate hashes each corpus input before and after all correctness encodes; source inspection confirms read-only PPM ingestion. The full-run gate was not reached because authority is NONE, so no corpus-wide runtime immutability claim is added.",
+    "production_correctness_gate": "NOT_RUN_AUTHORITY_NONE"
+  },
+  "timed_recorder_and_codegen_audit": {
+    "timed_runner_sha256": "ba4afa7b3faf979ba3aaaf855ac85e98bf3c448fe35ce9ba4208afcfba7071c2",
+    "recorder_runner_sha256": "361a74989417ba3597bb27b799692d7b3742e1ebd1ac1b311314839473c3cf81",
+    "runner_hashes_distinct": true,
+    "same_timed_binary_for_b_l_h": true,
+    "timed_recorder_symbols_present": false,
+    "recorder_symbols_present_in_recorder_build": true,
+    "linker_flag": "-Wl,-no_deduplicate",
+    "all_six_private_addresses_distinct": true,
+    "disassembly_sha256": "b610865d225135104b28e4027230942c68e5964d75e64124ca2e450052785c93",
+    "facts": {
+      "BackwardReferencesHashChainDistanceOnly": {
+        "size_bytes": 1292,
+        "instructions": 323,
+        "branches": 54,
+        "loads": 55,
+        "stores": 23,
+        "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"
+      },
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone": {
+        "size_bytes": 1292,
+        "instructions": 323,
+        "branches": 54,
+        "loads": 55,
+        "stores": 23,
+        "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"
+      },
+      "BackwardReferencesHashChainDistanceOnlySpecialized": {
+        "size_bytes": 1292,
+        "instructions": 323,
+        "branches": 54,
+        "loads": 55,
+        "stores": 23,
+        "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"
+      },
+      "PushInterval": {
+        "size_bytes": 508,
+        "instructions": 127,
+        "branches": 30,
+        "loads": 25,
+        "stores": 11,
+        "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8"
+      },
+      "PushIntervalLayoutClone": {
+        "size_bytes": 508,
+        "instructions": 127,
+        "branches": 30,
+        "loads": 25,
+        "stores": 11,
+        "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8"
+      },
+      "PushIntervalSpecialized": {
+        "size_bytes": 732,
+        "instructions": 183,
+        "branches": 45,
+        "loads": 34,
+        "stores": 12,
+        "mnemonics_sha256": "453c8695e2523dc281903d227f9896d68decf895d5676690c8bd67a59431f190"
+      }
+    },
+    "two_frozen_build_fact_sets_equal": true,
+    "interpretation": "B and L are separately emitted, instruction-equivalent baseline DP and PushInterval bodies. H shares the DP control-body shape and differs at the larger append-hint PushInterval boundary. This proves the diagnostic design is statically credible, not that either component caused V16 timing behavior."
+  },
+  "counter_coverage_and_work_audit": {
+    "mandatory_emitted_fields": [
+      "selector_evaluations",
+      "baseline_dp_calls",
+      "layout_clone_dp_calls",
+      "hint_dp_calls",
+      "exact_activations",
+      "push_calls",
+      "short_push_calls",
+      "cache_segments",
+      "overlap_scans",
+      "disjoint_prefix_scans",
+      "insert_calls",
+      "null_hint_insert_calls",
+      "position_backward_steps",
+      "position_forward_steps",
+      "append_hint_fast_paths",
+      "append_hint_branch_checks",
+      "append_hint_loads",
+      "append_hint_start_loads",
+      "append_hint_update_checks",
+      "append_hint_updates",
+      "pop_tail_branch_checks",
+      "pop_tail_updates",
+      "interval_updates",
+      "interval_pops",
+      "max_live_intervals",
+      "bitstream_bytes",
+      "bitstream_fnv1a64"
+    ],
+    "static_declaration_and_emission_coverage": "PASS",
+    "independent_local_fixture_tested_common_subset": [
+      "push_calls",
+      "short_push_calls",
+      "cache_segments",
+      "overlap_scans",
+      "insert_calls",
+      "interval_pops",
+      "max_live_intervals",
+      "bitstream_fnv1a64"
+    ],
+    "independent_local_fixture_tested_common_subset_equal_b_l_h": "PASS",
+    "independent_local_fixture_b_l_forward_steps_equal": "PASS",
+    "independent_local_fixture_h_append_hint_active": "PASS",
+    "independent_local_fixture_h_forward_positioning_steps_zero": "PASS",
+    "frozen_full_run_work_rows_expected": 12,
+    "frozen_full_run_work_rows_observed": 0,
+    "full_corpus_runtime_work_semantics": "UNAVAILABLE_AUTHORITY_NONE",
+    "claim_boundary": "The counter declarations/emission paths and one untimed local fixture's tested common subset pass. The broader frozen work gate exists in source but was not reached. No full-corpus B/L/H work rows exist, so no corpus-wide activation, exact-work-equality, or work-count claim is inferred."
+  },
+  "prior_evidence_audit": {
+    "v16_artifact_index_sha256": "9c2a1bad74ef66a482c09390ead68fbc13d68de6d4e93de860c1bd3f84a56f77",
+    "v16_selected_dp_receipt_sha256": "a52d4eed638ebfad3a786bc75d4ae49fb17678c6d31e6ead840eebfd110d64eb",
+    "v16_phase3_evaluation_sha256": "375b1ef41913c4344291a6c3181ac02592ae9d66e29a91ced780a854fdea99f3",
+    "interval_search_v3_work_rows_sha256": "d5b16a2122d967b30d415d81b17308165673c982d7aa7d89c6165c0a364b33c2",
+    "interval_search_v3_work_rows": 36,
+    "interval_search_v3_summary_sha256": "4a9b8bf6236f33e86cd55c9ee4d3972891e5d922d4de66e5aae19f2e8eabfe4a",
+    "interval_search_v3_codegen_sha256": "972faf01dea8df95140a9b90e36b08ca5f4180c7308c3b28fb6716cb4e7c0905",
+    "raw_hash_mismatches": [],
+    "v16_timing_rows_reused_or_pooled": 0,
+    "old_two_variant_ab_rerun": false
+  },
+  "execution_and_timing_absence": {
+    "phase1_rehearsal_sessions": 1,
+    "phase1_rehearsal_encoder_workloads": 0,
+    "phase1_rehearsal_profiler_workloads": 0,
+    "phase1_rehearsal_timed_workloads": 0,
+    "phase1_rehearsal_performance_samples": 0,
+    "phase1_rehearsal_lease_attempts": 0,
+    "phase2_host_contacts": 0,
+    "phase2_ssh_invocations": 0,
+    "phase2_lease_attempts": 0,
+    "phase2_pipeline_runs": 0,
+    "phase2_timed_binary_invocations": 0,
+    "phase2_recorder_workloads": 0,
+    "phase2_performance_samples": 0,
+    "phase2_remote_cleanup_operations": 0,
+    "factorization_v1_execution_directory_present": false,
+    "factorization_v1_design_jsonl_files": 0,
+    "actual_runner_rows": 0,
+    "actual_stage_rows": 0,
+    "actual_retained_timing_rows": 0,
+    "actual_work_rows": 0,
+    "pairwise_statistics_recomputable": false
+  },
+  "pairwise_results": {
+    "photo-m4": {
+      "dp_total": {
+        "B_to_L": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "L_to_H": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "B_to_H": "UNAVAILABLE_ABSENT_NO_ROWS"
+      },
+      "dp_steady": {
+        "B_to_L": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "L_to_H": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "B_to_H": "UNAVAILABLE_ABSENT_NO_ROWS"
+      },
+      "whole_encode": {
+        "B_to_L": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "L_to_H": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "B_to_H": "UNAVAILABLE_ABSENT_NO_ROWS"
+      }
+    },
+    "photo-m6": {
+      "dp_total": {
+        "B_to_L": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "L_to_H": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "B_to_H": "UNAVAILABLE_ABSENT_NO_ROWS"
+      },
+      "dp_steady": {
+        "B_to_L": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "L_to_H": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "B_to_H": "UNAVAILABLE_ABSENT_NO_ROWS"
+      },
+      "whole_encode": {
+        "B_to_L": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "L_to_H": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "B_to_H": "UNAVAILABLE_ABSENT_NO_ROWS"
+      }
+    },
+    "graphic-m4": {
+      "dp_total": {
+        "B_to_L": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "L_to_H": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "B_to_H": "UNAVAILABLE_ABSENT_NO_ROWS"
+      },
+      "dp_steady": {
+        "B_to_L": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "L_to_H": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "B_to_H": "UNAVAILABLE_ABSENT_NO_ROWS"
+      },
+      "whole_encode": {
+        "B_to_L": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "L_to_H": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "B_to_H": "UNAVAILABLE_ABSENT_NO_ROWS"
+      }
+    },
+    "graphic-m6": {
+      "dp_total": {
+        "B_to_L": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "L_to_H": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "B_to_H": "UNAVAILABLE_ABSENT_NO_ROWS"
+      },
+      "dp_steady": {
+        "B_to_L": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "L_to_H": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "B_to_H": "UNAVAILABLE_ABSENT_NO_ROWS"
+      },
+      "whole_encode": {
+        "B_to_L": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "L_to_H": "UNAVAILABLE_ABSENT_NO_ROWS",
+        "B_to_H": "UNAVAILABLE_ABSENT_NO_ROWS"
+      }
+    }
+  },
+  "interpretation": {
+    "v16_content_reversal": "The merged V16 evidence remains valid evidence that the always-specialized append-hint boundary helps photo DP and hurts graphic DP. It is context, not a Factorization V1 timing input.",
+    "layout_or_control_overhead": "NOT_ATTRIBUTABLE_NO_B_TO_L_ROWS",
+    "append_hint_algorithm": "NOT_ATTRIBUTABLE_NO_L_TO_H_ROWS",
+    "interaction": "NOT_ATTRIBUTABLE_NO_SIMULTANEOUS_ROWS",
+    "causal_conclusion": "UNRESOLVED",
+    "evidence_boundary": "Static codegen proves that B/L/H would be a credible matched-layout causal diagnostic, but static facts and earlier work removal cannot replace the missing simultaneous runtime rows. The V16 content reversal cannot be assigned to layout/control overhead, the hint algorithm, or their interaction."
+  },
+  "production_consequence": {
+    "decision": "NO_PRODUCTION_PROMOTION",
+    "candidate": "NONE",
+    "diagnostic_success": false,
+    "reason": "Authority is NONE and no fresh factorization correctness/work/timing evidence exists. The frozen promotion rule requires fresh correctness plus negative B-to-H DP-steady and whole-encode means, nonpositive upper bootstrap bounds, and no material paired regression in every required holdout cell. None of those timing conditions can be evaluated.",
+    "thresholds_weakened": false,
+    "missing_rows_inferred": false
+  },
+  "single_next_lead": {
+    "name": "BACKREF COST SPECIALIZATION FACTORIZATION TRANSPORT IDENTITY REFREEZE V2",
+    "scope": "A fresh successor cycle may re-freeze the same simultaneous B/L/H causal factorization under a new V2 transport domain. It is not an old V16 two-variant A/B rerun and admits no V1 or V16 timing samples.",
+    "entry_condition": "Before the Phase 1A commit and before any rehearsal, independently regenerate the complete V2 representative payload and require byte/size/SHA-256 equality among the generator, manifest, request declaration, and local transport fixture. Also require exact path-set equality between source-admission hashes and manifest frozen artifacts, including both the manifest and layout-clone source. Commit only after both identity gates pass.",
+    "blocker": "No V2 rehearsal or execution authority exists until the pre-Phase-1A payload-identity and exact hash-set gates pass from fresh bytes. No amendment, retry, V1 evidence reuse, benchmark, or remote action is authorized by this evaluation.",
+    "executed": false
+  },
+  "phase3_actions": {
+    "remote_host_contacts": 0,
+    "ssh_invocations": 0,
+    "lease_attempts": 0,
+    "benchmark_runs": 0,
+    "factorization_pipeline_runs": 0,
+    "timed_performance_samples": 0,
+    "remote_cleanup_operations": 0,
+    "cuda_used": false,
+    "host_service_power_auth_toolchain_mutations": 0
+  }
+}

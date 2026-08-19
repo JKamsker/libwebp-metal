@@ -1,0 +1,8 @@
+{
+  "acquisition_attempted": false,
+  "receipt_available": false,
+  "receipt_required": false,
+  "schema": "libwebp-backref-cost-specialization-factorization-v1-lease-transfer-v1",
+  "state": "not-attempted",
+  "status": "not-attempted"
+}
