@@ -2009,3 +2009,26 @@ two-CTA limit already supplies 96 slots across 48 SMs, so a third resident CTA
 does not materially increase available wavefront parallelism. Raw artifacts
 use the `libwebp-i4-compact-occupancy-*` prefix. Turing-only evidence; Ampere+
 thresholds and claims are unchanged.
+
+## Decimation CUDA Graph replay rejection
+
+After the retained native-sm_75 profile measured decimation at 20.671 ms on
+graphic-medium, 21.605 ms on photo-medium, and 52.138 ms on texture-medium, a
+pre-Ampere candidate cached the roughly 250 dependent diagonal launches and
+replayed them as a CUDA Graph. Ampere+ kept the established direct launches.
+
+The same native candidate binary provided both sides of the screen, with
+`WEBP_CUDA_DECIMATE_GRAPH=0` selecting the control. PNG ran candidate/control
+and JPEG ran control/candidate; every retained row had exact aggregate output:
+
+| Format | Control | Graph replay | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 39.937 ms/image | 82.736 ms/image | -42.799 ms/image | `ace64e860de89b43` / 6,441,688 |
+| JPEG lossy | 39.515 ms/image | 80.974 ms/image | -41.459 ms/image | `1cbb84d2ab926db3` / 6,400,792 |
+
+The focused trellis, padded-stride, band-remainder, and transactional-fallback
+suite passed before timing. Because replay regressed both formats by more than
+41 ms/image, the candidate was restored immediately and the larger correctness
+matrix was unnecessary. Raw artifacts use the
+`libwebp-decimate-graph-replay-*` prefix. Turing-only evidence; Ampere+
+thresholds and source behavior remain unchanged.

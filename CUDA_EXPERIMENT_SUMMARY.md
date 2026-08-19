@@ -706,3 +706,30 @@ leaving the third theoretical slot mostly unused. Exact patch, resource
 profile, 24 raw rows, and the 15-cell hash/byte matrix are archived under
 `libwebp-i4-compact-occupancy-*`. RTX 2080 SUPER only; Ampere+ code, dispatch
 gates, and performance claims remain unchanged.
+
+## Pre-Ampere decimation CUDA Graph replay rejection
+
+The refreshed native-sm_75 profile kept decimation as the dominant retained
+lossy stage: 20.671/25.819 ms on graphic, 21.605/31.750 ms on photo, and
+52.138/79.093 ms on texture. The medium wavefront also requires roughly 250
+dependent diagonal launches. Nsight Compute counters were unavailable with
+`ERR_NVGPUCTRPERM`, so the next distinct candidate cached and replayed that
+explicit launch sequence as CUDA Graphs on pre-Ampere only. Ampere+ retained
+the existing launch path.
+
+The candidate trellis/fallback suite was byte-exact. A same-binary screen used
+`WEBP_CUDA_DECIMATE_GRAPH=0` as the control and reversed format order:
+
+| Format | Parent | Graph replay | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.937 ms/image | 82.736 ms/image | -42.799 ms/image |
+| JPEG lossy | 39.515 ms/image | 80.974 ms/image | -41.459 ms/image |
+
+All retained rows matched aggregate hashes and byte counts (`ace64e860de89b43`
+/ 6,441,688 bytes for PNG; `1cbb84d2ab926db3` / 6,400,792 bytes for JPEG).
+Graph-node scheduling more than doubled the decimation-heavy cost on Turing,
+so the candidate was removed without expanding to the full matrix. Restored
+source passed six of seven local CTests; the sole silent
+`cuda_histogram_test` exit is pre-existing in the untouched parent. Exact
+patch, raw rows, profile, tests, and summary are archived under
+`libwebp-decimate-graph-replay-*`. RTX 2080 SUPER only; no Ampere+ claim.

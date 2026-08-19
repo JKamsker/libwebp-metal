@@ -292,6 +292,12 @@ profile, exact rejected pre-Ampere compact-scratch plus RD-specialization
 patch, 24 byte-exact order-reversed timing rows, the 15-cell methods/qualities
 tiny/odd aggregate hash-and-byte matrix, and the computed decision summary.
 
+The `libwebp-decimate-graph-replay-*` files preserve the refreshed retained
+stage profile, exact rejected pre-Ampere CUDA Graph patch, same-binary PNG and
+JPEG control/candidate rows, focused/restored test status, and computed
+decision summary. The candidate was removed after regressing both formats by
+more than 41 ms/image.
+
 Inspect the sampling archives with:
 
 ```sh

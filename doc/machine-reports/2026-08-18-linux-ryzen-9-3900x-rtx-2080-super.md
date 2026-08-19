@@ -2145,3 +2145,29 @@ residency slot is consequently mostly unused. Raw profile/resource evidence,
 exact candidate patch, all timing rows, and the hash/byte matrix use the
 `libwebp-i4-compact-occupancy-*` prefix. No Ampere+ code, dispatch gate, or
 performance claim changed.
+
+## Pre-Ampere decimation CUDA Graph replay
+
+A refreshed native-sm_75 run confirmed decimation remained the dominant
+lossy stage, taking 20.671 ms of 25.819 ms on graphic-medium, 21.605 ms of
+31.750 ms on photo-medium, and 52.138 ms of 79.093 ms on texture-medium. The
+pass submits roughly 250 dependency-ordered diagonal kernels for the medium
+geometry. Nsight Systems capture was not importable on this host and Nsight
+Compute counters were denied with `ERR_NVGPUCTRPERM`; the explicit launch
+count and stage timings therefore motivated a pre-Ampere-only CUDA Graph
+cache/replay candidate. Ampere+ remained on the retained path.
+
+The candidate passed the focused exact trellis/fallback suite. Three retained
+samples per side in a same-binary, reversed-format screen measured:
+
+| Format | Direct launches | CUDA Graph | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.937 ms/image | 82.736 ms/image | -42.799 ms/image |
+| JPEG lossy | 39.515 ms/image | 80.974 ms/image | -41.459 ms/image |
+
+PNG hashes/bytes were `ace64e860de89b43` / 6,441,688 on both sides; JPEG was
+`1cbb84d2ab926db3` / 6,400,792. The graph path more than doubled end-to-end
+latency, so it was removed. The restored focused build succeeded and six of
+seven CTests passed; the known silent `cuda_histogram_test` failure reproduced
+unchanged. Evidence is archived under `libwebp-decimate-graph-replay-*`. This
+is RTX 2080 SUPER evidence only and does not alter Ampere+ settings or claims.
