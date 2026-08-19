@@ -188,6 +188,15 @@ transcript. The earlier parent and candidate failures under
 `libwebp-hash-combined-test-cuda-*` demonstrate that the stale resident-pixel
 bug predated the rejected matcher.
 
+The `libwebp-lossy-retained-profile-*` files contain the current native-sm_75
+stage records, summary, and direct per-phase device timing for medium graphic,
+photo, and texture inputs. `libwebp-token-record-inline-*` preserves every raw
+row from the five-pair PNG/JPEG recorder-pipeline recheck plus its computed
+summary. `libwebp-static-i4-inline-*` preserves both order-reversed composite
+screens, their summary, the exact rejected pre-Ampere patch, and parent and
+candidate native CMake caches. Raw input-format controls were not promoted to
+a performance claim; the report documents the invalid cross-format contrast.
+
 Inspect the sampling archives with:
 
 ```sh

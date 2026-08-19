@@ -1451,3 +1451,31 @@ The raw paired screens, failing parent reproducer, final public-test logs,
 official JSONL/results, exact patches, SASS, resource reports, and copied
 tiny/odd inputs are in the adjacent evidence directory under the
 `libwebp-hash-combined-*` and `libwebp-resident-handoff-*` prefixes.
+
+## Lossy recorder recheck and rejected composition
+
+The retained native-sm_75 profile measured medium graphic/photo/texture at
+25.819/31.750/79.093 ms per encode. Their accelerated decimate/collect/replay
+intervals were 20.671/21.605/52.138 ms, while direct device walls were nearly
+flat at 21.650/21.920/21.890 ms. Token emission was
+0.589/2.849/14.374 ms; I4 represented 37.0/63.8/65.5% of device block cycles.
+
+That texture gap justified rechecking the recorder worker. Five
+order-balanced process pairs per format kept every aggregate hash and byte
+count exact, but inline recording gained only 0.553 ms/image PNG (40.208 to
+39.655) and 0.373 JPEG (40.403 to 39.878). A preliminary 8.8 ms impression
+was discarded because it compared PPM candidate input against PNG parent
+input; like-for-like PPM measured 32.362 versus 31.731 ms/image.
+
+Inline recording was then composed with the previously exact static I4
+prediction dispatch and 16-lane winner publication, isolated to the
+pre-Ampere compile path. Two order-reversed processes with six samples per
+cell moved PNG 40.436 to 39.008 ms/image (1.427 ms) and JPEG 40.375 to 39.120
+(1.255 ms). All 48 aggregate rows retained the expected hashes. Both gains
+remain below 1.5 ms/image, so the composite was removed and no Ampere+ claim
+is made.
+
+The adjacent evidence directory stores the retained profile under
+`libwebp-lossy-retained-profile-*`, the 20-process recorder gate under
+`libwebp-token-record-inline-*`, and the composite screen, exact rejected
+patch, summaries, and native caches under `libwebp-static-i4-inline-*`.

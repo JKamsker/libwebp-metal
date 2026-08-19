@@ -1357,3 +1357,48 @@ were:
 These measurements are specific to the Ryzen 9 3900X / RTX 2080 SUPER. Raw
 suite JSONL, results, public-test transcripts, the reproducer, and the exact
 patch are stored with that machine's report.
+
+## Retained-head lossy profile and token-recording recheck
+
+A new native-sm_75 retained-head profile separated the medium PPM encode wall,
+the accelerated decimate/collect/replay interval, token emission, and the
+device wall:
+
+| Content | Encode total | Decimate / replay | Emit tokens | GPU wall | I4 cycle share |
+|---|---:|---:|---:|---:|---:|
+| Graphic | 25.819 ms | 20.671 ms | 0.589 ms | 21.650 ms | 37.0% |
+| Photo | 31.750 ms | 21.605 ms | 2.849 ms | 21.920 ms | 63.8% |
+| Texture | 79.093 ms | 52.138 ms | 14.374 ms | 21.890 ms | 65.5% |
+
+The texture gap motivated a like-for-like recheck of the recorder worker.
+Five order-balanced processes per format, with one warmup and three measured
+24-image batches per process, produced:
+
+| Format | Pipelined recording | Inline recording | Paired gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.208 ms/image | 39.655 ms/image | 0.553 ms/image |
+| JPEG lossy | 40.403 ms/image | 39.878 ms/image | 0.373 ms/image |
+
+All aggregate hashes and byte counts matched. The gains are below the 1.5
+ms/image retention threshold, so the pipeline default remains unchanged. An
+initial apparent 8.8 ms gap was an invalid cross-format comparison: the parent
+used PNG input while the candidate used cheaper-to-decode PPM input. The
+like-for-like PPM medians were 32.362 and 31.731 ms/image, consistent with the
+small valid result above.
+
+## Static-I4 plus inline-recording composition rejection
+
+The exact static I4 prediction dispatch and 16-lane winner publication were
+reconstructed only in the pre-Ampere compile branch and composed with inline
+token recording. Two order-reversed native-sm_75 processes, six measured
+samples per cell, kept every aggregate output hash and byte count unchanged:
+
+| Format | Parent | Composite | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.436 ms/image | 39.008 ms/image | 1.427 ms/image |
+| JPEG lossy | 40.375 ms/image | 39.120 ms/image | 1.255 ms/image |
+
+Both results remain below the strict 1.5 ms/image gate. The candidate was
+removed; this is RTX 2080 SUPER evidence only and makes no Ampere+ performance
+claim. Raw profiles, all timing rows, native caches, summaries, and the exact
+rejected patch are stored with the machine report.

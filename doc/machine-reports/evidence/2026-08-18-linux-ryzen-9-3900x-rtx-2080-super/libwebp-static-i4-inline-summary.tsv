@@ -1,0 +1,9 @@
+format	order	parent_ms_per_image	candidate_ms_per_image	gain_ms	parent_hash	candidate_hash
+png	0	40.476986	39.006124	1.470862	73b8b6adb7b52443	73b8b6adb7b52443
+png	1	40.388523	39.063869	1.324654	73b8b6adb7b52443	73b8b6adb7b52443
+jpeg	0	40.341938	39.086753	1.255185	9d89fbb6c0f92203	9d89fbb6c0f92203
+jpeg	1	40.434302	39.186125	1.248177	9d89fbb6c0f92203	9d89fbb6c0f92203
+
+format	parent_pooled_median_ms	candidate_pooled_median_ms	gain_ms
+png	40.435527	39.008059	1.427469
+jpeg	40.375242	39.120457	1.254785
