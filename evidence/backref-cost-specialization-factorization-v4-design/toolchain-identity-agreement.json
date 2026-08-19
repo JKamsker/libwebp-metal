@@ -1,0 +1,25 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v4-toolchain-agreement-v1",
+  "status": "PASS",
+  "identity_canonical_sha256": "703ceac0715a267f5519726ed3309a86ff6cbee57562c6b051c6d33c78b6c1ad",
+  "manifest_actual_fixture_agree": true,
+  "negative_stale_v2_xcrun_test": "PASS_REJECTED",
+  "negative_stale_v3_identity_test": "PASS_REJECTED",
+  "stale_v2_xcrun_sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152",
+  "stale_v3_identity_canonical_sha256": "735eb9be26c9b7118819b502bf0e24b6d87e8da945d81858c22bebdf889ce077",
+  "required_executables": [
+    "clang",
+    "clang++",
+    "nm",
+    "ar",
+    "ranlib",
+    "llvm-objdump"
+  ],
+  "required_metadata": [
+    "xcode-version-plist",
+    "toolchain-info-plist",
+    "sdk-settings-json",
+    "sdk-settings-plist"
+  ],
+  "xcrun_required": false
+}

@@ -1,0 +1,93 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v4-phase1-local-validation-v1",
+  "status": "PASS",
+  "base_commit": "f289499b37875d8166792ed104f2b26e23cf4ffd",
+  "phase": "1A",
+  "authority_before_rehearsal": "NONE",
+  "timed_execution_authorized": false,
+  "performance_samples": 0,
+  "factorization_pipeline_runs": 0,
+  "remote_contacts": 0,
+  "checks": {
+    "preferred_b_l_h_factorization_feasible": true,
+    "representative_payload_manifest_generator_fixture_agreement": "PASS",
+    "representative_payload_sha256": "d34b944ec0b8eead809367d456785cf37d325459bca34506bec74af5efba4db0",
+    "stale_v2_payload_negative_test": "PASS_REJECTED_68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "stale_v3_payload_negative_test": "PASS_REJECTED_8fb97e16b8be09e7dc0c20b0b26387a0f8301d0aa738fa7ade4a6a97d15afeb8",
+    "ordinary_build_default_omission": "PASS",
+    "public_api_abi_equal": "PASS",
+    "timed_recorder_free": "PASS",
+    "recorder_build_distinct": "PASS",
+    "runtime_truth_table": "PASS_ABSENT_B_EXACT_B_L_H_OTHER_INVALID",
+    "selector_once_before_mutation": "PASS",
+    "exactly_one_selected_dp": "PASS",
+    "bitstream_pixel_determinism_input_immutability": "PASS",
+    "local_correctness_encodes": 3,
+    "sanitizer_configurations": 2,
+    "sanitizer_boundary_encodes": 36,
+    "undefined_integer_sanitizer": "PASS_WITH_KNOWN_DECODER_UNSIGNED_SHIFT_BASE_DISABLED",
+    "array_bounds_pointer_overflow_sanitizer": "PASS",
+    "matched_layout_codegen": "PASS",
+    "six_private_symbols": "PASS",
+    "six_private_symbol_addresses_distinct": "PASS_NO_LINKER_DEDUPLICATION",
+    "local_work_counter_boundary": "PASS",
+    "coarse_timer_monotonicity": "PASS",
+    "transport_state_machine": "PASS",
+    "observe_only_process_ownership": "PASS",
+    "global_experiment_mutual_exclusion": "PASS_40_GUARDS",
+    "compact_archive_fixture": "PASS",
+    "compact_archive_fixture_bytes": 7921,
+    "compact_archive_fixture_sha256": "67cbc18f87a86a831f1668b95fe27de956867c38d4ee628e1549361a609a9a54",
+    "response_direction_fixture_bytes": 530893,
+    "archive_cap_bytes": 786432,
+    "framed_response_cap_bytes": 1048576,
+    "python_syntax_and_json": "PASS",
+    "whitespace": "PASS",
+    "merged_v3_refusal_provenance_audit": "PASS_AUTHORITY_NONE_ZERO_SAMPLES_NOT_RERUN",
+    "toolchain_manifest_actual_fixture_agreement": "PASS_6_EXECUTABLES_4_METADATA",
+    "stale_v2_xcrun_negative_test": "PASS_REJECTED_b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152",
+    "stale_v3_toolchain_envelope_negative_test": "PASS_REJECTED_735eb9be26c9b7118819b502bf0e24b6d87e8da945d81858c22bebdf889ce077",
+    "xcrun_required_executable_and_child_command_absence": "PASS",
+    "pinned_llvm_objdump_sha256": "fa24edaea7afab86d88b9706e1b952f32abc819bd62f8f9bf8dafb5ae01ba159"
+  },
+  "frozen_inventory": {
+    "variants": [
+      "B",
+      "L",
+      "H"
+    ],
+    "methods": [
+      4,
+      6
+    ],
+    "profile_processes": 36,
+    "warmups": 36,
+    "retained_timing_rows": 144,
+    "stage_rows": 180,
+    "runner_rows": 180,
+    "correctness_encodes": 24,
+    "untimed_work_rows": 12,
+    "pairwise_families": [
+      "B_to_L",
+      "L_to_H",
+      "B_to_H"
+    ],
+    "primary_metrics": [
+      "dp_total",
+      "dp_steady",
+      "whole_encode"
+    ]
+  },
+  "local_timer_validation": {
+    "clock_reads": 4096,
+    "elapsed_ns": 55042,
+    "mean_read_delta_ns": 13,
+    "minimum_positive_delta_ns": 41,
+    "maximum_delta_ns": 125,
+    "positive_deltas": 1318,
+    "monotonic": true
+  },
+  "local_synchronous_rehearsal": "NOT_YET_ATTEMPTED_PHASE_1A",
+  "production_promotion": "NOT_EVALUATED",
+  "next_action": "Commit Phase 1A, then execute exactly one synchronous remote untimed zero-workload zero-lease rehearsal on pandocs-agent with no retry. Authority remains NONE unless every frozen source/toolchain/device/resource/process/payload/archive/integrity/extraction/cleanup/absence receipt passes."
+}
