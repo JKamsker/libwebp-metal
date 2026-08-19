@@ -1,0 +1,45 @@
+{
+  "artifacts": [
+    {
+      "bytes": 2261,
+      "path": "build-identity.json",
+      "sha256": "6840a6da674ff194f5937d95f8ff3bb41e1d7c6def470a9f654c8dec98598240"
+    },
+    {
+      "bytes": 2712,
+      "path": "codegen.json",
+      "sha256": "8c5ead2bf9d67718d94c66d253804d07cb3ecdf35f395614927b923d82c07baa"
+    },
+    {
+      "bytes": 1566,
+      "path": "diagnostic-admission.json",
+      "sha256": "004665604620073c65c460820e4ae77cc1181fa7c7fff9a8913758e4f1e35d7a"
+    },
+    {
+      "bytes": 354,
+      "path": "operator-status.json",
+      "sha256": "7c8a7e278cfe5b95bd0b7a4e31f05f1f476230b60fd081c014d0880cae33ef95"
+    },
+    {
+      "bytes": 80129,
+      "path": "profile-plan.json",
+      "sha256": "b4e68e586be7489922c7d35108fb66f5cb9885dda2a82f3b5a67bc91e2abeb83"
+    },
+    {
+      "bytes": 1460,
+      "path": "rehearsal.json",
+      "sha256": "427abc0ed60e5ae9a39e842b4491f5d944a4de9d980803b4fb900b1184ca0a3c"
+    },
+    {
+      "bytes": 5679,
+      "path": "resource-admission-admission.json",
+      "sha256": "3d4d9e1dea5b22966e4eabad1918355f77d7b858fd4a4329a8140e6887364d16"
+    },
+    {
+      "bytes": 271,
+      "path": "timer-validation.json",
+      "sha256": "281b994290b1d07f7d95fb5d90880375020078c6f3519947e33c0e19e143550d"
+    }
+  ],
+  "schema": "libwebp-backref-cost-specialization-factorization-v1-artifact-hashes-v1"
+}

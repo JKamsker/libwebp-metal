@@ -1,0 +1,9 @@
+{
+  "benchmark_lease_acquisition_attempted": false,
+  "mode": "rehearse",
+  "production_promotion_authorized": false,
+  "schema": "libwebp-backref-cost-specialization-factorization-v1-operator-status-v1",
+  "source_commit": "cede7f5a3f075355b8e8894c137cb388508d422a",
+  "source_tree": "6a8e7566e1ed84cd01fc6e7ae148249323572930",
+  "status": "complete"
+}
