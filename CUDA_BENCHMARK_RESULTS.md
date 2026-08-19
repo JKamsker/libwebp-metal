@@ -976,3 +976,20 @@ five-process native-sm_75 gate measured only 1.399 ms/image PNG and 1.093
 ms/image JPEG gains. Both are below the 1.5 ms/image threshold, so the source
 change was removed. This result applies only to the RTX 2080 SUPER; the raw
 records are linked from its machine report.
+
+### Static-I4 composition follow-up
+
+Adding the prior exact static I4 dispatch/scalar scan/parallel commit to the
+chroma overlap crossed the short-screen threshold. A full version that also
+included I16 warp reductions gained 1.603 ms/image PNG but only 1.332 JPEG.
+The leaner version was therefore measured in two independent five-process
+blocks, for 30 samples per cell:
+
+| Format | Parent | Lean composition | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.274 ms/image | 38.662 ms/image | 1.612 ms |
+| JPEG lossy | 40.250 ms/image | 38.763 ms/image | 1.487 ms |
+
+All 120 outputs matched their parent hashes and byte counts. JPEG remained
+0.013 ms/image below the strict 1.5 ms gate, so the composition was removed.
+This is RTX 2080 SUPER-only evidence.

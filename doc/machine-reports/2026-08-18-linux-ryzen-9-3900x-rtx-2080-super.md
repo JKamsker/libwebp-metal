@@ -903,3 +903,29 @@ The raw A/B records are
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/chroma-i16-overlap-ab.jsonl`;
 the six `retained-lossy-stage-*.jsonl` files in the same directory contain the
 raw per-encode stage records and batch-harness outputs.
+
+### Static-I4 composition follow-up
+
+The exact static I4 prediction dispatch, scalar winner scan, and 16-lane
+winner commit were next composed with chroma/I16 overlap. A first full
+composition also included I16 warp reductions; all seven CTests passed and 60
+timing outputs were byte-exact, but its five-process medians gained 1.603
+ms/image PNG and only 1.332 JPEG.
+
+Removing the I16 reductions left more lower-half work to overlap with chroma.
+The lean composition passed the focused trellis/fallback test and was measured
+in a second independently order-balanced five-process block because its first
+JPEG result landed at 1.4985 ms/image. Combined medians across 30 samples per
+cell were:
+
+| Format | Parent | Lean composition | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.274 ms/image | 38.662 ms/image | 1.612 ms |
+| JPEG lossy | 40.250 ms/image | 38.763 ms/image | 1.487 ms |
+
+All 120 outputs retained the parent hash and byte count. JPEG remained 0.013
+ms/image below the strict 1.5 ms gate, so the candidate was removed rather
+than rounded into a win. This is RTX 2080 SUPER-only evidence. Raw records are
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-i16-chroma-overlap-ab.jsonl`
+and
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-chroma-overlap-ab.jsonl`.

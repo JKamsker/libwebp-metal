@@ -16,6 +16,11 @@ for the rejected scheduling candidate. The six
 and batch-harness output: 24 warmup plus 72 measured encodes for each of
 graphic, photo, and texture.
 
+`i4-i16-chroma-overlap-ab.jsonl` contains the 60-record full composition
+screen. `i4-chroma-overlap-ab.jsonl` contains both five-process blocks for the
+lean composition (120 records total), including the borderline repeat used
+for its decision.
+
 Inspect the sampling archives with:
 
 ```sh
