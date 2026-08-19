@@ -1,0 +1,62 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v9-phase3-local-validation-v1",
+  "status": "PASS_REPORT_VALIDATION_WITH_CONFIRMED_IMPLEMENTATION_BLOCKER",
+  "source_commit_before_phase3_files": "3952d4811de53872aa9e3c703490bdcf95bc21af",
+  "validation_mode": "local_untimed_report_and_static_evidence_only",
+  "timed_workload_invoked": false,
+  "encoder_workload_invoked": false,
+  "benchmark_invoked": false,
+  "profiler_invocations": 0,
+  "remote_command_invoked": false,
+  "remote_path_inspection_or_cleanup": false,
+  "benchmark_lease_acquisition_attempted": false,
+  "cuda_invocations": 0,
+  "process_signals": 0,
+  "rehearsal_retry_or_rerun": false,
+  "production_files_changed": false,
+  "production_promotion_authorized": false,
+  "commands": [
+    {
+      "command": "Git rev-parse/log/diff/cat-file inspection for exact main, Phase 1A, Phase 1B, and Phase 2",
+      "status": "PASS",
+      "summary": "exact three-commit linear ancestry, direct parents and trees verified; Phase 1B has five additions only; Phase 2 has two refusal-evidence additions only"
+    },
+    {
+      "command": "independent manifest, frozen-artifact, evidence inventory, byte-count, and SHA-256 checks",
+      "status": "PASS",
+      "summary": "27 manifest artifacts plus separately enveloped manifest are immutable through Phase 2 with zero digest mismatches; eight pre-evaluation evidence files total 21,480 bytes"
+    },
+    {
+      "command": "PYTHONPATH=scripts offline parse_response(require_success=False) of committed framed-stdout.bin",
+      "status": "PASS_REFUSAL_RECONSTRUCTED",
+      "summary": "six ordered frames and payload hashes verified; no bulk archive; exact comm refusal; final same-session cleanup and absence footer"
+    },
+    {
+      "command": "static source and AST review of V9 process identity and signal sites",
+      "status": "CONFIRMED_IMPLEMENTATION_DEFECT",
+      "summary": "pid/ppid/comm-only snapshot rejects slash-bearing comm before classification; no argv/source matching can justify refusal; discovered snapshot PIDs do not reach signals; only retained directly owned Popen timeout kill exists"
+    },
+    {
+      "command": "static source review of V9 build/compile/runtime gates, DP selection, fallback, counters, and timer boundaries",
+      "status": "PASS_AS_FROZEN_VALIDATION_SCOPE",
+      "summary": "default-off independent gate, exact-value runtime fallback, selector once before mutation, closed one-body DP selection, and frozen timer/counter structure confirmed without executing an encoder or timer"
+    },
+    {
+      "command": "JSON syntax/schema-field assertions and artifact-hash verification for Phase-3 reports",
+      "status": "PASS",
+      "summary": "JSON parsed, required unassessed/blocked/N/A fields asserted, report hashes recomputed, Git whitespace check passed, and only the Phase-3 evaluation directory changed"
+    }
+  ],
+  "inherited_phase1_local_validation_not_rerun": {
+    "status": "PASS_LOCAL_PENDING_ONE_EXACT_PHASE1A_REHEARSAL",
+    "correctness_encodes": 16,
+    "boundary_fixtures": 16,
+    "counter_cells": 4,
+    "sanitizer_configurations": 2,
+    "timer_reads": 4096,
+    "ordinary_object_target_string_omission": true,
+    "public_api_abi_equal": true,
+    "performance_samples": 0,
+    "reason_not_rerun": "Phase 3 is report-only and this resumed refusal cycle forbids encoder, profiler, benchmark, and timed execution."
+  }
+}
