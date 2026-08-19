@@ -1979,3 +1979,33 @@ The kernel moved from 103 to 102 registers with the 352-byte stack and 23,392
 shared bytes unchanged, but both formats regressed materially. The candidate
 was removed. Raw artifacts use the `libwebp-i4-residual-range-*` and
 `libwebp-i4-common-level-cost-*` prefixes. Turing-only evidence.
+
+## Compact-I4 three-CTA occupancy rejection
+
+The retained Turing method-4 kernel's 103 registers and 23,392 shared bytes
+both limited residency to two 256-thread CTAs per SM. The exact but previously
+rejected RD specialization removed the register limit without crossing the
+shared-memory boundary. Compacting only the pre-Ampere I4 reconstruction
+scratch from a padded 32-byte row stride to its actual four pixels reduced the
+composed method-4 kernel to 69 registers, no stack frame, and 21,152 shared
+bytes. This permits three CTAs within both Turing's 65,536-register and
+65,536-byte shared-memory budgets; Ampere+ compiled its established layout.
+
+The candidate passed exact aggregate hash/byte comparisons for methods 2--6,
+qualities 25/75/98, graphic/photo/texture, and 17x13/257x255 inputs. The
+trellis/fallback test additionally covered qualities 75/99, odd 513x517
+geometry, padded strides, one/two-pass encodes, all band remainders, and forced
+transactional fallback. Two order-reversed native builds produced 24 exact
+timing rows:
+
+| Format | Parent | Compact occupancy | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.438 ms/image | 38.974 ms/image | 0.465 ms/image |
+| JPEG lossy | 39.427 ms/image | 39.141 ms/image | 0.286 ms/image |
+
+The candidate was removed because both gains are below 1.5 ms/image. The
+medium workload's diagonal contains no more than 75 CTAs, while the retained
+two-CTA limit already supplies 96 slots across 48 SMs, so a third resident CTA
+does not materially increase available wavefront parallelism. Raw artifacts
+use the `libwebp-i4-compact-occupancy-*` prefix. Turing-only evidence; Ampere+
+thresholds and claims are unchanged.

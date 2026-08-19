@@ -1,0 +1,23 @@
+method	quality	cpu_hash	cuda_hash	cpu_bytes	cuda_bytes	result
+2	25	91ccc5eaf5fa5928	91ccc5eaf5fa5928	5154	5154	exact
+2	75	4c1d4091410652aa	4c1d4091410652aa	13262	13262	exact
+2	98	b7dc3d54c728a55c	b7dc3d54c728a55c	52226	52226	exact
+3	25	b72a89b94510c119	b72a89b94510c119	5072	5072	exact
+3	75	30b1cc7a8233e0ed	30b1cc7a8233e0ed	13326	13326	exact
+3	98	d012481e53a09298	d012481e53a09298	51758	51758	exact
+4	25	6f8786ee9405dee5	6f8786ee9405dee5	5064	5064	exact
+4	75	5c146e76c65dc35e	5c146e76c65dc35e	13376	13376	exact
+4	98	1ecc7c12253adc3f	1ecc7c12253adc3f	51780	51780	exact
+5	25	f2b05e2e7c9ca368	f2b05e2e7c9ca368	4930	4930	exact
+5	75	c3e20d0429bbdc3e	c3e20d0429bbdc3e	12270	12270	exact
+5	98	d5dd8a491e85d7bd	d5dd8a491e85d7bd	51106	51106	exact
+6	25	62b28f079eb3f395	62b28f079eb3f395	4800	4800	exact
+6	75	c72dec2e935714d3	c72dec2e935714d3	11968	11968	exact
+6	98	372a55c91860e81e	372a55c91860e81e	49702	49702	exact
+
+Inputs per row: graphic/photo/texture at 17x13 and 257x255. The aggregate
+hash and byte count include all six inputs in deterministic order.
+
+Focused cuda_trellis_test also passed method 5/6 qualities 75/99, 513x517
+padded strides, one/two-pass encodes, all band remainders, forced collect band
+3, forced download step 2, invalid requests, and transactional CPU fallback.

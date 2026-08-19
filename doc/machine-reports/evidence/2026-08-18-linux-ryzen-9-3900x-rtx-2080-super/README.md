@@ -287,6 +287,11 @@ The `libwebp-i4-residual-range-*` files preserve the temporary native-sm_75
 pre-Ampere common-range patch, 24 byte-exact rows, candidate build/resource
 output, and candidate/restored seven-test transcripts.
 
+The `libwebp-i4-compact-occupancy-*` files preserve the retained resource
+profile, exact rejected pre-Ampere compact-scratch plus RD-specialization
+patch, 24 byte-exact order-reversed timing rows, the 15-cell methods/qualities
+tiny/odd aggregate hash-and-byte matrix, and the computed decision summary.
+
 Inspect the sampling archives with:
 
 ```sh

@@ -2109,3 +2109,39 @@ Raw range profile, exact patch, timings, builds/resources, and
 candidate/restored tests are archived under
 `libwebp-i4-residual-range-*` and `libwebp-i4-common-level-cost-*`. RTX
 2080 SUPER only; no Ampere+ path changed.
+
+## Compact pre-Ampere I4 scratch / RD specialization composition
+
+The retained native-sm_75 kernel resource profile exposed a distinct
+occupancy boundary: method 4 used 103 registers, a 352-byte frame, and 23,392
+shared bytes, so both resources limited residency to two 256-thread CTAs per
+SM. The earlier exact RD-level specialization had reduced method 4 to 67
+registers and no frame but left shared memory unchanged, which explained its
+neutral result. The next candidate stored pre-Ampere I4 reconstruction rows at
+their actual four-byte stride and composed that specialization, while Ampere+
+retained the established layout and runtime RD-level behavior.
+
+Native resources reached 69 registers, no frame, and 21,152 shared bytes for
+method 4, admitting three CTAs under both 65,536-unit Turing limits. Methods 5
+and 6 remained at 96/94 registers, a 272-byte frame, and 21,152 shared bytes.
+Exact aggregate hashes and byte counts matched in all 15 method/quality cells:
+methods 2--6 and qualities 25/75/98 over graphic/photo/texture at 17x13 and
+257x255. The focused trellis suite also passed qualities 75/99, 513x517 odd
+geometry, one/two passes, padded strides, every band remainder, and forced
+collect/download transactional fallback.
+
+Two order-reversed processes per format, each discarding one warmup and
+retaining three 24-image samples, produced 24 exact rows:
+
+| Format | Parent | Compact occupancy | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.438 ms/image | 38.974 ms/image | 0.465 ms/image |
+| JPEG lossy | 39.427 ms/image | 39.141 ms/image | 0.286 ms/image |
+
+The source was restored because both changes are noise. The medium corpus has
+at most 75 CTAs on a diagonal; the retained two-CTA limit already makes 96
+slots available across the RTX 2080 SUPER's 48 SMs. The third theoretical
+residency slot is consequently mostly unused. Raw profile/resource evidence,
+exact candidate patch, all timing rows, and the hash/byte matrix use the
+`libwebp-i4-compact-occupancy-*` prefix. No Ampere+ code, dispatch gate, or
+performance claim changed.

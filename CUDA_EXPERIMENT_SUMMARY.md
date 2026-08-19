@@ -676,3 +676,33 @@ control path outweighed the fixed-table loads. The candidate was removed.
 Raw range probe, exact patch, rows, builds/resources, and tests are archived
 under `libwebp-i4-residual-range-*` and
 `libwebp-i4-common-level-cost-*`. RTX 2080 SUPER only.
+
+## Pre-Ampere compact-I4 occupancy rejection
+
+The retained native-sm_75 method-4 kernel used 103 registers, a 352-byte
+frame, and 23,392 bytes of shared memory, limiting it to two resident CTAs per
+Turing SM. The previously exact RD-level specialization removed the register
+limit (67 registers, no frame), but had remained at two CTAs because shared
+memory was unchanged. A new candidate stored each reconstructed I4 block at
+its actual four-byte row stride on pre-Ampere and composed that specialization;
+Ampere+ retained the established layout and runtime RD-level path.
+
+The candidate reached its profiled resource goal: method 4 used 69 registers,
+no frame, and 21,152 shared bytes, permitting three CTAs per Turing SM. Exact
+CPU/CUDA hashes and byte counts matched for all 15 method/quality cells across
+methods 2--6, qualities 25/75/98, and graphic/photo/texture inputs at 17x13
+and 257x255. The focused trellis test also covered qualities 75/99, 513x517,
+one/two passes, padded strides, band remainders, and transactional fallbacks.
+All 24 order-reversed timing rows matched:
+
+| Format | Parent | Compact occupancy | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.438 ms/image | 38.974 ms/image | 0.465 ms/image |
+| JPEG lossy | 39.427 ms/image | 39.141 ms/image | 0.286 ms/image |
+
+Both gains are noise, so the candidate was removed. The corpus has at most 75
+CTAs on a diagonal; two resident CTAs across 48 SMs already expose 96 slots,
+leaving the third theoretical slot mostly unused. Exact patch, resource
+profile, 24 raw rows, and the 15-cell hash/byte matrix are archived under
+`libwebp-i4-compact-occupancy-*`. RTX 2080 SUPER only; Ampere+ code, dispatch
+gates, and performance claims remain unchanged.
