@@ -644,3 +644,19 @@ warp reductions and one shared-memory writer per mode.
 The full CUDA trellis parity test passed and all 60 order-balanced outputs
 matched. The gains are below the 1.5 ms/image threshold, so the candidate was
 removed. Raw evidence is `/tmp/libwebp-i16-warp-reduce-ab.pW8SQc.jsonl`.
+
+## Cooperative I16 forward transforms
+
+An exact candidate mapped the 64 I16 forward transforms across all 256 CTA
+lanes using the retained four-lane separable transform. It reused the
+not-yet-populated I16 level arrays for bounded row intermediates, so shared
+memory and occupancy were unchanged.
+
+| Format | Parent | Cooperative transform | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.309 ms/image | 40.374 ms/image | +0.065 ms |
+| JPEG lossy | 40.377 ms/image | 40.307 ms/image | -0.071 ms |
+
+The full CUDA trellis parity test passed and all 60 order-balanced outputs
+matched. The candidate was removed; raw evidence is
+`/tmp/libwebp-i16-coop-forward-ab.8LpvKa.jsonl`.
