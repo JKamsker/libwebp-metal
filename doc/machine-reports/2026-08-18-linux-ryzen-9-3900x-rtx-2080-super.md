@@ -1931,3 +1931,27 @@ Resource use fell from 103 to 101 registers with the same 352-byte stack and
 was removed. Exact patch, rows, resource output, and candidate/restored test
 logs are archived under `libwebp-i4-uniform-ac-*`. This is Turing-only
 evidence and makes no Ampere+ performance claim.
+
+## I4 source-Hadamard overlap
+
+The 21.7--24.0% I4 metric interval includes a weighted Hadamard transform of
+the same source block for all ten modes. A pre-Ampere candidate computed that
+common sum in an otherwise idle upper-team lane during the preceding
+transform/quantization stage. The existing barrier published it, and the
+metric warp then transformed only each reconstruction. Ampere+ retained the
+original source path.
+
+Candidate and restored source passed all seven CTests. All 24 order-reversed
+native-sm_75 timing rows were byte-exact:
+
+| Format | Parent | Overlap | Change |
+|---|---:|---:|---:|
+| PNG lossy | 39.683 ms/image | 39.596 ms/image | -0.088 ms/image |
+| JPEG lossy | 39.567 ms/image | 39.689 ms/image | +0.121 ms/image |
+
+On texture-medium, direct GPU wall moved from 26.08 to 26.15 ms and I4 stayed
+65.3% versus 65.2% of block cycles. The candidate merely transferred the
+source transform to the earlier barrier's critical path, so it was removed.
+Exact patch, rows, phase trace, resource output, and candidate/restored tests
+are archived under `libwebp-i4-source-hadamard-*`. Turing-only evidence; no
+Ampere+ behavior or performance claim changed.

@@ -1,0 +1,46 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index d5dd4a6e..6b6aed31 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -1385,6 +1385,9 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     __shared__ int i4_header_bits;
+     __shared__ int16_t i4_best_levels[16][16];
+     __shared__ uint8_t i4_boundary2[2][13];
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++    __shared__ int i4_src_tsum[2];
++#endif
+     __shared__ uint8_t i4_block_nz[16], i4_ready[16];
+     __shared__ long long i4_block_D[16], i4_block_SD[16];
+     __shared__ long long i4_block_H[16], i4_block_R[16];
+@@ -1470,6 +1473,13 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+                           w.i4_transform_tmp[team][mode], mode_lane,
+                           warp_mask);
+       }
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++      if (active && tlambda && team_tid == 64) {
++        const uint8_t* const src =
++            w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
++        i4_src_tsum[team] = CudaTTransform(src, kWeightY);
++      }
++#endif
+       __syncthreads();
+       if (active) {
+         const int warp = team_tid >> 5, lane = team_tid & 31;
+@@ -1490,8 +1500,17 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+                                       kFlatnessLimitI4)
+                          : 0;
+         } else if (warp == 3 && lane < kNumBModes) {
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++          w.i4_sd[team][lane] =
++              tlambda
++                  ? (CudaAbs(CudaTTransform(w.i4_out[team][lane], kWeightY) -
++                             i4_src_tsum[team]) >>
++                     5)
++                  : 0;
++#else
+           w.i4_sd[team][lane] =
+               tlambda ? CudaDisto4x4(src, w.i4_out[team][lane], kWeightY) : 0;
++#endif
+         }
+       }
+       __syncthreads();

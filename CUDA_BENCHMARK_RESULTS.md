@@ -1818,3 +1818,25 @@ Registers fell from 103 to 101, but neither format improved. The specialized
 loads were already cheap in the retained layout, so the candidate was
 removed. Raw evidence is archived with the RTX 2080 SUPER report; no Ampere+
 behavior or performance claim changed.
+
+## I4 source-Hadamard overlap rejection
+
+The metric subprofile identified a scheduling opportunity: every I4 mode's
+distortion calculation transforms the same source block, while upper team
+warps are idle in the preceding transform/quantization interval. A
+pre-Ampere candidate computed that common weighted Hadamard sum in an idle
+lane before the existing barrier, leaving only reconstruction transforms in
+the metric warp. Ampere+ compiled the original path.
+
+Candidate and restored source passed all seven CTests. Two order-reversed
+native-sm_75 processes produced 24 byte-exact rows:
+
+| Format | Parent | Overlap | Change |
+|---|---:|---:|---:|
+| PNG lossy | 39.683 ms/image | 39.596 ms/image | -0.088 ms/image |
+| JPEG lossy | 39.567 ms/image | 39.689 ms/image | +0.121 ms/image |
+
+The representative texture GPU wall was also unchanged at 26.08 versus
+26.15 ms. The source transform became part of the preceding barrier's wait
+instead of reducing total critical-path work. The candidate was removed and
+raw evidence archived with the RTX 2080 SUPER report; no Ampere+ claim.

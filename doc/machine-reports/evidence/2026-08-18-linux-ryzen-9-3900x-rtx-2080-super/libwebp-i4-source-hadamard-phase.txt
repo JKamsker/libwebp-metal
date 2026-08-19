@@ -1,0 +1,8 @@
+BUILD=parent
+decimate GPU wall: 26.04 ms (100x75 MBs)
+decimate phases (% of block cycles): import 4.0% i16-num 10.0% i16-sel 8.5% i4 65.4% uv-num 5.8% uv-sel 5.7% recon 0.6%
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":340401231,"ns_per_image":340401231.000,"images_per_second":2.937710,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"48ed500df8ed450e","output_bytes":1193792}
+BUILD=candidate
+decimate GPU wall: 26.07 ms (100x75 MBs)
+decimate phases (% of block cycles): import 4.0% i16-num 10.1% i16-sel 8.5% i4 65.2% uv-num 5.9% uv-sel 5.7% recon 0.6%
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":255737661,"ns_per_image":255737661.000,"images_per_second":3.910257,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"48ed500df8ed450e","output_bytes":1193792}

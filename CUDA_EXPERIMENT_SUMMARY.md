@@ -503,3 +503,25 @@ time, confirming that the repeated AC loads were already coalesced or
 cache-resident. It was removed. Exact patch, rows, resources, and both test
 logs are archived under `libwebp-i4-uniform-ac-*`. RTX 2080 SUPER only; no
 Ampere+ behavior or claim changed.
+
+## Pre-Ampere I4 source-Hadamard overlap rejection
+
+The retained I4 profile assigned 21.7--24.0% of I4 cycles to metrics. Each
+distortion mode serially transforms the common source and its reconstruction,
+while two team warps are idle during the preceding transform/quantization
+stage. A pre-Ampere candidate computed the common source Hadamard sum in one
+idle lane before the existing barrier, then reused it for all ten modes.
+
+Candidate and restored trees passed 7/7 CTests and all 24 order-reversed rows
+were exact:
+
+| Format | Parent | Overlap | Change |
+|---|---:|---:|---:|
+| PNG lossy | 39.683 ms/image | 39.596 ms/image | -0.088 ms/image |
+| JPEG lossy | 39.567 ms/image | 39.689 ms/image | +0.121 ms/image |
+
+A texture trace was likewise flat at 26.08 versus 26.15 ms GPU wall, with I4
+65.3% versus 65.2% of block cycles. The work moved across the barrier but did
+not shorten its critical path, so the candidate was removed. Exact patch,
+rows, phase trace, resources, and tests are archived under
+`libwebp-i4-source-hadamard-*`. RTX 2080 SUPER only; Ampere+ stayed unchanged.

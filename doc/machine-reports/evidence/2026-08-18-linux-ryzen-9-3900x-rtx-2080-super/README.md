@@ -245,6 +245,11 @@ The `libwebp-i4-uniform-ac-*` files contain the exact patch, 24 byte-exact
 timing rows, parent/candidate resource output, and candidate/restored test
 logs for the rejected pre-Ampere uniform-AC quantization fast path.
 
+The `libwebp-i4-source-hadamard-*` files contain the exact patch, 24
+byte-exact timing rows, direct phase trace, resource output, and
+candidate/restored test logs for the rejected pre-Ampere source-transform
+overlap.
+
 Inspect the sampling archives with:
 
 ```sh
