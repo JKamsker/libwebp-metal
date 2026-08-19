@@ -1,0 +1,119 @@
+Functions sorted by metric: Exclusive Total CPU Time
+
+Excl. Total   Incl. Total    Name
+CPU           CPU
+ sec.      %   sec.      %
+2.862 100.00  2.862 100.00   <Total>
+0.420  14.69  0.630  22.03   VP8LBackwardReferencesTraceBackwards
+0.250   8.74  0.250   8.74   VP8LBackwardRefsCursorAdd
+0.200   6.99  0.230   8.04   GetCombinedEntropyUnrefined_C
+0.180   6.29  0.390  13.64   <static>@0x396586 (<libcuda.so.595.84>)
+0.180   6.29  0.410  14.34   VP8LHashChainFill
+0.180   6.29  0.180   6.29   inflate_fast
+0.120   4.20  0.270   9.44   <static>@0x2067e0 (<libcuda.so.595.84>)
+0.110   3.85  0.110   3.85   <static>@0x1881e1 (<libc.so.6>)
+0.100   3.50  0.100   3.50   GetEntropyUnrefined_C
+0.090   3.15  2.222  77.62   VP8LEncodeStream
+0.060   2.10  0.060   2.10   CacheSearchJobHook
+0.060   2.10  0.100   3.50   StoreImageToBitMask
+0.060   2.10  0.060   2.10   png_read_filter_row_paeth_multibyte_pixel
+0.050   1.75  0.220   7.69   <static>@0x245ece (<libcuda.so.595.84>)
+0.050   1.75  0.050   1.75   BackwardReferencesLz77Box.constprop.0
+0.050   1.75  0.050   1.75   VP8LAllocateHistogramSet
+0.050   1.75  0.991  34.62   VP8LGetBackwardReferences
+0.050   1.75  0.050   1.75   adler32_z
+0.050   1.75  2.712  94.76   main
+0.040   1.40  0.040   1.40   VP8LHistogramStoreRefs
+0.040   1.40  0.040   1.40   VP8LPutBitsFlushBits
+0.040   1.40  0.040   1.40   png_read_filter_row_up
+0.030   1.05  0.090   3.15   BackwardReferencesLz77.constprop.0
+0.030   1.05  0.030   1.05   FastSLog2Slow_C
+0.030   1.05  0.030   1.05   PushInterval
+0.030   1.05  0.430  15.03   VP8LGetHistoImageSymbols
+0.030   1.05  0.030   1.05   brk
+0.030   1.05  0.030   1.05   ioctl
+0.020   0.70  0.210   7.34   (anonymous namespace)::CUDAHashChainLocked(void*, WebPAcceleratorHashChainRequest const*)
+0.020   0.70  0.020   0.70   <static>@0x7ffcc83fe6f0 ([vdso])
+0.020   0.70  0.020   0.70   BackwardReferences2DLocality.isra.0
+0.020   0.70  0.020   0.70   CalculateBestCacheSizeBaseline.isra.0
+0.020   0.70  0.020   0.70   SubtractGreenFromBlueAndRed_AVX2
+0.020   0.70  0.020   0.70   VP8LDistanceToPlaneCode
+0.020   0.70  0.020   0.70   crc32_z
+0.020   0.70  0.250   8.74   inflate
+0.010   0.35  0.250   8.74   <static>@0x223510 (<libcuda.so.595.84>)
+0.010   0.35  0.010   0.35   ApplyPalette
+0.010   0.35  0.010   0.35   GetColorPalette
+0.010   0.35  0.010   0.35   PackRGB_C
+0.010   0.35  0.010   0.35   WebPReportProgress
+0.010   0.35  0.010   0.35   munmap
+0.010   0.35  0.010   0.35   png_read_filter_row_sub
+0.010   0.35  0.010   0.35   pthread_cond_signal
+0.010   0.35  0.010   0.35   pthread_create
+0.      0.    0.050   1.75   (anonymous namespace)::CUDAColorTransform(void*, WebPAcceleratorColorTransformRequest const*)
+0.      0.    0.050   1.75   (anonymous namespace)::CUDAColorTransformLocked(void*, WebPAcceleratorColorTransformRequest const*)
+0.      0.    0.210   7.34   (anonymous namespace)::CUDAHashChain(void*, WebPAcceleratorHashChainRequest const*)
+0.      0.    0.120   4.20   (anonymous namespace)::CUDAHistogram(void*, WebPAcceleratorHistogramRequest const*)
+0.      0.    0.120   4.20   (anonymous namespace)::CUDAHistogramLocked(void*, WebPAcceleratorHistogramRequest const*)
+0.      0.    0.080   2.80   (anonymous namespace)::CUDAPredictor(void*, WebPAcceleratorPredictorRequest const*)
+0.      0.    0.080   2.80   (anonymous namespace)::CUDAPredictorLocked(void*, WebPAcceleratorPredictorRequest const*)
+0.      0.    0.030   1.05   (anonymous namespace)::Initialize((anonymous namespace)::CudaState*)
+0.      0.    0.010   0.35   <static>@0x164dc0 (<libcuda.so.595.84>)
+0.      0.    0.360  12.59   <static>@0x1d0f96 (<libcuda.so.595.84>)
+0.      0.    0.390  13.64   <static>@0x21b7b (<libcudart.so.12.0.146>)
+0.      0.    2.712  94.76   <static>@0x2a145 (<libc.so.6>)
+0.      0.    0.040   1.40   <static>@0x317126 (<libcuda.so.595.84>)
+0.      0.    0.370  12.94   <static>@0x36ab16 (<libcuda.so.595.84>)
+0.      0.    0.010   0.35   <static>@0x4c9dc (<libgp-collector.so>)
+0.      0.    0.010   0.35   <static>@0x723d8 (<libcudart.so.12.0.146>)
+0.      0.    0.010   0.35   <static>@0x99099 (<libc.so.6>)
+0.      0.    0.010   0.35   <static>@0x9e723 (<libc.so.6>)
+0.      0.    0.010   0.35   <static>@0xa1eb6 (<libc.so.6>)
+0.      0.    0.030   1.05   <static>@0xaab1b (<libc.so.6>)
+0.      0.    0.400  13.99   <static>@0xf360 (<libcudart.so.12.0.146>)
+0.      0.    0.090   3.15   CalculateBestCacheSizeParallel
+0.      0.    0.100   3.50   ComputeHistogramCost
+0.      0.    0.050   1.75   EncodeImageNoHuffman
+0.      0.    2.662  93.01   EncodeInput
+0.      0.    2.121  74.13   EncodeStreamHook
+0.      0.    0.020   0.70   End
+0.      0.    2.121  74.13   Execute
+0.      0.    0.230   8.04   GetCombinedHistogramEntropy
+0.      0.    0.040   1.40   HistoQueuePush.constprop.0.isra.0
+0.      0.    0.110   3.85   HistogramCombineEntropyBin
+0.      0.    0.390  13.64   ReadPNG
+0.      0.    0.010   0.35   Reset
+0.      0.    0.120   4.20   TryAcceleratedHistogramCreate
+0.      0.    0.030   1.05   VP8LBitWriterWipeOut
+0.      0.    0.050   1.75   VP8LColorSpaceTransform
+0.      0.    2.272  79.37   VP8LEncodeImage
+0.      0.    0.120   4.20   VP8LHistogramCreate
+0.      0.    0.030   1.05   VP8LHistogramSetClear
+0.      0.    0.080   2.80   VP8LResidualImage
+0.      0.    0.050   1.75   WebPAccelerateColorTransform
+0.      0.    0.210   7.34   WebPAccelerateHashChain
+0.      0.    0.120   4.20   WebPAccelerateHistogram
+0.      0.    0.080   2.80   WebPAcceleratePredictor
+0.      0.    2.272  79.37   WebPEncode
+0.      0.    0.020   0.70   WebPMemoryWrite
+0.      0.    0.010   0.35   WebPPictureImportRGB
+0.      0.    0.030   1.05   __default_morecore
+0.      0.    0.010   0.35   __device_stub__ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_741e9f1020HistogramCountKernelEPK31WebPAcceleratorHistogramCommandmmPj(WebPAcceleratorHistogramCommand const*, unsigned long, unsigned long, unsigned int*)
+0.      0.    2.712  94.76   __libc_start_main
+0.      0.    0.020   0.70   clock_gettime
+0.      0.    0.010   0.35   cuCtxSetCurrent
+0.      0.    0.020   0.70   cuDevicePrimaryCtxRetain
+0.      0.    0.010   0.35   cuInit
+0.      0.    0.010   0.35   cuLaunchKernel
+0.      0.    0.280   9.79   cuMemcpyDtoHAsync_v2
+0.      0.    0.080   2.80   cuMemcpyHtoDAsync_v2
+0.      0.    0.010   0.35   cudaGetDeviceCount
+0.      0.    0.010   0.35   cudaLaunchKernel
+0.      0.    0.360  12.59   cudaMemcpyAsync
+0.      0.    0.030   1.05   cudaSetDevice
+0.      0.    0.030   1.05   free
+0.      0.    0.020   0.70   png_calculate_crc
+0.      0.    0.270   9.44   png_read_IDAT_data
+0.      0.    0.380  13.29   png_read_row
+0.      0.    0.380  13.29   png_read_rows
+0.      0.    0.030   1.05   sbrk
+

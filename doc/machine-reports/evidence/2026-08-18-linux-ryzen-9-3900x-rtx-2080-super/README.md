@@ -143,6 +143,17 @@ alphabets scalar and vectorizes only the extended literal alphabet. Each file
 contains its command, one discarded warmup, and three raw measured rows. Both
 forms were byte-exact and were removed after failing the two-format gate.
 
+The `libwebp-post-rejections-profile-*` and `libwebp-profile-lines-*` files
+preserve the 60-sample `gprofng` collection commands, function and calltree
+reports, annotated traceback/hash sources, and the Release-with-debug-lines
+native-sm_75 CMake cache that directed the CUDA hash screen. The 24
+`libwebp-hash-toggle-*.txt` timing transcripts contain two order-balanced
+process pairs per PNG/JPEG format for 256-thread blocks, scalar matching, and
+ordinary rather than `__ldg` loads. The three corresponding CMake caches prove
+that only the named switch changed and every build requested
+`CMAKE_CUDA_ARCHITECTURES=native`. Commands, raw nanosecond timings, hashes,
+and byte counts are retained in each transcript.
+
 Inspect the sampling archives with:
 
 ```sh

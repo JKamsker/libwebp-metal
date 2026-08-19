@@ -1,0 +1,275 @@
+Functions Call Tree. Metric: Attributed Total CPU Time
+
+Attr. Total    Name
+CPU
+ sec.      %
+2.862 100.00   +-<Total>
+2.712  94.76     +-__libc_start_main
+2.712  94.76     |  +-<static>@0x2a145 (<libc.so.6>)
+2.712  94.76     |    +-main
+2.662  93.01     |      +-EncodeInput
+2.272  79.37     |        +-WebPEncode
+2.272  79.37     |        |  +-VP8LEncodeImage
+2.222  77.62     |        |    +-VP8LEncodeStream
+2.121  74.13     |        |    |  +-Execute
+2.121  74.13     |        |    |  |  +-EncodeStreamHook
+0.951  33.22     |        |    |  |    +-VP8LGetBackwardReferences
+0.480  16.78     |        |    |  |    |  +-VP8LBackwardReferencesTraceBackwards
+0.120   4.20     |        |    |  |    |  |  +-VP8LBackwardRefsCursorAdd
+0.040   1.40     |        |    |  |    |  |  +-VP8LHistogramStoreRefs
+0.020   0.70     |        |    |  |    |  |  +-VP8LDistanceToPlaneCode
+0.090   3.15     |        |    |  |    |  +-BackwardReferencesLz77.constprop.0
+0.060   2.10     |        |    |  |    |  |  +-VP8LBackwardRefsCursorAdd
+0.090   3.15     |        |    |  |    |  +-CalculateBestCacheSizeParallel
+0.060   2.10     |        |    |  |    |  |  +-CacheSearchJobHook
+0.020   0.70     |        |    |  |    |  |  +-End
+0.010   0.35     |        |    |  |    |  |  |  +-<static>@0x9e723 (<libc.so.6>)
+0.010   0.35     |        |    |  |    |  |  |  |  +-<static>@0x99099 (<libc.so.6>)
+0.010   0.35     |        |    |  |    |  |  |  |    +-<static>@0x99099 (<libc.so.6>)
+0.010   0.35     |        |    |  |    |  |  |  |      +-munmap
+0.010   0.35     |        |    |  |    |  |  |  +-pthread_cond_signal
+0.010   0.35     |        |    |  |    |  |  +-Reset
+0.010   0.35     |        |    |  |    |  |    +-<static>@0x4c9dc (<libgp-collector.so>)
+0.010   0.35     |        |    |  |    |  |      +-pthread_create
+0.080   2.80     |        |    |  |    |  +-VP8LHistogramCreate
+0.080   2.80     |        |    |  |    |  |  +-TryAcceleratedHistogramCreate
+0.080   2.80     |        |    |  |    |  |    +-WebPAccelerateHistogram
+0.080   2.80     |        |    |  |    |  |      +-(anonymous namespace)::CUDAHistogram(void*, WebPAcceleratorHistogramRequest const*)
+0.080   2.80     |        |    |  |    |  |        +-(anonymous namespace)::CUDAHistogramLocked(void*, WebPAcceleratorHistogramRequest const*)
+0.070   2.45     |        |    |  |    |  |          +-cudaMemcpyAsync
+0.070   2.45     |        |    |  |    |  |          |  +-<static>@0xf360 (<libcudart.so.12.0.146>)
+0.070   2.45     |        |    |  |    |  |          |    +-<static>@0x21b7b (<libcudart.so.12.0.146>)
+0.050   1.75     |        |    |  |    |  |          |      +-cuMemcpyHtoDAsync_v2
+0.050   1.75     |        |    |  |    |  |          |      |  +-<static>@0x36ab16 (<libcuda.so.595.84>)
+0.050   1.75     |        |    |  |    |  |          |      |    +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.050   1.75     |        |    |  |    |  |          |      |      +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.050   1.75     |        |    |  |    |  |          |      |        +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.050   1.75     |        |    |  |    |  |          |      |          +-<static>@0x396586 (<libcuda.so.595.84>)
+0.050   1.75     |        |    |  |    |  |          |      |            +-<static>@0x396586 (<libcuda.so.595.84>)
+0.050   1.75     |        |    |  |    |  |          |      |              +-<static>@0x396586 (<libcuda.so.595.84>)
+0.050   1.75     |        |    |  |    |  |          |      |                +-<static>@0x245ece (<libcuda.so.595.84>)
+0.050   1.75     |        |    |  |    |  |          |      |                  +-<static>@0x2067e0 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |          |      +-cuMemcpyDtoHAsync_v2
+0.020   0.70     |        |    |  |    |  |          |        +-<static>@0x36ab16 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |          |          +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |          |            +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |          |              +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |          |                +-<static>@0x396586 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |          |                  +-<static>@0x396586 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |          |                    +-<static>@0x396586 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |          |                      +-<static>@0x396586 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |          |                        +-<static>@0x223510 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |          |                          +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |          |                            +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |          |                              +-<static>@0x223510 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |          |                                +-<static>@0x2067e0 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |          |                                  +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |          +-cudaSetDevice
+0.010   0.35     |        |    |  |    |  |            +-<static>@0xf360 (<libcudart.so.12.0.146>)
+0.010   0.35     |        |    |  |    |  |              +-cuCtxSetCurrent
+0.010   0.35     |        |    |  |    |  |                +-<static>@0x317126 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |                  +-<static>@0x245ece (<libcuda.so.595.84>)
+0.070   2.45     |        |    |  |    |  +-VP8LBackwardRefsCursorAdd
+0.050   1.75     |        |    |  |    |  +-BackwardReferencesLz77Box.constprop.0
+0.020   0.70     |        |    |  |    |  +-BackwardReferences2DLocality.isra.0
+0.020   0.70     |        |    |  |    |  +-CalculateBestCacheSizeBaseline.isra.0
+0.430  15.03     |        |    |  |    +-VP8LGetHistoImageSymbols
+0.110   3.85     |        |    |  |    |  +-HistogramCombineEntropyBin
+0.110   3.85     |        |    |  |    |  |  +-GetCombinedHistogramEntropy
+0.110   3.85     |        |    |  |    |  |    +-GetCombinedEntropyUnrefined_C
+0.030   1.05     |        |    |  |    |  |      +-FastSLog2Slow_C
+0.100   3.50     |        |    |  |    |  +-ComputeHistogramCost
+0.100   3.50     |        |    |  |    |  |  +-GetEntropyUnrefined_C
+0.080   2.80     |        |    |  |    |  +-GetCombinedHistogramEntropy
+0.080   2.80     |        |    |  |    |  |  +-GetCombinedEntropyUnrefined_C
+0.040   1.40     |        |    |  |    |  +-HistoQueuePush.constprop.0.isra.0
+0.040   1.40     |        |    |  |    |  |  +-GetCombinedHistogramEntropy
+0.040   1.40     |        |    |  |    |  |    +-GetCombinedEntropyUnrefined_C
+0.040   1.40     |        |    |  |    |  +-VP8LAllocateHistogramSet
+0.030   1.05     |        |    |  |    |  +-VP8LHistogramSetClear
+0.030   1.05     |        |    |  |    |    +-<static>@0x1881e1 (<libc.so.6>)
+0.400  13.99     |        |    |  |    +-VP8LHashChainFill
+0.210   7.34     |        |    |  |    |  +-WebPAccelerateHashChain
+0.210   7.34     |        |    |  |    |  |  +-(anonymous namespace)::CUDAHashChain(void*, WebPAcceleratorHashChainRequest const*)
+0.210   7.34     |        |    |  |    |  |    +-(anonymous namespace)::CUDAHashChainLocked(void*, WebPAcceleratorHashChainRequest const*)
+0.170   5.94     |        |    |  |    |  |      +-cudaMemcpyAsync
+0.170   5.94     |        |    |  |    |  |      |  +-<static>@0xf360 (<libcudart.so.12.0.146>)
+0.170   5.94     |        |    |  |    |  |      |    +-<static>@0x21b7b (<libcudart.so.12.0.146>)
+0.140   4.90     |        |    |  |    |  |      |      +-cuMemcpyDtoHAsync_v2
+0.140   4.90     |        |    |  |    |  |      |      |  +-<static>@0x36ab16 (<libcuda.so.595.84>)
+0.140   4.90     |        |    |  |    |  |      |      |    +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.140   4.90     |        |    |  |    |  |      |      |      +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.140   4.90     |        |    |  |    |  |      |      |        +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.140   4.90     |        |    |  |    |  |      |      |          +-<static>@0x396586 (<libcuda.so.595.84>)
+0.140   4.90     |        |    |  |    |  |      |      |            +-<static>@0x396586 (<libcuda.so.595.84>)
+0.140   4.90     |        |    |  |    |  |      |      |              +-<static>@0x396586 (<libcuda.so.595.84>)
+0.140   4.90     |        |    |  |    |  |      |      |                +-<static>@0x396586 (<libcuda.so.595.84>)
+0.120   4.20     |        |    |  |    |  |      |      |                  +-<static>@0x223510 (<libcuda.so.595.84>)
+0.110   3.85     |        |    |  |    |  |      |      |                  |  +-<static>@0x396586 (<libcuda.so.595.84>)
+0.090   3.15     |        |    |  |    |  |      |      |                  |  |  +-<static>@0x396586 (<libcuda.so.595.84>)
+0.090   3.15     |        |    |  |    |  |      |      |                  |  |    +-<static>@0x223510 (<libcuda.so.595.84>)
+0.090   3.15     |        |    |  |    |  |      |      |                  |  |      +-<static>@0x2067e0 (<libcuda.so.595.84>)
+0.090   3.15     |        |    |  |    |  |      |      |                  |  |        +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |      |      |                  |  +-<static>@0x245ece (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |      |      |                  +-<static>@0x245ece (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |      |      |                    +-<static>@0x2067e0 (<libcuda.so.595.84>)
+0.030   1.05     |        |    |  |    |  |      |      +-cuMemcpyHtoDAsync_v2
+0.030   1.05     |        |    |  |    |  |      |        +-<static>@0x36ab16 (<libcuda.so.595.84>)
+0.030   1.05     |        |    |  |    |  |      |          +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.030   1.05     |        |    |  |    |  |      |            +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.030   1.05     |        |    |  |    |  |      |              +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.030   1.05     |        |    |  |    |  |      |                +-<static>@0x396586 (<libcuda.so.595.84>)
+0.030   1.05     |        |    |  |    |  |      |                  +-<static>@0x396586 (<libcuda.so.595.84>)
+0.030   1.05     |        |    |  |    |  |      |                    +-<static>@0x396586 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |      |                      +-<static>@0x245ece (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |      |                      |  +-<static>@0x2067e0 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |      |                      +-<static>@0x223510 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |      |                        +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |      |                          +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |      |                            +-<static>@0x223510 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |      |                              +-<static>@0x2067e0 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |      |                                +-<static>@0x396586 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |      +-<static>@0x1881e1 (<libc.so.6>)
+0.010   0.35     |        |    |  |    |  +-WebPReportProgress
+0.100   3.50     |        |    |  |    +-StoreImageToBitMask
+0.040   1.40     |        |    |  |    |  +-VP8LPutBitsFlushBits
+0.080   2.80     |        |    |  |    +-VP8LResidualImage
+0.080   2.80     |        |    |  |    |  +-WebPAcceleratePredictor
+0.080   2.80     |        |    |  |    |    +-(anonymous namespace)::CUDAPredictor(void*, WebPAcceleratorPredictorRequest const*)
+0.080   2.80     |        |    |  |    |      +-(anonymous namespace)::CUDAPredictorLocked(void*, WebPAcceleratorPredictorRequest const*)
+0.080   2.80     |        |    |  |    |        +-cudaMemcpyAsync
+0.080   2.80     |        |    |  |    |          +-<static>@0xf360 (<libcudart.so.12.0.146>)
+0.080   2.80     |        |    |  |    |            +-<static>@0x21b7b (<libcudart.so.12.0.146>)
+0.080   2.80     |        |    |  |    |              +-cuMemcpyDtoHAsync_v2
+0.080   2.80     |        |    |  |    |                +-<static>@0x36ab16 (<libcuda.so.595.84>)
+0.080   2.80     |        |    |  |    |                  +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.080   2.80     |        |    |  |    |                    +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.080   2.80     |        |    |  |    |                      +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.080   2.80     |        |    |  |    |                        +-<static>@0x396586 (<libcuda.so.595.84>)
+0.080   2.80     |        |    |  |    |                          +-<static>@0x396586 (<libcuda.so.595.84>)
+0.080   2.80     |        |    |  |    |                            +-<static>@0x396586 (<libcuda.so.595.84>)
+0.080   2.80     |        |    |  |    |                              +-<static>@0x396586 (<libcuda.so.595.84>)
+0.060   2.10     |        |    |  |    |                                +-<static>@0x223510 (<libcuda.so.595.84>)
+0.040   1.40     |        |    |  |    |                                |  +-<static>@0x396586 (<libcuda.so.595.84>)
+0.040   1.40     |        |    |  |    |                                |  |  +-<static>@0x396586 (<libcuda.so.595.84>)
+0.030   1.05     |        |    |  |    |                                |  |    +-<static>@0x223510 (<libcuda.so.595.84>)
+0.030   1.05     |        |    |  |    |                                |  |      +-<static>@0x2067e0 (<libcuda.so.595.84>)
+0.030   1.05     |        |    |  |    |                                |  |        +-<static>@0x396586 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |                                |  +-<static>@0x245ece (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |                                |    +-clock_gettime
+0.020   0.70     |        |    |  |    |                                |      +-<static>@0x7ffcc83fe6f0 ([vdso])
+0.020   0.70     |        |    |  |    |                                +-<static>@0x245ece (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |                                  +-<static>@0x2067e0 (<libcuda.so.595.84>)
+0.050   1.75     |        |    |  |    +-EncodeImageNoHuffman
+0.040   1.40     |        |    |  |    |  +-VP8LGetBackwardReferences
+0.040   1.40     |        |    |  |    |  |  +-VP8LHistogramCreate
+0.040   1.40     |        |    |  |    |  |    +-TryAcceleratedHistogramCreate
+0.040   1.40     |        |    |  |    |  |      +-WebPAccelerateHistogram
+0.040   1.40     |        |    |  |    |  |        +-(anonymous namespace)::CUDAHistogram(void*, WebPAcceleratorHistogramRequest const*)
+0.040   1.40     |        |    |  |    |  |          +-(anonymous namespace)::CUDAHistogramLocked(void*, WebPAcceleratorHistogramRequest const*)
+0.030   1.05     |        |    |  |    |  |            +-(anonymous namespace)::Initialize((anonymous namespace)::CudaState*)
+0.020   0.70     |        |    |  |    |  |            |  +-cudaSetDevice
+0.020   0.70     |        |    |  |    |  |            |  |  +-<static>@0xf360 (<libcudart.so.12.0.146>)
+0.020   0.70     |        |    |  |    |  |            |  |    +-<static>@0x21b7b (<libcudart.so.12.0.146>)
+0.020   0.70     |        |    |  |    |  |            |  |      +-<static>@0x21b7b (<libcudart.so.12.0.146>)
+0.020   0.70     |        |    |  |    |  |            |  |        +-<static>@0x21b7b (<libcudart.so.12.0.146>)
+0.020   0.70     |        |    |  |    |  |            |  |          +-<static>@0x21b7b (<libcudart.so.12.0.146>)
+0.020   0.70     |        |    |  |    |  |            |  |            +-cuDevicePrimaryCtxRetain
+0.020   0.70     |        |    |  |    |  |            |  |              +-<static>@0x317126 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |            |  |                +-<static>@0x245ece (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |            |  |                  +-<static>@0x245ece (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |  |            |  |                    +-<static>@0x245ece (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |  |                      +-<static>@0x223510 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |  |                      |  +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |  |                      |    +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |  |                      |      +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |  |                      |        +-ioctl
+0.010   0.35     |        |    |  |    |  |            |  |                      +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |  |                        +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |  |                          +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |  |                            +-ioctl
+0.010   0.35     |        |    |  |    |  |            |  +-cudaGetDeviceCount
+0.010   0.35     |        |    |  |    |  |            |    +-<static>@0x21b7b (<libcudart.so.12.0.146>)
+0.010   0.35     |        |    |  |    |  |            |      +-<static>@0x723d8 (<libcudart.so.12.0.146>)
+0.010   0.35     |        |    |  |    |  |            |        +-<static>@0xa1eb6 (<libc.so.6>)
+0.010   0.35     |        |    |  |    |  |            |          +-<static>@0x21b7b (<libcudart.so.12.0.146>)
+0.010   0.35     |        |    |  |    |  |            |            +-<static>@0x21b7b (<libcudart.so.12.0.146>)
+0.010   0.35     |        |    |  |    |  |            |              +-cuInit
+0.010   0.35     |        |    |  |    |  |            |                +-<static>@0x317126 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |                  +-<static>@0x245ece (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |                    +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |                      +-<static>@0x245ece (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |                        +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |                          +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |                            +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |                              +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |                                +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |                                  +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |            |                                    +-ioctl
+0.010   0.35     |        |    |  |    |  |            +-__device_stub__ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_741e9f1020HistogramCountKernelEPK31WebPAcceleratorHistogramCommandmmPj(WebPAcceleratorHistogramCommand const*, unsigned long, unsigned long, unsigned int*)
+0.010   0.35     |        |    |  |    |  |              +-cudaLaunchKernel
+0.010   0.35     |        |    |  |    |  |                +-<static>@0xf360 (<libcudart.so.12.0.146>)
+0.010   0.35     |        |    |  |    |  |                  +-cuLaunchKernel
+0.010   0.35     |        |    |  |    |  |                    +-<static>@0x36ab16 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |                      +-<static>@0x164dc0 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |                        +-<static>@0x164dc0 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |                          +-<static>@0x164dc0 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  |                            +-<static>@0x245ece (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |  +-VP8LHashChainFill
+0.010   0.35     |        |    |  |    |    +-<static>@0x1881e1 (<libc.so.6>)
+0.050   1.75     |        |    |  |    +-VP8LColorSpaceTransform
+0.050   1.75     |        |    |  |    |  +-WebPAccelerateColorTransform
+0.050   1.75     |        |    |  |    |    +-(anonymous namespace)::CUDAColorTransform(void*, WebPAcceleratorColorTransformRequest const*)
+0.050   1.75     |        |    |  |    |      +-(anonymous namespace)::CUDAColorTransformLocked(void*, WebPAcceleratorColorTransformRequest const*)
+0.040   1.40     |        |    |  |    |        +-cudaMemcpyAsync
+0.040   1.40     |        |    |  |    |        |  +-<static>@0xf360 (<libcudart.so.12.0.146>)
+0.040   1.40     |        |    |  |    |        |    +-<static>@0x21b7b (<libcudart.so.12.0.146>)
+0.040   1.40     |        |    |  |    |        |      +-cuMemcpyDtoHAsync_v2
+0.040   1.40     |        |    |  |    |        |        +-<static>@0x36ab16 (<libcuda.so.595.84>)
+0.040   1.40     |        |    |  |    |        |          +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.040   1.40     |        |    |  |    |        |            +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.040   1.40     |        |    |  |    |        |              +-<static>@0x1d0f96 (<libcuda.so.595.84>)
+0.040   1.40     |        |    |  |    |        |                +-<static>@0x396586 (<libcuda.so.595.84>)
+0.040   1.40     |        |    |  |    |        |                  +-<static>@0x396586 (<libcuda.so.595.84>)
+0.040   1.40     |        |    |  |    |        |                    +-<static>@0x396586 (<libcuda.so.595.84>)
+0.040   1.40     |        |    |  |    |        |                      +-<static>@0x396586 (<libcuda.so.595.84>)
+0.030   1.05     |        |    |  |    |        |                        +-<static>@0x223510 (<libcuda.so.595.84>)
+0.020   0.70     |        |    |  |    |        |                        |  +-<static>@0x245ece (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |        |                        |  +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |        |                        |    +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |        |                        |      +-<static>@0x223510 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |        |                        |        +-<static>@0x2067e0 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |        |                        |          +-<static>@0x396586 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |        |                        +-<static>@0x245ece (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |        |                          +-<static>@0x2067e0 (<libcuda.so.595.84>)
+0.010   0.35     |        |    |  |    |        +-<static>@0x1881e1 (<libc.so.6>)
+0.020   0.70     |        |    |  |    +-<static>@0x1881e1 (<libc.so.6>)
+0.020   0.70     |        |    |  |    +-SubtractGreenFromBlueAndRed_AVX2
+0.010   0.35     |        |    |  |    +-ApplyPalette
+0.010   0.35     |        |    |  |    +-VP8LAllocateHistogramSet
+0.010   0.35     |        |    |  +-GetColorPalette
+0.030   1.05     |        |    +-VP8LBitWriterWipeOut
+0.030   1.05     |        |    |  +-free
+0.030   1.05     |        |    |    +-<static>@0xaab1b (<libc.so.6>)
+0.030   1.05     |        |    |      +-<static>@0xaab1b (<libc.so.6>)
+0.030   1.05     |        |    |        +-__default_morecore
+0.030   1.05     |        |    |          +-sbrk
+0.030   1.05     |        |    |            +-brk
+0.020   0.70     |        |    +-WebPMemoryWrite
+0.020   0.70     |        |      +-<static>@0x1881e1 (<libc.so.6>)
+0.390  13.64     |        +-ReadPNG
+0.380  13.29     |          +-png_read_rows
+0.380  13.29     |          |  +-png_read_row
+0.270   9.44     |          |    +-png_read_IDAT_data
+0.250   8.74     |          |    |  +-inflate
+0.180   6.29     |          |    |  |  +-inflate_fast
+0.050   1.75     |          |    |  |  +-adler32_z
+0.020   0.70     |          |    |  +-png_calculate_crc
+0.020   0.70     |          |    |    +-crc32_z
+0.060   2.10     |          |    +-png_read_filter_row_paeth_multibyte_pixel
+0.040   1.40     |          |    +-png_read_filter_row_up
+0.010   0.35     |          |    +-png_read_filter_row_sub
+0.010   0.35     |          +-WebPPictureImportRGB
+0.010   0.35     |            +-PackRGB_C
+0.150   5.24     +-VP8LBackwardReferencesTraceBackwards
+0.030   1.05       +-PushInterval

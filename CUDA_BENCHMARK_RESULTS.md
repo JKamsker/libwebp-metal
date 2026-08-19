@@ -1217,3 +1217,31 @@ counts. The broad form regressed PNG; preserving the fixed 256-symbol color
 and 40-symbol distance scans removed that regression but left both gains below
 the 1.5 ms/image gate. The candidate was removed. This is Ryzen 9 3900X / RTX
 2080 SUPER evidence only and does not change or characterize Ampere+ behavior.
+
+## Turing CUDA hash compile-switch rejection
+
+A longer retained-head `gprofng` run collected 2.862 seconds of CPU samples
+across 60 forced six-image PNG lossless batches. The leading functions were
+traceback at 0.420 seconds exclusive / 0.630 inclusive, cursor append at 0.250,
+combined entropy at 0.200, and `VP8LHashChainFill` at only 0.180 exclusive /
+0.410 inclusive. Release-with-debug-line attribution put CPU hash-chain
+preparation near 0.5 ms/image, so the previously measured 17--27 ms hash stage
+was treated as CUDA kernel and required transfer work rather than another CPU
+loop target.
+
+The three existing hash-kernel compile switches were then rebuilt separately
+with `CMAKE_CUDA_ARCHITECTURES=native` and screened in two order-balanced
+forced-batch pairs per PNG/JPEG format:
+
+| Candidate | PNG baseline/candidate | Paired gain | JPEG baseline/candidate | Paired gain |
+|---|---:|---:|---:|---:|
+| 256-thread block | 77.691 / 78.102 ms | -0.410 ms | 126.381 / 127.174 ms | -0.793 ms |
+| Scalar match loop | 77.331 / 78.151 ms | -0.820 ms | 126.861 / 128.111 ms | -1.249 ms |
+| Ordinary loads (no `__ldg`) | 77.402 / 77.698 ms | -0.296 ms | 126.521 / 126.315 ms | +0.206 ms |
+
+Every process retained aggregate hash `eec6c490be6aaf6d` for PNG or
+`06227eb38e0ac1e3` for JPEG and unchanged byte counts. The candidates were
+rejected without a source change: 128-thread blocks and four-pixel unrolling
+are materially better on this Turing GPU, while the read-only-load difference
+is noise. These are RTX 2080 SUPER measurements only; no Ampere+ setting or
+performance conclusion changes.

@@ -1297,3 +1297,33 @@ keeping the fixed color and distance alphabets scalar made PNG neutral but
 reduced JPEG below the 1.5 ms/image gate. The candidate was removed. These are
 Ryzen 9 3900X / RTX 2080 SUPER measurements only and make no Ampere+ claim.
 All 16 raw process transcripts are in the adjacent evidence directory.
+
+## CUDA hash compile-switch rejection
+
+A 60-sample retained-head `gprofng` profile, with six images per sample,
+collected 2.862 CPU seconds.
+`VP8LBackwardReferencesTraceBackwards` led at 0.420 seconds exclusive and
+0.630 inclusive; `VP8LBackwardRefsCursorAdd` used 0.250 exclusive;
+`GetCombinedEntropyUnrefined_C` used 0.200; and `VP8LHashChainFill` used only
+0.180 exclusive / 0.410 inclusive. A native-sm_75 Release build with debug
+lines further bounded CPU hash-chain preparation near 0.5 ms/image. The
+remaining 17--27 ms hash-stage boundary therefore points to device search and
+its required result transfer.
+
+Three already-supported compile-time kernel choices were measured separately
+in two order-balanced process pairs per format, each with one discarded warmup
+and three measured six-image lossless batches:
+
+| Candidate | PNG baseline | PNG candidate | Paired gain | JPEG baseline | JPEG candidate | Paired gain |
+|---|---:|---:|---:|---:|---:|---:|
+| 256 threads/block | 77.691 ms | 78.102 ms | -0.410 ms | 126.381 ms | 127.174 ms | -0.793 ms |
+| Disable four-pixel match loop | 77.331 ms | 78.151 ms | -0.820 ms | 126.861 ms | 128.111 ms | -1.249 ms |
+| Disable read-only-cache loads | 77.402 ms | 77.698 ms | -0.296 ms | 126.521 ms | 126.315 ms | +0.206 ms |
+
+All outputs retained hashes `eec6c490be6aaf6d` (PNG) and
+`06227eb38e0ac1e3` (JPEG), with unchanged byte counts. No candidate clears the
+1.5 ms/image gate, so the source remains unchanged: Turing keeps 128-thread
+blocks, four-pixel matching, and `__ldg` reads. No Ampere+ behavior or claim is
+changed. The adjacent evidence directory contains the raw function, calltree,
+and source-line reports, collection transcripts, three native CMake caches,
+and all 24 timing transcripts.
