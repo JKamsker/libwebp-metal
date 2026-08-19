@@ -1029,3 +1029,11 @@ two order-reversed native-sm_75 processes measured PNG 40.341 to 38.356
 ms/image (1.984 ms gain) and JPEG 40.213 to 38.815 (1.398 ms gain). The named
 barriers were therefore removed without a full gate. This is RTX 2080 SUPER-
 only evidence and is not an Ampere+ performance claim.
+
+A separate composition added the exact 13-lane I4 boundary gather to static
+prediction dispatch, scalar winner selection, and the 16-lane winner copy.
+All seven CTests and all 24 screen outputs were exact. Two order-reversed
+native-sm_75 processes measured PNG 40.374 to 39.817 ms/image (0.557 ms gain)
+and JPEG 40.365 to 39.129 (1.236 ms gain). Both are below the 1.5 ms gate, so
+the candidate was removed without a full run. The boundary gather's earlier
+standalone gain did not add to the broader schedule.

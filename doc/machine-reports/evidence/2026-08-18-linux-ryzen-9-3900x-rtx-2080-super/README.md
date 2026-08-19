@@ -33,6 +33,9 @@ per-case CPU/CUDA and band-3 fallback SHA-256 comparisons; every row is exact.
 `i4-team-barrier-chroma-screen.jsonl` contains the 24 exact timing rows for
 the rejected team-local I4 barrier plus chroma-overlap composition.
 
+`i4-boundary-static-commit-screen.jsonl` contains the 24 exact timing rows for
+the rejected boundary-gather, static-dispatch, and parallel-commit composition.
+
 Inspect the sampling archives with:
 
 ```sh

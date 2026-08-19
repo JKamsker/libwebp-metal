@@ -977,3 +977,17 @@ JPEG failed the 1.5 ms screen, so the composition was removed without a full
 gate. The result is specific to the RTX 2080 SUPER and makes no Ampere+
 performance claim. Raw rows are in
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-team-barrier-chroma-screen.jsonl`.
+
+The exact 13-lane I4 boundary gather was also composed with static prediction
+dispatch, scalar winner selection, and the 16-lane winner copy. All seven
+CTests and all 24 timed outputs were exact. Two order-reversed native-sm_75
+processes measured:
+
+| Format | Parent | Boundary/static/commit | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.374 ms/image | 39.817 ms/image | 0.557 ms |
+| JPEG lossy | 40.365 ms/image | 39.129 ms/image | 1.236 ms |
+
+Both gains are below the 1.5 ms gate, so the composition was removed without
+a full run. This is RTX 2080 SUPER-only evidence. Raw rows are
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-boundary-static-commit-screen.jsonl`.
