@@ -1,0 +1,23 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v15-rehearsal-invocation-v1",
+  "mode": "rehearse",
+  "attempt_ordinal": 1,
+  "retry_count": 0,
+  "command": "env -u WEBP_BENCHMARK_SESSION EXPECTED_FREEZE_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_attribution_v15.py rehearse \"$PWD/evidence/backref-cost-attribution-v15-design/rehearsal\"",
+  "source_commit": "85989e192817ca714a805a8e3cc8232af4329b6c",
+  "source_tree": "bf67a134fa4dd2d4b58524b288a05b918fb18af0",
+  "base_commit": "e085ff0cd7e0e9f4e9bdeaa939346725ae3d4d22",
+  "remote_host_alias": "pandocs-agent",
+  "webp_benchmark_session_present": false,
+  "expected_freeze_commit": "85989e192817ca714a805a8e3cc8232af4329b6c",
+  "local_executor_exit_code": 1,
+  "local_executor_error": "truncated frame stream",
+  "remote_connection_established": false,
+  "remote_transaction_started": false,
+  "remote_v15_child_created": false,
+  "encoder_workloads": 0,
+  "profiler_workloads": 0,
+  "timed_workloads": 0,
+  "benchmark_lease_acquisition_attempted": false,
+  "prior_cycle_paths_contacted": false
+}
