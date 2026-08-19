@@ -1,0 +1,123 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v3-post-blocker-audit-v1",
+  "audit_status": "PASS_WITH_RETURN_PROTOCOL_LIMITATION",
+  "scope": "supplemental packaging of naturally completed V3 rehearsal-refusal return only",
+  "ancestry": {
+    "phase3_commit": "a5c501075807aab78c47785744b46db921deaa68",
+    "phase3_tree": "0894c6bcdc36d74af2f69e0f2c8636a77b536670",
+    "phase3_parent": "e9b807695a7db1b688c1a920ef5038132fbab4cb",
+    "supplemental_parent_required": "a5c501075807aab78c47785744b46db921deaa68"
+  },
+  "preservation": {
+    "raw_root": "evidence/backref-cost-attribution-v3-design/remote-rehearsal-refusal",
+    "raw_file_count": 8,
+    "raw_bytes": 11690,
+    "raw_files_modified": 0,
+    "phase1_phase2_phase3_files_modified": 0,
+    "natural_completion_observed_at": "2026-08-19T06:32:22+0200",
+    "reported_session_37199_no_longer_live": true,
+    "process_inspection_performed": false,
+    "remote_contact_performed": false,
+    "process_signals_sent": 0,
+    "cleanup_performed_by_supplement": false,
+    "files_deleted": 0
+  },
+  "returned_index": {
+    "schema": "libwebp-backref-cost-attribution-v3-returned-evidence-hashes-v1",
+    "indexed_files": 6,
+    "hash_mismatches": 0,
+    "byte_count_mismatches": 0,
+    "excluded_after_index": [
+      "transfer-cleanup.json"
+    ],
+    "independent_local_verification": "PASS"
+  },
+  "source_identity": {
+    "commit": "a8a9dfdb3cd882d63980f4234c40e5c8cb91f5e1",
+    "tree": "af7eabc288db9de596d16b1b6a51c38ab25174bf",
+    "bundle_sha256": "9febb7b894dcd7e4c9eb7cb5a7475f8160c1459304abbbbb2f5e11e17d7472a7",
+    "bundle_hash_match": true,
+    "bundle_verified_in_repository_context": true,
+    "clean_status": true,
+    "source_hashes_verified": 19,
+    "frozen_manifest_mismatches": 0,
+    "local_file_mismatches": 0,
+    "verification_repository_removed": true,
+    "malformed_bundle_rejected": true,
+    "malformed_clone_absent": true,
+    "malformed_verification_repository_absent": true
+  },
+  "rehearsal_refusal": {
+    "mode": "rehearse",
+    "fixture": "missing",
+    "pipeline_exit_code": 0,
+    "pipeline_stdout_bytes": 0,
+    "pipeline_stderr_bytes": 0,
+    "status": "refused",
+    "timed_execution_authorized": false,
+    "timed_binary_invoked": false,
+    "benchmark_lease_acquisition_attempted": false,
+    "lease_acquired": false,
+    "lease_released": false,
+    "returned_lease_receipt_present": false,
+    "lease_transfer_receipt_status": "not-attempted",
+    "archive_status": "not-attempted",
+    "extraction_status": "not-attempted",
+    "encoder_workloads": 0,
+    "timing_rows": 0,
+    "performance_samples": 0,
+    "profiler_invocations": 0,
+    "cuda_invocations": 0,
+    "production_change": false
+  },
+  "cleanup": {
+    "schema": "libwebp-backref-cost-attribution-v3-cleanup-receipt-v1",
+    "status": "complete",
+    "home": "/Users/pandocs-agent-001",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v3",
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v3/run.GafKk1",
+    "token": "run.GafKk1",
+    "canonical_path_validated": true,
+    "removed_exact_validated_child": true,
+    "absence_proved": true,
+    "receipt_matches_transfer_cleanup_copy": true,
+    "supplement_performed_cleanup": false
+  },
+  "return_protocol_failure": {
+    "boundary": "unconditional lease-record fetch after successful refusal-fixture pipeline and before archive return",
+    "requested_path": "evidence/lease-record.json",
+    "default_direct_child_timeout_seconds": 1200,
+    "observed_failure": "scp of the lease-record path timed out after 1200 seconds",
+    "lease_acquisition_was_attempted": false,
+    "lease_record_was_accepted_locally": false,
+    "archive_return_reached": false,
+    "extraction_reached": false,
+    "precision_limitation": "the returned receipts prove the SCP timeout and absence of an accepted local lease receipt; they do not prove remote noncreation, and the frozen refusal-fixture source writes a no-acquisition placeholder",
+    "blocker_narrowed": true
+  },
+  "consequence": {
+    "interval_family_decision": "UNASSESSED",
+    "timed_execution_authorized": false,
+    "performance_claim": null,
+    "production_claim": null,
+    "v4_proposal_only": true,
+    "v4_requires_wholly_new_default_off_gates": true,
+    "v4_scope": "in rehearsal/refusal modes, do not request or require return of a lease record unless benchmark lease acquisition was attempted; always require independent exact-child cleanup receipt and absence proof",
+    "v4_implemented": false,
+    "v4_run": false
+  },
+  "phase3_consistency": {
+    "phase3_artifact_hash_index_sha256": "23050e9152ddfa1a7517c68aaa7fe6fae3bda373ef4796161be68b0daef6672e",
+    "phase3_human_report_sha256": "8c592026bfd70cf292df955ba700454df0f106040db36f8f62acd5976c03c9c8",
+    "phase3_machine_audit_sha256": "d8433b2ef3f97ff9c62183b5a501dc67c33486b7d6de578cdcebf2778d25ba6a",
+    "phase3_files_unchanged": true,
+    "phase3_unassessed_consequence_unchanged": true
+  },
+  "limitations": [
+    "The supplemental audit packages a refusal return and does not retroactively authorize Phase 2 timing.",
+    "No lease receipt, archive, extraction, timing row, workload row, or performance sample was returned.",
+    "The source and receipt evidence establish an unnecessary unconditional lease-record return dependency; they do not establish a performance result.",
+    "No device/resource timing admission or benchmark lease evidence exists.",
+    "The proposed V4 return-protocol correction is not implemented or executed in this cycle."
+  ]
+}
