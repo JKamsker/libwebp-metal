@@ -485,3 +485,18 @@ preceding same-machine official CUDA rows by 3.7 and 3.8 ms/image. All 180
 suite validation pairs passed. An additional 105-case byte-parity battery
 covered methods 2--6, qualities 25/75/98, tiny 17x13 and odd 257x255 inputs,
 and band-3 fault fallback across all methods and content classes.
+
+A follow-up kept the ten-way transform/metric layout intact and changed only
+the I4 prediction generators: each warp processed one uniform directional mode
+with lanes 0--15 producing the sixteen 4x4 pixels. This was byte-exact in the
+focused method-5/6 trellis and fallback test, but three post-warmup 24-image
+samples were neutral-to-negative:
+
+| Format | Parent official CUDA | Warp-cooperative I4 prediction | Change |
+|---|---:|---:|---:|
+| PNG lossy | 53.0 ms/image | 52.864 ms/image | -0.136 ms (noise) |
+| JPEG lossy | 53.3 ms/image | 54.499 ms/image | +1.199 ms (regression/noise) |
+
+The experiment was removed. Directional per-pixel formula and branch overhead
+cancelled the four-leader prediction work; after whole-macroblock prediction
+was parallelized, I4 prediction alone is not an evidenced latency target.
