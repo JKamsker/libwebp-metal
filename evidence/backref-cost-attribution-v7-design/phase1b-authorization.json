@@ -1,0 +1,56 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v7-authorization-v1",
+  "authorization_status": "REFUSED",
+  "base_commit": "567e48ddfeacfaa65fb11a1611fba7aa7f5590a5",
+  "source_commit": "7ad55d44e5a78f3b8ef197c2a26cd4c78dd7bbba",
+  "source_tree": "3e6fde30702fefe9c01432255263efc1760d0980",
+  "phase_1b_parent_rule": "the commit containing this envelope has exactly one parent equal to source_commit",
+  "phase_1b_identity_rule": "HEAD must equal the dynamically supplied EXPECTED_FREEZE_COMMIT; this envelope never embeds its own Phase-1B commit hash",
+  "manifest_sha256": "3b888a952009fe0e8b3c82379b7128f7c7d6574b4ebfae4b6cd5dde87cf8117e",
+  "protocol_sha256": "49e0fe6c9612c8ec5e1170b1e93c5e6d01ce5bfff42e4860427c1a78218edc04",
+  "schema_catalog_sha256": "9c6244495556d5a3865fdd6723d58949d391efe636aaac3a3a3444c176d31bb7",
+  "transport_source_sha256": "ef8b8d4429da42528d40652b7cd67afe3d6fce8bd93f2f12360a094221e97da0",
+  "rehearsal_hash_index_sha256": "08460cc31852bd93ea5130e909af78a447c838518bf6e3b80983516eded7c61c",
+  "raw_rehearsal_evidence_hashes": {
+    "rehearsal-invocation.json": "29a9dcb525d91453f35f744c4d903c9bfbc4b014bebd16a74b90a055f3b7ba0a",
+    "return-protocol/framed-stdout.bin": "c27491f8341bf6981d1f6460ae3c7be7b81bd6844ecb25dee5ee3131b42fcbd8",
+    "return-protocol/transport-stderr.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "rehearsal_receipt_hashes": {
+    "rehearsal-invocation.json": "29a9dcb525d91453f35f744c4d903c9bfbc4b014bebd16a74b90a055f3b7ba0a",
+    "return-protocol/framed-stdout.bin": "c27491f8341bf6981d1f6460ae3c7be7b81bd6844ecb25dee5ee3131b42fcbd8"
+  },
+  "missing_required_success_receipts": [
+    "rehearsal.json",
+    "transfer-cleanup.json",
+    "return-protocol/source-admission.json",
+    "return-protocol/operator-status.json",
+    "return-protocol/bulk-declaration.json",
+    "return-protocol/integrity-footer.json",
+    "return-protocol/cleanup-footer.json"
+  ],
+  "observed_transport_calibration": {
+    "status": "REFUSED_BEFORE_REPRESENTATIVE_PAYLOAD",
+    "representative_payload_bytes": 0,
+    "predeclared_representative_payload_bytes": 5242880,
+    "maximum_expected_run_archive_bytes": 4194304,
+    "finite_margin_ratio": 0,
+    "archive_bytes": 24145,
+    "archive_sha256": "e696706c0af41a7417841b1563d68c9d2c4f4faef28c4d6ebe286fef3b1f10c2",
+    "chunk_count": 1,
+    "chunk_bytes": 524288,
+    "transaction_elapsed_ns": 10843368416,
+    "throughput_bytes_per_second": 2226,
+    "reason": "operator process guard refused after matching the ancestor transport command; the required representative payload and PASS rehearsal receipt were not produced"
+  },
+  "single_noninteractive_remote_session_count": 1,
+  "post_run_remote_cleanup_operations": 0,
+  "cleanup_footer_verified": true,
+  "remote_cleanup_absence_proved": true,
+  "benchmark_lease_acquisition_attempted": false,
+  "encoder_workloads": 0,
+  "profiler_workloads": 0,
+  "timed_execution_authorized": false,
+  "phase_2_authority": "NONE",
+  "blocker": "the sole no-retry rehearsal cleaned its exact V7 child in-session and returned the final absence footer, but the remote operator refused before the representative transfer; no Phase-2 timing is authorized"
+}

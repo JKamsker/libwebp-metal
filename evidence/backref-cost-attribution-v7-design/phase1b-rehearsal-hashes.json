@@ -1,0 +1,20 @@
+{
+  "artifacts": [
+    {
+      "bytes": 2513,
+      "path": "rehearsal-invocation.json",
+      "sha256": "29a9dcb525d91453f35f744c4d903c9bfbc4b014bebd16a74b90a055f3b7ba0a"
+    },
+    {
+      "bytes": 31671,
+      "path": "return-protocol/framed-stdout.bin",
+      "sha256": "c27491f8341bf6981d1f6460ae3c7be7b81bd6844ecb25dee5ee3131b42fcbd8"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/transport-stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "schema": "libwebp-backref-cost-attribution-v7-phase1b-hash-index-v1"
+}
