@@ -693,3 +693,14 @@ trellis parity test passed, but a two-process order-balanced screen was
 neutral: PNG moved from 40.247 to 40.316 ms/image and JPEG from 40.298 to
 40.379 ms/image. The candidate was removed. Raw evidence is
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-coop-metrics-screen.jsonl`.
+
+## Seeded I4 residual-cost bound
+
+An exact candidate evaluated the earliest minimum-base-score mode first, then
+skipped parallel residual walks whose nonnegative cost could not beat that
+seed (including exact earlier-mode tie handling). The serial seed and extra
+synchronization dominated: PNG regressed from 40.891 to 42.457 ms/image and
+JPEG from 40.429 to 42.520 ms/image in a two-process screen. The trellis
+parity test and all 24 timed outputs matched. The candidate was removed. Raw
+evidence is
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-rcost-bound-screen.jsonl`.
