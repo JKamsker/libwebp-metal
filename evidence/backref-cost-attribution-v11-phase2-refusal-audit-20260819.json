@@ -1,0 +1,183 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v11-phase2-refusal-audit-v1",
+  "phase": "2",
+  "executor": "Luna/max",
+  "audit_scope": "independent local read-only audit of frozen Phase 1A/1B and the returned rehearsal refusal",
+  "audit_status": "BLOCKED",
+  "base_commit": "631ac52803ff7d74f8461917503d54b46a8fc5e4",
+  "phase1a_commit": "e19eb84a61400af2d434004e8ff1e2fdf692a288",
+  "phase1b_commit": "34c2b2782b421e90aa59bf87e06b46f9509184df",
+  "phase1_chain": {
+    "base_parent_count": 2,
+    "base_parents": [
+      "a027f4a4b6a61d2b4a5d9e897e6b7ca51eb6c6ca",
+      "284e634447b3eaced47a4748138c9cfdfa2ef2da"
+    ],
+    "phase1a_parent": "631ac52803ff7d74f8461917503d54b46a8fc5e4",
+    "phase1b_parent": "e19eb84a61400af2d434004e8ff1e2fdf692a288",
+    "phase1b_parent_count": 1,
+    "phase1a_tree": "ae61de93df238c4cb1c47e01049b8586803dc420",
+    "phase1b_tree": "b56b3decca3096707e8b84da724749b9423fa7fb",
+    "linear_base_ancestry_verified": true,
+    "worktree_clean_before_audit": true
+  },
+  "phase1b_authority_audit": {
+    "diff_entries": [
+      "A evidence/backref-cost-attribution-v11-design/phase1b-authorization.json",
+      "A evidence/backref-cost-attribution-v11-design/phase1b-rehearsal-hashes.json",
+      "A evidence/backref-cost-attribution-v11-design/rehearsal/rehearsal-invocation.json",
+      "A evidence/backref-cost-attribution-v11-design/rehearsal/return-protocol/framed-stdout.bin",
+      "A evidence/backref-cost-attribution-v11-design/rehearsal/return-protocol/transport-stderr.bin",
+      "A evidence/backref-cost-attribution-v11-design/rehearsal/transfer-cleanup.json"
+    ],
+    "additions_only": true,
+    "permitted_phase1b_paths_only": true,
+    "frozen_phase1a_files_modified": false,
+    "source_tree_matches_authorization": true,
+    "frozen_source_hashes_match_authorization": true,
+    "phase1b_envelope_embeds_own_commit": false,
+    "authorization_status": "REFUSED",
+    "timed_execution_authorized": false,
+    "phase_2_authority": "NONE",
+    "circular_authority": false,
+    "hash_index_membership_and_digests": true,
+    "hash_index_lexical_order": false,
+    "hash_index_order_finding": "Frozen entries are digest-correct and membership-complete, but transfer-cleanup.json precedes return-protocol/*; the v11 executor's strict lexical-order guard would refuse this index. Phase 2 did not repair frozen evidence."
+  },
+  "frozen_hashes": {
+    "phase1_local_validation": {
+      "path": "evidence/backref-cost-attribution-v11-design/phase1-local-validation.json",
+      "sha256": "4bbe5c047ee6905f52d9c63ce061b6f4b98fe6b7f67859616505f84da1498030"
+    },
+    "manifest": {
+      "path": "scripts/backref_cost_attribution_v11_manifest.json",
+      "sha256": "dc272f74a48d01993389f581fd10d7304fe18ae2b371c1a350e8181a3be27d17"
+    },
+    "protocol": {
+      "path": "doc/backref-cost-attribution-v11-protocol-20260819.md",
+      "sha256": "e7c0d3d625648cac20c7ee2633e1c3778119711caf8556ff5f15b6ba9c6d7259"
+    },
+    "schema_catalog": {
+      "path": "scripts/backref_cost_attribution_v11_schemas.json",
+      "sha256": "0b1080dfe4a0c68b956b4ff284094782e2bde863a295ec294eb14ae6c5f77541"
+    },
+    "transport": {
+      "path": "scripts/backref_cost_attribution_v11_transport.py",
+      "sha256": "2e49d42af0652b46bbd32a23c31640626687af3a6ada657ea5fe6681860436c1"
+    },
+    "phase1b_authorization": {
+      "path": "evidence/backref-cost-attribution-v11-design/phase1b-authorization.json",
+      "sha256": "fe98494d169b40a9d0e0e530254d389e01ca55d11f8cbd6bca8276497ca066f1"
+    },
+    "phase1b_hash_index": {
+      "path": "evidence/backref-cost-attribution-v11-design/phase1b-rehearsal-hashes.json",
+      "sha256": "c65fd32c10510291fb073b2b903170c8d47ef652dfb167e106bf14aa96debe45"
+    }
+  },
+  "rehearsal_evidence_audit": {
+    "artifacts": [
+      {
+        "path": "rehearsal-invocation.json",
+        "bytes": 3984,
+        "sha256": "a27a90f24fcfba3b0757b1dc8bed90b6fce79fe02f6526a62d4acceb98b967b3"
+      },
+      {
+        "path": "transfer-cleanup.json",
+        "bytes": 348,
+        "sha256": "2cb418546d7c67ae16d52be9bb0749b8ccc68b997859b262277be0b4ff5a0f2b"
+      },
+      {
+        "path": "return-protocol/framed-stdout.bin",
+        "bytes": 1941990,
+        "sha256": "f6cb02af4d445ac355bdf007f8cfc19daf19d98d3e45647e0689f89264f848f4"
+      },
+      {
+        "path": "return-protocol/transport-stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    ],
+    "raw_hashes_match_index_and_authorization": true,
+    "source_admission": "verified",
+    "remote_operator_status": "complete_zero_workload",
+    "lease_state": "not-attempted",
+    "frame_bytes": 1941990,
+    "frame_sha256": "f6cb02af4d445ac355bdf007f8cfc19daf19d98d3e45647e0689f89264f848f4",
+    "complete_frame_count": 8,
+    "complete_frame_kinds": [
+      "source-admission",
+      "operator-status",
+      "archive-build",
+      "lease-state",
+      "bulk-declaration",
+      "bulk-chunk",
+      "bulk-chunk",
+      "bulk-chunk"
+    ],
+    "complete_frame_payload_hashes_verified": true,
+    "complete_bulk_chunks": 3,
+    "truncated_fourth_bulk_frame_bytes": 359941,
+    "integrity_footer_returned": false,
+    "cleanup_footer_returned": false,
+    "transport_stderr_bytes": 0
+  },
+  "transport_failure_audit": {
+    "representative_payload_bytes": 5242880,
+    "maximum_expected_run_archive_bytes": 4194304,
+    "declared_payload_margin_ratio": 1.25,
+    "declared_archive_bytes": 5276453,
+    "declared_archive_sha256": "21b9e17df32ed4416e9728cf0836081f1d6c2a6c8dca2dc86e6ff89bf65377a2",
+    "archive_over_frozen_bound_bytes": 1082149,
+    "archive_over_representative_payload_bytes": 33573,
+    "representative_payload_to_declared_archive_ratio": 0.9936372028709438,
+    "declared_chunk_count": 11,
+    "chunk_bytes": 524288,
+    "complete_chunks_returned": 3,
+    "failure_plane": "bounded local transport timeout during the fourth bulk chunk",
+    "direct_transport_child_timed_out": true,
+    "transaction_timeout_seconds": 7200
+  },
+  "cleanup_audit": {
+    "same_session_cleanup_footer_returned": false,
+    "cleanup_footer_verified": false,
+    "remote_cleanup_absence_proved": false,
+    "remote_cleanup_state": "unknown-after-truncation",
+    "post_run_remote_cleanup_operations_reported": 0,
+    "second_cleanup_forbidden_and_not_attempted": true,
+    "phase2_cleanup_operations": 0
+  },
+  "phase2_execution": {
+    "first_failed_gate": "phase1b-authorization.timed_execution_authorized=false and phase_2_authority=NONE",
+    "frozen_diagnostic_command_invoked": false,
+    "transport_command_invoked": false,
+    "remote_session_started_by_phase2": false,
+    "rehearsal_rerun": false,
+    "retry_count": 0,
+    "tuning_or_pooling": false,
+    "alternate_timing": false,
+    "profiler_workloads": 0,
+    "cuda_workloads": 0,
+    "benchmark_lease_acquisition_attempted": false,
+    "process_discovery_performed": false,
+    "encoder_workloads": 0,
+    "discovered_pid_signals": 0,
+    "diagnostic_authorization_claimed": false,
+    "diagnostic_executed": false,
+    "ordinary_default_off_source_check": "PASS: CMake option OFF and make variable default 0; no build/runtime check was run",
+    "ordinary_default_off_runtime_check": "DEFERRED_TO_PHASE3",
+    "performance_statistics": "N/A_UNASSESSED_NO_PHASE2_DATA",
+    "interval_family": "UNASSESSED",
+    "production_consequence": "NONE"
+  },
+  "blocked_decision": {
+    "phase2_action": "FAIL_CLOSED_NO_EXECUTION",
+    "blocker": "The sole rehearsal exceeded both the frozen 4 MiB archive bound and the 5 MiB representative payload, then the directly owned transport timed out during bulk transfer without integrity or cleanup/absence footers. Cleanup is unknown, no second cleanup is permitted, and authority is NONE.",
+    "additional_frozen_evidence_finding": "The rehearsal hash index is not in the strict lexical order required by the v11 executor; it was preserved unchanged.",
+    "phase3_boundary": "No Phase 3 evaluation was performed by this audit; no production change or future run is authorized by Phase 2."
+  },
+  "changed_files": [
+    "evidence/backref-cost-attribution-v11-phase2-refusal-audit-20260819.json"
+  ],
+  "phase1_files_modified_by_this_audit": false,
+  "audit_evidence_is_additional_single_file": true
+}
