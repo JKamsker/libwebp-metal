@@ -41,6 +41,12 @@ rejected warp-argmin/static-dispatch/parallel-commit composition.
 `retained-phase-refresh.txt` is the raw native-sm_75 phase trace used to select
 that experiment.
 
+`partition0-token-overlap-screen.jsonl` contains the 24 exact timing rows for
+the rejected host-side schedule that generated VP8 partition 0 while all eight
+token partitions emitted on worker threads. The `parent` rows set
+`WEBP_PARTITION0_PIPELINE=0`; candidate and parent rows came from the same
+native-sm_75 binary.
+
 Inspect the sampling archives with:
 
 ```sh

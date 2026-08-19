@@ -1047,3 +1047,18 @@ winner copy. All seven CTests and all 24 screen outputs matched, but two
 order-reversed processes measured PNG 40.112 to 38.871 ms/image (1.241 ms)
 and JPEG 40.027 to 39.203 (0.824 ms). Shuffle/reduction overhead absorbed the
 serial-scan saving, so the candidate was removed.
+
+## Partition0/token-emission overlap rejection
+
+After probabilities and filter strength are final, VP8 partition 0 and the
+eight token partitions are independent arithmetic streams. A candidate
+launched all token partitions on workers while the caller generated partition
+0; `WEBP_PARTITION0_PIPELINE=0` restored the parent schedule for matched A/B
+measurement in the same native-sm_75 binary.
+
+Two order-reversed processes with six timed samples per cell moved the
+six-image small/medium PPM lossy corpus from 32.301 to 31.228 ms/image, a
+1.073 ms/image gain. All 24 aggregate hashes and byte counts matched and all
+seven CTests passed. The gain remained below the 1.5 ms/image retention gate,
+so the candidate was removed. Raw evidence is archived with the RTX 2080
+SUPER machine report.

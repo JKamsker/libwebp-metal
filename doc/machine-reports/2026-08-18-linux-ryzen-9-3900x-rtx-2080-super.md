@@ -1011,3 +1011,27 @@ rows and the refreshed device trace are
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-warp-argmin-static-screen.jsonl`
 and
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/retained-phase-refresh.txt`.
+
+## Partition0/token-emission overlap
+
+The retained eight-partition encoder emits independent token partitions on
+eight CPU threads, then generates VP8 partition 0 serially. A host-scheduling
+candidate first finalized the filter strength, launched all eight token
+coders on workers, and generated partition 0 (headers and intra modes) on the
+caller. The two operations share only finalized read-only encoder state. An
+environment-off arm restored the previous schedule in the same binary.
+
+Two order-reversed native-sm_75 processes, each with one warmup and six timed
+samples per cell over the six small/medium PPM corpus images, measured:
+
+| Parent | Partition0 overlap | Gain |
+|---:|---:|---:|
+| 32.301 ms/image | 31.228 ms/image | 1.073 ms/image |
+
+All 24 aggregate timing records retained the same output hash
+(`d01c3571a90d2653`) and byte count (1,610,422 bytes per six-image batch), and
+all seven CTests passed. The gain is below the strict 1.5 ms/image retention
+threshold, so the candidate was removed. This host result was measured only
+on the Ryzen 9 3900X / RTX 2080 SUPER machine; it is not a cross-architecture
+claim. Raw records are
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/partition0-token-overlap-screen.jsonl`.
