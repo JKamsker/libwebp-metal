@@ -821,3 +821,25 @@ six-image process medians were:
 The content-specific gain is diluted far below the 1.5 ms/image aggregate
 retention threshold. The candidate was removed; raw timing evidence is
 retained locally in `/tmp/libwebp-i4-lower-bound-ab.pvCGmK.json`.
+
+## Local token-flush capacity tracking rejection
+
+The retained page coder checks `pos <= max_pos` and recomputes
+`max_pos - pos` at each real byte flush. An exact candidate kept remaining
+capacity local, decremented it by each emitted pending run plus byte, and
+reloaded it only after the unchanged `Flush`/resize fallback. Unlike page-wide
+preallocation, this preserves the precise partial writer state on allocation
+failure.
+
+All seven focused CTests passed, including repeated growth and injected
+allocation-failure equality, and all 60 timed outputs matched. Five
+order-balanced process medians were:
+
+| Format | Baseline | Local capacity | Change |
+|---|---:|---:|---:|
+| PNG lossy | 42.131 ms/image | 42.083 ms/image | -0.048 ms |
+| JPEG lossy | 42.095 ms/image | 41.945 ms/image | -0.150 ms |
+
+The gains are far below the retention threshold, so the candidate was
+removed. Raw timing evidence is retained locally in
+`/tmp/libwebp-token-available-ab.xJ3CZi.json`.

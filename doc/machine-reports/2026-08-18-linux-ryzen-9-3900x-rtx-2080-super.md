@@ -472,3 +472,20 @@ texture were unchanged. Five order-balanced aggregate medians measured:
 The aggregate gains are far below the retention threshold, so the candidate
 was removed. The local raw summary is
 `/tmp/libwebp-i4-lower-bound-ab.pvCGmK.json`.
+
+## Local token-flush capacity tracking
+
+An exact token-page candidate kept remaining output capacity local instead of
+recomputing `max_pos - pos` at every byte flush. The unchanged resize fallback
+preserved exact partial state under injected allocation failure. All seven
+focused CTests passed and all 60 timed outputs matched. Five order-balanced
+medians measured:
+
+| Format | Baseline | Local capacity | Change |
+|---|---:|---:|---:|
+| PNG lossy | 42.131 ms/image | 42.083 ms/image | -0.048 ms |
+| JPEG lossy | 42.095 ms/image | 41.945 ms/image | -0.150 ms |
+
+The gains are far below the retention threshold, so the candidate was
+removed. The local raw summary is
+`/tmp/libwebp-token-available-ab.xJ3CZi.json`.
