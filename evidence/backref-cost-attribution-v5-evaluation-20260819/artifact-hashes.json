@@ -1,0 +1,20 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v5-phase3-artifact-hashes-v1",
+  "artifacts": [
+    {
+      "path": "operator-report.md",
+      "bytes": 9710,
+      "sha256": "b35c839057acecbf0b1488793f4d9c38d4c84feff0cfd0fbae8bc54b520e574f"
+    },
+    {
+      "path": "phase3-audit.json",
+      "bytes": 14550,
+      "sha256": "99d07e65bc0654fb51cc2437a1d8b0d0e043227394969f05f7f9bcb7503f2f49"
+    },
+    {
+      "path": "phase3-local-validation.json",
+      "bytes": 4357,
+      "sha256": "5d1134572c674ebf5d49d61677555362b2ffe4e409ad49c364ea4bbc3a7001fa"
+    }
+  ]
+}

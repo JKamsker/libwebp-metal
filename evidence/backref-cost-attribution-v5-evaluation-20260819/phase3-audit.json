@@ -1,0 +1,357 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v5-phase3-audit-v1",
+  "generated_at_utc": "2026-08-19T06:50:00Z",
+  "phase": 3,
+  "evaluator": "Sol/high",
+  "evaluation_status": "complete",
+  "evaluated_head": "c240891fbf64b78fcec357dfb3b9634f5ccf70f0",
+  "decision": {
+    "interval_family": "unassessed",
+    "close_family": false,
+    "reopen_family": false,
+    "new_bounded_experiment_implemented": false,
+    "new_bounded_experiment_run": false,
+    "next_cpu_boundary": null,
+    "production_promotion_authorized": false,
+    "consequence": "no usable timing evidence; any future experiment requires wholly new gates and an exact-final-commit rehearsal receipt"
+  },
+  "ancestry": {
+    "linear_from_frozen_main": true,
+    "frozen_main": {
+      "commit": "a192d9b8562b497b03bf8cc83c2de5c7a6ea8cae",
+      "tree": "df06cf4a9d045ece61f808c32cad4e33d0abed88",
+      "parents": [
+        "d8e015e8395a1ae3d5d17637cacf8b99bd084901",
+        "1794a6acdf9f67d3030657a67994d8723a403f83"
+      ]
+    },
+    "intermediate_commits": [
+      {
+        "commit": "e366a352bd2ab7739454e1664581f2e314415867",
+        "parent": "a192d9b8562b497b03bf8cc83c2de5c7a6ea8cae",
+        "tree": "ac41529e0a207cb3c85f21eeb2a750119ca9b301",
+        "subject": "Design backref cost attribution v5 evidence return"
+      },
+      {
+        "commit": "1656a52882c09d91d6d66c0c7ed864e7bc0f5ae6",
+        "parent": "e366a352bd2ab7739454e1664581f2e314415867",
+        "tree": "0471f8194e00f7fbf9be533d3cb11c892ed0dad9",
+        "subject": "Calibrate attribution v5 bulk evidence timeout"
+      },
+      {
+        "commit": "f98105c9d604b95698ac2b1fa2e0dd0a85c67b9c",
+        "parent": "1656a52882c09d91d6d66c0c7ed864e7bc0f5ae6",
+        "tree": "ff6b8bf661e533f50141c8878e18731058323a01",
+        "subject": "Bound attribution v5 archive transfer by measured chunks"
+      }
+    ],
+    "phase1": {
+      "commit": "54cfa24c563d4d8ba0cf4228be9b0161ee5140c1",
+      "parent": "f98105c9d604b95698ac2b1fa2e0dd0a85c67b9c",
+      "tree": "539a056cf7cae861d518e209c088694287b62878",
+      "changed_files": 5,
+      "insertions": 54,
+      "deletions": 21
+    },
+    "phase2": {
+      "commit": "c240891fbf64b78fcec357dfb3b9634f5ccf70f0",
+      "parent": "54cfa24c563d4d8ba0cf4228be9b0161ee5140c1",
+      "tree": "282c4b5d61524405b6871234685a23701a0d425a",
+      "changed_files": 2,
+      "insertions": 334,
+      "deletions": 0,
+      "only_evidence_files_changed": true
+    }
+  },
+  "identity": {
+    "manifest": {
+      "path": "scripts/backref_cost_attribution_v5_manifest.json",
+      "sha256": "31b6ccf9ae04bad1c7d716bbb4a05a24d7a943afcf281957619b253e41703090"
+    },
+    "protocol": {
+      "path": "doc/backref-cost-attribution-v5-protocol-20260819.md",
+      "sha256": "840b807798569df4634d4c095dfc70744a5b4ca44bf0c1537815b4dcb6249cad"
+    },
+    "schema_catalog": {
+      "path": "scripts/backref_cost_attribution_v5_schemas.json",
+      "sha256": "7e23d793575f4d3802cea9c5eda319e801175d5c262e4b6487d8f278ef908882",
+      "schema_count": 15
+    },
+    "phase1_local_validation": {
+      "path": "evidence/backref-cost-attribution-v5-design/phase1-local-validation.json",
+      "sha256": "ebdeaa2deb09cad64f89770edcd0d2de7b23821c77bb9a06e485ee5e90696cd5"
+    },
+    "phase2_evidence": [
+      {
+        "path": "evidence/backref-cost-attribution-v5-execution-20260819/phase2-command-and-refusal.txt",
+        "bytes": 3134,
+        "sha256": "b7f3d563a2d048f5bb0ca741d7d1c984307a6589c02d5ba22ab4962c7cab41cc",
+        "git_blob": "8515e9a949fd273a1fbf383f14b9f647fed22315"
+      },
+      {
+        "path": "evidence/backref-cost-attribution-v5-execution-20260819/phase2-refusal-observation.json",
+        "bytes": 7711,
+        "sha256": "3587a84682b09d2580b2843d010eb5a00b3d46135a16418d730dd0659b17f019",
+        "git_blob": "c760ca0036e95f886af1950f27efd6a42b43efe4"
+      }
+    ],
+    "frozen_artifact_count": 26,
+    "frozen_artifact_hash_mismatches": 0
+  },
+  "authorization": {
+    "manifest_decision_status": "AUTHORIZE_DIAGNOSTIC",
+    "manifest_timed_execution_authorized": true,
+    "phase1_validation_status": "PASS_AUTHORIZED_CONDITIONED_EXACT_COMMIT_REHEARSAL",
+    "phase1_validation_timed_execution_authorized": true,
+    "authorization_condition": "the Phase-1 handoff must include a verified rehearsal receipt whose source_commit equals the final Phase-1 commit",
+    "required_rehearsal_source_commit": "54cfa24c563d4d8ba0cf4228be9b0161ee5140c1",
+    "manifest_rehearsal_source_commit": "runtime-verified-exact-handoff-commit",
+    "verified_exact_commit_rehearsal_receipts_present": 0,
+    "effective_authorization_valid": false,
+    "first_failed_gate": "manifest.phase_1_decision.authorization_condition",
+    "exact_failure_reason": "no committed V5 synchronous rehearsal receipt has source_commit 54cfa24c563d4d8ba0cf4228be9b0161ee5140c1; the manifest value is a non-commit placeholder",
+    "phase1_performance_samples": 0
+  },
+  "frozen_command": {
+    "text": "env WEBP_BENCHMARK_SESSION=exclusive WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V5_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_attribution_v5.py run \"$PWD/evidence/backref-cost-attribution-v5-execution-20260819\"",
+    "expanded_expected_commit_at_handoff": "54cfa24c563d4d8ba0cf4228be9b0161ee5140c1",
+    "invoked": false,
+    "wrapper_invocations": 0,
+    "return_status": "N/A-command-not-invoked",
+    "stdout": "",
+    "stderr": "",
+    "retry_count": 0,
+    "rerun_count": 0,
+    "rehearsal_count": 0,
+    "tuning_count": 0,
+    "alternate_timing_count": 0,
+    "timed_pipeline_invocations": 0,
+    "encoder_workload_invocations": 0,
+    "profiler_invocations": 0,
+    "cuda_invocations": 0,
+    "failed_closed": true
+  },
+  "frozen_plan_and_actual": {
+    "case_order": ["photo-large", "graphic-large"],
+    "method_order": [4, 6],
+    "repetition_variant_order": [
+      ["baseline", "candidate"],
+      ["candidate", "baseline"],
+      ["baseline", "candidate"]
+    ],
+    "planned_profile_order": [
+      "p00-photo-large-m4-baseline-r0",
+      "p01-photo-large-m4-candidate-r0",
+      "p02-photo-large-m4-candidate-r1",
+      "p03-photo-large-m4-baseline-r1",
+      "p04-photo-large-m4-baseline-r2",
+      "p05-photo-large-m4-candidate-r2",
+      "p06-photo-large-m6-baseline-r0",
+      "p07-photo-large-m6-candidate-r0",
+      "p08-photo-large-m6-candidate-r1",
+      "p09-photo-large-m6-baseline-r1",
+      "p10-photo-large-m6-baseline-r2",
+      "p11-photo-large-m6-candidate-r2",
+      "p12-graphic-large-m4-baseline-r0",
+      "p13-graphic-large-m4-candidate-r0",
+      "p14-graphic-large-m4-candidate-r1",
+      "p15-graphic-large-m4-baseline-r1",
+      "p16-graphic-large-m4-baseline-r2",
+      "p17-graphic-large-m4-candidate-r2",
+      "p18-graphic-large-m6-baseline-r0",
+      "p19-graphic-large-m6-candidate-r0",
+      "p20-graphic-large-m6-candidate-r1",
+      "p21-graphic-large-m6-baseline-r1",
+      "p22-graphic-large-m6-baseline-r2",
+      "p23-graphic-large-m6-candidate-r2"
+    ],
+    "parallel_profile_processes": 1,
+    "planned": {
+      "remote_admissions": 1,
+      "exclusive_lease_attempts": 1,
+      "correctness_encodes": 16,
+      "counter_check_encodes": 8,
+      "profile_processes": 24,
+      "profile_encodes_including_warmups": 120,
+      "all_encoder_encodes": 144,
+      "warmups": 24,
+      "retained_runner_rows": 96,
+      "total_runner_rows": 120,
+      "total_stage_rows": 120,
+      "timing_rows": 96
+    },
+    "actual": {
+      "remote_admissions": 0,
+      "exclusive_lease_attempts": 0,
+      "correctness_encodes": 0,
+      "counter_check_encodes": 0,
+      "profile_processes": 0,
+      "profile_encodes_including_warmups": 0,
+      "all_encoder_encodes": 0,
+      "warmups": 0,
+      "retained_runner_rows": 0,
+      "total_runner_rows": 0,
+      "total_stage_rows": 0,
+      "timing_rows": 0,
+      "performance_samples": 0,
+      "executed_profile_order": []
+    }
+  },
+  "implementation_audit": {
+    "build_gate": "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT",
+    "compile_gate": "WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT",
+    "runtime_gate": "WEBP_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT=1",
+    "fresh_default_off_identity": true,
+    "predecessor_gate_isolation": true,
+    "ordinary_surface_omits_v5": true,
+    "public_api_abi_preserved": true,
+    "selector_once_before_dp_mutation": true,
+    "closed_baseline_candidate_if_else": true,
+    "predecessor_fallthrough_excluded": true,
+    "thread_local_body_counters": true,
+    "counter_reset_explicit": true,
+    "dp_total_boundary": "immediately around exactly one selected DP body through body cleanup",
+    "dp_setup_boundary": "before CostModel and CostManager allocation through successful CostManagerInit",
+    "dp_steady_boundary": "initial literal and pixel DP loop only",
+    "traceback_separately_timed": true,
+    "materialization_separately_timed": true,
+    "per_pixel_or_push_interval_clocks": 0,
+    "required_success_invariant": "selected_dp_calls == selector_evaluations == dp_total.calls == dp_setup.calls == dp_steady.calls; selected body only; setup+steady <= dp_total; dp_total+traceback+materialize <= lossless_backward_refs"
+  },
+  "source_toolchain_device_resources": {
+    "frozen_remote_target": {
+      "host_alias": "pandocs-agent",
+      "system": "Darwin",
+      "architecture": "arm64",
+      "hardware_model": "Mac16,10",
+      "cpu_brand": "Apple M4",
+      "physical_memory_bytes": 25769803776,
+      "compiler": "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+      "sdk_version": "26.2"
+    },
+    "phase2_observed_remote_source": null,
+    "phase2_observed_remote_toolchain": null,
+    "phase2_observed_remote_device": null,
+    "phase2_observed_remote_resources": null,
+    "phase2_observed_remote_process_order": null,
+    "reason_unobserved": "authorization failed before remote admission",
+    "local_validation_compiler": "AppleClang 17.0.0.17000604",
+    "local_validation_is_performance_evidence": false
+  },
+  "ownership": {
+    "process_discovery_performed": false,
+    "direct_workload_children_spawned": 0,
+    "preexisting_or_discovered_pids_touched": 0,
+    "signals_sent": 0,
+    "host_runner_service_auth_toolchain_mutations": 0,
+    "local_contract_test_result": "PASS",
+    "local_contract_test_scope": "only retained directly spawned child handles are signal-capable; discovered processes are refusal-only"
+  },
+  "return_protocol": {
+    "remote_admission_attempted": false,
+    "control_plane_receipts_obtained": 0,
+    "operator_status_receipts": 0,
+    "source_admission_receipts": 0,
+    "archive_build_receipts": 0,
+    "lease_receipts": 0,
+    "cleanup_receipts": 0,
+    "lease_state": "not-derived",
+    "bulk_archive": {
+      "build_attempts": 0,
+      "transfer_attempts": 0,
+      "hash_verifications": 0,
+      "size_verifications": 0,
+      "inventory_verifications": 0,
+      "extraction_attempts": 0,
+      "status": "not-attempted"
+    },
+    "cleanup": {
+      "exact_children_created": 0,
+      "attempts": 0,
+      "receipts": 0,
+      "absence_proofs": 0,
+      "status": "N/A-no-remote-child-created",
+      "remote_absence_claim_made": false
+    },
+    "phase1_transport_calibration": {
+      "representative_archive_bytes": 4230194,
+      "representative_elapsed_ns": 8135333000,
+      "representative_chunk_count": 9,
+      "bulk_chunk_bytes": 524288,
+      "derived_per_chunk_timeout_seconds": 20,
+      "derived_total_timeout_seconds": 60,
+      "exact_phase1_commit_rehearsal_receipt": false
+    },
+    "local_archive_contract_test_result": "PASS",
+    "local_archive_contract_test_is_run_receipt": false
+  },
+  "raw_row_reconstruction": {
+    "execution_directory_files": 2,
+    "execution_directory_bytes": 10845,
+    "jsonl_files": 0,
+    "raw_runner_rows": 0,
+    "raw_stage_rows": 0,
+    "retained_rows": 0,
+    "performance_samples": 0,
+    "accepted_statistics": 0,
+    "recomputation_result": "N/A-empty-raw-row-set",
+    "metrics": [
+      "whole_encode",
+      "lossless_analyze",
+      "lossless_hash_chain",
+      "lossless_backward_refs",
+      "backref_cost_dp_total",
+      "backref_cost_dp_setup",
+      "backref_cost_dp_steady",
+      "backref_cost_traceback",
+      "backref_cost_materialize",
+      "lossless_histogram",
+      "lossless_huffman",
+      "lossless_bitstream"
+    ],
+    "cells": [
+      {"case": "photo-large", "method": 4, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "photo-large", "method": 6, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "graphic-large", "method": 4, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "graphic-large", "method": 6, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null}
+    ]
+  },
+  "untimed_validation": {
+    "status": "PASS",
+    "timed_workload_invoked": false,
+    "remote_command_invoked": false,
+    "correctness_encodes": 16,
+    "counter_cells": 4,
+    "opposite_body_calls": 0,
+    "sanitizer_configurations": 2,
+    "boundary_fixtures": 16,
+    "guard_count": 25,
+    "ordinary_build_targets": ["cwebp", "dwebp"],
+    "lossless_roundtrip": "PASS",
+    "clock": {
+      "reads": 4096,
+      "positive_deltas": 1465,
+      "elapsed_ns": 61375,
+      "mean_read_delta_ns": 14,
+      "minimum_positive_delta_ns": 41,
+      "maximum_delta_ns": 167,
+      "monotonic": true
+    }
+  },
+  "limitations": [
+    "the exact frozen Phase-2 command was not invoked",
+    "no exact-final-Phase-1-commit rehearsal receipt exists",
+    "no remote source, toolchain, device, resource, ownership, correctness, order, count, or timer receipt exists",
+    "no raw workload row exists, so every timing statistic is N/A",
+    "local untimed validation is not performance evidence",
+    "Phase-1 pre-final transport calibration does not satisfy the exact-commit authorization condition",
+    "coarse timers cannot establish PushInterval self time, call-stack, code-layout, branch-predictor, or cache causality"
+  ],
+  "final_consequence": {
+    "status": "UNASSESSED_NO_USABLE_TIMING_EVIDENCE",
+    "production_changed": false,
+    "production_promotion_authorized": false,
+    "next_cpu_boundary_ranked": false,
+    "future_requirement": "new independent gates and a verified synchronous rehearsal receipt for the exact final handoff commit; do not run it in this cycle"
+  }
+}
