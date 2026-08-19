@@ -319,7 +319,7 @@ complete official suite measured:
 | JPEG near-lossless | 799.8 ms | 382.3 ms | **2.09x** |
 
 The `win-2080super-fast-flush` suite passed all 180 validation pairs; its raw
-result is `/tmp/libwebp-cuda-results-2080super-fast-flush/results.json`.
+result is `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/official-fast-flush-results.json`.
 Seven registered CTests and an additional 105 exact-byte cases across methods
 2--6, qualities 25/75/98, tiny and odd inputs, three content classes, and
 forced band-3 fallback passed. Exact CI run `32221803146` passed all eleven
@@ -347,7 +347,7 @@ processes, each with one warmup and three retained 24-image samples, measured:
 
 All 60 outputs retained their reference hash and byte count. Both gains were
 far below the retention threshold, so the code change was removed. The local
-raw timing summary is `/tmp/libwebp-i4-balanced-ab.zRywWw.json`.
+raw timing summary is `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-balanced-ab.json`.
 
 ## Combined residual-cost table
 
@@ -368,7 +368,7 @@ with one warmup and three retained 24-image samples, measured:
 All 60 outputs retained their reference hash and byte count. The larger table
 and wider addressing outweighed the saved load, so the candidate was removed.
 The local raw summary is
-`/tmp/libwebp-combined-level-cost-ab.Xn4ND3.json`.
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/combined-level-cost-ab.json`.
 
 ## Small-level residual-cost specialization
 
@@ -384,7 +384,7 @@ processes per variant measured:
 
 All 60 outputs retained their reference hash and byte count. The added range
 test outweighed the saved load, so the candidate was removed. The local raw
-summary is `/tmp/libwebp-small-level-cost-ab.OHZMcV.json`.
+summary is `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/small-level-cost-ab.json`.
 
 ## Coefficient-major I4 residual mirror
 
@@ -403,7 +403,7 @@ registers stayed at 93 and static shared memory increased from 17,912 to
 
 The extra shared writes and footprint outweighed the read-layout improvement,
 so the candidate was removed. The local raw summary is
-`/tmp/libwebp-residual-transpose-ab.ffrAEp.json`.
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/residual-transpose-ab.json`.
 
 ## Two-token boolean-coder loop unroll
 
@@ -419,7 +419,7 @@ process medians measured:
 | JPEG lossy | 42.004 ms/image | 41.958 ms/image | -0.046 ms |
 
 The gains are effectively zero, so the larger generated loop was removed. The
-local raw summary is `/tmp/libwebp-token-unroll-ab.frMCAJ.json`.
+local raw summary is `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/token-unroll-ab.json`.
 
 ## Phase-aliased decimate workspace
 
@@ -437,7 +437,7 @@ outputs matched. Direct medium-texture GPU wall moved from 28.48 to about
 
 The sparse wavefront did not benefit from the additional theoretical
 occupancy, so the candidate was removed. The local raw summary is
-`/tmp/libwebp-phase-union-ab.yLDGe1.json`.
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/phase-union-ab.json`.
 
 ## Compact I4 reconstruction scratch
 
@@ -454,7 +454,7 @@ and all 60 timed outputs matched. Five order-balanced process medians measured:
 
 The added stride-aware metric work offset the bank-layout improvement, so the
 candidate was removed. The local raw summary is
-`/tmp/libwebp-i4-compact-output-ab.4oaeP2.json`.
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-compact-output-ab.json`.
 
 ## Whole-I4 lower-bound pruning
 
@@ -471,7 +471,7 @@ texture were unchanged. Five order-balanced aggregate medians measured:
 
 The aggregate gains are far below the retention threshold, so the candidate
 was removed. The local raw summary is
-`/tmp/libwebp-i4-lower-bound-ab.pvCGmK.json`.
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-lower-bound-ab.json`.
 
 ## Local token-flush capacity tracking
 
@@ -488,7 +488,7 @@ medians measured:
 
 The gains are far below the retention threshold, so the candidate was
 removed. The local raw summary is
-`/tmp/libwebp-token-available-ab.xJ3CZi.json`.
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/token-available-ab.json`.
 
 ## Dual-sub-block I4 dependency diagonals
 
@@ -524,8 +524,8 @@ methods 2--6, qualities 25/75/98, 17x13 and 257x255 inputs, three content
 classes, and forced band-3 transactional fallback. The official suite then
 passed all 180 validation pairs (including 60 exact lossy pairs) and produced
 the tables at the top of this report. Raw official results are in
-`/tmp/libwebp-cuda-results-2080super-i4-diagonal/results.json`; the local A/B
-summary is `/tmp/libwebp-i4-diagonal-ab.we3FD8.json`.
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/official-i4-diagonal-results.json`; the local A/B
+summary is `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-diagonal-ab.json`.
 
 ## I4 team-local named barriers
 
@@ -543,7 +543,7 @@ leaving the two publication/abort barriers block-wide.
 
 All 60 order-balanced timing outputs matched. The gains are far below the
 1.5 ms/image retention threshold, so the candidate was removed. Raw evidence
-is `/tmp/libwebp-i4-team-barrier-ab.6N0G7E.tsv`.
+is `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-team-barrier-ab.tsv`.
 
 ## Local-state coefficient-token recording
 
@@ -559,8 +559,8 @@ time:
 | JPEG lossy | 40.241 ms/image | 40.392 ms/image | +0.151 ms |
 
 All 60 order-balanced timing outputs matched. The candidate was removed. Raw
-evidence is `/tmp/libwebp-token-record-local-ab.iEsa8t.tsv` and the CPU
-profile is `/tmp/libwebp-gprof-i4-diagonal-replay.er`.
+evidence is `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/token-record-local-ab.tsv` and the CPU
+profile is `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/gprof-i4-diagonal-replay.tar.gz`.
 
 ## Eight-lane basic I4 quantization
 
@@ -574,7 +574,7 @@ method-6 trellis chain. It was byte-exact but neutral:
 | JPEG lossy | 40.366 ms/image | 40.088 ms/image | -0.279 ms |
 
 All 60 order-balanced outputs matched. The candidate was removed; raw
-evidence is `/tmp/libwebp-i4-quant8-ab.R8YBlE.tsv`.
+evidence is `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-quant8-ab.tsv`.
 
 ## Cold coefficient-statistics renormalization
 
@@ -592,7 +592,7 @@ fall-through, but the end-to-end result regressed:
 
 The focused trellis test passed and all 60 order-balanced outputs matched.
 The candidate was removed; raw evidence is
-`/tmp/libwebp-recordstats-hint-ab.XRmLrK.jsonl`.
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/recordstats-hint-ab.jsonl`.
 
 ## Branchless token-probability selection
 
@@ -610,7 +610,7 @@ only low indices 0--255, so the speculative indexed load remained in bounds.
 The bit-writer and trellis tests passed and all 60 order-balanced outputs
 matched. Both gains are far below the 1.5 ms/image threshold, so the candidate
 was removed. Raw evidence is
-`/tmp/libwebp-tokenprob-branchless-ab.shxSHc.jsonl`.
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/tokenprob-branchless-ab.jsonl`.
 
 ## Split singleton I4 diagonals
 
@@ -627,7 +627,7 @@ cross-team publication outweighed the parallel work:
 
 The full CUDA trellis parity test passed and all 60 order-balanced outputs
 matched. The candidate was removed; raw evidence is
-`/tmp/libwebp-i4-singleton-split-ab.CKXjFR.jsonl`.
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-singleton-split-ab.jsonl`.
 
 ## I16 warp reductions
 
@@ -643,7 +643,7 @@ warp reductions and one shared-memory writer per mode.
 
 The full CUDA trellis parity test passed and all 60 order-balanced outputs
 matched. The gains are below the 1.5 ms/image threshold, so the candidate was
-removed. Raw evidence is `/tmp/libwebp-i16-warp-reduce-ab.pW8SQc.jsonl`.
+removed. Raw evidence is `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i16-warp-reduce-ab.jsonl`.
 
 ## Cooperative I16 forward transforms
 
@@ -659,7 +659,7 @@ memory and occupancy were unchanged.
 
 The full CUDA trellis parity test passed and all 60 order-balanced outputs
 matched. The candidate was removed; raw evidence is
-`/tmp/libwebp-i16-coop-forward-ab.8LpvKa.jsonl`.
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i16-coop-forward-ab.jsonl`.
 
 ## Cooperative I16 quantization with warp reductions
 
@@ -675,7 +675,7 @@ measured reductions:
 
 The full CUDA trellis parity test passed and all 60 order-balanced outputs
 matched. The combination remains below the 1.5 ms/image threshold and was
-removed. Raw evidence is `/tmp/libwebp-i16-quant-reduce-ab.iLk0Fr.jsonl`.
+removed. Raw evidence is `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i16-quant-reduce-ab.jsonl`.
 
 ## Forced-inline I4 metrics
 
@@ -683,4 +683,4 @@ Forcing the scalar 4x4 SSE and Hadamard metric helpers inline preserved exact
 output but did not improve a two-process order-balanced screen: PNG was flat
 (40.323 vs. 40.316 ms/image) and JPEG regressed (40.095 vs.
 40.552 ms/image). The candidate was removed. Raw evidence is
-`/tmp/libwebp-i4-metric-inline-ab.wn7jYO.jsonl`.
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-metric-inline-ab.jsonl`.
