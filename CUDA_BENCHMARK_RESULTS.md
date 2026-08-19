@@ -2053,3 +2053,23 @@ The candidate and restored focused exact suites passed, but both improvements
 are noise under the 1.5 ms/image gate. The candidate was removed; raw
 artifacts use the `libwebp-i4-pred-group-fusion-*` prefix. This is Turing-only
 evidence and does not alter Ampere+ behavior or thresholds.
+
+## Min/max reconstruction-clip rejection
+
+After partition-size inspection ruled out token-worker imbalance as a
+gate-sized scheduling opportunity, the 63.8--65.5% I4 phase motivated a
+pre-Ampere saturation candidate. `CudaClip8b` used signed integer min/max on
+Turing while Ampere+ compiled the retained range-test expression.
+
+Native code shrank by 240 instructions with unchanged kernel resources. Two
+order-reversed process pairs per format remained exact:
+
+| Format | Parent | Candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 39.459 ms/image | 39.063 ms/image | 0.396 ms/image | `ace64e860de89b43` / 6,441,688 |
+| JPEG lossy | 39.500 ms/image | 39.486 ms/image | 0.014 ms/image | `1cbb84d2ab926db3` / 6,400,792 |
+
+Candidate and restored focused exact tests passed. Neither format approached
+the 1.5 ms/image gate, so the source was restored. Raw artifacts use the
+`libwebp-i4-clip-minmax-*` prefix. This is Turing-only evidence; Ampere+
+behavior and thresholds remain unchanged.

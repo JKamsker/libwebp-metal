@@ -2195,3 +2195,26 @@ The source was restored because neither format reached 1.5 ms/image. Evidence
 under `libwebp-i4-pred-group-fusion-*` includes the exact patch, refreshed
 batch/device/CPU profile, all timing rows, tests, and computed summary. This
 result is RTX 2080 SUPER-only and changes no Ampere+ setting or claim.
+
+## Pre-Ampere min/max reconstruction clipping
+
+The retained I4 phase still consumed 63.8% of photo and 65.5% of texture
+block cycles. Parsing the texture-medium output found token partitions between
+137,336 and 152,730 bytes, only an 11.2% imbalance caused by the standard
+75-row modulo-eight assignment; all eight coders already run concurrently.
+The next candidate instead changed the frequently inlined pre-Ampere
+`CudaClip8b` to signed min/max saturation while preserving Ampere+ source.
+
+The sm_75 decimate kernel shortened by 240 instructions without changing its
+103 registers, 352-byte stack, or 23,392-byte shared allocation. Candidate and
+restored focused exact tests passed. All 24 timing rows matched aggregate
+output:
+
+| Format | Parent | Min/max clip | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.459 ms/image | 39.063 ms/image | 0.396 ms/image |
+| JPEG lossy | 39.500 ms/image | 39.486 ms/image | 0.014 ms/image |
+
+The code-size improvement did not move the critical path, so the candidate was
+removed. Exact artifacts are under `libwebp-i4-clip-minmax-*`. This result is
+RTX 2080 SUPER-only and changes no Ampere+ behavior, threshold, or claim.

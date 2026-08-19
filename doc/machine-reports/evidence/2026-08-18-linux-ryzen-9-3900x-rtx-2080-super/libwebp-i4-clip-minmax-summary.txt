@@ -1,0 +1,17 @@
+Candidate: pre-Ampere min/max 8-bit saturation
+Status: rejected and removed
+Hardware: Ryzen 9 3900X / RTX 2080 SUPER
+Build: Release, CMAKE_CUDA_ARCHITECTURES=native
+Benchmark: lossy method 4 quality 75, six-image small/medium corpus,
+           batch size 24, one discarded warmup, three retained samples,
+           two order-reversed process pairs per format
+
+Format  Parent median  Candidate median  Gain ms/image  Hash              Bytes
+PNG         39.458719         39.062569       0.396150  ace64e860de89b43  6441688
+JPEG        39.500497         39.486485       0.014012  1cbb84d2ab926db3  6400792
+
+The pre-Ampere candidate replaced CudaClip8b's in-range/negative tests with
+signed min/max saturation. Ampere+ retained the original expression. Native
+sm_75 code became 240 instructions shorter with unchanged resources, and the
+focused exact suite plus all timing outputs matched. Neither format reached
+the strict 1.5 ms/image threshold, so the source was restored.

@@ -304,6 +304,12 @@ batch/device/CPU profile, exact rejected pre-Ampere prediction-group patch,
 decision summary. The source was restored after gains of 0.671 ms/image PNG
 and 0.881 ms/image JPEG missed the retention threshold.
 
+The `libwebp-i4-clip-minmax-*` files preserve partition-balance and I4 profile
+evidence, the exact rejected pre-Ampere saturation patch, native resources and
+code-size change, 24 order-reversed timing rows, candidate/restored focused
+tests, and decision summary. The candidate was removed after gains of only
+0.396 ms/image PNG and 0.014 ms/image JPEG.
+
 Inspect the sampling archives with:
 
 ```sh

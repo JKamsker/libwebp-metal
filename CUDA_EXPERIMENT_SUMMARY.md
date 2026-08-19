@@ -757,3 +757,27 @@ shared prediction arithmetic improves the earlier static-dispatch shape but
 still cannot move enough of the sequential I4 chain. Exact patch, profile,
 24 rows, tests, and summary are archived under
 `libwebp-i4-pred-group-fusion-*`. RTX 2080 SUPER only; no Ampere+ claim.
+
+## Pre-Ampere min/max reconstruction-clip rejection
+
+The retained profile kept I4 at 63.8--65.5% of realistic photo/texture block
+cycles. Texture token partitions differed by only 11.2%, an unavoidable
+consequence of assigning 75 macroblock rows modulo eight already-concurrent
+standard partitions. The next distinct candidate therefore replaced
+pre-Ampere `CudaClip8b` range tests with signed integer min/max saturation;
+Ampere+ retained the original expression.
+
+The native sm_75 decimate kernel became 240 SASS instructions shorter while
+remaining at 103 registers, a 352-byte stack, and 23,392 shared bytes.
+Candidate and restored focused exact suites passed, and all 24 order-reversed
+rows matched hashes and byte counts:
+
+| Format | Parent | Min/max clip | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.459 ms/image | 39.063 ms/image | 0.396 ms/image |
+| JPEG lossy | 39.500 ms/image | 39.486 ms/image | 0.014 ms/image |
+
+The shorter code is largely outside the critical path, and both gains are
+below 1.5 ms/image. The candidate was removed. Exact patch, partition/profile
+evidence, resources, 24 rows, tests, and summary are archived under
+`libwebp-i4-clip-minmax-*`. RTX 2080 SUPER only; no Ampere+ claim.
