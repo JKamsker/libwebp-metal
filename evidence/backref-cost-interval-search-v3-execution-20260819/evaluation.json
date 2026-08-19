@@ -1,0 +1,170 @@
+{
+  "cells": [
+    {
+      "case_id": "photo-medium",
+      "lifecycle": "cold",
+      "method": 4,
+      "p95_ratio": 1.0040485681772169,
+      "paired_median_ratio": 1.006232015663445,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "tune"
+    },
+    {
+      "case_id": "photo-medium",
+      "lifecycle": "warm",
+      "method": 4,
+      "p95_ratio": 1.032501634284526,
+      "paired_median_ratio": 1.0347423186181497,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "tune"
+    },
+    {
+      "case_id": "photo-medium",
+      "lifecycle": "cold",
+      "method": 6,
+      "p95_ratio": 1.005350036260047,
+      "paired_median_ratio": 1.0029104935870896,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "tune"
+    },
+    {
+      "case_id": "photo-medium",
+      "lifecycle": "warm",
+      "method": 6,
+      "p95_ratio": 1.0060380787414602,
+      "paired_median_ratio": 1.0047578736318123,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "tune"
+    },
+    {
+      "case_id": "graphic-medium",
+      "lifecycle": "cold",
+      "method": 4,
+      "p95_ratio": 0.9894618036653965,
+      "paired_median_ratio": 0.9920147433650095,
+      "passes_performance": true,
+      "process_pairs": 11,
+      "role": "tune"
+    },
+    {
+      "case_id": "graphic-medium",
+      "lifecycle": "warm",
+      "method": 4,
+      "p95_ratio": 0.9893562781372839,
+      "paired_median_ratio": 0.9885483955393304,
+      "passes_performance": true,
+      "process_pairs": 6,
+      "role": "tune"
+    },
+    {
+      "case_id": "graphic-medium",
+      "lifecycle": "cold",
+      "method": 6,
+      "p95_ratio": 0.9973744062582311,
+      "paired_median_ratio": 0.9857851442376726,
+      "passes_performance": true,
+      "process_pairs": 11,
+      "role": "tune"
+    },
+    {
+      "case_id": "graphic-medium",
+      "lifecycle": "warm",
+      "method": 6,
+      "p95_ratio": 0.9932455037046056,
+      "paired_median_ratio": 0.9954256942381552,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "tune"
+    },
+    {
+      "case_id": "photo-large",
+      "lifecycle": "cold",
+      "method": 4,
+      "p95_ratio": 1.0232215632863857,
+      "paired_median_ratio": 1.005016326822317,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "holdout"
+    },
+    {
+      "case_id": "photo-large",
+      "lifecycle": "warm",
+      "method": 4,
+      "p95_ratio": 1.0294745292799958,
+      "paired_median_ratio": 1.004765752186203,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "holdout"
+    },
+    {
+      "case_id": "photo-large",
+      "lifecycle": "cold",
+      "method": 6,
+      "p95_ratio": 1.0249478667745022,
+      "paired_median_ratio": 1.0013144142557235,
+      "passes_performance": false,
+      "process_pairs": 11,
+      "role": "holdout"
+    },
+    {
+      "case_id": "photo-large",
+      "lifecycle": "warm",
+      "method": 6,
+      "p95_ratio": 0.999781759309237,
+      "paired_median_ratio": 1.0007538358039059,
+      "passes_performance": false,
+      "process_pairs": 6,
+      "role": "holdout"
+    },
+    {
+      "case_id": "graphic-large",
+      "lifecycle": "cold",
+      "method": 4,
+      "p95_ratio": 0.9858545171236481,
+      "paired_median_ratio": 0.9775355285185369,
+      "passes_performance": true,
+      "process_pairs": 11,
+      "role": "holdout"
+    },
+    {
+      "case_id": "graphic-large",
+      "lifecycle": "warm",
+      "method": 4,
+      "p95_ratio": 0.978281722827435,
+      "paired_median_ratio": 0.9811490892154469,
+      "passes_performance": true,
+      "process_pairs": 6,
+      "role": "holdout"
+    },
+    {
+      "case_id": "graphic-large",
+      "lifecycle": "cold",
+      "method": 6,
+      "p95_ratio": 0.9848364179135966,
+      "paired_median_ratio": 0.9794553807914189,
+      "passes_performance": true,
+      "process_pairs": 11,
+      "role": "holdout"
+    },
+    {
+      "case_id": "graphic-large",
+      "lifecycle": "warm",
+      "method": 6,
+      "p95_ratio": 0.9752984463909045,
+      "paired_median_ratio": 0.9776733439242431,
+      "passes_performance": true,
+      "process_pairs": 6,
+      "role": "holdout"
+    }
+  ],
+  "command_processes": 272,
+  "decision": "reject",
+  "measured_samples": 1040,
+  "sample_rows": 1232,
+  "schema": "libwebp-backref-cost-interval-search-v3-evaluation-v1",
+  "timing_authority": "end-to-end WebPEncode only"
+}

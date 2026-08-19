@@ -1,0 +1,178 @@
+{
+  "candidate_equivalence": {
+    "algorithm": "derive an append hint only inside each PushInterval call from the existing monotonic overlap scan, update that local only after a successful tail insertion or an in-call tail pop, and use it for a null-hint insertion only when new start is strictly greater than hint start; otherwise execute the exact baseline search",
+    "semantics": [
+      "integer costs",
+      "strict comparisons and ties",
+      "interval ordering and lifetimes",
+      "update order",
+      "traceback",
+      "reference order",
+      "cache choice",
+      "input immutability",
+      "pre-DP injected exact baseline fallback"
+    ],
+    "validated_candidate_commit": "frozen handoff commit supplied by source admission"
+  },
+  "frozen_artifacts": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "7bfa6c16c6db2db1ca92fceac6af4ee49f9894dea6f95c6fc5e460c5099ae96d"
+    },
+    {
+      "path": "makefile.unix",
+      "sha256": "e97d37d77cef80b881fdd5472dd4cf06b4947b1c42ef97810b96a9216b045f31"
+    },
+    {
+      "path": "doc/backref-cost-interval-search-v3-design-20260819.md",
+      "sha256": "407e28a2224625e0f88fc80cb7260757dbc6aa86273e98519b6d138433eda7f3"
+    },
+    {
+      "path": "doc/backref-cost-interval-search-v3-protocol-20260819.md",
+      "sha256": "a4d61aa4153f127323d2af7a3c515c86b456aa74d1506c0aab1dbc1d10ee0056"
+    },
+    {
+      "path": "doc/backref-cost-interval-search-v3-operator-20260819.md",
+      "sha256": "b520d13c680f711bd8d9f67a4397150712a40e82b6d1689935688c05ef4fb386"
+    },
+    {
+      "path": "scripts/backref_cost_interval_search_v3_schemas.json",
+      "sha256": "48a7b79dbeaf2f642cd41f8f7606359ba045e7b7a61c111fc282709e2b4bb9d0"
+    },
+    {
+      "path": "scripts/backref_cost_interval_search_v3_archive.py",
+      "sha256": "8bf977bf42f77fd73ccd975aefedff3b13de6eb61b7368a660bdf401368a8833"
+    },
+    {
+      "path": "scripts/run_backref_cost_interval_search_v3_experiment.py",
+      "sha256": "9fc2447dc41777e7529b4b7a2e4512e6af6f568966ce8df8e8d7880766c4ac1d"
+    },
+    {
+      "path": "scripts/execute_backref_cost_interval_search_v3.py",
+      "sha256": "a46175be90ced5f2fe162279d42978328f4d39c4dce88d940d8b67e145d18d5f"
+    },
+    {
+      "path": "scripts/backref_cost_interval_search_v3_admission.py",
+      "sha256": "c285d51f0ba84503a053c1f6ee93342e9dafe71f75720fc17c713858a52d12fe"
+    },
+    {
+      "path": "scripts/backref_cost_interval_search_v3_paths.py",
+      "sha256": "350fc76e41d5d02d50cc75fc9f4ae9bf9bc71e217f93512cc789f883cbe069d6"
+    },
+    {
+      "path": "scripts/validate_backref_cost_interval_search_v3_evidence_return.py",
+      "sha256": "9f44b75c128b6a97de7de33b8709a43331831d1719c6689bb1d0858f094d50c7"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_search_v3_experiment.py",
+      "sha256": "96d240cebd658bd7272d3338fbcc550c3d63896b7c5ef3534e9e6082ae549dfc"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_search_v3_admission.py",
+      "sha256": "d0764e6d790ebaa5628dd4f0d610403bc5c0748b92990d5ea7145dd71a33a777"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_search_v3_archive.py",
+      "sha256": "619e9fd1dd716181416217de7b293ef19b594881cc92cb1d1d10c1f0f64e8337"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_search_v3_protocol.py",
+      "sha256": "96ec4ab2f39b42c9170ba35c33fa0defc5197028ba336496958c1ff34fcc2f0f"
+    },
+    {
+      "path": "scripts/collect_backref_cost_interval_search_v3_work.py",
+      "sha256": "4bb528f31b78de68408eabfb237ef88f19551ebe0d1ab0cb0862b4e6b3b89dfe"
+    },
+    {
+      "path": "scripts/test_experiment_guards.py",
+      "sha256": "94a87469a8395dc6bb67eae778886800fe40b48d53652d84c69d843ccb1f5ae2"
+    },
+    {
+      "path": "scripts/generate_publication_corpus.py",
+      "sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007"
+    },
+    {
+      "path": "benchmarks/publication-corpus/manifest.json",
+      "sha256": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff"
+    },
+    {
+      "path": "src/enc/backref_cost_interval_search_v3_experiment_enc.c",
+      "sha256": "9cdf462bf5ea8e780632c120e3e51a5dda00f119c5bd7a141182bbb8b70caaaf"
+    },
+    {
+      "path": "src/enc/backref_cost_interval_search_v3_experiment_enc.h",
+      "sha256": "4523b247a340d54549c9464aef2b1fc56bd0e31bae5fc0cde29ec7f7745fff24"
+    },
+    {
+      "path": "src/enc/backward_references_cost_enc.c",
+      "sha256": "2a6364f683692247def2febbc2e9734d25bba397a348c5e858fb3840009be4d2"
+    },
+    {
+      "path": "tools/backref_cost_interval_search_v3_experiment_runner.c",
+      "sha256": "3af0f5034417ae1220c2dd00225abca27ec7cf3656e6fb00349f35aeb58412e4"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design-work/work-metrics.jsonl",
+      "sha256": "d5b16a2122d967b30d415d81b17308165673c982d7aa7d89c6165c0a364b33c2"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design-work/summary.json",
+      "sha256": "4a9b8bf6236f33e86cd55c9ee4d3972891e5d922d4de66e5aae19f2e8eabfe4a"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design-work/abi.json",
+      "sha256": "ae789a6cab8b24f1cb91c661ba49b9a1380f12de1d058c1b85f7f44be0058837"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design-work/identity.json",
+      "sha256": "a9d2e83771cddf269ab33b74262568abfaeb37d7a7f617bb698c1f12860a91b6"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design-work/codegen.json",
+      "sha256": "972faf01dea8df95140a9b90e36b08ca5f4180c7308c3b28fb6716cb4e7c0905"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design/local-validation.json",
+      "sha256": "4ff011132e92974d042c6f5be8f72a7c707e8b1104a0d0b9decccd1a87a667fb"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design/remote-rehearsal-success/rehearsal.json",
+      "sha256": "fe4cd4ed67f0dff879e99802623c02a08a938d2bcc7c4cb83db5dc60f21b54e6"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design/remote-rehearsal-success/work-metric-summary.json",
+      "sha256": "873bde4676afd80cad48b61b3607d7d24c3f4d1b6362519a4edc8d871e7016e5"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design/remote-rehearsal-success/returned-evidence-hashes.json",
+      "sha256": "374ca48ba0e9f78ce890e87fbfa95ecf6702e41f32f052f40425b78d04b25396"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design/remote-rehearsal-success/transfer-cleanup.json",
+      "sha256": "a40ff92d52cde3fcd9b905a5762e61f62998f6732f4dc90ec3e6fbd583df1dd2"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design/remote-rehearsal-refusal/refusal.json",
+      "sha256": "c713eda7dcce57aee25c7b33b9d8b650e0f4da0e74f4bcbc15dda2b76575d4e3"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design/remote-rehearsal-refusal/returned-evidence-hashes.json",
+      "sha256": "ea2cef2b8f77814b131780e015e85878acc5afc5dd4b0ec6af15bcf162bc50db"
+    },
+    {
+      "path": "evidence/backref-cost-interval-search-v3-design/remote-rehearsal-refusal/transfer-cleanup.json",
+      "sha256": "7d1723d13aea1a962f3d56abe6678ddfbfc06c74b686a0df1bfac0c344238fe4"
+    },
+    {
+      "path": "doc/experiment-guard-matrix.md",
+      "sha256": "d54f3a4e23f01c6e2beded1a04642498398eb5e1badddb825a43b92743bbb37e"
+    },
+    {
+      "path": "tests/README.md",
+      "sha256": "d5932d98d893ad47e1017af7dff6028de8e2970ccd932e6d2e32042c54c485ac"
+    }
+  ],
+  "manifest_sha256": "ba1d460ffd1a9b301472fa1886b0da00b2ed79b0de62352394284982933d5bc2",
+  "schema": "libwebp-backref-cost-interval-search-v3-source-hashes-v1",
+  "source_commit": "a3ebde3d12f1be7f5bb3dc8dd7969383595cf68e"
+}
