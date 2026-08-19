@@ -1077,3 +1077,21 @@ from 32.340 to 31.829 ms/image, a 0.510 ms/image gain. The singleton intervals
 hide only a fraction of the chroma critical path, so the candidate was removed
 well below the 1.5 ms/image gate. Raw evidence is archived with the RTX 2080
 SUPER machine report.
+
+## Turing lossless back-reference follow-up
+
+On the RTX 2080 SUPER, native-sm_75 quality-75/method-4 profiles show that the
+remaining lossless bottleneck after forced CUDA transforms and hash dispatch is
+CPU backward-reference selection: 26.159 ms for graphic, 83.312 ms for photo,
+and 121.525 ms for texture. Exact substage medians attribute 72.9% of graphic
+backrefs to traceback; photo splits between cache search (48.4%) and traceback
+(33.7%); texture is dominated by cache search (65.4%).
+
+The previously untimed, default-off one-allocation `CostManager` workspace was
+screened in four order-balanced process pairs per content. Median paired
+parent-minus-candidate changes were -0.005 ms graphic, +1.164 ms photo, and
+-1.305 ms texture per image. It was rejected: the only improvement is below
+the 1.5 ms/image retention threshold and texture regresses. This is Turing-only
+evidence; no Ampere+ performance claim or production default change follows.
+Raw rows and native-build logs are stored with the RTX 2080 SUPER machine
+report evidence.

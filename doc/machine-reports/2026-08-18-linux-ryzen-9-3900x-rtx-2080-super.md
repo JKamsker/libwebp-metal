@@ -1058,3 +1058,43 @@ CTests passed. The singleton intervals hide only part of the chroma path, and
 the gain is far below the 1.5 ms/image retention threshold, so the candidate
 was removed. This is RTX 2080 SUPER-only evidence. Raw records are
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-singleton-chroma-overlap-screen.jsonl`.
+
+## Lossless back-reference profile and workspace screen
+
+A native-sm_75 lossless stage profile used the three 1600x1200 publication
+cases at quality 75 and method 4. Each cell contains 21 in-process encodes; the
+first encode was discarded and the table reports the median of the remaining
+20. CUDA rows forced the retained color, predictor, and hash stages.
+
+| Content | CPU total | CUDA total | CPU/CUDA backrefs | CPU/CUDA hash |
+|---|---:|---:|---:|---:|
+| graphic | 39.709 ms | 49.836 ms | 26.665 / 26.159 ms | 4.352 / 17.005 ms |
+| photo | 371.541 ms | 283.196 ms | 89.987 / 83.312 ms | 33.289 / 22.491 ms |
+| texture | 231.892 ms | 184.264 ms | 143.614 / 121.525 ms | 43.956 / 18.802 ms |
+
+An exact substage recorder then decomposed the forced-CUDA back-reference
+boundary. Median shares were 72.9% traceback for graphic; 48.4% cache search
+and 33.7% traceback for photo; and 65.4% cache search plus 16.9% traceback for
+texture. This identifies CPU work remaining after CUDA transform/hash dispatch;
+it is not a GPU kernel timing or a cross-hardware result.
+
+The existing default-off single-allocation `CostManager` workspace candidate
+was screened because it had never received performance samples. Four
+order-balanced process pairs per content each discarded the first of eleven
+in-process encodes. Pairwise median results were:
+
+| Content | Parent | Workspace | Parent - workspace |
+|---|---:|---:|---:|
+| graphic | 50.733 ms | 50.739 ms | -0.005 ms |
+| photo | 287.039 ms | 286.659 ms | +1.164 ms |
+| texture | 188.471 ms | 188.752 ms | -1.305 ms |
+
+The table's parent/workspace columns are medians across the four process
+medians; the decision uses the median of paired differences shown in the last
+column. The graphic baseline and candidate bitstreams also have the identical
+SHA-256 `be9d2ac71ab6b8c5ac3254431fde2c94b7c22f69af68acc60263715720429628`.
+The implementation already has exhaustive exact-output and fault-fallback
+coverage in its frozen research protocol. It was not promoted: graphic is
+neutral, photo is below the 1.5 ms/image retention threshold, and texture
+regresses. All stage, substage, A/B, build, and sample bitstream artifacts are
+copied into the adjacent evidence directory.

@@ -51,6 +51,19 @@ native-sm_75 binary.
 for the rejected device schedule that moved the four chroma search stages
 into the idle upper team on the four singleton I4 dependency diagonals.
 
+`lossless-stage-profile.jsonl` contains the 126 raw encoder-stage rows used to
+identify the remaining lossless CPU bottleneck. The three
+`libwebp-backref-profile-20260819b-*.jsonl` files contain the 63 exact
+back-reference substage rows. The 24
+`libwebp-workspace-screen-d-*.jsonl` files contain the four order-balanced
+parent/candidate process pairs for each of graphic, photo, and texture; each
+file has eleven in-process encodes, with the first excluded from the screen.
+The matching configure/build logs and `libwebp-*-CMakeCache.txt` files prove
+both CUDA builds requested `CMAKE_CUDA_ARCHITECTURES=native` (sm_75 on this
+host). `workspace-baseline-graphic.webp` and
+`workspace-candidate-graphic.webp` are the sampled exact-output pair and are
+byte-identical.
+
 Inspect the sampling archives with:
 
 ```sh
