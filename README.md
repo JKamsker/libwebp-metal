@@ -158,6 +158,14 @@ histogram construction, merging, and tie-sensitive decisions stay on the CPU.
 stage stays off by default: forced-threshold A/B encodes measured it as
 neutral within noise on an RTX 5070 Ti Laptop (its population counting is a
 small share of the CPU histogram stage), so no profitable crossover is known.
+On pre-Ampere CUDA devices, expensive lossless color-cache searches use one
+CPU worker per independent cache-bit candidate once the requested maximum is
+at least 8 bits and the reference stream contains at least 32,768 commands.
+This preserves the original ascending candidate order and strict tie rule.
+The gate is based on RTX 2080 SUPER measurements and therefore stays off by
+default on Ampere-or-newer devices pending evidence there.
+`WEBP_CUDA_PARALLEL_CACHE_SEARCH=0` disables it; value `1` forces the same
+structural gate for cross-hardware A/B measurement.
 `WEBP_CUDA_RESIDENT_LOSSLESS=0` disables the resident pipeline handoff: the
 predictor and cross-color stages preserve their transformed device pixels, and
 the matching main hash-chain stage reuses them instead of uploading the host

@@ -178,8 +178,23 @@ static int TestInvalidHashChainPreservesOutput(void) {
   return 1;
 }
 
+static int TestParallelCacheSearchOverride(void) {
+  if (!WebPBenchmarkSetEnvironment("WEBP_CUDA_PARALLEL_CACHE_SEARCH", "0") ||
+      WebPCUDAParallelCacheSearchEnabled()) {
+    fprintf(stderr, "parallel cache-search disable override failed\n");
+    return 0;
+  }
+  if (!WebPBenchmarkSetEnvironment("WEBP_CUDA_PARALLEL_CACHE_SEARCH", "1") ||
+      !WebPCUDAParallelCacheSearchEnabled()) {
+    fprintf(stderr, "parallel cache-search force override failed\n");
+    return 0;
+  }
+  return WebPBenchmarkUnsetEnvironment("WEBP_CUDA_PARALLEL_CACHE_SEARCH");
+}
+
 int main(void) {
   if (!WebPBenchmarkHasCUDADevice()) return 77;
+  if (!TestParallelCacheSearchOverride()) return 1;
   WebPBenchmarkSetEnvironment("WEBP_ACCELERATOR", "cuda");
   WebPBenchmarkSetEnvironment("WEBP_CUDA", "1");
   WebPBenchmarkSetEnvironment("WEBP_CUDA_HISTOGRAM", "1");
@@ -195,6 +210,7 @@ int main(void) {
     fprintf(stderr, "CUDA histogram stage was not observed\n");
     return 1;
   }
-  puts("PASS: exact CUDA histogram counts, spans, boundaries, and fallback");
+  puts("PASS: exact CUDA histogram counts, spans, boundaries, fallback, and "
+       "parallel cache-search override");
   return 0;
 }

@@ -247,6 +247,7 @@ struct CudaState {
   int fused_lossy_quality = 0;
   size_t fused_lossy_result_count = 0;
   bool gamma_initialized = false;
+  int compute_capability_major = 0;
   uint32_t successful_stages = 0;
   uint64_t resident_lossless_handoff_count = 0;
   char device_name[256] = {0};
@@ -2167,6 +2168,7 @@ WebPAcceleratorResult Initialize(CudaState* state) {
   if (cudaGetDeviceProperties(&properties, state->device) == cudaSuccess) {
     snprintf(state->device_name, sizeof(state->device_name), "%s",
              properties.name);
+    state->compute_capability_major = properties.major;
   } else {
     snprintf(state->device_name, sizeof(state->device_name), "%s",
              "CUDA device");
@@ -4163,4 +4165,23 @@ extern "C" uint64_t WebPCUDAGetResidentLosslessHandoffCount(void) {
   count = g_cuda_state.resident_lossless_handoff_count;
   UnlockCudaMutex(&g_cuda_mutex);
   return count;
+}
+
+extern "C" int WebPCUDAParallelCacheSearchEnabled(void) {
+  const char* const override_value =
+      getenv("WEBP_CUDA_PARALLEL_CACHE_SEARCH");
+  int enabled;
+  if (override_value != nullptr && override_value[0] != '\0') {
+    return EnvironmentFlag("WEBP_CUDA_PARALLEL_CACHE_SEARCH", true) ? 1 : 0;
+  }
+  LockCudaMutex(&g_cuda_mutex);
+  enabled = g_cuda_state.available &&
+            g_cuda_state.compute_capability_major > 0 &&
+            g_cuda_state.compute_capability_major < 8 &&
+            (g_cuda_state.successful_stages &
+             (WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM |
+              WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN |
+              WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR)) != 0;
+  UnlockCudaMutex(&g_cuda_mutex);
+  return enabled;
 }

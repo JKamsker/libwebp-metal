@@ -64,6 +64,16 @@ host). `workspace-baseline-graphic.webp` and
 `workspace-candidate-graphic.webp` are the sampled exact-output pair and are
 byte-identical.
 
+The `libwebp-parcache-screen-a-*.jsonl` files are the unconditional parallel
+cache-search screen; `libwebp-parcache-gated-a-*.jsonl` contains the six-case
+structurally gated screen. The `libwebp-parcache-final-a-*.txt` transcripts are
+the four order-balanced final serial/default CUDA batch pairs for PNG and JPEG,
+and `libwebp-parcache-final-cpu-*.txt` holds the matched four-process CPU
+measurements. `libwebp-parcache-parity-sha256.txt` contains all 84 output hashes
+from the 42-case byte-parity matrix. The associated CTest transcript, native
+CMake cache, CUDA build log, and clean non-CUDA configure/build logs are stored
+under the same prefix.
+
 Inspect the sampling archives with:
 
 ```sh

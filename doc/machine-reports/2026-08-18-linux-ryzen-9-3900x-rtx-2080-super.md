@@ -1098,3 +1098,42 @@ coverage in its frozen research protocol. It was not promoted: graphic is
 neutral, photo is below the 1.5 ms/image retention threshold, and texture
 regresses. All stage, substage, A/B, build, and sample bitstream artifacts are
 copied into the adjacent evidence directory.
+
+## Retained parallel cache-bit search
+
+The cache-search decomposition above exposed independent work across cache-bit
+candidates. The retained implementation gives each candidate its own CPU
+worker, histogram, and color-cache state. Candidate recurrences remain
+ordered; after all workers finish, the caller scans integer entropy results in
+ascending cache-bit order with the original strict comparison, preserving ties
+and output exactly.
+
+An unconditional screen improved photo and texture but regressed graphic by
+3.248 ms/image from worker startup. The final pre-Ampere policy therefore
+requires both a requested maximum of at least 8 cache bits and at least 32,768
+reference commands. Small/medium isolated screens then measured median paired
+gains of -0.446/-0.341 ms for graphic (noise), +1.980/+24.800 ms for photo,
+and +4.243/+38.625 ms for texture.
+
+The final architecture-aware build was measured in four order-balanced
+process pairs. Each process used one discarded warmup and three measured
+six-image batches:
+
+| Format | CPU | CUDA serial | CUDA default | CUDA speedup | Paired CUDA gain |
+|---|---:|---:|---:|---:|---:|
+| PNG lossless | 140.082 ms | 91.820 ms | 77.319 ms | **1.81x** | 14.381 ms |
+| JPEG lossless | 698.397 ms | 146.558 ms | 127.644 ms | **5.47x** | 19.406 ms |
+
+Every serial/default CUDA process retained the same format-specific aggregate
+hash (`eec6c490be6aaf6d` PNG, `06227eb38e0ac1e3` JPEG). A separate 42-case
+matrix covered methods 2--6 at quality 75 and methods 4/6 at qualities 25/98
+across small/medium graphic, photo, and texture inputs; all pairs were
+byte-identical. The seven focused CTests passed, and a clean non-CUDA build
+produced the same CPU smoke-test hash before and after the change.
+
+This threshold and performance result are RTX 2080 SUPER/Turing evidence only.
+The default remains off on Ampere-or-newer devices pending measurements there.
+`WEBP_CUDA_PARALLEL_CACHE_SEARCH=0` disables the optimization; `=1` forces the
+same structural gate for matched A/B work on another architecture. Raw stage
+screens, final batch transcripts, parity hashes, build logs, CMake cache, and
+CTest transcript are in the adjacent evidence directory.

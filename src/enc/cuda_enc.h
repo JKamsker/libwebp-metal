@@ -31,6 +31,11 @@ void WebPCUDALossyDecimateTrim(void);
 void WebPCUDAResetSuccessfulStages(void);
 uint32_t WebPCUDAGetSuccessfulStages(void);
 uint64_t WebPCUDAGetResidentLosslessHandoffCount(void);
+// True when the current encode may use the CPU worker-parallel lossless color
+// cache search. The default is limited to pre-Ampere CUDA devices with an
+// already-successful lossless stage; the environment override is intended for
+// matched cross-hardware A/B measurement.
+int WebPCUDAParallelCacheSearchEnabled(void);
 
 #ifdef __cplusplus
 }  // extern "C"

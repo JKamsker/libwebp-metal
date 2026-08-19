@@ -1095,3 +1095,32 @@ the 1.5 ms/image retention threshold and texture regresses. This is Turing-only
 evidence; no Ampere+ performance claim or production default change follows.
 Raw rows and native-build logs are stored with the RTX 2080 SUPER machine
 report evidence.
+
+## Turing parallel cache-bit search
+
+Color-cache candidates are independent once the backward-reference stream is
+fixed. The retained pre-Ampere path assigns one CPU worker to each candidate,
+keeps every cache's ordered recurrence unchanged, and reduces the completed
+integer entropies in the original ascending order with the original strict
+comparison. A Turing-only gate requires a maximum of at least 8 cache bits and
+at least 32,768 reference commands, avoiding worker startup on graphic streams.
+
+Four order-balanced native-sm_75 process pairs, each with one warmup and three
+measured six-image batches, produced:
+
+| Format | CUDA serial | CUDA parallel | Paired gain | Parallel/serial |
+|---|---:|---:|---:|---:|
+| PNG lossless | 91.820 ms/image | 77.319 ms/image | 14.381 ms/image | 0.8432 |
+| JPEG lossless | 146.558 ms/image | 127.644 ms/image | 19.406 ms/image | 0.8674 |
+
+Every off/default process retained aggregate hash `eec6c490be6aaf6d` for PNG
+or `06227eb38e0ac1e3` for JPEG. A separate 42-case matrix covering methods
+2--6 at quality 75 and methods 4/6 at qualities 25/98 across small/medium
+graphic, photo, and texture inputs was byte-identical. All seven focused CTests
+passed, and a non-CUDA build retained identical output.
+
+Contemporaneous four-process CPU medians were 140.082 ms/image PNG and 698.397
+ms/image JPEG, giving current-machine CUDA speedups of **1.81x** and **5.47x**
+against the parallel default. These measurements are specific to the Ryzen 9
+3900X / RTX 2080 SUPER. Ampere+ defaults remain unchanged and no Ampere+
+performance claim is made.
