@@ -1493,3 +1493,30 @@ Both effects are far below the 1.5 ms/image threshold, so the candidate was
 removed. The duplicated cold code is not a material instruction-cache limit on
 this Ryzen 9 3900X / RTX 2080 SUPER path. No Ampere+ behavior or performance
 claim changes.
+
+## Precomputed coefficient-token band-offset rejection
+
+The dominant token-recorder profile was followed with an optimized native
+coverage build over the same six-image PNG and JPEG corpora. It counted
+117,400,812 coefficient-loop iterations: 46,956,000 (40.0%) encoded zero,
+33,918,456 (28.9%) encoded magnitude one, and only 190,584 (0.16%) entered
+the greater-than-ten category. This made the common next-context calculation,
+not the rare category tail, the next candidate.
+
+Retained sm_75 assembly loaded `VP8EncBands[n]` and formed its 33-element
+offset independently for the token ID and statistics pointer. A 17-entry
+`uint16_t` table stored those exact offsets, replacing both arithmetic chains
+with one load and additions. `VP8RecordCoeffTokens` shrank from 4,976 to 4,944
+bytes. Seven CTests passed, and two order-reversed six-sample processes kept
+every output hash and byte count unchanged:
+
+| Format | Parent | Precomputed offsets | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.240 ms/image | 40.356 ms/image | -0.116 ms/image |
+| JPEG lossy | 40.321 ms/image | 39.851 ms/image | 0.471 ms/image |
+
+The PNG regression and sub-threshold JPEG gain reject the candidate. The extra
+cache-resident load does not produce a material two-format win and duplicating
+the canonical `VP8EncBands` mapping would add maintenance risk. The change was
+removed; this is Ryzen 9 3900X / RTX 2080 SUPER evidence only and makes no
+Ampere+ claim.

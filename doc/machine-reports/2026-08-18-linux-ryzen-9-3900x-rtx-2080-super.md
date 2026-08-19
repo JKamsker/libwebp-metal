@@ -1569,3 +1569,28 @@ exact patch, native build caches, compressed disassemblies, 7/7 CTest log, 48
 raw timing rows, sampling reports, and complete profile are stored under the
 `libwebp-token-grow-*` and `libwebp-token-lines-*` prefixes. This is RTX 2080
 SUPER-only evidence and makes no Ampere+ claim.
+
+## Precomputed coefficient-token band-offset rejection
+
+An optimized coverage build refined the dominant token-recorder profile. On
+the representative PNG and JPEG corpora it observed 117,400,812 coefficient
+iterations: 40.0% zero, 28.9% magnitude one, and only 0.16% above magnitude
+ten. Static retained assembly showed every next-context transition forming the
+same `band * 33` offset separately for the token ID and statistics pointer.
+
+A temporary 17-entry exact offset table replaced both arithmetic chains with
+one 16-bit lookup and reduced `VP8RecordCoeffTokens` from 4,976 to 4,944 bytes.
+All seven CTests passed and every A/B output retained the expected hash and
+byte count:
+
+| Format | Parent | Precomputed offsets | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.240 ms/image | 40.356 ms/image | -0.116 ms/image |
+| JPEG lossy | 40.321 ms/image | 39.851 ms/image | 0.471 ms/image |
+
+The candidate was removed because PNG regressed and JPEG remained far below
+the 1.5 ms/image gate. Raw `.gcda`/`.gcno`, annotated coverage sources, the
+coverage workload rows, exact patch, native caches, compressed disassemblies,
+7/7 CTest transcript, and 48 timing rows are stored under the
+`libwebp-token-gcov-*` and `libwebp-token-band-offset-*` prefixes. This is RTX
+2080 SUPER-only evidence and does not characterize or alter Ampere+.
