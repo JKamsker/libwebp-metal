@@ -1524,3 +1524,21 @@ The exact rejected patch, native cache, resource report, compressed SASS, 7/7
 CTest log, 48 timing rows, and summary are stored under the
 `libwebp-rd-specialize-*` prefix. This result is RTX 2080 SUPER-only and makes
 no Ampere+ performance claim.
+
+## Sixteen-band streaming rejection
+
+Because eight bands previously beat four on this machine and the retained
+profile still showed collection/replay work beyond the device wall, a temporary
+candidate extended the backend event capacity to 16 and used 16 bands for
+images at least 32 macroblock rows high.
+
+Two order-reversed processes with six samples per cell retained every output
+hash and byte count. PNG moved from 40.185 to 39.973 ms/image (+0.211 ms), and
+JPEG moved from 40.317 to 39.876 (+0.441 ms). Both are far below the 1.5
+ms/image threshold, so the candidate was removed. A separate screen requested
+16 bands without extending the production eight-event cap; the backend safely
+declined and exact CPU fallback completed the encode.
+
+The exact patch, native cache, all valid and decline timing rows, and summary
+are stored under the `libwebp-band16-*` prefix. This is RTX 2080 SUPER-only
+evidence; the shared eight-band default and Ampere+ behavior remain unchanged.

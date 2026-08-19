@@ -214,6 +214,12 @@ trellis state that method 4 never executes. The exact patch, candidate native
 cache, three-specialization resource report and compressed SASS, 7/7 CTest
 log, 48 byte-exact timing rows, and computed summary are included.
 
+The `libwebp-band16-*` files preserve the rejected Turing 8-to-16 streaming
+band screen. `valid` rows use a temporary 16-event backend capacity; `decline`
+rows intentionally leave the production eight-band cap in place and show the
+safe, byte-exact CPU fallback. The exact candidate patch, native cache, all 96
+rows, and computed summary are included.
+
 Inspect the sampling archives with:
 
 ```sh

@@ -1,0 +1,5 @@
+screen	format	band8_ms_per_image	band16_ms_per_image	band8_minus_band16_ms	speedup	band8_hash	band16_hash	byte_exact
+valid-capacity	PNG lossy	40.184903	39.973452	0.211451	1.005290	ace64e860de89b43	ace64e860de89b43	true
+valid-capacity	JPEG lossy	40.316717	39.875977	0.440740	1.011053	1cbb84d2ab926db3	1cbb84d2ab926db3	true
+backend-decline	PNG lossy	40.214915	83.291288	-43.076373	0.482823	ace64e860de89b43	ace64e860de89b43	true
+backend-decline	JPEG lossy	39.973284	83.298703	-43.325420	0.479879	1cbb84d2ab926db3	1cbb84d2ab926db3	true

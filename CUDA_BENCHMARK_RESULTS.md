@@ -1448,3 +1448,21 @@ already place two CTAs within 65,536 registers. The 23,392-byte shared-memory
 allocation caps Turing residency at two CTAs (three require 70,176 bytes), so
 the specialization does not increase occupancy. It was removed; no Ampere+
 behavior or claim changes.
+
+## Turing 16-band streaming rejection
+
+The retained collection/replay profile and the earlier positive four-to-eight
+band result motivated a 16-band screen. A temporary candidate extended the
+backend event capacity to 16 and selected 16 bands for images with at least 32
+macroblock rows. Two order-reversed six-sample processes were byte-exact:
+
+| Format | 8 bands | 16 bands | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.185 ms/image | 39.973 ms/image | 0.211 ms/image |
+| JPEG lossy | 40.317 ms/image | 39.876 ms/image | 0.441 ms/image |
+
+Both gains are below 1.5 ms/image, so the candidate was removed. A separate
+screen left the production eight-event backend cap unchanged while requesting
+16 bands; the backend declined and the encoder completed through its exact CPU
+fallback. The eight-band default and cap remain shared, and no Ampere+ claim is
+made.
