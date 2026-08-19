@@ -584,3 +584,24 @@ rejects coefficient-wave subgrouping. It was removed. Exact corrected patch,
 timeout record, 24 rows, resources/build output, and both test logs are under
 `libwebp-i4-residual-coop2-*`. RTX 2080 SUPER only; Ampere+ compiled the
 unchanged scalar path.
+
+## I4 zero-residual bypass feasibility rejection
+
+A temporary native-sm_75 counter used the already-published I4 nonzero flags
+to measure how often scalar residual scoring could bypass its backwards
+last-nonzero scan. Two diagnostic passes per medium input reported:
+
+| Content | Zero residual modes | Rate |
+|---|---:|---:|
+| Graphic | 424,548 / 488,950 | 86.83% |
+| Photo | 4,234 / 1,198,680 | 0.35% |
+| Texture | 0 / 1,200,000 | 0.00% |
+
+The high graphic rate is not actionable: the preceding warp profile measured
+its residual warp at 84.2 million cycles versus 85.6 million for SSE/flatness,
+so even deleting residual work entirely would leave the metric barrier set by
+another warp. Photo and texture are the cases where residual is critical, but
+their zero rates are negligible or zero. The ceiling is therefore far below
+1.5 ms/image and no candidate was built. The probe was removed and the
+restored tree passed 7/7 CTests. Raw patch, counts, build, and restored test
+output are under `libwebp-i4-zero-residual-*`. RTX 2080 SUPER only.

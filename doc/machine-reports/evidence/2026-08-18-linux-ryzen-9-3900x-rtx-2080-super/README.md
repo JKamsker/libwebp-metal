@@ -265,6 +265,11 @@ candidate patch, all 24 byte-exact timing rows, candidate build and resource
 output, candidate/restored seven-test transcripts, and the bounded timeout
 record for the invalid first prototype. Both candidate versions were removed.
 
+The `libwebp-i4-zero-residual-*` files preserve the temporary native-sm_75
+zero-mode counter patch, raw medium-content counts and timing output, probe
+build log, and restored-parent build/test transcript. The measured critical
+path ruled out a candidate, and the probe was removed.
+
 Inspect the sampling archives with:
 
 ```sh

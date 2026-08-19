@@ -1893,3 +1893,24 @@ Both formats regressed by almost 3 ms/image, so the candidate was removed.
 Raw corrected rows, exact patch, timeout record, build/resource output, and
 candidate/restored tests are archived under
 `libwebp-i4-residual-coop2-*`. Turing-only evidence; no Ampere+ change.
+
+## I4 zero-residual bypass feasibility rejection
+
+A temporary native-sm_75 probe counted modes whose existing I4 nonzero flag
+would allow residual scoring to return the first zero-bit cost without its
+sixteen-coefficient backwards scan:
+
+| Content | Zero / total modes | Rate |
+|---|---:|---:|
+| Graphic-medium | 424,548 / 488,950 | 86.83% |
+| Photo-medium | 4,234 / 1,198,680 | 0.35% |
+| Texture-medium | 0 / 1,200,000 | 0.00% |
+
+Graphic cannot realize the apparent opportunity because its measured
+84.2-million-cycle residual warp already finishes before the
+85.6-million-cycle SSE/flatness warp. Photo and texture put residual on the
+critical path, but there are essentially no zero scans to remove. This rules
+out a 1.5 ms/image end-to-end gain, so no behavior candidate was implemented.
+The probe was removed and the restored source passed all seven CTests. Raw
+probe, output, build, and restored test transcript are archived under
+`libwebp-i4-zero-residual-*`. Turing-only diagnostic; no Ampere+ change.

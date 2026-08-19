@@ -2013,3 +2013,25 @@ more expensive than the scalar residual walks on this RTX 2080 SUPER. The
 candidate was removed. The exact corrected patch, raw rows, prototype timeout
 record, build/resources, and candidate/restored tests are archived under
 `libwebp-i4-residual-coop2-*`. Ampere+ compiled the original path.
+
+## I4 zero-residual bypass feasibility
+
+A temporary counter read the I4 nonzero flags already produced by
+quantization and counted modes that could skip the scalar residual walk's
+backwards last-nonzero scan:
+
+| Content | Zero / total modes | Rate |
+|---|---:|---:|
+| Graphic-medium | 424,548 / 488,950 | 86.83% |
+| Photo-medium | 4,234 / 1,198,680 | 0.35% |
+| Texture-medium | 0 / 1,200,000 | 0.00% |
+
+The separate warp-cycle profile explains why the graphic number is
+misleading: residual consumed about 84.2 million cycles there, while
+SSE/flatness consumed about 85.6 million, so the metric barrier would not move
+even if all residual work vanished. Photo and texture are residual-critical,
+but their zero rates are 0.35% and 0.00%. The end-to-end ceiling is far below
+1.5 ms/image; no candidate was built. The probe was removed and the restored
+source passed all seven CTests. Raw probe patch, counts, build log, and
+restored test transcript are archived under
+`libwebp-i4-zero-residual-*`. RTX 2080 SUPER only; no Ampere+ path changed.
