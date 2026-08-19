@@ -1570,6 +1570,33 @@ raw timing rows, sampling reports, and complete profile are stored under the
 `libwebp-token-grow-*` and `libwebp-token-lines-*` prefixes. This is RTX 2080
 SUPER-only evidence and makes no Ampere+ claim.
 
+## Four-pixel mismatch-mask rejection
+
+An explicit native-sm_75 profile measured retained hash-candidate calls at
+7.557 ms for the 1,920,000-pixel resident photo and 10.891 ms for the
+960,000-pixel texture. The candidate composed the independently exact
+duplicate-precheck removal with four branchless mismatch bits and a
+first-set-bit position per unrolled group. It was compile-time selected only
+on pre-Ampere; the Ampere+ specialization's full mnemonic stream remained
+identical to the parent.
+
+Candidate and restored builds passed all seven CTests. Two order-reversed
+pairs per format produced 48 byte-exact rows:
+
+| Format | Parent | Mismatch mask | Gain |
+|---|---:|---:|---:|
+| PNG lossless | 75.827 ms/image | 74.587 ms/image | 1.239 ms/image |
+| JPEG lossless | 127.713 ms/image | 123.393 ms/image | 4.319 ms/image |
+
+Every PNG row retained `81fa42c7697cb521` / 6,720,632 bytes; every JPEG row
+retained `a4fca74ecf18a917` / 8,956,690 bytes. The Turing kernel rose from 26
+to 34 registers without changing its 296-instruction count. Since PNG still
+misses the 1.5 ms/image threshold, the source was restored. The profile,
+exact patch, 48 rows, resource/SASS reports, specialization comparison,
+binary hashes, native cache, and candidate/restored test logs are archived
+under `libwebp-hash-mask-*` in the adjacent evidence directory. No Ampere+
+performance claim is made.
+
 ## Hash-chain next-link prefetch rejection
 
 A native-sm_75 candidate moved each next-chain-link read ahead of the pixel

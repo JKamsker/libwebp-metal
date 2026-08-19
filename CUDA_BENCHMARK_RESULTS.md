@@ -1467,6 +1467,27 @@ screen left the production eight-event backend cap unchanged while requesting
 fallback. The eight-band default and cap remain shared, and no Ampere+ claim is
 made.
 
+## Turing four-pixel mismatch-mask rejection
+
+The retained native-sm_75 profile continued to put the hash matcher on the
+critical path. A pre-Ampere specialization combined the exact redundant
+precheck removal with a four-bit mismatch mask and first-set-bit result for
+each unrolled group. Its Ampere+ false specialization retained the parent's
+complete 296-instruction mnemonic stream.
+
+Seven CTests passed on the candidate and restored source. Two order-reversed
+pairs per format produced 48 exact rows:
+
+| Format | Parent | Mismatch mask | Gain |
+|---|---:|---:|---:|
+| PNG lossless | 75.827 ms/image | 74.587 ms/image | 1.239 ms/image |
+| JPEG lossless | 127.713 ms/image | 123.393 ms/image | 4.319 ms/image |
+
+The Turing specialization used 34 registers versus the parent's 26. It was
+removed because the PNG gain misses the 1.5 ms/image gate. Raw evidence is
+archived under `libwebp-hash-mask-*` with the RTX 2080 SUPER report; no
+Ampere+ performance conclusion is inferred.
+
 ## Pre-Ampere hash-chain next-link prefetch rejection
 
 The retained hash-candidate loop reads its next chain link after the pixel

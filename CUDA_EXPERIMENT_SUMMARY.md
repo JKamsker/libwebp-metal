@@ -340,3 +340,26 @@ rows, profile, resources, compressed SASS, specialization comparison, binary
 hashes, native cache, and candidate/restored CTest logs are stored under
 `libwebp-hash-link-prefetch-*` in the RTX 2080 SUPER evidence directory. This
 is Turing-only performance evidence and makes no Ampere+ claim.
+
+## Pre-Ampere four-pixel mismatch-mask rejection
+
+A fresh explicit-native profile measured the material hash calls at 7.557 ms
+for 1.92 MP resident pixels and 10.891 ms for 0.96 MP non-resident pixels. A
+Turing specialization composed the proven duplicate-precheck removal with a
+four-bit mismatch mask, replacing four divergent early returns per unrolled
+group with one first-set-bit result. Ampere+ retained a specialization whose
+296-instruction mnemonic stream exactly matched the parent.
+
+Both candidate and restored trees passed seven CTests. All 48 timing rows were
+byte-exact:
+
+| Format | Parent | Mismatch mask | Gain |
+|---|---:|---:|---:|
+| PNG lossless | 75.827 ms/image | 74.587 ms/image | 1.239 ms/image |
+| JPEG lossless | 127.713 ms/image | 123.393 ms/image | 4.319 ms/image |
+
+The pre-Ampere kernel rose from 26 to 34 registers. The candidate was removed
+because PNG remained below 1.5 ms/image. Profile output, exact patch, timing
+rows, resources, compressed SASS, specialization comparison, binary hashes,
+native cache, and both CTest logs are under `libwebp-hash-mask-*` in the RTX
+2080 SUPER evidence directory. No Ampere+ performance claim is made.
