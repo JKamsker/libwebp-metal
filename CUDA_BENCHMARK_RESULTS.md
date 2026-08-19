@@ -776,3 +776,26 @@ occupancy, while wider union-member addressing and register pressure cost
 slightly. The candidate was removed; raw timing evidence is retained locally
 in `/tmp/libwebp-phase-union-ab.yLDGe1.json` and the parent stage profile in
 `/tmp/libwebp-stage-current.mkaP1J.jsonl`.
+
+## Compact I4 reconstruction-scratch rejection
+
+Each retained I4 reconstruction occupied four rows at the encoder's 32-byte
+stride. Four cooperative row lanes therefore wrote identical shared-memory
+banks, while the ten metric lanes read mode bases 128 bytes apart. A compact
+4-byte row layout and exact stride-aware SSE/Hadamard helpers reduced static
+shared memory from 17,912 to 16,792 bytes with registers unchanged at 93.
+Direct medium-texture GPU wall was about 28.64 ms versus 28.48 ms for the
+parent.
+
+All seven focused CTests passed and all 60 timed outputs matched between
+variants. Five order-balanced process medians were:
+
+| Format | Baseline | Compact I4 output | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.866 ms/image | 42.004 ms/image | +0.139 ms |
+| JPEG lossy | 41.918 ms/image | 41.971 ms/image | +0.053 ms |
+
+The stride-aware metric arithmetic offset the bank-layout improvement, so the
+candidate was removed. This is distinct from padding the per-mode arrays,
+which preserved the 32-byte row stride. Raw timing evidence is retained
+locally in `/tmp/libwebp-i4-compact-output-ab.4oaeP2.json`.

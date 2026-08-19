@@ -438,3 +438,20 @@ outputs matched. Direct medium-texture GPU wall moved from 28.48 to about
 The sparse wavefront did not benefit from the additional theoretical
 occupancy, so the candidate was removed. The local raw summary is
 `/tmp/libwebp-phase-union-ab.yLDGe1.json`.
+
+## Compact I4 reconstruction scratch
+
+A compact 4-byte row layout replaced the 32-byte-strided 4x4 I4 output
+scratch, removing row-write and cross-mode metric bank aliases. Exact
+stride-aware SSE/Hadamard helpers reduced static shared memory from 17,912 to
+16,792 bytes with registers unchanged at 93. All seven focused CTests passed
+and all 60 timed outputs matched. Five order-balanced process medians measured:
+
+| Format | Baseline | Compact I4 output | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.866 ms/image | 42.004 ms/image | +0.139 ms |
+| JPEG lossy | 41.918 ms/image | 41.971 ms/image | +0.053 ms |
+
+The added stride-aware metric work offset the bank-layout improvement, so the
+candidate was removed. The local raw summary is
+`/tmp/libwebp-i4-compact-output-ab.4oaeP2.json`.
