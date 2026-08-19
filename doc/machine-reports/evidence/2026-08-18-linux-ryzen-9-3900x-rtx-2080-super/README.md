@@ -115,6 +115,13 @@ transcript contains one discarded warmup and three measured JSON rows plus the
 invoked command. The removed candidate retained identical format-specific
 hashes and byte counts.
 
+The 16 `libwebp-parhist-screen-*.txt` files are four order-balanced forced
+batch pairs for each PNG/JPEG format. `off` keeps raw-histogram cost analysis
+serial; `parallel` splits at least 4,096 raw tiles into 12 CPU jobs before the
+unchanged ordered compaction and clustering path. Each transcript contains one
+discarded warmup and three measured rows. All hashes and byte counts match;
+the candidate was removed after both format medians regressed.
+
 Inspect the sampling archives with:
 
 ```sh

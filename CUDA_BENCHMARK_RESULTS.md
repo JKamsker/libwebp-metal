@@ -1160,3 +1160,13 @@ ms/image PNG gain but a 1.456 ms/image JPEG regression; every aggregate hash
 and byte count matched. Ending the workers after each cache search remains the
 better two-format Turing policy. Raw rows are in the RTX 2080 SUPER evidence
 directory.
+
+## Turing parallel raw-histogram cost rejection
+
+Splitting the independent per-tile `ComputeHistogramCost` phase into 12 CPU
+jobs left serial compaction, clustering, and remapping untouched and retained
+exact aggregate output. Four order-balanced native-sm_75 forced-batch pairs
+changed PNG by -0.143 ms/image and JPEG by -0.471 ms/image at paired medians.
+The candidate was removed: worker startup costs more than this initial phase,
+so future histogram work must address clustering/remapping rather than merely
+parallelizing raw tile costs. No Ampere+ conclusion follows.

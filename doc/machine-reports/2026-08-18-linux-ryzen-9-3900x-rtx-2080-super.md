@@ -1217,3 +1217,26 @@ PNG is below the 1.5 ms/image gate and JPEG materially regresses. These are
 RTX 2080 SUPER-only measurements. The 294 raw profiler rows, verbose dispatch
 transcript, native CMake cache, and 16 batch A/B transcripts are archived in
 the adjacent evidence directory.
+
+## Parallel raw-histogram cost rejection
+
+The initial entropy-cost calculation for each raw histogram tile is independent
+before the encoder compacts non-empty tiles in exact source order. A guarded
+candidate split at least 4,096 raw histograms into 12 CPU jobs, then left
+compaction, entropy bins, stochastic/greedy clustering, and remapping unchanged.
+The environment override enabled the structural path only for matched A/B;
+the proposed default remained pre-Ampere-only.
+
+Four order-balanced forced-batch process pairs per format, each with one
+warmup and three measured samples, produced:
+
+| Format | Serial costs | Parallel costs | Paired serial - parallel |
+|---|---:|---:|---:|
+| PNG lossless | 76.224 ms/image | 76.475 ms/image | -0.143 ms/image |
+| JPEG lossless | 126.913 ms/image | 127.628 ms/image | -0.471 ms/image |
+
+All 48 aggregate rows retained the format-specific output hashes and byte
+counts. The candidate was removed: worker startup cost exceeds the independent
+phase, confirming that the remaining histogram boundary lies in later serial
+clustering/remapping. This is RTX 2080 SUPER-only evidence and makes no
+Ampere+ claim. All 16 raw transcripts are in the adjacent evidence directory.
