@@ -1514,10 +1514,11 @@ passed and all 48 screen outputs were byte-exact.
 
 Two order-reversed processes with six samples per cell measured PNG at 40.147
 ms/image parent versus 39.946 specialized (+0.200 ms), and JPEG at 40.201
-versus 39.789 (+0.412 ms). Even the 67-register form consumes roughly 57K
-registers for an 852-thread CTA before allocation granularity, so it still
-cannot place a second CTA on a Turing SM. The measured gains are far below the
-1.5 ms/image threshold and the specialization was removed.
+versus 39.789 (+0.412 ms). At 256 threads, both the 103- and 67-register forms
+fit two CTAs within the 65,536-register SM budget. The 23,392-byte shared-memory
+allocation is the unchanged occupancy limit: two CTAs require 46,784 bytes,
+while three require 70,176. The measured gains are far below the 1.5 ms/image
+threshold and the specialization was removed.
 
 The exact rejected patch, native cache, resource report, compressed SASS, 7/7
 CTest log, 48 timing rows, and summary are stored under the

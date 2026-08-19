@@ -1442,7 +1442,9 @@ every output hash and byte count:
 | PNG lossy | 40.147 ms/image | 39.946 ms/image | 0.200 ms/image |
 | JPEG lossy | 40.201 ms/image | 39.789 ms/image | 0.412 ms/image |
 
-Both gains are below 1.5 ms/image. At 852 threads, even 67 registers/thread
-requires roughly 57K registers before allocation granularity, so the reduction
-does not admit a second CTA on the Turing SM. The specialization was removed;
-no Ampere+ behavior or claim changes.
+Both gains are below 1.5 ms/image. At 256 threads, the parent and candidate use
+26,368 and 17,152 registers per CTA before allocation granularity, so both can
+already place two CTAs within 65,536 registers. The 23,392-byte shared-memory
+allocation caps Turing residency at two CTAs (three require 70,176 bytes), so
+the specialization does not increase occupancy. It was removed; no Ampere+
+behavior or claim changes.
