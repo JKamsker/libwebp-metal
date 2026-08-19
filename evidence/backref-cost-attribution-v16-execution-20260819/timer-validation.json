@@ -1,0 +1,10 @@
+{
+  "clock_reads": 4096,
+  "elapsed_ns": 157209,
+  "maximum_delta_ns": 750,
+  "mean_read_delta_ns": 38,
+  "minimum_positive_delta_ns": 41,
+  "monotonic": true,
+  "positive_deltas": 3756,
+  "schema": "libwebp-backref-cost-attribution-v16-timer-check-v1"
+}
