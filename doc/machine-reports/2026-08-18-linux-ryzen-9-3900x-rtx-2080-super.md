@@ -704,3 +704,13 @@ JPEG from 40.429 to 42.520 ms/image in a two-process screen. The trellis
 parity test and all 24 timed outputs matched. The candidate was removed. Raw
 evidence is
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-rcost-bound-screen.jsonl`.
+
+## Static I4 prediction dispatch
+
+The four retained prediction leaders used a static schedule of direct mode
+calls instead of invoking the runtime mode dispatcher 2--3 times per leader.
+The trellis parity test and all 24 screen outputs matched. PNG improved from
+40.414 to 39.608 ms/image and JPEG from 40.463 to 39.690 ms/image, but both
+~0.8 ms gains remain below the 1.5 ms/image threshold. The candidate was
+removed. Raw evidence is
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-static-pred-screen.jsonl`.
