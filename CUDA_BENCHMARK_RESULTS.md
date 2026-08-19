@@ -1467,6 +1467,27 @@ screen left the production eight-event backend cap unchanged while requesting
 fallback. The eight-band default and cap remain shared, and no Ampere+ claim is
 made.
 
+## Turing warp-private I4 boundary rejection
+
+The refreshed lossy profile kept I4 at 63--65% of block cycles on medium
+photo/texture inputs. A pre-Ampere-only candidate eliminated the first
+CTA-wide barrier in every I4 dependency diagonal by making each of the four
+prediction warp leaders gather and consume its own 13-byte boundary. The
+Ampere+ compile branch retained the existing shared-boundary path.
+
+Seven CTests passed on both candidate and restored source. Two order-reversed
+processes per format produced 24 exact rows:
+
+| Format | Parent | Private boundaries | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.888 ms/image | 39.720 ms/image | 0.167 ms/image |
+| JPEG lossy | 39.405 ms/image | 39.681 ms/image | -0.276 ms/image |
+
+The four duplicate gathers offset the removed barrier. The candidate was
+removed, and complete raw evidence is archived under
+`libwebp-i4-private-boundary-*` with the RTX 2080 SUPER machine report. This
+does not characterize Ampere+ performance.
+
 ## Turing four-pixel mismatch-mask rejection
 
 The retained native-sm_75 profile continued to put the hash matcher on the

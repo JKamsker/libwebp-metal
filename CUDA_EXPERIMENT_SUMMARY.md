@@ -363,3 +363,27 @@ because PNG remained below 1.5 ms/image. Profile output, exact patch, timing
 rows, resources, compressed SASS, specialization comparison, binary hashes,
 native cache, and both CTest logs are under `libwebp-hash-mask-*` in the RTX
 2080 SUPER evidence directory. No Ampere+ performance claim is made.
+
+## Pre-Ampere warp-private I4 boundary rejection
+
+Fresh native-sm_75 end-to-end medians were 41.061 ms/image PNG and 39.555
+JPEG, while medium device walls remained about 22--26 ms and I4 accounted for
+63--65% of photo/texture block cycles. To remove the first CTA barrier from
+each I4 dependency diagonal, a Turing-only candidate gave all four prediction
+warp leaders their own exact 13-byte boundary. Each leader gathered and
+immediately consumed its copy; Ampere+ retained the parent code.
+
+Both candidate and restored trees passed seven CTests. All 24 screen rows were
+byte-exact:
+
+| Format | Parent | Private boundaries | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.888 ms/image | 39.720 ms/image | 0.167 ms/image |
+| JPEG lossy | 39.405 ms/image | 39.681 ms/image | -0.276 ms/image |
+
+Registers and stack stayed at 103 and 352 bytes; shared memory rose from
+23,392 to 23,464 bytes. The candidate was removed because PNG is far below
+1.5 ms/image and JPEG regresses. The retained profile, phase traces, exact
+patch, rows, SASS/resources, binary hashes, native cache, and both CTest logs
+are under `libwebp-i4-private-boundary-*` in the RTX 2080 SUPER evidence
+directory. No Ampere+ performance claim is made.

@@ -1570,6 +1570,33 @@ raw timing rows, sampling reports, and complete profile are stored under the
 `libwebp-token-grow-*` and `libwebp-token-lines-*` prefixes. This is RTX 2080
 SUPER-only evidence and makes no Ampere+ claim.
 
+## Warp-private I4 prediction-boundary rejection
+
+A new explicit-native profile measured PNG/JPEG lossy CUDA at 41.061/39.555
+ms per image versus 85.134/85.822 on CPU. Medium-image device walls were
+about 22--26 ms; I4 still represented 63--65% of photo/texture block cycles.
+
+The pre-Ampere candidate replaced one shared 13-byte boundary per active team
+with one boundary per prediction warp. Four leaders gathered and immediately
+consumed their own exact samples, eliminating the first CTA-wide barrier in
+each I4 dependency diagonal. Ampere+ retained the original compile branch.
+
+Candidate and restored builds passed 7/7 CTests. All 24 timing outputs were
+exact:
+
+| Format | Parent | Private boundaries | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.888 ms/image | 39.720 ms/image | 0.167 ms/image |
+| JPEG lossy | 39.405 ms/image | 39.681 ms/image | -0.276 ms/image |
+
+PNG retained `d01c3571a90d2653` / 1,610,422 bytes and JPEG retained
+`befeef70bef22946` / 1,600,198 bytes. Registers and stack remained 103 and
+352 bytes; shared memory increased by 72 bytes. The source was restored
+because PNG is far below the gate and JPEG regresses. The raw retained matrix,
+phase traces, exact patch, screen, SASS/resources, binary hashes, native cache,
+and both test transcripts are stored under `libwebp-i4-private-boundary-*` in
+the adjacent evidence directory. No Ampere+ performance claim is made.
+
 ## Four-pixel mismatch-mask rejection
 
 An explicit native-sm_75 profile measured retained hash-candidate calls at
