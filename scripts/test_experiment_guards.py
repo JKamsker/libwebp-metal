@@ -140,6 +140,12 @@ MATRIX = (
         "WEBP_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT",
         "src/enc/backref_cost_interval_specialization_v1_experiment_enc.o",
     ),
+    (
+        "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT",
+        "WEBP_USE_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT",
+        "WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT",
+        "src/enc/backref_cost_attribution_v1_experiment_enc.o",
+    ),
 )
 
 
@@ -167,6 +173,7 @@ def run(argv: list[str], environment: dict[str, str] | None = None) -> subproces
         "WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT",
         "WEBP_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT",
         "WEBP_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT",
+        "WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT",
     ):
         env.pop(name, None)
     if environment:
@@ -232,6 +239,8 @@ def check_build_matrix() -> None:
     assert "src/enc/backref_cost_interval_search_v2_experiment_enc.o" not in default.stdout
     assert "src/enc/backref_cost_interval_search_v3_experiment_enc.o" not in default.stdout
     assert "src/enc/backref_cost_interval_specialization_v1_experiment_enc.o" not in default.stdout
+    assert "src/enc/backref_cost_attribution_v1_experiment_enc.o" not in default.stdout
+    assert "tools/backref_cost_attribution_v1_experiment_runner" not in default.stdout
     assert "list(REMOVE_ITEM WEBP_ENC_SRCS" in cmake
     assert not any(
         f"add_definitions(-D{macro}" in cmake for macro in macros
@@ -308,6 +317,11 @@ def check_omitted_targets() -> None:
         ["make", "-f", "makefile.unix", "WEBP_ENABLE_METAL=0",
          "tools/backref_cost_interval_specialization_v1_experiment_runner"],
         "WEBP_BUILD_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT=1",
+    )
+    require_failure(
+        ["make", "-f", "makefile.unix", "WEBP_ENABLE_METAL=0",
+         "tools/backref_cost_attribution_v1_experiment_runner"],
+        "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT=1",
     )
 
 
@@ -433,7 +447,7 @@ def main() -> int:
     check_omitted_targets()
     check_promoted_ablation_control()
     check_runtime_and_lease_refusals()
-    print("PASS: twenty independent build/runtime guards and fail-closed leases")
+    print("PASS: twenty-one independent build/runtime guards and fail-closed leases")
     return 0
 
 

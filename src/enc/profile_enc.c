@@ -2,10 +2,15 @@
 //
 // Internal, independently guarded encoder stage profiling experiment.
 
-#if !defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT)
+#if !defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT) && \
+    !defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS)
 #define WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT 1
 #endif
 #include "src/enc/profile_enc.h"
+
+#if defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS)
+#include "src/enc/backref_cost_attribution_v1_experiment_enc.h"
+#endif
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -69,6 +74,11 @@ static const char* const kStageNames[WEBP_PROFILE_STAGE_COUNT] = {
     "lossless_bitstream",
     "lossless_stream_finalize",
     "lossless_riff_write",
+    "backref_cost_dp_total",
+    "backref_cost_dp_setup",
+    "backref_cost_dp_steady",
+    "backref_cost_traceback",
+    "backref_cost_materialize",
     "metal_init",
     "metal_cross_color_dispatch",
     "metal_hash_pipeline_init",
@@ -130,7 +140,15 @@ void WebPProfileBeginSession(const WebPConfig* config,
                              const WebPPicture* picture) {
   WebPProfileContext* const ctx = &profile_context;
   memset(ctx, 0, sizeof(*ctx));
+#if defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS)
+  if (!EnvironmentOptIn("WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT") &&
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT") != NULL) {
+    return;
+  }
+  if (!EnvironmentOptIn("WEBP_BACKREF_COST_ATTRIBUTION_V1_TIMERS")) return;
+#else
   if (!EnvironmentOptIn("WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT")) return;
+#endif
   if (getenv("WEBP_BENCHMARK_SESSION") == NULL ||
       strcmp(getenv("WEBP_BENCHMARK_SESSION"), "exclusive") != 0) {
     fprintf(stderr,
@@ -152,18 +170,34 @@ void WebPProfileBeginSession(const WebPConfig* config,
 
 void WebPProfileEndSession(int ok, int error_code) {
   WebPProfileContext* const ctx = &profile_context;
+#if defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS)
+  const char* const output_path =
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V1_STAGE_OUTPUT");
+  const char* const run_id =
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V1_RUN_ID");
+  const char* const case_id =
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V1_CASE_ID");
+  const char* const backend =
+      VP8LBackrefCostAttributionV1ExperimentEnabled() ? "candidate" :
+                                                       "baseline";
+  const char* const sample_set =
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V1_SAMPLE_SET");
+#else
   const char* const output_path = getenv("WEBP_STAGE_PROFILE_OUTPUT");
   const char* const run_id = getenv("WEBP_STAGE_PROFILE_RUN_ID");
   const char* const case_id = getenv("WEBP_STAGE_PROFILE_CASE_ID");
   const char* const backend = getenv("WEBP_STAGE_PROFILE_BACKEND");
   const char* const sample_set = getenv("WEBP_STAGE_PROFILE_SAMPLE_SET");
+#endif
   const uint64_t total_ns = ctx->active ? ProfileNowNs() - ctx->total_start_ns : 0;
   const char* sample_role;
   FILE* out;
   int i;
   if (!ctx->active) return;
   ctx->active = 0;
-  if (sample_set != NULL && strcmp(sample_set, "warm") == 0) {
+  if (sample_set != NULL &&
+      (strcmp(sample_set, "warm") == 0 ||
+       strcmp(sample_set, "warm-dominant") == 0)) {
     sample_role = (ctx->encode_index == 0) ? "warmup" : "warm";
   } else {
     sample_role = "cold";

@@ -1,0 +1,231 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v1-frozen-protocol-v1",
+  "protocol_version": 1,
+  "experiment_id": "backref_cost_attribution_v1",
+  "base_commit": "db1d9e8e66055ff943f57664733316df83b0a965",
+  "required_expected_commit_environment": "WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V1_COMMIT",
+  "phase_1_decision": {
+    "status": "BLOCKED_REMOTE_REHEARSAL",
+    "timed_execution_authorized": false,
+    "reason": "the read-only facility inventory was captured, but a lingering interactive SSH session prevented completion of the required noninteractive remote rehearsal; Phase 2 must not run",
+    "phase_1_performance_samples": 0
+  },
+  "execution_modes": {
+    "validate": "local, session absent, hashes and mode contract only",
+    "rehearse": "remote, session absent, build/symbol/command/refusal/archive checks only; no encoder workload or profiler invocation",
+    "run": "Phase 2 only, exact exclusive session, one lease and 24 serial xctrace launches"
+  },
+  "frozen_phase_2_command": "env WEBP_BENCHMARK_SESSION=exclusive WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V1_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_attribution_v1.py run \"$PWD/evidence/backref-cost-attribution-v1-execution-20260819\"",
+  "candidate": {
+    "build_flag": "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT",
+    "compile_macro": "WEBP_USE_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT",
+    "marker_macro": "WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS",
+    "runtime_flag": "WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT",
+    "runtime_value": "1",
+    "source": "src/enc/backref_cost_attribution_v1_experiment_enc.c",
+    "runner": "tools/backref_cost_attribution_v1_experiment_runner.c",
+    "runner_target": "backref_cost_attribution_v1_experiment_runner",
+    "equivalence": {
+      "source_commit": "673bc3fa",
+      "algorithm": "exact always-specialized v3-local-hint PushInterval implementation already frozen at 673bc3fa; attribution identity only aliases the outer exact-value selector",
+      "preserved": [
+        "integer costs", "strict comparisons and ties", "interval ordering",
+        "update order", "traceback", "reference order", "cache choice"
+      ],
+      "baseline": "clean production PushInterval and DP body from db1d9e8",
+      "single_binary_identity": true
+    }
+  },
+  "forbidden_environment": [
+    "CUDA_VISIBLE_DEVICES", "MallocNanoZone",
+    "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT",
+    "WEBP_BACKREF_COST_TRACEBACK_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT"
+  ],
+  "remote_host": {
+    "ssh_alias": "pandocs-agent",
+    "system": "Darwin",
+    "architecture": "arm64",
+    "hardware_model": "Mac16,10",
+    "cpu_brand": "Apple M4",
+    "physical_memory_bytes": 25769803776,
+    "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+    "compiler_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "compiler_version_lines": [
+      "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+      "Target: arm64-apple-darwin25.2.0",
+      "Thread model: posix",
+      "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+    ],
+    "sdk_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+    "sdk_version": "26.2",
+    "required_thermal_lines": [
+      "No thermal warning level has been recorded",
+      "No performance warning level has been recorded",
+      "No CPU power status has been recorded"
+    ],
+    "safe_root_basename": ".libwebp-metal-backref-cost-attribution-v1",
+    "runner_policy": "Runner.Listener may remain; Runner.Worker fails closed",
+    "permission_rule": "xctrace uses --launch --no-prompt only; any authentication prompt or denial is terminal refusal"
+  },
+  "profiler": {
+    "primary": "Xcode Time Profiler",
+    "fallback": null,
+    "xctrace_version": "xctrace version 26.0 (17C529)",
+    "record_command_template": [
+      "/usr/bin/xcrun", "xctrace", "record", "--no-prompt", "--template",
+      "Time Profiler", "--output", "PROFILE.trace", "--target-stdout",
+      "RUNNER.jsonl", "--target-stderr", "RUNNER.stderr", "--launch", "--",
+      "/usr/bin/env", "FROZEN_ENV...", "RUNNER", "profile", "INPUT",
+      "CASE", "METHOD", "VARIANT", "1", "4"
+    ],
+    "export_commands": [
+      "/usr/bin/xcrun xctrace export --input PROFILE.trace --toc --output TOC.xml",
+      "/usr/bin/xcrun xctrace export --input PROFILE.trace --xpath /trace-toc/run/data/table[@schema=DISCOVERED_SAMPLE_SCHEMA] --output EXPORT.xml"
+    ],
+    "executables": {
+      "clang": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang", "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a"},
+      "xcrun": {"path": "/usr/bin/xcrun", "sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152"},
+      "xctrace": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/usr/bin/xctrace", "sha256": "4b5e176f39cde3fd24af6da9dc48f18358b6f1bcbe2aaa996b4067e44899af26"},
+      "dsymutil": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dsymutil", "sha256": "f22ba19104faff765b56c655a2c9ad7ae73f3092a63b270717ce28e531101747"},
+      "dwarfdump": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/dwarfdump", "sha256": "70373a2b63b41f51f81c7ca2052466f2a226f9660c12ae4fc2c7c3a51f571815"},
+      "nm": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm", "sha256": "a42f25b6363f3d43b911733a276a46bdbed894f1ef8e764cb7461ebdb37a15e7"}
+    },
+    "inspection_findings": {
+      "sample": "/usr/bin/sample exists; 1 ms default; textual call tree; -mayDie/-fullPaths/-file supported",
+      "xctrace": "Time Profiler and Sampler instruments available; launch, no-prompt, raw .trace, TOC/XML export and explicit dSYM symbolication supported",
+      "permissions": "SSH user is admin and _developer; Developer Mode enabled; task-port and Instruments rights authenticate-user=true, so noninteractive success is not assumed"
+    }
+  },
+  "build": {
+    "system": "makefile.unix",
+    "metal": false,
+    "cflags": "-O3 -g -DNDEBUG -fno-omit-frame-pointer",
+    "ar": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+    "ranlib": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+    "identity_rule": "one Mach-O and one matching dSYM UUID serve baseline and candidate; marker layout is identical"
+  },
+  "corpus": [
+    {"case_id": "photo-large", "file": "photo-large.ppm", "category": "photo", "width": 3000, "height": 2000, "sha256": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612"},
+    {"case_id": "graphic-large", "file": "graphic-large.ppm", "category": "graphic", "width": 3000, "height": 2000, "sha256": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc"}
+  ],
+  "protocol": {
+    "purpose": "causal attribution only, never a promotion A/B",
+    "methods": [4, 6],
+    "profile_repetitions": 3,
+    "warmups_per_profile": 1,
+    "retained_encodes_per_profile": 4,
+    "profile_processes": 24,
+    "retained_stage_records": 96,
+    "variant_order": [["baseline", "candidate"], ["candidate", "baseline"], ["baseline", "candidate"]],
+    "case_order": ["photo-large", "graphic-large"],
+    "lifecycle": "warm-dominant process: picture/import setup once, first encode discarded by timer analysis, four retained; sampler spans all five to maximize stable call-stack attribution",
+    "serial_rule": "one synchronous xctrace-launched runner at a time under one exclusive lease; no overlap or retry",
+    "correctness": "before first profile, two baseline and two candidate encodes per case/method; exact bitstreams, decoded RGB pixels, and repeat determinism must all match",
+    "perturbation": "coarse monotonic timers add calls only at whole stages and DP setup/steady/trace/materialize boundaries; no per-PushInterval clock; no instrumented time may support production promotion"
+  },
+  "acceptance": {
+    "diagnostic_only": true,
+    "minimum_export_rows_per_profile": 500,
+    "minimum_usable_symbolized_samples_per_profile": 500,
+    "maximum_unsymbolized_share": 0.05,
+    "required_symbols": [
+      "WebPEncode", "VP8LEncodeStream", "VP8LHashChainFill",
+      "VP8LGetBackwardReferences", "VP8LBackwardReferencesTraceBackwards",
+      "BackwardReferencesHashChainDistanceOnly",
+      "BackwardReferencesHashChainDistanceOnlySpecialized",
+      "PushInterval", "PushIntervalSpecialized", "InsertInterval",
+      "CostManagerInit", "CostModelBuild", "TraceBackwards",
+      "BackwardReferencesHashChainFollowChosenPath", "EncodeImageInternal",
+      "GetHuffBitLengthsAndCodes", "StoreImageToBitMask"
+    ],
+    "required_profile_symbols": [
+      "BackwardReferencesHashChainDistanceOnly", "PushInterval",
+      "VP8LHashChainFill", "VP8LGetBackwardReferences", "EncodeImageInternal"
+    ],
+    "required_timer_stages": [
+      "lossless_analyze", "lossless_hash_chain", "lossless_backward_refs",
+      "lossless_histogram", "lossless_huffman", "lossless_bitstream",
+      "backref_cost_dp_total", "backref_cost_dp_setup",
+      "backref_cost_dp_steady", "backref_cost_traceback",
+      "backref_cost_materialize"
+    ],
+    "per_profile": "raw trace, TOC, every discovered sample/profile export, five stage records, four retained records, zero profiler/export errors",
+    "repeatability": "for each case/method/variant, three retained-total medians must have max/min <= 1.25 and every major stage share range <= 0.10 absolute; otherwise attribution is inconclusive",
+    "timer_accounting": "setup+steady <= DP total; DP total+traceback+materialize <= backward refs; required call counts positive and baseline/candidate nesting identical",
+    "build_identity": "single runner SHA-256, binary/dSYM UUID match, frozen clang/SDK/flags/frame policy",
+    "resources": "AC power, LPM off, no thermal warning, >=4 GiB free memory, >=8 GiB disk, output <=2 GiB, one profile child",
+    "correctness_required": true,
+    "production_promotion_forbidden": true
+  },
+  "interpretation": {
+    "quantify": "report total and every sampled/timed stage share and baseline-to-candidate delta separately for each case/method",
+    "interval_materiality": "estimate baseline PushInterval/InsertInterval/update inclusive and self sample shares of total encode and DP",
+    "layout_limit": "attribute candidate regression to code-layout/I-cache/control only when DP call stacks shift consistently while outside-DP stage times do not; otherwise label unresolved",
+    "close_family": "close the interval-search family when interval work is not material (baseline median <5% total CPU) or when no consistent recoverable total win remains after bounding interval samples",
+    "next_stage": "if closed, rank the next dominant sampled CPU stages separately for methods 4/6",
+    "follow_up": "only if one concrete internal sub-boundary dominates consistently, propose exactly one independently gated experiment; do not implement or run it in this cycle",
+    "no_pooling": "no old specialization/search/workspace samples, relabeling, thresholds, graphic-only path, Metal, or CUDA"
+  },
+  "resources": {
+    "lease_path": "~/.libwebp-metal-backref-cost-attribution-v1.lock",
+    "profile_timeout_seconds": 600,
+    "maximum_output_bytes": 2147483648,
+    "minimum_available_memory_bytes": 4294967296,
+    "minimum_available_disk_bytes": 8589934592,
+    "parallel_profile_processes": 1
+  },
+  "schemas": {
+    "catalog": "scripts/backref_cost_attribution_v1_schemas.json",
+    "artifact_hashes": "libwebp-backref-cost-attribution-v1-artifact-hashes-v1",
+    "cleanup_receipt": "libwebp-backref-cost-attribution-v1-cleanup-receipt-v1",
+    "lease": "libwebp-backref-cost-attribution-v1-lease-v1",
+    "operator_status": "libwebp-backref-cost-attribution-v1-operator-status-v1",
+    "refusal": "libwebp-backref-cost-attribution-v1-refusal-v1",
+    "rehearsal": "libwebp-backref-cost-attribution-v1-rehearsal-v1",
+    "transfer_cleanup": "libwebp-backref-cost-attribution-v1-transfer-cleanup-v1"
+  },
+  "admission_identity_paths": [
+    "scripts/backref_cost_attribution_v1_manifest.json",
+    "scripts/backref_cost_attribution_v1_schemas.json",
+    "scripts/backref_cost_attribution_v1_archive.py",
+    "scripts/backref_cost_attribution_v1_admission.py",
+    "scripts/backref_cost_attribution_v1_paths.py",
+    "scripts/run_backref_cost_attribution_v1_experiment.py",
+    "scripts/execute_backref_cost_attribution_v1.py",
+    "doc/backref-cost-attribution-v1-protocol-20260819.md"
+  ],
+  "frozen_artifacts": [
+    {"path": "scripts/backref_cost_attribution_v1_schemas.json", "sha256": "68e63051130f107fb987455beeca14d4210105edc31cab31e68bde1492d224d5"},
+    {"path": "scripts/backref_cost_attribution_v1_archive.py", "sha256": "acd1b4d3b4fb5b9d3b3a6a9fd5a8f2de155bacb08e6b9bd71ee6d7b5bd360743"},
+    {"path": "scripts/backref_cost_attribution_v1_admission.py", "sha256": "bcccf97cfe0691adf5fd12b28df8bb585dc4c5df5cefeecce9c4fd3e7c7ba8bd"},
+    {"path": "scripts/backref_cost_attribution_v1_paths.py", "sha256": "890ba318c845579bea238ce169becec96156f24de15d0c860145847439f0af55"},
+    {"path": "scripts/run_backref_cost_attribution_v1_experiment.py", "sha256": "b8084a07d6e7263568e971e2da8fe40e737f8b524257766555cfe67677d2c9bb"},
+    {"path": "scripts/execute_backref_cost_attribution_v1.py", "sha256": "2f347924df48c6af76fb382d3c025ceb50f289844d8a87e69073c0d0912b7073"},
+    {"path": "doc/backref-cost-attribution-v1-protocol-20260819.md", "sha256": "0089245302345ba29dfd2fb8d61251892d2bd0f0504a1a2720a0f03e1dad0b14"},
+    {"path": "CMakeLists.txt", "sha256": "be0fc1e12813ac6d9ad52ca65b4012207f68280380d61b8789797d0918d8ba92"},
+    {"path": "makefile.unix", "sha256": "45a5fbab3d9965a51f305dc0d65bde92a0a8e79fbfabf0518fc7f035c6c94f7f"},
+    {"path": "src/enc/backref_cost_attribution_v1_experiment_enc.c", "sha256": "116b291b60c60852b088a71ecbf5e694fa317bea55e7badeea03d7ce68c17f25"},
+    {"path": "src/enc/backref_cost_attribution_v1_experiment_enc.h", "sha256": "c29cb0e42c9a498fd5748b4e0eb5127d113db336036cb083344f93484ea2a7ca"},
+    {"path": "src/enc/backward_references_cost_enc.c", "sha256": "eef5c35c56939a41486b2bd2277ac526769f87318e6fb4c18b31a147aa529e89"},
+    {"path": "src/enc/backward_references_cost_distance_only_enc.inc", "sha256": "e582aa07af5c8e5021b809aed3ef4ab6677c61b991aacd3d7f52b776b2e7e7b9"},
+    {"path": "src/enc/profile_enc.c", "sha256": "36578d8159ee53b74ffa7cadd6b1eea994ebb32c8861ffcef4b6434f1247d61c"},
+    {"path": "src/enc/profile_enc.h", "sha256": "f1d3049b1ab431e0794fb0adf9d187a37190ffbffaf1aa13bb94b9ffbf154619"},
+    {"path": "src/enc/backward_references_enc.c", "sha256": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03"},
+    {"path": "src/enc/vp8l_enc.c", "sha256": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0"},
+    {"path": "tools/backref_cost_attribution_v1_experiment_runner.c", "sha256": "8857f08350ce52ee72762ee3328a8ee4860ac106462549e51e9d5136fec3dbd5"},
+    {"path": "scripts/test_backref_cost_attribution_v1_protocol.py", "sha256": "128702c287ed942600334694436f41e897862849cc98e842b3e48ea5d583dfc4"},
+    {"path": "scripts/test_backref_cost_attribution_v1_admission.py", "sha256": "7fb1926b6d301e9d1bb00a5d11054416e18e0a0071b91174fb7a7bab8c9beb57"},
+    {"path": "scripts/test_backref_cost_attribution_v1_archive.py", "sha256": "95a5bd881636f85647bc95e9449135b326d400aec0f4ed9e2d357c3c761088b5"},
+    {"path": "scripts/test_experiment_guards.py", "sha256": "922e04a08f0e1ae9d6d668f9fe364fa9e3d803779ae212edaf1621fd1d1420bf"},
+    {"path": "doc/experiment-guard-matrix.md", "sha256": "583eedc56924b9d419c7e68d0de65751f0dae1533fe17054c4c3c0af29d66ba6"}
+  ]
+}

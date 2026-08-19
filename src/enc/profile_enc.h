@@ -31,6 +31,11 @@ typedef enum {
   WEBP_PROFILE_LOSSLESS_BITSTREAM,
   WEBP_PROFILE_LOSSLESS_STREAM_FINALIZE,
   WEBP_PROFILE_LOSSLESS_RIFF_WRITE,
+  WEBP_PROFILE_BACKREF_COST_DP_TOTAL,
+  WEBP_PROFILE_BACKREF_COST_DP_SETUP,
+  WEBP_PROFILE_BACKREF_COST_DP_STEADY,
+  WEBP_PROFILE_BACKREF_COST_TRACEBACK,
+  WEBP_PROFILE_BACKREF_COST_MATERIALIZE,
   WEBP_PROFILE_METAL_INIT,
   WEBP_PROFILE_METAL_CROSS_COLOR_DISPATCH,
   WEBP_PROFILE_METAL_HASH_PIPELINE_INIT,
@@ -46,7 +51,8 @@ typedef enum {
 } WebPProfileStage;
 
 // This internal API is compiled only for the encoder-stage-profile experiment.
-#if defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT)
+#if defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT) || \
+    defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS)
 void WebPProfileBeginSession(const WebPConfig* config,
                              const WebPPicture* picture);
 void WebPProfileEndSession(int ok, int error_code);
@@ -67,6 +73,18 @@ void WebPProfileMarkMetalHash(void);
 #define WebPProfileSetOutputSize(output_size) ((void)(output_size))
 #define WebPProfileMarkMetalCrossColor() ((void)0)
 #define WebPProfileMarkMetalHash() ((void)0)
+#endif
+
+#if defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS)
+#if defined(_MSC_VER)
+#define WEBP_PROFILE_NOINLINE __declspec(noinline)
+#elif defined(__GNUC__) || defined(__clang__)
+#define WEBP_PROFILE_NOINLINE __attribute__((noinline))
+#else
+#define WEBP_PROFILE_NOINLINE
+#endif
+#else
+#define WEBP_PROFILE_NOINLINE
 #endif
 
 #ifdef __cplusplus
