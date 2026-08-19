@@ -1467,6 +1467,30 @@ screen left the production eight-event backend cap unchanged while requesting
 fallback. The eight-band default and cap remain shared, and no Ampere+ claim is
 made.
 
+## Turing two-pixel grouped hash-matcher rejection
+
+The retained lossless profile continued to show hash-candidate kernels large
+enough to matter, including stable calls near 7.5 and 10.9 ms. To avoid the
+prior four-pixel load-ahead candidate's 26-to-32-register increase, a new
+pre-Ampere specialization issued only two pixel pairs ahead at a time and
+also removed the previously validated duplicate zero-offset precheck.
+
+The pre-Ampere and parent kernels both use 26 registers. Static SASS contains
+288 instructions for the Turing specialization versus 296 for the parent.
+The Ampere+ false specialization has the parent's complete 296-instruction
+mnemonic sequence. Seven CTests and all timing outputs were exact:
+
+| Format | Parent | Candidate | Change |
+|---|---:|---:|---:|
+| PNG lossless | 77.101 ms/image | 76.102 ms/image | -0.999 ms/image |
+| JPEG lossless | 128.924 ms/image | 123.830 ms/image | -5.094 ms/image |
+
+The format-selective result is rejected: PNG remains below the required
+1.5 ms/image improvement. The source was restored and 7/7 CTests passed. Raw
+evidence is archived under `libwebp-hash-pair-*` with the RTX 2080 SUPER
+machine report. Ampere+ behavior is unchanged and no performance inference is
+made for it.
+
 ## Cold token-page growth outlining rejection
 
 A fresh native-sm_75 `gprofng` profile of the retained six-image PNG lossy

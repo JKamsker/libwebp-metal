@@ -1570,6 +1570,38 @@ raw timing rows, sampling reports, and complete profile are stored under the
 `libwebp-token-grow-*` and `libwebp-token-lines-*` prefixes. This is RTX 2080
 SUPER-only evidence and makes no Ampere+ claim.
 
+## Two-pixel grouped hash-matcher rejection
+
+A current forced-lossless refresh measured dominant hash-candidate kernel
+calls around 7.5 ms for 1,920,000 resident pixels and 10.9 ms for 960,000
+pixels. The archived four-pixel load-ahead candidate had gained 1.395 ms/image
+PNG and 1.851 JPEG but raised Turing register use from 26 to 32. A new
+pre-Ampere specialization therefore grouped only two pixel pairs before their
+ordered comparisons and composed the independently exact duplicate-precheck
+removal.
+
+The candidate stayed at 26 registers with no stack, shared, or local memory.
+Its pre-Ampere mnemonic stream shrank from 296 to 288 instructions. The
+Ampere+ false specialization retained 296 instructions and its complete
+mnemonic sequence matched the parent, so no Ampere+ behavior changed.
+
+All seven CTests passed. Two order-reversed pairs per format produced 48 exact
+aggregate rows:
+
+| Format | Parent | Two-pixel matcher | Gain |
+|---|---:|---:|---:|
+| PNG lossless | 77.101 ms/image | 76.102 ms/image | 0.999 ms/image |
+| JPEG lossless | 128.924 ms/image | 123.830 ms/image | 5.094 ms/image |
+
+Every PNG row retained `ae63469bc03eece1` / 6,720,632 bytes and every JPEG
+row retained `7396c2ca11b0f48f` / 8,956,690 bytes. The candidate was removed
+because PNG remains below the strict 1.5 ms/image gate despite the large JPEG
+win. The raw current profile, exact patch, timing rows, resources, compressed
+SASS, Ampere+ mnemonic comparison, binary hashes, native cache, restored
+7/7 CTest log, and summary are stored under `libwebp-hash-pair-*` in the
+adjacent evidence directory. These performance numbers characterize only the
+RTX 2080 SUPER.
+
 ## Precomputed coefficient-token band-offset rejection
 
 An optimized coverage build refined the dominant token-recorder profile. On

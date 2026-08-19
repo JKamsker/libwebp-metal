@@ -293,3 +293,27 @@ the 1.5 ms/image gate. The probe was removed and the retained build passed all
 seven CTests. Exact counters, probe patch, and restored-parent test log are
 stored under `i16-lazy-prune-*` in the RTX 2080 SUPER evidence directory. This
 is Turing-only evidence and makes no Ampere+ claim.
+
+## Pre-Ampere two-pixel grouped hash-matcher rejection
+
+A retained forced-lossless refresh still measured material hash-candidate
+kernels at about 7.5 and 10.9 ms. The prior four-pixel load-ahead result gained
+1.395/1.851 ms per PNG/JPEG image but used 32 Turing registers, so a midpoint
+candidate grouped two pixel pairs at a time and composed the independently
+exact duplicate-precheck removal. It was selected only on pre-Ampere.
+
+The new Turing specialization stayed at the parent's 26 registers and reduced
+the hash kernel's mnemonic count from 296 to 288. The Ampere+ false
+specialization retained 296 instructions with a mnemonic stream identical to
+the parent. Seven CTests passed and all 48 screen records were byte-exact:
+
+| Format | Parent | Two-pixel matcher | Gain |
+|---|---:|---:|---:|
+| PNG lossless | 77.101 ms/image | 76.102 ms/image | 0.999 ms/image |
+| JPEG lossless | 128.924 ms/image | 123.830 ms/image | 5.094 ms/image |
+
+The candidate was removed because the PNG gain is below the 1.5 ms/image gate
+despite the large JPEG win. Raw profile output, exact patch, all timing rows,
+resources, SASS and false-specialization comparison, binary hashes, native
+cache, and restored-parent CTest log are stored under `libwebp-hash-pair-*` in
+the RTX 2080 SUPER evidence directory. No Ampere+ performance claim is made.
