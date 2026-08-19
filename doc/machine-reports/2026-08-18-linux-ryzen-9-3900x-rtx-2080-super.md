@@ -714,3 +714,12 @@ The trellis parity test and all 24 screen outputs matched. PNG improved from
 ~0.8 ms gains remain below the 1.5 ms/image threshold. The candidate was
 removed. Raw evidence is
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-static-pred-screen.jsonl`.
+
+## Parallel I4 boundary plus static prediction
+
+The static prediction schedule was combined with a 13-lane gather of the
+exact left, top-left, top, and top-right boundary samples, reusing the existing
+CTA barrier. Trellis parity and all 24 screen outputs matched. PNG moved from
+40.774 to 40.233 ms/image and JPEG from 40.779 to 40.065 ms/image; both gains
+remain below 1.5 ms/image, so the candidate was removed. Raw evidence is
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-boundary-pred-screen.jsonl`.
