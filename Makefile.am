@@ -6,6 +6,7 @@ EXTRA_DIST = COPYING autogen.sh CUDA_BENCHMARK_RESULTS.md \
   CUDA_NEAR_LOSSLESS_RESULTS_RAW.md \
   scripts/test_cuda.sh scripts/test_cuda_variants.sh \
   scripts/test_cuda_acceleration_experiments.sh \
+  tests/bit_writer_utils_test.c \
   tests/cuda_concurrency_test.c tests/cuda_histogram_test.c \
   tests/cuda_near_lossless_test.c tests/cuda_trellis_test.c \
   tools/benchmark_platform.h tools/cuda_batch_benchmark.c \

@@ -92,6 +92,13 @@ option(WEBP_ENABLE_WUNUSED_RESULT "Add [[nodiscard]] to some functions. \
        CMake must be at least 3.21 to force C23" OFF)
 
 if(BUILD_TESTING)
+  add_executable(bit_writer_utils_test tests/bit_writer_utils_test.c
+                                       src/utils/bit_writer_utils.c)
+  target_include_directories(bit_writer_utils_test
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                                     ${CMAKE_CURRENT_BINARY_DIR}/src
+                                     ${CMAKE_CURRENT_SOURCE_DIR})
+  add_test(NAME bit_writer_utils_test COMMAND bit_writer_utils_test)
   add_executable(accelerator_enc_test tests/accelerator_enc_test.c
                                       src/enc/accelerator_enc.c)
   target_compile_definitions(accelerator_enc_test
