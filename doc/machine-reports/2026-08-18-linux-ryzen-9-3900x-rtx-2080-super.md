@@ -93,3 +93,26 @@ and only about ten threads per warp were active. The 16-step I4 recurrence and
 its four barriers per step therefore explain the device floor. Splitting the
 ten residual walks over two warps left the kernel duration flat and regressed
 PNG end-to-end time, so that experiment was removed.
+
+## CPU analysis and overlap experiment
+
+Encoder-stage profiling on the production CUDA path measured the serial CPU
+lossy-analysis stage at 10.0--12.0 ms per 1600x1200 image. Median stage times
+over 24 measured encodes per content class were:
+
+| Input family | Total | CPU analysis | CUDA decimate |
+|---|---:|---:|---:|
+| PNG graphic | 50.3 ms | 11.8 ms | 34.8 ms |
+| PNG photo | 61.6 ms | 10.4 ms | 37.8 ms |
+| PNG texture | 126.3 ms | 10.0 ms | 58.8 ms |
+| JPEG graphic | 50.2 ms | 12.0 ms | 34.4 ms |
+| JPEG photo | 59.3 ms | 10.8 ms | 36.9 ms |
+| JPEG texture | 124.2 ms | 10.0 ms | 59.7 ms |
+
+A two-worker batch-tool prototype attempted to overlap analysis of image N+1
+with the encode of image N. Its first PNG pass improved 100.4 to 81.1
+ms/image, but the reference hash changed from `b274cb32eed00ca3` to
+`c942d229bf5104f7`, output bytes changed from 11,300,544 to 16,895,686, and
+the next pass failed the deterministic-output check. The prototype was
+removed. Concurrent calls require an explicit design that isolates or safely
+schedules shared CUDA encoder state before this overlap can be used.

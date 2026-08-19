@@ -114,10 +114,13 @@ measurements are meaningless until they pass.
   explain the ~9k cycles/step in the 16-step i4 chain in `DecimateKernel`
   (`src/enc/cuda_decimate_enc.cu`), then attack the largest component.
   This is the main unexplored GPU-side lever.
-- [ ] 7. **CPU-side analyze (~11 ms/image)** — largest remaining serial
-  CPU chunk. GPU analysis measured neutral three times as-built; a leaner
-  fused variant, or overlapping analysis of image N+1 with the encode of
-  image N inside the batch tool, are the unexplored angles.
+- [x] 7. **CPU-side analyze (~11 ms/image)** — stage profiling on this
+  machine measured 10.0--12.0 ms/image across the canonical medium inputs.
+  A two-encode batch-tool pipeline overlapped that work with serialized GPU
+  decimation and showed a promising first-pass 100.4 -> 81.1 ms/image, but
+  changed the output hash/byte count and was non-deterministic on the next
+  pass. The prototype was removed: concurrency needs an explicit backend/API
+  design rather than an unsafe benchmark-only switch (task 8).
 - [ ] 8. **Multi-image GPU overlap** (design task): batch callers could
   hide the entire GPU wall by decimating image N+1 while tokenizing image
   N, but that changes the synchronous encode-call contract — needs an
