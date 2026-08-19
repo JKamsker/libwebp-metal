@@ -50,6 +50,7 @@ WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT ?= 0
 WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT ?= 0
 WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT ?= 0
 WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT ?= 0
+WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT ?= 0
 
 ifneq ($(origin WEBP_BUILD_METAL_BENCHMARK),undefined)
   $(error WEBP_BUILD_METAL_BENCHMARK was replaced by WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT)
@@ -76,7 +77,8 @@ ifeq ($(strip $(shell uname)), Darwin)
                      $(WEBP_BACKREF_COST_ATTRIBUTION_V4_DETERMINISTIC_BUILD) \
                      $(WEBP_BACKREF_COST_ATTRIBUTION_V5_DETERMINISTIC_BUILD) \
                      $(WEBP_BACKREF_COST_ATTRIBUTION_V6_DETERMINISTIC_BUILD) \
-                     $(WEBP_BACKREF_COST_ATTRIBUTION_V7_DETERMINISTIC_BUILD)),)
+                     $(WEBP_BACKREF_COST_ATTRIBUTION_V7_DETERMINISTIC_BUILD) \
+                     $(WEBP_BACKREF_COST_ATTRIBUTION_V8_DETERMINISTIC_BUILD)),)
     EXTRA_FLAGS += -I/opt/local/include
     EXTRA_LIBS  += -L/opt/local/lib
     HOMEBREW_PREFIX := $(shell brew --prefix 2> /dev/null)
@@ -109,7 +111,8 @@ ifneq ($(filter 1,$(WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_DETERMINISTIC_BUILD) \
                     $(WEBP_BACKREF_COST_ATTRIBUTION_V4_DETERMINISTIC_BUILD) \
                     $(WEBP_BACKREF_COST_ATTRIBUTION_V5_DETERMINISTIC_BUILD) \
                     $(WEBP_BACKREF_COST_ATTRIBUTION_V6_DETERMINISTIC_BUILD) \
-                    $(WEBP_BACKREF_COST_ATTRIBUTION_V7_DETERMINISTIC_BUILD)),)
+                    $(WEBP_BACKREF_COST_ATTRIBUTION_V7_DETERMINISTIC_BUILD) \
+                    $(WEBP_BACKREF_COST_ATTRIBUTION_V8_DETERMINISTIC_BUILD)),)
 SDL_CONFIG =
 else
 SDL_CONFIG = $(shell sdl2-config --version 2> /dev/null)
@@ -317,7 +320,8 @@ ifeq ($(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT),1)
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) \
-                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)),)
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)),)
     $(error WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT is mutually exclusive with overlapping experiments)
   endif
   override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT=1
@@ -340,7 +344,8 @@ ifeq ($(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT),1)
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) \
-                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)),)
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)),)
     $(error WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT is mutually exclusive with overlapping experiments)
   endif
   override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT=1
@@ -362,7 +367,8 @@ ifeq ($(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT),1)
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) \
-                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)),)
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)),)
     $(error WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT is mutually exclusive with overlapping experiments)
   endif
   override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT=1
@@ -384,7 +390,8 @@ ifeq ($(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT),1)
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) \
-                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)),)
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)),)
     $(error WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT is mutually exclusive with overlapping experiments)
   endif
   override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT=1
@@ -406,7 +413,8 @@ ifeq ($(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT),1)
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) \
-                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)),)
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)),)
     $(error WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT is mutually exclusive with overlapping experiments)
   endif
   override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT=1
@@ -428,7 +436,8 @@ ifeq ($(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT),1)
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) \
-                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)),)
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)),)
     $(error WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT is mutually exclusive with overlapping experiments)
   endif
   override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT=1
@@ -450,10 +459,34 @@ ifeq ($(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT),1)
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT) \
                       $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) \
-                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT)),)
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)),)
     $(error WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT is mutually exclusive with overlapping experiments)
   endif
   override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT=1
+endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT),1)
+  ifneq ($(filter 1,$(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) \
+                      $(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)),)
+    $(error WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT is mutually exclusive with overlapping experiments)
+  endif
+  override EXTRA_FLAGS += -DWEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT=1
 endif
 INSTALL = install
 GROFF = /usr/bin/groff
@@ -620,6 +653,10 @@ endif
 ifeq ($(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT),1)
 ENC_OBJS += src/enc/profile_enc.o
 ENC_OBJS += src/enc/backref_cost_attribution_v7_experiment_enc.o
+endif
+ifeq ($(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT),1)
+ENC_OBJS += src/enc/profile_enc.o
+ENC_OBJS += src/enc/backref_cost_attribution_v8_experiment_enc.o
 endif
 ifeq ($(WEBP_ENABLE_METAL),1)
 ENC_OBJS += src/enc/metal_enc.o src/enc/picture_csp_enc_metal.o
@@ -813,6 +850,7 @@ ifeq ($(MAKECMDGOALS),clean)
   OUTPUT += tools/backref_cost_attribution_v5_experiment_runner
   OUTPUT += tools/backref_cost_attribution_v6_experiment_runner
   OUTPUT += tools/backref_cost_attribution_v7_experiment_runner
+  OUTPUT += tools/backref_cost_attribution_v8_experiment_runner
   OUTPUT += src/demux/libwebpdemux.a src/mux/libwebpmux.a $(EXTRA_LIB)
   OUTPUT += examples/libgifdec.a examples/libanim_util.a
 endif
@@ -841,6 +879,19 @@ tools/backref_cost_attribution_v7_experiment_runner:
 	@echo "$@ requires WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT=1" >&2
 	@false
 .PHONY: tools/backref_cost_attribution_v7_experiment_runner
+endif
+
+ifeq ($(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT),1)
+tools/backref_cost_attribution_v8_experiment_runner: \
+    tools/backref_cost_attribution_v8_experiment_runner.o
+tools/backref_cost_attribution_v8_experiment_runner: \
+    src/libwebp.a sharpyuv/libsharpyuv.a
+	$(LINK) -o $@ $^ $(LDFLAGS)
+else
+tools/backref_cost_attribution_v8_experiment_runner:
+	@echo "$@ requires WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT=1" >&2
+	@false
+.PHONY: tools/backref_cost_attribution_v8_experiment_runner
 endif
 
 ifeq ($(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT),1)

@@ -1,0 +1,64 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v8-phase3-local-validation-v1",
+  "status": "PASS_WITH_EXPECTED_FAIL_CLOSED_AUTHORITY_REFUSAL",
+  "source_commit_before_phase3_files": "8fd0ab2511a84be24fd39926f1dd974ede372e52",
+  "timed_workload_invoked": false,
+  "remote_command_invoked": false,
+  "benchmark_lease_acquisition_attempted": false,
+  "profiler_invocations": 0,
+  "cuda_invocations": 0,
+  "process_signals": 0,
+  "production_promotion_authorized": false,
+  "commands": [
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v8_admission.py",
+      "status": "PASS",
+      "summary": "canonical V8-only paths, repository-context admission, strict request frames, receipt hashes, same-process exact-child cleanup, and disjoint modes"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v8_archive.py",
+      "status": "PASS",
+      "summary": "indexed archive build/extract, normalized inventory, hashes, corruption and malicious-member rejection, and no partial extraction"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v8_process_ownership.py",
+      "status": "PASS",
+      "summary": "PID/PPID/comm-only exact executable identity, exact transport ancestor chain, hostile argv immunity, exact deny matches, lookalike immunity, malformed fail-closed behavior, discovered PIDs excluded from signal APIs, and one in-session cleanup"
+    },
+    {
+      "command": "python3 scripts/test_experiment_guards.py",
+      "status": "PASS",
+      "summary": "28 independent build/runtime guards, fail-closed leases, and V1-V8 ownership guards"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 -c '<safe Phase3 protocol subset>'",
+      "status": "PASS",
+      "summary": "specialized semantic identity, valid success/control-only refusal frames, authority rejection fixtures, and exact 24-command plan; the synthetic timeout/signal fixture was deliberately not invoked in Phase 3"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v8_experiment.py",
+      "status": "PASS",
+      "summary": {
+        "correctness_encodes": 16,
+        "counter_cells": 4,
+        "sanitizer_configurations": 2,
+        "boundary_fixtures": 16,
+        "default_omission": true,
+        "public_api_abi_equal": true,
+        "exact_runtime_truth_table": {"absent": false, "": false, "0": false, "01": false, "1": true, "true": false},
+        "timer_validation": {"clock_reads": 4096, "positive_deltas": 1464, "elapsed_ns": 61042, "mean_read_delta_ns": 14, "minimum_positive_delta_ns": 41, "maximum_delta_ns": 83, "monotonic": true, "performance_sample": false}
+      }
+    },
+    {
+      "command": "env -u WEBP_BENCHMARK_SESSION EXPECTED_FREEZE_COMMIT=8fd0ab2511a84be24fd39926f1dd974ede372e52 python3 scripts/execute_backref_cost_attribution_v8.py validate",
+      "status": "EXPECTED_REFUSAL",
+      "exit_code": 1,
+      "summary": "failed closed locally because the successful source-admission receipt is absent; no remote contact or timed invocation"
+    },
+    {
+      "command": "independent SHA-256, Git ancestry/tree/diff, evidence inventory, raw frame parse, and empty-row reconstruction",
+      "status": "PASS",
+      "summary": "linear main-to-1A-to-1B history; 27 enumerated frozen artifacts plus manifest with zero digest mismatches; Phase 1B additions-only boundary; six-frame refusal stream with final cleanup footer; no Phase 2 commit or rows"
+    }
+  ]
+}
