@@ -207,17 +207,8 @@ int VP8EmitTokens(VP8TBuffer* const b, VP8BitWriter* const bw,
   while (p != NULL) {
     const VP8Tokens* const next = p->next;
     const int N = (next == NULL) ? b->left : 0;
-    int n = b->page_size;
     const token_t* const tokens = TOKEN_DATA(p);
-    while (n-- > N) {
-      const token_t token = tokens[n];
-      const int bit = (token >> 15) & 1;
-      if (token & FIXED_PROBA_BIT) {
-        VP8PutBit(bw, bit, token & 0xffu);  // constant proba
-      } else {
-        VP8PutBit(bw, bit, probas[token & 0x3fffu]);
-      }
-    }
+    VP8PutTokenPage(bw, tokens, b->page_size, N, probas);
     if (final_pass) WebPSafeFree((void*)p);
     p = next;
   }

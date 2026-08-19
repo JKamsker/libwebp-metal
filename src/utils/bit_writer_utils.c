@@ -123,6 +123,47 @@ int VP8PutBit(VP8BitWriter* const bw, int bit, int prob) {
   return bit;
 }
 
+void VP8PutTokenPage(VP8BitWriter* const bw, const uint16_t* const tokens,
+                     int num_tokens, int first_token,
+                     const uint8_t* const probas) {
+  int range = bw->range;
+  int value = bw->value;
+  int nb_bits = bw->nb_bits;
+  assert(first_token >= 0);
+  assert(first_token <= num_tokens);
+  while (num_tokens-- > first_token) {
+    const uint16_t token = tokens[num_tokens];
+    const int bit = (token >> 15) & 1;
+    const int prob = (token & (1u << 14))
+                         ? token & 0xffu
+                         : probas[token & 0x3fffu];
+    const int split = (range * prob) >> 8;
+    if (bit) {
+      value += split + 1;
+      range -= split + 1;
+    } else {
+      range = split;
+    }
+    if (range < 127) {
+      const int shift = kNorm[range];
+      range = kNewRange[range];
+      value <<= shift;
+      nb_bits += shift;
+      if (nb_bits > 0) {
+        bw->range = range;
+        bw->value = value;
+        bw->nb_bits = nb_bits;
+        Flush(bw);
+        value = bw->value;
+        nb_bits = bw->nb_bits;
+      }
+    }
+  }
+  bw->range = range;
+  bw->value = value;
+  bw->nb_bits = nb_bits;
+}
+
 int VP8PutBitUniform(VP8BitWriter* const bw, int bit) {
   const int split = bw->range >> 1;
   if (bit) {
