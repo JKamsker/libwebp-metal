@@ -822,3 +822,26 @@ All 24 timing outputs retained their parent hash and byte count. The candidate
 was removed because both formats regressed. This was measured only on the RTX
 2080 SUPER and makes no Ampere+ performance claim. Raw evidence is
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-cooperative-prediction-screen.jsonl`.
+
+## Static I4 dispatch/commit plus token probability layout
+
+The previously byte-exact static I4 prediction schedule, scalar-only score
+scan, and 16-lane winner commit were combined with the CPU token branch layout
+that makes the common dynamic probability lookup fall through. This tests
+whether the known subthreshold GPU and CPU improvements become material
+together without adding the previously rejected I16 reductions.
+
+All seven CTests passed, including bit-writer growth/failure and CUDA
+trellis/fallback coverage. A two-process screen appeared borderline at 1.599
+ms/image PNG and 1.399 JPEG, so it was not used for a decision. The extended
+five-process, order-balanced native-sm_75 gate measured:
+
+| Format | Parent | Combined candidate | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.246 ms/image | 39.283 ms/image | -0.962 ms |
+| JPEG lossy | 40.139 ms/image | 39.121 ms/image | -1.018 ms |
+
+All 60 timing outputs retained the parent hash and byte count. Both gains are
+below 1.5 ms/image, so the candidate was removed. This was measured only on
+the RTX 2080 SUPER and makes no Ampere+ performance claim. Raw evidence is
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-token-layout-combined-ab.jsonl`.
