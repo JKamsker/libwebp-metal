@@ -10,7 +10,7 @@ same-machine comparison.
 
 | Date (UTC) | Backend | Machine | Report |
 |---|---|---|---|
-| 2026-08-18 | CUDA | AMD Ryzen 9 3900X / NVIDIA GeForce RTX 2080 SUPER | [End-to-end PNG/JPEG benchmark](2026-08-18-linux-ryzen-9-3900x-rtx-2080-super.md) |
+| 2026-08-18--19 | CUDA | AMD Ryzen 9 3900X / NVIDIA GeForce RTX 2080 SUPER | [End-to-end PNG/JPEG benchmark](2026-08-18-linux-ryzen-9-3900x-rtx-2080-super.md) |
 
 ## Older machine-specific records
 

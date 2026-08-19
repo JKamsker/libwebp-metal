@@ -1,6 +1,6 @@
 # CUDA end-to-end benchmark: Ryzen 9 3900X / RTX 2080 SUPER
 
-Measured on 2026-08-18 UTC. Times are median milliseconds per image and
+Measured on 2026-08-18--19 UTC. Times are median milliseconds per image and
 speedup is CPU time divided by CUDA time, so values above `1x` favor CUDA.
 
 ## Machine and build
@@ -14,9 +14,9 @@ speedup is CPU time divided by CUDA time, so values above `1x` favor CUDA.
 | CUDA toolkit | 12.0.140 |
 | Compiler | GCC 13.3.0 / NVCC 12.0.140 |
 | Python / Pillow | Python 3.12.3 / Pillow 10.2.0 |
-| Source revision | `9393a44d96f626635ba8b6b988fd02759390ac65` |
+| Source revision | `5d841ba0c2346de7adfff2caa2e7c59dab4bffb7` |
 | Build | CMake Release, CUDA enabled |
-| Result label | `win-2080super` |
+| Result label | `win-2080super-i4-coop-audit` |
 
 ## Protocol
 
@@ -161,3 +161,36 @@ battery covered methods 2--6, qualities 25/75/98, 17x13 tiny and 257x255 odd
 inputs across three content classes, and forced band-3 fallback for every
 method/content pair. The focused trellis/fallback, concurrency, histogram, and
 near-lossless tests also passed.
+
+## Audited four-lane intra4 transform result
+
+After the CUDA acceleration audit remediation, four adjacent lanes were used
+per I4 mode for the forward transform, basic quantization, and inverse
+transform. The complete official suite was repeated from revision `5d841ba0`.
+
+### Persistent 24-image batch
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy | 99.4 ms | 50.0 ms | **1.99x** |
+| PNG lossless | 143.1 ms | 92.3 ms | **1.55x** |
+| PNG near-lossless | 209.1 ms | 93.1 ms | **2.25x** |
+| JPEG lossy | 99.4 ms | 49.6 ms | **2.00x** |
+| JPEG lossless | 681.4 ms | 146.4 ms | **4.65x** |
+| JPEG near-lossless | 802.4 ms | 148.3 ms | **5.41x** |
+
+### Fresh process per image
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy | 101.7 ms | 269.5 ms | **0.38x** |
+| PNG lossless | 155.5 ms | 317.0 ms | **0.49x** |
+| PNG near-lossless | 221.3 ms | 324.1 ms | **0.68x** |
+| JPEG lossy | 100.6 ms | 270.4 ms | **0.37x** |
+| JPEG lossless | 703.2 ms | 362.3 ms | **1.94x** |
+| JPEG near-lossless | 812.2 ms | 383.0 ms | **2.12x** |
+
+Relative to the preceding same-machine official CUDA batch medians, PNG lossy
+improved from 53.0 to 50.0 ms/image and JPEG lossy from 53.3 to 49.6 ms/image.
+All 180 suite validation pairs and the additional 105-case exact lossy battery
+passed. Exact CI run `32212085424` passed all eleven jobs.

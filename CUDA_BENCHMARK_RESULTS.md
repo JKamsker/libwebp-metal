@@ -519,3 +519,23 @@ Both movements are below the 1.5 ms/image retention threshold, so the change
 was removed. This rules out winner copying as a material post-prediction
 bottleneck; the measured I4 transform/quantization subphase remains the next
 addressable target.
+
+The next profile-driven candidate parallelized that transform/quantization
+subphase without changing the ten-mode packing. Four adjacent lanes cooperate
+on each mode's separable forward transform, basic quantization, and inverse
+transform; trellis quantization retains its exact serial dependency chain.
+The complete portable suite at revision `5d841ba0` measured:
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy — batch | 99.4 ms | 50.0 ms | **1.99x** |
+| JPEG lossy — batch | 99.4 ms | 49.6 ms | **2.00x** |
+| PNG lossy — fresh process | 101.7 ms | 269.5 ms | **0.38x** |
+| JPEG lossy — fresh process | 100.6 ms | 270.4 ms | **0.37x** |
+
+Against the immediately preceding same-machine official rows, CUDA batch time
+fell by 3.0 ms/image for PNG and 3.7 ms/image for JPEG. The suite's 180
+validation pairs passed, as did the focused six-test CTest set and an extra
+105-case exact-byte battery covering methods 2--6, qualities 25/75/98, three
+content classes at tiny and odd dimensions, and band-3 fallback. Exact CI run
+`32212085424` passed all eleven jobs.
