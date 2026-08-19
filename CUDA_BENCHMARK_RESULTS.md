@@ -900,3 +900,27 @@ below the retention threshold, so the candidate was removed. The two teams'
 numeric work is uniform enough that independent barrier progress does not
 materially shorten the critical path. Raw timing evidence is retained locally
 in `/tmp/libwebp-i4-team-barrier-ab.6N0G7E.tsv`.
+
+## Local-state coefficient-token recording rejection
+
+A fresh retained-head `gprofng` run over 48 texture-medium images attributed
+58.2% of sampled CPU time to `VP8PutTokenPage` and 36.7% to
+`VP8RecordCoeffTokens`; accelerated replay itself was negligible. The
+candidate kept the active token-page pointer and remaining slot count local
+for each coefficient block, committing them only before page growth and at
+function return. Statistics updates and allocation-failure behavior were
+unchanged.
+
+The always-active bit-writer growth/failure test and the focused CUDA
+trellis/fallback test passed. Five order-balanced processes measured:
+
+| Format | Parent | Local record state | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.186 ms/image | 40.485 ms/image | +0.299 ms |
+| JPEG lossy | 40.241 ms/image | 40.392 ms/image | +0.151 ms |
+
+All 60 outputs retained the same hashes and byte counts. The candidate was
+removed: compiler promotion and overlap of recording with device work make
+the explicit state object neutral-to-negative. Raw timing evidence is
+`/tmp/libwebp-token-record-local-ab.iEsa8t.tsv`; the CPU profile is
+`/tmp/libwebp-gprof-i4-diagonal-replay.er`.

@@ -544,3 +544,20 @@ leaving the two publication/abort barriers block-wide.
 All 60 order-balanced timing outputs matched. The gains are far below the
 1.5 ms/image retention threshold, so the candidate was removed. Raw evidence
 is `/tmp/libwebp-i4-team-barrier-ab.6N0G7E.tsv`.
+
+## Local-state coefficient-token recording
+
+A texture-medium CPU profile attributed 58.2% of samples to
+`VP8PutTokenPage` and 36.7% to `VP8RecordCoeffTokens`. Keeping the active
+token-page pointer and capacity local across each coefficient block preserved
+exact output and allocation-failure behavior but did not improve end-to-end
+time:
+
+| Format | Parent | Local record state | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.186 ms/image | 40.485 ms/image | +0.299 ms |
+| JPEG lossy | 40.241 ms/image | 40.392 ms/image | +0.151 ms |
+
+All 60 order-balanced timing outputs matched. The candidate was removed. Raw
+evidence is `/tmp/libwebp-token-record-local-ab.iEsa8t.tsv` and the CPU
+profile is `/tmp/libwebp-gprof-i4-diagonal-replay.er`.
