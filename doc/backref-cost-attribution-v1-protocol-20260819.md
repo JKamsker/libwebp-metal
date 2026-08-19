@@ -1,5 +1,12 @@
 # Frozen backref-cost attribution v1 protocol
 
+> **Superseding safety consequence (2026-08-19):** Phase 1's SIGTERM of PID
+> `28860` was an unauthorized termination of an unrelated user-owned
+> interactive SSH session, not protocol cleanup. See the
+> [root incident audit](backref-cost-attribution-v1-incident-audit-20260819.md)
+> and [machine-readable incident record](../evidence/backref-cost-attribution-v1-remediation-20260819/incident.json).
+> Process observations are refusal-only and never signaling authority.
+
 This cycle is diagnostic attribution only. It cannot promote the rejected
 branch-free specialization, revive any interval-search candidate, set a
 content threshold, or justify a graphic-only production path.

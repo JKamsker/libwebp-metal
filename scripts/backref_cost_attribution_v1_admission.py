@@ -4,9 +4,11 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import dataclass
 import hashlib
 import json
 import os
+import re
 import shlex
 import shutil
 import stat
@@ -43,6 +45,70 @@ SCOPED_NAMES = {
     "source.bundle": ("verify.git", "source"),
     "malformed.bundle": ("malformed-verify.git", "malformed-source"),
 }
+FORBIDDEN_TERMINATION_COMMANDS = ("kill", "pkill", "killall")
+OBSERVE_ONLY_EXTERNAL_PROCESS_CLASSES = (
+    "ssh", "runner", "profiler", "editor", "user-shell", "service")
+
+
+def _reject_generic_termination(argv: list[str]) -> None:
+    """Generic or shell-embedded termination is never protocol authority."""
+    for argument in argv:
+        for command in FORBIDDEN_TERMINATION_COMMANDS:
+            if re.search(rf"(?<![A-Za-z0-9_.-]){command}(?![A-Za-z0-9_.-])",
+                         argument):
+                raise RuntimeError(
+                    f"generic process termination is forbidden: {command}")
+
+
+@dataclass(frozen=True)
+class _OwnedChild:
+    """Creation provenance retained for one directly spawned subprocess."""
+
+    process: subprocess.Popen
+    pid: int
+    creation_identity: int
+
+    @classmethod
+    def spawn(cls, argv: list[str], **kwargs) -> "_OwnedChild":
+        _reject_generic_termination(argv)
+        process = subprocess.Popen(argv, **kwargs)
+        return cls(process=process, pid=process.pid,
+                   creation_identity=id(process))
+
+    def _assert_creation_identity(self) -> None:
+        if id(self.process) != self.creation_identity or \
+                self.process.pid != self.pid:
+            raise RuntimeError("owned-child creation identity changed")
+
+    def stop_after_timeout(self) -> None:
+        """Signal only the retained handle for this directly spawned child."""
+        self._assert_creation_identity()
+        if self.process.poll() is None:
+            self.process.kill()
+
+
+def run_owned(argv: list[str], *, input_data=None, timeout: int = 1200,
+              cwd: Path = ROOT, env: dict[str, str] | None = None,
+              text: bool = False) -> subprocess.CompletedProcess:
+    """Run one direct child; timeout cleanup cannot accept a discovered PID."""
+    owned = _OwnedChild.spawn(
+        argv, cwd=cwd, env=env, text=text,
+        stdin=subprocess.PIPE if input_data is not None else None,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    try:
+        stdout, stderr = owned.process.communicate(input_data, timeout=timeout)
+    except subprocess.TimeoutExpired:
+        owned.stop_after_timeout()
+        # Waiting reaps only the same retained child. Descendants and every
+        # process observed through ps remain outside signaling authority.
+        owned.process.wait(timeout=5)
+        for stream in (owned.process.stdin, owned.process.stdout,
+                       owned.process.stderr):
+            if stream is not None:
+                stream.close()
+        raise
+    return subprocess.CompletedProcess(argv, owned.process.returncode,
+                                       stdout, stderr)
 
 
 def sha256(path: Path) -> str:
@@ -56,9 +122,7 @@ def sha256(path: Path) -> str:
 def run(argv: list[str], *, input_bytes: bytes | None = None,
         timeout: int = 1200, check: bool = True,
         cwd: Path = ROOT) -> subprocess.CompletedProcess[bytes]:
-    result = subprocess.run(argv, cwd=cwd, input=input_bytes, timeout=timeout,
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE,
-                            check=False)
+    result = run_owned(argv, cwd=cwd, input_data=input_bytes, timeout=timeout)
     if check and result.returncode != 0:
         raise RuntimeError(
             f"command failed ({result.returncode}): {' '.join(argv)}\n"
@@ -75,8 +139,10 @@ def ssh(script: str, *, input_bytes: bytes | None = None,
 
 
 def git(*args: str) -> str:
-    return subprocess.check_output(["git", *args], cwd=ROOT,
-                                   text=True).strip()
+    result = run_owned(["git", *args], cwd=ROOT, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(f"git command failed: {' '.join(args)}")
+    return result.stdout.strip()
 
 
 def remote_path_guard(command: str, *arguments: str) -> dict:
@@ -108,6 +174,10 @@ def remote_process_guard() -> dict:
         "runner_worker_matches": workers,
         "benchmark_or_cuda_matches": conflicts,
         "runner_listener_present": "Runner.Listener" in text,
+        "external_process_classes": list(
+            OBSERVE_ONLY_EXTERNAL_PROCESS_CLASSES),
+        "external_process_policy":
+            "observe-only; conflicts fail closed; never signal",
     }
 
 

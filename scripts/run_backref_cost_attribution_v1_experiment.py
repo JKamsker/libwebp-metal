@@ -18,6 +18,9 @@ import time
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from backref_cost_attribution_v1_admission import (
+    OBSERVE_ONLY_EXTERNAL_PROCESS_CLASSES, run_owned)
+
 
 ROOT = Path(__file__).resolve().parents[1]
 MANIFEST_PATH = ROOT / "scripts/backref_cost_attribution_v1_manifest.json"
@@ -39,9 +42,7 @@ def write_json(path: Path, value: object) -> None:
 def run(argv: list[str], *, cwd: Path = ROOT,
         env: dict[str, str] | None = None, timeout: int = 1200,
         check: bool = True) -> subprocess.CompletedProcess[str]:
-    result = subprocess.run(argv, cwd=cwd, env=env, timeout=timeout,
-                            text=True, stdout=subprocess.PIPE,
-                            stderr=subprocess.PIPE, check=False)
+    result = run_owned(argv, cwd=cwd, env=env, timeout=timeout, text=True)
     if check and result.returncode != 0:
         raise RuntimeError(
             f"command failed ({result.returncode}): {' '.join(argv)}\n"
@@ -50,8 +51,10 @@ def run(argv: list[str], *, cwd: Path = ROOT,
 
 
 def git(*args: str) -> str:
-    return subprocess.check_output(["git", *args], cwd=ROOT,
-                                   text=True).strip()
+    result = run_owned(["git", *args], cwd=ROOT, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(f"git command failed: {' '.join(args)}")
+    return result.stdout.strip()
 
 
 def load_manifest() -> dict:
@@ -124,6 +127,10 @@ def process_guard(output: Path, label: str) -> dict:
         raise RuntimeError("Runner.Worker, competing profile, benchmark, or CUDA detected")
     return {"runner_worker_matches": workers, "conflicts": conflicts,
             "runner_listener_present": "Runner.Listener" in text,
+            "external_process_classes": list(
+                OBSERVE_ONLY_EXTERNAL_PROCESS_CLASSES),
+            "external_process_policy":
+                "observe-only; conflicts fail closed; never signal",
             "sha256": hashlib.sha256(result.stdout.encode()).hexdigest()}
 
 

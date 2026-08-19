@@ -1,5 +1,13 @@
 # Backref-cost attribution v1 — Phase 3 evaluation
 
+> **Safety remediation (2026-08-19):** the root Codex session audit established
+> that Phase 1 sent SIGTERM to unrelated user-owned interactive SSH PID `28860`.
+> This was an unauthorized external-session termination, not valid experiment
+> cleanup. The [root incident audit](backref-cost-attribution-v1-incident-audit-20260819.md)
+> and its [machine-readable record](../evidence/backref-cost-attribution-v1-remediation-20260819/incident.json)
+> supersede this document's incomplete safety interpretation. Frozen Phase 1,
+> 2, and 3 evidence is unchanged.
+
 ## Decision
 
 The diagnostic is inconclusive because Phase 2 stopped at the frozen local

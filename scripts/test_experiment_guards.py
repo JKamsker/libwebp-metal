@@ -15,6 +15,7 @@ import tempfile
 from pathlib import Path
 
 import benchmark_metal_ablation as metal_ablation
+import test_backref_cost_attribution_v1_process_ownership as attribution_ownership
 import test_next_boundary_operator_portability as boundary_portability
 
 
@@ -443,11 +444,13 @@ def check_runtime_and_lease_refusals() -> None:
 
 def main() -> int:
     boundary_portability.main()
+    attribution_ownership.main()
     check_build_matrix()
     check_omitted_targets()
     check_promoted_ablation_control()
     check_runtime_and_lease_refusals()
-    print("PASS: twenty-one independent build/runtime guards and fail-closed leases")
+    print("PASS: twenty-one independent build/runtime guards, fail-closed leases, "
+          "and attribution-v1 process ownership")
     return 0
 
 
