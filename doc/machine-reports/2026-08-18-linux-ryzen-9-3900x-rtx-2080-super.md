@@ -324,3 +324,27 @@ Seven registered CTests and an additional 105 exact-byte cases across methods
 2--6, qualities 25/75/98, tiny and odd inputs, three content classes, and
 forced band-3 fallback passed. Exact CI run `32221803146` passed all eleven
 jobs.
+
+## Wavefront launch bound and I4 warp balancing
+
+An `nvprof` trace of the production method-4 1600x1200 photo path recorded 248
+anti-diagonal kernels. Their execution time summed to 29.926 ms; the span from
+the first launch to the final completion was 30.215 ms. All inter-kernel gaps
+therefore totaled only 0.288 ms, with a 1.168 us mean and 1.760 us maximum.
+Deleting every gap could not meet the 1.5 ms/image retention threshold, so
+CUDA graph capture and cooperative persistent launch were not implemented.
+
+The retained four-lane I4 transform packed eight mode groups into warp 0 and
+two into warp 1. A byte-exact candidate instead distributed them 3/3/2/2 over
+the existing four warps and removed the prediction-to-transform CTA barrier.
+All seven focused CTests passed. Five order-balanced baseline/candidate
+processes, each with one warmup and three retained 24-image samples, measured:
+
+| Format | Baseline | Balanced groups | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.954 ms/image | 41.703 ms/image | -0.251 ms |
+| JPEG lossy | 41.881 ms/image | 41.709 ms/image | -0.172 ms |
+
+All 60 outputs retained their reference hash and byte count. Both gains were
+far below the retention threshold, so the code change was removed. The local
+raw timing summary is `/tmp/libwebp-i4-balanced-ab.zRywWw.json`.

@@ -642,3 +642,29 @@ failure, and an additional 105 exact-byte methods 2--6 / qualities 25--98 /
 tiny / odd / band-3 fallback battery passed. The raw suite result is
 `/tmp/libwebp-cuda-results-2080super-fast-flush/results.json` under label
 `win-2080super-fast-flush`. Exact CI run `32221803146` passed all eleven jobs.
+
+## Wavefront launch bound and balanced-I4 rejection
+
+A current production-path `nvprof` trace used method 4 on the canonical
+1600x1200 photo. Its 100x75 macroblock wavefront launched 248 kernels. Kernel
+execution summed to 29.926 ms and the complete first-launch-to-last-completion
+span was 30.215 ms, leaving only 0.288 ms in all 247 inter-kernel gaps (1.168
+us mean, 1.760 us maximum). Graph capture or cooperative launch therefore
+cannot reach the 1.5 ms/image retention threshold by removing launch gaps,
+even under an unattainable zero-gap upper bound.
+
+The next isolated candidate redistributed the ten retained four-lane I4
+transform groups from an 8/2 split across two warps to a 3/3/2/2 split across
+the existing four warps. Each warp consumed its leader's prediction planes,
+which also removed one CTA-wide barrier per I4 step without enlarging the
+block. Seven focused CTests passed and all 60 timed outputs retained their
+reference hashes and byte counts. Five order-balanced process medians were:
+
+| Format | Baseline | Balanced I4 groups | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.954 ms/image | 41.703 ms/image | -0.251 ms |
+| JPEG lossy | 41.881 ms/image | 41.709 ms/image | -0.172 ms |
+
+Both gains are well below the retention threshold, so the candidate was
+removed. Raw timing evidence is retained locally in
+`/tmp/libwebp-i4-balanced-ab.zRywWw.json`.
