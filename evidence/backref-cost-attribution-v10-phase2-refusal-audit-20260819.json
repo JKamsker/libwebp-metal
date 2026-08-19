@@ -1,0 +1,127 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v10-phase2-refusal-audit-v1",
+  "phase": "2",
+  "audit_scope": "independent local read-only audit of frozen Phase 1A/1B and returned rehearsal refusal",
+  "audit_status": "BLOCKED",
+  "base_commit": "a027f4a4b6a61d2b4a5d9e897e6b7ca51eb6c6ca",
+  "phase1a_commit": "8b0a14978342bddf322177c59a907b11ee7770ac",
+  "phase1b_commit": "ec1471e5439d7e25d86f3aaa8d88be48535ec980",
+  "phase1_chain": {
+    "base_parent_count": 2,
+    "phase1a_parent": "a027f4a4b6a61d2b4a5d9e897e6b7ca51eb6c6ca",
+    "phase1b_parent": "8b0a14978342bddf322177c59a907b11ee7770ac",
+    "phase1a_tree": "3cf3b8d36d66bf4f11e43ce8cae8e16994ec4a51",
+    "phase1b_tree": "5ea3f0539cdb8e67c2ac3d821a25df3f3c1efb17",
+    "linear_base_ancestry_verified": true,
+    "worktree_clean_before_audit": true
+  },
+  "phase1b_authority_audit": {
+    "diff_entries": [
+      "A evidence/backref-cost-attribution-v10-design/phase1b-authorization.json",
+      "A evidence/backref-cost-attribution-v10-design/phase1b-rehearsal-hashes.json",
+      "A evidence/backref-cost-attribution-v10-design/rehearsal/rehearsal-invocation.json",
+      "A evidence/backref-cost-attribution-v10-design/rehearsal/return-protocol/framed-stdout.bin",
+      "A evidence/backref-cost-attribution-v10-design/rehearsal/return-protocol/transport-stderr.bin"
+    ],
+    "additions_only": true,
+    "permitted_phase1b_paths_only": true,
+    "frozen_phase1a_files_modified": false,
+    "source_tree_matches_authorization": true,
+    "frozen_source_hashes_match_authorization": true,
+    "authorization_status": "REFUSED",
+    "timed_execution_authorized": false,
+    "phase_2_authority": "NONE",
+    "circular_authority": false,
+    "phase1b_envelope_embeds_own_commit": false
+  },
+  "returned_frame_audit": {
+    "framed_stdout_bytes": 1888,
+    "framed_stdout_sha256": "c1f2129d8ed41f920ad92efef744e9eb51d65a3a93c71767f779ff61b31b5e3e",
+    "transport_stderr_bytes": 0,
+    "transport_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "frame_count": 6,
+    "frame_kinds_in_order": [
+      "source-admission",
+      "operator-status",
+      "archive-build",
+      "lease-state",
+      "integrity-footer",
+      "cleanup-footer"
+    ],
+    "source_admission": "unavailable",
+    "operator_status": "unavailable",
+    "representative_bulk_archive": "not-returned",
+    "archive_build": "not-attempted",
+    "lease_state": "unavailable-after-attempt",
+    "integrity_footer": "refused",
+    "cleanup_footer": "complete",
+    "refusal_reason": "FrameRefusal: transaction ancestor executable is not allowed",
+    "exact_unadmitted_identity_returned": false,
+    "raw_frame_contains_offending_identity": false,
+    "raw_frame_structure_and_payload_hashes_verified": true
+  },
+  "cleanup_audit": {
+    "same_session_cleanup_footer_returned": true,
+    "cleanup_complete": true,
+    "exact_child_removed": true,
+    "absence_proved": true,
+    "post_run_cleanup_operations": 0,
+    "second_cleanup_performed_by_phase2": false
+  },
+  "identity_and_guard_audit": {
+    "snapshot_fields": [
+      "pid",
+      "ppid",
+      "comm"
+    ],
+    "raw_comm_is_exact_opaque_process_table_string": true,
+    "lexical_basename_is_separately_recorded_final_slash_component": true,
+    "comm_filesystem_identity_operations": [],
+    "resolved_path_api_used": false,
+    "argv_or_source_text_used_for_identity": false,
+    "matching_is_exact_raw_or_lexical_identity": true,
+    "frozen_positive_ancestor_allowlist_required": true,
+    "observed_failure_plane": "outer frozen process-identity snapshot before source admission",
+    "unadmitted_identity": null,
+    "unadmitted_identity_status": "N/A; refusal frame did not disclose it",
+    "denied_identity_matching": "exact raw_comm or exact lexical_basename",
+    "discovered_pid_signal_count": 0
+  },
+  "workload_and_authorization": {
+    "rehearsal_invocation_count": 1,
+    "rehearsal_retry_count": 0,
+    "rehearsal_rerun_count": 0,
+    "source_admission_reached": false,
+    "benchmark_lease_acquisition_attempted": null,
+    "lease_created_by_phase2": false,
+    "encoder_workloads": 0,
+    "profiler_workloads": 0,
+    "benchmark_workloads": 0,
+    "sanitizer_workloads": 0,
+    "timing_workloads": 0,
+    "cuda_workloads": 0,
+    "diagnostic_authorized": false,
+    "diagnostic_executed": false,
+    "performance_statistics": "N/A",
+    "interval_family": "UNASSESSED",
+    "production_consequence": "NONE"
+  },
+  "blocked_decision": {
+    "phase2_action": "FAIL_CLOSED_NO_EXECUTION",
+    "blocker": "The sole frozen rehearsal refused before source admission because an own-chain process identity was outside the V10 positive raw_comm/lexical_basename ancestor sets; no PASS rehearsal or archive calibration exists.",
+    "future_v11_design_consequence": "N/A for Phase2; not implemented or run",
+    "remote_contact_by_phase2": false,
+    "remote_paths_inspected_or_cleaned_by_phase2": false,
+    "process_signaling_by_phase2": false
+  },
+  "local_checks": {
+    "commit_parent_tree_and_clean_status": "PASS",
+    "phase1b_additions_only_diff": "PASS",
+    "phase1b_json_and_hash_index_consistency": "PASS",
+    "raw_frame_decode_and_payload_hashes": "PASS",
+    "frozen_source_hashes": "PASS",
+    "executor_or_workload_invoked": false
+  },
+  "phase1_files_modified_by_this_audit": false,
+  "audit_evidence_is_additional_single_file": true
+}
