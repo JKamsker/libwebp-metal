@@ -1,0 +1,178 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v14-phase3-evaluation-consequence-v1",
+  "phase": "3",
+  "evaluator": "Sol/high",
+  "evaluation_status": "FAIL_CLOSED_REJECTED",
+  "branch": "codex/backref-cost-attribution-v14",
+  "required_base_commit": "e690603a84aa90448e7c6d44ebfc303920b806b3",
+  "phase_commits_at_evaluation_start": {
+    "phase1a": null,
+    "phase1b": null,
+    "phase2": "fdecd9ee2fc091972081f932f3792808f14a7f88",
+    "phase2_parent": "e690603a84aa90448e7c6d44ebfc303920b806b3",
+    "linear_from_required_base": true
+  },
+  "phase1_authority_audit": {
+    "phase1a_commit_present_in_refs_or_reflogs": false,
+    "phase1b_commit_present_in_refs_or_reflogs": false,
+    "authorization_envelope_present": false,
+    "rehearsal_hash_index_present": false,
+    "rehearsal_root_present": false,
+    "zero_workload_rehearsal_receipts_present": false,
+    "timed_execution_authorized": false,
+    "phase_2_authority": "NONE",
+    "conclusion": "INVALID_NO_AUTHORITY"
+  },
+  "phase2_receipt_audit": {
+    "path": "evidence/backref-cost-attribution-v14-phase2-refusal-audit-20260819.json",
+    "commit": "fdecd9ee2fc091972081f932f3792808f14a7f88",
+    "supplied_sha256": "1959be01fe2eb8e4181898fa6d6397d86ec5efe41ffd00de400dbdffa76cb3",
+    "actual_sha256": "1959be01fe2eb8e4181898fa6d6397d86ec5efe41ffd00de400dbdffa76cb3e3",
+    "supplied_hash_matches": false,
+    "json_parse": "PASS",
+    "declared_schema": "libwebp-backref-cost-attribution-v14-phase2-refusal-audit-v1",
+    "required_field_and_type_check": "PASS",
+    "formal_schema_definition_present": false,
+    "schema_note": "The V14 schema catalog is an identifier list rather than JSON Schema definitions and does not include the Phase 2 refusal-audit identifier; validation is limited to JSON parsing plus explicit required-field and type checks.",
+    "substantive_refusal_findings_confirmed": true
+  },
+  "interrupted_phase1_draft": {
+    "pre_preservation_status_file_entries": 26,
+    "modified_tracked_files": 7,
+    "untracked_files": 19,
+    "tracked_binary_diff_sha256": "8b6fbbbec1ece72aa7136b1824f67fdd0d5038b643771e561157a094dcba9992",
+    "manifest_path": "scripts/backref_cost_attribution_v14_manifest.json",
+    "manifest_sha256": "24544b85dd39b184d676e62eac0e7155618a0e8f341294ab00a6f5c30e9ef3a0",
+    "manifest_declared_artifacts": 28,
+    "manifest_hash_mismatches": 0,
+    "schema_catalog_path": "scripts/backref_cost_attribution_v14_schemas.json",
+    "schema_catalog_sha256": "f9fcd01f445592e373289c7fdb02a8c5228a92ea324b32f344b6575ee1b785e5",
+    "schema_catalog_identifiers": 19,
+    "preservation_disposition": "COMMIT_BYTE_FOR_BYTE_AS_NONAUTHORITATIVE_FORENSIC_DRAFT",
+    "auditable": [
+      "the exact draft bytes and hashes",
+      "the tracked diff against the required base",
+      "the manifest's declarations and internal hash consistency",
+      "the protocol and schema-identifier catalog text",
+      "static default-off build/compile/runtime gates",
+      "absence of public API header changes",
+      "the contents of the local validation summary"
+    ],
+    "not_auditable": [
+      "execution of the nine claimed local checks because their raw logs and command receipts are absent",
+      "the claimed 16 correctness encodes and their input, bitstream, decoded-pixel, and repeat-determinism evidence",
+      "the claimed runtime fallback, sanitizer, timer, counter, default-omission, and compiled ABI results",
+      "the claimed deterministic archive and request/response fixtures because the fixture bytes are absent",
+      "any frozen Phase 1 source or rehearsal identity because Phase 1A and Phase 1B commits are absent",
+      "any live source, toolchain, device, resource, process, lease, transfer, extraction, cleanup, or absence observation"
+    ]
+  },
+  "raw_evidence_audit": {
+    "phase1_remote_raw_evidence_files": 0,
+    "phase2_raw_evidence_files": 0,
+    "performance_sample_rows": 0,
+    "timed_stage_rows": 0,
+    "runner_output_rows": 0,
+    "correctness_raw_rows": 0,
+    "statistics_recomputed": 0,
+    "statistics": [],
+    "interpretation": "NONE_NO_AUTHORIZED_DIAGNOSTIC_OR_COMPLETE_RAW_ROWS"
+  },
+  "count_and_order_audit": {
+    "declared_case_order": [
+      "photo-large",
+      "graphic-large"
+    ],
+    "declared_method_order": [
+      4,
+      6
+    ],
+    "declared_variant_order": [
+      [
+        "baseline",
+        "candidate"
+      ],
+      [
+        "candidate",
+        "baseline"
+      ],
+      [
+        "baseline",
+        "candidate"
+      ]
+    ],
+    "declared_profile_processes": 24,
+    "declared_warmups": 24,
+    "declared_retained_records": 96,
+    "declared_runner_output_records": 120,
+    "declared_stage_records": 120,
+    "observed_rows": 0,
+    "ordering_verified_from_raw": false,
+    "count_note": "Declared protocol inventory is not an observed count. No missing row was inferred or fabricated."
+  },
+  "execution_receipt_audit": {
+    "source_identity": "MISSING_NO_FROZEN_PHASE1_COMMITS_OR_ADMISSION_RECEIPT",
+    "toolchain_identity": "MISSING_NO_LIVE_RECEIPT",
+    "device_identity": "MISSING_NO_LIVE_RECEIPT",
+    "resource_admission": "MISSING_NO_LIVE_RECEIPT",
+    "process_ownership": "MISSING_NO_LIVE_RECEIPT",
+    "lease_acquisition_attempted": false,
+    "lease_receipt": "ABSENT_NOT_ATTEMPTED",
+    "lease_release": "NOT_APPLICABLE_NO_ACQUISITION_BUT_NO_LIVE_ABSENCE_RECEIPT",
+    "archive": "MISSING",
+    "transfer": "MISSING",
+    "extraction": "MISSING",
+    "cleanup": "MISSING",
+    "exact_child_absence": "MISSING",
+    "remote_state": "UNKNOWN_AND_UNPROVEN"
+  },
+  "correctness_and_abi_audit": {
+    "local_summary_claimed_checks": 9,
+    "local_summary_claimed_correctness_encodes": 16,
+    "local_summary_claimed_counter_cells": 4,
+    "local_summary_claimed_boundary_fixtures": 16,
+    "local_summary_claimed_sanitizer_configurations": 2,
+    "local_summary_claimed_timer_reads": 4096,
+    "local_summary_claimed_timer_mean_read_delta_ns": 14,
+    "local_summary_claimed_default_omission": true,
+    "local_summary_claimed_public_api_abi_equal": true,
+    "public_api_header_diff_count": 0,
+    "raw_supporting_artifacts_present": false,
+    "correctness": "NOT_INDEPENDENTLY_AUDITABLE",
+    "determinism": "NOT_INDEPENDENTLY_AUDITABLE",
+    "runtime_fallback": "NOT_INDEPENDENTLY_AUDITABLE",
+    "compiled_abi": "NOT_INDEPENDENTLY_AUDITABLE",
+    "static_gate_isolation": "OBSERVED_IN_DRAFT_ONLY_NOT_FROZEN_AUTHORITY"
+  },
+  "phase3_prohibited_action_accounting": {
+    "remote_hosts_contacted": 0,
+    "prior_cycle_remote_paths_contacted": 0,
+    "diagnostics_run": 0,
+    "benchmarks_run": 0,
+    "timing_workloads_run": 0,
+    "cuda_workloads_run": 0,
+    "parallel_workloads_run": 0,
+    "lease_attempts": 0,
+    "process_signals": 0,
+    "cleanup_operations": 0,
+    "existing_evidence_files_modified_or_deleted": 0
+  },
+  "consequence": {
+    "decision": "REJECT_UNAUTHORIZED_INCOMPLETE_V14_EXPERIMENT_FROM_PRODUCTION",
+    "production_change": "NONE",
+    "production_promotion": false,
+    "experiment_status": "REJECTED_AS_PERFORMANCE_OR_PRODUCTION_EVIDENCE",
+    "draft_retention": "FORENSIC_PRESERVATION_ONLY",
+    "reason": "Authority is NONE, no authorized V14 diagnostic ran, performance samples and complete raw rows are zero, and every live execution and correctness receipt needed by the frozen criteria is absent. Preserving the interrupted bytes avoids evidence destruction but grants them no authority.",
+    "criteria_weakened": false
+  },
+  "next_experiment": {
+    "proposed": false,
+    "count": 0,
+    "reason": "No complete performance row exists from which to derive an evidence-supported lead; inventing one from missing rows would violate the frozen criteria."
+  },
+  "publication_at_evaluation_commit": {
+    "status": "PENDING_POST_COMMIT",
+    "merge_authorized": false
+  }
+}
