@@ -1542,3 +1542,30 @@ declined and exact CPU fallback completed the encode.
 The exact patch, native cache, all valid and decline timing rows, and summary
 are stored under the `libwebp-band16-*` prefix. This is RTX 2080 SUPER-only
 evidence; the shared eight-band default and Ampere+ behavior remain unchanged.
+
+## Cold token-page growth outlining rejection
+
+A refreshed native-sm_75 whole-process sampling run attributed 2.402 of 5.164
+exclusive CPU seconds (46.51%) to `VP8RecordCoeffTokens`, ahead of
+`VP8PutTokenPage` at 1.291 seconds. The executable and archived copy both
+contain full DWARF, although this machine's Binutils 2.42 `gprofng` crashes with
+exit 139 when resolving the experiment to line or annotated-disassembly views.
+The successful function report and complete compressed 104 MiB experiment are
+stored alongside this report so that result remains independently inspectable.
+
+Generated-code inspection showed the rare page-allocation branch duplicated at
+each token site. Outlining only `TBufferNewPage` reduced
+`VP8RecordCoeffTokens` from 4,976 to 3,644 bytes and added one 95-byte cold
+helper. All seven CTests passed and every timing row retained the expected hash
+and byte count. Two order-reversed processes measured:
+
+| Format | Parent | Outlined growth | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.221 ms/image | 40.111 ms/image | 0.110 ms/image |
+| JPEG lossy | 40.170 ms/image | 40.164 ms/image | 0.006 ms/image |
+
+The candidate was removed because both gains are far below 1.5 ms/image. The
+exact patch, native build caches, compressed disassemblies, 7/7 CTest log, 48
+raw timing rows, sampling reports, and complete profile are stored under the
+`libwebp-token-grow-*` and `libwebp-token-lines-*` prefixes. This is RTX 2080
+SUPER-only evidence and makes no Ampere+ claim.

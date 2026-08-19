@@ -1,0 +1,3 @@
+  [34] .debug_info       PROGBITS         0000000000000000  0034144a
+  [36] .debug_line       PROGBITS         0000000000000000  004f89fa
+  [38] .debug_line_str   PROGBITS         0000000000000000  00615563

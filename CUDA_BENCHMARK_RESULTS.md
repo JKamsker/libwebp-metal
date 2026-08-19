@@ -1466,3 +1466,30 @@ screen left the production eight-event backend cap unchanged while requesting
 16 bands; the backend declined and the encoder completed through its exact CPU
 fallback. The eight-band default and cap remain shared, and no Ampere+ claim is
 made.
+
+## Cold token-page growth outlining rejection
+
+A fresh native-sm_75 `gprofng` profile of the retained six-image PNG lossy
+batch sampled 5.164 CPU seconds. `VP8RecordCoeffTokens` accounted for 2.402
+seconds exclusive (46.51%), followed by `VP8PutTokenPage` at 1.291 seconds
+(25.00%). Full debug information was present in both the benchmark and the
+archived executable, but Binutils 2.42 crashed with exit 139 while producing
+either its line or annotated-disassembly report; the complete experiment and
+the successful function report are archived for independent inspection.
+
+Static disassembly exposed a separate actionable fact: GCC had expanded the
+rare `TBufferNewPage` allocation path at every inlined `AddToken` site, making
+`VP8RecordCoeffTokens` 4,976 bytes. A portable no-inline candidate reduced the
+body to 3,644 bytes and emitted one 95-byte growth helper. Seven CTests passed,
+and two order-reversed native-sm_75 processes with six measured samples per
+cell retained all hashes and byte counts:
+
+| Format | Parent | Outlined growth | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.221 ms/image | 40.111 ms/image | 0.110 ms/image |
+| JPEG lossy | 40.170 ms/image | 40.164 ms/image | 0.006 ms/image |
+
+Both effects are far below the 1.5 ms/image threshold, so the candidate was
+removed. The duplicated cold code is not a material instruction-cache limit on
+this Ryzen 9 3900X / RTX 2080 SUPER path. No Ampere+ behavior or performance
+claim changes.

@@ -1,0 +1,99 @@
+Current metrics: e.totalcpu:name
+Current Sort Metric: Exclusive Total CPU Time ( e.totalcpu )
+Functions sorted by metric: Exclusive Total CPU Time
+
+Excl.      Name
+Total
+CPU sec.
+5.164      <Total>
+2.402      VP8RecordCoeffTokens
+1.291      VP8PutTokenPage
+0.230      inflate_fast
+0.180      <static>@0x396586 (<libcuda.so.595.84>)
+0.150      PackRGB_C
+0.120      <static>@0x1881e1 (<libc.so.6>)
+0.120      <static>@0xaab1b (<libc.so.6>)
+0.080      SetResidualCoeffs_SSE2
+0.070      VP8CodeIntraModes
+0.060      <static>@0x2067e0 (<libcuda.so.595.84>)
+0.060      RecordTokensFromResults
+0.040      <static>@0x223510 (<libcuda.so.595.84>)
+0.040      VP8PutBit
+0.030      ioctl
+0.030      madvise
+0.030      png_read_filter_row_paeth_multibyte_pixel
+0.020      <static>@0x245ece (<libcuda.so.595.84>)
+0.020      adler32_z
+0.020      brk
+0.020      main
+0.020      png_read_filter_row_sub
+0.010      <static>@0x164dc0 (<libcuda.so.595.84>)
+0.010      <static>@0x7ffdb655c6f0 ([vdso])
+0.010      <static>@0x98cd5 (<libc.so.6>)
+0.010      <static>@0x99099 (<libc.so.6>)
+0.010      ImportBlock
+0.010      StoreSideInfo
+0.010      VP8IteratorImport
+0.010      VP8SetIntraUVMode
+0.010      __vdso_clock_gettime
+0.010      inflate
+0.010      inflate_table
+0.010      pthread_cond_signal
+0.010      pthread_mutex_lock
+0.         (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+0.         (anonymous namespace)::CUDARGBToYUV(void*, WebPAcceleratorRGBToYUVRequest const*)
+0.         (anonymous namespace)::CUDARGBToYUVLocked(void*, WebPAcceleratorRGBToYUVRequest const*)
+0.         (anonymous namespace)::CommitPlaneRows(unsigned char*, unsigned long, unsigned char const*, unsigned long, unsigned long, unsigned long)
+0.         (anonymous namespace)::Initialize((anonymous namespace)::CudaState*)
+0.         <static>@0x1d0f96 (<libcuda.so.595.84>)
+0.         <static>@0x21b7b (<libcudart.so.12.0.146>)
+0.         <static>@0x2a145 (<libc.so.6>)
+0.         <static>@0x317126 (<libcuda.so.595.84>)
+0.         <static>@0x36ab16 (<libcuda.so.595.84>)
+0.         <static>@0x5115c (<libgp-collector.so>)
+0.         <static>@0x723d8 (<libcudart.so.12.0.146>)
+0.         <static>@0x9c526 (<libc.so.6>)
+0.         <static>@0xa1eb6 (<libc.so.6>)
+0.         <static>@0xf360 (<libcudart.so.12.0.146>)
+0.         AcceleratedDecimateClear
+0.         EncodeInput
+0.         End
+0.         Execute
+0.         ImportYUVAFromRGBA
+0.         ReadPNG
+0.         ThreadLoop
+0.         VP8BitWriterWipeOut
+0.         VP8EmitTokens
+0.         VP8EncAnalyze
+0.         VP8EncTokenLoop
+0.         VP8EncWrite
+0.         WebPAccelerateLossyDecimate
+0.         WebPAccelerateRGBToYUV
+0.         WebPCUDALossyDecimate
+0.         WebPEncode
+0.         WebPPictureARGBToYUVADithered
+0.         WebPPictureFree
+0.         WebPPictureImportRGB
+0.         __default_morecore
+0.         __device_stub__ZN53_GLOBAL__N__e8a64b43_20_cuda_decimate_enc_cu_08a8e32714DecimateKernelENS_10DeviceViewENS_20DecimateKernelParamsEPh((anonymous namespace)::DeviceView&, (anonymous namespace)::DecimateKernelParams&, unsigned char*)
+0.         __libc_start_main
+0.         clock_gettime
+0.         cuDevicePrimaryCtxRetain
+0.         cuInit
+0.         cuLaunchKernel
+0.         cuMemcpyDtoHAsync_v2
+0.         cuMemcpyHtoDAsync_v2
+0.         cudaGetDeviceCount
+0.         cudaLaunchKernel
+0.         cudaMemcpyAsync
+0.         cudaSetDevice
+0.         free
+0.         malloc
+0.         png_combine_row
+0.         png_read_IDAT_data
+0.         png_read_row
+0.         png_read_rows
+0.         pthread_cond_wait
+0.         pthread_mutex_unlock
+0.         sbrk
+0.         updatewindow.isra.0

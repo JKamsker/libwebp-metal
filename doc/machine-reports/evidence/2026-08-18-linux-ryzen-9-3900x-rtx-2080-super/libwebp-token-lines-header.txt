@@ -1,0 +1,21 @@
+Experiment: /tmp/libwebp-token-lines-20260819.er
+No errors
+*** Collector Warning: Collection interval timer period was changed (10007 -> 0); profile data may be unreliable
+Archive command ` /usr/bin/gp-archive -n -a on --outfile /tmp/libwebp-token-lines-20260819.er/archive.log /tmp/libwebp-token-lines-20260819.er'
+
+Target command (64-bit): 'build-cuda-token-lineprofile/webp_cuda_batch_benchmark --variant cuda --mode lossy --batch-size 6 --method 4 --quality 75 --warmups 2 --samples 60 --force-cuda /tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png /tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png /tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png /tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-medium.png /tmp/libwebp-cuda-batch-corpus-20260818/png/photo-medium.png /tmp/libwebp-cuda-batch-corpus-20260818/png/texture-medium.png'
+Process pid 3664834, ppid 3664833, pgrp 3664833, sid 3664833
+Current working directory: /home/jonas/priv/repos/libwebp-metal
+Collector version: `2.42'; experiment version 12.4 (64-bit)
+Host `dev-build-server', OS `Linux 6.8.0-137-generic', page size 4096, architecture `x86_64'
+  24 CPUs, with clocks ranging from 2137 to 4292 MHz.; max of 4292 MHz. assumed
+  Memory: 16438466 pages @  4096 = 64212 MB.
+Data collection parameters:
+  Clock-profiling, interval = 10007 microsecs.
+  Periodic sampling, 1 secs.
+  Follow descendant processes from: fork|exec|combo
+
+Experiment started Wed Aug 19 17:14:29 2026
+
+Experiment Ended: 15.311442426
+Data Collection Duration: 15.311442426

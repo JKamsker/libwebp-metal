@@ -1,0 +1,30 @@
+Machine: AMD Ryzen 9 3900X / NVIDIA GeForce RTX 2080 SUPER (sm_75)
+Builds: CMAKE_CUDA_ARCHITECTURES=native, retained parent and temporary candidate
+Workload: forced CUDA lossy, method 4, quality 75, batch 6, warmups 2
+Protocol: two order-reversed processes per format, six samples per process
+
+Profile (debug-line native build):
+  total exclusive sampled CPU: 5.164 s
+  VP8RecordCoeffTokens:         2.402 s (46.51%)
+  VP8PutTokenPage:              1.291 s (25.00%)
+  gprofng line report exit:     139
+  gprofng disasm report exit:   139
+  Note: both live and archived binaries contain .debug_info and .debug_line.
+
+Generated code:
+  parent VP8RecordCoeffTokens:    0x1370 = 4976 bytes
+  candidate TBufferNewPage:       0x005f =   95 bytes
+  candidate VP8RecordCoeffTokens: 0x0e3c = 3644 bytes
+
+Pooled timing medians:
+  format  parent ms/image  candidate ms/image  parent-candidate gain
+  PNG     40.220815        40.111223           0.109592
+  JPEG    40.169568        40.163964           0.005604
+
+Exactness:
+  PNG  hash 0eaafe6ff2862adb, bytes 1610422 (all 24 rows)
+  JPEG hash de1a26dc5ccc887e, bytes 1600198 (all 24 rows)
+  CTest: 7/7 passed
+
+Decision: rejected and removed. Both gains are below 1.5 ms/image.
+Scope: RTX 2080 SUPER evidence only; no Ampere+ claim.
