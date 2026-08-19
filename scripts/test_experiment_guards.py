@@ -24,6 +24,7 @@ import test_backref_cost_attribution_v6_process_ownership as attribution_v6_owne
 import test_backref_cost_attribution_v7_process_ownership as attribution_v7_ownership
 import test_backref_cost_attribution_v8_process_ownership as attribution_v8_ownership
 import test_backref_cost_attribution_v9_process_ownership as attribution_v9_ownership
+import test_backref_cost_attribution_v10_process_ownership as attribution_v10_ownership
 import test_next_boundary_operator_portability as boundary_portability
 
 
@@ -203,6 +204,12 @@ MATRIX = (
         "WEBP_BACKREF_COST_ATTRIBUTION_V9_EXPERIMENT",
         "src/enc/backref_cost_attribution_v9_experiment_enc.o",
     ),
+    (
+        "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V10_EXPERIMENT",
+        "WEBP_USE_BACKREF_COST_ATTRIBUTION_V10_EXPERIMENT",
+        "WEBP_BACKREF_COST_ATTRIBUTION_V10_EXPERIMENT",
+        "src/enc/backref_cost_attribution_v10_experiment_enc.o",
+    ),
 )
 
 
@@ -239,6 +246,7 @@ def run(argv: list[str], environment: dict[str, str] | None = None) -> subproces
         "WEBP_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT",
         "WEBP_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT",
         "WEBP_BACKREF_COST_ATTRIBUTION_V9_EXPERIMENT",
+        "WEBP_BACKREF_COST_ATTRIBUTION_V10_EXPERIMENT",
     ):
         env.pop(name, None)
     if environment:
@@ -318,6 +326,8 @@ def check_build_matrix() -> None:
     assert "tools/backref_cost_attribution_v8_experiment_runner" not in default.stdout
     assert "src/enc/backref_cost_attribution_v9_experiment_enc.o" not in default.stdout
     assert "tools/backref_cost_attribution_v9_experiment_runner" not in default.stdout
+    assert "src/enc/backref_cost_attribution_v10_experiment_enc.o" not in default.stdout
+    assert "tools/backref_cost_attribution_v10_experiment_runner" not in default.stdout
     assert "list(REMOVE_ITEM WEBP_ENC_SRCS" in cmake
     assert not any(
         f"add_definitions(-D{macro}" in cmake for macro in macros
@@ -429,6 +439,11 @@ def check_omitted_targets() -> None:
         ["make", "-f", "makefile.unix", "WEBP_ENABLE_METAL=0",
          "tools/backref_cost_attribution_v9_experiment_runner"],
         "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V9_EXPERIMENT=1",
+    )
+    require_failure(
+        ["make", "-f", "makefile.unix", "WEBP_ENABLE_METAL=0",
+         "tools/backref_cost_attribution_v10_experiment_runner"],
+        "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V10_EXPERIMENT=1",
     )
 
 
@@ -559,12 +574,13 @@ def main() -> int:
     attribution_v7_ownership.main()
     attribution_v8_ownership.main()
     attribution_v9_ownership.main()
+    attribution_v10_ownership.main()
     check_build_matrix()
     check_omitted_targets()
     check_promoted_ablation_control()
     check_runtime_and_lease_refusals()
-    print("PASS: twenty-nine independent build/runtime guards, fail-closed "
-          "leases, and attribution v1-v9 process ownership")
+    print("PASS: thirty independent build/runtime guards, fail-closed leases, "
+          "and attribution v1-v10 process ownership")
     return 0
 
 
