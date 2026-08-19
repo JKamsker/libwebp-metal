@@ -135,7 +135,7 @@ def lease_transfer_truth_table() -> None:
     assert record["state"] == "unavailable-after-attempt"
     assert record["receipt_required"] and record["receipt_requested"]
     assert value is None and requests == ["verified", "refused"]
-    assert record["transfer_timeout_seconds"] == 1020
+    assert record["transfer_timeout_seconds"] == 1800
 
 
 def two_plane_state_contract() -> None:
@@ -228,7 +228,7 @@ def main() -> int:
     assert manifest["acceptance"]["maximum_mean_clock_read_delta_ns"] == 10000
     assert manifest["return_contract"]["lease_transfer_states"] == [
         "not-attempted", "unavailable-after-attempt", "verified"]
-    assert manifest["resources"]["transfer_timeout_seconds"] == 1020
+    assert manifest["resources"]["transfer_timeout_seconds"] == 1800
     assert manifest["resources"]["archive_build_timeout_seconds"] == 180
     assert manifest["diagnostic"]["primary"] == "coarse monotonic stage timers"
     assert manifest["diagnostic"]["fallback"] is None
@@ -258,7 +258,8 @@ def main() -> int:
     assert "finally:" in executor_source
     assert "cleanup = admission.finish_admission(record)" in executor_source
     assert '"remote_cleanup_absence_proved"' in executor_source
-    assert 'timeout=TRANSFER_TIMEOUT_SECONDS' in executor_source
+    assert 'timeout=BULK_CHUNK_TIMEOUT_SECONDS' in executor_source
+    assert 'time.monotonic_ns() - started' in executor_source
     print("PASS: attribution v5 exact specialization identity, one selected DP "
           "body without predecessor fallthrough, disjoint modes, 24-command "
           "coarse-timer plan, bounded three-state lease return, no-workload "

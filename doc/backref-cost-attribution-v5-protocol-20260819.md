@@ -99,10 +99,12 @@ Lease transfer has exactly three states: `not-attempted`,
 `unavailable-after-attempt`, and `verified`. A lease receipt is mandatory only
 after acquisition was attempted. Compact control receipts have a 20-second
 bound. The finite bulk timeout is frozen from the representative transfer as
-measured lower-bound throughput: a 64 MiB calibration moved 2,088,960 bytes in
-120 seconds before bounded refusal, projecting the 4 MiB representative plus
-overhead below 252 seconds. Four-times margin plus 10 seconds, rounded upward
-to a whole minute, freezes 1,020 seconds. Remote archive construction has a
+measured transport evidence: two bounded representative SCP calibrations moved
+2,088,960 bytes in 120 seconds and 2,350,080 bytes in 1,020 seconds before
+channel stalls. The separate data plane therefore transfers predeclared
+512 KiB byte ranges, each below the first progress window, with a finite
+180-second per-range bound and 1,800-second total bound (at most ten ranges for
+the frozen archive cap plus overhead). Remote archive construction has a
 180-second bound.
 Cleanup is independent of archive and lease success: every mode requires an
 independently validated exact-child removal receipt and absence proof. Local

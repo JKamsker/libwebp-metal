@@ -26,7 +26,9 @@ EXPECTED_ENV = "WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V5_COMMIT"
 CONTROL_TIMEOUT_SECONDS = 20
 # Frozen after the Phase-1 representative transfer. See the manifest's
 # transport_timeout_derivation; this is deliberately not a generic default.
-TRANSFER_TIMEOUT_SECONDS = 1020
+TRANSFER_TIMEOUT_SECONDS = 1800
+BULK_CHUNK_BYTES = 512 * 1024
+BULK_CHUNK_TIMEOUT_SECONDS = 180
 ARCHIVE_BUILD_TIMEOUT_SECONDS = 180
 MAXIMUM_TRANSFER_ARCHIVE_BYTES = 8 * 1024 * 1024
 
@@ -184,8 +186,23 @@ def build_and_fetch_archive(record: dict, temporary: Path,
             raise TimeoutError("fixture: bulk transport timeout")
         remote_file = f"{record['run_directory']}/evidence.tar.gz"
         started = time.monotonic_ns()
-        admission.run(["scp", "-q", f"{HOST}:{remote_file}", str(archive_path)],
-                      timeout=TRANSFER_TIMEOUT_SECONDS)
+        chunk_count = (digest["archive_bytes"] + BULK_CHUNK_BYTES - 1) // \
+            BULK_CHUNK_BYTES
+        with archive_path.open("xb") as destination:
+            for chunk_index in range(chunk_count):
+                if time.monotonic_ns() - started > \
+                        TRANSFER_TIMEOUT_SECONDS * 1_000_000_000:
+                    raise TimeoutError("bulk archive total timeout")
+                returned = admission.ssh(
+                    f"dd if={shlex.quote(remote_file)} bs={BULK_CHUNK_BYTES} "
+                    f"skip={chunk_index} count=1 2>/dev/null",
+                    timeout=BULK_CHUNK_TIMEOUT_SECONDS)
+                expected = min(
+                    BULK_CHUNK_BYTES,
+                    digest["archive_bytes"] - chunk_index * BULK_CHUNK_BYTES)
+                if len(returned.stdout) != expected:
+                    raise RuntimeError("bulk archive chunk size mismatch")
+                destination.write(returned.stdout)
         elapsed_ns = time.monotonic_ns() - started
         if bulk_fixture in ("truncated-archive", "corrupt-archive"):
             raw = archive_path.read_bytes()
@@ -201,6 +218,9 @@ def build_and_fetch_archive(record: dict, temporary: Path,
             "throughput_bytes_per_second":
                 archive_path.stat().st_size * 1_000_000_000 // max(1, elapsed_ns),
             "timeout_seconds": TRANSFER_TIMEOUT_SECONDS,
+            "chunk_bytes": BULK_CHUNK_BYTES,
+            "chunk_count": chunk_count,
+            "chunk_timeout_seconds": BULK_CHUNK_TIMEOUT_SECONDS,
         }
         if transfers["archive"]["bytes"] != digest["archive_bytes"]:
             raise RuntimeError("archive byte-size declaration mismatch")

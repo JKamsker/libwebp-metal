@@ -47,7 +47,12 @@
     "lower_bound_bytes_per_second": 17408,
     "cleanup_absence_proved": true,
     "control_receipts_survived_bulk_timeout": true,
-    "derived_bulk_timeout_seconds": 1020
+    "second_partial_bytes": 2350080,
+    "second_elapsed_seconds": 1020,
+    "second_declared_archive_bytes": 4230225,
+    "chunk_bytes": 524288,
+    "derived_bulk_chunk_timeout_seconds": 180,
+    "derived_bulk_total_timeout_seconds": 1800
   },
   "frozen_inventory": {
     "cases": ["photo-large", "graphic-large"],

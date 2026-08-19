@@ -26,8 +26,8 @@
     "data_plane": "predeclared tar+gzip hash, byte size, and complete safe member inventory; bulk extraction follows all verification only",
     "maximum_expected_run_archive_bytes": 4194304,
     "maximum_expected_run_archive_justification": "4 MiB conservatively covers the compressed archive of 120 raw runner rows, 120 raw stage rows, all 24 commands, process/resource records and build logs; 16 correctness products are decoded and byte-compared in-process then retained as compact byte-size/SHA-256/pixel-equivalence records with input/corpus hashes, not duplicate WebP payloads",
-    "timeouts": {"compact_control_seconds": 20, "bulk_transfer_seconds": 1020, "archive_build_seconds": 180},
-    "transport_timeout_derivation": "the 64 MiB incompressible calibration transferred 2088960 bytes in 120 seconds before bounded refusal (17408 B/s lower-bound evidence); 4 MiB plus archive overhead projects below 252 seconds, then 4x margin plus 10 seconds rounded up to a whole minute freezes 1020 seconds"
+    "timeouts": {"compact_control_seconds": 20, "bulk_chunk_seconds": 180, "bulk_total_seconds": 1800, "archive_build_seconds": 180},
+    "transport_timeout_derivation": "two bounded representative SCP calibrations moved 2088960 bytes/120 seconds and 2350080 bytes/1020 seconds before channel stalls; the data plane therefore uses predeclared 512 KiB byte ranges, each below the first measured progress window, with a 180-second finite per-range bound and 1800-second finite total bound (10 ranges maximum under the 4 MiB expected archive plus overhead)"
   },
   "frozen_phase_2_command": "env WEBP_BENCHMARK_SESSION=exclusive WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V5_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_attribution_v5.py run \"$PWD/evidence/backref-cost-attribution-v5-execution-20260819\"",
   "candidate": {
@@ -133,7 +133,7 @@
   },
   "resources": {
     "lease_path": "~/.libwebp-metal-backref-cost-attribution-v5.lock", "profile_timeout_seconds": 600,
-    "remote_timeout_seconds": 7200, "transfer_timeout_seconds": 1020,
+    "remote_timeout_seconds": 7200, "transfer_timeout_seconds": 1800,
     "archive_build_timeout_seconds": 180, "maximum_output_bytes": 2147483648,
     "minimum_available_memory_bytes": 4294967296, "minimum_available_disk_bytes": 8589934592,
     "parallel_profile_processes": 1
