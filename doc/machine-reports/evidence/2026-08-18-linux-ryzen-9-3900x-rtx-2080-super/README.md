@@ -260,6 +260,11 @@ residual/SSE-flatness/distortion warp-cycle probe and its raw output. The
 candidate patch, 24 byte-exact timing rows, candidate build/resource output,
 and candidate/restored seven-test transcripts. The candidate was removed.
 
+The `libwebp-i4-residual-coop2-*` files preserve the corrected two-lane
+candidate patch, all 24 byte-exact timing rows, candidate build and resource
+output, candidate/restored seven-test transcripts, and the bounded timeout
+record for the invalid first prototype. Both candidate versions were removed.
+
 Inspect the sampling archives with:
 
 ```sh

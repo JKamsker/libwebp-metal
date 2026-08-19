@@ -1871,3 +1871,25 @@ at 352 and 23,392 bytes. The candidate was removed because PNG was noise and
 JPEG regressed. Raw probe, exact patch, rows, build/resource transcript, and
 candidate/restored test logs are archived with the RTX 2080 SUPER report under
 `libwebp-i4-metric-warp-*` and `libwebp-i4-residual-coop4-*`. No Ampere+ claim.
+
+## Cooperative two-lane I4 residual rejection
+
+After the four-lane residual mapping failed, a pre-Ampere follow-up paired
+lanes and reduced the scalar chain from sixteen to eight waves while keeping
+all ten modes in warp 0. The first prototype's lane-0-only shuffle named both
+lanes and timed out in the bounded medium smoke test; those results were
+discarded. The corrected shuffle was executed by both named lanes.
+
+Corrected candidate and restored source passed all seven CTests. All 24
+order-reversed rows matched hashes and byte counts:
+
+| Format | Parent | Two-lane residual | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.846 ms/image | 42.669 ms/image | -2.823 ms/image |
+| JPEG lossy | 39.813 ms/image | 42.713 ms/image | -2.900 ms/image |
+
+The kernel used 102 registers, a 352-byte stack, and 23,392 shared bytes.
+Both formats regressed by almost 3 ms/image, so the candidate was removed.
+Raw corrected rows, exact patch, timeout record, build/resource output, and
+candidate/restored tests are archived under
+`libwebp-i4-residual-coop2-*`. Turing-only evidence; no Ampere+ change.

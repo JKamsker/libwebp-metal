@@ -560,3 +560,27 @@ the shorter serial chain. The candidate was removed. Raw probe patch/output,
 candidate patch, timing rows, build resources, and both test logs are archived
 under `libwebp-i4-metric-warp-*` and `libwebp-i4-residual-coop4-*`. RTX 2080
 SUPER only; Ampere+ behavior and performance claims are unchanged.
+
+## Pre-Ampere two-lane I4 residual cooperation rejection
+
+The four-lane screen showed that subgroup overhead outweighed its four-wave
+chain, so the same residual-warp profile motivated a narrower two-lane
+experiment. Ten pairs remained entirely in warp 0 and processed eight
+coefficient waves. An initial prototype violated the shuffle mask contract
+and hung the bounded medium smoke test; no timing from it was used. Moving the
+prior-wave shuffle into both named lanes corrected the synchronization.
+
+The corrected candidate and restored tree passed 7/7 CTests. All 24
+order-reversed native-sm_75 rows were byte-exact:
+
+| Format | Parent | Two-lane residual | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.846 ms/image | 42.669 ms/image | -2.823 ms/image |
+| JPEG lossy | 39.813 ms/image | 42.713 ms/image | -2.900 ms/image |
+
+The candidate retained the four-lane experiment's 102-register allocation,
+but nearly three milliseconds of regression in both formats decisively
+rejects coefficient-wave subgrouping. It was removed. Exact corrected patch,
+timeout record, 24 rows, resources/build output, and both test logs are under
+`libwebp-i4-residual-coop2-*`. RTX 2080 SUPER only; Ampere+ compiled the
+unchanged scalar path.

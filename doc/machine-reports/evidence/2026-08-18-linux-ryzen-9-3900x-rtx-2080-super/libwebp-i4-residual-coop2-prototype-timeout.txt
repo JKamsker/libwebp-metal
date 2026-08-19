@@ -1,0 +1,7 @@
+prototype result: invalid, excluded from timing
+command: timeout 30s build-cuda-sm75-gate/webp_cuda_batch_benchmark --variant cuda --mode lossy --batch-size 24 --method 4 --quality 75 --warmups 1 --samples 1 --force-cuda <six PNG corpus inputs>
+exit_code: 124
+stdout_bytes: 0
+cause: __shfl_sync named both subgroup lanes but was reached only by lane 0
+correction: execute the prior-wave shuffle in both lanes, then select its value in lane 0
+corrected bounded medium smoke: exit_code 0, output_hash 455f70a1e139f043, output_bytes 6441688

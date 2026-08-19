@@ -1988,3 +1988,28 @@ The raw probe, exact candidate patch, timing rows, build/resource transcript,
 and candidate/restored tests are in the adjacent evidence directory under
 `libwebp-i4-metric-warp-*` and `libwebp-i4-residual-coop4-*`. These results
 apply only to the RTX 2080 SUPER; no Ampere+ path or claim changed.
+
+## Cooperative two-lane I4 residual scoring
+
+The follow-up reduced the measured residual warp's serial chain less
+aggressively: two lanes per mode processed eight coefficient waves, and all
+ten mode pairs stayed in warp 0. The first prototype called a two-lane shuffle
+from lane 0 alone and therefore timed out in a bounded medium-corpus smoke
+test. That invalid run was excluded. The corrected implementation executed
+the shuffle in both mask members before lane 0 consumed the value.
+
+Both corrected candidate and restored source passed all seven CTests. All 24
+order-reversed native-sm_75 rows were byte-exact:
+
+| Format | Parent | Two-lane residual | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.846 ms/image | 42.669 ms/image | -2.823 ms/image |
+| JPEG lossy | 39.813 ms/image | 42.713 ms/image | -2.900 ms/image |
+
+The candidate used 102 registers with the unchanged 352-byte stack and
+23,392-byte shared allocation. The nearly 3 ms/image regressions show that
+even the narrower subgroup's shuffle and duplicated control/table work is
+more expensive than the scalar residual walks on this RTX 2080 SUPER. The
+candidate was removed. The exact corrected patch, raw rows, prototype timeout
+record, build/resources, and candidate/restored tests are archived under
+`libwebp-i4-residual-coop2-*`. Ampere+ compiled the original path.
