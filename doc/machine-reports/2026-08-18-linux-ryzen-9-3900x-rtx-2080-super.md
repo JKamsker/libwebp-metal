@@ -561,3 +561,17 @@ time:
 All 60 order-balanced timing outputs matched. The candidate was removed. Raw
 evidence is `/tmp/libwebp-token-record-local-ab.iEsa8t.tsv` and the CPU
 profile is `/tmp/libwebp-gprof-i4-diagonal-replay.er`.
+
+## Eight-lane basic I4 quantization
+
+Widening basic I4 quantization from four to eight lanes per mode halved each
+lane's coefficient loop while retaining the exact four-lane transforms and
+method-6 trellis chain. It was byte-exact but neutral:
+
+| Format | Parent | Eight-lane quantizer | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.163 ms/image | 40.202 ms/image | +0.040 ms |
+| JPEG lossy | 40.366 ms/image | 40.088 ms/image | -0.279 ms |
+
+All 60 order-balanced outputs matched. The candidate was removed; raw
+evidence is `/tmp/libwebp-i4-quant8-ab.R8YBlE.tsv`.

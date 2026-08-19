@@ -924,3 +924,23 @@ removed: compiler promotion and overlap of recording with device work make
 the explicit state object neutral-to-negative. Raw timing evidence is
 `/tmp/libwebp-token-record-local-ab.iEsa8t.tsv`; the CPU profile is
 `/tmp/libwebp-gprof-i4-diagonal-replay.er`.
+
+## Eight-lane basic I4 quantization rejection
+
+The retained-head I4 probe attributed 25.6--26.5% of I4 cycles to the combined
+forward-transform, quantization, and inverse-transform interval. A candidate
+assigned eight lanes to each of the ten modes for basic quantization, reducing
+the coefficient loop from four to two iterations per lane. The exact
+four-lane transforms and method-6 trellis chain were unchanged.
+
+The focused trellis, padded-stride, band-remainder, and fallback test passed.
+Five order-balanced processes measured:
+
+| Format | Parent | Eight-lane quantizer | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.163 ms/image | 40.202 ms/image | +0.040 ms |
+| JPEG lossy | 40.366 ms/image | 40.088 ms/image | -0.279 ms |
+
+All 60 outputs retained the same hashes and byte counts. The candidate was
+removed because both deltas are far below the 1.5 ms/image threshold. Raw
+timing evidence is `/tmp/libwebp-i4-quant8-ab.R8YBlE.tsv`.
