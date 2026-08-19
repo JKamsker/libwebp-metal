@@ -94,6 +94,27 @@ command. Output hashes and byte counts match within each format. The tested
 method-4 path does not request a no-cache candidate, so the proposed overlap
 never dispatched and was removed.
 
+The `libwebp-post-parcache-v4-*.jsonl` pass set the histogram runtime flag in a
+build where `WEBP_CUDA_ENABLE_HISTOGRAM=OFF`; it is retained as explicit no-op
+evidence. The `libwebp-post-parcache-v5-*.jsonl` pass used the rebuilt native
+sm_75 profiler with the histogram accelerator compiled in, and its verbose run
+transcript contains 504 `histogram counted` dispatch records. The matching
+`libwebp-histogram-stage-CMakeCache.txt` records both the native architecture
+and enabled histogram option.
+
+The 24 `libwebp-histogram-turing-v6-*.jsonl` files are four order-balanced
+runtime on/off pairs for each medium graphic, photo, and texture case. Each
+contains one warmup and six measured encodes (168 rows total); the three quiet
+run transcripts are empty by design. Together v4, v5, and v6 contain 294 raw
+stage-profile rows.
+
+The 16 `libwebp-cache-worker-reuse-*.txt` files are four order-balanced forced
+batch pairs per PNG/JPEG format. `off` recreates cache-search workers per
+search; `reuse` keeps them alive within a backward-reference call. Each
+transcript contains one discarded warmup and three measured JSON rows plus the
+invoked command. The removed candidate retained identical format-specific
+hashes and byte counts.
+
 Inspect the sampling archives with:
 
 ```sh

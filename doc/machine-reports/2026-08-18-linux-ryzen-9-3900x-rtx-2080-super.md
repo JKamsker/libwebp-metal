@@ -1177,3 +1177,43 @@ was removed rather than retaining inactive code. These are RTX 2080 SUPER-only
 measurements and make no Ampere+ claim. All 189 raw stage rows, verbose CUDA
 dispatch output, native CMake cache, and 16 A/B transcripts are in the adjacent
 evidence directory.
+
+## Forced histogram diagnostic and cache-worker reuse
+
+The portable batch harness forces the otherwise opt-in CUDA histogram counter.
+The stage profiler was rebuilt with both native sm_75 and
+`WEBP_CUDA_ENABLE_HISTOGRAM=ON`; a verbose 63-row pass observed 504 histogram
+dispatches, eight per encode. Their device kernels averaged 0.179 ms, with a
+maximum 1.249 ms for up to 1,920,000 commands, while the complete histogram
+and clustering boundary remained 19--22 ms.
+
+Four order-balanced same-binary on/off process pairs per 1600x1200 content
+case, each with one warmup and six measured encodes, found:
+
+| Content | Histogram off | Histogram forced | Paired off - forced |
+|---|---:|---:|---:|
+| graphic | 49.419 ms | 50.369 ms | -0.670 ms |
+| photo | 146.147 ms | 135.098 ms | +11.037 ms |
+| texture | 149.446 ms | 154.662 ms | -4.646 ms |
+
+The measured histogram boundary itself was essentially unchanged; the
+content-opposed total effects arose in later CPU work after earlier small
+histogram calls. Counting is therefore not the entropy-stage bottleneck, and
+this does not justify changing the production default or any Ampere+ policy.
+
+A second candidate retained the ten cache-bit worker threads across multiple
+cache searches inside one backward-reference call. It preserved the exact
+candidate recurrence, synchronization, and integer reduction. Four
+order-balanced forced-batch process pairs per format measured:
+
+| Format | Recreate workers | Reuse workers | Paired recreate - reuse |
+|---|---:|---:|---:|
+| PNG lossless | 81.703 ms/image | 80.971 ms/image | +0.714 ms/image |
+| JPEG lossless | 132.562 ms/image | 134.018 ms/image | -1.456 ms/image |
+
+All 48 rows per format retained hashes `eec6c490be6aaf6d` (PNG) and
+`06227eb38e0ac1e3` (JPEG) with unchanged byte counts. The candidate was removed:
+PNG is below the 1.5 ms/image gate and JPEG materially regresses. These are
+RTX 2080 SUPER-only measurements. The 294 raw profiler rows, verbose dispatch
+transcript, native CMake cache, and 16 batch A/B transcripts are archived in
+the adjacent evidence directory.

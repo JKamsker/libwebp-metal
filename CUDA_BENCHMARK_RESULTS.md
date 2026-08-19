@@ -1143,3 +1143,20 @@ Method 4 never sets `do_no_cache`, so the candidate did not dispatch and was
 removed. This result is limited to the RTX 2080 SUPER; no Ampere+ policy or
 performance conclusion follows. Raw profiles and transcripts are archived in
 the machine-specific evidence directory.
+
+## Turing histogram-counter and cache-worker follow-up
+
+With the histogram accelerator compiled in and forced, a verbose native-sm_75
+profile observed eight launches per method-4 encode. Kernel time averaged only
+0.179 ms across 504 calls; the full histogram/clustering stage remained
+19--22 ms. Four order-balanced per-content process pairs produced opposed total
+effects: -0.670 ms graphic, +11.037 ms photo, and -4.646 ms texture for
+off-minus-forced. The counted portion is not the stage bottleneck, so the
+production default remains off and no Ampere+ policy conclusion is drawn.
+
+Reusing the retained cache-search workers within a backward-reference call was
+also rejected. Four order-balanced forced batch pairs measured a 0.714
+ms/image PNG gain but a 1.456 ms/image JPEG regression; every aggregate hash
+and byte count matched. Ending the workers after each cache search remains the
+better two-format Turing policy. Raw rows are in the RTX 2080 SUPER evidence
+directory.

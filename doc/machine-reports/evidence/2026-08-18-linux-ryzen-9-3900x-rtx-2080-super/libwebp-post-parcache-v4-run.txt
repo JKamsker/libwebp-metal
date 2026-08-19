@@ -1,0 +1,171 @@
+WebP-CUDA: using NVIDIA GeForce RTX 2080 SUPER (device 0)
+WebP-CUDA: hash candidates for 960000 pixels in 11.282 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.880 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.892 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.877 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.874 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.865 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.918 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.903 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.876 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.900 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.928 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.921 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.885 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.899 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.933 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.853 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.867 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.915 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.923 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.871 ms
+WebP-CUDA: hash candidates for 960000 pixels in 10.911 ms
+WebP-CUDA: using NVIDIA GeForce RTX 2080 SUPER (device 0)
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 12.426 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.238 ms
+WebP-CUDA: transformed 1600x1200 in 2.966 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.108 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.574 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.155 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.763 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.202 ms
+WebP-CUDA: transformed 1600x1200 in 2.925 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.109 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.555 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.154 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.763 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.203 ms
+WebP-CUDA: transformed 1600x1200 in 2.927 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.107 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.565 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.155 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.762 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.202 ms
+WebP-CUDA: transformed 1600x1200 in 2.927 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.110 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.544 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.159 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.759 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.201 ms
+WebP-CUDA: transformed 1600x1200 in 2.917 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.111 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.570 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.154 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.770 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.209 ms
+WebP-CUDA: transformed 1600x1200 in 2.922 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.111 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.572 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.154 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.740 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.205 ms
+WebP-CUDA: transformed 1600x1200 in 2.912 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.108 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.554 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.156 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.766 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.203 ms
+WebP-CUDA: transformed 1600x1200 in 2.927 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.111 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.574 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.156 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.756 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.202 ms
+WebP-CUDA: transformed 1600x1200 in 2.923 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.112 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.562 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.155 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.756 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.204 ms
+WebP-CUDA: transformed 1600x1200 in 2.914 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.109 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.582 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.154 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.754 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.202 ms
+WebP-CUDA: transformed 1600x1200 in 2.921 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.110 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.563 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.155 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.757 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.203 ms
+WebP-CUDA: transformed 1600x1200 in 2.916 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.110 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.560 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.158 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.766 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.203 ms
+WebP-CUDA: transformed 1600x1200 in 2.922 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.108 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.550 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.154 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.776 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.202 ms
+WebP-CUDA: transformed 1600x1200 in 2.918 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.108 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.542 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.154 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.757 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.205 ms
+WebP-CUDA: transformed 1600x1200 in 2.920 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.109 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.552 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.156 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.761 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.202 ms
+WebP-CUDA: transformed 1600x1200 in 2.930 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.109 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.557 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.154 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.752 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.205 ms
+WebP-CUDA: transformed 1600x1200 in 2.927 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.111 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.529 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.154 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.769 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.201 ms
+WebP-CUDA: transformed 1600x1200 in 2.922 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.107 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.568 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.156 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.759 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.203 ms
+WebP-CUDA: transformed 1600x1200 in 2.918 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.109 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.596 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.154 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.774 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.205 ms
+WebP-CUDA: transformed 1600x1200 in 2.919 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.108 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.576 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.156 ms
+WebP-CUDA: predictor selected 1900 tiles and transformed for 1600x1200 in 11.769 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.208 ms
+WebP-CUDA: transformed 1600x1200 in 2.931 ms (1900 tiles) (resident input)
+WebP-CUDA: hash candidates for 1900 pixels in 0.109 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 7.556 ms (resident pixels)
+WebP-CUDA: hash candidates for 1900 pixels in 0.154 ms
+WebP-CUDA: using NVIDIA GeForce RTX 2080 SUPER (device 0)
+WebP-CUDA: hash candidates for 1920000 pixels in 0.410 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.182 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.182 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.183 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.189 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.182 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.187 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.187 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.183 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.183 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.183 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.181 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.185 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.182 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.182 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.182 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.183 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.183 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.183 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.184 ms
+WebP-CUDA: hash candidates for 1920000 pixels in 0.182 ms
