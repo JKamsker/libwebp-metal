@@ -1,0 +1,72 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v10-authorization-v1",
+  "authorization_status": "REFUSED",
+  "base_commit": "a027f4a4b6a61d2b4a5d9e897e6b7ca51eb6c6ca",
+  "source_commit": "8b0a14978342bddf322177c59a907b11ee7770ac",
+  "source_tree": "3cf3b8d36d66bf4f11e43ce8cae8e16994ec4a51",
+  "phase_1b_parent_rule": "the commit containing this envelope has exactly one parent equal to source_commit",
+  "phase_1b_identity_rule": "HEAD must equal the dynamically supplied EXPECTED_FREEZE_COMMIT; this envelope never embeds its own Phase-1B commit hash",
+  "manifest_sha256": "236da4000a1196702cd9471899ece5fd0e951776302e7ca5a944beb266d8f981",
+  "protocol_sha256": "e77456dcdfffc9969dc663a61a86d859d7745967dea4ddc1c3f65f3688079255",
+  "schema_catalog_sha256": "564bcc730e6f468daeb4332ae8144995d79c494550cfd4229538514f0419ed4a",
+  "transport_source_sha256": "dfab6bdace6a75f2e87268718b57ef4f23d61e663e74c44a4675c4c252280e56",
+  "rehearsal_hash_index_sha256": "85f18d0c1a222a6362114d955156f4825e302f97c6ff78f3a1af9352a4d23cde",
+  "raw_rehearsal_evidence_hashes": {
+    "rehearsal-invocation.json": "3002079f5a6228bc050202fd6da174bc80be097f349c29b8c6e2ef1b40ace970",
+    "return-protocol/framed-stdout.bin": "c1f2129d8ed41f920ad92efef744e9eb51d65a3a93c71767f779ff61b31b5e3e",
+    "return-protocol/transport-stderr.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "rehearsal_receipt_hashes": {
+    "rehearsal-invocation.json": "3002079f5a6228bc050202fd6da174bc80be097f349c29b8c6e2ef1b40ace970",
+    "return-protocol/framed-stdout.bin": "c1f2129d8ed41f920ad92efef744e9eb51d65a3a93c71767f779ff61b31b5e3e"
+  },
+  "missing_required_success_receipts": [
+    "rehearsal.json",
+    "transfer-cleanup.json",
+    "return-protocol/source-admission.json",
+    "return-protocol/operator-status.json",
+    "return-protocol/bulk-declaration.json",
+    "return-protocol/integrity-footer.json",
+    "return-protocol/cleanup-footer.json"
+  ],
+  "observed_process_isolation": {
+    "snapshot_fields": [
+      "pid",
+      "ppid",
+      "comm"
+    ],
+    "argument_text_collected": false,
+    "raw_comm_accepts_slash_space_and_path_like_values": true,
+    "comm_filesystem_operations": [],
+    "status": "FAIL_CLOSED_UNKNOWN_ANCESTOR_IDENTITY",
+    "reason": "transaction ancestor executable is not allowed",
+    "exact_unadmitted_identity_returned": false,
+    "source_admission_reached": false,
+    "discovered_pid_signals": 0
+  },
+  "observed_transport_calibration": {
+    "status": "REFUSED_BEFORE_SOURCE_ADMISSION",
+    "representative_payload_bytes": 5242880,
+    "representative_payload_sha256": "a014eeaa79e5f5407bd9315b009f59c5db35186c5fd98d61b525160b65cb97e4",
+    "maximum_expected_run_archive_bytes": 4194304,
+    "declared_payload_margin_ratio": 1.25,
+    "finite_margin_ratio": 0,
+    "archive_bytes": 0,
+    "archive_sha256": null,
+    "chunk_count": 0,
+    "chunk_bytes": 524288,
+    "transaction_elapsed_ns": 9702229000,
+    "throughput_bytes_per_second": 0,
+    "reason": "the unknown exact ancestor identity refused before source admission and archive construction; representative archive capacity was not calibrated"
+  },
+  "single_noninteractive_remote_session_count": 1,
+  "post_run_remote_cleanup_operations": 0,
+  "cleanup_footer_verified": true,
+  "remote_cleanup_absence_proved": true,
+  "benchmark_lease_acquisition_attempted": null,
+  "encoder_workloads": 0,
+  "profiler_workloads": 0,
+  "timed_execution_authorized": false,
+  "phase_2_authority": "NONE",
+  "blocker": "the sole no-retry rehearsal failed closed before source admission because an exact own-chain process identity was outside the frozen V10 raw_comm/lexical_basename ancestor sets; cleanup succeeded, but no PASS rehearsal or archive calibration exists, so Phase 2 is forbidden"
+}
