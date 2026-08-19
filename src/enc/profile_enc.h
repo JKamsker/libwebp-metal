@@ -54,7 +54,8 @@ typedef enum {
 #if defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT) ||       \
     defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS) ||        \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT)
 void WebPProfileBeginSession(const WebPConfig* config,
                              const WebPPicture* picture);
 void WebPProfileEndSession(int ok, int error_code);
@@ -63,7 +64,8 @@ void WebPProfileStageEnd(WebPProfileStage stage, uint64_t start_ns);
 void WebPProfileSetOutputSize(size_t output_size);
 void WebPProfileMarkMetalCrossColor(void);
 void WebPProfileMarkMetalHash(void);
-#if defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT)
 uint64_t WebPProfileClockNowForValidation(void);
 #endif
 #else
@@ -80,7 +82,8 @@ uint64_t WebPProfileClockNowForValidation(void);
 
 #if defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS) ||        \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT)
 #if defined(_MSC_VER)
 #define WEBP_PROFILE_NOINLINE __declspec(noinline)
 #elif defined(__GNUC__) || defined(__clang__)

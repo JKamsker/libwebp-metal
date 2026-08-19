@@ -1,0 +1,162 @@
+{
+  "admission": {
+    "admission": {
+      "bundle_hash_match": true,
+      "bundle_path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4/run.44yTUf/source.bundle",
+      "bundle_sha256": "efd576691d1a0615f645a0c3bcc2f2f908db2ae04dced7ad17241ba88483d654",
+      "bundle_verified_in_repository_context": true,
+      "bundle_verify_command": [
+        "git",
+        "-C",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4/run.44yTUf/verify.git",
+        "bundle",
+        "verify",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4/run.44yTUf/source.bundle"
+      ],
+      "bundle_verify_repository": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4/run.44yTUf/verify.git",
+      "clean_status": true,
+      "clone": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4/run.44yTUf/source",
+      "source_commit": "615b42b4766a6aad17e74707dd69f3925cb4ce3b",
+      "source_hashes": {
+        "CMakeLists.txt": "3f14830b0f2efbaf91267eb9c8bb7b673ecb85c5a657a92514018ff921b2cd62",
+        "doc/backref-cost-attribution-v4-protocol-20260819.md": "34e4a91c1c9ce770690628f29ca88125af82b59285c352a98e0a874f21bb14e5",
+        "makefile.unix": "52e9090dd995c289c5e8604eafd923f335a169503f41e5bfe7df0cdf1a76d72b",
+        "scripts/backref_cost_attribution_v4_admission.py": "0e905e9d19c39f5f3b20675d6991ff9310f6580726578b88f7085370a767d146",
+        "scripts/backref_cost_attribution_v4_archive.py": "cf78b78747c2739c32c8ec616a8f6c38c1c787deb65cf59bf4420a60fab06054",
+        "scripts/backref_cost_attribution_v4_manifest.json": "06919ccc231f92aa8bc6fee0e88794784e4e74a449e47f79cec2e7991f90dd79",
+        "scripts/backref_cost_attribution_v4_paths.py": "d33722062cd5dcbfa89b72da50bf70ffc0e94fd779589464eacebe7abe30c57b",
+        "scripts/backref_cost_attribution_v4_schemas.json": "a4330351c628c06200447a49508ec4b0b2d223b5f240f44e97a2ab38f1c975e5",
+        "scripts/execute_backref_cost_attribution_v4.py": "f49de61b8f3d670667deba646cb82abc6adbad0348af5650fbbfc063f6ea8f84",
+        "scripts/run_backref_cost_attribution_v4_experiment.py": "923f78441ab5e1acf7d63ec5d41874438ef60dcf6bb0146061038494381f0fea",
+        "src/enc/backref_cost_attribution_v4_experiment_enc.c": "4e34e8fe268bf34235f14a48a680bc1237999509e029671e19ae1f489945ce7b",
+        "src/enc/backref_cost_attribution_v4_experiment_enc.h": "ea31cddf64c366e1bf92787c11c69bc7779fedd1de2d067952a6ef55c666adcd",
+        "src/enc/backward_references_cost_distance_only_enc.inc": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5",
+        "src/enc/backward_references_cost_enc.c": "3e58aa1f2a69efbbb4d17261f65c20ff2dc61d74d03d767ea3fff1016ee26992",
+        "src/enc/backward_references_enc.c": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03",
+        "src/enc/profile_enc.c": "226739fdc2f4adb050f975300d5b168cb7a1a831e94f784e96cdb86df15dbcd6",
+        "src/enc/profile_enc.h": "c379d563859ab7f9c74c780033a3585404638b6e6a2a14de261f1801ef024bcc",
+        "src/enc/vp8l_enc.c": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0",
+        "tools/backref_cost_attribution_v4_experiment_runner.c": "5dd052df95487148e971e9c1518310f907244a42afbb473ae9363023f1b1a476"
+      },
+      "source_tree": "cedbffc7436a600f3941d2e28a1bb449fe428851",
+      "verification_repository_removed": true
+    },
+    "finished": true,
+    "home": "/Users/pandocs-agent-001",
+    "path_generation": {
+      "generator": "mktemp -d",
+      "home": "/Users/pandocs-agent-001",
+      "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4/run.44yTUf",
+      "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4",
+      "token": "run.44yTUf",
+      "validated": true
+    },
+    "post_admission_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "external_process_classes": [
+        "ssh",
+        "runner",
+        "profiler",
+        "editor",
+        "user-shell",
+        "service"
+      ],
+      "external_process_policy": "observe-only; conflicts fail closed; never signal",
+      "process_table_sha256": "bc30e1141679dbf6d4b829e6b018b68a600ddbea96b8190c420216f80d609db4",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "pretransfer_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "external_process_classes": [
+        "ssh",
+        "runner",
+        "profiler",
+        "editor",
+        "user-shell",
+        "service"
+      ],
+      "external_process_policy": "observe-only; conflicts fail closed; never signal",
+      "process_table_sha256": "3171cc64b2bf036a83603c428e321ce27a372c443aa2429487ad7a08ba3799db",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "receipt_version": 1,
+    "remote_source_bundle_sha256": "efd576691d1a0615f645a0c3bcc2f2f908db2ae04dced7ad17241ba88483d654",
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4/run.44yTUf",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4",
+    "schema": "libwebp-backref-cost-attribution-v4-source-admission-receipt-v1",
+    "source_bundle_sha256": "efd576691d1a0615f645a0c3bcc2f2f908db2ae04dced7ad17241ba88483d654",
+    "source_commit": "615b42b4766a6aad17e74707dd69f3925cb4ce3b",
+    "source_hashes": {
+      "CMakeLists.txt": "3f14830b0f2efbaf91267eb9c8bb7b673ecb85c5a657a92514018ff921b2cd62",
+      "doc/backref-cost-attribution-v4-protocol-20260819.md": "34e4a91c1c9ce770690628f29ca88125af82b59285c352a98e0a874f21bb14e5",
+      "makefile.unix": "52e9090dd995c289c5e8604eafd923f335a169503f41e5bfe7df0cdf1a76d72b",
+      "scripts/backref_cost_attribution_v4_admission.py": "0e905e9d19c39f5f3b20675d6991ff9310f6580726578b88f7085370a767d146",
+      "scripts/backref_cost_attribution_v4_archive.py": "cf78b78747c2739c32c8ec616a8f6c38c1c787deb65cf59bf4420a60fab06054",
+      "scripts/backref_cost_attribution_v4_manifest.json": "06919ccc231f92aa8bc6fee0e88794784e4e74a449e47f79cec2e7991f90dd79",
+      "scripts/backref_cost_attribution_v4_paths.py": "d33722062cd5dcbfa89b72da50bf70ffc0e94fd779589464eacebe7abe30c57b",
+      "scripts/backref_cost_attribution_v4_schemas.json": "a4330351c628c06200447a49508ec4b0b2d223b5f240f44e97a2ab38f1c975e5",
+      "scripts/execute_backref_cost_attribution_v4.py": "f49de61b8f3d670667deba646cb82abc6adbad0348af5650fbbfc063f6ea8f84",
+      "scripts/run_backref_cost_attribution_v4_experiment.py": "923f78441ab5e1acf7d63ec5d41874438ef60dcf6bb0146061038494381f0fea",
+      "src/enc/backref_cost_attribution_v4_experiment_enc.c": "4e34e8fe268bf34235f14a48a680bc1237999509e029671e19ae1f489945ce7b",
+      "src/enc/backref_cost_attribution_v4_experiment_enc.h": "ea31cddf64c366e1bf92787c11c69bc7779fedd1de2d067952a6ef55c666adcd",
+      "src/enc/backward_references_cost_distance_only_enc.inc": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5",
+      "src/enc/backward_references_cost_enc.c": "3e58aa1f2a69efbbb4d17261f65c20ff2dc61d74d03d767ea3fff1016ee26992",
+      "src/enc/backward_references_enc.c": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03",
+      "src/enc/profile_enc.c": "226739fdc2f4adb050f975300d5b168cb7a1a831e94f784e96cdb86df15dbcd6",
+      "src/enc/profile_enc.h": "c379d563859ab7f9c74c780033a3585404638b6e6a2a14de261f1801ef024bcc",
+      "src/enc/vp8l_enc.c": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0",
+      "tools/backref_cost_attribution_v4_experiment_runner.c": "5dd052df95487148e971e9c1518310f907244a42afbb473ae9363023f1b1a476"
+    },
+    "source_tree": "cedbffc7436a600f3941d2e28a1bb449fe428851"
+  },
+  "benchmark_lease_acquisition_attempted": false,
+  "evidence_transfer": {
+    "archive": {
+      "status": "not-attempted"
+    },
+    "extraction": {
+      "status": "not-attempted"
+    },
+    "lease": {
+      "acquisition_attempted": false,
+      "mode": "run",
+      "receipt_requested": false,
+      "receipt_required": false,
+      "schema": "libwebp-backref-cost-attribution-v4-lease-transfer-v1",
+      "state": "not-attempted",
+      "status": "not-attempted",
+      "transfer_timeout_seconds": 30
+    }
+  },
+  "failure": "Command '['scp', '-q', 'pandocs-agent:/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4/run.44yTUf/evidence.tar.gz', '/var/folders/g_/y0l39t0x5q39xs0msnnn7hb80000gn/T/attribution-v4-return-thh0zlyj/evidence.tar.gz']' timed out after 30 seconds",
+  "installed_runner_directory_touched": false,
+  "lease_released": false,
+  "lease_transfer_state": "not-attempted",
+  "mode": "run",
+  "pipeline_exit_code": 0,
+  "pipeline_stderr_path": "return-protocol/pipeline.stderr",
+  "pipeline_stdout_path": "return-protocol/pipeline.stdout",
+  "rehearsal_refusal_fixture": null,
+  "remote_cleanup_absence_proved": true,
+  "remote_cleanup_complete": true,
+  "remote_cleanup_proof": {
+    "absence_proved": true,
+    "home": "/Users/pandocs-agent-001",
+    "removed_exact_validated_child": true,
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4/run.44yTUf",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4",
+    "schema": "libwebp-backref-cost-attribution-v4-cleanup-receipt-v1",
+    "status": "complete",
+    "token": "run.44yTUf",
+    "validated": true
+  },
+  "remote_host_alias": "pandocs-agent",
+  "return_contract_status": "not-attempted",
+  "schema": "libwebp-backref-cost-attribution-v4-transfer-cleanup-v1",
+  "source_bundle_sha256": "efd576691d1a0615f645a0c3bcc2f2f908db2ae04dced7ad17241ba88483d654",
+  "source_commit": "615b42b4766a6aad17e74707dd69f3925cb4ce3b",
+  "status": "refused",
+  "timed_binary_invoked": true
+}

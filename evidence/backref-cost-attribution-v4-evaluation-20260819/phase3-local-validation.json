@@ -1,0 +1,82 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v4-phase3-local-validation-v1",
+  "status": "PASS",
+  "source_commit_before_phase3_files": "de1d9f94f01403dfc58149cfd5b33649b0a4b95c",
+  "timed_workload_invoked": false,
+  "remote_command_invoked": false,
+  "profiler_invocations": 0,
+  "cuda_used": false,
+  "production_promotion_authorized": false,
+  "commands": [
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v4_protocol.py",
+      "status": "PASS",
+      "summary": "exact specialization identity, one selected DP body, disjoint modes, 24-command plan, bounded three-state lease return, no-workload rehearsal, diagnostic-only policy"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v4_admission.py",
+      "status": "PASS",
+      "summary": "canonical paths, repository-context bundle verification, schema/hash failure closure, mode/session table, malformed rejection, cleanup"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v4_archive.py",
+      "status": "PASS",
+      "summary": "indexed builder/extractor, normalized ordering, inventory/hash verification, no-partial extraction, malicious rejection"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v4_process_ownership.py",
+      "status": "PASS",
+      "summary": "only retained direct-child handle is signal-capable; discovered processes are refusal-only; cleanup is receipt-scoped"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v4_experiment.py",
+      "status": "PASS",
+      "summary": {
+        "correctness_encodes": 16,
+        "counter_cells": 4,
+        "sanitizer_configurations": 2,
+        "boundary_fixtures": 16,
+        "default_omission": true,
+        "public_api_abi_equal": true,
+        "clock_reads": 4096,
+        "clock_monotonic": true,
+        "positive_clock_deltas": 1463,
+        "mean_read_delta_ns": 14,
+        "maximum_read_delta_ns": 84
+      }
+    },
+    {
+      "command": "python3 scripts/test_experiment_guards.py",
+      "status": "PASS",
+      "summary": "24 independent build/runtime guards and v1-v4 ownership guards"
+    },
+    {
+      "command": "env -u WEBP_BENCHMARK_SESSION WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V4_COMMIT=de1d9f94f01403dfc58149cfd5b33649b0a4b95c python3 scripts/execute_backref_cost_attribution_v4.py validate",
+      "status": "PASS",
+      "manifest_sha256": "06919ccc231f92aa8bc6fee0e88794784e4e74a449e47f79cec2e7991f90dd79",
+      "schema_catalog_sha256": "a4330351c628c06200447a49508ec4b0b2d223b5f240f44e97a2ab38f1c975e5",
+      "benchmark_lease_acquisition_attempted": false,
+      "timed_binary_invoked": false
+    },
+    {
+      "command": "cmake -S . -B /tmp/libwebp-v4-phase3-build.EXeH52 -G Ninja -DCMAKE_BUILD_TYPE=Release -DWEBP_ENABLE_METAL=OFF -DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_EXTRAS=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPMUX=OFF",
+      "status": "PASS",
+      "compiler": "AppleClang 17.0.0.17000604"
+    },
+    {
+      "command": "cmake --build /tmp/libwebp-v4-phase3-build.EXeH52 --target cwebp dwebp --parallel 2",
+      "status": "PASS",
+      "targets_built": ["cwebp", "dwebp"]
+    },
+    {
+      "command": "env WEBP_TEST_BIN_DIR=/tmp/libwebp-v4-phase3-build.EXeH52 scripts/test_roundtrip.sh",
+      "status": "PASS",
+      "summary": "lossless round-trip smoke test"
+    },
+    {
+      "command": "jq parse plus independent Python reconstruction of returned artifact count, byte total, SHA-256 index, and empty-row statistics",
+      "status": "PASS",
+      "summary": "6 artifacts, 772 bytes, every indexed hash matched, zero recomputation input rows"
+    }
+  ]
+}

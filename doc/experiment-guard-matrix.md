@@ -30,6 +30,7 @@ shared experimental build or runtime switch.
 | 21 backref-cost attribution v1 | `WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT` | `WEBP_USE_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT` plus attribution-only markers | `WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT=1` | diagnostic-only same-binary Time Profiler and coarse-stage attribution of clean baseline versus exact rejected specialization; no promotion authority |
 | 22 backref-cost attribution v2 | `WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT` | `WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT` | `WEBP_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT=1` | diagnostic-only same-binary coarse monotonic stage attribution with no profiler or attach rights; no promotion authority |
 | 23 backref-cost attribution v3 | `WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT` | `WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT` | `WEBP_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT=1` | diagnostic-only single-selected-DP coarse monotonic attribution; no profiler, attach rights, or promotion authority |
+| 24 backref-cost attribution v4 | `WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT` | `WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT` | `WEBP_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT=1` | diagnostic-only v3-semantic coarse attribution with mode/state-dependent evidence return; no profiler, attach rights, or promotion authority |
 
 Every runtime value is exact: values other than `1` are disabled. Every timed
 launcher additionally requires `WEBP_BENCHMARK_SESSION=exclusive`. Correctness,

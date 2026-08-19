@@ -1,0 +1,10 @@
+{
+  "acquisition_attempted": false,
+  "mode": "run",
+  "receipt_requested": false,
+  "receipt_required": false,
+  "schema": "libwebp-backref-cost-attribution-v4-lease-transfer-v1",
+  "state": "not-attempted",
+  "status": "not-attempted",
+  "transfer_timeout_seconds": 30
+}

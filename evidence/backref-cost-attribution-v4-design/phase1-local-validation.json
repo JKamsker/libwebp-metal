@@ -1,0 +1,45 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v4-phase1-local-validation-v1",
+  "status": "PASS",
+  "base_commit": "d8e015e8395a1ae3d5d17637cacf8b99bd084901",
+  "performance_samples": 0,
+  "production_promotion_authorized": false,
+  "cuda_used": false,
+  "checks": {
+    "admission_archive_and_process_ownership": "PASS",
+    "build_and_runtime_gate_matrix": "PASS (24 independent guards)",
+    "default_object_target_and_string_omission": "PASS",
+    "public_api_abi_equality": "PASS",
+    "correctness_encodes": 16,
+    "correctness_bitstreams_pixels_determinism_and_input_immutability": "PASS",
+    "selected_dp_counter_cells": 4,
+    "selector_once_no_overwrite_opposite_body_zero_and_reset": "PASS",
+    "sanitizer_configurations": 2,
+    "sanitizer_boundary_fixtures": 16,
+    "timer_nesting_and_counter_accounting": "PASS",
+    "frozen_corpus_order_and_counts": "PASS",
+    "lease_return_states_and_bounded_transfer_contract": "PASS"
+  },
+  "clock_validation": {
+    "clock_reads": 4096,
+    "monotonic": true,
+    "positive_deltas": 1463,
+    "mean_read_delta_ns": 14,
+    "maximum_delta_ns": 125
+  },
+  "frozen_inventory": {
+    "cases": ["photo-large", "graphic-large"],
+    "methods": [4, 6],
+    "paired_variant_order": [
+      ["baseline", "candidate"],
+      ["candidate", "baseline"],
+      ["baseline", "candidate"]
+    ],
+    "correctness_encodes": 16,
+    "serial_profile_processes": 24,
+    "warmups": 24,
+    "retained_records": 96,
+    "total_runner_records": 120,
+    "total_stage_records": 120
+  }
+}
