@@ -51,9 +51,10 @@ typedef enum {
 } WebPProfileStage;
 
 // This internal API is compiled only for the encoder-stage-profile experiment.
-#if defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT) || \
-    defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS) || \
-    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
+#if defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT) ||       \
+    defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS) ||        \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
 void WebPProfileBeginSession(const WebPConfig* config,
                              const WebPPicture* picture);
 void WebPProfileEndSession(int ok, int error_code);
@@ -62,22 +63,24 @@ void WebPProfileStageEnd(WebPProfileStage stage, uint64_t start_ns);
 void WebPProfileSetOutputSize(size_t output_size);
 void WebPProfileMarkMetalCrossColor(void);
 void WebPProfileMarkMetalHash(void);
+#if defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
+uint64_t WebPProfileClockNowForValidation(void);
+#endif
 #else
 // Default builds compile every call site to a no-op and omit profile_enc.c.
 #define WebPProfileBeginSession(config, picture) \
   ((void)(config), (void)(picture))
-#define WebPProfileEndSession(ok, error_code) \
-  ((void)(ok), (void)(error_code))
+#define WebPProfileEndSession(ok, error_code) ((void)(ok), (void)(error_code))
 #define WebPProfileStageBegin(stage) ((void)(stage), (uint64_t)0)
-#define WebPProfileStageEnd(stage, start_ns) \
-  ((void)(stage), (void)(start_ns))
+#define WebPProfileStageEnd(stage, start_ns) ((void)(stage), (void)(start_ns))
 #define WebPProfileSetOutputSize(output_size) ((void)(output_size))
 #define WebPProfileMarkMetalCrossColor() ((void)0)
 #define WebPProfileMarkMetalHash() ((void)0)
 #endif
 
-#if defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS) || \
-    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
+#if defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS) ||        \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
 #if defined(_MSC_VER)
 #define WEBP_PROFILE_NOINLINE __declspec(noinline)
 #elif defined(__GNUC__) || defined(__clang__)

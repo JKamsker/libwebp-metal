@@ -23,6 +23,8 @@ static WEBP_BACKREF_ATTRIBUTION_NOINLINE int BACKREF_DISTANCE_ONLY_NAME(
   const uint64_t attribution_setup_start =
       WebPProfileStageBegin(WEBP_PROFILE_BACKREF_COST_DP_SETUP);
 
+  BACKREF_DP_RECORD_CALL();
+
   cost_model = (CostModel*)WebPSafeCalloc(1ULL, cost_model_size);
   cost_manager = (CostManager*)WebPSafeCalloc(1ULL, sizeof(*cost_manager));
 
@@ -40,60 +42,61 @@ static WEBP_BACKREF_ATTRIBUTION_NOINLINE int BACKREF_DISTANCE_ONLY_NAME(
                       attribution_setup_start);
 
   {
-  const uint64_t attribution_steady_start =
-      WebPProfileStageBegin(WEBP_PROFILE_BACKREF_COST_DP_STEADY);
-  dist_array[0] = 0;
-  AddSingleLiteralWithCostModel(argb, &hashers, cost_model, /*idx=*/0,
-                                use_color_cache, /*prev_cost=*/0,
-                                cost_manager->costs, dist_array);
-  for (i = 1; i < pix_count; ++i) {
-    const int64_t prev_cost = cost_manager->costs[i - 1];
-    int offset, len;
-    VP8LHashChainFindCopy(hash_chain, i, &offset, &len);
-    AddSingleLiteralWithCostModel(argb, &hashers, cost_model, i,
-                                  use_color_cache, prev_cost,
+    const uint64_t attribution_steady_start =
+        WebPProfileStageBegin(WEBP_PROFILE_BACKREF_COST_DP_STEADY);
+    dist_array[0] = 0;
+    AddSingleLiteralWithCostModel(argb, &hashers, cost_model, /*idx=*/0,
+                                  use_color_cache, /*prev_cost=*/0,
                                   cost_manager->costs, dist_array);
-    if (len >= 2) {
-      if (offset != offset_prev) {
-        const int code = VP8LDistanceToPlaneCode(xsize, offset);
-        offset_cost = GetDistanceCost(cost_model, code);
-        first_offset_is_constant = 1;
-        BACKREF_PUSH_INTERVAL_NAME(cost_manager, prev_cost + offset_cost, i,
-                                   len);
-      } else {
-        assert(offset_cost >= 0);
-        assert(len_prev >= 0);
-        assert(first_offset_is_constant == 0 || first_offset_is_constant == 1);
-        if (first_offset_is_constant) {
-          reach = i - 1 + len_prev - 1;
-          first_offset_is_constant = 0;
-        }
-        if (i + len - 1 > reach) {
-          int offset_j, len_j = 0;
-          int j;
-          assert(len == MAX_LENGTH || len == pix_count - i);
-          for (j = i; j <= reach; ++j) {
-            VP8LHashChainFindCopy(hash_chain, j + 1, &offset_j, &len_j);
-            if (offset_j != offset) {
-              VP8LHashChainFindCopy(hash_chain, j, &offset_j, &len_j);
-              break;
-            }
+    for (i = 1; i < pix_count; ++i) {
+      const int64_t prev_cost = cost_manager->costs[i - 1];
+      int offset, len;
+      VP8LHashChainFindCopy(hash_chain, i, &offset, &len);
+      AddSingleLiteralWithCostModel(argb, &hashers, cost_model, i,
+                                    use_color_cache, prev_cost,
+                                    cost_manager->costs, dist_array);
+      if (len >= 2) {
+        if (offset != offset_prev) {
+          const int code = VP8LDistanceToPlaneCode(xsize, offset);
+          offset_cost = GetDistanceCost(cost_model, code);
+          first_offset_is_constant = 1;
+          BACKREF_PUSH_INTERVAL_NAME(cost_manager, prev_cost + offset_cost, i,
+                                     len);
+        } else {
+          assert(offset_cost >= 0);
+          assert(len_prev >= 0);
+          assert(first_offset_is_constant == 0 ||
+                 first_offset_is_constant == 1);
+          if (first_offset_is_constant) {
+            reach = i - 1 + len_prev - 1;
+            first_offset_is_constant = 0;
           }
-          UpdateCostAtIndex(cost_manager, j - 1, 0);
-          UpdateCostAtIndex(cost_manager, j, 0);
-          BACKREF_PUSH_INTERVAL_NAME(
-              cost_manager, cost_manager->costs[j - 1] + offset_cost, j,
-              len_j);
-          reach = j + len_j - 1;
+          if (i + len - 1 > reach) {
+            int offset_j, len_j = 0;
+            int j;
+            assert(len == MAX_LENGTH || len == pix_count - i);
+            for (j = i; j <= reach; ++j) {
+              VP8LHashChainFindCopy(hash_chain, j + 1, &offset_j, &len_j);
+              if (offset_j != offset) {
+                VP8LHashChainFindCopy(hash_chain, j, &offset_j, &len_j);
+                break;
+              }
+            }
+            UpdateCostAtIndex(cost_manager, j - 1, 0);
+            UpdateCostAtIndex(cost_manager, j, 0);
+            BACKREF_PUSH_INTERVAL_NAME(cost_manager,
+                                       cost_manager->costs[j - 1] + offset_cost,
+                                       j, len_j);
+            reach = j + len_j - 1;
+          }
         }
       }
+      UpdateCostAtIndex(cost_manager, i, 1);
+      offset_prev = offset;
+      len_prev = len;
     }
-    UpdateCostAtIndex(cost_manager, i, 1);
-    offset_prev = offset;
-    len_prev = len;
-  }
-  WebPProfileStageEnd(WEBP_PROFILE_BACKREF_COST_DP_STEADY,
-                      attribution_steady_start);
+    WebPProfileStageEnd(WEBP_PROFILE_BACKREF_COST_DP_STEADY,
+                        attribution_steady_start);
   }
 
   ok = !refs->error;
