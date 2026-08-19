@@ -225,6 +225,13 @@ rows intentionally leave the production eight-band cap in place and show the
 safe, byte-exact CPU fallback. The exact candidate patch, native cache, all 96
 rows, and computed summary are included.
 
+`libwebp-jpeg-decode-feasibility-functions.txt` and its matching benchmark
+row preserve the fresh end-to-end sampling evidence that bounded `ReadJPEG`.
+The `libwebp-i4-fused-register-*` files contain the exact corrected candidate
+patch, 24 byte-exact timing rows, candidate/restored seven-test transcripts,
+parent/candidate resources, and binary hashes for the rejected register-local
+I4 coefficient handoff.
+
 Inspect the sampling archives with:
 
 ```sh

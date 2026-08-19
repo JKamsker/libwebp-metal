@@ -1832,3 +1832,33 @@ Both gains miss the strict 1.5 ms/image gate, so the candidate was removed.
 The raw rows are
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-partition0-current-formats-screen.jsonl`.
 This is RTX 2080 SUPER-only evidence and makes no Ampere+ claim.
+
+## Fused I4 transform/quantization handoff
+
+A fresh 48-image `gprofng` sample first bounded the JPEG input decoder at
+0.050 seconds inclusive, about 1.04 ms/image. That is below the retention gate
+even before considering that PNG would be unchanged, so the next candidate
+returned to the profiled 25.6--26.5% I4 transform/quantization interval.
+
+The pre-Ampere candidate kept each four-lane group's transformed coefficient
+column in registers through basic quantization and inverse-transform setup.
+It wrote levels through an exact inverse-zigzag map and removed two warp
+synchronizations plus the shared coefficient publish/reload. The first build
+omitted the mode non-zero publication and was rejected by correctness before
+timing; the corrected candidate and restored source both passed all seven
+CTests.
+
+All 24 order-reversed native-sm_75 screen rows were byte-exact:
+
+| Format | Parent | Fused handoff | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.641 ms/image | 38.986 ms/image | 0.655 ms/image |
+| JPEG lossy | 39.426 ms/image | 39.168 ms/image | 0.258 ms/image |
+
+Resources moved from 103 to 98 registers with the same 352-byte stack and
+23,392-byte shared allocation. Both gains are far below 1.5 ms/image, so the
+candidate was removed. The raw sample, benchmark row, exact corrected patch,
+timings, resources, binary hashes, and candidate/restored CTest logs are in
+the adjacent evidence directory under `libwebp-jpeg-decode-feasibility-*` and
+`libwebp-i4-fused-register-*`. This is Turing-only evidence; Ampere+ behavior
+was never changed.

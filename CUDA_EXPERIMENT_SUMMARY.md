@@ -410,3 +410,29 @@ host schedule to rescue the borderline Turing GPU composition. The candidate
 was removed. Raw rows are archived as
 `libwebp-partition0-current-formats-screen.jsonl` with the RTX 2080 SUPER
 machine report. No Ampere+ performance claim is made.
+
+## Pre-Ampere fused I4 coefficient handoff rejection
+
+A fresh 48-image JPEG sampling profile attributed only 0.050 seconds
+inclusive to `ReadJPEG` (about 1.04 ms/image), bounding input decode below the
+retention gate. The still-actionable retained subphase profile assigns
+25.6--26.5% of I4 cycles to transform/quantization. A Turing-only candidate
+therefore kept each four-lane mode group's transformed coefficient column in
+registers through basic quantization and inverse-transform setup. It removed
+two warp synchronizations and the shared coefficient publish/reload while
+preserving the exact zigzag levels and arithmetic. An omitted non-zero publish
+was caught before timing; the corrected candidate and restored tree both
+passed 7/7 CTests.
+
+All 24 corrected screen rows matched hashes and byte counts:
+
+| Format | Parent | Fused handoff | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.641 ms/image | 38.986 ms/image | 0.655 ms/image |
+| JPEG lossy | 39.426 ms/image | 39.168 ms/image | 0.258 ms/image |
+
+The candidate reduced the kernel from 103 to 98 registers but both gains are
+far below 1.5 ms/image, so it was removed. Raw profile, exact corrected patch,
+timings, resources, binary hashes, and both CTest logs are archived under the
+`libwebp-i4-fused-register-*` and `libwebp-jpeg-decode-feasibility-*`
+prefixes. RTX 2080 SUPER only; no Ampere+ behavior or performance claim.

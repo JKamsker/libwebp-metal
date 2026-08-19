@@ -1,0 +1,2 @@
+b46c6843f6b1b4f87798a3ba1f86a7487ced0495ce6c6f64bcac8ebccc8894c6  build-cuda/webp_cuda_batch_benchmark
+d560370f67b007e90dcd3f18067468fc5cc72c7a5207935fb2988738601f4887  /tmp/libwebp-retained-baseline/build-native/webp_cuda_batch_benchmark

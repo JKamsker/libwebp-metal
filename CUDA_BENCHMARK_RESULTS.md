@@ -1727,3 +1727,29 @@ Both gains are below the 1.5 ms/image gate, and JPEG decisively rules out this
 host schedule as the missing increment for the borderline Turing GPU
 composition. The candidate was removed. Raw rows are archived with the RTX
 2080 SUPER machine report; no Ampere+ performance claim is made.
+
+## Fused I4 transform/quantization handoff rejection
+
+A new 48-image JPEG sampling run first bounded input decode: `ReadJPEG` owned
+0.050 seconds inclusive, about 1.04 ms/image, so even an impossible deletion
+would miss the 1.5 ms/image gate. The retained I4 transform/quantization
+interval remains 25.6--26.5% of I4 cycles and supplied the next candidate.
+
+On the pre-Ampere compile branch, each four-lane mode group retained its four
+forward-transform coefficients in registers through basic quantization and
+the first inverse-transform stage. Exact inverse-zigzag stores preserved the
+level layout while eliminating two warp synchronizations and the shared
+coefficient handoff. The initial build omitted publication of the mode's
+non-zero bit and failed before timing; that bookkeeping write was restored.
+The corrected candidate and restored tree both passed all seven CTests.
+
+Two order-reversed native-sm_75 processes produced 24 exact timing rows:
+
+| Format | Parent | Fused handoff | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.641 ms/image | 38.986 ms/image | 0.655 ms/image |
+| JPEG lossy | 39.426 ms/image | 39.168 ms/image | 0.258 ms/image |
+
+Although register use fell from 103 to 98, neither format reaches the strict
+gate. The candidate was removed. Raw evidence is archived with the RTX 2080
+SUPER report and makes no Ampere+ claim.
