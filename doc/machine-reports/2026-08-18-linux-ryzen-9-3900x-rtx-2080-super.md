@@ -800,3 +800,25 @@ and
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-i16-combined-provisional-official-results.json`.
 The preliminary screen and two pre-`native` A/Bs are retained alongside them
 for auditability, but are not used for the decision.
+
+## Four-row cooperative I4 prediction
+
+A fresh retained-head profile measured PNG lossy at 90.11 ms/image CPU and
+39.23 ms/image CUDA, and JPEG lossy at 88.10 and 38.83 ms/image. Device phase
+timing put photo/texture I4 at 60.0--61.9% of block cycles. A candidate kept
+the existing uniform 2--3-mode-per-warp assignment but used four aligned lanes
+to generate one prediction row each, instead of filling every 4x4 prediction
+from the warp leader.
+
+The concurrency, histogram, trellis/fallback, and near-lossless tests passed.
+Two order-reversed native-sm_75 processes produced six samples per cell:
+
+| Format | Parent | Cooperative rows | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.303 ms/image | 40.987 ms/image | +0.684 ms |
+| JPEG lossy | 40.231 ms/image | 40.894 ms/image | +0.664 ms |
+
+All 24 timing outputs retained their parent hash and byte count. The candidate
+was removed because both formats regressed. This was measured only on the RTX
+2080 SUPER and makes no Ampere+ performance claim. Raw evidence is
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-cooperative-prediction-screen.jsonl`.
