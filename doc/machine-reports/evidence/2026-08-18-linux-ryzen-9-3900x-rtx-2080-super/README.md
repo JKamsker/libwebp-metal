@@ -298,6 +298,12 @@ JPEG control/candidate rows, focused/restored test status, and computed
 decision summary. The candidate was removed after regressing both formats by
 more than 41 ms/image.
 
+The `libwebp-i4-pred-group-fusion-*` files preserve the refreshed native
+batch/device/CPU profile, exact rejected pre-Ampere prediction-group patch,
+24 order-reversed timing rows, candidate/restored focused test status, and
+decision summary. The source was restored after gains of 0.671 ms/image PNG
+and 0.881 ms/image JPEG missed the retention threshold.
+
 Inspect the sampling archives with:
 
 ```sh

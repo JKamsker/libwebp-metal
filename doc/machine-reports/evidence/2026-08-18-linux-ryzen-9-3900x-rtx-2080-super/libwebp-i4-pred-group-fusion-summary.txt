@@ -1,0 +1,18 @@
+Candidate: pre-Ampere fused I4 prediction group
+Status: rejected and removed
+Hardware: Ryzen 9 3900X / RTX 2080 SUPER
+Build: Release, CMAKE_CUDA_ARCHITECTURES=native
+Benchmark: lossy method 4 quality 75, six-image small/medium corpus,
+           batch size 24, one discarded warmup, three retained samples,
+           two order-reversed process pairs per format
+
+Format  Parent median  Candidate median  Gain ms/image  Hash              Bytes
+PNG         39.468778         38.797732       0.671046  ace64e860de89b43  6441688
+JPEG        39.524819         38.643892       0.880927  1cbb84d2ab926db3  6400792
+
+The pre-Ampere candidate replaced warp 0's separate DC/RD/HD prediction calls
+with a fused routine. RD and HD reused six symmetric three-tap averages, and
+the other three warp leaders used direct calls for their fixed mode groups.
+Ampere+ retained the original dispatcher loop. The focused exact suite and
+all timing outputs matched, but both gains are below the strict 1.5 ms/image
+retention threshold. The source was restored.

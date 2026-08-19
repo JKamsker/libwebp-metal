@@ -1,0 +1,34 @@
+Retained native-sm_75 profile before source modification
+Build: Release, CMAKE_CUDA_ARCHITECTURES=native
+
+Current six-image batch samples (ms/image)
+format  sample0       sample1       sample2       hash              bytes
+PNG     39.600436125  39.337957250  39.391932208  ace64e860de89b43  6441688
+JPEG    39.555544792  39.787391500  39.660712917  1cbb84d2ab926db3  6400792
+
+WEBP_CUDA_DECIMATE_TIMING=2, medium method 4 / quality 75
+content   GPU wall ms  import  i16-num  i16-sel  I4     uv-num  uv-sel  recon
+graphic        26.37     5.5%    12.9%    25.0%  37.0%    7.3%   11.6%   0.7%
+photo          26.69     3.8%     9.4%     9.5%  63.8%    4.9%    8.0%   0.5%
+texture        25.37     4.0%    10.0%     8.5%  65.5%    5.8%    5.7%   0.6%
+
+Guarded CPU stage profiler, direct CUDA cwebp (cold process, ms)
+content   total   analyze  decimate  emit-tokens
+graphic  42.987    11.704    26.819        0.785
+photo    48.269    10.517    28.575        2.954
+texture 103.927    10.076    59.380       17.551
+
+Whole forced-batch gprofng sampling (0.631 seconds aggregate CPU)
+exclusive  share   function
+0.308 s    48.82%  VP8PutTokenPage
+0.199 s    31.60%  VP8RecordCoeffTokens
+0.067 s    10.58%  ioctl
+0.008 s     1.26%  SetResidualCoeffs_SSE2
+
+Token recording/emission is the sampled CPU hot path, but its local-state,
+normalization, probability selection, unrolling, flushing, and worker policy
+have already been measured and rejected or retained. The distinct current
+device lever is I4, at 63.8--65.5% of realistic photo/texture block cycles.
+The four-leader schedule assigns DC/RD/HD to warp 0; RD and HD redundantly
+compute six identical symmetric three-tap boundary averages. The candidate
+fused those averages and used static calls for the remaining warp groups.

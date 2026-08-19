@@ -2171,3 +2171,27 @@ latency, so it was removed. The restored focused build succeeded and six of
 seven CTests passed; the known silent `cuda_histogram_test` failure reproduced
 unchanged. Evidence is archived under `libwebp-decimate-graph-replay-*`. This
 is RTX 2080 SUPER evidence only and does not alter Ampere+ settings or claims.
+
+## Pre-Ampere fused I4 prediction group
+
+The next retained-head profile measured 39.44 ms/image PNG and 39.66
+ms/image JPEG on the native six-image batch. Medium device traces placed I4
+at 63.8% of photo and 65.5% of texture block cycles. Direct CPU stage traces
+measured analysis at 10.1--11.7 ms/image, while forced-batch sampling again
+landed in the exhaustively tuned token recorder/emitter. The distinct device
+candidate therefore fused warp 0's DC/RD/HD predictions: RD and HD shared six
+identical symmetric three-tap boundary averages, and the remaining leaders
+used fixed group calls. Ampere+ retained the original loop.
+
+Candidate and restored focused exact tests passed. All 24 order-reversed rows
+matched the established aggregate output:
+
+| Format | Parent | Fused group | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.469 ms/image | 38.798 ms/image | 0.671 ms/image |
+| JPEG lossy | 39.525 ms/image | 38.644 ms/image | 0.881 ms/image |
+
+The source was restored because neither format reached 1.5 ms/image. Evidence
+under `libwebp-i4-pred-group-fusion-*` includes the exact patch, refreshed
+batch/device/CPU profile, all timing rows, tests, and computed summary. This
+result is RTX 2080 SUPER-only and changes no Ampere+ setting or claim.

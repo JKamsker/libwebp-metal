@@ -2032,3 +2032,24 @@ suite passed before timing. Because replay regressed both formats by more than
 matrix was unnecessary. Raw artifacts use the
 `libwebp-decimate-graph-replay-*` prefix. Turing-only evidence; Ampere+
 thresholds and source behavior remain unchanged.
+
+## Fused I4 prediction-group rejection
+
+The retained native-sm_75 phase trace measured I4 at 63.8% of photo-medium
+and 65.5% of texture-medium block cycles. A pre-Ampere candidate fused the
+four-leader schedule's DC/RD/HD group, allowing RD and HD to share six exact
+symmetric three-tap averages, and statically called the remaining fixed mode
+groups. The Ampere+ source path was unchanged.
+
+Two order-reversed process pairs per format, with one warmup and three
+retained 24-image samples, produced exact aggregate output throughout:
+
+| Format | Parent | Candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 39.469 ms/image | 38.798 ms/image | 0.671 ms/image | `ace64e860de89b43` / 6,441,688 |
+| JPEG lossy | 39.525 ms/image | 38.644 ms/image | 0.881 ms/image | `1cbb84d2ab926db3` / 6,400,792 |
+
+The candidate and restored focused exact suites passed, but both improvements
+are noise under the 1.5 ms/image gate. The candidate was removed; raw
+artifacts use the `libwebp-i4-pred-group-fusion-*` prefix. This is Turing-only
+evidence and does not alter Ampere+ behavior or thresholds.

@@ -733,3 +733,27 @@ source passed six of seven local CTests; the sole silent
 `cuda_histogram_test` exit is pre-existing in the untouched parent. Exact
 patch, raw rows, profile, tests, and summary are archived under
 `libwebp-decimate-graph-replay-*`. RTX 2080 SUPER only; no Ampere+ claim.
+
+## Pre-Ampere fused I4 prediction-group rejection
+
+Fresh native-sm_75 tracing kept I4 at 63.8% of photo and 65.5% of texture
+block cycles. Whole forced-batch sampling placed the CPU work in the already
+exhausted token recorder/emitter, so the next distinct device candidate fused
+warp 0's fixed DC/RD/HD prediction group. RD and HD reused six symmetric
+three-tap boundary averages; the other warp leaders used direct calls for
+their fixed mode groups. Ampere+ retained the original dispatcher loop.
+
+The focused trellis, padded-stride, band-remainder, and transactional-fallback
+test passed for both candidate and restored source. All 24 order-reversed
+native timing rows matched hashes and byte counts:
+
+| Format | Parent | Fused prediction group | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.469 ms/image | 38.798 ms/image | 0.671 ms/image |
+| JPEG lossy | 39.525 ms/image | 38.644 ms/image | 0.881 ms/image |
+
+Both gains are below 1.5 ms/image, so the candidate was removed. Reusing the
+shared prediction arithmetic improves the earlier static-dispatch shape but
+still cannot move enough of the sequential I4 chain. Exact patch, profile,
+24 rows, tests, and summary are archived under
+`libwebp-i4-pred-group-fusion-*`. RTX 2080 SUPER only; no Ampere+ claim.
