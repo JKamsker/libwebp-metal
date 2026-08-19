@@ -59,7 +59,8 @@ typedef enum {
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V9_EXPERIMENT)
 void WebPProfileBeginSession(const WebPConfig* config,
                              const WebPPicture* picture);
 void WebPProfileEndSession(int ok, int error_code);
@@ -73,7 +74,8 @@ void WebPProfileMarkMetalHash(void);
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V9_EXPERIMENT)
 uint64_t WebPProfileClockNowForValidation(void);
 #endif
 #else
@@ -95,7 +97,8 @@ uint64_t WebPProfileClockNowForValidation(void);
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V9_EXPERIMENT)
 #if defined(_MSC_VER)
 #define WEBP_PROFILE_NOINLINE __declspec(noinline)
 #elif defined(__GNUC__) || defined(__clang__)
