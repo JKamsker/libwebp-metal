@@ -591,3 +591,54 @@ The complete portable suite at `4852f92e` measured:
 All 180 official validations, six registered CTests, and the separate 105-case
 exact methods 2--6 / qualities 25--98 / tiny / odd / band-3 fallback battery
 passed. Exact CI run `32217152201` passed all eleven jobs.
+
+## Local-state in-page byte flushing
+
+A fresh whole-process profile after the local arithmetic-state change moved
+the remaining serial cost into the byte flush itself: `gprofng` attributed
+42.92% of exclusive CPU samples to `Flush`, 29.39% to `VP8PutTokenPage`, and
+22.55% to coefficient-token recording. Revision `9a44518a` keeps the output
+buffer, position, and pending run local across a token page and performs the
+unchanged carry/run byte emission inline while the buffer has capacity. The
+original `Flush` and `BitWriterResize` path remains the capacity-growth and
+error path.
+
+Five order-balanced baseline/candidate processes, each retaining three
+24-image samples after one warmup, measured:
+
+| Format | `4852f92e` baseline | In-page byte flushing | Change |
+|---|---:|---:|---:|
+| PNG lossy | 44.299 ms/image | 41.843 ms/image | **-2.456 ms** |
+| JPEG lossy | 44.317 ms/image | 42.017 ms/image | **-2.300 ms** |
+
+All 60 outputs retained their reference hash and byte count. The complete
+portable suite at `9a44518a` measured:
+
+### Persistent 24-image batch
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy | 92.0 ms | 41.6 ms | **2.21x** |
+| PNG lossless | 142.5 ms | 92.4 ms | **1.54x** |
+| PNG near-lossless | 210.5 ms | 92.6 ms | **2.27x** |
+| JPEG lossy | 92.6 ms | 41.7 ms | **2.22x** |
+| JPEG lossless | 694.7 ms | 146.2 ms | **4.75x** |
+| JPEG near-lossless | 808.1 ms | 146.8 ms | **5.51x** |
+
+### Fresh process per image
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy | 97.7 ms | 266.1 ms | **0.37x** |
+| PNG lossless | 154.4 ms | 316.6 ms | **0.49x** |
+| PNG near-lossless | 221.3 ms | 328.0 ms | **0.67x** |
+| JPEG lossy | 96.5 ms | 270.0 ms | **0.36x** |
+| JPEG lossless | 690.0 ms | 362.7 ms | **1.90x** |
+| JPEG near-lossless | 799.8 ms | 382.3 ms | **2.09x** |
+
+The suite passed all 180 validation pairs. Seven registered CTests, including
+a new always-active writer test for repeated buffer growth and allocation
+failure, and an additional 105 exact-byte methods 2--6 / qualities 25--98 /
+tiny / odd / band-3 fallback battery passed. The raw suite result is
+`/tmp/libwebp-cuda-results-2080super-fast-flush/results.json` under label
+`win-2080super-fast-flush`. Exact CI run `32221803146` passed all eleven jobs.
