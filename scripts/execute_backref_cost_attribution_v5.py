@@ -26,9 +26,9 @@ EXPECTED_ENV = "WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V5_COMMIT"
 CONTROL_TIMEOUT_SECONDS = 20
 # Frozen after the Phase-1 representative transfer. See the manifest's
 # transport_timeout_derivation; this is deliberately not a generic default.
-TRANSFER_TIMEOUT_SECONDS = 120
+TRANSFER_TIMEOUT_SECONDS = 1020
 ARCHIVE_BUILD_TIMEOUT_SECONDS = 180
-MAXIMUM_TRANSFER_ARCHIVE_BYTES = 80 * 1024 * 1024
+MAXIMUM_TRANSFER_ARCHIVE_BYTES = 8 * 1024 * 1024
 
 
 def sha256(path: Path) -> str:

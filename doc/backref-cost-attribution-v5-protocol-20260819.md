@@ -88,7 +88,7 @@ The synchronous remote rehearsal keeps `WEBP_BENCHMARK_SESSION` absent, attempts
 and runs no encoder correctness/profile workload. It admits exact source,
 builds the optimized Metal-disabled runner, validates private symbols and the
 clock without an encoder or profiler workload, constructs all commands, and
-transfers a deterministic 64 MiB SHA-256-counter payload that is at least the
+transfers a deterministic 4 MiB SHA-256-counter payload that is at least the
 frozen maximum expected run archive. It exercises normal, controlled-refusal,
 missing-artifact, truncated/corrupt-archive, and timeout contracts without
 signals, then proves all-or-nothing extraction, exact-child cleanup, and
@@ -99,8 +99,11 @@ Lease transfer has exactly three states: `not-attempted`,
 `unavailable-after-attempt`, and `verified`. A lease receipt is mandatory only
 after acquisition was attempted. Compact control receipts have a 20-second
 bound. The finite bulk timeout is frozen from the representative transfer as
-`ceil(4 * measured_elapsed_seconds + 10)`, with a 20-second floor; it is not an
-arbitrary default. Remote archive construction has a 180-second bound.
+measured lower-bound throughput: a 64 MiB calibration moved 2,088,960 bytes in
+120 seconds before bounded refusal, projecting the 4 MiB representative plus
+overhead below 252 seconds. Four-times margin plus 10 seconds, rounded upward
+to a whole minute, freezes 1,020 seconds. Remote archive construction has a
+180-second bound.
 Cleanup is independent of archive and lease success: every mode requires an
 independently validated exact-child removal receipt and absence proof. Local
 contract tests cover naturally completed not-attempted, verified, and missing

@@ -399,12 +399,17 @@ def correctness_gate(manifest: dict, runner: Path, corpus: Path, cases: dict,
                 raise RuntimeError("correctness input was mutated")
             rows.append({"case_id": case_id, "method": method,
                          "bitstream_sha256": hashes.pop(),
+                         "bitstream_bytes": destination.stat().st_size,
                          "baseline_candidate_equal": True,
                          "repeat_deterministic": True,
                          "decoded_rgb_equal": True,
                          "input_sha256_before": input_sha_before,
                          "input_sha256_after": input_sha_after,
                          "input_immutable": True})
+            for variant in ("baseline", "candidate"):
+                for repeat in range(2):
+                    (root / f"{case_id}-m{method}-{variant}-{repeat}.webp").unlink()
+    root.rmdir()
     write_json(output / "correctness.json", rows)
     return rows
 

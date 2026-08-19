@@ -37,6 +37,18 @@
     "discovered_pid_signals": 0,
     "external_profiler_invocations": 0
   },
+  "transport_calibration": {
+    "status": "BOUNDED_REFUSAL_USED_FOR_LOWER_BOUND",
+    "declared_archive_bytes": 67163574,
+    "declared_archive_sha256": "56e1d27ecd8ed086f7c77eb6570b2485a34de846f95598cd501689bcddde0da4",
+    "partial_bytes": 2088960,
+    "partial_sha256": "edfd8f144755c42a991f8217167ece7485439263bee213bf1247fb8fcbe12f7c",
+    "elapsed_seconds": 120,
+    "lower_bound_bytes_per_second": 17408,
+    "cleanup_absence_proved": true,
+    "control_receipts_survived_bulk_timeout": true,
+    "derived_bulk_timeout_seconds": 1020
+  },
   "frozen_inventory": {
     "cases": ["photo-large", "graphic-large"],
     "methods": [4, 6],

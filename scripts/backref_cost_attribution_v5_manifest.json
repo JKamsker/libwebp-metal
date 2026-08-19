@@ -24,10 +24,10 @@
     "cleanup_rule": "every mode requires an independent exact-child cleanup receipt and exact-child absence proof regardless of archive or lease state",
     "control_plane": ["operator-status", "source-admission", "archive-build", "lease-when-attempted", "cleanup-last"],
     "data_plane": "predeclared tar+gzip hash, byte size, and complete safe member inventory; bulk extraction follows all verification only",
-    "maximum_expected_run_archive_bytes": 67108864,
-    "maximum_expected_run_archive_justification": "64 MiB conservatively covers 120 raw runner rows, 120 stage rows, 24 process snapshots/commands, build logs, correctness hashes, corpus hashes, and compact decoded-pixel/byte equivalence records; corpus inputs and decoded pixel buffers are verified but not archived",
-    "timeouts": {"compact_control_seconds": 20, "bulk_transfer_seconds": 120, "archive_build_seconds": 180},
-    "transport_timeout_derivation": "provisional until the exact-commit representative rehearsal records 64 MiB incompressible transfer evidence; freeze ceil(4*measured_elapsed_seconds+10) with a 20-second floor"
+    "maximum_expected_run_archive_bytes": 4194304,
+    "maximum_expected_run_archive_justification": "4 MiB conservatively covers the compressed archive of 120 raw runner rows, 120 raw stage rows, all 24 commands, process/resource records and build logs; 16 correctness products are decoded and byte-compared in-process then retained as compact byte-size/SHA-256/pixel-equivalence records with input/corpus hashes, not duplicate WebP payloads",
+    "timeouts": {"compact_control_seconds": 20, "bulk_transfer_seconds": 1020, "archive_build_seconds": 180},
+    "transport_timeout_derivation": "the 64 MiB incompressible calibration transferred 2088960 bytes in 120 seconds before bounded refusal (17408 B/s lower-bound evidence); 4 MiB plus archive overhead projects below 252 seconds, then 4x margin plus 10 seconds rounded up to a whole minute freezes 1020 seconds"
   },
   "frozen_phase_2_command": "env WEBP_BENCHMARK_SESSION=exclusive WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V5_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_attribution_v5.py run \"$PWD/evidence/backref-cost-attribution-v5-execution-20260819\"",
   "candidate": {
@@ -133,7 +133,7 @@
   },
   "resources": {
     "lease_path": "~/.libwebp-metal-backref-cost-attribution-v5.lock", "profile_timeout_seconds": 600,
-    "remote_timeout_seconds": 7200, "transfer_timeout_seconds": 120,
+    "remote_timeout_seconds": 7200, "transfer_timeout_seconds": 1020,
     "archive_build_timeout_seconds": 180, "maximum_output_bytes": 2147483648,
     "minimum_available_memory_bytes": 4294967296, "minimum_available_disk_bytes": 8589934592,
     "parallel_profile_processes": 1
