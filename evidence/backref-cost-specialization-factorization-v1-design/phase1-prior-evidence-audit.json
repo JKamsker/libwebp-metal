@@ -1,0 +1,51 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v1-prior-evidence-audit-v1",
+  "status": "PASS",
+  "base_commit": "c6046dc7cde6e7ea1cc9d54a6a90c55f8a2f2edb",
+  "auditor": "Sol/high",
+  "v16": {
+    "status": "MERGED_COMPLETE_EVIDENCE_NOT_REUSED",
+    "raw_artifact_index": {
+      "path": "evidence/backref-cost-attribution-v16-execution-20260819/artifact-hashes.json",
+      "sha256": "9c2a1bad74ef66a482c09390ead68fbc13d68de6d4e93de860c1bd3f84a56f77"
+    },
+    "selected_dp_counter_receipt": {
+      "path": "evidence/backref-cost-attribution-v16-execution-20260819/selected-dp-counter-check.json",
+      "sha256": "a52d4eed638ebfad3a786bc75d4ae49fb17678c6d31e6ead840eebfd110d64eb"
+    },
+    "phase3_evaluation": {
+      "path": "evidence/backref-cost-attribution-v16-phase3-evaluation-consequence-20260819.json",
+      "sha256": "375b1ef41913c4344291a6c3181ac02592ae9d66e29a91ced780a854fdea99f3"
+    },
+    "raw_stage_rows": 120,
+    "raw_runner_rows": 120,
+    "finding": "Correctness, evidence and repeatability passed. DP total and steady improve on photo and regress on graphic; setup is small and inconsistent; whole encode is not consistently beneficial. Coarse timers cannot distinguish append-hint work savings from code placement, control layout, branch or I-cache effects.",
+    "sample_policy": "No V16 timing row is admitted into Factorization V1 and the old two-variant A/B is not rerun."
+  },
+  "interval_search_v3": {
+    "work_rows": {
+      "path": "evidence/backref-cost-interval-search-v3-design-work/work-metrics.jsonl",
+      "sha256": "d5b16a2122d967b30d415d81b17308165673c982d7aa7d89c6165c0a364b33c2",
+      "rows": 36
+    },
+    "work_summary": {
+      "path": "evidence/backref-cost-interval-search-v3-design-work/summary.json",
+      "sha256": "4a9b8bf6236f33e86cd55c9ee4d3972891e5d922d4de66e5aae19f2e8eabfe4a"
+    },
+    "codegen": {
+      "path": "evidence/backref-cost-interval-search-v3-design-work/codegen.json",
+      "sha256": "972faf01dea8df95140a9b90e36b08ca5f4180c7308c3b28fb6716cb4e7c0905"
+    },
+    "finding": "Active candidate rows remove all 5,585,685 baseline forward-positioning steps while preserving 53,769 backward steps and common interval work; they record 1,062,260 append-hint fast paths and 1,124,012 updates. This establishes real algorithmic work removal but does not attribute the V16 content reversal."
+  },
+  "source_and_disassembly": {
+    "merged_v16_source_sha256": "a2a442fc86316b627b3b88d9dc31c1cd7861487bb49452e288e90889f73be55c",
+    "merged_v16_control_source_sha256": "61ddbfe54c9b0b538a25891c1d056f23e9d67ab4d28c3e7859c021d2e35f7a39",
+    "phase1_factorization_source_sha256": "13f933f20a9b05219e6199eda53d88e9d42472db639d23b3843a72bcdfe86202",
+    "shared_dp_template_sha256": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5",
+    "layout_clone_source_sha256": "30f144d46895f210cf1969cda8696a7ad21fd7cf708c94ad32703f6caa675a7b",
+    "finding": "The merged source already provides separately noinline-able baseline and specialized boundaries. A third noinline baseline clone can use the same DP template and an exact PushInterval clone, so the preferred B/L/H diagnostic is credible."
+  },
+  "decision": "ACCEPT_PREFERRED_B_L_H_FACTORIZATION",
+  "performance_samples_generated": 0
+}

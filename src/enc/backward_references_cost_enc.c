@@ -50,7 +50,10 @@
      defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT) +            \
      defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V14_EXPERIMENT) +            \
      defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V15_EXPERIMENT) +            \
-     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT)) > 1
+     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT) +            \
+     defined(                                                                \
+         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)) > \
+    1
 #error "overlapping backref cost experiments are mutually exclusive"
 #elif defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
 #include "src/enc/backref_cost_traceback_experiment_enc.h"
@@ -212,6 +215,51 @@
 #define VP8LBackrefCostIntervalSpecializationV1ExperimentEnabled \
   VP8LBackrefCostAttributionV16ExperimentEnabled
 #define VP8LBackrefCostIntervalSpecializationV1ExperimentInjectFallback() 0
+#elif defined(                                                          \
+    WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+#include "src/enc/backref_cost_specialization_factorization_v1_experiment_enc.h"
+#define WEBP_USE_BACKREF_COST_INTERVAL_SPECIALIZATION_LOCAL 1
+#define VP8LBackrefCostIntervalSpecializationV1ExperimentInjectFallback() 0
+#if defined(WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_RECORDER)
+#define WEBP_BACKREF_COST_INTERVAL_SPECIALIZATION_LOCAL_RECORDER 1
+#define WEBP_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_RECORDER 1
+#define VP8LBackrefCostIntervalSpecializationV1RecordActivation \
+  VP8LBackrefCostSpecializationFactorizationV1RecordActivation
+#define VP8LBackrefCostIntervalSpecializationV1RecordPush \
+  VP8LBackrefCostSpecializationFactorizationV1RecordPush
+#define VP8LBackrefCostIntervalSpecializationV1RecordCacheSegment \
+  VP8LBackrefCostSpecializationFactorizationV1RecordCacheSegment
+#define VP8LBackrefCostIntervalSpecializationV1RecordOverlapScan \
+  VP8LBackrefCostSpecializationFactorizationV1RecordOverlapScan
+#define VP8LBackrefCostIntervalSpecializationV1RecordInsert \
+  VP8LBackrefCostSpecializationFactorizationV1RecordInsert
+#define VP8LBackrefCostIntervalSpecializationV1RecordPositionBackwardStep \
+  VP8LBackrefCostSpecializationFactorizationV1RecordPositionBackwardStep
+#define VP8LBackrefCostIntervalSpecializationV1RecordPositionForwardStep \
+  VP8LBackrefCostSpecializationFactorizationV1RecordPositionForwardStep
+#define VP8LBackrefCostIntervalSpecializationV1RecordAppendHintFastPath \
+  VP8LBackrefCostSpecializationFactorizationV1RecordAppendHintFastPath
+#define VP8LBackrefCostIntervalSpecializationV1RecordAppendHintBranchCheck \
+  VP8LBackrefCostSpecializationFactorizationV1RecordAppendHintBranchCheck
+#define VP8LBackrefCostIntervalSpecializationV1RecordAppendHintLoad \
+  VP8LBackrefCostSpecializationFactorizationV1RecordAppendHintLoad
+#define VP8LBackrefCostIntervalSpecializationV1RecordAppendHintStartLoad \
+  VP8LBackrefCostSpecializationFactorizationV1RecordAppendHintStartLoad
+#define VP8LBackrefCostIntervalSpecializationV1RecordAppendHintUpdateCheck \
+  VP8LBackrefCostSpecializationFactorizationV1RecordAppendHintUpdateCheck
+#define VP8LBackrefCostIntervalSpecializationV1RecordAppendHintUpdate \
+  VP8LBackrefCostSpecializationFactorizationV1RecordAppendHintUpdate
+#define VP8LBackrefCostIntervalSpecializationV1RecordPopTailBranchCheck \
+  VP8LBackrefCostSpecializationFactorizationV1RecordPopTailBranchCheck
+#define VP8LBackrefCostIntervalSpecializationV1RecordPopTailUpdate \
+  VP8LBackrefCostSpecializationFactorizationV1RecordPopTailUpdate
+#define VP8LBackrefCostIntervalSpecializationV1RecordUpdate \
+  VP8LBackrefCostSpecializationFactorizationV1RecordUpdate
+#define VP8LBackrefCostIntervalSpecializationV1RecordPop \
+  VP8LBackrefCostSpecializationFactorizationV1RecordPop
+#define VP8LBackrefCostIntervalSpecializationV1RecordLiveIntervals \
+  VP8LBackrefCostSpecializationFactorizationV1RecordLiveIntervals
+#endif
 #endif
 
 #include "src/enc/profile_enc.h"
@@ -239,6 +287,14 @@
 #define INTERVAL_SPECIALIZATION_RECORD(call) call
 #else
 #define INTERVAL_SPECIALIZATION_RECORD(call) ((void)0)
+#endif
+
+#if defined(                                                               \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) && \
+    defined(WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_RECORDER)
+#define FACTORIZATION_RECORD(call) call
+#else
+#define FACTORIZATION_RECORD(call) ((void)0)
 #endif
 
 #define VALUES_IN_BYTE 256
@@ -1116,6 +1172,9 @@ static WEBP_BACKREF_ATTRIBUTION_NOINLINE void PushInterval(
 }
 
 #if defined(WEBP_USE_BACKREF_COST_INTERVAL_SPECIALIZATION_LOCAL)
+#if defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+#include "src/enc/backref_cost_factorization_layout_clone_enc.inc"
+#endif
 // The production-shaped candidate is deliberately a separate always-on hot
 // path. Its append hint is the exact v3 PushInterval-local algorithm, with the
 // v3 experiment-control parameter and all of its checks removed.
@@ -1479,6 +1538,11 @@ Error:
 #elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT)
 #define BACKREF_DP_RECORD_CALL() \
   VP8LBackrefCostAttributionV16RecordDP(/*candidate=*/0)
+#elif defined(                                                          \
+    WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+#define BACKREF_DP_RECORD_CALL()                                         \
+  FACTORIZATION_RECORD(VP8LBackrefCostSpecializationFactorizationV1RecordDP( \
+      WEBP_BACKREF_FACTORIZATION_VARIANT_B))
 #else
 #define BACKREF_DP_RECORD_CALL() ((void)0)
 #endif
@@ -1486,6 +1550,19 @@ Error:
 #undef BACKREF_DP_RECORD_CALL
 #undef BACKREF_PUSH_INTERVAL_NAME
 #undef BACKREF_DISTANCE_ONLY_NAME
+
+#if defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+#define BACKREF_DISTANCE_ONLY_NAME \
+  BackwardReferencesHashChainDistanceOnlyLayoutClone
+#define BACKREF_PUSH_INTERVAL_NAME PushIntervalLayoutClone
+#define BACKREF_DP_RECORD_CALL()                                         \
+  FACTORIZATION_RECORD(VP8LBackrefCostSpecializationFactorizationV1RecordDP( \
+      WEBP_BACKREF_FACTORIZATION_VARIANT_L))
+#include "src/enc/backward_references_cost_distance_only_enc.inc"
+#undef BACKREF_DP_RECORD_CALL
+#undef BACKREF_PUSH_INTERVAL_NAME
+#undef BACKREF_DISTANCE_ONLY_NAME
+#endif
 
 #define BACKREF_DISTANCE_ONLY_NAME \
   BackwardReferencesHashChainDistanceOnlySpecialized
@@ -1532,6 +1609,11 @@ Error:
 #elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT)
 #define BACKREF_DP_RECORD_CALL() \
   VP8LBackrefCostAttributionV16RecordDP(/*candidate=*/1)
+#elif defined(                                                          \
+    WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+#define BACKREF_DP_RECORD_CALL()                                         \
+  FACTORIZATION_RECORD(VP8LBackrefCostSpecializationFactorizationV1RecordDP( \
+      WEBP_BACKREF_FACTORIZATION_VARIANT_H))
 #else
 #define BACKREF_DP_RECORD_CALL() ((void)0)
 #endif
@@ -1901,6 +1983,43 @@ int VP8LBackwardReferencesTraceBackwards(int xsize, int ysize,
     } else {
       dp_ok = BackwardReferencesHashChainDistanceOnly(
           xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array);
+    }
+    WebPProfileStageEnd(WEBP_PROFILE_BACKREF_COST_DP_TOTAL, dp_start);
+    if (!dp_ok) goto Error;
+  }
+#elif defined(                                                          \
+    WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+  {
+    // Evaluate the three-way selector exactly once before any selected DP can
+    // mutate dist_array. The closed switch invokes exactly one noinline body.
+    const VP8LBackrefCostSpecializationFactorizationV1Variant variant =
+        VP8LBackrefCostSpecializationFactorizationV1GetVariant();
+    const uint64_t dp_start =
+        WebPProfileStageBegin(WEBP_PROFILE_BACKREF_COST_DP_TOTAL);
+    int dp_ok = 0;
+    FACTORIZATION_RECORD(
+        VP8LBackrefCostSpecializationFactorizationV1RecordSelector());
+    switch (variant) {
+      case WEBP_BACKREF_FACTORIZATION_VARIANT_B:
+        FACTORIZATION_RECORD(
+            VP8LBackrefCostSpecializationFactorizationV1RecordActivation());
+        dp_ok = BackwardReferencesHashChainDistanceOnly(
+            xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array);
+        break;
+      case WEBP_BACKREF_FACTORIZATION_VARIANT_L:
+        FACTORIZATION_RECORD(
+            VP8LBackrefCostSpecializationFactorizationV1RecordActivation());
+        dp_ok = BackwardReferencesHashChainDistanceOnlyLayoutClone(
+            xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array);
+        break;
+      case WEBP_BACKREF_FACTORIZATION_VARIANT_H:
+        FACTORIZATION_RECORD(
+            VP8LBackrefCostSpecializationFactorizationV1RecordActivation());
+        dp_ok = BackwardReferencesHashChainDistanceOnlySpecialized(
+            xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array);
+        break;
+      default:
+        goto Error;
     }
     WebPProfileStageEnd(WEBP_PROFILE_BACKREF_COST_DP_TOTAL, dp_start);
     if (!dp_ok) goto Error;
