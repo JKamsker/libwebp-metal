@@ -676,3 +676,11 @@ measured reductions:
 The full CUDA trellis parity test passed and all 60 order-balanced outputs
 matched. The combination remains below the 1.5 ms/image threshold and was
 removed. Raw evidence is `/tmp/libwebp-i16-quant-reduce-ab.iLk0Fr.jsonl`.
+
+## Forced-inline I4 metrics
+
+Forcing the scalar 4x4 SSE and Hadamard metric helpers inline preserved exact
+output but did not improve a two-process order-balanced screen: PNG was flat
+(40.323 vs. 40.316 ms/image) and JPEG regressed (40.095 vs.
+40.552 ms/image). The candidate was removed. Raw evidence is
+`/tmp/libwebp-i4-metric-inline-ab.wn7jYO.jsonl`.
