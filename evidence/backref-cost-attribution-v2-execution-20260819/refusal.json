@@ -1,0 +1,7 @@
+{
+  "controlled_exit": true,
+  "error_type": "RuntimeError",
+  "reason": "DP timer nesting/accounting invalid",
+  "schema": "libwebp-backref-cost-attribution-v2-refusal-v1",
+  "status": "refused"
+}

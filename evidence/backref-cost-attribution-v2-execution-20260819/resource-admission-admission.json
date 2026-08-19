@@ -1,0 +1,54 @@
+{
+  "available_disk_bytes": 19163611136,
+  "available_memory_bytes": 11097030656,
+  "cpu_brand": "Apple M4",
+  "hardware_model": "Mac16,10",
+  "label": "admission",
+  "physical_memory_bytes": 25769803776,
+  "pmset_batt": "Now drawing from 'AC Power'\n",
+  "pmset_custom": "AC Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              0\n ttyskeepawake        1\n powernap             1\n displaysleep         0\n womp                 1\n networkoversleep     0\n sleep                0\n tcpkeepalive         1\n autorestart          1\n disksleep            0\n",
+  "pmset_thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+  "process_isolation": {
+    "conflicts": [],
+    "external_process_classes": [
+      "ssh",
+      "runner",
+      "profiler",
+      "editor",
+      "user-shell",
+      "service"
+    ],
+    "external_process_policy": "observe-only; conflicts fail closed; never signal",
+    "runner_listener_present": true,
+    "runner_worker_matches": [],
+    "sha256": "88b0dc672f32301c3cf876f037726738b42b34cf9d99258f836624d6da2f3ca6"
+  },
+  "settings_changed": false,
+  "system_profiler_power": {
+    "SPPowerDataType": [
+      {
+        "AC Power": {
+          "Automatic Restart On Power Loss": "Yes",
+          "Current Power Source": "TRUE",
+          "Disk Sleep Timer": 0,
+          "Display Sleep Timer": 0,
+          "LowPowerMode": "No",
+          "PrioritizeNetworkReachabilityOverSleep": "No",
+          "Sleep On Power Button": "Yes",
+          "System Sleep Timer": 0,
+          "Wake On LAN": "Yes"
+        },
+        "_name": "sppower_information"
+      },
+      {
+        "_name": "sppower_hwconfig_information",
+        "sppower_ups_installed": "FALSE"
+      },
+      {
+        "_name": "sppower_ac_charger_information",
+        "sppower_ac_charger_family": "0x0000"
+      }
+    ]
+  },
+  "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                               43924.\nPages active:                            578516.\nPages inactive:                          623406.\nPages speculative:                         9979.\nPages throttled:                              0.\nPages wired down:                        131184.\nPages purgeable:                          11600.\n\"Translation faults\":                2487155029.\nPages copy-on-write:                  168844630.\nPages zero filled:                    861982184.\nPages reactivated:                      4991999.\nPages purged:                           8488314.\nFile-backed pages:                       673377.\nAnonymous pages:                         538524.\nPages stored in compressor:              304312.\nPages occupied by compressor:            151008.\nDecompressions:                         2310324.\nCompressions:                           4064555.\nPageins:                               70855866.\nPageouts:                                123110.\nSwapins:                                      0.\nSwapouts:                                     4.\n"
+}
