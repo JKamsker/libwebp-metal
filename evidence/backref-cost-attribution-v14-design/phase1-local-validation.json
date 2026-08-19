@@ -1,0 +1,121 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v14-phase1-local-validation-v1",
+  "base_commit": "e690603a84aa90448e7c6d44ebfc303920b806b3",
+  "branch": "codex/backref-cost-attribution-v14",
+  "status": "PASS_LOCAL_REMOTE_REHEARSAL_NOT_RUN_FAIL_CLOSED",
+  "timed_execution_authorized": false,
+  "phase_2_authority": "NONE",
+  "production_diagnostic_executed": false,
+  "performance_samples": 0,
+  "timed_workloads": 0,
+  "remote_rehearsal": {
+    "attempts": 0,
+    "retries": 0,
+    "status": "NOT_RUN",
+    "reason": "User requested finish at the next safe point after all local gates; no remote state was contacted, so cleanup and integrity were not put at risk.",
+    "benchmark_lease_acquisition_attempted": false,
+    "remote_paths_contacted": [],
+    "remote_cleanup_operations": 0
+  },
+  "transport_repair": {
+    "decision": "compact digest-indexed evidence over the existing single stdout data plane",
+    "timeout_extension": false,
+    "alternate_data_plane": false,
+    "archive_cap_bytes": 786432,
+    "framed_response_cap_bytes": 1048576,
+    "control_payload_cap_bytes": 8192,
+    "chunk_bytes": 262144,
+    "representative_request_bytes": 2097152,
+    "representative_request_sha256": "255841fa98da45217a8a01b545325778d8d7b735d1bca0e9faa6e77a3c0950dc",
+    "request_payload_returned_bytes": 0,
+    "preserved_raw_evidence": [
+      "stages/*.jsonl",
+      "runner/*.jsonl",
+      "runner/*.stderr",
+      "commands.jsonl",
+      "correctness.json",
+      "selected-dp-counter-check.json",
+      "resource-admission-*.json",
+      "artifact-hashes.json"
+    ]
+  },
+  "prior_evidence_audit": {
+    "v11_framed_stdout": {
+      "path": "evidence/backref-cost-attribution-v11-design/rehearsal/return-protocol/framed-stdout.bin",
+      "bytes": 1941990,
+      "sha256": "f6cb02af4d445ac355bdf007f8cfc19daf19d98d3e45647e0689f89264f848f4"
+    },
+    "v13_framed_stdout": {
+      "path": "evidence/backref-cost-attribution-v13-design/rehearsal/return-protocol/framed-stdout.bin",
+      "bytes": 1942116,
+      "sha256": "edaafe783c94d5cb9dcef376012bb64960730d1f6a92f493f3f60464be41109d"
+    },
+    "shared_complete_chunks": 3,
+    "shared_chunk_bytes": 524288,
+    "shared_partial_fourth_chunk_bytes": 359772,
+    "prior_remote_paths_contacted": false
+  },
+  "local_fixtures": {
+    "compact_120_stage_record_archive": {
+      "builds": 2,
+      "archive_bytes": 5646,
+      "archive_sha256": "720c4a742abdc495512ce729839afe33cab176c2d0b23e4fe4b3354b1884c413",
+      "byte_identical": true
+    },
+    "independent_request_response_direction": {
+      "request_bytes": 2101248,
+      "response_archive_bytes": 528384,
+      "response_bytes": 530845,
+      "response_cap_bytes": 1048576,
+      "request_larger_than_response_cap": true,
+      "response_below_cap": true
+    }
+  },
+  "checks": [
+    {
+      "command": "python3 -m py_compile scripts/backref_cost_attribution_v14_*.py scripts/execute_backref_cost_attribution_v14.py scripts/run_backref_cost_attribution_v14_experiment.py scripts/test_backref_cost_attribution_v14_*.py",
+      "status": "PASS"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_attribution_v14_admission.py",
+      "status": "PASS"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_attribution_v14_archive.py",
+      "status": "PASS"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_attribution_v14_process_ownership.py",
+      "status": "PASS"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_attribution_v14_streaming.py",
+      "status": "PASS"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_attribution_v14_protocol.py",
+      "status": "PASS"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_experiment_guards.py",
+      "status": "PASS"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_attribution_v14_experiment.py",
+      "status": "PASS",
+      "correctness_encodes": 16,
+      "counter_cells": 4,
+      "boundary_fixtures": 16,
+      "sanitizer_configurations": 2,
+      "public_api_abi_equal": true,
+      "default_omission": true,
+      "timer_reads": 4096,
+      "timer_mean_read_delta_ns": 14
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASS"
+    }
+  ],
+  "blocker": "The optional sole zero-workload remote rehearsal was not run; therefore no live integrity/cleanup receipt exists and Phase 2 remains forbidden."
+}

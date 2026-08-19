@@ -1,0 +1,339 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v14-phase2-refusal-audit-v1",
+  "phase": "2",
+  "executor": "Luna/max",
+  "audit_scope": "independent local read-only untimed audit of Phase 1 ancestry, hashes, gate isolation, frozen authority, protocol, schemas, caps, and rehearsal receipts",
+  "audit_status": "BLOCKED",
+  "branch": "codex/backref-cost-attribution-v14",
+  "required_base_commit": "e690603a84aa90448e7c6d44ebfc303920b806b3",
+  "audit_start_head": "e690603a84aa90448e7c6d44ebfc303920b806b3",
+  "audit_start_tree": "b72083d5bc3249c439c1033ac4e29073825cc736",
+  "phase1_chain": {
+    "head_is_required_base": true,
+    "base_is_ancestor_of_head": true,
+    "phase1a_commit": null,
+    "phase1b_commit": null,
+    "phase1a_parent": null,
+    "phase1b_parent": null,
+    "phase1a_parent_count": null,
+    "phase1b_parent_count": null,
+    "phase1_commits_in_refs_or_reflog": [],
+    "linear_frozen_phase1": false,
+    "reason": "HEAD is still the exact main base; Phase 1 source and local validation artifacts are uncommitted, and no Phase 1A or Phase 1B commit is present in refs or reflog."
+  },
+  "worktree_before_audit": {
+    "status_entries": 26,
+    "modified_tracked_paths": 7,
+    "untracked_paths": 19,
+    "git_diff_binary_sha256": "8b6fbbbec1ece72aa7136b1824f67fdd0d5038b643771e561157a094dcba9992",
+    "phase1_paths_modified_by_this_audit": false,
+    "phase1_artifacts_were_left_uncommitted": true
+  },
+  "phase1_local_authority": {
+    "path": "evidence/backref-cost-attribution-v14-design/phase1-local-validation.json",
+    "sha256": "0a1f079bfc3a362e421c40e2c748e35f02a7ce0e914b4841aa39cb508d1bc9b0",
+    "schema": "libwebp-backref-cost-attribution-v14-phase1-local-validation-v1",
+    "base_commit_in_artifact": "e690603a84aa90448e7c6d44ebfc303920b806b3",
+    "status": "PASS_LOCAL_REMOTE_REHEARSAL_NOT_RUN_FAIL_CLOSED",
+    "timed_execution_authorized": false,
+    "phase_2_authority": "NONE",
+    "production_diagnostic_executed": false,
+    "performance_samples": 0,
+    "timed_workloads": 0,
+    "remote_rehearsal": {
+      "attempts": 0,
+      "retries": 0,
+      "status": "NOT_RUN",
+      "benchmark_lease_acquisition_attempted": false,
+      "remote_paths_contacted": [],
+      "remote_cleanup_operations": 0,
+      "receipt_status": "ABSENT"
+    },
+    "blocker": "The optional sole zero-workload remote rehearsal was not run; therefore no live integrity/cleanup receipt exists and Phase 2 remains forbidden.",
+    "reported_local_checks": {
+      "status": "PASS as recorded by the uncommitted artifact; not re-executed by this audit",
+      "listed_check_count": 9,
+      "correctness_encodes": 16,
+      "counter_cells": 4,
+      "boundary_fixtures": 16,
+      "sanitizer_configurations": 2,
+      "timer_reads": 4096,
+      "timer_mean_read_delta_ns": 14
+    }
+  },
+  "required_phase1b_evidence": {
+    "authorization_envelope": {
+      "path": "evidence/backref-cost-attribution-v14-design/phase1b-authorization.json",
+      "present": false,
+      "sha256": null
+    },
+    "rehearsal_hash_index": {
+      "path": "evidence/backref-cost-attribution-v14-design/phase1b-rehearsal-hashes.json",
+      "present": false,
+      "sha256": null
+    },
+    "rehearsal_root": {
+      "path": "evidence/backref-cost-attribution-v14-design/rehearsal/",
+      "present": false,
+      "file_count": 0
+    },
+    "zero_workload_receipt": {
+      "status": "ABSENT",
+      "source_admission": null,
+      "operator_status": null,
+      "integrity_footer": null,
+      "cleanup_footer": null,
+      "exact_child_absence": null
+    },
+    "authority_conclusion": "NONE: the required Phase 1B envelope, hash index, receipt files, commit identity, cleanup proof, and absence proof are unavailable."
+  },
+  "manifest_and_hash_audit": {
+    "manifest_path": "scripts/backref_cost_attribution_v14_manifest.json",
+    "manifest_sha256": "24544b85dd39b184d676e62eac0e7155618a0e8f341294ab00a6f5c30e9ef3a0",
+    "manifest_schema": "libwebp-backref-cost-attribution-v14-frozen-protocol-v1",
+    "manifest_protocol_version": 6,
+    "manifest_phase1_status": "FROZEN_FAIL_CLOSED_REMOTE_REHEARSAL_NOT_RUN",
+    "manifest_timed_execution_authorized": false,
+    "manifest_phase2_authority": "NONE",
+    "manifest_declared_frozen_artifact_count": 28,
+    "current_worktree_frozen_artifact_hashes_match_manifest": true,
+    "current_frozen_artifacts": [
+      {
+        "path": "CMakeLists.txt",
+        "sha256": "f789d26de527e304a4370e82bbf21af1f653d683c19c1c3eaaa79f2242e6fa19"
+      },
+      {
+        "path": "makefile.unix",
+        "sha256": "6235265fa555ecef58d06b92315cca149bffd036263098779e714d7f03a2680e"
+      },
+      {
+        "path": "src/enc/backward_references_cost_enc.c",
+        "sha256": "26bfdb8b37f07564cb47357721eb94c758512f9bf06962350b2f616b8338cabf"
+      },
+      {
+        "path": "src/enc/backward_references_cost_distance_only_enc.inc",
+        "sha256": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5"
+      },
+      {
+        "path": "src/enc/backward_references_enc.c",
+        "sha256": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03"
+      },
+      {
+        "path": "src/enc/profile_enc.c",
+        "sha256": "bbe2f240ab1548b8e3af761979ef59397c41941e4209fb7b505e9f74ad24a12c"
+      },
+      {
+        "path": "src/enc/profile_enc.h",
+        "sha256": "acfee7a204a9ff5d864340bc7a5839405cb71d2a7960d84e1bbb9d4ddce9c0fe"
+      },
+      {
+        "path": "src/enc/vp8l_enc.c",
+        "sha256": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0"
+      },
+      {
+        "path": "src/enc/backref_cost_attribution_v14_experiment_enc.c",
+        "sha256": "557883de070c1037fd65506a03c22acbde558de91348e65b8271518a1eebaf9f"
+      },
+      {
+        "path": "src/enc/backref_cost_attribution_v14_experiment_enc.h",
+        "sha256": "375128696d6ccbee8760c7bbc9fbc9fcb38703f291cdae5d9aa2d73d08fc2f85"
+      },
+      {
+        "path": "tools/backref_cost_attribution_v14_experiment_runner.c",
+        "sha256": "6b74dfe1b358a7f10214e4066d98c10c30e8c1d63424d2ffb325bd513d2a3419"
+      },
+      {
+        "path": "scripts/backref_cost_attribution_v14_paths.py",
+        "sha256": "cae97dc39d4e5ea6a88e0adb7ab0bcdc6328fe3fd70dcbc0cd0ef4dc8054c951"
+      },
+      {
+        "path": "scripts/backref_cost_attribution_v14_admission.py",
+        "sha256": "7b24ecd269fa36e319e3bbc7e7350913d16d2160d4f632ccf9aa2fd6f2d302c2"
+      },
+      {
+        "path": "scripts/backref_cost_attribution_v14_transport.py",
+        "sha256": "219f83a157c6ff1f1ad7570966d79660e40fde1e31735ffbfdde9f4e3f164382"
+      },
+      {
+        "path": "scripts/backref_cost_attribution_v14_archive.py",
+        "sha256": "4c839c32724bc6080c96b0801ebaaa9ebaea5621af5f260f02a5a643d8c450df"
+      },
+      {
+        "path": "scripts/backref_cost_attribution_v14_schemas.json",
+        "sha256": "f9fcd01f445592e373289c7fdb02a8c5228a92ea324b32f344b6575ee1b785e5"
+      },
+      {
+        "path": "scripts/run_backref_cost_attribution_v14_experiment.py",
+        "sha256": "ec8a731f1db9e8ba02aed54660a69041d80467673c47e4279fe1f4cfd6f767bb"
+      },
+      {
+        "path": "scripts/execute_backref_cost_attribution_v14.py",
+        "sha256": "08fb167171e698ef8e755f714d7f5917304fe3aa4f4ace6d515d2b6e4abc28cf"
+      },
+      {
+        "path": "scripts/test_backref_cost_attribution_v14_admission.py",
+        "sha256": "66b595cf03e0744c5884e721fb9918e6b77d0196016ddbb5ef8651384cd7f325"
+      },
+      {
+        "path": "scripts/test_backref_cost_attribution_v14_archive.py",
+        "sha256": "55baa2aa352aa65685dcafec73fcead47fbee172711a15e8420d1f54a553dc36"
+      },
+      {
+        "path": "scripts/test_backref_cost_attribution_v14_experiment.py",
+        "sha256": "28bdd6ff88b164ca4044928bc83717103521b591c5980311e5d8ffb01175164b"
+      },
+      {
+        "path": "scripts/test_backref_cost_attribution_v14_process_ownership.py",
+        "sha256": "f76f34c976bfd0b7f7497d50abe58cb4d177f26c4aeb7887ac1bc0db23a3dabf"
+      },
+      {
+        "path": "scripts/test_backref_cost_attribution_v14_protocol.py",
+        "sha256": "f16d6d66bddf6b4643b37fd459134e6ccf5e989831ae27fb7db5371254457b0f"
+      },
+      {
+        "path": "scripts/test_backref_cost_attribution_v14_streaming.py",
+        "sha256": "438575d0b35f8d54e6eb20527c0c1fc7787acfe86d96f558ffa348619f7c562f"
+      },
+      {
+        "path": "scripts/test_experiment_guards.py",
+        "sha256": "ef23243b452198dbc0f0f833a87a467644ac3c8c13e2acba44399792d38d3467"
+      },
+      {
+        "path": "doc/backref-cost-attribution-v14-protocol-20260819.md",
+        "sha256": "67a9d7ddf86ab56cdaa159ecaa7ebb4ae9b30d4ca57b3baf0deffa373185d490"
+      },
+      {
+        "path": "doc/experiment-guard-matrix.md",
+        "sha256": "903ad31ae47d573903b2f8b9e811ec5b20a80cf43eebf72c1d0128d1d368d6b8"
+      },
+      {
+        "path": "evidence/backref-cost-attribution-v14-design/phase1-local-validation.json",
+        "sha256": "0a1f079bfc3a362e421c40e2c748e35f02a7ce0e914b4841aa39cb508d1bc9b0"
+      }
+    ]
+  },
+  "gate_isolation_audit": {
+    "build_gate": "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V14_EXPERIMENT",
+    "compile_gate": "WEBP_USE_BACKREF_COST_ATTRIBUTION_V14_EXPERIMENT",
+    "runtime_gate": "WEBP_BACKREF_COST_ATTRIBUTION_V14_EXPERIMENT=1",
+    "default_off_declared": true,
+    "predecessor_mutual_exclusion_declared": true,
+    "public_header_paths_in_worktree_diff": [],
+    "static_draft_isolation": "OBSERVED_UNCOMMITTED_NOT_AUTHORITY",
+    "phase1_reported_guard_checks": "PASS_UNVERIFIED_BY_THIS_AUDIT"
+  },
+  "protocol_schema_caps_audit": {
+    "protocol_path": "doc/backref-cost-attribution-v14-protocol-20260819.md",
+    "protocol_sha256": "67a9d7ddf86ab56cdaa159ecaa7ebb4ae9b30d4ca57b3baf0deffa373185d490",
+    "schema_catalog_path": "scripts/backref_cost_attribution_v14_schemas.json",
+    "schema_catalog_sha256": "f9fcd01f445592e373289c7fdb02a8c5228a92ea324b32f344b6575ee1b785e5",
+    "schema_catalog_protocol_version": 6,
+    "schema_catalog_entry_count": 19,
+    "remote_host_alias_declared": "pandocs-agent",
+    "request_direction": {
+      "declared_payload_bytes": 2097152,
+      "declared_payload_sha256": "255841fa98da45217a8a01b545325778d8d7b735d1bca0e9faa6e77a3c0950dc",
+      "direction": "client_to_remote_only",
+      "returned_request_payload_bytes": 0,
+      "live_receipt": false,
+      "status": "DECLARED_AND_LOCAL_FIXTURE_ONLY"
+    },
+    "response_caps": {
+      "expected_archive_bytes": 524288,
+      "archive_cap_bytes": 786432,
+      "framed_response_cap_bytes": 1048576,
+      "frame_header_cap_bytes": 65536,
+      "control_payload_cap_bytes": 8192,
+      "bulk_chunk_bytes": 262144,
+      "status": "DECLARED_AND_STATICALLY_INSPECTED_NO_LIVE_CALIBRATION"
+    },
+    "local_direction_fixture_report": {
+      "request_bytes": 2101248,
+      "response_archive_bytes": 528384,
+      "response_bytes": 530845,
+      "response_cap_bytes": 1048576,
+      "request_larger_than_response_cap": true,
+      "response_below_cap": true,
+      "fixture_artifact_path": null,
+      "authority": "uncommitted validation claim only"
+    },
+    "live_rehearsal_calibration": "ABSENT"
+  },
+  "lease_cleanup_integrity_absence": {
+    "phase1_lease_acquisition_attempted": false,
+    "phase2_lease_acquisition_attempts": 0,
+    "lease_receipt": "ABSENT_NOT_ATTEMPTED",
+    "integrity_receipt": "ABSENT",
+    "cleanup_receipt": "ABSENT",
+    "exact_child_absence_proof": "ABSENT",
+    "state": "UNKNOWN_AND_UNPROVEN",
+    "follow_up_cleanup_performed": false,
+    "prior_cycle_paths_contacted_or_cleaned": false
+  },
+  "execution_audit": {
+    "host_contacted_by_phase2_audit": false,
+    "host_contacted_by_recorded_phase1_rehearsal": false,
+    "phase2_pipeline_command_invoked": false,
+    "command_run_count": 0,
+    "diagnostic_run_count": 0,
+    "remote_session_count": 0,
+    "benchmark_lease_attempts": 0,
+    "encoder_workloads": 0,
+    "profiler_workloads": 0,
+    "timing_workloads": 0,
+    "cuda_workloads": 0,
+    "parallel_benchmark": false,
+    "retry_count": 0,
+    "rerun_count": 0,
+    "tuning_count": 0,
+    "pooling_count": 0,
+    "prior_v11_v13_authority_or_samples_reused": false
+  },
+  "raw_evidence": {
+    "phase2_raw_evidence_paths": [],
+    "phase1_remote_raw_evidence_paths": [],
+    "local_evidence_used": [
+      {
+        "path": "evidence/backref-cost-attribution-v14-design/phase1-local-validation.json",
+        "sha256": "0a1f079bfc3a362e421c40e2c748e35f02a7ce0e914b4841aa39cb508d1bc9b0"
+      },
+      {
+        "path": "scripts/backref_cost_attribution_v14_manifest.json",
+        "sha256": "24544b85dd39b184d676e62eac0e7155618a0e8f341294ab00a6f5c30e9ef3a0"
+      },
+      {
+        "path": "doc/backref-cost-attribution-v14-protocol-20260819.md",
+        "sha256": "67a9d7ddf86ab56cdaa159ecaa7ebb4ae9b30d4ca57b3baf0deffa373185d490"
+      },
+      {
+        "path": "scripts/backref_cost_attribution_v14_schemas.json",
+        "sha256": "f9fcd01f445592e373289c7fdb02a8c5228a92ea324b32f344b6575ee1b785e5"
+      },
+      {
+        "path": "scripts/backref_cost_attribution_v14_transport.py",
+        "sha256": "219f83a157c6ff1f1ad7570966d79660e40fde1e31735ffbfdde9f4e3f164382"
+      },
+      {
+        "path": "scripts/execute_backref_cost_attribution_v14.py",
+        "sha256": "08fb167171e698ef8e755f714d7f5917304fe3aa4f4ace6d515d2b6e4abc28cf"
+      }
+    ],
+    "raw_byte_preservation": "No Phase 2 raw bytes exist; no prior-cycle raw bytes were touched."
+  },
+  "refusal": {
+    "action": "FAIL_CLOSED_NO_EXECUTION",
+    "reason": "Timed execution is refused because the delegated Phase 1 ended with only an uncommitted draft: HEAD remains the exact base, no Phase 1A/1B commit or freeze exists, the required Phase 1B envelope/hash index/rehearsal receipts are missing, and both local authority artifacts explicitly set timed_execution_authorized=false and phase_2_authority=NONE.",
+    "timed_execution_refusal_reasons": [
+      "Phase 1A commit absent",
+      "Phase 1B commit absent",
+      "HEAD is not a frozen Phase 1B commit and worktree is dirty",
+      "required zero-workload remote rehearsal was not run",
+      "live integrity, cleanup, lease, and exact-child absence receipts are absent",
+      "local direction/cap fixtures are not a live rehearsal calibration",
+      "Phase 2 authority is NONE"
+    ],
+    "production_change": "NONE",
+    "audit_did_not_modify_phase1": true,
+    "audit_evidence_is_additional_single_file": true
+  }
+}
