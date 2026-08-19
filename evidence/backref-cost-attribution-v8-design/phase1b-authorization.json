@@ -1,0 +1,64 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v8-authorization-v1",
+  "authorization_status": "REFUSED",
+  "base_commit": "fea767272f7d9d13e5e5f19cb910e6152418dcdd",
+  "source_commit": "9ab1014f9a72c4c82e53044a458ac0a1ee1d07c1",
+  "source_tree": "43b6cd35383ad6bae86c1b6a57436c0e4814117c",
+  "phase_1b_parent_rule": "the commit containing this envelope has exactly one parent equal to source_commit",
+  "phase_1b_identity_rule": "HEAD must equal the dynamically supplied EXPECTED_FREEZE_COMMIT; this envelope never embeds its own Phase-1B commit hash",
+  "manifest_sha256": "9ed7d303cbb565c2510dc051818e72d50bd0414452b042df9b17bfb58cde683a",
+  "protocol_sha256": "6c93e6c13ef2ffe476447c97a8bbba05cc6097d048bd7c886a2a61d9ba3bfe13",
+  "schema_catalog_sha256": "e5b06a34d6c1e957904ddeb2d83f0794aa6ca3f59a0a87a9dd59baf1a90dc142",
+  "transport_source_sha256": "c9b15dc9fff6fd01d4a685d1c9fbcaf66ea424c3bed0becd7c17c3b202b021ed",
+  "rehearsal_hash_index_sha256": "42837de6289dbaa5d5297cf6222186c66aed08a61a0a323411ddba15e46ded5a",
+  "raw_rehearsal_evidence_hashes": {
+    "rehearsal-invocation.json": "871b83da598c709e696b0ef664e707fd0a3b10f195d1939a4be4424ff3416707",
+    "return-protocol/framed-stdout.bin": "c5920e9cee82461135bacc35fd199da22ccca9b98ba3d79c3634972456ee4fdb",
+    "return-protocol/transport-stderr.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "rehearsal_receipt_hashes": {
+    "rehearsal-invocation.json": "871b83da598c709e696b0ef664e707fd0a3b10f195d1939a4be4424ff3416707",
+    "return-protocol/framed-stdout.bin": "c5920e9cee82461135bacc35fd199da22ccca9b98ba3d79c3634972456ee4fdb"
+  },
+  "missing_required_success_receipts": [
+    "rehearsal.json",
+    "transfer-cleanup.json",
+    "return-protocol/source-admission.json",
+    "return-protocol/operator-status.json",
+    "return-protocol/bulk-declaration.json",
+    "return-protocol/integrity-footer.json",
+    "return-protocol/cleanup-footer.json"
+  ],
+  "observed_process_isolation": {
+    "snapshot_fields": ["pid", "ppid", "comm"],
+    "argument_text_collected": false,
+    "status": "FAIL_CLOSED_AMBIGUOUS_IDENTITY",
+    "reason": "relative executable identity is ambiguous",
+    "source_admission_reached": false,
+    "discovered_pid_signals": 0
+  },
+  "observed_transport_calibration": {
+    "status": "REFUSED_BEFORE_SOURCE_ADMISSION",
+    "representative_payload_bytes": 5242880,
+    "representative_payload_sha256": "463f27cd782216a4be5793c95e0d7f73b6cafb3e6364026e6650d24c059f301c",
+    "maximum_expected_run_archive_bytes": 4194304,
+    "finite_margin_ratio": 0,
+    "archive_bytes": 0,
+    "archive_sha256": null,
+    "chunk_count": 0,
+    "chunk_bytes": 524288,
+    "transaction_elapsed_ns": 9808014250,
+    "throughput_bytes_per_second": 0,
+    "reason": "the identity snapshot refused before source admission and archive construction; representative archive capacity was not calibrated"
+  },
+  "single_noninteractive_remote_session_count": 1,
+  "post_run_remote_cleanup_operations": 0,
+  "cleanup_footer_verified": true,
+  "remote_cleanup_absence_proved": true,
+  "benchmark_lease_acquisition_attempted": null,
+  "encoder_workloads": 0,
+  "profiler_workloads": 0,
+  "timed_execution_authorized": false,
+  "phase_2_authority": "NONE",
+  "blocker": "the sole no-retry rehearsal failed closed on an ambiguous comm identity before source admission; the exact V8 child was removed and absence proved in the same session, but no PASS rehearsal or representative archive calibration exists, so Phase 2 is forbidden"
+}
