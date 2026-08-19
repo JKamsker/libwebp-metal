@@ -1,0 +1,97 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v5-phase3-local-validation-v1",
+  "status": "PASS",
+  "source_commit_before_phase3_files": "c240891fbf64b78fcec357dfb3b9634f5ccf70f0",
+  "timed_workload_invoked": false,
+  "remote_command_invoked": false,
+  "benchmark_lease_acquisition_attempted": false,
+  "profiler_invocations": 0,
+  "cuda_invocations": 0,
+  "process_signals": 0,
+  "production_promotion_authorized": false,
+  "commands": [
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v5_protocol.py",
+      "status": "PASS",
+      "summary": "exact specialization identity, one selected DP body without predecessor fallthrough, disjoint modes, 24-command plan, bounded three-state lease return, no-workload rehearsal contract, diagnostic-only policy"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v5_admission.py",
+      "status": "PASS",
+      "summary": "canonical paths, repository-context bundle verification, receipt schema/hash failure closure, disjoint mode/session table, malformed rejection, cleanup, shared admission implementation"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v5_archive.py",
+      "status": "PASS",
+      "summary": "indexed builder/extractor, normalized ordering, full inventory, hash verification, no-partial extraction, malicious rejection"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v5_process_ownership.py",
+      "status": "PASS",
+      "summary": "only retained direct-child handles are signal-capable; discovered processes are refusal-only; cleanup is receipt-scoped"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v5_experiment.py",
+      "status": "PASS",
+      "summary": {
+        "correctness_encodes": 16,
+        "counter_cells": 4,
+        "sanitizer_configurations": 2,
+        "boundary_fixtures": 16,
+        "default_omission": true,
+        "public_api_abi_equal": true,
+        "exact_runtime_truth_table": {
+          "absent": false,
+          "": false,
+          "0": false,
+          "01": false,
+          "1": true,
+          "true": false
+        },
+        "timer_validation": {
+          "clock_reads": 4096,
+          "positive_deltas": 1465,
+          "elapsed_ns": 61375,
+          "mean_read_delta_ns": 14,
+          "minimum_positive_delta_ns": 41,
+          "maximum_delta_ns": 167,
+          "monotonic": true
+        }
+      }
+    },
+    {
+      "command": "python3 scripts/test_experiment_guards.py",
+      "status": "PASS",
+      "summary": "25 independent build/runtime guards, fail-closed leases, and attribution-v1 through attribution-v5 process ownership"
+    },
+    {
+      "command": "env -u WEBP_BENCHMARK_SESSION WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V5_COMMIT=c240891fbf64b78fcec357dfb3b9634f5ccf70f0 python3 scripts/execute_backref_cost_attribution_v5.py validate",
+      "status": "PASS",
+      "source_commit": "c240891fbf64b78fcec357dfb3b9634f5ccf70f0",
+      "manifest_sha256": "31b6ccf9ae04bad1c7d716bbb4a05a24d7a943afcf281957619b253e41703090",
+      "schema_catalog_sha256": "7e23d793575f4d3802cea9c5eda319e801175d5c262e4b6487d8f278ef908882",
+      "benchmark_lease_acquisition_attempted": false,
+      "timed_binary_invoked": false
+    },
+    {
+      "command": "cmake -S . -B /tmp/libwebp-v5-phase3-build.JLqr8D -G Ninja -DCMAKE_BUILD_TYPE=Release -DWEBP_ENABLE_METAL=OFF -DWEBP_BUILD_ANIM_UTILS=OFF -DWEBP_BUILD_EXTRAS=OFF -DWEBP_BUILD_GIF2WEBP=OFF -DWEBP_BUILD_IMG2WEBP=OFF -DWEBP_BUILD_VWEBP=OFF -DWEBP_BUILD_WEBPMUX=OFF",
+      "status": "PASS",
+      "compiler": "AppleClang 17.0.0.17000604"
+    },
+    {
+      "command": "cmake --build /tmp/libwebp-v5-phase3-build.JLqr8D --target cwebp dwebp --parallel 2",
+      "status": "PASS",
+      "targets_built": ["cwebp", "dwebp"]
+    },
+    {
+      "command": "env WEBP_TEST_BIN_DIR=/tmp/libwebp-v5-phase3-build.JLqr8D scripts/test_roundtrip.sh",
+      "status": "PASS",
+      "summary": "lossless round-trip smoke test"
+    },
+    {
+      "command": "independent SHA-256, Git ancestry/blob, frozen-artifact, V5 execution-directory, and empty-row reconstruction",
+      "status": "PASS",
+      "summary": "linear ancestry; 26 frozen artifacts and zero mismatches; two execution evidence files totaling 10845 bytes; zero JSONL files and zero raw rows"
+    }
+  ]
+}

@@ -38,7 +38,8 @@
      defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT) +             \
      defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT) +             \
      defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT) +             \
-     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT)) > 1
+     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT) +             \
+     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT)) > 1
 #error "overlapping backref cost experiments are mutually exclusive"
 #elif defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
 #include "src/enc/backref_cost_traceback_experiment_enc.h"
@@ -127,6 +128,12 @@
 #define WEBP_USE_BACKREF_COST_INTERVAL_SPECIALIZATION_LOCAL 1
 #define VP8LBackrefCostIntervalSpecializationV1ExperimentEnabled \
   VP8LBackrefCostAttributionV4ExperimentEnabled
+#define VP8LBackrefCostIntervalSpecializationV1ExperimentInjectFallback() 0
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT)
+#include "src/enc/backref_cost_attribution_v5_experiment_enc.h"
+#define WEBP_USE_BACKREF_COST_INTERVAL_SPECIALIZATION_LOCAL 1
+#define VP8LBackrefCostIntervalSpecializationV1ExperimentEnabled \
+  VP8LBackrefCostAttributionV5ExperimentEnabled
 #define VP8LBackrefCostIntervalSpecializationV1ExperimentInjectFallback() 0
 #endif
 
@@ -1359,6 +1366,9 @@ Error:
 #elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT)
 #define BACKREF_DP_RECORD_CALL() \
   VP8LBackrefCostAttributionV4RecordDP(/*candidate=*/0)
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT)
+#define BACKREF_DP_RECORD_CALL() \
+  VP8LBackrefCostAttributionV5RecordDP(/*candidate=*/0)
 #else
 #define BACKREF_DP_RECORD_CALL() ((void)0)
 #endif
@@ -1376,6 +1386,9 @@ Error:
 #elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT)
 #define BACKREF_DP_RECORD_CALL() \
   VP8LBackrefCostAttributionV4RecordDP(/*candidate=*/1)
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT)
+#define BACKREF_DP_RECORD_CALL() \
+  VP8LBackrefCostAttributionV5RecordDP(/*candidate=*/1)
 #else
 #define BACKREF_DP_RECORD_CALL() ((void)0)
 #endif
@@ -1505,6 +1518,26 @@ int VP8LBackwardReferencesTraceBackwards(int xsize, int ysize,
         WebPProfileStageBegin(WEBP_PROFILE_BACKREF_COST_DP_TOTAL);
     int dp_ok;
     VP8LBackrefCostAttributionV4RecordSelector();
+    if (use_candidate) {
+      dp_ok = BackwardReferencesHashChainDistanceOnlySpecialized(
+          xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array);
+    } else {
+      dp_ok = BackwardReferencesHashChainDistanceOnly(
+          xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array);
+    }
+    WebPProfileStageEnd(WEBP_PROFILE_BACKREF_COST_DP_TOTAL, dp_start);
+    if (!dp_ok) goto Error;
+  }
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT)
+  {
+    // V5 preserves V4's frozen control flow and timer ownership exactly.
+    // Selection is evaluated once before mutation, and the closed if/else
+    // owns exactly one DP body for this traceback invocation.
+    const int use_candidate = VP8LBackrefCostAttributionV5ExperimentEnabled();
+    const uint64_t dp_start =
+        WebPProfileStageBegin(WEBP_PROFILE_BACKREF_COST_DP_TOTAL);
+    int dp_ok;
+    VP8LBackrefCostAttributionV5RecordSelector();
     if (use_candidate) {
       dp_ok = BackwardReferencesHashChainDistanceOnlySpecialized(
           xsize, ysize, argb, cache_bits, hash_chain, refs_src, dist_array);

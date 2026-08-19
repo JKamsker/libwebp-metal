@@ -1,0 +1,73 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v5-phase1-local-validation-v1",
+  "base_commit": "a192d9b8562b497b03bf8cc83c2de5c7a6ea8cae",
+  "status": "PASS_AUTHORIZED_CONDITIONED_EXACT_COMMIT_REHEARSAL",
+  "timed_execution_authorized": true,
+  "phase_2_executed": false,
+  "phase_3_executed": false,
+  "checks": {
+    "source_ancestry_clean_start": true,
+    "build_runtime_gate_isolation": true,
+    "ordinary_object_target_string_omission": true,
+    "public_api_abi_equal": true,
+    "correctness_encodes": 16,
+    "boundary_fixtures": 16,
+    "counter_cells": 4,
+    "single_selected_dp_no_overwrite": true,
+    "sanitizer_configurations": 2,
+    "timer_clock": "mach_continuous_time",
+    "timer_reads": 4096,
+    "timer_mean_read_delta_ns": 14,
+    "timer_maximum_read_delta_ns": 83,
+    "archive_security_and_no_partial_extraction": true,
+    "control_plane_contract_states": [
+      "not-attempted",
+      "unavailable-after-attempt",
+      "verified"
+    ],
+    "bulk_contract_fixtures": [
+      "normal",
+      "controlled-refusal",
+      "missing-artifact",
+      "truncated-archive",
+      "corrupt-archive",
+      "timeout"
+    ],
+    "process_ownership_v1_v2_v3_v4_v5": true,
+    "discovered_pid_signals": 0,
+    "external_profiler_invocations": 0
+  },
+  "transport_calibration": {
+    "status": "BOUNDED_REFUSAL_USED_FOR_LOWER_BOUND",
+    "declared_archive_bytes": 67163574,
+    "declared_archive_sha256": "56e1d27ecd8ed086f7c77eb6570b2485a34de846f95598cd501689bcddde0da4",
+    "partial_bytes": 2088960,
+    "partial_sha256": "edfd8f144755c42a991f8217167ece7485439263bee213bf1247fb8fcbe12f7c",
+    "elapsed_seconds": 120,
+    "lower_bound_bytes_per_second": 17408,
+    "cleanup_absence_proved": true,
+    "control_receipts_survived_bulk_timeout": true,
+    "second_partial_bytes": 2350080,
+    "second_elapsed_seconds": 1020,
+    "second_declared_archive_bytes": 4230225,
+    "chunk_bytes": 524288,
+    "successful_archive_bytes": 4230194,
+    "successful_archive_sha256": "52e6633b294c6c8c624df94e729191a18cc77b025f56bd8e4e695ac8013b78ce",
+    "successful_elapsed_ns": 8135333000,
+    "successful_throughput_bytes_per_second": 519977,
+    "successful_chunk_count": 9,
+    "derived_bulk_chunk_timeout_seconds": 20,
+    "derived_bulk_total_timeout_seconds": 60
+  },
+  "frozen_inventory": {
+    "cases": ["photo-large", "graphic-large"],
+    "methods": [4, 6],
+    "serial_processes": 24,
+    "correctness_encodes": 16,
+    "warmups": 24,
+    "retained_rows": 96,
+    "total_runner_rows": 120,
+    "total_stage_rows": 120
+  },
+  "remaining_gate": "the final handoff must retain verified exact-commit synchronous success/refusal/timeout receipts; any mismatch fails closed"
+}
