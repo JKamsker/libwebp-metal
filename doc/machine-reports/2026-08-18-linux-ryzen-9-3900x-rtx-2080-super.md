@@ -1812,3 +1812,23 @@ was rebuilt, and all seven CTests passed. The raw counter output, exact probe
 patch, restored-parent CTest log, and calculation summary are stored under the
 `i16-lazy-prune-*` prefix in the adjacent evidence directory. This is RTX 2080
 SUPER-only evidence and makes no Ampere+ claim.
+
+## Refreshed partition0/token-emission overlap
+
+The earlier exact host overlap was recovered and re-screened on the current
+retained native-sm_75 binary using the actual PNG and JPEG inputs. It generated
+partition 0 on the caller while all eight token partitions ran on workers;
+`WEBP_PARTITION0_PIPELINE=0` selected the same-binary parent schedule.
+
+Seven CTests passed for both candidate and restored trees. All 24
+order-reversed rows retained identical hashes and byte counts:
+
+| Format | Parent | Partition0 overlap | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.775 ms/image | 38.559 ms/image | 1.216 ms/image |
+| JPEG lossy | 39.286 ms/image | 38.885 ms/image | 0.401 ms/image |
+
+Both gains miss the strict 1.5 ms/image gate, so the candidate was removed.
+The raw rows are
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-partition0-current-formats-screen.jsonl`.
+This is RTX 2080 SUPER-only evidence and makes no Ampere+ claim.

@@ -387,3 +387,26 @@ Registers and stack stayed at 103 and 352 bytes; shared memory rose from
 patch, rows, SASS/resources, binary hashes, native cache, and both CTest logs
 are under `libwebp-i4-private-boundary-*` in the RTX 2080 SUPER evidence
 directory. No Ampere+ performance claim is made.
+
+## Refreshed partition0/token-emission overlap rejection
+
+The retained texture stage profile still showed 7.34 ms/image in lossy write,
+so the exact earlier host schedule was recovered and screened on the current
+native-sm_75 binary with the actual PNG and JPEG inputs. It finalized filter
+strength, launched all eight token partitions on workers, and generated
+partition 0 on the caller. `WEBP_PARTITION0_PIPELINE=0` supplied a same-binary
+parent.
+
+Candidate and restored trees passed 7/7 CTests. All 24 order-reversed rows
+matched hashes and byte counts:
+
+| Format | Parent | Partition0 overlap | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.775 ms/image | 38.559 ms/image | 1.216 ms/image |
+| JPEG lossy | 39.286 ms/image | 38.885 ms/image | 0.401 ms/image |
+
+Both gains miss the strict 1.5 ms/image gate, and JPEG rules out using this
+host schedule to rescue the borderline Turing GPU composition. The candidate
+was removed. Raw rows are archived as
+`libwebp-partition0-current-formats-screen.jsonl` with the RTX 2080 SUPER
+machine report. No Ampere+ performance claim is made.

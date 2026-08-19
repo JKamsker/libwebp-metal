@@ -1705,3 +1705,25 @@ candidate was built. The diagnostic was removed and 7/7 CTests passed on the
 restored source. Raw evidence is archived under `i16-lazy-prune-*` with the
 RTX 2080 SUPER machine report; no Ampere+ behavior or performance claim is
 made.
+
+## Refreshed partition0/token-emission overlap rejection
+
+The retained stage profile still showed 7.34 ms/image in lossy write for the
+texture case, so the exact earlier host schedule was recovered and measured
+against the actual PNG and JPEG inputs on the current native-sm_75 binary.
+The candidate finalized filter strength, launched all eight token partitions
+on workers, and generated partition 0 on the caller. Setting
+`WEBP_PARTITION0_PIPELINE=0` restored the parent schedule in the same binary.
+
+Both candidate and restored trees passed seven CTests. All 24 order-reversed
+screen rows were byte-exact:
+
+| Format | Parent | Partition0 overlap | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.775 ms/image | 38.559 ms/image | 1.216 ms/image |
+| JPEG lossy | 39.286 ms/image | 38.885 ms/image | 0.401 ms/image |
+
+Both gains are below the 1.5 ms/image gate, and JPEG decisively rules out this
+host schedule as the missing increment for the borderline Turing GPU
+composition. The candidate was removed. Raw rows are archived with the RTX
+2080 SUPER machine report; no Ampere+ performance claim is made.
