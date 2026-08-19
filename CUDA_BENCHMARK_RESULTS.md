@@ -998,3 +998,25 @@ Adding the previously exact dynamic-token probability fall-through did not
 rescue the borderline result. The two-process screen remained byte-exact and
 gained 1.867 ms/image PNG, but JPEG fell to a 1.155 ms/image gain. The CPU
 hint was therefore removed without extending that variant to the full gate.
+
+### Balanced-I4/chroma composition follow-up
+
+The lean composition was next combined with the previously exact four-warp
+I4 transform-group layout. That layout distributes the ten modes 3/3/2/2
+across the existing four warps and removes the prediction-to-transform CTA
+barrier without changing the block size or algorithm. Ten order-balanced
+native-sm_75 processes, split into two independent five-process blocks,
+produced 30 samples per cell:
+
+| Format | Parent | Balanced-I4/chroma | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.206 ms/image | 38.503 ms/image | 1.703 ms |
+| JPEG lossy | 40.122 ms/image | 38.633 ms/image | 1.489 ms |
+
+All 120 timed outputs matched their parent hashes and byte counts. All seven
+focused CTests passed, as did a separate 105-case exact-byte battery covering
+methods 2--6, qualities 25/75/98, tiny 17x13 and odd 257x255 inputs across
+three content classes, and band-3 fallback for every method/content pair.
+JPEG remained 0.011 ms/image below the strict 1.5 ms gate, so the candidate
+was removed. This was measured only on the RTX 2080 SUPER; no Ampere+
+performance claim is made.

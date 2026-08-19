@@ -24,6 +24,12 @@ for its decision.
 `i4-chroma-token-fallthrough-screen.jsonl` contains the 24-record screen that
 showed the CPU probability layout did not compose with the lean GPU candidate.
 
+`i4-balanced-chroma-overlap-ab-block1.jsonl` and
+`i4-balanced-chroma-overlap-ab-block2.jsonl` contain the two independent
+60-record timing blocks for the rejected balanced-four-warp I4/chroma
+composition. `i4-balanced-chroma-overlap-parity.jsonl` contains the 105
+per-case CPU/CUDA and band-3 fallback SHA-256 comparisons; every row is exact.
+
 Inspect the sampling archives with:
 
 ```sh

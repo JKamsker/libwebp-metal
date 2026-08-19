@@ -936,3 +936,28 @@ and all 24 outputs were byte-exact, but the gains were 1.867 ms/image PNG and
 only 1.155 JPEG. Because the CPU hint reduced rather than increased the JPEG
 gain, that variant was removed without a full gate. Raw records are
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-chroma-token-fallthrough-screen.jsonl`.
+
+### Balanced-I4/chroma composition follow-up
+
+The lean GPU composition was then combined with the independently exact
+four-warp I4 transform layout. Its 3/3/2/2 mode-group assignment removes the
+prediction-to-transform CTA barrier while retaining the existing block size
+and exact scalar comparison order. Two independent five-process,
+order-balanced native-sm_75 blocks produced 30 samples per cell:
+
+| Format | Parent | Balanced-I4/chroma | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.206 ms/image | 38.503 ms/image | 1.703 ms |
+| JPEG lossy | 40.122 ms/image | 38.633 ms/image | 1.489 ms |
+
+All 120 timed outputs matched their parent hashes and byte counts. All seven
+focused CTests passed. A separate 105-case exact-byte ledger also passed,
+covering methods 2--6, qualities 25/75/98, 17x13 tiny and 257x255 odd inputs
+across photo/graphic/texture, plus band-3 fault fallback for every
+method/content pair. JPEG remained 0.011 ms/image below the strict 1.5 ms
+gate, so the candidate was removed rather than rounded into a win. This is
+RTX 2080 SUPER-only evidence and makes no Ampere+ performance claim. The two
+60-record timing blocks and the 105-record parity ledger are in the adjacent
+evidence directory as `i4-balanced-chroma-overlap-ab-block1.jsonl`,
+`i4-balanced-chroma-overlap-ab-block2.jsonl`, and
+`i4-balanced-chroma-overlap-parity.jsonl`.
