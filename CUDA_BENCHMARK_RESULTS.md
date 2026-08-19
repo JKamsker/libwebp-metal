@@ -1753,3 +1753,25 @@ Two order-reversed native-sm_75 processes produced 24 exact timing rows:
 Although register use fell from 103 to 98, neither format reaches the strict
 gate. The candidate was removed. Raw evidence is archived with the RTX 2080
 SUPER report and makes no Ampere+ claim.
+
+## Shared segment-matrix staging rejection
+
+The selected segment contributes only 716 immutable bytes: three quantization
+matrices and the scoring lambdas reused throughout I16, I4, and chroma. A
+pre-Ampere candidate copied the bundle cooperatively into shared memory while
+source import ran. The existing setup barrier also published the copy, so the
+experiment added no barrier.
+
+Candidate and restored trees passed all seven CTests. Two order-reversed
+native-sm_75 processes produced 24 exact timing rows:
+
+| Format | Parent | Shared segment | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.637 ms/image | 39.596 ms/image | 0.041 ms/image |
+| JPEG lossy | 39.621 ms/image | 39.417 ms/image | 0.204 ms/image |
+
+The compiler reduced register use from 103 to 92; shared memory grew from
+23,392 to 24,104 bytes without changing occupancy. Neither format moved
+materially, confirming the original global segment loads were already
+cache-resident. The candidate was removed and raw evidence is archived with
+the RTX 2080 SUPER report. No Ampere+ claim is made.

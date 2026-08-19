@@ -436,3 +436,24 @@ far below 1.5 ms/image, so it was removed. Raw profile, exact corrected patch,
 timings, resources, binary hashes, and both CTest logs are archived under the
 `libwebp-i4-fused-register-*` and `libwebp-jpeg-decode-feasibility-*`
 prefixes. RTX 2080 SUPER only; no Ampere+ behavior or performance claim.
+
+## Pre-Ampere shared segment-matrix staging rejection
+
+The retained transform/quantization profile motivated staging the selected
+716-byte immutable segment bundle (three quantization matrices and lambdas)
+in shared memory. Threads copied it alongside source import, so the existing
+setup barrier absorbed publication and no synchronization was added. The
+pre-Ampere-only candidate and restored tree both passed 7/7 CTests, and all
+24 order-reversed timing rows matched hashes and byte counts:
+
+| Format | Parent | Shared segment | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.637 ms/image | 39.596 ms/image | 0.041 ms/image |
+| JPEG lossy | 39.621 ms/image | 39.417 ms/image | 0.204 ms/image |
+
+Registers fell from 103 to 92 while shared memory rose from 23,392 to 24,104
+bytes, but both timing changes are noise. The candidate was removed: segment
+data was already cache-resident, and quantization remains arithmetic-bound.
+Raw patch, rows, resources, binary hashes, and both CTest logs are archived
+under `libwebp-decimate-shared-segment-*`. RTX 2080 SUPER only; no Ampere+
+behavior or performance claim.

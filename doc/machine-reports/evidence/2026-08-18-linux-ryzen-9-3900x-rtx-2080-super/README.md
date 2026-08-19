@@ -232,6 +232,11 @@ patch, 24 byte-exact timing rows, candidate/restored seven-test transcripts,
 parent/candidate resources, and binary hashes for the rejected register-local
 I4 coefficient handoff.
 
+The `libwebp-decimate-shared-segment-*` files contain the exact patch, 24
+byte-exact timing rows, candidate/restored seven-test transcripts,
+parent/candidate resources, and binary hashes for the rejected shared
+quantization-matrix staging candidate.
+
 Inspect the sampling archives with:
 
 ```sh

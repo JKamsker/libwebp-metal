@@ -1862,3 +1862,26 @@ timings, resources, binary hashes, and candidate/restored CTest logs are in
 the adjacent evidence directory under `libwebp-jpeg-decode-feasibility-*` and
 `libwebp-i4-fused-register-*`. This is Turing-only evidence; Ampere+ behavior
 was never changed.
+
+## Shared segment-matrix staging
+
+The next pre-Ampere candidate staged the selected 716-byte immutable segment
+bundle—three quantization matrices and all scoring lambdas—in shared memory.
+Its cooperative copy ran alongside source import and used the already-required
+setup barrier, so it introduced no synchronization point.
+
+Candidate and restored source passed all seven CTests. All 24 order-reversed
+native-sm_75 timing rows were byte-exact:
+
+| Format | Parent | Shared segment | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.637 ms/image | 39.596 ms/image | 0.041 ms/image |
+| JPEG lossy | 39.621 ms/image | 39.417 ms/image | 0.204 ms/image |
+
+Resources changed from 103 registers and 23,392 shared bytes to 92 registers
+and 24,104 shared bytes; the 352-byte stack and occupancy were unchanged. The
+near-zero wall changes show that the original global segment reads were
+already cache-resident, so the candidate was removed. The exact patch, raw
+rows, parent/candidate resources, binary hashes, and both CTest transcripts
+are archived under `libwebp-decimate-shared-segment-*`. This is Turing-only
+evidence; Ampere+ behavior was never changed.
