@@ -167,6 +167,12 @@ for input do
       -o "$temporary_dir/$name-color-cuda.pam"
     cmp "$temporary_dir/$name-color-cpu.pam" \
         "$temporary_dir/$name-color-cuda.pam"
+    cpu_size=$(wc -c < "$temporary_dir/$name-color-cpu.webp")
+    cuda_size=$(wc -c < "$temporary_dir/$name-color-cuda-1.webp")
+    if [ "$((cuda_size * 100))" -gt "$((cpu_size * 125))" ]; then
+      echo "CUDA color output exceeds the 25% size budget: $name method $method ($cuda_size/$cpu_size)" >&2
+      exit 1
+    fi
   done
 
   # The parallel predictor deliberately uses a different selection policy,
@@ -187,6 +193,12 @@ for input do
       -o "$temporary_dir/$name-predictor-cuda.pam"
     cmp "$temporary_dir/$name-predictor-cpu.pam" \
         "$temporary_dir/$name-predictor-cuda.pam"
+    cpu_size=$(wc -c < "$temporary_dir/$name-predictor-cpu.webp")
+    cuda_size=$(wc -c < "$temporary_dir/$name-predictor-cuda.webp")
+    if [ "$((cuda_size * 100))" -gt "$((cpu_size * 125))" ]; then
+      echo "CUDA predictor output exceeds the 25% size budget: $name method $method ($cuda_size/$cpu_size)" >&2
+      exit 1
+    fi
   done
 
   # The opaque regular RGB/BGR conversion also promises the exact CPU stream.

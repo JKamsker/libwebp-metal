@@ -37,9 +37,22 @@ typedef struct {
   int lossless;
   int method;
   int quality;
+  uint64_t handoff_generation;
 } WebPAcceleratorEncodeContext;
 
 static WEBP_ACCELERATOR_TLS WebPAcceleratorEncodeContext g_encode_context;
+static WEBP_ACCELERATOR_TLS uint64_t g_handoff_counter;
+
+static uint64_t CurrentHandoffGeneration(int lossless) {
+#if WEBP_ACCELERATOR_HAS_TLS
+  return g_encode_context.active && g_encode_context.lossless == lossless
+             ? g_encode_context.handoff_generation
+             : 0;
+#else
+  (void)lossless;
+  return 0;
+#endif
+}
 
 #if defined(WEBP_ACCELERATOR_TESTING)
 static const WebPEncoderAccelerator* g_test_backend = NULL;
@@ -104,10 +117,13 @@ WebPAcceleratorResult WebPAccelerateColorTransform(
   const WebPEncoderAccelerator* backends[4];
   const size_t count =
       GetBackends(backends, sizeof(backends) / sizeof(*backends));
+  WebPAcceleratorColorTransformRequest enriched;
   size_t i;
   if (request == NULL || count == 0 || IsDisabledByEnvironment()) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
+  enriched = *request;
+  enriched.handoff_generation = CurrentHandoffGeneration(1);
   for (i = 0; i < count; ++i) {
     const WebPEncoderAccelerator* const backend = backends[i];
     WebPAcceleratorResult result;
@@ -118,8 +134,8 @@ WebPAcceleratorResult WebPAccelerateColorTransform(
       continue;
     }
     if (backend->color_transform == NULL) return WEBP_ACCELERATOR_ERROR;
-    result =
-        NormalizeResult(backend->color_transform(backend->context, request));
+    result = NormalizeResult(
+        backend->color_transform(backend->context, &enriched));
     if (result != WEBP_ACCELERATOR_NOT_RUN) return result;
   }
   return WEBP_ACCELERATOR_NOT_RUN;
@@ -130,10 +146,13 @@ WebPAcceleratorResult WebPAccelerateHashChain(
   const WebPEncoderAccelerator* backends[4];
   const size_t count =
       GetBackends(backends, sizeof(backends) / sizeof(*backends));
+  WebPAcceleratorHashChainRequest enriched;
   size_t i;
   if (request == NULL || count == 0 || IsDisabledByEnvironment()) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
+  enriched = *request;
+  enriched.handoff_generation = CurrentHandoffGeneration(1);
   for (i = 0; i < count; ++i) {
     const WebPEncoderAccelerator* const backend = backends[i];
     WebPAcceleratorResult result;
@@ -143,7 +162,8 @@ WebPAcceleratorResult WebPAccelerateHashChain(
       continue;
     }
     if (backend->hash_chain == NULL) return WEBP_ACCELERATOR_ERROR;
-    result = NormalizeResult(backend->hash_chain(backend->context, request));
+    result =
+        NormalizeResult(backend->hash_chain(backend->context, &enriched));
     if (result != WEBP_ACCELERATOR_NOT_RUN) return result;
   }
   return WEBP_ACCELERATOR_NOT_RUN;
@@ -163,9 +183,11 @@ WebPAcceleratorResult WebPAccelerateRGBToYUV(
   if (g_encode_context.active && !g_encode_context.lossless) {
     enriched.method = g_encode_context.method;
     enriched.quality = g_encode_context.quality;
+    enriched.handoff_generation = g_encode_context.handoff_generation;
   } else {
     enriched.method = -1;
     enriched.quality = -1;
+    enriched.handoff_generation = 0;
   }
   for (i = 0; i < count; ++i) {
     const WebPEncoderAccelerator* const backend = backends[i];
@@ -213,10 +235,13 @@ WebPAcceleratorResult WebPAccelerateLossyAnalysis(
   const WebPEncoderAccelerator* backends[4];
   const size_t count =
       GetBackends(backends, sizeof(backends) / sizeof(*backends));
+  WebPAcceleratorLossyAnalysisRequest enriched;
   size_t i;
   if (request == NULL || count == 0 || IsDisabledByEnvironment()) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
+  enriched = *request;
+  enriched.handoff_generation = CurrentHandoffGeneration(0);
   for (i = 0; i < count; ++i) {
     const WebPEncoderAccelerator* const backend = backends[i];
     WebPAcceleratorResult result;
@@ -227,7 +252,7 @@ WebPAcceleratorResult WebPAccelerateLossyAnalysis(
     }
     if (backend->lossy_analysis == NULL) return WEBP_ACCELERATOR_ERROR;
     result = NormalizeResult(
-        backend->lossy_analysis(backend->context, request));
+        backend->lossy_analysis(backend->context, &enriched));
     if (result != WEBP_ACCELERATOR_NOT_RUN) return result;
   }
   return WEBP_ACCELERATOR_NOT_RUN;
@@ -238,10 +263,13 @@ WebPAcceleratorResult WebPAcceleratePredictor(
   const WebPEncoderAccelerator* backends[4];
   const size_t count =
       GetBackends(backends, sizeof(backends) / sizeof(*backends));
+  WebPAcceleratorPredictorRequest enriched;
   size_t i;
   if (request == NULL || count == 0 || IsDisabledByEnvironment()) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
+  enriched = *request;
+  enriched.handoff_generation = CurrentHandoffGeneration(1);
   for (i = 0; i < count; ++i) {
     const WebPEncoderAccelerator* const backend = backends[i];
     WebPAcceleratorResult result;
@@ -251,7 +279,8 @@ WebPAcceleratorResult WebPAcceleratePredictor(
       continue;
     }
     if (backend->predictor == NULL) return WEBP_ACCELERATOR_ERROR;
-    result = NormalizeResult(backend->predictor(backend->context, request));
+    result =
+        NormalizeResult(backend->predictor(backend->context, &enriched));
     if (result != WEBP_ACCELERATOR_NOT_RUN) return result;
   }
   return WEBP_ACCELERATOR_NOT_RUN;
@@ -328,10 +357,18 @@ int WebPAcceleratorLossyAnalysisEnabled(void) {
 
 void WebPAcceleratorBeginEncode(int lossless, int method, int quality) {
 #if WEBP_ACCELERATOR_HAS_TLS
+  uintptr_t thread_identity;
+  uint64_t generation;
+  if (++g_handoff_counter == 0) ++g_handoff_counter;
+  thread_identity = (uintptr_t)&g_encode_context;
+  generation = ((uint64_t)thread_identity << 17) ^
+               ((uint64_t)thread_identity >> 11) ^ g_handoff_counter;
+  if (generation == 0) generation = g_handoff_counter;
   g_encode_context.active = 1;
   g_encode_context.lossless = lossless != 0;
   g_encode_context.method = method;
   g_encode_context.quality = quality;
+  g_encode_context.handoff_generation = generation;
 #else
   (void)lossless;
   (void)method;

@@ -615,12 +615,22 @@ static void AcceleratedDecimateClear(AcceleratedDecimatePass* const pass) {
 static int TryAcceleratedDecimate(VP8Encoder* const enc,
                                   AcceleratedDecimatePass* const pass) {
   const int mb_count = enc->mb_w * enc->mb_h;
-  const size_t y_size = (size_t)enc->mb_w * 16 * enc->mb_h * 16;
-  const size_t uv_size = (size_t)enc->mb_w * 8 * enc->mb_h * 8;
+  size_t y_size;
+  size_t uv_size;
   WebPAcceleratorDecimateSegment* segment_params;
   WebPAcceleratorDecimateRequest* request;
   int i;
   memset(pass, 0, sizeof(*pass));
+  pass->recon_y_stride = enc->mb_w * 16;
+  pass->recon_uv_stride = enc->mb_w * 8;
+  // Contract-test hook: padding is never read by the encoder, but exercises
+  // the backend's independent output-stride handling end to end.
+  if (getenv("WEBP_CUDA_DECIMATE_TEST_PADDED_STRIDES") != NULL) {
+    pass->recon_y_stride += 7;
+    pass->recon_uv_stride += 5;
+  }
+  y_size = (size_t)pass->recon_y_stride * enc->mb_h * 16;
+  uv_size = (size_t)pass->recon_uv_stride * enc->mb_h * 8;
   segment_params = pass->segment_params;
   request = &pass->request;
   // The exact contract requires the fork's stable cost tables; a restored
@@ -676,8 +686,6 @@ static int TryAcceleratedDecimate(VP8Encoder* const enc,
   pass->recon_y = pass->recon;
   pass->recon_u = pass->recon + y_size;
   pass->recon_v = pass->recon + y_size + uv_size;
-  pass->recon_y_stride = enc->mb_w * 16;
-  pass->recon_uv_stride = enc->mb_w * 8;
   request->width = enc->pic->width;
   request->height = enc->pic->height;
   request->mb_w = enc->mb_w;

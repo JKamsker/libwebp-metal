@@ -17,6 +17,8 @@
 
 #include <cuda_runtime.h>
 
+#include <errno.h>
+#include <limits.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -1022,6 +1024,16 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
   // at the global tables directly.
   const CostCache cc = {v.level_costs, v.coeff_probas,
                         v.tables->entropy_cost, v.tables->level_fixed_costs};
+  // DeviceResult is exported byte-for-byte. Initialize named padding and
+  // fields that may be unused when the I4 search aborts so repeated requests
+  // cannot expose stale shared memory or produce nondeterministic bytes.
+  {
+    uint8_t* const rd_bytes = (uint8_t*)&w.rd;
+    for (int i = tid; i < (int)sizeof(w.rd);
+         i += (int)blockDim.x) {
+      rd_bytes[i] = 0;
+    }
+  }
 #define PHASE_TS(k) \
   do { \
     if (v.phase_cycles != nullptr && tid == 0) ph_ts[k] = clock64(); \
@@ -1647,7 +1659,6 @@ static void UnlockDecimate(DecimateMutex* m) { (void)pthread_mutex_unlock(m); }
 constexpr int kMaxDecimateBands = 8;
 
 struct DecimateState {
-  bool initialization_attempted = false;
   bool available = false;
   bool quarantined = false;
   bool tables_uploaded = false;
@@ -1657,9 +1668,13 @@ struct DecimateState {
   void* device_arena = nullptr;
   size_t arena_capacity = 0;
   StaticCostTables* device_tables = nullptr;
+  uint8_t* host_staging = nullptr;
+  size_t host_staging_capacity = 0;
   // Streaming pass in flight (BEGIN issued, not all bands collected).
   bool pass_pending = false;
   int pending_band_count = 0;
+  int pending_requested_band_count = 0;
+  int pending_next_band = 0;
   int pending_rows_per_band = 0;
   int pending_mb_w = 0;
   int pending_mb_h = 0;
@@ -1667,6 +1682,12 @@ struct DecimateState {
   size_t pending_off_recon_y = 0;
   size_t pending_off_recon_u = 0;
   size_t pending_off_recon_v = 0;
+  size_t pending_host_off_results = 0;
+  size_t pending_host_off_recon_y = 0;
+  size_t pending_host_off_recon_u = 0;
+  size_t pending_host_off_recon_v = 0;
+  size_t pending_recon_y_stride = 0;
+  size_t pending_recon_uv_stride = 0;
   cudaEvent_t band_events[kMaxDecimateBands] = {};
   // WEBP_CUDA_DECIMATE_TIMING=1: measure the device wall time of each pass
   // (first diagonal launch to last diagonal completion) and print it.
@@ -1680,35 +1701,143 @@ struct DecimateState {
 DecimateState g_decimate_state;
 DecimateMutex g_decimate_mutex = DECIMATE_MUTEX_INITIALIZER;
 
+bool DecimateStringEqualsIgnoreCase(const char* value, const char* expected) {
+  while (*value != '\0' && *expected != '\0') {
+    char a = *value++;
+    char b = *expected++;
+    if (a >= 'A' && a <= 'Z') a = (char)(a - 'A' + 'a');
+    if (b >= 'A' && b <= 'Z') b = (char)(b - 'A' + 'a');
+    if (a != b) return false;
+  }
+  return *value == *expected;
+}
+
 bool DecimateFlag(const char* name, bool default_value) {
   const char* const value = getenv(name);
   if (value == nullptr || value[0] == '\0') return default_value;
-  return strcmp(value, "0") != 0;
+  return strcmp(value, "0") != 0 &&
+         !DecimateStringEqualsIgnoreCase(value, "false") &&
+         !DecimateStringEqualsIgnoreCase(value, "no");
+}
+
+bool DecimateParseSize(const char* name, size_t* parsed_value) {
+  const char* const value = getenv(name);
+  char* end = nullptr;
+  unsigned long long parsed;
+  if (value == nullptr || value[0] == '\0' || value[0] == '-') return false;
+  errno = 0;
+  parsed = strtoull(value, &end, 10);
+  if (errno != 0 || end == value || *end != '\0' ||
+      parsed > (unsigned long long)SIZE_MAX) {
+    return false;
+  }
+  *parsed_value = (size_t)parsed;
+  return true;
+}
+
+int DecimateEnvironmentDevice(void) {
+  const char* const value = getenv("WEBP_CUDA_DEVICE");
+  char* end = nullptr;
+  long parsed;
+  if (value == nullptr || value[0] == '\0') return 0;
+  errno = 0;
+  parsed = strtol(value, &end, 10);
+  if (errno != 0 || end == value || *end != '\0' || parsed < 0 ||
+      parsed > INT_MAX) {
+    return -1;
+  }
+  return (int)parsed;
+}
+
+bool CheckedAddSize(size_t a, size_t b, size_t* result) {
+  if (a > SIZE_MAX - b) return false;
+  *result = a + b;
+  return true;
+}
+
+bool CheckedMulSize(size_t a, size_t b, size_t* result) {
+  if (a != 0 && b > SIZE_MAX / a) return false;
+  *result = a * b;
+  return true;
+}
+
+bool CheckedAlignUp(size_t value, size_t* result) {
+  size_t with_padding;
+  if (!CheckedAddSize(value, 255u, &with_padding)) return false;
+  *result = with_padding & ~(size_t)255u;
+  return true;
+}
+
+bool AddAlignedSlice(size_t offset, size_t bytes, size_t* next) {
+  size_t aligned;
+  return CheckedAlignUp(bytes, &aligned) &&
+         CheckedAddSize(offset, aligned, next);
+}
+
+void DecimateClearPending(DecimateState* state) {
+  state->pass_pending = false;
+  state->pending_band_count = 0;
+  state->pending_requested_band_count = 0;
+  state->pending_next_band = 0;
+}
+
+void DecimateReleaseAll(DecimateState* state) {
+  if (state->stream != nullptr) (void)cudaStreamSynchronize(state->stream);
+  if (state->copy_stream != nullptr) {
+    (void)cudaStreamSynchronize(state->copy_stream);
+  }
+  if (state->device_arena != nullptr) (void)cudaFree(state->device_arena);
+  if (state->device_tables != nullptr) (void)cudaFree(state->device_tables);
+  if (state->phase_cycles_dev != nullptr) {
+    (void)cudaFree(state->phase_cycles_dev);
+  }
+  if (state->timing_begin != nullptr) {
+    (void)cudaEventDestroy(state->timing_begin);
+  }
+  if (state->timing_end != nullptr) {
+    (void)cudaEventDestroy(state->timing_end);
+  }
+  for (int i = 0; i < kMaxDecimateBands; ++i) {
+    if (state->band_events[i] != nullptr) {
+      (void)cudaEventDestroy(state->band_events[i]);
+    }
+  }
+  if (state->copy_stream != nullptr) {
+    (void)cudaStreamDestroy(state->copy_stream);
+  }
+  if (state->stream != nullptr) (void)cudaStreamDestroy(state->stream);
+  free(state->host_staging);
+  *state = DecimateState();
 }
 
 bool DecimateInitialize(DecimateState* state) {
-  if (state->initialization_attempted) return state->available;
-  state->initialization_attempted = true;
   int device_count = 0;
+  if (state->available) return true;
   if (cudaGetDeviceCount(&device_count) != cudaSuccess || device_count == 0) {
     (void)cudaGetLastError();
     return false;
   }
-  if (cudaSetDevice(state->device) != cudaSuccess) return false;
+  state->device = DecimateEnvironmentDevice();
+  if (state->device < 0 || state->device >= device_count ||
+      cudaSetDevice(state->device) != cudaSuccess) {
+    (void)cudaGetLastError();
+    state->device = 0;
+    return false;
+  }
   if (cudaStreamCreateWithFlags(&state->stream, cudaStreamNonBlocking) !=
       cudaSuccess) {
-    state->quarantined = true;
+    DecimateReleaseAll(state);
     return false;
   }
   if (cudaStreamCreateWithFlags(&state->copy_stream, cudaStreamNonBlocking) !=
       cudaSuccess) {
-    state->quarantined = true;
+    DecimateReleaseAll(state);
     return false;
   }
   for (int i = 0; i < kMaxDecimateBands; ++i) {
     if (cudaEventCreateWithFlags(&state->band_events[i],
                                  cudaEventDisableTiming) != cudaSuccess) {
-      state->quarantined = true;
+      DecimateReleaseAll(state);
       return false;
     }
   }
@@ -1723,12 +1852,10 @@ bool DecimateInitialize(DecimateState* state) {
       state->timing_level = 1;
       (void)cudaGetLastError();
     }
-  }
-  if (state->timing) {
     if (cudaEventCreate(&state->timing_begin) != cudaSuccess ||
         cudaEventCreate(&state->timing_end) != cudaSuccess) {
-      state->timing = false;
-      (void)cudaGetLastError();
+      DecimateReleaseAll(state);
+      return false;
     }
   }
   state->available = true;
@@ -1758,6 +1885,8 @@ bool DecimateEnsureTables(DecimateState* state) {
   if (cudaMemcpy(state->device_tables, &tables, sizeof(tables),
                  cudaMemcpyHostToDevice) != cudaSuccess) {
     (void)cudaGetLastError();
+    (void)cudaFree(state->device_tables);
+    state->device_tables = nullptr;
     return false;
   }
   state->tables_uploaded = true;
@@ -1765,21 +1894,230 @@ bool DecimateEnsureTables(DecimateState* state) {
 }
 
 bool DecimateEnsureArena(DecimateState* state, size_t bytes) {
+  void* replacement = nullptr;
   if (bytes <= state->arena_capacity) return true;
-  if (state->device_arena != nullptr) {
-    (void)cudaFree(state->device_arena);
-    state->device_arena = nullptr;
-    state->arena_capacity = 0;
-  }
-  if (cudaMalloc(&state->device_arena, bytes) != cudaSuccess) {
+  if (cudaMalloc(&replacement, bytes) != cudaSuccess) {
     (void)cudaGetLastError();
     return false;
   }
+  if (state->device_arena != nullptr) (void)cudaFree(state->device_arena);
+  state->device_arena = replacement;
   state->arena_capacity = bytes;
   return true;
 }
 
-size_t AlignUp(size_t value) { return (value + 255u) & ~(size_t)255u; }
+bool DecimateEnsureHostStaging(DecimateState* state, size_t bytes) {
+  void* replacement;
+  if (bytes <= state->host_staging_capacity) return true;
+  replacement = realloc(state->host_staging, bytes);
+  if (replacement == nullptr) return false;
+  state->host_staging = (uint8_t*)replacement;
+  state->host_staging_capacity = bytes;
+  return true;
+}
+
+struct DecimateLayout {
+  size_t mb_count;
+  size_t src_y_bytes;
+  size_t src_uv_bytes;
+  size_t recon_y_stride;
+  size_t recon_uv_stride;
+  size_t recon_y_bytes;
+  size_t recon_uv_bytes;
+  size_t preds_w;
+  size_t preds_bytes;
+  size_t results_bytes;
+  size_t off_src_y;
+  size_t off_src_u;
+  size_t off_src_v;
+  size_t off_recon_y;
+  size_t off_recon_u;
+  size_t off_recon_v;
+  size_t off_segments;
+  size_t off_seg_params;
+  size_t off_level_costs;
+  size_t off_probas;
+  size_t off_nz;
+  size_t off_preds;
+  size_t off_left_nz8;
+  size_t off_results;
+  size_t arena_bytes;
+  size_t host_off_results;
+  size_t host_off_recon_y;
+  size_t host_off_recon_u;
+  size_t host_off_recon_v;
+  size_t host_bytes;
+};
+
+bool BuildDecimateLayout(const WebPAcceleratorDecimateRequest* request,
+                         DecimateLayout* layout) {
+  const size_t level_cost_bytes =
+      4u * 8u * 3u * 68u * sizeof(uint16_t);
+  const size_t proba_bytes = 4u * 8u * 3u * 11u;
+  size_t uv_height, recon_y_height, recon_uv_height, preds_h;
+  size_t next;
+  memset(layout, 0, sizeof(*layout));
+  if (!CheckedMulSize((size_t)request->mb_w, (size_t)request->mb_h,
+                      &layout->mb_count) ||
+      !CheckedMulSize((size_t)request->y_stride, (size_t)request->height,
+                      &layout->src_y_bytes)) {
+    return false;
+  }
+  uv_height = ((size_t)request->height + 1u) / 2u;
+  if (!CheckedMulSize((size_t)request->uv_stride, uv_height,
+                      &layout->src_uv_bytes) ||
+      !CheckedMulSize((size_t)request->mb_w, 16u,
+                      &layout->recon_y_stride) ||
+      !CheckedMulSize((size_t)request->mb_w, 8u,
+                      &layout->recon_uv_stride) ||
+      !CheckedMulSize((size_t)request->mb_h, 16u, &recon_y_height) ||
+      !CheckedMulSize((size_t)request->mb_h, 8u, &recon_uv_height) ||
+      !CheckedMulSize(layout->recon_y_stride, recon_y_height,
+                      &layout->recon_y_bytes) ||
+      !CheckedMulSize(layout->recon_uv_stride, recon_uv_height,
+                      &layout->recon_uv_bytes) ||
+      !CheckedMulSize(layout->mb_count, sizeof(DeviceResult),
+                      &layout->results_bytes) ||
+      !CheckedMulSize((size_t)request->mb_w, 4u, &layout->preds_w) ||
+      !CheckedAddSize(layout->preds_w, 1u, &layout->preds_w) ||
+      !CheckedMulSize((size_t)request->mb_h, 4u, &preds_h) ||
+      !CheckedAddSize(preds_h, 1u, &preds_h) ||
+      !CheckedMulSize(layout->preds_w, preds_h, &layout->preds_bytes)) {
+    return false;
+  }
+
+  layout->off_src_y = 0;
+  if (!AddAlignedSlice(layout->off_src_y, layout->src_y_bytes, &next)) {
+    return false;
+  }
+  layout->off_src_u = next;
+  if (!AddAlignedSlice(next, layout->src_uv_bytes, &next)) return false;
+  layout->off_src_v = next;
+  if (!AddAlignedSlice(next, layout->src_uv_bytes, &next)) return false;
+  layout->off_recon_y = next;
+  if (!AddAlignedSlice(next, layout->recon_y_bytes, &next)) return false;
+  layout->off_recon_u = next;
+  if (!AddAlignedSlice(next, layout->recon_uv_bytes, &next)) return false;
+  layout->off_recon_v = next;
+  if (!AddAlignedSlice(next, layout->recon_uv_bytes, &next)) return false;
+  layout->off_segments = next;
+  if (!AddAlignedSlice(next, layout->mb_count, &next)) return false;
+  layout->off_seg_params = next;
+  if (!AddAlignedSlice(next, 4u * sizeof(DeviceSegment), &next)) return false;
+  layout->off_level_costs = next;
+  if (!AddAlignedSlice(next, level_cost_bytes, &next)) return false;
+  layout->off_probas = next;
+  if (!AddAlignedSlice(next, proba_bytes, &next)) return false;
+  layout->off_nz = next;
+  if (!AddAlignedSlice(next, layout->mb_count * sizeof(uint32_t), &next)) {
+    return false;
+  }
+  layout->off_preds = next;
+  if (!AddAlignedSlice(next, layout->preds_bytes, &next)) return false;
+  layout->off_left_nz8 = next;
+  if (!AddAlignedSlice(next, layout->mb_count, &next)) return false;
+  layout->off_results = next;
+  if (!AddAlignedSlice(next, layout->results_bytes, &layout->arena_bytes)) {
+    return false;
+  }
+
+  layout->host_off_results = 0;
+  if (!CheckedAddSize(layout->host_off_results, layout->results_bytes,
+                      &layout->host_off_recon_y) ||
+      !CheckedAddSize(layout->host_off_recon_y, layout->recon_y_bytes,
+                      &layout->host_off_recon_u) ||
+      !CheckedAddSize(layout->host_off_recon_u, layout->recon_uv_bytes,
+                      &layout->host_off_recon_v) ||
+      !CheckedAddSize(layout->host_off_recon_v, layout->recon_uv_bytes,
+                      &layout->host_bytes)) {
+    return false;
+  }
+  return true;
+}
+
+bool ValidateDecimateRequest(const WebPAcceleratorDecimateRequest* request,
+                             DecimateLayout* layout) {
+  size_t expected_mb_w, expected_mb_h;
+  size_t uv_width;
+  if (request == nullptr || request->y == nullptr || request->u == nullptr ||
+      request->v == nullptr || request->segments == nullptr ||
+      request->segment_params == nullptr || request->level_costs == nullptr ||
+      request->coeff_probas == nullptr || request->results == nullptr ||
+      request->recon_y == nullptr || request->recon_u == nullptr ||
+      request->recon_v == nullptr || request->width <= 0 ||
+      request->height <= 0 || request->mb_w <= 0 || request->mb_h <= 0 ||
+      request->phase < WEBP_ACCELERATOR_DECIMATE_WHOLE ||
+      request->phase > WEBP_ACCELERATOR_DECIMATE_COLLECT) {
+    return false;
+  }
+  expected_mb_w = ((size_t)request->width - 1u) / 16u + 1u;
+  expected_mb_h = ((size_t)request->height - 1u) / 16u + 1u;
+  uv_width = ((size_t)request->width + 1u) / 2u;
+  if ((size_t)request->mb_w != expected_mb_w ||
+      (size_t)request->mb_h != expected_mb_h ||
+      request->y_stride < request->width || request->uv_stride <= 0 ||
+      (size_t)request->uv_stride < uv_width ||
+      request->recon_y_stride <= 0 || request->recon_uv_stride <= 0 ||
+      (size_t)request->recon_y_stride < (size_t)request->mb_w * 16u ||
+      (size_t)request->recon_uv_stride < (size_t)request->mb_w * 8u ||
+      (request->use_error_diffusion != 0 &&
+       request->use_error_diffusion != 1)) {
+    return false;
+  }
+  if (request->phase != WEBP_ACCELERATOR_DECIMATE_WHOLE &&
+      (request->band_count <= 0 ||
+       request->band_count > kMaxDecimateBands)) {
+    return false;
+  }
+  if (request->phase == WEBP_ACCELERATOR_DECIMATE_BEGIN &&
+      request->band_index != 0) {
+    return false;
+  }
+  if (!BuildDecimateLayout(request, layout)) return false;
+  for (size_t i = 0; i < layout->mb_count; ++i) {
+    if (request->segments[i] >= 4u) return false;
+  }
+  return true;
+}
+
+void CommitPlaneRows(uint8_t* destination, size_t destination_stride,
+                     const uint8_t* source, size_t source_stride,
+                     size_t first_row, size_t row_count) {
+  for (size_t row = 0; row < row_count; ++row) {
+    memcpy(destination + (first_row + row) * destination_stride,
+           source + (first_row + row) * source_stride, source_stride);
+  }
+}
+
+void DecimateReportTiming(DecimateState* state, int mb_w, int mb_h) {
+  if (!state->timing || state->timing_end == nullptr ||
+      cudaEventSynchronize(state->timing_end) != cudaSuccess) {
+    return;
+  }
+  float ms = 0.f;
+  if (cudaEventElapsedTime(&ms, state->timing_begin, state->timing_end) ==
+      cudaSuccess) {
+    fprintf(stderr, "decimate GPU wall: %.2f ms (%dx%d MBs)\n", ms, mb_w,
+            mb_h);
+  }
+  if (state->phase_cycles_dev != nullptr) {
+    unsigned long long cycles[7] = {0};
+    if (cudaMemcpy(cycles, state->phase_cycles_dev, sizeof(cycles),
+                   cudaMemcpyDeviceToHost) == cudaSuccess) {
+      static const char* const kPhaseNames[7] = {
+          "import", "i16-num", "i16-sel", "i4", "uv-num", "uv-sel",
+          "recon"};
+      unsigned long long total = 0;
+      for (int k = 0; k < 7; ++k) total += cycles[k];
+      fprintf(stderr, "decimate phases (%% of block cycles):");
+      for (int k = 0; k < 7; ++k) {
+        fprintf(stderr, " %s %.1f%%", kPhaseNames[k],
+                total ? 100.0 * (double)cycles[k] / (double)total : 0.0);
+      }
+      fprintf(stderr, "\n");
+    }
+  }
+}
 
 }  // namespace
 
@@ -1791,25 +2129,20 @@ static_assert(sizeof(DeviceSegment) ==
 
 extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     void* context, const WebPAcceleratorDecimateRequest* request) {
+  DecimateLayout layout;
   (void)context;
   if (!DecimateFlag("WEBP_CUDA", true) ||
       !DecimateFlag("WEBP_CUDA_LOSSY_DECIMATE", true)) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
-  if (request == nullptr || request->y == nullptr || request->u == nullptr ||
-      request->v == nullptr || request->segments == nullptr ||
-      request->segment_params == nullptr || request->level_costs == nullptr ||
-      request->coeff_probas == nullptr || request->results == nullptr ||
-      request->recon_y == nullptr || request->recon_u == nullptr ||
-      request->recon_v == nullptr || request->width <= 0 ||
-      request->height <= 0 || request->mb_w <= 0 || request->mb_h <= 0) {
+  if (!ValidateDecimateRequest(request, &layout)) {
     return WEBP_ACCELERATOR_ERROR;
   }
   if (request->rd_opt_level < (int)kRDBasic ||
       request->rd_opt_level > (int)kRDTrellisAll) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
-  const size_t mb_count = (size_t)request->mb_w * request->mb_h;
+  const size_t mb_count = layout.mb_count;
   if (request->phase == WEBP_ACCELERATOR_DECIMATE_COLLECT) {
     // Wait for one band's completion event, then copy its rows out on the
     // dedicated copy stream so later diagonals keep running.
@@ -1819,8 +2152,14 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     do {
       if (!state->pass_pending || state->pending_mb_w != request->mb_w ||
           state->pending_mb_h != request->mb_h ||
+          request->band_count != state->pending_requested_band_count ||
+          request->band_index != state->pending_next_band ||
           request->band_index < 0 ||
           request->band_index >= state->pending_band_count) {
+        break;
+      }
+      if (cudaSetDevice(state->device) != cudaSuccess) {
+        state->quarantined = true;
         break;
       }
       const int band = request->band_index;
@@ -1833,7 +2172,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
             atoi(fail_env) == band) {
           (void)cudaStreamSynchronize(state->stream);
           (void)cudaStreamSynchronize(state->copy_stream);
-          state->pass_pending = false;
+          DecimateClearPending(state);
           break;
         }
       }
@@ -1843,39 +2182,73 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
           row_end_raw < request->mb_h ? row_end_raw : request->mb_h;
       const size_t mb_start = (size_t)row_start * request->mb_w;
       const size_t mb_end = (size_t)row_end * request->mb_w;
+      const size_t y_first_row = (size_t)row_start * 16u;
+      const size_t y_row_count = (size_t)(row_end - row_start) * 16u;
+      const size_t uv_first_row = (size_t)row_start * 8u;
+      const size_t uv_row_count = (size_t)(row_end - row_start) * 8u;
       uint8_t* const arena = (uint8_t*)state->device_arena;
+      uint8_t* const staging = state->host_staging;
+      const char* const fail_download =
+          getenv("WEBP_CUDA_DECIMATE_FAIL_DOWNLOAD");
+      const int injected_step =
+          (fail_download != nullptr && fail_download[0] != '\0')
+              ? atoi(fail_download)
+              : -1;
+      int copy_step = 0;
+      bool injected_failure = false;
       cudaError_t error = cudaStreamWaitEvent(
           state->copy_stream, state->band_events[band], 0);
       if (error == cudaSuccess) {
         error = cudaMemcpyAsync(
-            request->results + mb_start,
+            staging + state->pending_host_off_results +
+                mb_start * sizeof(DeviceResult),
             (const DeviceResult*)(arena + state->pending_off_results) +
                 mb_start,
             (mb_end - mb_start) * sizeof(DeviceResult),
             cudaMemcpyDeviceToHost, state->copy_stream);
-      }
-      const size_t ys = (size_t)request->mb_w * 16;
-      const size_t uvs = (size_t)request->mb_w * 8;
-      if (error == cudaSuccess) {
-        error = cudaMemcpyAsync(
-            request->recon_y + (size_t)row_start * 16 * ys,
-            arena + state->pending_off_recon_y + (size_t)row_start * 16 * ys,
-            (size_t)(row_end - row_start) * 16 * ys,
-            cudaMemcpyDeviceToHost, state->copy_stream);
+        if (error == cudaSuccess && injected_step == copy_step++) {
+          error = cudaErrorUnknown;
+          injected_failure = true;
+        }
       }
       if (error == cudaSuccess) {
         error = cudaMemcpyAsync(
-            request->recon_u + (size_t)row_start * 8 * uvs,
-            arena + state->pending_off_recon_u + (size_t)row_start * 8 * uvs,
-            (size_t)(row_end - row_start) * 8 * uvs,
+            staging + state->pending_host_off_recon_y +
+                y_first_row * state->pending_recon_y_stride,
+            arena + state->pending_off_recon_y +
+                y_first_row * state->pending_recon_y_stride,
+            y_row_count * state->pending_recon_y_stride,
             cudaMemcpyDeviceToHost, state->copy_stream);
+        if (error == cudaSuccess && injected_step == copy_step++) {
+          error = cudaErrorUnknown;
+          injected_failure = true;
+        }
       }
       if (error == cudaSuccess) {
         error = cudaMemcpyAsync(
-            request->recon_v + (size_t)row_start * 8 * uvs,
-            arena + state->pending_off_recon_v + (size_t)row_start * 8 * uvs,
-            (size_t)(row_end - row_start) * 8 * uvs,
+            staging + state->pending_host_off_recon_u +
+                uv_first_row * state->pending_recon_uv_stride,
+            arena + state->pending_off_recon_u +
+                uv_first_row * state->pending_recon_uv_stride,
+            uv_row_count * state->pending_recon_uv_stride,
             cudaMemcpyDeviceToHost, state->copy_stream);
+        if (error == cudaSuccess && injected_step == copy_step++) {
+          error = cudaErrorUnknown;
+          injected_failure = true;
+        }
+      }
+      if (error == cudaSuccess) {
+        error = cudaMemcpyAsync(
+            staging + state->pending_host_off_recon_v +
+                uv_first_row * state->pending_recon_uv_stride,
+            arena + state->pending_off_recon_v +
+                uv_first_row * state->pending_recon_uv_stride,
+            uv_row_count * state->pending_recon_uv_stride,
+            cudaMemcpyDeviceToHost, state->copy_stream);
+        if (error == cudaSuccess && injected_step == copy_step++) {
+          error = cudaErrorUnknown;
+          injected_failure = true;
+        }
       }
       if (error == cudaSuccess) {
         error = cudaStreamSynchronize(state->copy_stream);
@@ -1883,12 +2256,31 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
       if (error != cudaSuccess) {
         (void)cudaStreamSynchronize(state->stream);
         (void)cudaStreamSynchronize(state->copy_stream);
-        state->pass_pending = false;
-        state->quarantined = true;
+        DecimateClearPending(state);
+        if (!injected_failure) state->quarantined = true;
         break;
       }
+      memcpy(request->results + mb_start,
+             staging + state->pending_host_off_results +
+                 mb_start * sizeof(DeviceResult),
+             (mb_end - mb_start) * sizeof(DeviceResult));
+      CommitPlaneRows(request->recon_y, (size_t)request->recon_y_stride,
+                      staging + state->pending_host_off_recon_y,
+                      state->pending_recon_y_stride, y_first_row,
+                      y_row_count);
+      CommitPlaneRows(request->recon_u, (size_t)request->recon_uv_stride,
+                      staging + state->pending_host_off_recon_u,
+                      state->pending_recon_uv_stride, uv_first_row,
+                      uv_row_count);
+      CommitPlaneRows(request->recon_v, (size_t)request->recon_uv_stride,
+                      staging + state->pending_host_off_recon_v,
+                      state->pending_recon_uv_stride, uv_first_row,
+                      uv_row_count);
       if (band == state->pending_band_count - 1) {
-        state->pass_pending = false;
+        DecimateReportTiming(state, state->pending_mb_w, state->pending_mb_h);
+        DecimateClearPending(state);
+      } else {
+        ++state->pending_next_band;
       }
       collect_result = WEBP_ACCELERATOR_SUCCESS;
     } while (0);
@@ -1907,68 +2299,71 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
         g_decimate_state.available ||
         (backend != nullptr && strcmp(backend, "cuda") == 0);
     const char* const min_mbs = getenv("WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS");
-    const size_t minimum = (min_mbs != nullptr)
-                               ? (size_t)atoll(min_mbs)
-                               : (context_warm ? 784u : 12544u);
+    size_t minimum = context_warm ? 784u : 12544u;
+    if (min_mbs != nullptr && min_mbs[0] != '\0' &&
+        !DecimateParseSize("WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS", &minimum)) {
+      if (DecimateFlag("WEBP_CUDA_VERBOSE", false)) {
+        fprintf(stderr,
+                "WebP-CUDA: invalid WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS\n");
+      }
+      return WEBP_ACCELERATOR_ERROR;
+    }
     if (mb_count < minimum) return WEBP_ACCELERATOR_NOT_RUN;
   }
 
   WebPAcceleratorResult result = WEBP_ACCELERATOR_NOT_RUN;
   const int streaming = (request->phase == WEBP_ACCELERATOR_DECIMATE_BEGIN);
-  const int band_count =
-      streaming
-          ? ((request->band_count > 0 &&
-              request->band_count <= kMaxDecimateBands)
-                 ? request->band_count
-                 : 1)
-          : 1;
+  const int requested_band_count = streaming ? request->band_count : 1;
   LockDecimate(&g_decimate_mutex);
   DecimateState* const state = &g_decimate_state;
   do {
     if (state->quarantined || !DecimateInitialize(state)) break;
-    if (state->pass_pending) {
-      // Abandon an uncollected pass: drain the device before reusing arena.
-      (void)cudaStreamSynchronize(state->stream);
-      (void)cudaStreamSynchronize(state->copy_stream);
-      state->pass_pending = false;
-    }
-    if (!DecimateEnsureTables(state)) break;
     if (cudaSetDevice(state->device) != cudaSuccess) {
       state->quarantined = true;
       result = WEBP_ACCELERATOR_ERROR;
       break;
     }
-    const size_t src_y_bytes = (size_t)request->y_stride * request->height;
-    const size_t uv_height = (request->height + 1) / 2;
-    const size_t src_uv_bytes = (size_t)request->uv_stride * uv_height;
-    const size_t recon_y_bytes =
-        (size_t)request->mb_w * 16 * request->mb_h * 16;
-    const size_t recon_uv_bytes =
-        (size_t)request->mb_w * 8 * request->mb_h * 8;
-    const size_t preds_w = 4 * (size_t)request->mb_w + 1;
-    const size_t preds_h = 4 * (size_t)request->mb_h + 1;
-    const size_t preds_bytes = preds_w * preds_h;
-    const size_t results_bytes = mb_count * sizeof(DeviceResult);
+    if (state->pass_pending) {
+      // Abandon an uncollected pass: drain the device before reusing arena.
+      cudaError_t drain_error = cudaStreamSynchronize(state->stream);
+      if (drain_error == cudaSuccess) {
+        drain_error = cudaStreamSynchronize(state->copy_stream);
+      }
+      if (drain_error != cudaSuccess) {
+        state->quarantined = true;
+        result = WEBP_ACCELERATOR_ERROR;
+        break;
+      }
+      DecimateClearPending(state);
+    }
+    if (!DecimateEnsureTables(state)) break;
+    const size_t src_y_bytes = layout.src_y_bytes;
+    const size_t src_uv_bytes = layout.src_uv_bytes;
+    const size_t recon_y_bytes = layout.recon_y_bytes;
+    const size_t recon_uv_bytes = layout.recon_uv_bytes;
+    const size_t preds_w = layout.preds_w;
+    const size_t preds_bytes = layout.preds_bytes;
+    const size_t results_bytes = layout.results_bytes;
     const size_t level_cost_bytes = 4u * 8u * 3u * 68u * sizeof(uint16_t);
     const size_t proba_bytes = 4u * 8u * 3u * 11u;
-    // Arena layout, 256-byte aligned slices.
-    const size_t off_src_y = 0;
-    const size_t off_src_u = off_src_y + AlignUp(src_y_bytes);
-    const size_t off_src_v = off_src_u + AlignUp(src_uv_bytes);
-    const size_t off_recon_y = off_src_v + AlignUp(src_uv_bytes);
-    const size_t off_recon_u = off_recon_y + AlignUp(recon_y_bytes);
-    const size_t off_recon_v = off_recon_u + AlignUp(recon_uv_bytes);
-    const size_t off_segments = off_recon_v + AlignUp(recon_uv_bytes);
-    const size_t off_seg_params = off_segments + AlignUp(mb_count);
-    const size_t off_level_costs =
-        off_seg_params + AlignUp(4 * sizeof(DeviceSegment));
-    const size_t off_probas = off_level_costs + AlignUp(level_cost_bytes);
-    const size_t off_nz = off_probas + AlignUp(proba_bytes);
-    const size_t off_preds = off_nz + AlignUp(mb_count * sizeof(uint32_t));
-    const size_t off_left_nz8 = off_preds + AlignUp(preds_bytes);
-    const size_t off_results = off_left_nz8 + AlignUp(mb_count);
-    const size_t total = off_results + AlignUp(results_bytes);
-    if (!DecimateEnsureArena(state, total)) break;
+    const size_t off_src_y = layout.off_src_y;
+    const size_t off_src_u = layout.off_src_u;
+    const size_t off_src_v = layout.off_src_v;
+    const size_t off_recon_y = layout.off_recon_y;
+    const size_t off_recon_u = layout.off_recon_u;
+    const size_t off_recon_v = layout.off_recon_v;
+    const size_t off_segments = layout.off_segments;
+    const size_t off_seg_params = layout.off_seg_params;
+    const size_t off_level_costs = layout.off_level_costs;
+    const size_t off_probas = layout.off_probas;
+    const size_t off_nz = layout.off_nz;
+    const size_t off_preds = layout.off_preds;
+    const size_t off_left_nz8 = layout.off_left_nz8;
+    const size_t off_results = layout.off_results;
+    if (!DecimateEnsureArena(state, layout.arena_bytes) ||
+        !DecimateEnsureHostStaging(state, layout.host_bytes)) {
+      break;
+    }
     uint8_t* const arena = (uint8_t*)state->device_arena;
     cudaError_t error = cudaSuccess;
 #define UPLOAD(offset, ptr, bytes)                                          \
@@ -2033,8 +2428,8 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     params.mb_h = (uint32_t)request->mb_h;
     params.y_stride = (uint32_t)request->y_stride;
     params.uv_stride = (uint32_t)request->uv_stride;
-    params.recon_y_stride = (uint32_t)request->mb_w * 16u;
-    params.recon_uv_stride = (uint32_t)request->mb_w * 8u;
+    params.recon_y_stride = (uint32_t)layout.recon_y_stride;
+    params.recon_uv_stride = (uint32_t)layout.recon_uv_stride;
     params.max_i4_header_bits = request->max_i4_header_bits;
     params.use_error_diffusion = (uint32_t)request->use_error_diffusion;
     params.rd_opt_level = (uint32_t)request->rd_opt_level;
@@ -2042,7 +2437,10 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     (void)cudaGetLastError();
     const int last_diagonal =
         (request->mb_w - 1) + 2 * (request->mb_h - 1);
-    const int rows_per_band = (request->mb_h + band_count - 1) / band_count;
+    const int rows_per_band =
+        (request->mb_h + requested_band_count - 1) / requested_band_count;
+    const int effective_band_count =
+        (request->mb_h + rows_per_band - 1) / rows_per_band;
     if (state->timing) {
       (void)cudaEventRecord(state->timing_begin, state->stream);
     }
@@ -2061,48 +2459,24 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
       if (streaming && error == cudaSuccess) {
         // A band of macroblock rows is complete once the diagonal reaching
         // its last row's rightmost block has run.
-        for (int band = 0; band < band_count; ++band) {
+        for (int band = 0; band < effective_band_count; ++band) {
           const int end_raw = (band + 1) * rows_per_band;
           const int end_row =
               end_raw < request->mb_h ? end_raw : request->mb_h;
           if (d == (request->mb_w - 1) + 2 * (end_row - 1)) {
             error = cudaEventRecord(state->band_events[band], state->stream);
-            break;
           }
         }
       }
     }
     if (state->timing && error == cudaSuccess) {
-      (void)cudaEventRecord(state->timing_end, state->stream);
-      if (cudaEventSynchronize(state->timing_end) == cudaSuccess) {
-        float ms = 0.f;
-        if (cudaEventElapsedTime(&ms, state->timing_begin,
-                                 state->timing_end) == cudaSuccess) {
-          fprintf(stderr, "decimate GPU wall: %.2f ms (%dx%d MBs)\n", ms,
-                  request->mb_w, request->mb_h);
-        }
-        if (state->phase_cycles_dev != nullptr) {
-          unsigned long long cycles[7] = {0};
-          if (cudaMemcpy(cycles, state->phase_cycles_dev, sizeof(cycles),
-                         cudaMemcpyDeviceToHost) == cudaSuccess) {
-            static const char* const kPhaseNames[7] = {
-                "import", "i16-num", "i16-sel", "i4",
-                "uv-num", "uv-sel",  "recon"};
-            unsigned long long total = 0;
-            for (int k = 0; k < 7; ++k) total += cycles[k];
-            fprintf(stderr, "decimate phases (%% of block cycles):");
-            for (int k = 0; k < 7; ++k) {
-              fprintf(stderr, " %s %.1f%%", kPhaseNames[k],
-                      total ? 100.0 * (double)cycles[k] / (double)total : 0.0);
-            }
-            fprintf(stderr, "\n");
-          }
-        }
-      }
+      error = cudaEventRecord(state->timing_end, state->stream);
     }
     if (streaming && error == cudaSuccess) {
       state->pass_pending = true;
-      state->pending_band_count = band_count;
+      state->pending_band_count = effective_band_count;
+      state->pending_requested_band_count = requested_band_count;
+      state->pending_next_band = 0;
       state->pending_rows_per_band = rows_per_band;
       state->pending_mb_w = request->mb_w;
       state->pending_mb_h = request->mb_h;
@@ -2110,25 +2484,38 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
       state->pending_off_recon_y = off_recon_y;
       state->pending_off_recon_u = off_recon_u;
       state->pending_off_recon_v = off_recon_v;
+      state->pending_host_off_results = layout.host_off_results;
+      state->pending_host_off_recon_y = layout.host_off_recon_y;
+      state->pending_host_off_recon_u = layout.host_off_recon_u;
+      state->pending_host_off_recon_v = layout.host_off_recon_v;
+      state->pending_recon_y_stride = layout.recon_y_stride;
+      state->pending_recon_uv_stride = layout.recon_uv_stride;
       result = WEBP_ACCELERATOR_SUCCESS;
       break;
     }
-    if (error == cudaSuccess) {
-      error = cudaMemcpyAsync(request->results, view.results, results_bytes,
-                              cudaMemcpyDeviceToHost, state->stream);
-    }
-    if (error == cudaSuccess) {
-      error = cudaMemcpyAsync(request->recon_y, view.recon_y, recon_y_bytes,
-                              cudaMemcpyDeviceToHost, state->stream);
-    }
-    if (error == cudaSuccess) {
-      error = cudaMemcpyAsync(request->recon_u, view.recon_u, recon_uv_bytes,
-                              cudaMemcpyDeviceToHost, state->stream);
-    }
-    if (error == cudaSuccess) {
-      error = cudaMemcpyAsync(request->recon_v, view.recon_v, recon_uv_bytes,
-                              cudaMemcpyDeviceToHost, state->stream);
-    }
+    const char* const fail_download =
+        getenv("WEBP_CUDA_DECIMATE_FAIL_DOWNLOAD");
+    const int injected_step =
+        (fail_download != nullptr && fail_download[0] != '\0')
+            ? atoi(fail_download)
+            : -1;
+    int copy_step = 0;
+    bool injected_failure = false;
+#define DOWNLOAD_STAGED(host_offset, device_ptr, bytes)                    \
+  if (error == cudaSuccess) {                                               \
+    error = cudaMemcpyAsync(state->host_staging + (host_offset),            \
+                            (device_ptr), (bytes), cudaMemcpyDeviceToHost,   \
+                            state->stream);                                 \
+    if (error == cudaSuccess && injected_step == copy_step++) {             \
+      error = cudaErrorUnknown;                                             \
+      injected_failure = true;                                              \
+    }                                                                       \
+  }
+    DOWNLOAD_STAGED(layout.host_off_results, view.results, results_bytes);
+    DOWNLOAD_STAGED(layout.host_off_recon_y, view.recon_y, recon_y_bytes);
+    DOWNLOAD_STAGED(layout.host_off_recon_u, view.recon_u, recon_uv_bytes);
+    DOWNLOAD_STAGED(layout.host_off_recon_v, view.recon_v, recon_uv_bytes);
+#undef DOWNLOAD_STAGED
     if (error == cudaSuccess) error = cudaStreamSynchronize(state->stream);
     if (error != cudaSuccess) {
       (void)cudaStreamSynchronize(state->stream);
@@ -2136,10 +2523,25 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
         fprintf(stderr, "WebP-CUDA: lossy decimate failed: %s\n",
                 cudaGetErrorString(error));
       }
-      state->quarantined = true;
+      if (!injected_failure) state->quarantined = true;
       result = WEBP_ACCELERATOR_ERROR;
       break;
     }
+    memcpy(request->results,
+           state->host_staging + layout.host_off_results, results_bytes);
+    CommitPlaneRows(request->recon_y, (size_t)request->recon_y_stride,
+                    state->host_staging + layout.host_off_recon_y,
+                    layout.recon_y_stride, 0,
+                    recon_y_bytes / layout.recon_y_stride);
+    CommitPlaneRows(request->recon_u, (size_t)request->recon_uv_stride,
+                    state->host_staging + layout.host_off_recon_u,
+                    layout.recon_uv_stride, 0,
+                    recon_uv_bytes / layout.recon_uv_stride);
+    CommitPlaneRows(request->recon_v, (size_t)request->recon_uv_stride,
+                    state->host_staging + layout.host_off_recon_v,
+                    layout.recon_uv_stride, 0,
+                    recon_uv_bytes / layout.recon_uv_stride);
+    DecimateReportTiming(state, request->mb_w, request->mb_h);
     if (DecimateFlag("WEBP_CUDA_VERBOSE", false)) {
       fprintf(stderr,
               "WebP-CUDA: lossy decimate of %dx%d (%zu MBs, %d diagonals)\n",
@@ -2156,8 +2558,66 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
 extern "C" void WebPCUDALossyDecimatePrewarm(void) {
   LockDecimate(&g_decimate_mutex);
   if (!g_decimate_state.quarantined &&
-      DecimateInitialize(&g_decimate_state)) {
+      DecimateInitialize(&g_decimate_state) &&
+      cudaSetDevice(g_decimate_state.device) == cudaSuccess) {
     (void)DecimateEnsureTables(&g_decimate_state);
+  }
+  UnlockDecimate(&g_decimate_mutex);
+}
+
+extern "C" WebPAcceleratorResult WebPCUDALossyDecimateFlush(void) {
+  WebPAcceleratorResult result = WEBP_ACCELERATOR_NOT_RUN;
+  LockDecimate(&g_decimate_mutex);
+  if (g_decimate_state.available && !g_decimate_state.quarantined) {
+    cudaError_t error = cudaSetDevice(g_decimate_state.device);
+    if (error == cudaSuccess && g_decimate_state.stream != nullptr) {
+      error = cudaStreamSynchronize(g_decimate_state.stream);
+    }
+    if (error == cudaSuccess && g_decimate_state.copy_stream != nullptr) {
+      error = cudaStreamSynchronize(g_decimate_state.copy_stream);
+    }
+    if (error == cudaSuccess) {
+      result = WEBP_ACCELERATOR_SUCCESS;
+    } else {
+      g_decimate_state.quarantined = true;
+      result = WEBP_ACCELERATOR_ERROR;
+    }
+  }
+  UnlockDecimate(&g_decimate_mutex);
+  return result;
+}
+
+extern "C" void WebPCUDALossyDecimateEndEncode(void) {
+  LockDecimate(&g_decimate_mutex);
+  if (g_decimate_state.available) {
+    cudaError_t error = cudaSetDevice(g_decimate_state.device);
+    if (error == cudaSuccess && g_decimate_state.stream != nullptr) {
+      error = cudaStreamSynchronize(g_decimate_state.stream);
+    }
+    if (error == cudaSuccess && g_decimate_state.copy_stream != nullptr) {
+      error = cudaStreamSynchronize(g_decimate_state.copy_stream);
+    }
+    if (error != cudaSuccess) {
+      g_decimate_state.quarantined = true;
+    } else {
+      DecimateClearPending(&g_decimate_state);
+    }
+  } else {
+    DecimateClearPending(&g_decimate_state);
+  }
+  UnlockDecimate(&g_decimate_mutex);
+}
+
+extern "C" void WebPCUDALossyDecimateTrim(void) {
+  LockDecimate(&g_decimate_mutex);
+  if (g_decimate_state.available) {
+    if (cudaSetDevice(g_decimate_state.device) == cudaSuccess) {
+      DecimateReleaseAll(&g_decimate_state);
+    } else {
+      g_decimate_state.quarantined = true;
+    }
+  } else {
+    DecimateReleaseAll(&g_decimate_state);
   }
   UnlockDecimate(&g_decimate_mutex);
 }

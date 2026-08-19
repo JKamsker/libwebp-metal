@@ -20,6 +20,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "src/enc/accelerator_enc.h"
 #include "tools/benchmark_platform.h"
 #include "webp/encode.h"
 
@@ -110,6 +111,10 @@ static void* RunWorker(void* opaque) {
 int main(void) {
   const size_t rgba_size = (size_t)kWidth * kHeight * 4u;
   uint8_t* const rgba = (uint8_t*)malloc(rgba_size);
+  if (!WebPBenchmarkHasCUDADevice()) {
+    free(rgba);
+    return 77;
+  }
   BenchmarkThread threads[kThreadCount];
   Worker workers[kThreadCount];
   uint64_t expected_lossless, expected_lossy;
@@ -120,8 +125,24 @@ int main(void) {
   for (i = 3; i < rgba_size; i += 4) rgba[i] = 255u;
   WebPBenchmarkSetEnvironment("WEBP_ACCELERATOR", "cuda");
   WebPBenchmarkSetEnvironment("WEBP_CUDA", "1");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY_ANALYSIS", "1");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_DEVICE", "2147483647");
+  if (WebPAcceleratorLossyAnalysisEnabled()) {
+    fprintf(stderr, "lossy-analysis probe accepted an unavailable device\n");
+    free(rgba);
+    return 1;
+  }
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_DEVICE", "0");
+  if (!WebPAcceleratorLossyAnalysisEnabled()) {
+    fprintf(stderr, "lossy-analysis probe rejected the available device\n");
+    free(rgba);
+    return 1;
+  }
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY_ANALYSIS", "0");
   WebPBenchmarkSetEnvironment("WEBP_CUDA_MIN_PIXELS", "0");
   WebPBenchmarkSetEnvironment("WEBP_CUDA_PREDICTOR_MIN_PIXELS", "0");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_PREDICTOR", "1");
+  WebPBenchmarkSetEnvironment("WEBP_CUDA_RESIDENT_LOSSLESS", "1");
   WebPBenchmarkSetEnvironment("WEBP_CUDA_HASH_MIN_PIXELS", "0");
   WebPBenchmarkSetEnvironment("WEBP_CUDA_LOSSY_MIN_PIXELS", "0");
   if (!Encode(rgba, 1, &expected_lossless) ||

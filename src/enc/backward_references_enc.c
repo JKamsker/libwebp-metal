@@ -384,7 +384,7 @@ int VP8LHashChainFill(VP8LHashChain* const p, int quality,
   {
     const WebPAcceleratorHashChainRequest request = {
         argb, chain, size, xsize, iter_max, window_size, low_effort,
-        p->offset_length};
+        p->offset_length, 0};
     if (WebPAccelerateHashChain(&request) == WEBP_ACCELERATOR_SUCCESS) {
       base_position = size - 2;
       p->offset_length[0] = p->offset_length[size - 1] = 0;

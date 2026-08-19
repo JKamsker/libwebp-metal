@@ -249,6 +249,7 @@ int main(int argc, const char* const argv[]) {
   int require_cuda = 1;
   size_t i;
   int bits;
+  if (!WebPBenchmarkHasCUDADevice()) return 77;
   if (argc == 2 && !strcmp(argv[1], "--allow-fallback")) {
     require_cuda = 0;
   } else if (argc != 1) {

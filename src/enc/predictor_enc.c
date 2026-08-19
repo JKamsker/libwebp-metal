@@ -801,7 +801,7 @@ int VP8LResidualImage(int width, int height, int min_bits, int max_bits,
         exact,          used_subtract_green,
         argb,           argb,
         image,          best_bits,
-        &modes_only};
+        &modes_only,    0};
     // A backend's mode search follows this function's cost model but not its
     // exact arithmetic, so the predictor image is valid and the caller
     // promises decoded-pixel parity rather than byte identity (as with the
@@ -1109,7 +1109,7 @@ int VP8LColorSpaceTransform(int width, int height, int bits, int quality,
 
   {
     const WebPAcceleratorColorTransformRequest request = {
-        width, height, bits, quality, argb, image};
+        width, height, bits, quality, argb, image, 0};
     if (WebPAccelerateColorTransform(&request) == WEBP_ACCELERATOR_SUCCESS) {
       if (!WebPReportProgress(pic, percent_start + percent_range, percent)) {
         return 0;

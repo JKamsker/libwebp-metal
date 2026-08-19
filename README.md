@@ -130,11 +130,15 @@ On the accelerated decimate path a worker thread additionally records each
 collected band's tokens (in exact raster order, from the GPU results) while
 the main thread replays the band; `WEBP_TOKEN_RECORD_PIPELINE=0` records
 inline instead. The bytes are identical either way.
-The predictor stage takes both tile-mode selection and exact residual
+The approximate predictor stage is explicitly enabled with
+`WEBP_CUDA_PREDICTOR=1`; it takes both tile-mode selection and exact residual
 application; `WEBP_CUDA_PREDICTOR_MIN_PIXELS=N` controls its threshold. Tile
-rows are scored in launch order against the accumulated residual histogram of
-the previous rows, mirroring the CPU cost model; the chosen predictor image is
-valid but not byte-identical to the CPU search, so lossless modes promise
+rows are scored only at `max_bits`, in launch order, against the accumulated
+residual histogram of previous rows. The selector uses above-mode bias and
+floating-point entropy; unlike the CPU search it does not try every allowed
+grid size, use left-mode bias, update history after every tile, or use the
+fixed-point tie behavior. The chosen predictor image is valid but not
+byte-identical to the CPU search, so lossless modes promise
 decoded-pixel parity (as with the accelerated cross-color search). Exact
 encodes bypass near-lossless residual quantization entirely, so the stage
 accepts them at every near-lossless strength. Non-exact quantized requests
@@ -156,13 +160,20 @@ small share of the CPU histogram stage), so no profitable crossover is known.
 `WEBP_CUDA_RESIDENT_LOSSLESS=0` disables the resident pipeline handoff: the
 predictor and cross-color stages preserve their transformed device pixels, and
 the matching main hash-chain stage reuses them instead of uploading the host
-copy again. Pointer identity, dimensions, and encode-end cleanup prevent reuse
-outside the originating image. It is on by default: measured single-process
+copy again. A non-zero dispatcher-owned encode generation, pointer identity,
+dimensions, and encode-end cleanup jointly prevent reuse outside the
+originating image. It is on by default: measured single-process
 lossless encodes were up to 17% faster and never slower, with byte-identical
 output, so the saved upload outweighs the device-side preservation copy.
-`WEBP_CUDA_COLOR=0`, `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`,
-`WEBP_CUDA_PREDICTOR=0`, `WEBP_CUDA_HISTOGRAM=0`, and `WEBP_CUDA_LOSSY=0`
-disable one stage. Lossy CUDA
+`WEBP_CUDA_COLOR=1` and `WEBP_CUDA_PREDICTOR=1` opt into the two lossless
+search policies whose output can be larger or smaller than the CPU encoder;
+both are off by default because they simplify the CPU optimizer as described
+above. The cross-color selector likewise scores independent local tiles with
+floating-point entropy instead of the CPU's neighboring-multiplier and global
+histogram guidance. Forced CUDA correctness tests enforce decoded-pixel parity,
+determinism, and a maximum 25% encoded-size increase over CPU for both policies
+on the regression inputs. `WEBP_CUDA_HASH=0`, `WEBP_CUDA_NEAR_LOSSLESS=0`,
+`WEBP_CUDA_HISTOGRAM=0`, and `WEBP_CUDA_LOSSY=0` disable one stage. Lossy CUDA
 is off by default because it was neutral in persistent end-to-end batches and
 much slower in fresh processes; set `WEBP_CUDA_LOSSY=1` to opt in.
 `WEBP_CUDA_VERBOSE=1` reports device and dispatch timings. Set a threshold to

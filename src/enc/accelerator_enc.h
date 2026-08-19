@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 11u
+#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 12u
 #define WEBP_ACCELERATOR_MAX_HISTOGRAM_SPANS 16u
 
 // These are deliberately encoder stages, not low-level GPU kernels. A backend
@@ -63,6 +63,8 @@ typedef struct {
   // transform_image has ceil(width / 2^bits) * ceil(height / 2^bits).
   uint32_t* argb;
   uint32_t* transform_image;
+  // Filled by the dispatcher for one encode. Zero forbids resident reuse.
+  uint64_t handoff_generation;
 } WebPAcceleratorColorTransformRequest;
 
 typedef struct {
@@ -76,6 +78,8 @@ typedef struct {
   int low_effort;
   // Borrowed mutable output with size elements.
   uint32_t* candidates;
+  // Must match the producer's non-zero generation for resident reuse.
+  uint64_t handoff_generation;
 } WebPAcceleratorHashChainRequest;
 
 typedef struct {
@@ -99,6 +103,8 @@ typedef struct {
   // picture-conversion API calls receive -1 for both fields.
   int method;
   int quality;
+  // Filled by the dispatcher for one encode. Zero forbids resident reuse.
+  uint64_t handoff_generation;
 } WebPAcceleratorRGBToYUVRequest;
 
 typedef struct {
@@ -136,6 +142,8 @@ typedef struct {
   // Borrowed mutable output with ceil(width / 16) * ceil(height / 16)
   // elements, committed only on SUCCESS.
   WebPAcceleratorLossyAnalysisResult* results;
+  // Must match the producer's non-zero generation for resident reuse.
+  uint64_t handoff_generation;
 } WebPAcceleratorLossyAnalysisRequest;
 
 typedef struct {
@@ -158,6 +166,8 @@ typedef struct {
   // this to 1 on SUCCESS after filling only mode_image and best_bits; the
   // caller then applies the prediction itself. The caller initializes it to 0.
   int* modes_only;
+  // Filled by the dispatcher for one encode. Zero forbids resident reuse.
+  uint64_t handoff_generation;
 } WebPAcceleratorPredictorRequest;
 
 // This layout intentionally matches the encoder's private PixOrCopy command.

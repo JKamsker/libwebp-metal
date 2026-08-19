@@ -148,14 +148,46 @@ static int TestInvalidPreservesOutput(void) {
   return 1;
 }
 
+static int TestInvalidHashChainPreservesOutput(void) {
+  const uint32_t pixels[4] = {1u, 2u, 3u, 4u};
+  const int32_t chain[4] = {-1, 4, -1, -1};
+  uint32_t candidates[4];
+  uint32_t before[4];
+  WebPAcceleratorHashChainRequest request;
+  memset(candidates, 0xa5, sizeof(candidates));
+  memcpy(before, candidates, sizeof(before));
+  memset(&request, 0, sizeof(request));
+  request.pixels = pixels;
+  request.chain = chain;
+  request.size = 4;
+  request.xsize = 2;
+  request.iter_max = 8;
+  request.window_size = 32;
+  request.candidates = candidates;
+  if (WebPAccelerateHashChain(&request) != WEBP_ACCELERATOR_ERROR ||
+      memcmp(candidates, before, sizeof(candidates)) != 0) {
+    fprintf(stderr, "invalid hash predecessor was not transactional\n");
+    return 0;
+  }
+  request.window_size = 1u << 20;
+  if (WebPAccelerateHashChain(&request) != WEBP_ACCELERATOR_ERROR ||
+      memcmp(candidates, before, sizeof(candidates)) != 0) {
+    fprintf(stderr, "unrepresentable hash window was accepted\n");
+    return 0;
+  }
+  return 1;
+}
+
 int main(void) {
+  if (!WebPBenchmarkHasCUDADevice()) return 77;
   WebPBenchmarkSetEnvironment("WEBP_ACCELERATOR", "cuda");
   WebPBenchmarkSetEnvironment("WEBP_CUDA", "1");
   WebPBenchmarkSetEnvironment("WEBP_CUDA_HISTOGRAM", "1");
   WebPBenchmarkSetEnvironment("WEBP_CUDA_HISTOGRAM_MIN_COMMANDS", "0");
   WebPCUDAResetSuccessfulStages();
   if (!TestDeclinePreservesOutput() || !TestExactCounts() ||
-      !TestInvalidPreservesOutput()) {
+      !TestInvalidPreservesOutput() ||
+      !TestInvalidHashChainPreservesOutput()) {
     return 1;
   }
   if ((WebPCUDAGetSuccessfulStages() &

@@ -154,7 +154,7 @@ static int ImportYUVAFromRGBA(const uint8_t* r_ptr, const uint8_t* g_ptr,
     const WebPAcceleratorRGBToYUVRequest request = {
         r_ptr,      g_ptr,      b_ptr,      step,       rgb_stride, width,
         height,     picture->y, picture->u, picture->v, picture->y_stride,
-        picture->uv_stride, -1, -1};
+        picture->uv_stride, -1, -1, 0};
     if (WebPAccelerateRGBToYUV(&request) == WEBP_ACCELERATOR_SUCCESS) {
       return 1;
     }

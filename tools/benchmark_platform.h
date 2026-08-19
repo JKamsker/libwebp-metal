@@ -8,6 +8,17 @@
 #include <stdint.h>
 #include <stdlib.h>
 
+#if defined(WEBP_CUDA_TESTING)
+#include <cuda_runtime_api.h>
+
+static int WebPBenchmarkHasCUDADevice(void) {
+  int count = 0;
+  const cudaError_t error = cudaGetDeviceCount(&count);
+  if (error != cudaSuccess) (void)cudaGetLastError();
+  return error == cudaSuccess && count > 0;
+}
+#endif
+
 #if defined(_WIN32)
 #ifndef NOMINMAX
 #define NOMINMAX

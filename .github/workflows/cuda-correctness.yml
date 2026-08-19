@@ -1,0 +1,89 @@
+name: CUDA correctness
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - ".github/workflows/cuda-correctness.yml"
+      - "CMakeLists.txt"
+      - "Makefile.am"
+      - "configure.ac"
+      - "scripts/test_cuda.sh"
+      - "src/**"
+      - "tests/cuda_*"
+      - "tools/benchmark_platform.h"
+  schedule:
+    - cron: "19 5 * * 2"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: cuda-correctness-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  real-cuda:
+    name: Physical CUDA correctness (self-hosted X64)
+    # Never execute untrusted pull-request code on the GPU host. Manual runs
+    # are an operator assertion that the selected revision was reviewed.
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/main') ||
+      (github.event_name == 'schedule' && github.ref == 'refs/heads/main')
+    runs-on: [self-hosted, Linux, X64, cuda]
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Require a physical CUDA device
+        run: |
+          mkdir -p artifacts
+          nvidia-smi -L | tee artifacts/nvidia-smi.txt
+          nvcc --version | tee artifacts/nvcc.txt
+      - name: Configure focused CUDA build
+        run: >-
+          cmake -S . -B build-cuda -G Ninja
+          -DCMAKE_BUILD_TYPE=RelWithDebInfo
+          -DCMAKE_CUDA_ARCHITECTURES=native
+          -DWEBP_ENABLE_CUDA=ON
+          -DWEBP_BUILD_CUDA_BENCHMARK=ON
+          -DWEBP_CUDA_ENABLE_HISTOGRAM=ON
+          -DWEBP_CUDA_ENABLE_LOSSY_DECIMATE=ON
+          -DWEBP_BUILD_ANIM_UTILS=OFF
+          -DWEBP_BUILD_EXTRAS=OFF
+          -DWEBP_BUILD_GIF2WEBP=OFF
+          -DWEBP_BUILD_IMG2WEBP=OFF
+          -DWEBP_BUILD_VWEBP=OFF
+          -DWEBP_BUILD_WEBPMUX=OFF
+      - name: Build and run registered tests
+        run: |
+          cmake --build build-cuda --target cwebp dwebp cuda_concurrency_test cuda_histogram_test cuda_trellis_test cuda_near_lossless_test --parallel 2
+          ctest --test-dir build-cuda --output-on-failure
+      - name: Forced public-encoder parity suite
+        env:
+          WEBP_TEST_BIN_DIR: ${{ github.workspace }}/build-cuda
+        run: scripts/test_cuda.sh
+      - name: Compute Sanitizer contract checks
+        run: |
+          compute-sanitizer --tool memcheck --error-exitcode 9 build-cuda/cuda_trellis_test
+          compute-sanitizer --tool racecheck --error-exitcode 9 build-cuda/cuda_concurrency_test
+      - name: Verify release archive contains and builds CUDA sources
+        run: |
+          autoreconf -fi
+          ./configure --disable-shared
+          make dist
+          archive=$(find . -maxdepth 1 -name 'libwebp-*.tar.gz' -print -quit)
+          test -n "$archive"
+          tar -tzf "$archive" | grep '/src/enc/cuda_decimate_enc.cu$'
+          tar -tzf "$archive" | grep '/src/enc/cuda_decimate_dsp.cuh$'
+      - name: Preserve diagnostics
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cuda-correctness-${{ runner.name }}-${{ github.run_id }}
+          path: artifacts/
+          if-no-files-found: warn
+          retention-days: 30

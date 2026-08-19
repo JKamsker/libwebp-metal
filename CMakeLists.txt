@@ -13,6 +13,7 @@ else()
 endif()
 
 project(WebP C)
+include(CTest)
 
 # Options for coder / decoder executables.
 if(BUILD_SHARED_LIBS)
@@ -90,6 +91,21 @@ set_property(CACHE WEBP_BITTRACE PROPERTY STRINGS 0 1 2)
 option(WEBP_ENABLE_WUNUSED_RESULT "Add [[nodiscard]] to some functions. \
        CMake must be at least 3.21 to force C23" OFF)
 
+if(BUILD_TESTING)
+  add_executable(accelerator_enc_test tests/accelerator_enc_test.c
+                                      src/enc/accelerator_enc.c)
+  target_compile_definitions(accelerator_enc_test
+                             PRIVATE WEBP_ACCELERATOR_TESTING=1)
+  target_include_directories(accelerator_enc_test
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                                     ${CMAKE_CURRENT_BINARY_DIR}/src
+                                     ${CMAKE_CURRENT_SOURCE_DIR})
+  add_test(NAME accelerator_enc_auto COMMAND accelerator_enc_test)
+  add_test(NAME accelerator_enc_cpu COMMAND accelerator_enc_test)
+  set_tests_properties(accelerator_enc_cpu
+                       PROPERTIES ENVIRONMENT "WEBP_ACCELERATOR=none")
+endif()
+
 if(WEBP_ENABLE_METAL)
   if(NOT APPLE)
     message(FATAL_ERROR "WEBP_ENABLE_METAL is only supported on Apple platforms.")
@@ -115,20 +131,20 @@ if(WEBP_ENABLE_CUDA)
   if(POLICY CMP0104)
     cmake_policy(SET CMP0104 NEW)
   endif()
-  # Without an explicit architecture list nvcc's default (its oldest supported
-  # arch) ships PTX that the driver must JIT on newer GPUs, inflating every
-  # cold process start. Default to the build machine's real architecture.
+  # Distributable default: Turing SASS plus forward-compatible PTX. Local
+  # benchmark builds should pass -DCMAKE_CUDA_ARCHITECTURES=native explicitly.
   if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES AND NOT DEFINED ENV{CUDAARCHS}
      AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
-    set(CMAKE_CUDA_ARCHITECTURES native)
+    set(CMAKE_CUDA_ARCHITECTURES "75-real;75-virtual")
   endif()
   enable_language(CUDA)
   find_package(CUDAToolkit REQUIRED)
   find_package(Threads REQUIRED)
   set(CMAKE_CUDA_STANDARD 11)
   set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+  set(CMAKE_CUDA_VISIBILITY_PRESET hidden)
   add_definitions(-DWEBP_USE_CUDA=1)
-  set(CUDA_LIBS "-L${CUDAToolkit_LIBRARY_DIR} -lcudart")
+  set(CUDA_LIBS "-lcudart")
 
   # Every CUDA stage and optimization is independently compiled so benchmark
   # builds can isolate effects without changing runtime code paths.
@@ -149,9 +165,9 @@ if(WEBP_ENABLE_CUDA)
   option(WEBP_CUDA_ENABLE_PREDICTOR
          "Build the CUDA lossless predictor stage." ON)
   option(WEBP_CUDA_ENABLE_HISTOGRAM
-         "Build experimental CUDA lossless histogram counting." ON)
+         "Build experimental CUDA lossless histogram counting." OFF)
   option(WEBP_CUDA_ENABLE_LOSSY_DECIMATE
-         "Build the experimental CUDA lossy macroblock decimation." ON)
+         "Build CUDA lossy macroblock decimation." ON)
   option(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS
          "Retain CUDA staging allocations across encoder calls." ON)
   option(WEBP_CUDA_ENABLE_PINNED_HOST_MEMORY
@@ -1006,32 +1022,45 @@ if(WEBP_BUILD_CUDA_BENCHMARK)
     PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
             ${CMAKE_CURRENT_SOURCE_DIR})
   add_executable(cuda_concurrency_test tests/cuda_concurrency_test.c)
-  target_link_libraries(cuda_concurrency_test PRIVATE webp Threads::Threads)
+  target_link_libraries(cuda_concurrency_test PRIVATE webp Threads::Threads
+                                                     CUDA::cudart)
   target_include_directories(cuda_concurrency_test
                              PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src
                                      ${CMAKE_CURRENT_SOURCE_DIR})
   add_executable(cuda_histogram_test tests/cuda_histogram_test.c)
-  target_link_libraries(cuda_histogram_test PRIVATE webp)
+  target_link_libraries(cuda_histogram_test PRIVATE webp CUDA::cudart)
   target_include_directories(
     cuda_histogram_test
     PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
             ${CMAKE_CURRENT_SOURCE_DIR})
   if(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
     add_executable(cuda_trellis_test tests/cuda_trellis_test.c)
-    target_link_libraries(cuda_trellis_test PRIVATE webp)
+    target_link_libraries(cuda_trellis_test PRIVATE webp CUDA::cudart)
     target_include_directories(
       cuda_trellis_test
       PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
               ${CMAKE_CURRENT_SOURCE_DIR})
+    if(NOT BUILD_SHARED_LIBS)
+      target_compile_definitions(cuda_trellis_test
+                                 PRIVATE WEBP_CUDA_DIRECT_PRIVATE_TEST=1)
+    endif()
   endif()
   if(WEBP_NEAR_LOSSLESS)
     add_executable(cuda_near_lossless_test tests/cuda_near_lossless_test.c)
-    target_link_libraries(cuda_near_lossless_test PRIVATE webp)
+    target_link_libraries(cuda_near_lossless_test PRIVATE webp CUDA::cudart)
     target_include_directories(
       cuda_near_lossless_test
       PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
               ${CMAKE_CURRENT_SOURCE_DIR})
   endif()
+  foreach(cuda_test cuda_concurrency_test cuda_histogram_test
+                    cuda_trellis_test cuda_near_lossless_test)
+    if(TARGET ${cuda_test})
+      target_compile_definitions(${cuda_test} PRIVATE WEBP_CUDA_TESTING=1)
+      add_test(NAME ${cuda_test} COMMAND ${cuda_test})
+      set_tests_properties(${cuda_test} PROPERTIES SKIP_RETURN_CODE 77)
+    endif()
+  endforeach()
 endif()
 
 if(WEBP_BUILD_LIBWEBPMUX)

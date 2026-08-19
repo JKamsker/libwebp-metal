@@ -21,6 +21,9 @@ WebPAcceleratorResult WebPCUDALossyDecimate(
 // Warms the decimate unit's stream and static tables; called from the
 // process-start prewarm thread.
 void WebPCUDALossyDecimatePrewarm(void);
+WebPAcceleratorResult WebPCUDALossyDecimateFlush(void);
+void WebPCUDALossyDecimateEndEncode(void);
+void WebPCUDALossyDecimateTrim(void);
 #endif
 
 // Internal benchmark instrumentation. Stage bits are set only after a CUDA

@@ -219,10 +219,12 @@ struct CudaState {
   size_t host_analysis_result_capacity = 0;
   size_t host_histogram_count_capacity = 0;
   bool resident_lossless_pixels_valid = false;
+  uint64_t resident_lossless_generation = 0;
   const uint32_t* resident_lossless_host_pixels = nullptr;
   size_t resident_lossless_pixel_count = 0;
   int resident_lossless_xsize = 0;
   bool resident_yuv_valid = false;
+  uint64_t resident_yuv_generation = 0;
   const uint8_t* resident_y = nullptr;
   const uint8_t* resident_u = nullptr;
   const uint8_t* resident_v = nullptr;
@@ -233,6 +235,7 @@ struct CudaState {
   size_t resident_y_size = 0;
   size_t resident_uv_size = 0;
   bool fused_lossy_analysis_valid = false;
+  uint64_t fused_lossy_analysis_generation = 0;
   const uint8_t* fused_lossy_y = nullptr;
   const uint8_t* fused_lossy_u = nullptr;
   const uint8_t* fused_lossy_v = nullptr;
@@ -2128,7 +2131,6 @@ WebPAcceleratorResult Initialize(CudaState* state) {
     return state->available ? WEBP_ACCELERATOR_SUCCESS
                             : WEBP_ACCELERATOR_NOT_RUN;
   }
-  state->initialization_attempted = true;
   error = cudaGetDeviceCount(&device_count);
   if (error != cudaSuccess || device_count == 0) {
     if (EnvironmentFlag("WEBP_CUDA_VERBOSE", false)) {
@@ -2155,13 +2157,13 @@ WebPAcceleratorResult Initialize(CudaState* state) {
       (void)cudaStreamDestroy(state->stream);
       state->stream = nullptr;
     }
-    state->quarantined = true;
     if (EnvironmentFlag("WEBP_CUDA_VERBOSE", false)) {
       fprintf(stderr, "WebP-CUDA: initialization failed: %s\n",
               cudaGetErrorString(error));
     }
     return WEBP_ACCELERATOR_ERROR;
   }
+  state->initialization_attempted = true;
   if (cudaGetDeviceProperties(&properties, state->device) == cudaSuccess) {
     snprintf(state->device_name, sizeof(state->device_name), "%s",
              properties.name);
@@ -2215,16 +2217,35 @@ bool ShouldPrewarm(void) {
 }
 
 struct CudaPrewarm {
+#if defined(_WIN32)
+  HANDLE thread = nullptr;
+#else
+  pthread_t thread = {};
+  bool thread_started = false;
+#endif
+
   CudaPrewarm() {
     if (!ShouldPrewarm()) return;
 #if defined(_WIN32)
-    HANDLE const thread =
-        CreateThread(nullptr, 0, PrewarmThreadMain, nullptr, 0, nullptr);
-    if (thread != nullptr) CloseHandle(thread);
+    thread = CreateThread(nullptr, 0, PrewarmThreadMain, nullptr, 0, nullptr);
 #else
-    pthread_t thread;
     if (pthread_create(&thread, nullptr, PrewarmThreadMain, nullptr) == 0) {
-      (void)pthread_detach(thread);
+      thread_started = true;
+    }
+#endif
+  }
+
+  ~CudaPrewarm() {
+#if defined(_WIN32)
+    if (thread != nullptr) {
+      (void)WaitForSingleObject(thread, INFINITE);
+      (void)CloseHandle(thread);
+      thread = nullptr;
+    }
+#else
+    if (thread_started) {
+      (void)pthread_join(thread, nullptr);
+      thread_started = false;
     }
 #endif
   }
@@ -2375,8 +2396,11 @@ cudaError_t FinishDownloads(cudaStream_t stream) {
 
 void ReleaseStagingBuffers(CudaState* state) {
   state->resident_lossless_pixels_valid = false;
+  state->resident_lossless_generation = 0;
   state->resident_yuv_valid = false;
+  state->resident_yuv_generation = 0;
   state->fused_lossy_analysis_valid = false;
+  state->fused_lossy_analysis_generation = 0;
 #if defined(WEBP_CUDA_ENABLE_STREAM_ORDERED_ALLOCATIONS)
   if (state->pixels != nullptr) (void)cudaFreeAsync(state->pixels, state->stream);
   if (state->resident_lossless_pixels != nullptr) {
@@ -2493,7 +2517,7 @@ WebPAcceleratorResult CUDAColorTransformLocked(
   uint32_t* device_pixels;
 
   if (!EnvironmentFlag("WEBP_CUDA", true) ||
-      !EnvironmentFlag("WEBP_CUDA_COLOR", true)) {
+      !EnvironmentFlag("WEBP_CUDA_COLOR", false)) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
   if (request == nullptr || request->argb == nullptr ||
@@ -2549,9 +2573,12 @@ WebPAcceleratorResult CUDAColorTransformLocked(
     return ReportError(state, "select device", error, true);
   }
   state->resident_yuv_valid = false;
+  state->resident_yuv_generation = 0;
   use_resident_pixels =
       EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", true) &&
+      request->handoff_generation != 0 &&
       state->resident_lossless_pixels_valid &&
+      state->resident_lossless_generation == request->handoff_generation &&
       state->resident_lossless_host_pixels == request->argb &&
       state->resident_lossless_pixel_count == pixel_count &&
       state->resident_lossless_xsize == request->width;
@@ -2560,6 +2587,7 @@ WebPAcceleratorResult CUDAColorTransformLocked(
     error = cudaSuccess;
   } else {
     state->resident_lossless_pixels_valid = false;
+    state->resident_lossless_generation = 0;
     error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
                                pixel_bytes, state->stream);
     device_pixels = state->pixels;
@@ -2652,7 +2680,8 @@ WebPAcceleratorResult CUDAColorTransformLocked(
     state->resident_lossless_host_pixels = request->argb;
     state->resident_lossless_pixel_count = pixel_count;
     state->resident_lossless_xsize = request->width;
-    state->resident_lossless_pixels_valid = true;
+    state->resident_lossless_generation = request->handoff_generation;
+    state->resident_lossless_pixels_valid = request->handoff_generation != 0;
   }
   if (verbose) {
     if (timing) {
@@ -2751,6 +2780,7 @@ WebPAcceleratorResult CUDANearLosslessLocked(
     return ReportError(state, "select device", error, true);
   }
   state->resident_yuv_valid = false;
+  state->resident_yuv_generation = 0;
   error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
                              pixel_bytes, state->stream);
   if (error == cudaSuccess) {
@@ -2861,7 +2891,7 @@ WebPAcceleratorResult CUDAPredictorLocked(
   bool timing;
 
   if (!EnvironmentFlag("WEBP_CUDA", true) ||
-      !EnvironmentFlag("WEBP_CUDA_PREDICTOR", true)) {
+      !EnvironmentFlag("WEBP_CUDA_PREDICTOR", false)) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
   if (request == nullptr || request->source == nullptr ||
@@ -2940,7 +2970,9 @@ WebPAcceleratorResult CUDAPredictorLocked(
     return ReportError(state, "select device", error, true);
   }
   state->resident_yuv_valid = false;
+  state->resident_yuv_generation = 0;
   state->resident_lossless_pixels_valid = false;
+  state->resident_lossless_generation = 0;
   error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
                              pixel_bytes, state->stream);
   if (error == cudaSuccess && !near_lossless) {
@@ -3097,7 +3129,8 @@ WebPAcceleratorResult CUDAPredictorLocked(
     state->resident_lossless_host_pixels = request->residuals;
     state->resident_lossless_pixel_count = pixel_count;
     state->resident_lossless_xsize = request->width;
-    state->resident_lossless_pixels_valid = true;
+    state->resident_lossless_generation = request->handoff_generation;
+    state->resident_lossless_pixels_valid = request->handoff_generation != 0;
   }
 #endif
   if (verbose) {
@@ -3157,8 +3190,20 @@ WebPAcceleratorResult CUDAHashChainLocked(
   }
   if (request == nullptr || request->pixels == nullptr ||
       request->chain == nullptr || request->candidates == nullptr ||
-      request->size <= 2 || request->xsize <= 0 || request->iter_max <= 0) {
+      request->size <= 2 || request->xsize <= 0 ||
+      request->xsize >= request->size || request->iter_max <= 0 ||
+      request->window_size > ((1u << 20) - 1u) ||
+      (uint32_t)request->xsize > ((1u << 20) - 1u)) {
     return WEBP_ACCELERATOR_ERROR;
+  }
+  // The kernel follows caller-provided predecessor links. Validate the host
+  // chain once so every traversed link is in bounds and strictly decreasing;
+  // the final element is deliberately unused by both CPU and CUDA paths.
+  for (int i = 0; i < request->size - 1; ++i) {
+    const int32_t predecessor = request->chain[i];
+    if (predecessor < -1 || predecessor >= i) {
+      return WEBP_ACCELERATOR_ERROR;
+    }
   }
   const bool profitable_batch = HasProfitableLosslessBatchHint();
   if (static_cast<size_t>(request->size) <
@@ -3189,13 +3234,20 @@ WebPAcceleratorResult CUDAHashChainLocked(
     return ReportError(state, "select device", error, true);
   }
   state->resident_yuv_valid = false;
+  state->resident_yuv_generation = 0;
   use_resident_pixels =
       EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", true) &&
+      request->handoff_generation != 0 &&
       state->resident_lossless_pixels_valid &&
+      state->resident_lossless_generation == request->handoff_generation &&
       state->resident_lossless_host_pixels == request->pixels &&
       state->resident_lossless_pixel_count ==
           static_cast<size_t>(request->size) &&
       state->resident_lossless_xsize == request->xsize;
+  // Hash is the terminal consumer of this handoff. Make residency one-shot
+  // even if this request later fails or its identity check did not match.
+  state->resident_lossless_pixels_valid = false;
+  state->resident_lossless_generation = 0;
   if (use_resident_pixels) {
     device_pixels = state->resident_lossless_pixels;
     error = cudaSuccess;
@@ -3505,7 +3557,9 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
     return ReportError(state, "initialize gamma tables", error, true);
   }
   state->resident_yuv_valid = false;
+  state->resident_yuv_generation = 0;
   state->fused_lossy_analysis_valid = false;
+  state->fused_lossy_analysis_generation = 0;
   error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
                              source_size, state->stream);
   if (error == cudaSuccess) {
@@ -3625,7 +3679,8 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
   state->resident_height = request->height;
   state->resident_y_size = pixel_count;
   state->resident_uv_size = uv_size;
-  state->resident_yuv_valid = true;
+  state->resident_yuv_generation = request->handoff_generation;
+  state->resident_yuv_valid = request->handoff_generation != 0;
 #if defined(WEBP_CUDA_HAS_FUSED_LOSSY_ANALYSIS)
   if (fuse_analysis) {
     state->fused_lossy_y = request->y;
@@ -3638,7 +3693,8 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
     state->fused_lossy_method = request->method;
     state->fused_lossy_quality = request->quality;
     state->fused_lossy_result_count = fused_result_count;
-    state->fused_lossy_analysis_valid = true;
+    state->fused_lossy_analysis_generation = request->handoff_generation;
+    state->fused_lossy_analysis_valid = request->handoff_generation != 0;
   }
 #endif
 #endif
@@ -3698,7 +3754,20 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
       !EnvironmentFlag("WEBP_CUDA_LOSSY_ANALYSIS", false)) {
     return WEBP_ACCELERATOR_NOT_RUN;
   }
-  if (request == nullptr) return WEBP_ACCELERATOR_SUCCESS;
+  if (request == nullptr) {
+    int device_count = 0;
+    const int device = EnvironmentDevice();
+    cudaError_t probe_error;
+    if (state->quarantined) return WEBP_ACCELERATOR_NOT_RUN;
+    if (state->available) return WEBP_ACCELERATOR_SUCCESS;
+    probe_error = cudaGetDeviceCount(&device_count);
+    if (probe_error != cudaSuccess) {
+      (void)cudaGetLastError();
+      return WEBP_ACCELERATOR_NOT_RUN;
+    }
+    return device >= 0 && device < device_count ? WEBP_ACCELERATOR_SUCCESS
+                                                : WEBP_ACCELERATOR_NOT_RUN;
+  }
   if (request->y == nullptr || request->u == nullptr ||
       request->v == nullptr || request->results == nullptr ||
       request->width <= 0 || request->height <= 0 ||
@@ -3743,6 +3812,9 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
 
 #if defined(WEBP_CUDA_HAS_FUSED_LOSSY_ANALYSIS)
   if (state->fused_lossy_analysis_valid &&
+      request->handoff_generation != 0 &&
+      state->fused_lossy_analysis_generation ==
+          request->handoff_generation &&
       state->fused_lossy_y == request->y &&
       state->fused_lossy_u == request->u &&
       state->fused_lossy_v == request->v &&
@@ -3755,7 +3827,9 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
       state->fused_lossy_result_count == result_count) {
     memcpy(request->results, state->host_analysis_results, result_bytes);
     state->fused_lossy_analysis_valid = false;
+    state->fused_lossy_analysis_generation = 0;
     state->resident_yuv_valid = false;
+    state->resident_yuv_generation = 0;
     if (EnvironmentFlag("WEBP_CUDA_VERBOSE", false)) {
       fprintf(stderr,
               "WebP-CUDA: lossy analysis %ux%u macroblocks "
@@ -3765,6 +3839,7 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
     return WEBP_ACCELERATOR_SUCCESS;
   }
   state->fused_lossy_analysis_valid = false;
+  state->fused_lossy_analysis_generation = 0;
 #endif
 
   if (state->quarantined) return WEBP_ACCELERATOR_NOT_RUN;
@@ -3775,18 +3850,23 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
     return ReportError(state, "select device", error, true);
   }
   use_resident_yuv =
-      state->resident_yuv_valid && state->resident_y == request->y &&
+      request->handoff_generation != 0 && state->resident_yuv_valid &&
+      state->resident_yuv_generation == request->handoff_generation &&
+      state->resident_y == request->y &&
       state->resident_u == request->u && state->resident_v == request->v &&
       state->resident_y_stride == request->y_stride &&
       state->resident_uv_stride == request->uv_stride &&
       state->resident_width == request->width &&
       state->resident_height == request->height &&
       state->resident_y_size == y_bytes && state->resident_uv_size == uv_bytes;
+  // Analysis is the terminal consumer. A mismatching call also invalidates
+  // the offer so pointer reuse later in the same encode cannot revive it.
+  state->resident_yuv_valid = false;
+  state->resident_yuv_generation = 0;
   if (use_resident_yuv) {
     device_y = reinterpret_cast<const uint8_t*>(state->transform);
     device_u = device_y + y_bytes;
     device_v = device_u + uv_bytes;
-    state->resident_yuv_valid = false;
     error = cudaSuccess;
   } else {
     error = EnsureDeviceBuffer(&state->analysis_y, &state->analysis_y_capacity,
@@ -3894,13 +3974,33 @@ WebPAcceleratorResult CUDALossyAnalysis(
 
 #endif  // WEBP_CUDA_ENABLE_LOSSY_ANALYSIS
 
+#if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+WebPAcceleratorResult CUDALossyDecimate(
+    void* context, const WebPAcceleratorDecimateRequest* request) {
+  const WebPAcceleratorResult result =
+      WebPCUDALossyDecimate(context, request);
+  if (result == WEBP_ACCELERATOR_SUCCESS) {
+    LockCudaMutex(&g_cuda_mutex);
+    g_cuda_state.successful_stages |= WEBP_ACCELERATOR_STAGE_LOSSY_DECIMATE;
+    UnlockCudaMutex(&g_cuda_mutex);
+  }
+  return result;
+}
+#endif
+
 void CUDAEndEncode(void* context) {
   CudaState* const state = static_cast<CudaState*>(context);
   LockCudaMutex(&g_cuda_mutex);
   state->resident_lossless_pixels_valid = false;
+  state->resident_lossless_generation = 0;
   state->resident_yuv_valid = false;
+  state->resident_yuv_generation = 0;
   state->fused_lossy_analysis_valid = false;
+  state->fused_lossy_analysis_generation = 0;
   UnlockCudaMutex(&g_cuda_mutex);
+#if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+  WebPCUDALossyDecimateEndEncode();
+#endif
 }
 
 WebPAcceleratorResult CUDAFlush(void* context) {
@@ -3917,6 +4017,19 @@ WebPAcceleratorResult CUDAFlush(void* context) {
                  : ReportError(state, "flush", error, true);
   }
   UnlockCudaMutex(&g_cuda_mutex);
+#if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+  {
+    const WebPAcceleratorResult decimate_result =
+        WebPCUDALossyDecimateFlush();
+    if (result == WEBP_ACCELERATOR_ERROR ||
+        decimate_result == WEBP_ACCELERATOR_ERROR) {
+      result = WEBP_ACCELERATOR_ERROR;
+    } else if (result == WEBP_ACCELERATOR_SUCCESS ||
+               decimate_result == WEBP_ACCELERATOR_SUCCESS) {
+      result = WEBP_ACCELERATOR_SUCCESS;
+    }
+  }
+#endif
   return result;
 }
 
@@ -3930,6 +4043,9 @@ void CUDATrim(void* context) {
 #endif
   }
   UnlockCudaMutex(&g_cuda_mutex);
+#if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+  WebPCUDALossyDecimateTrim();
+#endif
 }
 
 constexpr uint32_t kCUDAStages =
@@ -3965,7 +4081,8 @@ constexpr uint32_t kCUDAProperties =
     WEBP_ACCELERATOR_PROPERTY_TRANSACTIONAL_OUTPUT |
     WEBP_ACCELERATOR_PROPERTY_DETERMINISTIC |
     WEBP_ACCELERATOR_PROPERTY_SERIALIZED
-#if defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+#if defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS) || \
+    defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
     | WEBP_ACCELERATOR_PROPERTY_PERSISTENT_RESOURCES
 #endif
     ;
@@ -4015,7 +4132,7 @@ static const WebPEncoderAccelerator kCUDAEncoderAccelerator = {
     nullptr,
 #endif
 #if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
-    WebPCUDALossyDecimate,
+    CUDALossyDecimate,
 #else
     nullptr,
 #endif

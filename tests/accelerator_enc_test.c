@@ -26,6 +26,11 @@ typedef struct {
   int end_encode_calls;
   int expected_rgb_method;
   int expected_rgb_quality;
+  uint64_t color_generation;
+  uint64_t hash_generation;
+  uint64_t rgb_generation;
+  uint64_t lossy_analysis_generation;
+  uint64_t predictor_generation;
 } FakeContext;
 
 static void FakeEndEncode(void* opaque) {
@@ -37,6 +42,7 @@ static WebPAcceleratorResult FakeColorTransform(
     void* opaque, const WebPAcceleratorColorTransformRequest* request) {
   FakeContext* const context = (FakeContext*)opaque;
   ++context->color_calls;
+  context->color_generation = request->handoff_generation;
   assert(request->width == 2);
   assert(request->height == 1);
   assert(request->bits == 5);
@@ -53,6 +59,7 @@ static WebPAcceleratorResult FakeHashChain(
   FakeContext* const context = (FakeContext*)opaque;
   (void)request;
   ++context->hash_calls;
+  context->hash_generation = request->handoff_generation;
   assert(request->size == 3);
   assert(request->xsize == 3);
   assert(request->iter_max == 8);
@@ -67,6 +74,7 @@ static WebPAcceleratorResult FakeRGBToYUV(
     void* opaque, const WebPAcceleratorRGBToYUVRequest* request) {
   FakeContext* const context = (FakeContext*)opaque;
   ++context->rgb_calls;
+  context->rgb_generation = request->handoff_generation;
   assert(request->step == 4);
   assert(request->source_stride == 13);
   assert(request->width == 2);
@@ -102,6 +110,7 @@ static WebPAcceleratorResult FakeLossyAnalysis(
   FakeContext* const context = (FakeContext*)opaque;
   if (request == NULL) return context->lossy_analysis_result;
   ++context->lossy_analysis_calls;
+  context->lossy_analysis_generation = request->handoff_generation;
   assert(request->width == 2);
   assert(request->height == 2);
   assert(request->method == 4);
@@ -116,6 +125,7 @@ static WebPAcceleratorResult FakePredictor(
     void* opaque, const WebPAcceleratorPredictorRequest* request) {
   FakeContext* const context = (FakeContext*)opaque;
   ++context->predictor_calls;
+  context->predictor_generation = request->handoff_generation;
   assert(request->width == 2);
   assert(request->height == 1);
   assert(request->min_bits == 2);
@@ -180,32 +190,32 @@ int main(void) {
   uint32_t argb[2] = {1u, 2u};
   uint32_t transform_image[1] = {3u};
   const WebPAcceleratorColorTransformRequest color_request = {
-      2, 1, 5, 75, argb, transform_image};
+      2, 1, 5, 75, argb, transform_image, 0};
   const uint32_t pixels[3] = {1u, 2u, 3u};
   const int32_t chain[3] = {-1, 0, 1};
   uint32_t candidates[3] = {4u, 5u, 6u};
   const WebPAcceleratorHashChainRequest hash_request = {
-      pixels, chain, 3, 3, 8, 32u, 0, candidates};
+      pixels, chain, 3, 3, 8, 32u, 0, candidates, 0};
   const uint8_t rgba[26] = {0};
   uint8_t y[10] = {7u};
   uint8_t u[3] = {8u};
   uint8_t v[3] = {9u};
   const WebPAcceleratorRGBToYUVRequest rgb_request = {
-      rgba, rgba + 1, rgba + 2, 4, 13, 2, 2, y, u, v, 5, 3, -1, -1};
+      rgba, rgba + 1, rgba + 2, 4, 13, 2, 2, y, u, v, 5, 3, -1, -1, 0};
   const uint32_t near_source[9] = {0};
   uint32_t near_output[6] = {10u};
   const WebPAcceleratorNearLosslessRequest near_lossless_request = {
       near_source, 3, 2, 3, 4, near_output};
   WebPAcceleratorLossyAnalysisResult analysis_result = {0};
   const WebPAcceleratorLossyAnalysisRequest lossy_analysis_request = {
-      y, u, v, 5, 3, 2, 2, 4, 75, &analysis_result};
+      y, u, v, 5, 3, 2, 2, 4, 75, &analysis_result, 0};
   uint32_t predictor_source[2] = {11u, 12u};
   uint32_t predictor_modes[1] = {13u};
   int predictor_bits = 0;
   int predictor_modes_only = 0;
   const WebPAcceleratorPredictorRequest predictor_request = {
       2, 1, 2, 5, 1, 1, 0, predictor_source, predictor_source,
-      predictor_modes, &predictor_bits, &predictor_modes_only};
+      predictor_modes, &predictor_bits, &predictor_modes_only, 0};
   const WebPAcceleratorHistogramCommand histogram_command = {0, 0, 1,
                                                               0xff000000u};
   const WebPAcceleratorHistogramSpan histogram_span = {&histogram_command, 1};
@@ -256,6 +266,7 @@ int main(void) {
   assert(WebPAccelerateColorTransform(&color_request) ==
          WEBP_ACCELERATOR_SUCCESS);
   assert(context.color_calls == 1);
+  assert(context.color_generation == 0);
   assert(argb[0] == 0x11223344u);
   assert(transform_image[0] == 0x55667788u);
 
@@ -278,12 +289,17 @@ int main(void) {
 
   assert(WebPAccelerateHashChain(&hash_request) == WEBP_ACCELERATOR_SUCCESS);
   assert(context.hash_calls == 1);
+  assert(context.hash_generation == 0);
   assert(candidates[0] == 99u);
 
   WebPAcceleratorBeginEncode(0, 5, 63);
   assert(WebPAccelerateRGBToYUV(&rgb_request) == WEBP_ACCELERATOR_SUCCESS);
   assert(context.rgb_calls == 1);
+  assert(context.rgb_generation != 0);
   assert(y[0] == 42u && u[0] == 43u && v[0] == 44u);
+  assert(WebPAccelerateLossyAnalysis(&lossy_analysis_request) ==
+         WEBP_ACCELERATOR_SUCCESS);
+  assert(context.lossy_analysis_generation == context.rgb_generation);
   WebPAcceleratorEndEncode();
   context.expected_rgb_method = -1;
   context.expected_rgb_quality = -1;
@@ -297,12 +313,22 @@ int main(void) {
 
   assert(WebPAccelerateLossyAnalysis(&lossy_analysis_request) ==
          WEBP_ACCELERATOR_SUCCESS);
-  assert(context.lossy_analysis_calls == 1);
+  assert(context.lossy_analysis_calls == 2);
+  assert(context.lossy_analysis_generation == 0);
   assert(analysis_result.alpha == 46u);
   assert(WebPAcceleratorLossyAnalysisEnabled());
 
+  WebPAcceleratorBeginEncode(1, 5, 63);
+  context.color_result = WEBP_ACCELERATOR_SUCCESS;
+  assert(WebPAccelerateColorTransform(&color_request) ==
+         WEBP_ACCELERATOR_SUCCESS);
   assert(WebPAcceleratePredictor(&predictor_request) ==
          WEBP_ACCELERATOR_SUCCESS);
+  assert(WebPAccelerateHashChain(&hash_request) == WEBP_ACCELERATOR_SUCCESS);
+  assert(context.color_generation != 0);
+  assert(context.predictor_generation == context.color_generation);
+  assert(context.hash_generation == context.color_generation);
+  WebPAcceleratorEndEncode();
   assert(context.predictor_calls == 1);
   assert(predictor_source[0] == 47u);
   assert(predictor_modes[0] == 0xff000b00u);
