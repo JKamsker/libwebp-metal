@@ -1617,3 +1617,25 @@ caches, compressed parent/candidate disassembly, symbol sizes, 7/7 CTest
 transcript, and 48 raw timing rows are stored under the
 `libwebp-token-fixed-bit-*` prefix. This is RTX 2080 SUPER-only evidence and
 makes no Ampere+ claim.
+
+## No-run token-byte fast-flush rejection
+
+The native coverage run counted 36,426,600 real byte flushes in
+`VP8PutTokenPage`. Pending `0xff` runs occurred on only 138,264 normal flushes
+(0.38%), and buffer growth occurred 768 times. A temporary direct no-run arm
+therefore bypassed pending-capacity arithmetic and the later run test for the
+99.62% common case while preserving the original run and allocation paths.
+
+The intended assembly was emitted and the function shrank from 764 to 719
+bytes. Seven CTests passed and all timing outputs were exact:
+
+| Format | Parent | No-run fast flush | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.144 ms/image | 40.213 ms/image | -0.069 ms/image |
+| JPEG lossy | 40.027 ms/image | 40.105 ms/image | -0.078 ms/image |
+
+Both formats regressed slightly, so the candidate was removed. Raw annotated
+coverage and `.gcda`/`.gcno` files are stored under `libwebp-token-page-gcov-*`;
+the exact patch, native caches, disassemblies, symbols, 7/7 CTest transcript,
+and 48 timing rows are under `libwebp-token-norun-flush-*`. This is RTX 2080
+SUPER-only evidence and makes no Ampere+ claim.

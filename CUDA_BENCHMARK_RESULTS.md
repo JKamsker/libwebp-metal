@@ -1544,3 +1544,27 @@ byte-exact, but both formats regressed:
 The candidate was removed. Compact shared dynamic-bit code is faster than the
 larger fixed-path tree on this Ryzen 9 3900X / RTX 2080 SUPER workload. No
 Ampere+ behavior or performance claim changes.
+
+## No-run token-byte fast-flush rejection
+
+Coverage of the retained page coder counted 441,511,416 tokens and 36,426,600
+real byte flushes. Only 138,264 normal flushes (0.38%) carried a pending
+`0xff` run, and only 768 took the buffer-growth path. The remaining 99.62% of
+normal flushes still computed `run + 1`, subtracted capacity, compared it, and
+later tested `run` again.
+
+A direct `run == 0 && pos < max_pos` arm performed the unchanged carry update
+and byte store, while the original run and resize logic handled every other
+case. Generated assembly removed the pending-capacity chain from the dominant
+arm and shrank `VP8PutTokenPage` from 764 to 719 bytes. Seven CTests passed and
+two order-reversed six-sample processes remained byte-exact:
+
+| Format | Parent | No-run fast flush | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.144 ms/image | 40.213 ms/image | -0.069 ms/image |
+| JPEG lossy | 40.027 ms/image | 40.105 ms/image | -0.078 ms/image |
+
+Both formats were neutral-to-negative, so the candidate was removed. The
+retained compiler schedule already hides the almost-always-trivial capacity
+and run work. This is Ryzen 9 3900X / RTX 2080 SUPER evidence only; no Ampere+
+behavior or performance claim changes.
