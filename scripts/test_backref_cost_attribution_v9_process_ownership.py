@@ -4,8 +4,11 @@
 from __future__ import annotations
 
 import ast
+import hashlib
 import inspect
+import json
 from pathlib import Path
+from unittest import mock
 
 import backref_cost_attribution_v9_admission as admission
 import backref_cost_attribution_v9_transport as transport
@@ -13,6 +16,12 @@ import execute_backref_cost_attribution_v9 as executor
 
 
 ROOT = Path(__file__).resolve().parents[1]
+AUTHORIZATION = (
+    ROOT / "evidence/backref-cost-attribution-v9-design/phase1b-authorization.json")
+MANIFEST = ROOT / "scripts/backref_cost_attribution_v9_manifest.json"
+POST_CYCLE_REMEDIATION = (
+    ROOT / "evidence/backref-cost-attribution-v9-post-cycle-remediation-20260819"
+    / "remediation.json")
 INFRASTRUCTURE = (
     "scripts/backref_cost_attribution_v9_admission.py",
     "scripts/backref_cost_attribution_v9_archive.py",
@@ -135,17 +144,25 @@ def identity_only_process_contract() -> None:
     assert transport.classify_process_snapshot(
         lookalike_snapshot, 100)["exact_identity_conflicts"] == []
 
-    # A separately acquired path can establish an otherwise unknown ancestor,
-    # but only when it is absolute, canonical, read-only, and provenanced.
+    # Frozen v9 also rejects a nominal absolute path when realpath resolves it
+    # elsewhere.  That host-dependent rejection surfaced in post-cycle CI.  Do
+    # not turn this frozen fixture into an authority-bearing success case; v10
+    # must establish corrected identity semantics under fresh gates.
     path_ancestor = snapshot(
         (1, 0, "launchd"), (90, 1, "opaque-python-name"))
-    by_path = transport.classify_process_snapshot(path_ancestor, 90, {
-        90: {"path": "/usr/bin/python3", "provenance": "fixture:proc_pidpath",
-             "read_only": True}})
-    assert by_path["verified_ancestor_chain"][0]["comm"] == \
-        "opaque-python-name"
-    assert by_path["resolved_executable_paths"][0]["path"] == \
-        "/usr/bin/python3"
+    with mock.patch.object(transport.os.path, "realpath",
+                           return_value="/usr/bin/python3.13"):
+        try:
+            transport.classify_process_snapshot(path_ancestor, 90, {
+                90: {"path": "/usr/bin/python3",
+                     "provenance": "fixture:proc_pidpath",
+                     "read_only": True}})
+        except transport.FrameRefusal as error:
+            assert str(error) == (
+                "resolved executable path is not "
+                "absolute/canonical/provenanced")
+        else:
+            raise AssertionError("frozen noncanonical path rejection changed")
 
     for unresolved_denied in ("metal_benchmark", "Runner.Worker"):
         try:
@@ -216,14 +233,47 @@ def single_session_contract() -> None:
     assert "_validate_child(home, root, child)" in remote
 
 
+def post_cycle_authorization_contract() -> None:
+    authorization = json.loads(AUTHORIZATION.read_text())
+    assert authorization["authorization_status"] == "REFUSED"
+    assert authorization["timed_execution_authorized"] is False
+    assert authorization["phase_2_authority"] == "NONE"
+
+    remediation = json.loads(POST_CYCLE_REMEDIATION.read_text())
+    assert remediation["status"] == "FIXTURE_CORRECTED_FROZEN_V9_UNCHANGED"
+    assert remediation["authorization"] == {
+        "timed_execution_authorized": False,
+        "phase_2_authority": "NONE",
+        "v9_execution_authority_after_remediation": False,
+    }
+    assert remediation["frozen_artifact_hashes"]["status"] == \
+        "INTENTIONALLY_SUPERSEDED_INVALIDATED"
+    frozen = next(
+        row for row in json.loads(MANIFEST.read_text())["frozen_artifacts"]
+        if row["path"] ==
+        "scripts/test_backref_cost_attribution_v9_process_ownership.py")
+    current_sha256 = hashlib.sha256(Path(__file__).read_bytes()).hexdigest()
+    assert frozen["sha256"] == remediation["frozen_artifact_hashes"][
+        "frozen_sha256"]
+    assert current_sha256 == remediation["frozen_artifact_hashes"][
+        "post_cycle_sha256"]
+    assert current_sha256 != frozen["sha256"]
+    assert remediation["future_v10"]["fresh_gates_required"] is True
+    assert remediation["conclusion"] == {
+        "interval_family": "UNASSESSED",
+        "production_consequence": "NONE",
+    }
+
+
 def main() -> int:
     static_guards()
     direct_child_contract()
     identity_only_process_contract()
     single_session_contract()
+    post_cycle_authorization_contract()
     print("PASS: attribution v9 treats comm as an opaque exact token, accepts "
-          "slashless v8 live-shape identities, verifies optional path provenance "
-          "and transport ancestors, keeps "
+          "slashless v8 live-shape identities, records the frozen path rejection "
+          "and false/NONE authorization, keeps "
           "discovered PIDs out of signal APIs, and has one in-session cleanup")
     return 0
 
