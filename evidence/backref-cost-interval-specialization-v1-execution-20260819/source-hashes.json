@@ -1,0 +1,182 @@
+{
+  "candidate_equivalence": {
+    "algorithm": "select once before DP mutation between a baseline DP and a distinct always-specialized DP; specialized PushInterval is the exact v3 local scan-derived append hint with use_append_hint and all experiment-control operations removed",
+    "semantics": [
+      "integer costs",
+      "strict comparisons and ties",
+      "interval ordering and lifetimes",
+      "update order",
+      "traceback",
+      "reference order",
+      "cache choice",
+      "input immutability",
+      "pre-DP injected exact baseline fallback"
+    ],
+    "validated_candidate_commit": "frozen handoff commit supplied by source admission"
+  },
+  "frozen_artifacts": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "3327a50a22b6d372de6d4f099da5a646bd85d49acd2444994db8483d48d5d5f0"
+    },
+    {
+      "path": "makefile.unix",
+      "sha256": "9c811de329c154bf1e6ce68a9d1bc35a5fdebc416b463a285994d7c5325d8915"
+    },
+    {
+      "path": "doc/backref-cost-interval-specialization-v1-design-20260819.md",
+      "sha256": "225178e4ad35594ff79309fe757191bcfc60fb95bc917b01c1f961eeafecf338"
+    },
+    {
+      "path": "doc/backref-cost-interval-specialization-v1-protocol-20260819.md",
+      "sha256": "df07b6212e43de35dcea9891b1c26a4d04f4d747e729b0d8094f49222fd4604c"
+    },
+    {
+      "path": "doc/backref-cost-interval-specialization-v1-operator-20260819.md",
+      "sha256": "400b0a41bff4568ebf78e00d1dbd72a0c26c3f3f7c6e371d96a32da11c8dfeb8"
+    },
+    {
+      "path": "scripts/backref_cost_interval_specialization_v1_schemas.json",
+      "sha256": "f81c2257aa9745ff909c6f76332bd0adda21df6c5d69b94f2546d60a514f21a7"
+    },
+    {
+      "path": "scripts/backref_cost_interval_specialization_v1_archive.py",
+      "sha256": "a3965b0f39a0e620a8a36abf6f262cd376b0678aa8725a0cc9345e9579e528c2"
+    },
+    {
+      "path": "scripts/run_backref_cost_interval_specialization_v1_experiment.py",
+      "sha256": "3245b3383f9a33d81fcecc8fce743ec05c25ce5662bfb82446a7d95a3571d494"
+    },
+    {
+      "path": "scripts/execute_backref_cost_interval_specialization_v1.py",
+      "sha256": "3f309a2f02b0a1002618787e14eae2bfd3c6d654829f1b6d2099c71e3c9eb6b4"
+    },
+    {
+      "path": "scripts/backref_cost_interval_specialization_v1_admission.py",
+      "sha256": "898fd0c0aa6b0fa323f91680b5bd8eb2abc1fcc7ee11345e529f9d9a5f0bd483"
+    },
+    {
+      "path": "scripts/backref_cost_interval_specialization_v1_paths.py",
+      "sha256": "de88d36f030f42e9bd4d99545999e0ebf45891ba829505007d3d7d172e8cab6b"
+    },
+    {
+      "path": "scripts/validate_backref_cost_interval_specialization_v1_evidence_return.py",
+      "sha256": "8a4ad63fe3ad563e5c2b50a18cc68d8c7bce1b563694d933596f6ba3d52501b3"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_specialization_v1_experiment.py",
+      "sha256": "af8706cd278a4bdf7b054824feb790b51d369b7e71096f1686bd13b959d758e3"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_specialization_v1_admission.py",
+      "sha256": "2cac5e5138f86f7332f71edc3daabfb22993f141692f00f414b4d86bc744084e"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_specialization_v1_archive.py",
+      "sha256": "95e83daf1d84b967ba5e377e193a0e8e5e72750b3f51fc9559d659c5fe818509"
+    },
+    {
+      "path": "scripts/test_backref_cost_interval_specialization_v1_protocol.py",
+      "sha256": "1f9f4750eabd5f0c74c72340a4dd6432bc2a0aeb21b864c8b8289eaed83b9ed5"
+    },
+    {
+      "path": "scripts/collect_backref_cost_interval_specialization_v1_work.py",
+      "sha256": "f53848fcf0ce4376a8de876534e071faff1940c3ab5f3942add91b485d692f57"
+    },
+    {
+      "path": "scripts/test_experiment_guards.py",
+      "sha256": "ae34f1e46643a0d45900027237a11defa2eb7153dbab96681fe0b09e70db2a7d"
+    },
+    {
+      "path": "scripts/generate_publication_corpus.py",
+      "sha256": "6a4271dd036ff96be03188109680554e3d1676862c23553b5dd15474b2aeb007"
+    },
+    {
+      "path": "benchmarks/publication-corpus/manifest.json",
+      "sha256": "34582ce2d2da7f14e3711280e1c2ab44ffc5fe460de4abac7c5696fc5b1875ff"
+    },
+    {
+      "path": "src/enc/backref_cost_interval_specialization_v1_experiment_enc.c",
+      "sha256": "f6784c9118177f0e00156a523f104b5dd47484cfbdce82efe7f86ba9a6970693"
+    },
+    {
+      "path": "src/enc/backref_cost_interval_specialization_v1_experiment_enc.h",
+      "sha256": "70b55bdfb998ec658b385ba098a755799cd2110a3c4fe9245687000304412e0a"
+    },
+    {
+      "path": "src/enc/backward_references_cost_enc.c",
+      "sha256": "22d25ef7c3bde7c61f4368a327682269d6f9c988bec094c5249667e948ad7d19"
+    },
+    {
+      "path": "tools/backref_cost_interval_specialization_v1_experiment_runner.c",
+      "sha256": "dc085cf8ac2f40208ba01b6dd5406d3c16f63f0a11d55cc15f957e54b2bf4bfd"
+    },
+    {
+      "path": "doc/experiment-guard-matrix.md",
+      "sha256": "dca87675ff0dc05bf9f157f5bae28336eb78b27c330f85524d90128de85d2094"
+    },
+    {
+      "path": "tests/README.md",
+      "sha256": "f3d3fac91a44fbbf84d12c3f44a696716f33f6effacaf803fffe3ccda54e1296"
+    },
+    {
+      "path": "src/enc/backward_references_cost_distance_only_enc.inc",
+      "sha256": "9623ad554a5ea686d632c3672089cb2e91e0e16282d94b08b4978dd8c3142d82"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design-work/work-metrics.jsonl",
+      "sha256": "207c133e005edecb6672fb58011639703ffa9856e221ce5faaa7ff36f53d3b32"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design-work/summary.json",
+      "sha256": "63a5a4f4692eb8111be572afcdbd1b66e4474f34872c891a497845ead218987c"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design-work/abi.json",
+      "sha256": "9bf8e46c3e18efdf2c43de254ce46f931c682741bf6f877b5dedc123aaf12be8"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design-work/identity.json",
+      "sha256": "3ae75ce2886e1592267b85b11806ff7eccfa9e5eda01c342d49e8510a026567d"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design-work/codegen.json",
+      "sha256": "5a99752918d64fde9534bc3f0822ecce10bc0b60af9b80f66d737514116957a2"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design/local-validation.json",
+      "sha256": "b275f5681d4249aca4ff72c33f49958fd7e4a0ba053d16bc3795ace976f38ad6"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design/remote-rehearsal-success/rehearsal.json",
+      "sha256": "99db77fd18b4c5eae7859b1e6c7815dd000a134b7704f8f7de9500b7d7492c99"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design/remote-rehearsal-success/work-metric-summary.json",
+      "sha256": "1f67605b738c109ca339ce4d1640939612e2979053fefe64fba982b6c248ed67"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design/remote-rehearsal-success/returned-evidence-hashes.json",
+      "sha256": "cc74390f17bff2d4e7f5f7deaee3f9289bf4418aea3a1116b46eb4462873417f"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design/remote-rehearsal-success/transfer-cleanup.json",
+      "sha256": "7ec568aaf09fa69443c478dd66b14802787a23fe4e1d56edb1a7a4fd719c9376"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design/remote-rehearsal-refusal/refusal.json",
+      "sha256": "a522e6807c6fe6984aecb1b9ecb8d377ccfb83a2afe585624898392348c8a826"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design/remote-rehearsal-refusal/returned-evidence-hashes.json",
+      "sha256": "3a9b18f39895df16461548401b5415bd3023fa62ba6bda60b5942436897389b9"
+    },
+    {
+      "path": "evidence/backref-cost-interval-specialization-v1-design/remote-rehearsal-refusal/transfer-cleanup.json",
+      "sha256": "dbb932d05e5d696644b6c966e979927948ca8c1db397e5a0b0f8ca758cb89d7a"
+    }
+  ],
+  "manifest_sha256": "2fefb68b60e6b0136ad67bae3c2ed0d25a4d39d953f5cd58b4e4e410c5e13784",
+  "schema": "libwebp-backref-cost-interval-specialization-v1-source-hashes-v1",
+  "source_commit": "673bc3fa9e8b247a834e293aedb32363f8410f11"
+}
