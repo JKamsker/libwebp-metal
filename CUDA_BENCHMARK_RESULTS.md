@@ -377,3 +377,28 @@ of the five process medians:
 Both deltas are below the 1.5 ms/image noise threshold, and both signs favor
 8 bands. The four-band build was discarded and the existing eight-band
 default remains unchanged.
+
+### Turing dispatch-threshold calibration
+
+Stage-isolated forced CPU/CUDA grids measured the existing warm and cold
+decision points. Warm measurements retained the median of seven samples after
+one warmup. Cold measurements used the median of three fresh processes with
+CUDA prewarm disabled, so the first measured dispatch paid context setup.
+
+| Stage and lifecycle | Below-gate check | Gate / next check | Decision |
+|---|---:|---:|---|
+| Lossy decimate, warm | 384x384 / 576 MBs: 15.0 CPU vs 16.8 CUDA ms | 448x448 / 784 MBs: 20.7 CPU vs 18.5 CUDA ms | Raise warm gate to 784 MBs |
+| Lossy decimate, cold | 1664x1664 / 10,816 MBs: 273.0 CPU vs 287.2 CUDA ms | 1792x1792 / 12,544 MBs: 314.8 CPU vs 290.0 CUDA ms | Raise cold gate to 12,544 MBs |
+| Cross-color, warm | 64x64: 4.70 CPU vs 3.95 CUDA ms | Existing 128x128 gate: 16.30 CPU vs 8.96 CUDA ms | Keep 16,384 pixels |
+| Cross-color, cold | 1600x1600: 664.7 CPU vs 630.7 CUDA ms | Existing 2000x2000 gate: 1132.0 CPU vs 976.2 CUDA ms | Keep 4,000,000 pixels |
+| Predictor, warm | 96x96: 8.26 CPU vs 8.57 CUDA ms | Existing 128x128 gate: 16.45 CPU vs 14.10 CUDA ms | Keep 16,384 pixels |
+| Predictor, cold | 1600x1600: 661.6 CPU vs 688.1 CUDA ms | Existing 2000x2000 gate: 1149.6 CPU vs 1074.3 CUDA ms | Keep 4,000,000 pixels |
+| Near-lossless (3 pass), warm | 192x192: 0.93 CPU vs 0.07 CUDA ms | Existing 256x256 gate: 1.70 CPU vs 0.12 CUDA ms | Keep 65,536 pixels |
+| Near-lossless (3 pass), cold | 3584x3584: 458.7 CPU vs 227.8 CUDA ms | Existing 4096x4096 gate: 545.7 CPU vs 359.8 CUDA ms | Keep 16,777,216 pixels |
+
+The predictor's alternative mode map can change downstream entropy time, so
+additional synthetic sizes were content-sensitive; at the actual 4 MP gate,
+however, all five alternating cold pairs favored CUDA. The production path
+also normally initializes the shared CUDA state in the earlier cross-color
+stage. No lower-bound-only calibration improves the observed policy, so its
+existing conservative threshold remains.

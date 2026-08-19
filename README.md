@@ -116,7 +116,9 @@ to this fork's CPU encoder. It requires the basic (non-trellis) search
 upstream refresh cadence via `WEBP_TOKEN_REFRESH_SHIFT` declines it.
 `WEBP_CUDA_LOSSY_DECIMATE=0` disables it and
 `WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS=N` overrides its dispatch threshold
-(64 macroblocks warm, 4,000 cold).
+(784 macroblocks warm, 12,544 cold). These conservative defaults include the
+measured Turing crossover; callers with a calibrated persistent workload can
+still override them.
 Lossy token streams use eight VP8 token partitions by default (a standard
 bitstream feature costing about 38 bytes per image): macroblock row `y`
 records into partition `y mod parts`, and the final arithmetic coding of

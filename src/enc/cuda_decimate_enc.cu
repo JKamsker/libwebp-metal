@@ -1509,10 +1509,12 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     return collect_result;
   }
   {
-    // The roughly 140 ms context-creation cost is only worth paying for
-    // large images; once a context exists (the unit ran before, or the
-    // process committed to the CUDA backend and the prewarm created one),
-    // even small images win.
+    // The context-creation cost is only worth paying for large images. Once a
+    // context exists (the unit ran before, or the process committed to CUDA
+    // and the prewarm created one), Turing still needs enough work to cover
+    // its higher per-dispatch overhead. These conservative cutoffs are the
+    // first repeatable wins across both the RTX 2080 SUPER and the faster
+    // hardware used for the original implementation.
     const char* const backend = getenv("WEBP_ACCELERATOR");
     const bool context_warm =
         g_decimate_state.available ||
@@ -1520,7 +1522,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     const char* const min_mbs = getenv("WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS");
     const size_t minimum = (min_mbs != nullptr)
                                ? (size_t)atoll(min_mbs)
-                               : (context_warm ? 64u : 4000u);
+                               : (context_warm ? 784u : 12544u);
     if (mb_count < minimum) return WEBP_ACCELERATOR_NOT_RUN;
   }
 

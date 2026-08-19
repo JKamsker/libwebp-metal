@@ -73,3 +73,13 @@ lossless cases also verified that the requested resident CUDA handoff occurred.
 CUDA improved every persistent-batch row. In a fresh process, CUDA startup
 cost outweighed the accelerated work for all PNG rows and JPEG lossy, while
 the longer JPEG lossless and near-lossless encodes remained faster on CUDA.
+
+## Adaptive dispatch calibration
+
+An isolated warm/cold crossover re-check found that the lossy decimate
+thresholds tuned on the RTX 5070 Ti dispatched too early on this Turing GPU.
+Across three deterministic inputs, warm CUDA first won at 448x448 (784
+macroblocks), while cold CUDA first won at 1792x1792 (12,544 macroblocks).
+The defaults were raised from 64/4,000 to 784/12,544 macroblocks. Cross-color,
+predictor, and three-pass near-lossless won at their existing warm and cold
+decision points, so their pixel thresholds remain unchanged.

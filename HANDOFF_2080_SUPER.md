@@ -104,7 +104,7 @@ measurements are meaningless until they pass.
   priorities shift with it. Also A/B 4 vs 8 bands
   (`pass->band_count` in `frame_enc.c` / backend `kMaxDecimateBands`) —
   the 8-band choice was tuned on the 5070 Ti.
-- [ ] 5. **Re-check dispatch thresholds on Turing.** Warm/cold gates
+- [x] 5. **Re-check dispatch thresholds on Turing.** Warm/cold gates
   (`WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS` 64 warm / 4000 cold,
   `WEBP_CUDA_MIN_PIXELS`, predictor and NL thresholds) were never
   validated on this hardware. If forced CUDA loses to CPU on some mode
