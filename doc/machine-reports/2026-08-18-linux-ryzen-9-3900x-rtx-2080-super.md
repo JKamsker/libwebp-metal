@@ -1907,3 +1907,27 @@ removed. The exact composite patch, raw rows, and both CTest transcripts are
 archived under `libwebp-i4-balanced-chroma-shared-*`. This is Turing-only
 evidence; the experimental scheduling code was never pushed and no Ampere+
 behavior or performance claim was changed.
+
+## Uniform-AC I4 quantization
+
+The retained I4 transform/quantization profile was combined with a native
+sm_75 SASS inspection, which counted 621 static global `U16` load sites.
+Because the encoder's `ExpandMatrix` duplicates luma AC `q`, `iq`, `bias`,
+and `zthresh` values across indices 1--15, a pre-Ampere candidate cached one
+copy of each scalar in the four-lane basic quantizer. A host check selected
+the fast path only when every segment satisfied the invariant; generic
+contract inputs and Ampere+ retained the original implementation.
+
+Candidate and restored source passed all seven CTests. All 24 order-reversed
+native-sm_75 timing rows were byte-exact:
+
+| Format | Parent | Uniform-AC | Change |
+|---|---:|---:|---:|
+| PNG lossy | 39.548 ms/image | 39.733 ms/image | +0.185 ms/image |
+| JPEG lossy | 39.633 ms/image | 39.645 ms/image | +0.012 ms/image |
+
+Resource use fell from 103 to 101 registers with the same 352-byte stack and
+23,392-byte shared allocation, but wall time did not improve. The candidate
+was removed. Exact patch, rows, resource output, and candidate/restored test
+logs are archived under `libwebp-i4-uniform-ac-*`. This is Turing-only
+evidence and makes no Ampere+ performance claim.

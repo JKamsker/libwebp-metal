@@ -241,6 +241,10 @@ The `libwebp-i4-balanced-chroma-shared-*` files contain the exact composite
 patch, 24 byte-exact timing rows, and candidate/restored seven-test
 transcripts for the rejected balanced-I4/chroma plus shared-segment screen.
 
+The `libwebp-i4-uniform-ac-*` files contain the exact patch, 24 byte-exact
+timing rows, parent/candidate resource output, and candidate/restored test
+logs for the rejected pre-Ampere uniform-AC quantization fast path.
+
 Inspect the sampling archives with:
 
 ```sh

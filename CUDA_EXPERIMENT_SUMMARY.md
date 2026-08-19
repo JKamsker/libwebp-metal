@@ -480,3 +480,26 @@ independent micro-gains do not add reliably. The composition was removed.
 Its exact patch, rows, and candidate/restored CTest logs are archived under
 `libwebp-i4-balanced-chroma-shared-*`. This was a Turing-only local screen;
 no Ampere+ code or performance claim was retained.
+
+## Pre-Ampere uniform-AC I4 quantization rejection
+
+Native-sm_75 disassembly exposed 621 static global `U16` load sites in the
+decimate kernel, while `ExpandMatrix` guarantees that luma AC entries 1--15
+of `q`, `iq`, `bias`, and `zthresh` are identical. A host-validated fast path
+cached those four AC scalars in the four-lane basic I4 quantizer and retained
+the generic path for arbitrary contract matrices. Ampere+ compiled only the
+unchanged generic implementation.
+
+Candidate and restored trees passed 7/7 CTests, and all 24 order-reversed
+native-sm_75 rows matched hashes and byte counts:
+
+| Format | Parent | Uniform-AC | Change |
+|---|---:|---:|---:|
+| PNG lossy | 39.548 ms/image | 39.733 ms/image | +0.185 ms/image |
+| JPEG lossy | 39.633 ms/image | 39.645 ms/image | +0.012 ms/image |
+
+The candidate lowered register use from 103 to 101 but did not reduce wall
+time, confirming that the repeated AC loads were already coalesced or
+cache-resident. It was removed. Exact patch, rows, resources, and both test
+logs are archived under `libwebp-i4-uniform-ac-*`. RTX 2080 SUPER only; no
+Ampere+ behavior or claim changed.

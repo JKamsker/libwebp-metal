@@ -1796,3 +1796,25 @@ The shared staging did not add to the balanced schedule's JPEG result; JPEG
 still missed the 1.5 ms/image gate by 0.144 ms/image. The candidate was
 removed and its exact patch, rows, and test logs were archived. This is RTX
 2080 SUPER-only evidence and makes no Ampere+ performance claim.
+
+## Uniform-AC I4 quantization rejection
+
+The retained transform/quantization profile and native-sm_75 SASS motivated
+a pre-Ampere fast path for the normal `ExpandMatrix` invariant: luma AC
+indices 1--15 share `q`, `iq`, `bias`, and `zthresh`. The host validated all
+four segment matrices before selecting the specialized four-lane quantizer;
+arbitrary matrices used the original generic code, and Ampere+ compiled only
+that original path.
+
+Both candidate and restored source passed all seven CTests. Two
+order-reversed processes produced 24 exact rows:
+
+| Format | Parent | Uniform-AC | Change |
+|---|---:|---:|---:|
+| PNG lossy | 39.548 ms/image | 39.733 ms/image | +0.185 ms/image |
+| JPEG lossy | 39.633 ms/image | 39.645 ms/image | +0.012 ms/image |
+
+Registers fell from 103 to 101, but neither format improved. The specialized
+loads were already cheap in the retained layout, so the candidate was
+removed. Raw evidence is archived with the RTX 2080 SUPER report; no Ampere+
+behavior or performance claim changed.
