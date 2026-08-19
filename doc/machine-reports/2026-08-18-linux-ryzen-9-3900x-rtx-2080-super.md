@@ -1275,3 +1275,25 @@ Ryzen 9 3900X / RTX 2080 SUPER evidence only and makes no Ampere+ claim. The
 adjacent evidence directory contains both sampling reports, both native CMake
 caches, and all 84 process transcripts covering the unconditional, CPU-only,
 and three gated screens.
+
+## AVX2 combined-entropy rejection
+
+The sampled `GetCombinedEntropyUnrefined_C` function scans each combined
+histogram population for equal-value streaks. An exact AVX2 candidate added
+eight `X + Y` bins and compared each with its predecessor in parallel. A fully
+uniform block skipped directly to the next block; every nonuniform block used
+the original scalar helper, integer arithmetic, and update order.
+
+Two order-balanced process pairs per format, with one warmup and three measured
+six-image batches in each process, found:
+
+| Form | PNG baseline/candidate | Paired gain | JPEG baseline/candidate | Paired gain |
+|---|---:|---:|---:|---:|
+| Every alphabet | 78.070 / 78.488 ms | -0.418 ms | 129.650 / 127.090 ms | +2.561 ms |
+| Extended literal only | 77.113 / 77.002 ms | +0.111 ms | 128.448 / 127.323 ms | +1.125 ms |
+
+All aggregate hashes and byte counts matched. The broad form regressed PNG;
+keeping the fixed color and distance alphabets scalar made PNG neutral but
+reduced JPEG below the 1.5 ms/image gate. The candidate was removed. These are
+Ryzen 9 3900X / RTX 2080 SUPER measurements only and make no Ampere+ claim.
+All 16 raw process transcripts are in the adjacent evidence directory.

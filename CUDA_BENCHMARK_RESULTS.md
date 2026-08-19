@@ -1197,3 +1197,23 @@ candidate was removed because no architecture-safe form won both formats.
 These results are specific to the Ryzen 9 3900X / RTX 2080 SUPER and make no
 Ampere+ performance claim. The sampling reports, build caches, and all raw
 process transcripts are stored with the machine report.
+
+## AVX2 combined-entropy rejection
+
+The remaining sampled histogram function scans combined population arrays for
+equal-value streaks. An exact AVX2 candidate added and compared eight bins at a
+time, skipping a block only when every combined value matched its predecessor;
+all nonuniform blocks performed the original scalar updates in original order.
+
+Two order-balanced forced-batch process pairs per format produced:
+
+| Form | PNG paired gain | JPEG paired gain |
+|---|---:|---:|
+| AVX2 on every alphabet | -0.418 ms/image | +2.561 ms/image |
+| AVX2 on extended literal alphabet only | +0.111 ms/image | +1.125 ms/image |
+
+All 48 measured encodes per form retained exact aggregate hashes and byte
+counts. The broad form regressed PNG; preserving the fixed 256-symbol color
+and 40-symbol distance scans removed that regression but left both gains below
+the 1.5 ms/image gate. The candidate was removed. This is Ryzen 9 3900X / RTX
+2080 SUPER evidence only and does not change or characterize Ampere+ behavior.

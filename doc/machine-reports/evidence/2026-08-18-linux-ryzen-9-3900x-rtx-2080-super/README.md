@@ -136,6 +136,13 @@ warmup and two rows. Commands, hashes, byte counts, process order, and raw
 nanosecond timings are included. All forms were removed after the CPU control
 or architecture-safe JPEG cells regressed.
 
+The 16 `libwebp-combined-entropy-avx2-*.txt` transcripts preserve two
+order-balanced process pairs per format for both AVX2 screens. The unversioned
+files vectorize every population alphabet; `v2` keeps fixed color/distance
+alphabets scalar and vectorizes only the extended literal alphabet. Each file
+contains its command, one discarded warmup, and three raw measured rows. Both
+forms were byte-exact and were removed after failing the two-format gate.
+
 Inspect the sampling archives with:
 
 ```sh
