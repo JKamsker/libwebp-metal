@@ -843,3 +843,32 @@ order-balanced process medians were:
 The gains are far below the retention threshold, so the candidate was
 removed. Raw timing evidence is retained locally in
 `/tmp/libwebp-token-available-ab.xJ3CZi.json`.
+
+## Dual-sub-block I4 dependency-diagonal retention
+
+A dependency audit of the sixteen raster-order Intra4 sub-blocks showed that
+the true reconstruction, mode, and non-zero-context predecessor relation is
+`x + 2y`, yielding ten diagonals with at most two independent blocks each.
+The retained kernel assigns one 128-thread team to each block, constructs its
+exact predictor boundary from completed neighbors, and publishes the winner
+after each diagonal. Thread 0 consumes ready results in raster order, keeping
+the CPU's score accumulation and abort comparisons unchanged.
+
+The 256-thread kernel uses 100 registers and 23,392 bytes of static shared
+memory, versus 93 and 17,912 for the 128-thread parent. Turing residency rises
+from 12 to 16 warps per SM. Direct medium-image device medians improved by
+6.877 ms for graphic, 2.859 ms for photo, and 2.590 ms for texture content.
+Five order-balanced parent/candidate processes measured:
+
+| Format | Parent | Diagonal scheduler | Change |
+|---|---:|---:|---:|
+| PNG lossy | 42.226 ms/image | 40.420 ms/image | **-1.806 ms** |
+| JPEG lossy | 42.247 ms/image | 40.610 ms/image | **-1.637 ms** |
+
+All 60 timed outputs matched. Seven focused CTests, the 105-case exact-byte
+methods/qualities/tiny/odd/fallback matrix, and all 180 official validation
+pairs passed. The official RTX 2080 SUPER suite now measures PNG lossy at
+92.4 ms CPU / 40.0 ms CUDA (**2.31x**) and JPEG lossy at 92.3 / 40.2 ms
+(**2.30x**) in persistent 24-image batches. Raw local evidence is in
+`/tmp/libwebp-i4-diagonal-ab.we3FD8.json` and
+`/tmp/libwebp-cuda-results-2080super-i4-diagonal/results.json`.

@@ -14,9 +14,9 @@ speedup is CPU time divided by CUDA time, so values above `1x` favor CUDA.
 | CUDA toolkit | 12.0.140 |
 | Compiler | GCC 13.3.0 / NVCC 12.0.140 |
 | Python / Pillow | Python 3.12.3 / Pillow 10.2.0 |
-| Source revision | `4852f92e1075124ab420d2d56524113a54255216` |
+| Source revision | `af921388b3abcac4efd61efb7a80a8f72e5777b7` |
 | Build | CMake Release, CUDA enabled |
-| Result label | `win-2080super-token-local` |
+| Result label | `win-2080super-i4-diagonal` |
 
 ## Protocol
 
@@ -37,31 +37,31 @@ Command:
 ```sh
 python3 scripts/benchmark_cuda_end_to_end.py run \
   --build-dir build-cuda \
-  --output-dir /tmp/libwebp-cuda-results-2080super-i4-score-prep \
-  --label "win-2080super-i4-score-prep"
+  --output-dir /tmp/libwebp-cuda-results-2080super-i4-diagonal \
+  --label "win-2080super-i4-diagonal"
 ```
 
 ## Persistent 24-image batch
 
 | Method | CPU time | CUDA time | CUDA speedup |
 |---|---:|---:|---:|
-| PNG lossy | 103.5 ms | 56.6 ms | **1.83x** |
-| PNG lossless | 141.6 ms | 92.1 ms | **1.54x** |
-| PNG near-lossless | 210.9 ms | 91.0 ms | **2.32x** |
-| JPEG lossy | 99.1 ms | 57.5 ms | **1.72x** |
-| JPEG lossless | 713.8 ms | 145.0 ms | **4.92x** |
-| JPEG near-lossless | 800.2 ms | 146.2 ms | **5.47x** |
+| PNG lossy | 92.4 ms | 40.0 ms | **2.31x** |
+| PNG lossless | 143.5 ms | 92.5 ms | **1.55x** |
+| PNG near-lossless | 210.7 ms | 92.2 ms | **2.28x** |
+| JPEG lossy | 92.3 ms | 40.2 ms | **2.30x** |
+| JPEG lossless | 684.7 ms | 146.7 ms | **4.67x** |
+| JPEG near-lossless | 799.8 ms | 147.4 ms | **5.42x** |
 
 ## Fresh process per image
 
 | Method | CPU time | CUDA time | CUDA speedup |
 |---|---:|---:|---:|
-| PNG lossy | 99.7 ms | 286.0 ms | **0.35x** |
-| PNG lossless | 177.7 ms | 315.4 ms | **0.56x** |
-| PNG near-lossless | 220.3 ms | 330.8 ms | **0.67x** |
-| JPEG lossy | 100.9 ms | 289.5 ms | **0.35x** |
-| JPEG lossless | 715.4 ms | 366.6 ms | **1.95x** |
-| JPEG near-lossless | 840.2 ms | 392.8 ms | **2.14x** |
+| PNG lossy | 95.6 ms | 261.2 ms | **0.37x** |
+| PNG lossless | 154.4 ms | 313.0 ms | **0.49x** |
+| PNG near-lossless | 221.5 ms | 322.9 ms | **0.69x** |
+| JPEG lossy | 97.0 ms | 261.0 ms | **0.37x** |
+| JPEG lossless | 705.2 ms | 359.6 ms | **1.96x** |
+| JPEG near-lossless | 817.4 ms | 376.1 ms | **2.17x** |
 
 ## Validation and interpretation
 
@@ -489,3 +489,40 @@ medians measured:
 The gains are far below the retention threshold, so the candidate was
 removed. The local raw summary is
 `/tmp/libwebp-token-available-ab.xJ3CZi.json`.
+
+## Dual-sub-block I4 dependency diagonals
+
+The retained scheduler replaces the sixteen serial Intra4 sub-block steps
+with the ten exact `x + 2y` dependency diagonals. Two independent 128-thread
+teams can evaluate the two blocks on a diagonal concurrently, while thread 0
+still aggregates completed block scores in the CPU's raster order. Direct
+boundary construction preserves the external top-right samples at the
+macroblock edge.
+
+`DecimateKernel` moved from 128 to 256 threads, 93 to 100 registers, and
+17,912 to 23,392 bytes of static shared memory. On this Turing GPU that raises
+the residency ceiling from 12 to 16 warps per SM. Direct method-4
+medium-image device medians moved as follows:
+
+| Content | Parent | Diagonal scheduler | Change |
+|---|---:|---:|---:|
+| Graphic | 28.665 ms | 21.788 ms | **-6.877 ms** |
+| Photo | 24.897 ms | 22.038 ms | **-2.859 ms** |
+| Texture | 23.525 ms | 20.935 ms | **-2.590 ms** |
+
+Five order-balanced parent/candidate processes, each with one warmup and
+three retained 24-image samples, produced these aggregate medians:
+
+| Format | Parent | Diagonal scheduler | Change |
+|---|---:|---:|---:|
+| PNG lossy | 42.226 ms/image | 40.420 ms/image | **-1.806 ms** |
+| JPEG lossy | 42.247 ms/image | 40.610 ms/image | **-1.637 ms** |
+
+All 60 timed outputs matched their reference hashes and byte counts. Seven
+focused CTests passed, as did a separate 105-case exact-byte matrix covering
+methods 2--6, qualities 25/75/98, 17x13 and 257x255 inputs, three content
+classes, and forced band-3 transactional fallback. The official suite then
+passed all 180 validation pairs (including 60 exact lossy pairs) and produced
+the tables at the top of this report. Raw official results are in
+`/tmp/libwebp-cuda-results-2080super-i4-diagonal/results.json`; the local A/B
+summary is `/tmp/libwebp-i4-diagonal-ab.we3FD8.json`.
