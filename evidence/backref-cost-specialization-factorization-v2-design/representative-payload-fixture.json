@@ -1,0 +1,8 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-independent-payload-fixture-v1",
+  "derivation": "independently frozen expected output for the committed V2 domain generator",
+  "domain": "libwebp-backref-cost-specialization-factorization-v2-rehearsal\\0",
+  "payload_bytes": 2097152,
+  "sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+  "stale_predecessor_sha256": "60a1a48b8128a82eae9474a69c0dfe8364745747f04a886341c3da03fd5dee85"
+}

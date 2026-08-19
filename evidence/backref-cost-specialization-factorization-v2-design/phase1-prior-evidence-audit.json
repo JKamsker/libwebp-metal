@@ -1,0 +1,73 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-prior-evidence-audit-v1",
+  "status": "PASS",
+  "base_commit": "ccdd4900633064f203010cbd437d2682e1cba51e",
+  "auditor": "Sol/high",
+  "v1": {
+    "status": "MERGED_DEFAULT_OFF_GROUNDWORK_AND_REFUSAL_NOT_RERUN",
+    "prior_audit": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-design/phase1-prior-evidence-audit.json",
+      "sha256": "761bd4e67966aabb72544034012e3d3ab734a05e0d84e8fbe0681fe9a2df1bd1"
+    },
+    "authority_refusal": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-design/phase1b-authorization.json",
+      "sha256": "2f761330d9045664637c4b7611927b331073444ee50d63e1d9dc0fd20b4af105",
+      "authority": "NONE"
+    },
+    "phase2_refusal_audit": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-design/phase2-refusal-audit.json",
+      "sha256": "76321352661a4a7a5d85fb06f94b03da1dbdaf3c1ea2e2503c80722d0b4cbc9f"
+    },
+    "phase3_consequence": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-phase3-evaluation-consequence-20260819.json",
+      "sha256": "6fc1e5e3e4105e27f0e54f5edbfe8b12d25236b1cb629930eef8d6a0b98ff2c9"
+    },
+    "finding": "V1's B/L/H implementation and no-deduplicate boundary passed, but Phase 1A froze predecessor-domain payload digest 2e858dcda0cfd71415b1a7b1ea39a1b5488241a5dddbc75c70a594f05efc4d03 while the sole rehearsal and independent regeneration agreed on 60a1a48b8128a82eae9474a69c0dfe8364745747f04a886341c3da03fd5dee85. Authority NONE was mandatory.",
+    "sample_policy": "No V1 timing authority, timing row, workload, or rehearsal is reused or rerun."
+  },
+  "v16": {
+    "status": "MERGED_COMPLETE_EVIDENCE_NOT_REUSED",
+    "raw_artifact_index": {
+      "path": "evidence/backref-cost-attribution-v16-execution-20260819/artifact-hashes.json",
+      "sha256": "9c2a1bad74ef66a482c09390ead68fbc13d68de6d4e93de860c1bd3f84a56f77"
+    },
+    "selected_dp_counter_receipt": {
+      "path": "evidence/backref-cost-attribution-v16-execution-20260819/selected-dp-counter-check.json",
+      "sha256": "a52d4eed638ebfad3a786bc75d4ae49fb17678c6d31e6ead840eebfd110d64eb"
+    },
+    "phase3_evaluation": {
+      "path": "evidence/backref-cost-attribution-v16-phase3-evaluation-consequence-20260819.json",
+      "sha256": "375b1ef41913c4344291a6c3181ac02592ae9d66e29a91ced780a854fdea99f3"
+    },
+    "raw_stage_rows": 120,
+    "raw_runner_rows": 120,
+    "finding": "Correctness, evidence and repeatability passed. DP total and steady improve on photo and regress on graphic; setup is small and inconsistent; whole encode is not consistently beneficial. Coarse timers cannot distinguish append-hint work savings from code placement, control layout, branch or I-cache effects.",
+    "sample_policy": "No V16 timing row is admitted into Factorization V2 and the old two-variant A/B is not rerun."
+  },
+  "interval_search_v3": {
+    "work_rows": {
+      "path": "evidence/backref-cost-interval-search-v3-design-work/work-metrics.jsonl",
+      "sha256": "d5b16a2122d967b30d415d81b17308165673c982d7aa7d89c6165c0a364b33c2",
+      "rows": 36
+    },
+    "work_summary": {
+      "path": "evidence/backref-cost-interval-search-v3-design-work/summary.json",
+      "sha256": "4a9b8bf6236f33e86cd55c9ee4d3972891e5d922d4de66e5aae19f2e8eabfe4a"
+    },
+    "codegen": {
+      "path": "evidence/backref-cost-interval-search-v3-design-work/codegen.json",
+      "sha256": "972faf01dea8df95140a9b90e36b08ca5f4180c7308c3b28fb6716cb4e7c0905"
+    },
+    "finding": "Active candidate rows remove all 5,585,685 baseline forward-positioning steps while preserving 53,769 backward steps and common interval work; they record 1,062,260 append-hint fast paths and 1,124,012 updates. This establishes real algorithmic work removal but does not attribute the V16 content reversal."
+  },
+  "source_and_disassembly": {
+    "merged_v16_source_sha256": "a2a442fc86316b627b3b88d9dc31c1cd7861487bb49452e288e90889f73be55c",
+    "merged_v16_control_source_sha256": "61ddbfe54c9b0b538a25891c1d056f23e9d67ab4d28c3e7859c021d2e35f7a39",
+    "phase1_factorization_source_sha256": "13f933f20a9b05219e6199eda53d88e9d42472db639d23b3843a72bcdfe86202",
+    "shared_dp_template_sha256": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5",
+    "layout_clone_source_sha256": "30f144d46895f210cf1969cda8696a7ad21fd7cf708c94ad32703f6caa675a7b",
+    "finding": "The B/L/H causal boundary was reviewed independently: B and L instantiate one shared DP template and exact baseline PushInterval work under distinct noinline symbols; H instantiates the same DP template with the append-hint PushInterval. Therefore B->L is duplication/layout/control, L->H is hint algorithm in matched structure, and B->H is total effect."
+  },
+  "decision": "ACCEPT_PREFERRED_B_L_H_FACTORIZATION",
+  "performance_samples_generated": 0
+}

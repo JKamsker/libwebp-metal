@@ -52,7 +52,9 @@
      defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V15_EXPERIMENT) +            \
      defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT) +            \
      defined(                                                                \
-         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)) > \
+         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) + \
+     defined(                                                                \
+         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)) > \
     1
 #error "overlapping backref cost experiments are mutually exclusive"
 #elif defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
@@ -216,11 +218,26 @@
   VP8LBackrefCostAttributionV16ExperimentEnabled
 #define VP8LBackrefCostIntervalSpecializationV1ExperimentInjectFallback() 0
 #elif defined(                                                          \
-    WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+          WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) || \
+    defined(                                                            \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
 #include "src/enc/backref_cost_specialization_factorization_v1_experiment_enc.h"
+#define WEBP_FACTORIZATION_VARIANT_TYPE \
+  VP8LBackrefCostSpecializationFactorizationV1Variant
+#define WEBP_FACTORIZATION_GET_VARIANT \
+  VP8LBackrefCostSpecializationFactorizationV1GetVariant
+#else
+#include "src/enc/backref_cost_specialization_factorization_v2_experiment_enc.h"
+#define WEBP_FACTORIZATION_VARIANT_TYPE \
+  VP8LBackrefCostSpecializationFactorizationV2Variant
+#define WEBP_FACTORIZATION_GET_VARIANT \
+  VP8LBackrefCostSpecializationFactorizationV2GetVariant
+#endif
 #define WEBP_USE_BACKREF_COST_INTERVAL_SPECIALIZATION_LOCAL 1
 #define VP8LBackrefCostIntervalSpecializationV1ExperimentInjectFallback() 0
-#if defined(WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_RECORDER)
+#if defined(WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_RECORDER) || \
+    defined(WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_RECORDER)
 #define WEBP_BACKREF_COST_INTERVAL_SPECIALIZATION_LOCAL_RECORDER 1
 #define WEBP_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_RECORDER 1
 #define VP8LBackrefCostIntervalSpecializationV1RecordActivation \
@@ -289,9 +306,12 @@
 #define INTERVAL_SPECIALIZATION_RECORD(call) ((void)0)
 #endif
 
-#if defined(                                                               \
-        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) && \
-    defined(WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_RECORDER)
+#if (defined(                                                              \
+         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) && \
+     defined(WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_RECORDER)) || \
+    (defined(                                                              \
+         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT) && \
+     defined(WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_RECORDER))
 #define FACTORIZATION_RECORD(call) call
 #else
 #define FACTORIZATION_RECORD(call) ((void)0)
@@ -1174,6 +1194,8 @@ static WEBP_BACKREF_ATTRIBUTION_NOINLINE void PushInterval(
 #if defined(WEBP_USE_BACKREF_COST_INTERVAL_SPECIALIZATION_LOCAL)
 #if defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
 #include "src/enc/backref_cost_factorization_layout_clone_enc.inc"
+#elif defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
+#include "src/enc/backref_cost_factorization_v2_layout_clone_enc.inc"
 #endif
 // The production-shaped candidate is deliberately a separate always-on hot
 // path. Its append hint is the exact v3 PushInterval-local algorithm, with the
@@ -1539,7 +1561,9 @@ Error:
 #define BACKREF_DP_RECORD_CALL() \
   VP8LBackrefCostAttributionV16RecordDP(/*candidate=*/0)
 #elif defined(                                                          \
-    WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+          WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) || \
+    defined(                                                            \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
 #define BACKREF_DP_RECORD_CALL()                                         \
   FACTORIZATION_RECORD(VP8LBackrefCostSpecializationFactorizationV1RecordDP( \
       WEBP_BACKREF_FACTORIZATION_VARIANT_B))
@@ -1551,7 +1575,8 @@ Error:
 #undef BACKREF_PUSH_INTERVAL_NAME
 #undef BACKREF_DISTANCE_ONLY_NAME
 
-#if defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
 #define BACKREF_DISTANCE_ONLY_NAME \
   BackwardReferencesHashChainDistanceOnlyLayoutClone
 #define BACKREF_PUSH_INTERVAL_NAME PushIntervalLayoutClone
@@ -1610,7 +1635,9 @@ Error:
 #define BACKREF_DP_RECORD_CALL() \
   VP8LBackrefCostAttributionV16RecordDP(/*candidate=*/1)
 #elif defined(                                                          \
-    WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+          WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) || \
+    defined(                                                            \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
 #define BACKREF_DP_RECORD_CALL()                                         \
   FACTORIZATION_RECORD(VP8LBackrefCostSpecializationFactorizationV1RecordDP( \
       WEBP_BACKREF_FACTORIZATION_VARIANT_H))
@@ -1988,12 +2015,14 @@ int VP8LBackwardReferencesTraceBackwards(int xsize, int ysize,
     if (!dp_ok) goto Error;
   }
 #elif defined(                                                          \
-    WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT)
+          WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) || \
+    defined(                                                            \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
   {
     // Evaluate the three-way selector exactly once before any selected DP can
     // mutate dist_array. The closed switch invokes exactly one noinline body.
-    const VP8LBackrefCostSpecializationFactorizationV1Variant variant =
-        VP8LBackrefCostSpecializationFactorizationV1GetVariant();
+    const WEBP_FACTORIZATION_VARIANT_TYPE variant =
+        WEBP_FACTORIZATION_GET_VARIANT();
     const uint64_t dp_start =
         WebPProfileStageBegin(WEBP_PROFILE_BACKREF_COST_DP_TOTAL);
     int dp_ok = 0;
