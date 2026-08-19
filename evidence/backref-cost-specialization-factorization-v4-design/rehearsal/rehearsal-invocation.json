@@ -1,0 +1,22 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v4-rehearsal-invocation-v1",
+  "source_commit": "1f60c324142d3dafaeece95b060114261fff86ac",
+  "source_tree": "c9c3ca54aa3f7bc85b410cda4ec7233dded66075",
+  "command": "env -u WEBP_BENCHMARK_SESSION EXPECTED_FREEZE_COMMIT=1f60c324142d3dafaeece95b060114261fff86ac python3 scripts/execute_backref_cost_specialization_factorization_v4.py rehearse $PWD/evidence/backref-cost-specialization-factorization-v4-design/rehearsal",
+  "ssh_connection_attempts": 1,
+  "ssh_connect_timeout_seconds": 30,
+  "ssh_connect_timeout_justification": "overlay first-session admission only",
+  "server_alive_interval_seconds": 15,
+  "server_alive_count_max": 3,
+  "transaction_timeout_seconds": 1800,
+  "retry_count": 0,
+  "rerun_count": 0,
+  "ping_attempts": 0,
+  "nc_attempts": 0,
+  "secondary_ssh_attempts": 0,
+  "background_keepalives": 0,
+  "benchmark_lease_acquisition_attempted": false,
+  "encoder_workloads": 0,
+  "performance_samples": 0,
+  "status": "COMPLETE"
+}
