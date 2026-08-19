@@ -991,3 +991,23 @@ processes measured:
 Both gains are below the 1.5 ms gate, so the composition was removed without
 a full run. This is RTX 2080 SUPER-only evidence. Raw rows are
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-boundary-static-commit-screen.jsonl`.
+
+A refreshed retained device trace measured I4 at 63.5% of photo and 65.4% of
+texture block cycles. The next candidate used the fact that every full mode
+score is its base score plus a non-negative residual cost: the exact ordered
+scan therefore selects the earliest minimum full score. Warp 0 reduced that
+argmin while retaining static dispatch and the validated 16-lane winner copy.
+
+All seven CTests and all 24 timed outputs were exact. Two order-reversed
+native-sm_75 processes measured:
+
+| Format | Parent | Warp argmin/static/commit | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.112 ms/image | 38.871 ms/image | 1.241 ms |
+| JPEG lossy | 40.027 ms/image | 39.203 ms/image | 0.824 ms |
+
+Both gains are below the 1.5 ms gate, so the candidate was removed. Raw timing
+rows and the refreshed device trace are
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-warp-argmin-static-screen.jsonl`
+and
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/retained-phase-refresh.txt`.

@@ -36,6 +36,11 @@ the rejected team-local I4 barrier plus chroma-overlap composition.
 `i4-boundary-static-commit-screen.jsonl` contains the 24 exact timing rows for
 the rejected boundary-gather, static-dispatch, and parallel-commit composition.
 
+`i4-warp-argmin-static-screen.jsonl` contains the 24 exact timing rows for the
+rejected warp-argmin/static-dispatch/parallel-commit composition.
+`retained-phase-refresh.txt` is the raw native-sm_75 phase trace used to select
+that experiment.
+
 Inspect the sampling archives with:
 
 ```sh

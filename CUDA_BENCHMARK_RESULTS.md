@@ -1037,3 +1037,13 @@ native-sm_75 processes measured PNG 40.374 to 39.817 ms/image (0.557 ms gain)
 and JPEG 40.365 to 39.129 (1.236 ms gain). Both are below the 1.5 ms gate, so
 the candidate was removed without a full run. The boundary gather's earlier
 standalone gain did not add to the broader schedule.
+
+A refreshed native-sm_75 phase trace still put I4 at 63.5% of photo and
+65.4% of texture block cycles. The next candidate replaced the ordered
+ten-mode winner scan with a warp-0 earliest-argmin reduction. This is exact
+because each full score is its base score plus a non-negative residual cost;
+the candidate retained static prediction dispatch and the validated 16-lane
+winner copy. All seven CTests and all 24 screen outputs matched, but two
+order-reversed processes measured PNG 40.112 to 38.871 ms/image (1.241 ms)
+and JPEG 40.027 to 39.203 (0.824 ms). Shuffle/reduction overhead absorbed the
+serial-scan saving, so the candidate was removed.
