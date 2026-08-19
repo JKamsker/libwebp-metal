@@ -9,7 +9,8 @@
     !defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT) && \
     !defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) && \
     !defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) && \
-    !defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)
+    !defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) && \
+    !defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)
 #define WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT 1
 #endif
 #include "src/enc/profile_enc.h"
@@ -28,6 +29,8 @@
 #include "src/enc/backref_cost_attribution_v6_experiment_enc.h"
 #elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)
 #include "src/enc/backref_cost_attribution_v7_experiment_enc.h"
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)
+#include "src/enc/backref_cost_attribution_v8_experiment_enc.h"
 #endif
 
 #include <stdio.h>
@@ -136,7 +139,8 @@ static uint64_t ProfileNowNs(void) {
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)
 uint64_t WebPProfileClockNowForValidation(void) { return ProfileNowNs(); }
 #endif
 
@@ -176,6 +180,8 @@ void WebPProfileBeginSession(const WebPConfig* config,
   VP8LBackrefCostAttributionV6ResetCounters();
 #elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)
   VP8LBackrefCostAttributionV7ResetCounters();
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)
+  VP8LBackrefCostAttributionV8ResetCounters();
 #endif
 #if defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS)
   if (!EnvironmentOptIn("WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT") &&
@@ -219,6 +225,12 @@ void WebPProfileBeginSession(const WebPConfig* config,
     return;
   }
   if (!EnvironmentOptIn("WEBP_BACKREF_COST_ATTRIBUTION_V7_TIMERS")) return;
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)
+  if (!EnvironmentOptIn("WEBP_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT") &&
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT") != NULL) {
+    return;
+  }
+  if (!EnvironmentOptIn("WEBP_BACKREF_COST_ATTRIBUTION_V8_TIMERS")) return;
 #else
   if (!EnvironmentOptIn("WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT")) return;
 #endif
@@ -320,6 +332,17 @@ void WebPProfileEndSession(int ok, int error_code) {
                                   : "baseline";
   const char* const sample_set =
       getenv("WEBP_BACKREF_COST_ATTRIBUTION_V7_SAMPLE_SET");
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)
+  const char* const output_path =
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V8_STAGE_OUTPUT");
+  const char* const run_id = getenv("WEBP_BACKREF_COST_ATTRIBUTION_V8_RUN_ID");
+  const char* const case_id =
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V8_CASE_ID");
+  const char* const backend = VP8LBackrefCostAttributionV8ExperimentEnabled()
+                                  ? "candidate"
+                                  : "baseline";
+  const char* const sample_set =
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V8_SAMPLE_SET");
 #else
   const char* const output_path = getenv("WEBP_STAGE_PROFILE_OUTPUT");
   const char* const run_id = getenv("WEBP_STAGE_PROFILE_RUN_ID");
@@ -360,6 +383,12 @@ void WebPProfileEndSession(int ok, int error_code) {
   const unsigned int selected_dp_calls =
       attribution_counters.baseline_dp_calls +
       attribution_counters.candidate_dp_calls;
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)
+  const VP8LBackrefCostAttributionV8Counters attribution_counters =
+      VP8LBackrefCostAttributionV8GetCounters();
+  const unsigned int selected_dp_calls =
+      attribution_counters.baseline_dp_calls +
+      attribution_counters.candidate_dp_calls;
 #endif
   FILE* out;
   int i;
@@ -394,7 +423,8 @@ void WebPProfileEndSession(int ok, int error_code) {
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)
           "\"selector_evaluations\":%u,\"selected_dp_calls\":%u,"
           "\"baseline_dp_calls\":%u,\"candidate_dp_calls\":%u,"
 #endif
@@ -411,7 +441,8 @@ void WebPProfileEndSession(int ok, int error_code) {
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT)
           ,
           attribution_counters.selector_evaluations, selected_dp_calls,
           attribution_counters.baseline_dp_calls,
