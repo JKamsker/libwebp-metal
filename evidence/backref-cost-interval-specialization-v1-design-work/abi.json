@@ -1,0 +1,11 @@
+{
+  "schema": "libwebp-backref-cost-interval-specialization-v1-abi-v1",
+  "status": "PASS",
+  "base_commit": "b2c71348c21371877328639efb5a929f2130bd09",
+  "installed_public_header_changes": 0,
+  "exported_public_symbol_count": 193,
+  "exported_public_symbols_match": true,
+  "exported_public_symbols_sha256_baseline": "bb5709f25626a5b150eb42e68e4c9760eddec5dcd85a499ae88b8a9a8db91b5c",
+  "exported_public_symbols_sha256_candidate": "bb5709f25626a5b150eb42e68e4c9760eddec5dcd85a499ae88b8a9a8db91b5c",
+  "api_abi_change": false
+}

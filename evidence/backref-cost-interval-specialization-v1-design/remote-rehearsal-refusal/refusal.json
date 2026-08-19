@@ -1,0 +1,10 @@
+{
+  "controlled_exit": true,
+  "error_type": "RuntimeError",
+  "lease_record_present": true,
+  "reason": "required tool is absent: make",
+  "schema": "libwebp-backref-cost-interval-specialization-v1-refusal-v1",
+  "stage": "toolchain-admission",
+  "status": "refused",
+  "timing_samples_present": false
+}

@@ -1,0 +1,20 @@
+{
+  "artifacts": [
+    {
+      "bytes": 167,
+      "path": "lease-record.json",
+      "sha256": "78c036417c8157bb4bc5e434a8bea31cc094b1d363234efac1446f091f7ed8da"
+    },
+    {
+      "bytes": 169,
+      "path": "operator-status.json",
+      "sha256": "c6162b9d6daafbfc55247d2ecd0f2ac9f3c6124fe986e9a5e7add2228caaee9b"
+    },
+    {
+      "bytes": 305,
+      "path": "refusal.json",
+      "sha256": "a522e6807c6fe6984aecb1b9ecb8d377ccfb83a2afe585624898392348c8a826"
+    }
+  ],
+  "schema": "libwebp-backref-cost-interval-specialization-v1-artifact-hashes-v1"
+}

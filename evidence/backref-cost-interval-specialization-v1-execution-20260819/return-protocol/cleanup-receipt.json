@@ -1,0 +1,11 @@
+{
+  "absence_proved": true,
+  "home": "/Users/pandocs-agent-001",
+  "removed_exact_validated_child": true,
+  "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-specialization-v1/run.CRQ83v",
+  "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-interval-specialization-v1",
+  "schema": "libwebp-backref-cost-interval-specialization-v1-cleanup-receipt-v1",
+  "status": "complete",
+  "token": "run.CRQ83v",
+  "validated": true
+}

@@ -1,0 +1,8 @@
+{
+  "bytes": 336,
+  "hashes_match": true,
+  "local_sha256": "ca52164ee0e8391d22978f739efcba9ad0eb07dfb4080ac2ec53295e17c42189",
+  "path": "evidence/lease-record.json",
+  "remote_sha256": "ca52164ee0e8391d22978f739efcba9ad0eb07dfb4080ac2ec53295e17c42189",
+  "status": "accepted"
+}

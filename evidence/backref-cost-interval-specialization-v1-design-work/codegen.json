@@ -1,0 +1,47 @@
+{
+  "schema": "libwebp-backref-cost-interval-specialization-v1-codegen-v1",
+  "status": "PASS",
+  "architecture": "arm64",
+  "compiler": "Apple clang 17.0.0",
+  "command_flags": "-O3 -DNDEBUG -arch arm64",
+  "premise": {
+    "v3_compiler_specialized_runtime_control_away": false,
+    "result": "VALID",
+    "reason": "recorder-free v3 emits one dynamic PushInterval receiving use_append_hint in w4 and retains experiment-control materialization, spill/reload, and repeated tests in the hot function"
+  },
+  "v3_recorder_free_dynamic_push": {
+    "text_bytes": 1160,
+    "instructions": 290,
+    "branch_instructions": 64,
+    "conditional_branch_instructions": 39,
+    "load_instructions": 52,
+    "store_instructions": 37,
+    "incoming_control_arguments": 1,
+    "direct_control_tests_or_branches": 6,
+    "control_spills": 1,
+    "control_reloads": 1,
+    "assembly_sha256": "82d927aa1080cd1a10790de435d0d880d1c2ff1d208f25603a3865a2fa6a639f",
+    "push_disassembly_sha256": "54b815b21368d469d1ba24b7b5509c2730354801c506ebbbad25c09b011a0b5d"
+  },
+  "specialized_candidate_push": {
+    "text_bytes": 788,
+    "instructions": 197,
+    "branch_instructions": 42,
+    "conditional_branch_instructions": 27,
+    "load_instructions": 37,
+    "store_instructions": 20,
+    "incoming_control_arguments": 0,
+    "direct_control_tests_or_branches": 0,
+    "control_spills": 0,
+    "control_reloads": 0,
+    "assembly_sha256": "33dc297afe65706eddb6a7bb129c40beb85e5065b38c96819f07088773a9645d",
+    "push_disassembly_sha256": "1e425afa85a07876252e80b05558d86ed1896f28554cd973d0559936c7c2034a"
+  },
+  "candidate_object_text_bytes": 9972,
+  "v3_object_text_bytes": 7796,
+  "outer_cfg": "ExperimentEnabled is called once; when true, InjectFallback is called once; false inject selects the distinct candidate DP and no gate symbol, gate-derived register, or gate-derived load reaches PushIntervalSpecialized",
+  "minimum_causal_criteria": {
+    "exact_v3_algorithm_and_work_identity": "PASS",
+    "actual_targeted_runtime_control_removal": "PASS"
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "member_inventory": {
+    "member_count": 4,
+    "members": [
+      {
+        "name": "evidence/artifact-hashes.json",
+        "size": 557,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/lease-record.json",
+        "size": 167,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-status.json",
+        "size": 169,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/refusal.json",
+        "size": 305,
+        "type": "regular"
+      }
+    ],
+    "offending": null,
+    "schema": "libwebp-backref-cost-interval-specialization-v1-archive-inventory-v1",
+    "status": "accepted"
+  },
+  "status": "accepted"
+}
