@@ -1425,3 +1425,24 @@ candidate rather than the cache's unrelated histogram option. The legacy
 `__shfl*` alternative does not compile for native sm_75 under CUDA 12. The
 candidate was removed; this is RTX 2080 SUPER-only evidence and makes no
 Ampere+ claim.
+
+## Pre-Ampere RD-level specialization rejection
+
+Line-info ptxas profiling established that `DecimateKernel`'s 352-byte stack
+frame has zero spills and maps to trellis state that method 4 never executes.
+A pre-Ampere compile-time RD-level specialization reduced the basic-search
+kernel from 103 registers and a 352-byte frame to 67 registers and no frame.
+Method 5 and 6 specializations used 100/272 and 94/272 registers/stack bytes.
+
+All seven CTests passed, and two order-reversed six-sample processes retained
+every output hash and byte count:
+
+| Format | Parent | Specialized | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.147 ms/image | 39.946 ms/image | 0.200 ms/image |
+| JPEG lossy | 40.201 ms/image | 39.789 ms/image | 0.412 ms/image |
+
+Both gains are below 1.5 ms/image. At 852 threads, even 67 registers/thread
+requires roughly 57K registers before allocation granularity, so the reduction
+does not admit a second CTA on the Turing SM. The specialization was removed;
+no Ampere+ behavior or claim changes.

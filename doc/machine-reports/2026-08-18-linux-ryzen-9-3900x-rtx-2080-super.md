@@ -1502,3 +1502,24 @@ compiler failure, summary, and clean-rebuild control are stored under the
 `libwebp-warp-helper-*` prefix in the adjacent evidence directory. This result
 is specific to the RTX 2080 SUPER and does not change or characterize the
 Ampere+ path.
+
+## RD-level kernel-specialization rejection
+
+Line-info ptxas profiling proved the retained decimate kernel's 352-byte frame
+has zero spills and belongs to trellis state that method 4 never executes. A
+pre-Ampere compile-time RD-level specialization reduced method 3/4 from 103
+registers and 352 stack bytes to 67 registers and no frame. Method 5 and 6
+specializations used 100/272 and 94/272 registers/stack bytes. All seven CTests
+passed and all 48 screen outputs were byte-exact.
+
+Two order-reversed processes with six samples per cell measured PNG at 40.147
+ms/image parent versus 39.946 specialized (+0.200 ms), and JPEG at 40.201
+versus 39.789 (+0.412 ms). Even the 67-register form consumes roughly 57K
+registers for an 852-thread CTA before allocation granularity, so it still
+cannot place a second CTA on a Turing SM. The measured gains are far below the
+1.5 ms/image threshold and the specialization was removed.
+
+The exact rejected patch, native cache, resource report, compressed SASS, 7/7
+CTest log, 48 timing rows, and summary are stored under the
+`libwebp-rd-specialize-*` prefix. This result is RTX 2080 SUPER-only and makes
+no Ampere+ performance claim.

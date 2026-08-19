@@ -1,0 +1,3 @@
+format	parent_ms_per_image	specialized_ms_per_image	gain_ms	speedup	parent_hash	candidate_hash	output_bytes	byte_exact
+PNG lossy	40.146652	39.946219	0.200433	1.005018	ace64e860de89b43	ace64e860de89b43	6441688	true
+JPEG lossy	40.200641	39.789050	0.411591	1.010344	1cbb84d2ab926db3	1cbb84d2ab926db3	6400792	true

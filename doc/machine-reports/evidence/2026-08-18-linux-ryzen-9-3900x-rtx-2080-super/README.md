@@ -207,6 +207,13 @@ shows that the candidate cache produces the parent's exact bytes once the
 source wrappers are removed, isolating the mismatch from the one differing
 histogram build option.
 
+The `libwebp-rd-specialize-*` files preserve the rejected pre-Ampere
+compile-time RD-level specialization. Line-info/ptxas profiling first proved
+that the monolithic kernel's 352-byte frame had zero spills and belonged to
+trellis state that method 4 never executes. The exact patch, candidate native
+cache, three-specialization resource report and compressed SASS, 7/7 CTest
+log, 48 byte-exact timing rows, and computed summary are included.
+
 Inspect the sampling archives with:
 
 ```sh
