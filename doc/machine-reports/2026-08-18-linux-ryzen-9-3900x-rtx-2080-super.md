@@ -83,3 +83,13 @@ macroblocks), while cold CUDA first won at 1792x1792 (12,544 macroblocks).
 The defaults were raised from 64/4,000 to 784/12,544 macroblocks. Cross-color,
 predictor, and three-pass near-lossless won at their existing warm and cold
 decision points, so their pixel thresholds remain unchanged.
+
+## Nsight decimate finding
+
+A representative interior `DecimateKernel` diagonal spent 93.82% of scheduler
+cycles with no eligible warp. CTA barriers accounted for 58.7% of the 16.29
+cycle issue interval; achieved occupancy was 12.5%, DRAM throughput was 0.49%,
+and only about ten threads per warp were active. The 16-step I4 recurrence and
+its four barriers per step therefore explain the device floor. Splitting the
+ten residual walks over two warps left the kernel duration flat and regressed
+PNG end-to-end time, so that experiment was removed.

@@ -109,7 +109,7 @@ measurements are meaningless until they pass.
   `WEBP_CUDA_MIN_PIXELS`, predictor and NL thresholds) were never
   validated on this hardware. If forced CUDA loses to CPU on some mode
   here, the fix is threshold calibration, not code.
-- [ ] 6. **Nsight Compute deep-dive on the i4 phase** if Nsight is
+- [x] 6. **Nsight Compute deep-dive on the i4 phase** if Nsight is
   available on this machine (it wasn't used on the laptop). Target:
   explain the ~9k cycles/step in the 16-step i4 chain in `DecimateKernel`
   (`src/enc/cuda_decimate_enc.cu`), then attack the largest component.

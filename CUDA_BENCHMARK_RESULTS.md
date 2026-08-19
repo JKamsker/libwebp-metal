@@ -402,3 +402,47 @@ however, all five alternating cold pairs favored CUDA. The production path
 also normally initializes the shared CUDA state in the earlier cross-color
 stage. No lower-bound-only calibration improves the observed policy, so its
 existing conservative threshold remains.
+
+### Nsight Compute Turing I4 deep-dive
+
+Nsight Compute 2022.4 profiled a native-sm_75 Release build with line info and
+all other CUDA encoder stages disabled. A representative interior diagonal
+launched 38 blocks of 128 threads. The report is retained locally as
+`/tmp/libwebp-task6-decimate-sm75-lineinfo.ncu-rep`.
+
+| Metric | Representative diagonal |
+|---|---:|
+| Kernel duration | 189.95 us |
+| Scheduler cycles with no eligible warp | 93.82% |
+| Issue interval | 16.29 cycles/instruction |
+| CTA-barrier stall | 9.6 cycles/instruction (58.7%) |
+| Average active / predicated-on threads per warp | 9.96 / 8.61 |
+| Achieved / theoretical occupancy | 12.5% / 37.5% |
+| DRAM / peak memory-pipe throughput | 0.49% / 8.39% |
+| Registers / static shared memory per block | 64 / 17.07 KiB |
+
+This explains the roughly 9k cycles per I4 step seen by the in-kernel clock
+instrumentation. Each of the 16 recurrence steps has four block-wide barriers:
+prediction, transform/quantization, three warp-specialized metrics, then the
+single-thread mode-selection and neighbor-state commit. Nsight source sampling
+placed nearly all dominant samples at the barriers after the uneven I4 work.
+Only about ten lanes are active on average, and the skewed dependency wavefront
+does not supply enough blocks to fill the 48 SMs, so another CTA cannot hide
+the waits even though shared memory would theoretically admit three per SM.
+The kernel is dependency/barrier-bound, not bandwidth- or arithmetic-bound.
+
+The targeted follow-up assigned five residual-cost mode walks to each of two
+warps instead of all ten lanes of one warp. It preserved output hashes and
+lowered the barrier share to 56.9%, but executed instructions increased from
+2,903,322 to 3,137,408 and duration stayed flat at 189.79 us. Five alternating
+processes per variant, each retaining three post-warmup 24-image samples:
+
+| Format | Existing mapping | Two-warp split | Split delta |
+|---|---:|---:|---:|
+| PNG lossy | 93.822 ms/image | 96.337 ms/image | +2.515 ms/image |
+| JPEG lossy | 94.042 ms/image | 93.876 ms/image | -0.166 ms/image |
+
+The mixed result is neutral-to-negative (the JPEG movement is below the 1.5 ms
+noise floor), so the experiment was removed. A useful I4 change must eliminate
+barriers or restructure the 16-step recurrence; redistributing the existing
+serial walks is insufficient.
