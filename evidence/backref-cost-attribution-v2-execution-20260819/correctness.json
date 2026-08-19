@@ -1,0 +1,30 @@
+[
+  {
+    "baseline_candidate_equal": true,
+    "bitstream_sha256": "d21aa8d0755b8c6bc377afcf1142499c66a42d2de1d00561fdd65a126a7ce83c",
+    "case_id": "photo-large",
+    "method": 4,
+    "repeat_deterministic": true
+  },
+  {
+    "baseline_candidate_equal": true,
+    "bitstream_sha256": "7c72ce50697d343dafe98a21b39e9255a669b7b84c1ca820b2fcd7206579a521",
+    "case_id": "photo-large",
+    "method": 6,
+    "repeat_deterministic": true
+  },
+  {
+    "baseline_candidate_equal": true,
+    "bitstream_sha256": "f4bd94160601ce53fad92579816fce9866267fdc00eebee62dd2d2ef9f71074a",
+    "case_id": "graphic-large",
+    "method": 4,
+    "repeat_deterministic": true
+  },
+  {
+    "baseline_candidate_equal": true,
+    "bitstream_sha256": "f4bd94160601ce53fad92579816fce9866267fdc00eebee62dd2d2ef9f71074a",
+    "case_id": "graphic-large",
+    "method": 6,
+    "repeat_deterministic": true
+  }
+]

@@ -1,0 +1,11 @@
+{
+  "absence_proved": true,
+  "home": "/Users/pandocs-agent-001",
+  "removed_exact_validated_child": true,
+  "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2/run.Kr6DyI",
+  "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2",
+  "schema": "libwebp-backref-cost-attribution-v2-cleanup-receipt-v1",
+  "status": "complete",
+  "token": "run.Kr6DyI",
+  "validated": true
+}

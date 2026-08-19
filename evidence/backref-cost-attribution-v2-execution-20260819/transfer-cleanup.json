@@ -1,0 +1,595 @@
+{
+  "admission": {
+    "admission": {
+      "bundle_hash_match": true,
+      "bundle_path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2/run.bV1QRB/source.bundle",
+      "bundle_sha256": "0a356ed572be3486c2c576b7caefb096f5771b0d0fab8097872c4c8a5d952169",
+      "bundle_verified_in_repository_context": true,
+      "bundle_verify_command": [
+        "git",
+        "-C",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2/run.bV1QRB/verify.git",
+        "bundle",
+        "verify",
+        "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2/run.bV1QRB/source.bundle"
+      ],
+      "bundle_verify_repository": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2/run.bV1QRB/verify.git",
+      "clean_status": true,
+      "clone": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2/run.bV1QRB/source",
+      "source_commit": "e42e35f155f3b91b557e21807b2e8f7b69db6e1b",
+      "source_hashes": {
+        "CMakeLists.txt": "8161ce116e0d375d3110bc449feb3324d8b5e99a38724e79c34048083da2b65c",
+        "doc/backref-cost-attribution-v2-protocol-20260819.md": "d983c27032d07e015c487720cd9975912cca0355bcc15fa4408222002a018ba4",
+        "makefile.unix": "db31dafa7ae0344b9b1da8625ebed336f6edb4e6f52fc5d949b52806536c5caf",
+        "scripts/backref_cost_attribution_v2_admission.py": "70aaa13076b02d14958afd0763b7b41901b3009c600aba788fd846931fa2e7fa",
+        "scripts/backref_cost_attribution_v2_archive.py": "8e1a294d4fbbc5b6ce447e914bfed656f8530042b501ea13d845a3da9444faae",
+        "scripts/backref_cost_attribution_v2_manifest.json": "db29b92de24a567e4e8bf99dc444ae68f3607ae53eab94b77193a32fe7fd9e1b",
+        "scripts/backref_cost_attribution_v2_paths.py": "77a7df0112adb98e34b4e038bc44c763cf89314ad5236c279116092fe1536a8b",
+        "scripts/backref_cost_attribution_v2_schemas.json": "a0f6ba64a52b1f3d2d0e780f4dd6715d77444f1705310f0b39f52d0cb90781f4",
+        "scripts/execute_backref_cost_attribution_v2.py": "3e5b4313d599d14bb231a52fd1863940a5091c5867ede9d9243cc71e5857a181",
+        "scripts/run_backref_cost_attribution_v2_experiment.py": "b640902e18f09d66f155839f8e7062af8959e7b224a402ff39ec3e7cdc6e9a7b",
+        "src/enc/backref_cost_attribution_v2_experiment_enc.c": "1a3dec60557a65e7c1759757e6719461694f964eedc865e55e84ad39a9d485b6",
+        "src/enc/backref_cost_attribution_v2_experiment_enc.h": "7667afcbc5d91f4ff7717d6b53e13e8846dd5580e22191aa2a3fb87cf7c91110",
+        "src/enc/backward_references_cost_distance_only_enc.inc": "e582aa07af5c8e5021b809aed3ef4ab6677c61b991aacd3d7f52b776b2e7e7b9",
+        "src/enc/backward_references_cost_enc.c": "194ff9710e3bd2444efd53cb312d375daf421ab867b1150a76f089d608a405e8",
+        "src/enc/backward_references_enc.c": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03",
+        "src/enc/profile_enc.c": "31c8a6ea3ad5149469de82d87a1eff32610ce13a7dc64a546538bd9885692b3e",
+        "src/enc/profile_enc.h": "f27d8b261213d5bb8ddde303729e69d300713840eaa74080ab7e1c1bf95c2764",
+        "src/enc/vp8l_enc.c": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0",
+        "tools/backref_cost_attribution_v2_experiment_runner.c": "7efae38213205384625b83831e4897db7c9bc9841d7885a77669fb68be61ada0"
+      },
+      "source_tree": "6057b0dd97ccf9b5e7444f0405b05d7dcae51325",
+      "verification_repository_removed": true
+    },
+    "finished": true,
+    "home": "/Users/pandocs-agent-001",
+    "path_generation": {
+      "generator": "mktemp -d",
+      "home": "/Users/pandocs-agent-001",
+      "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2/run.bV1QRB",
+      "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2",
+      "token": "run.bV1QRB",
+      "validated": true
+    },
+    "post_admission_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "external_process_classes": [
+        "ssh",
+        "runner",
+        "profiler",
+        "editor",
+        "user-shell",
+        "service"
+      ],
+      "external_process_policy": "observe-only; conflicts fail closed; never signal",
+      "process_table_sha256": "3041d7216b247c27b94f3be40faf9f4631c27c155b06ff5f81690d95e8b0452f",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "pretransfer_process_isolation": {
+      "benchmark_or_cuda_matches": [],
+      "external_process_classes": [
+        "ssh",
+        "runner",
+        "profiler",
+        "editor",
+        "user-shell",
+        "service"
+      ],
+      "external_process_policy": "observe-only; conflicts fail closed; never signal",
+      "process_table_sha256": "6e0d9c4689e519da9a196cdcd49d742d1017732eccbeadd51f31ac234b68ec04",
+      "runner_listener_present": true,
+      "runner_worker_matches": []
+    },
+    "receipt_version": 1,
+    "remote_source_bundle_sha256": "0a356ed572be3486c2c576b7caefb096f5771b0d0fab8097872c4c8a5d952169",
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2/run.bV1QRB",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2",
+    "schema": "libwebp-backref-cost-attribution-v2-source-admission-receipt-v1",
+    "source_bundle_sha256": "0a356ed572be3486c2c576b7caefb096f5771b0d0fab8097872c4c8a5d952169",
+    "source_commit": "e42e35f155f3b91b557e21807b2e8f7b69db6e1b",
+    "source_hashes": {
+      "CMakeLists.txt": "8161ce116e0d375d3110bc449feb3324d8b5e99a38724e79c34048083da2b65c",
+      "doc/backref-cost-attribution-v2-protocol-20260819.md": "d983c27032d07e015c487720cd9975912cca0355bcc15fa4408222002a018ba4",
+      "makefile.unix": "db31dafa7ae0344b9b1da8625ebed336f6edb4e6f52fc5d949b52806536c5caf",
+      "scripts/backref_cost_attribution_v2_admission.py": "70aaa13076b02d14958afd0763b7b41901b3009c600aba788fd846931fa2e7fa",
+      "scripts/backref_cost_attribution_v2_archive.py": "8e1a294d4fbbc5b6ce447e914bfed656f8530042b501ea13d845a3da9444faae",
+      "scripts/backref_cost_attribution_v2_manifest.json": "db29b92de24a567e4e8bf99dc444ae68f3607ae53eab94b77193a32fe7fd9e1b",
+      "scripts/backref_cost_attribution_v2_paths.py": "77a7df0112adb98e34b4e038bc44c763cf89314ad5236c279116092fe1536a8b",
+      "scripts/backref_cost_attribution_v2_schemas.json": "a0f6ba64a52b1f3d2d0e780f4dd6715d77444f1705310f0b39f52d0cb90781f4",
+      "scripts/execute_backref_cost_attribution_v2.py": "3e5b4313d599d14bb231a52fd1863940a5091c5867ede9d9243cc71e5857a181",
+      "scripts/run_backref_cost_attribution_v2_experiment.py": "b640902e18f09d66f155839f8e7062af8959e7b224a402ff39ec3e7cdc6e9a7b",
+      "src/enc/backref_cost_attribution_v2_experiment_enc.c": "1a3dec60557a65e7c1759757e6719461694f964eedc865e55e84ad39a9d485b6",
+      "src/enc/backref_cost_attribution_v2_experiment_enc.h": "7667afcbc5d91f4ff7717d6b53e13e8846dd5580e22191aa2a3fb87cf7c91110",
+      "src/enc/backward_references_cost_distance_only_enc.inc": "e582aa07af5c8e5021b809aed3ef4ab6677c61b991aacd3d7f52b776b2e7e7b9",
+      "src/enc/backward_references_cost_enc.c": "194ff9710e3bd2444efd53cb312d375daf421ab867b1150a76f089d608a405e8",
+      "src/enc/backward_references_enc.c": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03",
+      "src/enc/profile_enc.c": "31c8a6ea3ad5149469de82d87a1eff32610ce13a7dc64a546538bd9885692b3e",
+      "src/enc/profile_enc.h": "f27d8b261213d5bb8ddde303729e69d300713840eaa74080ab7e1c1bf95c2764",
+      "src/enc/vp8l_enc.c": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0",
+      "tools/backref_cost_attribution_v2_experiment_runner.c": "7efae38213205384625b83831e4897db7c9bc9841d7885a77669fb68be61ada0"
+    },
+    "source_tree": "6057b0dd97ccf9b5e7444f0405b05d7dcae51325"
+  },
+  "benchmark_lease_acquisition_attempted": true,
+  "evidence_transfer": {
+    "archive": {
+      "archive": {
+        "bytes": 2272835,
+        "hashes_match": true,
+        "local_sha256": "a04d8ddd9deab2151404d030109df3ce1f0716d024c9cc9de8721edeb78b320e",
+        "path": "evidence.tar.gz",
+        "remote_sha256": "a04d8ddd9deab2151404d030109df3ce1f0716d024c9cc9de8721edeb78b320e"
+      },
+      "builder_exit_code": 0,
+      "builder_stderr": "",
+      "builder_stdout": "{\"archive_bytes\": 2272835, \"archive_sha256\": \"a04d8ddd9deab2151404d030109df3ce1f0716d024c9cc9de8721edeb78b320e\", \"inventory_sha256\": \"89773b8edf8ca981fd3eb6ed023d9de9ca2342dca495d20d36219232c64badd0\", \"member_count\": 39, \"schema\": \"libwebp-backref-cost-attribution-v2-archive-v1\", \"status\": \"accepted\"}\n",
+      "digest": {
+        "bytes": 317,
+        "hashes_match": true,
+        "local_sha256": "46ce6b375cddd7206c3eebd4ef6c32456a74722abfceca389d949d5e050012ef",
+        "path": "archive-digest.json",
+        "remote_sha256": "46ce6b375cddd7206c3eebd4ef6c32456a74722abfceca389d949d5e050012ef"
+      },
+      "digest_record": {
+        "archive_bytes": 2272835,
+        "archive_sha256": "a04d8ddd9deab2151404d030109df3ce1f0716d024c9cc9de8721edeb78b320e",
+        "inventory_sha256": "89773b8edf8ca981fd3eb6ed023d9de9ca2342dca495d20d36219232c64badd0",
+        "member_count": 39,
+        "schema": "libwebp-backref-cost-attribution-v2-archive-v1",
+        "status": "accepted"
+      },
+      "inventory": {
+        "bytes": 4796,
+        "hashes_match": true,
+        "local_sha256": "89773b8edf8ca981fd3eb6ed023d9de9ca2342dca495d20d36219232c64badd0",
+        "path": "archive-inventory.json",
+        "remote_sha256": "89773b8edf8ca981fd3eb6ed023d9de9ca2342dca495d20d36219232c64badd0"
+      },
+      "member_inventory": {
+        "member_count": 39,
+        "members": [
+          {
+            "name": "evidence/correctness-files",
+            "size": 0,
+            "type": "directory"
+          },
+          {
+            "name": "evidence/runner",
+            "size": 0,
+            "type": "directory"
+          },
+          {
+            "name": "evidence/stages",
+            "size": 0,
+            "type": "directory"
+          },
+          {
+            "name": "evidence/artifact-hashes.json",
+            "size": 6132,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/build-identity.json",
+            "size": 1234,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/build.log",
+            "size": 60041,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/commands.jsonl",
+            "size": 3054,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m4-baseline-0.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m4-baseline-1.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m4-candidate-0.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m4-candidate-1.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m6-baseline-0.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m6-baseline-1.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m6-candidate-0.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m6-candidate-1.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m4-baseline-0.webp",
+            "size": 283992,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m4-baseline-1.webp",
+            "size": 283992,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m4-candidate-0.webp",
+            "size": 283992,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m4-candidate-1.webp",
+            "size": 283992,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m6-baseline-0.webp",
+            "size": 286706,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m6-baseline-1.webp",
+            "size": 286706,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m6-candidate-0.webp",
+            "size": 286706,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m6-candidate-1.webp",
+            "size": 286706,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness.json",
+            "size": 883,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/diagnostic-admission.json",
+            "size": 1566,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/lease-record.json",
+            "size": 222,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/operator-status.json",
+            "size": 140,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-before-p00-photo-large-m4-baseline-r0.txt",
+            "size": 93154,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-pre-profiles.txt",
+            "size": 93154,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-resources-admission.txt",
+            "size": 93154,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-resources-pre-profiles.txt",
+            "size": 93154,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/profile-plan.json",
+            "size": 48629,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/refusal.json",
+            "size": 198,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/resource-admission-admission.json",
+            "size": 3130,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/resource-admission-pre-profiles.json",
+            "size": 3133,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/runner/p00-photo-large-m4-baseline-r0.jsonl",
+            "size": 1088,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/runner/p00-photo-large-m4-baseline-r0.stderr",
+            "size": 0,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/stages/p00-photo-large-m4-baseline-r0.jsonl",
+            "size": 6978,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/symbols.txt",
+            "size": 70203,
+            "type": "regular"
+          }
+        ],
+        "offending": null,
+        "schema": "libwebp-backref-cost-attribution-v2-archive-inventory-v1",
+        "status": "accepted"
+      },
+      "status": "accepted"
+    },
+    "extraction": {
+      "member_inventory": {
+        "member_count": 39,
+        "members": [
+          {
+            "name": "evidence/correctness-files",
+            "size": 0,
+            "type": "directory"
+          },
+          {
+            "name": "evidence/runner",
+            "size": 0,
+            "type": "directory"
+          },
+          {
+            "name": "evidence/stages",
+            "size": 0,
+            "type": "directory"
+          },
+          {
+            "name": "evidence/artifact-hashes.json",
+            "size": 6132,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/build-identity.json",
+            "size": 1234,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/build.log",
+            "size": 60041,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/commands.jsonl",
+            "size": 3054,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m4-baseline-0.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m4-baseline-1.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m4-candidate-0.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m4-candidate-1.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m6-baseline-0.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m6-baseline-1.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m6-candidate-0.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/graphic-large-m6-candidate-1.webp",
+            "size": 1274,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m4-baseline-0.webp",
+            "size": 283992,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m4-baseline-1.webp",
+            "size": 283992,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m4-candidate-0.webp",
+            "size": 283992,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m4-candidate-1.webp",
+            "size": 283992,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m6-baseline-0.webp",
+            "size": 286706,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m6-baseline-1.webp",
+            "size": 286706,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m6-candidate-0.webp",
+            "size": 286706,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness-files/photo-large-m6-candidate-1.webp",
+            "size": 286706,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/correctness.json",
+            "size": 883,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/diagnostic-admission.json",
+            "size": 1566,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/lease-record.json",
+            "size": 222,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/operator-status.json",
+            "size": 140,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-before-p00-photo-large-m4-baseline-r0.txt",
+            "size": 93154,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-pre-profiles.txt",
+            "size": 93154,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-resources-admission.txt",
+            "size": 93154,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/processes-resources-pre-profiles.txt",
+            "size": 93154,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/profile-plan.json",
+            "size": 48629,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/refusal.json",
+            "size": 198,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/resource-admission-admission.json",
+            "size": 3130,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/resource-admission-pre-profiles.json",
+            "size": 3133,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/runner/p00-photo-large-m4-baseline-r0.jsonl",
+            "size": 1088,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/runner/p00-photo-large-m4-baseline-r0.stderr",
+            "size": 0,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/stages/p00-photo-large-m4-baseline-r0.jsonl",
+            "size": 6978,
+            "type": "regular"
+          },
+          {
+            "name": "evidence/symbols.txt",
+            "size": 70203,
+            "type": "regular"
+          }
+        ],
+        "offending": null,
+        "schema": "libwebp-backref-cost-attribution-v2-archive-inventory-v1",
+        "status": "accepted"
+      },
+      "status": "accepted"
+    },
+    "lease": {
+      "bytes": 222,
+      "hashes_match": true,
+      "local_sha256": "84408caa33956236e00ac37a23b56eaff8d03b8db33258e03e31fbaaa539b95a",
+      "path": "evidence/lease-record.json",
+      "remote_sha256": "84408caa33956236e00ac37a23b56eaff8d03b8db33258e03e31fbaaa539b95a",
+      "status": "accepted"
+    }
+  },
+  "failure": "remote operator status differs from requested mode",
+  "installed_runner_directory_touched": false,
+  "lease_released": true,
+  "mode": "run",
+  "pipeline_exit_code": 1,
+  "pipeline_stderr_path": "return-protocol/pipeline.stderr",
+  "pipeline_stdout_path": "return-protocol/pipeline.stdout",
+  "rehearsal_refusal_fixture": null,
+  "remote_cleanup_complete": true,
+  "remote_cleanup_proof": {
+    "absence_proved": true,
+    "home": "/Users/pandocs-agent-001",
+    "removed_exact_validated_child": true,
+    "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2/run.bV1QRB",
+    "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2",
+    "schema": "libwebp-backref-cost-attribution-v2-cleanup-receipt-v1",
+    "status": "complete",
+    "token": "run.bV1QRB",
+    "validated": true
+  },
+  "remote_host_alias": "pandocs-agent",
+  "schema": "libwebp-backref-cost-attribution-v2-transfer-cleanup-v1",
+  "source_bundle_sha256": "0a356ed572be3486c2c576b7caefb096f5771b0d0fab8097872c4c8a5d952169",
+  "source_commit": "e42e35f155f3b91b557e21807b2e8f7b69db6e1b",
+  "status": "refused",
+  "timed_binary_invoked": true
+}

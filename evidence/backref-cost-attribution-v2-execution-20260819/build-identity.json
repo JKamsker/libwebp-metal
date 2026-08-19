@@ -1,0 +1,35 @@
+{
+  "cflags": "-O3 -g -DNDEBUG -fno-omit-frame-pointer",
+  "command": [
+    "/usr/bin/make",
+    "-f",
+    "makefile.unix",
+    "WEBP_ENABLE_METAL=0",
+    "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT=1",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V2_DETERMINISTIC_BUILD=1",
+    "CFLAGS=-O3 -g -DNDEBUG -fno-omit-frame-pointer",
+    "tools/backref_cost_attribution_v2_experiment_runner"
+  ],
+  "required_symbols": [
+    "WebPEncode",
+    "VP8LEncodeStream",
+    "VP8LHashChainFill",
+    "VP8LGetBackwardReferences",
+    "VP8LBackwardReferencesTraceBackwards",
+    "BackwardReferencesHashChainDistanceOnly",
+    "BackwardReferencesHashChainDistanceOnlySpecialized",
+    "PushInterval",
+    "PushIntervalSpecialized",
+    "InsertInterval",
+    "CostManagerInit",
+    "CostModelBuild",
+    "TraceBackwards",
+    "BackwardReferencesHashChainFollowChosenPath",
+    "EncodeImageInternal",
+    "GetHuffBitLengthsAndCodes",
+    "StoreImageToBitMask"
+  ],
+  "runner": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-attribution-v2-f53_ptgi/source-build/tools/backref_cost_attribution_v2_experiment_runner",
+  "runner_sha256": "f6f4a46ec1b8a14764c7ec175f0a09b2207618cf0fe72a32f93bee97a9d9e6d4",
+  "same_binary_for_both_variants": true
+}

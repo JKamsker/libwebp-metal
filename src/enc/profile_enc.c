@@ -3,13 +3,16 @@
 // Internal, independently guarded encoder stage profiling experiment.
 
 #if !defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT) && \
-    !defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS)
+    !defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS) && \
+    !defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
 #define WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT 1
 #endif
 #include "src/enc/profile_enc.h"
 
 #if defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS)
 #include "src/enc/backref_cost_attribution_v1_experiment_enc.h"
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
+#include "src/enc/backref_cost_attribution_v2_experiment_enc.h"
 #endif
 
 #include <stdio.h>
@@ -146,6 +149,12 @@ void WebPProfileBeginSession(const WebPConfig* config,
     return;
   }
   if (!EnvironmentOptIn("WEBP_BACKREF_COST_ATTRIBUTION_V1_TIMERS")) return;
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
+  if (!EnvironmentOptIn("WEBP_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT") &&
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT") != NULL) {
+    return;
+  }
+  if (!EnvironmentOptIn("WEBP_BACKREF_COST_ATTRIBUTION_V2_TIMERS")) return;
 #else
   if (!EnvironmentOptIn("WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT")) return;
 #endif
@@ -182,6 +191,18 @@ void WebPProfileEndSession(int ok, int error_code) {
                                                        "baseline";
   const char* const sample_set =
       getenv("WEBP_BACKREF_COST_ATTRIBUTION_V1_SAMPLE_SET");
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
+  const char* const output_path =
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V2_STAGE_OUTPUT");
+  const char* const run_id =
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V2_RUN_ID");
+  const char* const case_id =
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V2_CASE_ID");
+  const char* const backend =
+      VP8LBackrefCostAttributionV2ExperimentEnabled() ? "candidate" :
+                                                       "baseline";
+  const char* const sample_set =
+      getenv("WEBP_BACKREF_COST_ATTRIBUTION_V2_SAMPLE_SET");
 #else
   const char* const output_path = getenv("WEBP_STAGE_PROFILE_OUTPUT");
   const char* const run_id = getenv("WEBP_STAGE_PROFILE_RUN_ID");

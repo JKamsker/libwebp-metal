@@ -1,0 +1,917 @@
+                 (undefined) external __DefaultRuneLocale (from libSystem)
+                 (undefined) external ___chkstk_darwin (from libSystem)
+                 (undefined) external ___exp10 (from libSystem)
+                 (undefined) external ___maskrune (from libSystem)
+                 (undefined) external ___memcpy_chk (from libSystem)
+                 (undefined) external ___stack_chk_fail (from libSystem)
+                 (undefined) external ___stack_chk_guard (from libSystem)
+                 (undefined) external ___stderrp (from libSystem)
+                 (undefined) external __tlv_bootstrap (from libSystem)
+                 (undefined) external _atoi (from libSystem)
+                 (undefined) external _bzero (from libSystem)
+                 (undefined) external _calloc (from libSystem)
+                 (undefined) external _expf (from libSystem)
+                 (undefined) external _fclose (from libSystem)
+                 (undefined) external _fgetc (from libSystem)
+                 (undefined) external _fopen (from libSystem)
+                 (undefined) external _fprintf (from libSystem)
+                 (undefined) external _fputc (from libSystem)
+                 (undefined) external _fputs (from libSystem)
+                 (undefined) external _fread (from libSystem)
+                 (undefined) external _free (from libSystem)
+                 (undefined) external _fwrite (from libSystem)
+                 (undefined) external _getenv (from libSystem)
+                 (undefined) external _getpid (from libSystem)
+                 (undefined) external _log (from libSystem)
+                 (undefined) external _log10 (from libSystem)
+                 (undefined) external _logf (from libSystem)
+                 (undefined) external _mach_continuous_time (from libSystem)
+                 (undefined) external _mach_timebase_info (from libSystem)
+                 (undefined) external _malloc (from libSystem)
+                 (undefined) external _memcmp (from libSystem)
+                 (undefined) external _memcpy (from libSystem)
+                 (undefined) external _memmove (from libSystem)
+                 (undefined) external _memset (from libSystem)
+                 (undefined) external _memset_pattern16 (from libSystem)
+                 (undefined) external _pow (from libSystem)
+                 (undefined) external _printf (from libSystem)
+                 (undefined) external _pthread_cond_destroy (from libSystem)
+                 (undefined) external _pthread_cond_init (from libSystem)
+                 (undefined) external _pthread_cond_signal (from libSystem)
+                 (undefined) external _pthread_cond_wait (from libSystem)
+                 (undefined) external _pthread_create (from libSystem)
+                 (undefined) external _pthread_join (from libSystem)
+                 (undefined) external _pthread_mutex_destroy (from libSystem)
+                 (undefined) external _pthread_mutex_init (from libSystem)
+                 (undefined) external _pthread_mutex_lock (from libSystem)
+                 (undefined) external _pthread_mutex_unlock (from libSystem)
+                 (undefined) external _qsort (from libSystem)
+                 (undefined) external _strcmp (from libSystem)
+0000000100000000 (__TEXT,__text) [referenced dynamically] external __mh_execute_header
+0000000100000728 (__TEXT,__text) non-external (was a private external) _WebPDeallocateAlphaMemory
+0000000100000774 (__TEXT,__text) non-external (was a private external) _VP8DecompressAlphaRows
+0000000100000b44 (__TEXT,__text) non-external (was a private external) _IsValidColorspace
+0000000100000b50 (__TEXT,__text) non-external (was a private external) _WebPFlipBuffer
+0000000100000bf0 (__TEXT,__text) non-external (was a private external) _WebPAllocateDecBuffer
+0000000100000e78 (__TEXT,__text) external _WebPInitDecBufferInternal
+0000000100000eb0 (__TEXT,__text) external _WebPFreeDecBuffer
+0000000100000ef0 (__TEXT,__text) non-external (was a private external) _WebPCopyDecBuffer
+0000000100000f38 (__TEXT,__text) non-external (was a private external) _WebPGrabDecBuffer
+0000000100000f80 (__TEXT,__text) non-external (was a private external) _WebPCopyDecBufferPixels
+00000001000010c4 (__TEXT,__text) non-external _CheckDecBuffer
+0000000100001200 (__TEXT,__text) non-external (was a private external) _WebPAvoidSlowMemory
+0000000100001240 (__TEXT,__text) non-external (was a private external) _VP8InitDithering
+00000001000013d0 (__TEXT,__text) non-external (was a private external) _VP8ProcessRow
+0000000100001530 (__TEXT,__text) non-external _ReconstructRow
+0000000100001d34 (__TEXT,__text) non-external _FinishRow
+0000000100002540 (__TEXT,__text) non-external (was a private external) _VP8EnterCritical
+000000010000366c (__TEXT,__text) non-external (was a private external) _VP8ExitCritical
+00000001000036e8 (__TEXT,__text) non-external (was a private external) _VP8GetThreadMethod
+0000000100003708 (__TEXT,__text) non-external (was a private external) _VP8InitFrame
+0000000100003a10 (__TEXT,__text) non-external (was a private external) _WebPInitCustomIo
+0000000100003a34 (__TEXT,__text) non-external _CustomPut
+0000000100003aac (__TEXT,__text) non-external _CustomSetup
+0000000100003fc0 (__TEXT,__text) non-external _CustomTeardown
+0000000100003fe8 (__TEXT,__text) non-external _EmitSampledRGB
+0000000100004054 (__TEXT,__text) non-external _EmitFancyRGB
+0000000100004248 (__TEXT,__text) non-external _EmitYUV
+0000000100004304 (__TEXT,__text) non-external _EmitAlphaRGBA4444
+000000010000440c (__TEXT,__text) non-external _EmitAlphaRGB
+0000000100004510 (__TEXT,__text) non-external _EmitAlphaYUV
+00000001000045c8 (__TEXT,__text) non-external _EmitRescaledRGB
+0000000100004788 (__TEXT,__text) non-external _EmitRescaledAlphaRGB
+0000000100004824 (__TEXT,__text) non-external _ExportAlphaRGBA4444
+0000000100004984 (__TEXT,__text) non-external _ExportAlpha
+0000000100004afc (__TEXT,__text) non-external _EmitRescaledYUV
+0000000100004c7c (__TEXT,__text) non-external _EmitRescaledAlphaYUV
+0000000100004d9c (__TEXT,__text) non-external (was a private external) _VP8ParseQuant
+0000000100005208 (__TEXT,__text) non-external (was a private external) _VP8ResetProba
+0000000100005218 (__TEXT,__text) non-external (was a private external) _VP8ParseIntraModeRow
+000000010000609c (__TEXT,__text) non-external (was a private external) _VP8ParseProba
+0000000100006498 (__TEXT,__text) external _WebPGetDecoderVersion
+00000001000064a4 (__TEXT,__text) non-external (was a private external) _VP8InitIoInternal
+00000001000064dc (__TEXT,__text) non-external (was a private external) _VP8New
+00000001000065b0 (__TEXT,__text) non-external (was a private external) _VP8Status
+00000001000065c4 (__TEXT,__text) non-external (was a private external) _VP8StatusMessage
+00000001000065ec (__TEXT,__text) non-external (was a private external) _VP8Delete
+000000010000664c (__TEXT,__text) non-external (was a private external) _VP8Clear
+00000001000066a4 (__TEXT,__text) non-external (was a private external) _VP8SetError
+00000001000066c4 (__TEXT,__text) external _VP8CheckSignature
+00000001000066fc (__TEXT,__text) external _VP8GetInfo
+00000001000067b0 (__TEXT,__text) non-external (was a private external) _VP8GetHeaders
+0000000100006d0c (__TEXT,__text) non-external _ParseFilterHeader
+0000000100006ea4 (__TEXT,__text) non-external _ParsePartitions
+0000000100006fa8 (__TEXT,__text) non-external (was a private external) _VP8DecodeMB
+000000010000776c (__TEXT,__text) non-external (was a private external) _VP8InitScanline
+0000000100007780 (__TEXT,__text) non-external (was a private external) _VP8Decode
+00000001000079a8 (__TEXT,__text) non-external _GetCoeffsAlt
+0000000100007de4 (__TEXT,__text) non-external _GetCoeffsFast
+0000000100008178 (__TEXT,__text) non-external _GetLargeValue
+0000000100008920 (__TEXT,__text) external _VP8LCheckSignature
+000000010000894c (__TEXT,__text) external _VP8LGetInfo
+0000000100008a54 (__TEXT,__text) non-external (was a private external) _ReadHuffmanCodesHelper
+0000000100009690 (__TEXT,__text) non-external _ReadHuffmanCode
+0000000100009a1c (__TEXT,__text) non-external (was a private external) _VP8LNew
+0000000100009a5c (__TEXT,__text) non-external (was a private external) _VP8LDelete
+0000000100009a88 (__TEXT,__text) non-external _VP8LClear
+0000000100009b44 (__TEXT,__text) non-external (was a private external) _VP8LDecodeAlphaHeader
+0000000100009d74 (__TEXT,__text) non-external _DecodeImageStream
+000000010000a5c4 (__TEXT,__text) non-external (was a private external) _VP8LDecodeAlphaImageStream
+000000010000af8c (__TEXT,__text) non-external _DecodeImageData
+000000010000b9f0 (__TEXT,__text) non-external _ExtractAlphaRows
+000000010000bbd4 (__TEXT,__text) non-external (was a private external) _VP8LDecodeHeader
+000000010000bcec (__TEXT,__text) non-external (was a private external) _VP8LDecodeImage
+000000010000bf30 (__TEXT,__text) non-external _ProcessRows
+000000010000c660 (__TEXT,__text) non-external (was a private external) _WebPParseHeaders
+000000010000c6d8 (__TEXT,__text) non-external _ParseHeadersInternal
+000000010000cb50 (__TEXT,__text) non-external (was a private external) _WebPResetDecParams
+000000010000cb70 (__TEXT,__text) external _WebPDecodeRGBInto
+000000010000cc3c (__TEXT,__text) external _WebPDecodeRGBAInto
+000000010000cd08 (__TEXT,__text) external _WebPDecodeARGBInto
+000000010000cdd8 (__TEXT,__text) external _WebPDecodeBGRInto
+000000010000cea8 (__TEXT,__text) external _WebPDecodeBGRAInto
+000000010000cf78 (__TEXT,__text) external _WebPDecodeYUVInto
+000000010000d070 (__TEXT,__text) non-external _DecodeInto
+000000010000d2c0 (__TEXT,__text) external _WebPDecodeRGB
+000000010000d3c4 (__TEXT,__text) external _WebPDecodeRGBA
+000000010000d4cc (__TEXT,__text) external _WebPDecodeARGB
+000000010000d5d4 (__TEXT,__text) external _WebPDecodeBGR
+000000010000d6dc (__TEXT,__text) external _WebPDecodeBGRA
+000000010000d7e4 (__TEXT,__text) external _WebPDecodeYUV
+000000010000d934 (__TEXT,__text) external _WebPGetInfo
+000000010000d9b4 (__TEXT,__text) external _WebPInitDecoderConfigInternal
+000000010000da18 (__TEXT,__text) external _WebPValidateDecoderConfig
+000000010000db5c (__TEXT,__text) non-external (was a private external) _WebPCheckCropDimensions
+000000010000dba0 (__TEXT,__text) external _WebPGetFeaturesInternal
+000000010000dbe4 (__TEXT,__text) external _WebPDecode
+000000010000dd60 (__TEXT,__text) non-external (was a private external) _WebPIoInitFromOptions
+000000010000df7c (__TEXT,__text) non-external _ParseOptionalChunks
+000000010000e0ac (__TEXT,__text) non-external (was a private external) _WebPMultARGBRow_C
+000000010000e494 (__TEXT,__text) non-external (was a private external) _WebPMultRow_C
+000000010000e534 (__TEXT,__text) non-external (was a private external) _WebPMultARGBRows
+000000010000e59c (__TEXT,__text) non-external (was a private external) _WebPMultRows
+000000010000e61c (__TEXT,__text) non-external (was a private external) _WebPInitAlphaProcessing
+000000010000e6f0 (__TEXT,__text) non-external _ApplyAlphaMultiply_16b_C
+000000010000ec50 (__TEXT,__text) non-external _PackRGB_C
+000000010000ee10 (__TEXT,__text) non-external _HasAlpha8b_C
+000000010000ee34 (__TEXT,__text) non-external _HasAlpha32b_C
+000000010000ee68 (__TEXT,__text) non-external _AlphaReplace_C
+000000010000f10c (__TEXT,__text) non-external (was a private external) _WebPInitAlphaProcessingNEON
+000000010000f174 (__TEXT,__text) non-external _ApplyAlphaMultiply_NEON
+000000010000f5bc (__TEXT,__text) non-external _DispatchAlpha_NEON
+000000010000f8d0 (__TEXT,__text) non-external _DispatchAlphaToGreen_NEON
+000000010000fc5c (__TEXT,__text) non-external _ExtractAlpha_NEON
+000000010000ff5c (__TEXT,__text) non-external _ExtractGreen_NEON
+00000001000100f0 (__TEXT,__text) non-external _armCPUInfo
+00000001000100fc (__TEXT,__text) non-external (was a private external) _VP8DspInit
+00000001000101d4 (__TEXT,__text) non-external _TransformUV_C
+000000010001021c (__TEXT,__text) non-external _TransformDCUV_C
+00000001000102b4 (__TEXT,__text) non-external _HE4_C
+0000000100010328 (__TEXT,__text) non-external _VR4_C
+0000000100010414 (__TEXT,__text) non-external _VL4_C
+0000000100010500 (__TEXT,__text) non-external _HD4_C
+00000001000105ec (__TEXT,__text) non-external _HU4_C
+0000000100010688 (__TEXT,__text) non-external _DitherCombine8x8_C
+0000000100010b90 (__TEXT,__text) non-external (was a private external) _VP8InitClipTables
+0000000100010b94 (__TEXT,__text) non-external (was a private external) _VP8DspInitNEON
+0000000100010db8 (__TEXT,__text) non-external _TransformTwo_NEON
+0000000100010fb8 (__TEXT,__text) non-external _TransformAC3_NEON
+0000000100011070 (__TEXT,__text) non-external _TransformDC_NEON
+00000001000110b8 (__TEXT,__text) non-external _TransformWHT_NEON
+00000001000111ac (__TEXT,__text) non-external _VFilter16_NEON
+0000000100011338 (__TEXT,__text) non-external _VFilter16i_NEON
+00000001000116ac (__TEXT,__text) non-external _HFilter16_NEON
+0000000100011ae8 (__TEXT,__text) non-external _HFilter16i_NEON
+0000000100011f08 (__TEXT,__text) non-external _VFilter8_NEON
+0000000100012130 (__TEXT,__text) non-external _VFilter8i_NEON
+00000001000122f4 (__TEXT,__text) non-external _HFilter8_NEON
+00000001000125e8 (__TEXT,__text) non-external _HFilter8i_NEON
+0000000100012850 (__TEXT,__text) non-external _SimpleVFilter16_NEON
+00000001000128ec (__TEXT,__text) non-external _SimpleHFilter16_NEON
+0000000100012ab4 (__TEXT,__text) non-external _SimpleVFilter16i_NEON
+0000000100012c64 (__TEXT,__text) non-external _SimpleHFilter16i_NEON
+000000010001314c (__TEXT,__text) non-external _DC4_NEON
+0000000100013194 (__TEXT,__text) non-external _TM4_NEON
+00000001000131f8 (__TEXT,__text) non-external _VE4_NEON
+0000000100013220 (__TEXT,__text) non-external _RD4_NEON
+0000000100013284 (__TEXT,__text) non-external _LD4_NEON
+00000001000132bc (__TEXT,__text) non-external _DC16TopLeft_NEON
+0000000100013394 (__TEXT,__text) non-external _TM16_NEON
+0000000100013570 (__TEXT,__text) non-external _VE16_NEON
+00000001000135b8 (__TEXT,__text) non-external _HE16_NEON
+000000010001367c (__TEXT,__text) non-external _DC16NoTop_NEON
+0000000100013748 (__TEXT,__text) non-external _DC16NoLeft_NEON
+000000010001379c (__TEXT,__text) non-external _DC16NoTopLeft_NEON
+00000001000137e4 (__TEXT,__text) non-external _DC8uv_NEON
+0000000100013858 (__TEXT,__text) non-external _TM8uv_NEON
+000000010001390c (__TEXT,__text) non-external _VE8uv_NEON
+0000000100013934 (__TEXT,__text) non-external _HE8uv_NEON
+0000000100013998 (__TEXT,__text) non-external _DC8uvNoTop_NEON
+0000000100013a00 (__TEXT,__text) non-external _DC8uvNoLeft_NEON
+0000000100013a34 (__TEXT,__text) non-external _DC8uvNoTopLeft_NEON
+0000000100013a5c (__TEXT,__text) non-external (was a private external) _VP8FiltersInit
+0000000100013ae8 (__TEXT,__text) non-external _NoneUnfilter_C
+0000000100013b04 (__TEXT,__text) non-external _GradientUnfilter_C
+0000000100013b78 (__TEXT,__text) non-external (was a private external) _VP8FiltersInitNEON
+0000000100013bc0 (__TEXT,__text) non-external _HorizontalUnfilter_NEON
+0000000100013ca4 (__TEXT,__text) non-external _VerticalUnfilter_NEON
+0000000100013ebc (__TEXT,__text) non-external _HorizontalFilter_NEON
+00000001000142ac (__TEXT,__text) non-external _VerticalFilter_NEON
+00000001000146cc (__TEXT,__text) non-external _GradientFilter_NEON
+0000000100014d14 (__TEXT,__text) non-external (was a private external) _VP8LPredictor2_C
+0000000100014d1c (__TEXT,__text) non-external (was a private external) _VP8LPredictor3_C
+0000000100014d24 (__TEXT,__text) non-external (was a private external) _VP8LPredictor4_C
+0000000100014d2c (__TEXT,__text) non-external (was a private external) _VP8LPredictor5_C
+0000000100014d60 (__TEXT,__text) non-external (was a private external) _VP8LPredictor6_C
+0000000100014d80 (__TEXT,__text) non-external (was a private external) _VP8LPredictor7_C
+0000000100014da0 (__TEXT,__text) non-external (was a private external) _VP8LPredictor8_C
+0000000100014dbc (__TEXT,__text) non-external (was a private external) _VP8LPredictor9_C
+0000000100014dd8 (__TEXT,__text) non-external (was a private external) _VP8LPredictor10_C
+0000000100014e24 (__TEXT,__text) non-external (was a private external) _VP8LPredictor11_C
+0000000100014ed4 (__TEXT,__text) non-external (was a private external) _VP8LPredictor12_C
+0000000100014f84 (__TEXT,__text) non-external (was a private external) _VP8LPredictor13_C
+000000010001505c (__TEXT,__text) non-external (was a private external) _VP8LAddGreenToBlueAndRed_C
+00000001000151f0 (__TEXT,__text) non-external (was a private external) _VP8LTransformColorInverse_C
+00000001000152f4 (__TEXT,__text) non-external (was a private external) _VP8LColorIndexInverseTransformAlpha
+00000001000155bc (__TEXT,__text) non-external (was a private external) _VP8LInverseTransform
+0000000100015b20 (__TEXT,__text) non-external _ColorIndexInverseTransform_C
+0000000100015ddc (__TEXT,__text) non-external (was a private external) _VP8LConvertBGRAToRGB_C
+0000000100015f5c (__TEXT,__text) non-external (was a private external) _VP8LConvertBGRAToRGBA_C
+00000001000160e8 (__TEXT,__text) non-external (was a private external) _VP8LConvertBGRAToRGBA4444_C
+00000001000162c8 (__TEXT,__text) non-external (was a private external) _VP8LConvertBGRAToRGB565_C
+0000000100016500 (__TEXT,__text) non-external (was a private external) _VP8LConvertBGRAToBGR_C
+0000000100016694 (__TEXT,__text) non-external (was a private external) _VP8LConvertFromBGRA
+00000001000168e8 (__TEXT,__text) non-external (was a private external) _VP8LDspInit
+0000000100016ae4 (__TEXT,__text) non-external _PredictorAdd0_C
+0000000100016bc0 (__TEXT,__text) non-external _PredictorAdd1_C
+0000000100016c10 (__TEXT,__text) non-external _PredictorAdd2_C
+0000000100016dcc (__TEXT,__text) non-external _VP8LPredictor0_C
+0000000100016dd4 (__TEXT,__text) non-external _VP8LPredictor1_C
+0000000100016ddc (__TEXT,__text) non-external _PredictorAdd3_C
+0000000100016fa0 (__TEXT,__text) non-external _PredictorAdd4_C
+0000000100017164 (__TEXT,__text) non-external _PredictorAdd5_C
+00000001000171e4 (__TEXT,__text) non-external _PredictorAdd6_C
+0000000100017250 (__TEXT,__text) non-external _PredictorAdd7_C
+00000001000172b8 (__TEXT,__text) non-external _PredictorAdd8_C
+00000001000173b8 (__TEXT,__text) non-external _PredictorAdd9_C
+00000001000174bc (__TEXT,__text) non-external _PredictorAdd10_C
+0000000100017548 (__TEXT,__text) non-external _PredictorAdd11_C
+0000000100017644 (__TEXT,__text) non-external _PredictorAdd12_C
+0000000100017740 (__TEXT,__text) non-external _PredictorAdd13_C
+0000000100017864 (__TEXT,__text) non-external _MapARGB_C
+0000000100017960 (__TEXT,__text) non-external _MapAlpha_C
+000000010001799c (__TEXT,__text) non-external (was a private external) _VP8LDspInitNEON
+0000000100017acc (__TEXT,__text) non-external _Predictor5_NEON
+0000000100017ae8 (__TEXT,__text) non-external _Predictor6_NEON
+0000000100017b00 (__TEXT,__text) non-external _Predictor7_NEON
+0000000100017b14 (__TEXT,__text) non-external _Predictor13_NEON
+0000000100017b48 (__TEXT,__text) non-external _PredictorAdd0_NEON
+0000000100017bac (__TEXT,__text) non-external _PredictorAdd1_NEON
+0000000100017c28 (__TEXT,__text) non-external _PredictorAdd2_NEON
+0000000100017c90 (__TEXT,__text) non-external _PredictorAdd3_NEON
+0000000100017cf8 (__TEXT,__text) non-external _PredictorAdd4_NEON
+0000000100017d60 (__TEXT,__text) non-external _PredictorAdd5_NEON
+0000000100017e1c (__TEXT,__text) non-external _PredictorAdd6_NEON
+0000000100017ec4 (__TEXT,__text) non-external _PredictorAdd7_NEON
+0000000100017f6c (__TEXT,__text) non-external _PredictorAdd8_NEON
+0000000100017fdc (__TEXT,__text) non-external _PredictorAdd9_NEON
+0000000100018050 (__TEXT,__text) non-external _PredictorAdd10_NEON
+0000000100018118 (__TEXT,__text) non-external _PredictorAdd11_NEON
+0000000100018218 (__TEXT,__text) non-external _PredictorAdd12_NEON
+00000001000182f4 (__TEXT,__text) non-external _PredictorAdd13_NEON
+000000010001841c (__TEXT,__text) non-external _ConvertBGRAToRGBA_NEON
+0000000100018454 (__TEXT,__text) non-external _ConvertBGRAToBGR_NEON
+000000010001847c (__TEXT,__text) non-external _ConvertBGRAToRGB_NEON
+00000001000184b0 (__TEXT,__text) non-external _AddGreenToBlueAndRed_NEON
+00000001000184fc (__TEXT,__text) non-external _TransformColorInverse_NEON
+00000001000185e8 (__TEXT,__text) non-external (was a private external) _WebPRescalerImportRowExpand_C
+0000000100018744 (__TEXT,__text) non-external (was a private external) _WebPRescalerImportRowShrink_C
+00000001000187f4 (__TEXT,__text) non-external (was a private external) _WebPRescalerExportRowExpand_C
+0000000100018ea8 (__TEXT,__text) non-external (was a private external) _WebPRescalerExportRowShrink_C
+0000000100019480 (__TEXT,__text) non-external (was a private external) _WebPRescalerImportRow
+00000001000194a4 (__TEXT,__text) non-external (was a private external) _WebPRescalerExportRow
+0000000100019574 (__TEXT,__text) non-external (was a private external) _WebPRescalerDspInit
+00000001000195f8 (__TEXT,__text) non-external (was a private external) _WebPRescalerDspInitNEON
+0000000100019624 (__TEXT,__text) non-external _RescalerExportRowExpand_NEON
+0000000100019d70 (__TEXT,__text) non-external _RescalerExportRowShrink_NEON
+000000010001a3ac (__TEXT,__text) non-external (was a private external) _WebPGetLinePairConverter
+000000010001a428 (__TEXT,__text) non-external (was a private external) _WebPInitUpsamplers
+000000010001a48c (__TEXT,__text) non-external (was a private external) _WebPYuv444ToRgba_C
+000000010001aba4 (__TEXT,__text) non-external (was a private external) _WebPYuv444ToBgra_C
+000000010001b2b8 (__TEXT,__text) non-external (was a private external) _WebPYuv444ToRgb_C
+000000010001b994 (__TEXT,__text) non-external (was a private external) _WebPYuv444ToBgr_C
+000000010001c06c (__TEXT,__text) non-external (was a private external) _WebPYuv444ToArgb_C
+000000010001c790 (__TEXT,__text) non-external (was a private external) _WebPYuv444ToRgba4444_C
+000000010001ce24 (__TEXT,__text) non-external (was a private external) _WebPYuv444ToRgb565_C
+000000010001d510 (__TEXT,__text) non-external (was a private external) _WebPInitYUV444Converters
+000000010001d5b8 (__TEXT,__text) non-external (was a private external) _WebPInitUpsamplersNEON
+000000010001d614 (__TEXT,__text) non-external _UpsampleRgbaLinePair_NEON
+000000010001eb24 (__TEXT,__text) non-external _UpsampleBgraLinePair_NEON
+0000000100020038 (__TEXT,__text) non-external _UpsampleRgbLinePair_NEON
+00000001000214b8 (__TEXT,__text) non-external _UpsampleBgrLinePair_NEON
+0000000100022938 (__TEXT,__text) non-external _UpsampleArgbLinePair_NEON
+0000000100023e84 (__TEXT,__text) non-external _UpsampleRgb565LinePair_NEON
+0000000100025364 (__TEXT,__text) non-external _UpsampleRgba4444LinePair_NEON
+000000010002676c (__TEXT,__text) non-external (was a private external) _WebPSamplerProcessPlane
+0000000100026828 (__TEXT,__text) non-external (was a private external) _WebPInitSamplers
+00000001000268d0 (__TEXT,__text) non-external (was a private external) _WebPConvertARGBToUV_C
+0000000100027264 (__TEXT,__text) non-external (was a private external) _WebPConvertRGBA32ToUV_C
+00000001000275a0 (__TEXT,__text) non-external (was a private external) _WebPInitGammaTables
+0000000100027850 (__TEXT,__text) non-external (was a private external) _WebPAccumulateRGBA
+0000000100027d24 (__TEXT,__text) non-external (was a private external) _WebPAccumulateRGB
+0000000100027fb4 (__TEXT,__text) non-external (was a private external) _WebPInitConvertARGBToYUV
+0000000100028088 (__TEXT,__text) non-external _YuvToRgbRow
+0000000100028a74 (__TEXT,__text) non-external _YuvToRgbaRow
+0000000100029664 (__TEXT,__text) non-external _YuvToBgrRow
+000000010002a048 (__TEXT,__text) non-external _YuvToBgraRow
+000000010002ac40 (__TEXT,__text) non-external _YuvToArgbRow
+000000010002b744 (__TEXT,__text) non-external _YuvToRgba4444Row
+000000010002c09c (__TEXT,__text) non-external _YuvToRgb565Row
+000000010002cad0 (__TEXT,__text) non-external _ConvertARGBToY_C
+000000010002cd08 (__TEXT,__text) non-external _ConvertRGBToY_C
+000000010002cd5c (__TEXT,__text) non-external _ConvertBGRToY_C
+000000010002cdb0 (__TEXT,__text) non-external _ImportYUVAFromRGBA_C
+000000010002d328 (__TEXT,__text) non-external _ImportYUVAFromRGBALastLine_C
+000000010002d468 (__TEXT,__text) non-external (was a private external) _WebPInitConvertARGBToYUVNEON
+000000010002d4d0 (__TEXT,__text) non-external _ConvertRGBToY_NEON
+000000010002d63c (__TEXT,__text) non-external _ConvertBGRToY_NEON
+000000010002d7a8 (__TEXT,__text) non-external _ConvertARGBToY_NEON
+000000010002da84 (__TEXT,__text) non-external _ConvertARGBToUV_NEON
+000000010002db74 (__TEXT,__text) non-external _ConvertRGBA32ToUV_NEON
+000000010002dfc8 (__TEXT,__text) non-external (was a private external) _VP8BitReaderSetBuffer
+000000010002dfe4 (__TEXT,__text) non-external (was a private external) _VP8InitBitReader
+000000010002e05c (__TEXT,__text) non-external (was a private external) _VP8RemapBitReader
+000000010002e080 (__TEXT,__text) non-external (was a private external) _VP8LoadFinalBytes
+000000010002e0e8 (__TEXT,__text) non-external (was a private external) _VP8GetValue
+000000010002e230 (__TEXT,__text) non-external (was a private external) _VP8GetSignedValue
+000000010002e490 (__TEXT,__text) non-external (was a private external) _VP8LInitBitReader
+000000010002e544 (__TEXT,__text) non-external (was a private external) _VP8LBitReaderSetBuffer
+000000010002e598 (__TEXT,__text) non-external (was a private external) _VP8LDoFillBitWindow
+000000010002e67c (__TEXT,__text) non-external (was a private external) _VP8LReadBits
+000000010002e73c (__TEXT,__text) non-external (was a private external) _VP8LColorCacheInit
+000000010002e7a4 (__TEXT,__text) non-external (was a private external) _VP8LColorCacheClear
+000000010002e7d4 (__TEXT,__text) non-external (was a private external) _VP8LColorCacheCopy
+000000010002e7f4 (__TEXT,__text) non-external (was a private external) _WebPEstimateBestFilter
+000000010002eb8c (__TEXT,__text) non-external (was a private external) _VP8LHtreeGroupsNew
+000000010002eb98 (__TEXT,__text) non-external (was a private external) _VP8LHtreeGroupsFree
+000000010002eba4 (__TEXT,__text) non-external (was a private external) _VP8LBuildHuffmanTable
+000000010002ed18 (__TEXT,__text) non-external _BuildHuffmanTable
+000000010002f4c8 (__TEXT,__text) non-external (was a private external) _VP8LHuffmanTablesAllocate
+000000010002f530 (__TEXT,__text) non-external (was a private external) _VP8LHuffmanTablesDeallocate
+000000010002f58c (__TEXT,__text) non-external (was a private external) _SearchColorNoIdx
+000000010002f5c8 (__TEXT,__text) non-external (was a private external) _PrepareMapToPalette
+000000010002f694 (__TEXT,__text) non-external _PaletteCompareColorsForQsort
+000000010002f6ac (__TEXT,__text) non-external (was a private external) _GetColorPalette
+000000010002f874 (__TEXT,__text) non-external (was a private external) _PaletteSort
+00000001000304f4 (__TEXT,__text) non-external (was a private external) _WebPDequantizeLevels
+0000000100030ee0 (__TEXT,__text) non-external (was a private external) _VP8InitRandom
+0000000100030f70 (__TEXT,__text) non-external (was a private external) _WebPRescalerInit
+0000000100031080 (__TEXT,__text) non-external (was a private external) _WebPRescalerGetScaledDimensions
+0000000100031114 (__TEXT,__text) non-external (was a private external) _WebPRescaleNeededLines
+0000000100031134 (__TEXT,__text) non-external (was a private external) _WebPRescalerImport
+0000000100031258 (__TEXT,__text) non-external (was a private external) _WebPRescalerExport
+00000001000312c8 (__TEXT,__text) external _WebPSetWorkerInterface
+0000000100031324 (__TEXT,__text) external _WebPGetWorkerInterface
+0000000100031330 (__TEXT,__text) non-external _Init
+0000000100031344 (__TEXT,__text) non-external _Reset
+0000000100031484 (__TEXT,__text) non-external _Sync
+00000001000314e8 (__TEXT,__text) non-external _Launch
+000000010003156c (__TEXT,__text) non-external _Execute
+00000001000315b0 (__TEXT,__text) non-external _End
+000000010003164c (__TEXT,__text) non-external _ThreadLoop
+0000000100031700 (__TEXT,__text) external _WebPSafeMalloc
+0000000100031724 (__TEXT,__text) external _WebPSafeCalloc
+0000000100031744 (__TEXT,__text) external _WebPSafeFree
+0000000100031748 (__TEXT,__text) external _WebPMalloc
+0000000100031760 (__TEXT,__text) external _WebPFree
+0000000100031764 (__TEXT,__text) external _WebPCopyPlane
+00000001000317d0 (__TEXT,__text) external _WebPCopyPixels
+000000010003184c (__TEXT,__text) external _WebPGetColorPalette
+0000000100031850 (__TEXT,__text) non-external (was a private external) _WebPAccelerateColorTransform
+0000000100031858 (__TEXT,__text) non-external (was a private external) _WebPAccelerateHashChain
+0000000100031860 (__TEXT,__text) non-external (was a private external) _WebPAccelerateRGBToYUV
+0000000100031868 (__TEXT,__text) non-external (was a private external) _VP8EncInitAlpha
+00000001000318d0 (__TEXT,__text) non-external _CompressAlphaJob
+00000001000322f4 (__TEXT,__text) non-external (was a private external) _VP8EncStartAlpha
+0000000100032374 (__TEXT,__text) non-external (was a private external) _VP8EncFinishAlpha
+00000001000323d8 (__TEXT,__text) non-external (was a private external) _VP8EncDeleteAlpha
+0000000100032448 (__TEXT,__text) non-external _EncodeAlphaInternal
+00000001000326c4 (__TEXT,__text) non-external (was a private external) _VP8EncAnalyze
+00000001000336ec (__TEXT,__text) non-external _DoSegmentsJob
+0000000100033b30 (__TEXT,__text) non-external (was a private external) _VP8LBackwardReferencesTraceBackwards
+0000000100033ccc (__TEXT,__text) non-external _BackwardReferencesHashChainDistanceOnlySpecialized
+00000001000341d8 (__TEXT,__text) non-external _BackwardReferencesHashChainDistanceOnly
+00000001000346e4 (__TEXT,__text) non-external _TraceBackwards
+0000000100034720 (__TEXT,__text) non-external _BackwardReferencesHashChainFollowChosenPath
+0000000100034a04 (__TEXT,__text) non-external _CostModelBuild
+0000000100035258 (__TEXT,__text) non-external _CostManagerInit
+00000001000357e0 (__TEXT,__text) non-external _PushIntervalSpecialized
+0000000100035abc (__TEXT,__text) non-external _UpdateCostAtIndex
+0000000100035ba8 (__TEXT,__text) non-external _CostManagerClear
+0000000100035cf4 (__TEXT,__text) non-external _InsertInterval
+0000000100035e6c (__TEXT,__text) non-external _PopInterval
+0000000100035ec8 (__TEXT,__text) non-external _UpdateCostPerInterval
+0000000100035f1c (__TEXT,__text) non-external _PushInterval
+0000000100036118 (__TEXT,__text) non-external (was a private external) _VP8LDistanceToPlaneCode
+0000000100036184 (__TEXT,__text) non-external (was a private external) _VP8LClearBackwardRefs
+00000001000361a4 (__TEXT,__text) non-external (was a private external) _VP8LBackwardRefsClear
+00000001000361f8 (__TEXT,__text) non-external (was a private external) _VP8LBackwardRefsInit
+0000000100036220 (__TEXT,__text) non-external (was a private external) _VP8LRefsCursorInit
+0000000100036254 (__TEXT,__text) non-external (was a private external) _VP8LRefsCursorNextBlock
+000000010003628c (__TEXT,__text) non-external (was a private external) _VP8LBackwardRefsCursorAdd
+0000000100036348 (__TEXT,__text) non-external (was a private external) _VP8LHashChainInit
+0000000100036384 (__TEXT,__text) non-external (was a private external) _VP8LHashChainClear
+00000001000363b0 (__TEXT,__text) non-external (was a private external) _VP8LHashChainFill
+0000000100036b14 (__TEXT,__text) non-external (was a private external) _VP8LGetBackwardReferences
+0000000100036c74 (__TEXT,__text) non-external _GetBackwardReferences
+0000000100038940 (__TEXT,__text) non-external _BackwardReferencesLz77
+0000000100038bb0 (__TEXT,__text) non-external _BackwardRefsClone
+0000000100038c8c (__TEXT,__text) external _WebPConfigInitInternal
+0000000100038d9c (__TEXT,__text) external _WebPValidateConfig
+0000000100038f10 (__TEXT,__text) external _WebPConfigLosslessPreset
+0000000100038f50 (__TEXT,__text) non-external (was a private external) _VP8CalculateLevelCosts
+0000000100039430 (__TEXT,__text) non-external (was a private external) _VP8InitResidual
+0000000100039470 (__TEXT,__text) non-external (was a private external) _VP8GetCostLuma4
+0000000100039510 (__TEXT,__text) non-external (was a private external) _VP8GetCostLuma16
+00000001000399c8 (__TEXT,__text) non-external (was a private external) _VP8GetCostUV
+0000000100039c44 (__TEXT,__text) non-external (was a private external) _VP8RecordCoeffs
+0000000100039e3c (__TEXT,__text) non-external (was a private external) _VP8FilterStrengthFromDelta
+0000000100039e60 (__TEXT,__text) non-external (was a private external) _VP8InitFilter
+0000000100039e84 (__TEXT,__text) non-external (was a private external) _VP8StoreFilterStats
+000000010003a0d8 (__TEXT,__text) non-external _GetMBSSIM
+000000010003a500 (__TEXT,__text) non-external (was a private external) _VP8AdjustFilterStrength
+000000010003a738 (__TEXT,__text) non-external (was a private external) _VP8EncLoop
+000000010003b8a0 (__TEXT,__text) non-external _StoreSideInfo
+000000010003ba88 (__TEXT,__text) non-external _PostLoopFinalize
+000000010003bbf0 (__TEXT,__text) non-external (was a private external) _VP8EncTokenLoop
+000000010003c6c0 (__TEXT,__text) non-external _SetLoopParams
+000000010003c930 (__TEXT,__text) non-external _FinalizeTokenProbas
+000000010003ccc4 (__TEXT,__text) non-external _PutCoeffs
+000000010003cfd0 (__TEXT,__text) non-external (was a private external) _VP8LFreeHistogram
+000000010003cfd4 (__TEXT,__text) non-external (was a private external) _VP8LFreeHistogramSet
+000000010003cfd8 (__TEXT,__text) non-external (was a private external) _VP8LHistogramCreate
+000000010003d0c4 (__TEXT,__text) non-external (was a private external) _VP8LHistogramStoreRefs
+000000010003d144 (__TEXT,__text) non-external (was a private external) _VP8LHistogramInit
+000000010003d1d8 (__TEXT,__text) non-external (was a private external) _VP8LAllocateHistogram
+000000010003d258 (__TEXT,__text) non-external (was a private external) _VP8LAllocateHistogramSet
+000000010003d358 (__TEXT,__text) non-external (was a private external) _VP8LHistogramSetClear
+000000010003d460 (__TEXT,__text) non-external _HistogramAddSinglePixOrCopy
+000000010003d600 (__TEXT,__text) non-external (was a private external) _VP8LBitsEntropy
+000000010003d710 (__TEXT,__text) non-external (was a private external) _VP8LHistogramEstimateBits
+000000010003d804 (__TEXT,__text) non-external _PopulationCost
+000000010003d9a4 (__TEXT,__text) non-external (was a private external) _VP8LGetHistoImageSymbols
+000000010003f87c (__TEXT,__text) non-external _HistogramAdd
+000000010003fe10 (__TEXT,__text) non-external _GetCombinedHistogramEntropy
+0000000100040110 (__TEXT,__text) non-external (was a private external) _VP8IteratorSetRow
+00000001000401bc (__TEXT,__text) non-external (was a private external) _VP8IteratorSetCountDown
+00000001000401c8 (__TEXT,__text) non-external (was a private external) _VP8IteratorIsDone
+00000001000401d8 (__TEXT,__text) non-external (was a private external) _VP8IteratorInit
+0000000100040310 (__TEXT,__text) non-external (was a private external) _VP8IteratorProgress
+0000000100040368 (__TEXT,__text) non-external (was a private external) _VP8IteratorImport
+0000000100040dac (__TEXT,__text) non-external (was a private external) _VP8IteratorExport
+0000000100040f2c (__TEXT,__text) non-external (was a private external) _VP8IteratorNzToBytes
+0000000100040fa8 (__TEXT,__text) non-external (was a private external) _VP8IteratorBytesToNz
+0000000100041010 (__TEXT,__text) non-external (was a private external) _VP8IteratorSaveBoundary
+000000010004121c (__TEXT,__text) non-external (was a private external) _VP8IteratorNext
+000000010004133c (__TEXT,__text) non-external (was a private external) _VP8SetIntra16Mode
+0000000100041394 (__TEXT,__text) non-external (was a private external) _VP8SetIntra4Mode
+00000001000413ec (__TEXT,__text) non-external (was a private external) _VP8SetIntraUVMode
+0000000100041408 (__TEXT,__text) non-external (was a private external) _VP8SetSkip
+0000000100041424 (__TEXT,__text) non-external (was a private external) _VP8SetSegment
+0000000100041440 (__TEXT,__text) non-external (was a private external) _VP8IteratorStartI4
+0000000100041620 (__TEXT,__text) non-external (was a private external) _VP8IteratorRotateI4
+00000001000416d8 (__TEXT,__text) non-external (was a private external) _VP8ApplyNearLossless
+00000001000417fc (__TEXT,__text) non-external _NearLossless
+0000000100041c68 (__TEXT,__text) external _WebPPictureInitInternal
+0000000100041cd4 (__TEXT,__text) non-external _DummyWriter
+0000000100041cdc (__TEXT,__text) non-external (was a private external) _WebPValidatePicture
+0000000100041d38 (__TEXT,__text) non-external (was a private external) _WebPPictureResetBuffers
+0000000100041d54 (__TEXT,__text) non-external (was a private external) _WebPPictureAllocARGB
+0000000100041e34 (__TEXT,__text) non-external (was a private external) _WebPPictureAllocYUVA
+0000000100041fbc (__TEXT,__text) external _WebPPictureAlloc
+0000000100042030 (__TEXT,__text) external _WebPPictureFree
+000000010004207c (__TEXT,__text) external _WebPMemoryWriterInit
+0000000100042088 (__TEXT,__text) external _WebPMemoryWrite
+0000000100042148 (__TEXT,__text) external _WebPMemoryWriterClear
+000000010004217c (__TEXT,__text) external _WebPEncodeRGB
+00000001000422e8 (__TEXT,__text) external _WebPEncodeRGBA
+0000000100042454 (__TEXT,__text) external _WebPEncodeBGR
+00000001000425c0 (__TEXT,__text) external _WebPEncodeBGRA
+000000010004272c (__TEXT,__text) external _WebPEncodeLosslessRGB
+00000001000428a4 (__TEXT,__text) external _WebPEncodeLosslessRGBA
+0000000100042a1c (__TEXT,__text) external _WebPEncodeLosslessBGR
+0000000100042b94 (__TEXT,__text) external _WebPEncodeLosslessBGRA
+0000000100042d0c (__TEXT,__text) external _WebPPictureHasTransparency
+0000000100042df4 (__TEXT,__text) external _WebPPictureARGBToYUVADithered
+0000000100042e4c (__TEXT,__text) external _WebPPictureARGBToYUVA
+0000000100042ea8 (__TEXT,__text) external _WebPPictureSharpARGBToYUVA
+0000000100042ef0 (__TEXT,__text) external _WebPPictureSmartARGBToYUVA
+0000000100042f38 (__TEXT,__text) external _WebPPictureYUVAToARGB
+00000001000433e0 (__TEXT,__text) external _WebPPictureImportBGR
+0000000100043508 (__TEXT,__text) non-external _Import
+00000001000436d0 (__TEXT,__text) external _WebPPictureImportBGRA
+00000001000436f0 (__TEXT,__text) external _WebPPictureImportBGRX
+0000000100043818 (__TEXT,__text) external _WebPPictureImportRGB
+0000000100043940 (__TEXT,__text) external _WebPPictureImportRGBA
+0000000100043a58 (__TEXT,__text) external _WebPPictureImportRGBX
+0000000100043b80 (__TEXT,__text) non-external _ImportYUVAFromRGBA
+0000000100044664 (__TEXT,__text) external _WebPPictureCopy
+00000001000447bc (__TEXT,__text) external _WebPPictureIsView
+00000001000447e4 (__TEXT,__text) external _WebPPictureView
+0000000100044998 (__TEXT,__text) external _WebPPictureCrop
+0000000100044c1c (__TEXT,__text) external _WebPPictureRescale
+000000010004502c (__TEXT,__text) non-external _RescalePlane
+00000001000450c4 (__TEXT,__text) non-external (was a private external) _WebPReplaceTransparentPixels
+0000000100045148 (__TEXT,__text) external _WebPCleanupTransparentArea
+00000001000485d4 (__TEXT,__text) external _WebPBlendAlpha
+0000000100048c68 (__TEXT,__text) non-external (was a private external) _VP8LOptimizeSampling
+0000000100048f60 (__TEXT,__text) non-external (was a private external) _VP8LResidualImage
+000000010004a65c (__TEXT,__text) non-external (was a private external) _VP8LColorSpaceTransform
+000000010004b160 (__TEXT,__text) non-external _MaxDiffsForRow
+000000010004b330 (__TEXT,__text) non-external _GetResidual
+000000010004b94c (__TEXT,__text) non-external (was a private external) _VP8SetSegmentParams
+000000010004c2d4 (__TEXT,__text) non-external (was a private external) _VP8MakeLuma16Preds
+000000010004c324 (__TEXT,__text) non-external (was a private external) _VP8MakeChroma8Preds
+000000010004c374 (__TEXT,__text) non-external (was a private external) _VP8Decimate
+000000010004dce4 (__TEXT,__text) non-external _ExpandMatrix
+000000010004debc (__TEXT,__text) non-external _ReconstructIntra16
+000000010004e5e0 (__TEXT,__text) non-external _TrellisQuantizeBlock
+000000010004ebe0 (__TEXT,__text) non-external _ReconstructUV
+000000010004f138 (__TEXT,__text) non-external (was a private external) _VP8EncFreeBitWriters
+000000010004f194 (__TEXT,__text) non-external (was a private external) _VP8EncWrite
+000000010004fa40 (__TEXT,__text) non-external (was a private external) _VP8TBufferInit
+000000010004fa60 (__TEXT,__text) non-external (was a private external) _VP8TBufferClear
+000000010004fab8 (__TEXT,__text) non-external (was a private external) _VP8RecordCoeffTokens
+0000000100050a60 (__TEXT,__text) non-external (was a private external) _VP8EmitTokens
+0000000100050bdc (__TEXT,__text) non-external (was a private external) _VP8EstimateTokenSize
+0000000100050c94 (__TEXT,__text) non-external (was a private external) _VP8DefaultProbas
+0000000100050cdc (__TEXT,__text) non-external (was a private external) _VP8CodeIntraModes
+0000000100050fc0 (__TEXT,__text) non-external (was a private external) _VP8WriteProbas
+00000001000512ec (__TEXT,__text) non-external (was a private external) _VP8LEncodeStream
+0000000100051938 (__TEXT,__text) non-external _EncoderAnalyze
+0000000100052640 (__TEXT,__text) non-external _EncodeStreamHook
+00000001000544c0 (__TEXT,__text) non-external (was a private external) _VP8LEncodeImage
+00000001000547dc (__TEXT,__text) non-external _WriteImage
+0000000100054978 (__TEXT,__text) non-external _AllocateTransformBuffer
+0000000100054a84 (__TEXT,__text) non-external _EncodeImageInternal
+00000001000555c0 (__TEXT,__text) non-external _EncodeImageNoHuffman
+0000000100055b14 (__TEXT,__text) non-external _GetHuffBitLengthsAndCodes
+0000000100055d98 (__TEXT,__text) non-external _StoreHuffmanCode
+00000001000565b8 (__TEXT,__text) non-external _StoreImageToBitMask
+0000000100056a9c (__TEXT,__text) external _WebPGetEncoderVersion
+0000000100056aa8 (__TEXT,__text) non-external (was a private external) _WebPEncodingSetError
+0000000100056ac4 (__TEXT,__text) non-external (was a private external) _WebPReportProgress
+0000000100056b4c (__TEXT,__text) external _WebPEncode
+0000000100056eec (__TEXT,__text) non-external _InitVP8Encoder
+0000000100057288 (__TEXT,__text) non-external _StoreStats
+0000000100057500 (__TEXT,__text) non-external _DeleteVP8Encoder
+0000000100057538 (__TEXT,__text) non-external (was a private external) _WebPProfileBeginSession
+0000000100057720 (__TEXT,__text) non-external (was a private external) _WebPProfileEndSession
+0000000100057a9c (__TEXT,__text) non-external _PrintJsonString
+0000000100057bb4 (__TEXT,__text) non-external (was a private external) _WebPProfileStageBegin
+0000000100057c30 (__TEXT,__text) non-external (was a private external) _WebPProfileStageEnd
+0000000100057ce8 (__TEXT,__text) non-external (was a private external) _WebPProfileSetOutputSize
+0000000100057d18 (__TEXT,__text) non-external (was a private external) _WebPProfileMarkMetalCrossColor
+0000000100057d48 (__TEXT,__text) non-external (was a private external) _WebPProfileMarkMetalHash
+0000000100057d78 (__TEXT,__text) non-external (was a private external) _VP8LBackrefCostAttributionV2ExperimentEnabled
+0000000100057dbc (__TEXT,__text) non-external (was a private external) _VP8EncDspCostInit
+0000000100057e50 (__TEXT,__text) non-external _GetResidualCost_C
+0000000100057fa4 (__TEXT,__text) non-external _SetResidualCoeffs_C
+00000001000580b4 (__TEXT,__text) non-external (was a private external) _VP8EncDspCostInitNEON
+00000001000580e0 (__TEXT,__text) non-external _SetResidualCoeffs_NEON
+0000000100058118 (__TEXT,__text) non-external _GetResidualCost_NEON
+00000001000582cc (__TEXT,__text) non-external (was a private external) _VP8SetHistogramData
+0000000100058604 (__TEXT,__text) non-external (was a private external) _VP8EncDspInit
+0000000100058770 (__TEXT,__text) non-external _FTransform2_C
+00000001000587b8 (__TEXT,__text) non-external _IntraChromaPreds_C
+0000000100058b28 (__TEXT,__text) non-external _Mean16x4_C
+0000000100058d24 (__TEXT,__text) non-external _Copy4x4_C
+0000000100058d48 (__TEXT,__text) non-external _Copy16x8_C
+0000000100058d8c (__TEXT,__text) non-external _TrueMotion
+00000001000590e8 (__TEXT,__text) non-external (was a private external) _VP8EncDspInitNEON
+0000000100059210 (__TEXT,__text) non-external _ITransform_NEON
+0000000100059420 (__TEXT,__text) non-external _FTransform_NEON
+0000000100059568 (__TEXT,__text) non-external _FTransformWHT_NEON
+0000000100059654 (__TEXT,__text) non-external _Disto4x4_NEON
+0000000100059738 (__TEXT,__text) non-external _Disto16x16_NEON
+000000010005985c (__TEXT,__text) non-external _CollectHistogram_NEON
+0000000100059b58 (__TEXT,__text) non-external _SSE16x16_NEON
+0000000100059b94 (__TEXT,__text) non-external _SSE16x8_NEON
+0000000100059c80 (__TEXT,__text) non-external _SSE8x8_NEON
+0000000100059d2c (__TEXT,__text) non-external _SSE4x4_NEON
+0000000100059d84 (__TEXT,__text) non-external _Intra4Preds_NEON
+0000000100059e74 (__TEXT,__text) non-external _Intra16Preds_NEON
+000000010005a2a0 (__TEXT,__text) non-external _QuantizeBlock_NEON
+000000010005a374 (__TEXT,__text) non-external _Quantize2Blocks_NEON
+000000010005a4f4 (__TEXT,__text) non-external (was a private external) _VP8LBitEntropyInit
+000000010005a504 (__TEXT,__text) non-external (was a private external) _VP8LBitsEntropyUnrefined
+000000010005a61c (__TEXT,__text) non-external (was a private external) _VP8LSubtractGreenFromBlueAndRed_C
+000000010005a7a0 (__TEXT,__text) non-external (was a private external) _VP8LTransformColor_C
+000000010005a898 (__TEXT,__text) non-external (was a private external) _VP8LCollectColorRedTransforms_C
+000000010005a904 (__TEXT,__text) non-external (was a private external) _VP8LCollectColorBlueTransforms_C
+000000010005a980 (__TEXT,__text) non-external (was a private external) _VP8LBundleColorMap_C
+000000010005aaf8 (__TEXT,__text) non-external (was a private external) _VP8LEncDspInit
+000000010005acf0 (__TEXT,__text) non-external _FastLog2Slow_C
+000000010005ad84 (__TEXT,__text) non-external _FastSLog2Slow_C
+000000010005ae18 (__TEXT,__text) non-external _ExtraCost_C
+000000010005af94 (__TEXT,__text) non-external _CombinedShannonEntropy_C
+000000010005b0ec (__TEXT,__text) non-external _ShannonEntropy_C
+000000010005b1a4 (__TEXT,__text) non-external _GetEntropyUnrefined_C
+000000010005b42c (__TEXT,__text) non-external _GetCombinedEntropyUnrefined_C
+000000010005b6cc (__TEXT,__text) non-external _AddVector_C
+000000010005b7b8 (__TEXT,__text) non-external _AddVectorEq_C
+000000010005b898 (__TEXT,__text) non-external _VectorMismatch_C
+000000010005b8d8 (__TEXT,__text) non-external _PredictorSub0_C
+000000010005b9b4 (__TEXT,__text) non-external _PredictorSub1_C
+000000010005bb74 (__TEXT,__text) non-external _PredictorSub2_C
+000000010005bc00 (__TEXT,__text) non-external _PredictorSub3_C
+000000010005bc8c (__TEXT,__text) non-external _PredictorSub4_C
+000000010005bd18 (__TEXT,__text) non-external _PredictorSub5_C
+000000010005bda4 (__TEXT,__text) non-external _PredictorSub6_C
+000000010005be30 (__TEXT,__text) non-external _PredictorSub7_C
+000000010005bebc (__TEXT,__text) non-external _PredictorSub8_C
+000000010005bf48 (__TEXT,__text) non-external _PredictorSub9_C
+000000010005bfd4 (__TEXT,__text) non-external _PredictorSub10_C
+000000010005c060 (__TEXT,__text) non-external _PredictorSub11_C
+000000010005c0ec (__TEXT,__text) non-external _PredictorSub12_C
+000000010005c178 (__TEXT,__text) non-external _PredictorSub13_C
+000000010005c204 (__TEXT,__text) non-external (was a private external) _VP8LEncDspInitNEON
+000000010005c230 (__TEXT,__text) non-external _SubtractGreenFromBlueAndRed_NEON
+000000010005c27c (__TEXT,__text) non-external _TransformColor_NEON
+000000010005c34c (__TEXT,__text) non-external (was a private external) _VP8SSIMFromStats
+000000010005c3c0 (__TEXT,__text) non-external (was a private external) _VP8SSIMFromStatsClipped
+000000010005c444 (__TEXT,__text) non-external (was a private external) _VP8SSIMDspInit
+000000010005c4c4 (__TEXT,__text) non-external _SSIMGetClipped_C
+000000010005c93c (__TEXT,__text) non-external _SSIMGet_C
+000000010005cafc (__TEXT,__text) non-external _AccumulateSSE_C
+000000010005cc60 (__TEXT,__text) non-external (was a private external) _VP8PutBit
+000000010005ccec (__TEXT,__text) non-external _Flush
+000000010005ce54 (__TEXT,__text) non-external (was a private external) _VP8PutBitUniform
+000000010005cecc (__TEXT,__text) non-external (was a private external) _VP8PutBits
+000000010005cf78 (__TEXT,__text) non-external (was a private external) _VP8PutSignedBits
+000000010005d118 (__TEXT,__text) non-external (was a private external) _VP8BitWriterInit
+000000010005d1c8 (__TEXT,__text) non-external (was a private external) _VP8BitWriterFinish
+000000010005d26c (__TEXT,__text) non-external (was a private external) _VP8BitWriterAppend
+000000010005d35c (__TEXT,__text) non-external (was a private external) _VP8BitWriterWipeOut
+000000010005d394 (__TEXT,__text) non-external (was a private external) _VP8LBitWriterInit
+000000010005d470 (__TEXT,__text) non-external (was a private external) _VP8LBitWriterClone
+000000010005d57c (__TEXT,__text) non-external (was a private external) _VP8LBitWriterWipeOut
+000000010005d5b4 (__TEXT,__text) non-external (was a private external) _VP8LBitWriterReset
+000000010005d5e4 (__TEXT,__text) non-external (was a private external) _VP8LBitWriterSwap
+000000010005d610 (__TEXT,__text) non-external (was a private external) _VP8LPutBitsFlushBits
+000000010005d718 (__TEXT,__text) non-external (was a private external) _VP8LBitWriterFinish
+000000010005d820 (__TEXT,__text) non-external (was a private external) _VP8LCreateCompressedHuffmanTree
+000000010005da1c (__TEXT,__text) non-external (was a private external) _VP8LCreateHuffmanTree
+000000010005e890 (__TEXT,__text) non-external _CompareHuffmanTrees
+000000010005e8cc (__TEXT,__text) non-external _SetBitDepths
+000000010005e934 (__TEXT,__text) non-external (was a private external) _QuantizeLevels
+000000010005ef50 (__TEXT,__text) external _SharpYuvGetVersion
+000000010005ef5c (__TEXT,__text) external _SharpYuvInit
+000000010005eff4 (__TEXT,__text) external _SharpYuvConvert
+000000010005f048 (__TEXT,__text) external _SharpYuvConvertWithOptions
+000000010005f354 (__TEXT,__text) external _SharpYuvOptionsInitInternal
+000000010005f384 (__TEXT,__text) non-external _DoSharpArgbToYuv
+0000000100060d74 (__TEXT,__text) non-external _ImportOneRow
+000000010006147c (__TEXT,__text) non-external _UpdateChroma
+0000000100061704 (__TEXT,__text) non-external _armCPUInfo
+0000000100061710 (__TEXT,__text) external _SharpYuvComputeConversionMatrix
+0000000100061828 (__TEXT,__text) external _SharpYuvGetConversionMatrix
+0000000100061848 (__TEXT,__text) non-external (was a private external) _SharpYuvInitDsp
+000000010006184c (__TEXT,__text) non-external (was a private external) _SharpYuvInitGammaTables
+0000000100061a10 (__TEXT,__text) non-external (was a private external) _SharpYuvGammaToLinear
+0000000100061da0 (__TEXT,__text) non-external (was a private external) _SharpYuvLinearToGamma
+0000000100062170 (__TEXT,__text) non-external (was a private external) _InitSharpYuvNEON
+00000001000621b0 (__TEXT,__text) non-external _SharpYuvUpdateY_NEON
+00000001000624b8 (__TEXT,__text) non-external _SharpYuvUpdateRGB_NEON
+0000000100062678 (__TEXT,__text) non-external _SharpYuvFilterRow_NEON
+0000000100062c58 (__TEXT,__text) non-external (was a private external) _main
+0000000100063314 (__TEXT,__text) non-external _ReadPPM
+00000001000634a4 (__TEXT,__text) non-external _PreparePicture
+00000001000635b8 (__TEXT,__text) non-external _ReadToken
+000000010006410f (__TEXT,__cstring) non-external _kNorm
+00000001000642c0 (__TEXT,__const) non-external _kModeBpp
+00000001000642ce (__TEXT,__const) non-external _kQuantToDitherAmp
+00000001000642da (__TEXT,__const) non-external _kFilterExtraRows
+00000001000642de (__TEXT,__const) non-external _kScan
+00000001000642fe (__TEXT,__const) non-external _kDcTable
+000000010006437e (__TEXT,__const) non-external _kAcTable
+000000010006447e (__TEXT,__const) non-external _CoeffsUpdateProba
+000000010006489e (__TEXT,__const) non-external _CoeffsProba0
+0000000100064cbe (__TEXT,__const) non-external _kBModesProba
+0000000100065060 (__TEXT,__const) non-external _kZigzag
+0000000100065070 (__TEXT,__const) non-external _kCat3
+0000000100065074 (__TEXT,__const) non-external _kCat4
+0000000100065079 (__TEXT,__const) non-external _kCat5
+000000010006507f (__TEXT,__const) non-external _kCat6
+00000001000650a0 (__TEXT,__const) non-external _kTableSize
+00000001000650b8 (__TEXT,__const) non-external _kCodeLengthCodeOrder
+00000001000650cb (__TEXT,__const) non-external _kCodeLengthExtraBits
+00000001000650ce (__TEXT,__const) non-external _kCodeLengthRepeatOffsets
+00000001000650d1 (__TEXT,__const) non-external _kCodeToPlane
+00000001000651c0 (__TEXT,__const) non-external _sclip1
+00000001000658ba (__TEXT,__const) non-external _sclip2
+000000010006599b (__TEXT,__const) non-external _clip1
+0000000100065c9a (__TEXT,__const) non-external _abs0
+0000000100066510 (__TEXT,__const) non-external _kInvAlpha
+0000000100067510 (__TEXT,__const) non-external (was a private external) _kVP8Log2Range
+0000000100067590 (__TEXT,__const) non-external (was a private external) _kVP8NewRange
+0000000100067610 (__TEXT,__const) non-external _kBitMask
+00000001000676b8 (__TEXT,__const) non-external _kRandomTable
+0000000100067800 (__TEXT,__const) non-external _plane_to_code_lut
+00000001000678e0 (__TEXT,__const) non-external _kLosslessPresets
+00000001000678f4 (__TEXT,__const) non-external (was a private external) _VP8FixedCostsUV
+00000001000678fc (__TEXT,__const) non-external (was a private external) _VP8FixedCostsI16
+0000000100067904 (__TEXT,__const) non-external (was a private external) _VP8FixedCostsI4
+00000001000680d4 (__TEXT,__const) non-external _VP8LevelCodes
+00000001000681e0 (__TEXT,__const) non-external _kLevelsFromDelta
+00000001000683e0 (__TEXT,__const) non-external (was a private external) _VP8Cat3
+00000001000683e3 (__TEXT,__const) non-external (was a private external) _VP8Cat4
+00000001000683e7 (__TEXT,__const) non-external (was a private external) _VP8Cat5
+00000001000683ec (__TEXT,__const) non-external (was a private external) _VP8Cat6
+00000001000683f7 (__TEXT,__const) non-external _kAverageBytesPerMB
+0000000100068480 (__TEXT,__const) non-external _VP8TopLeftI4
+00000001000684b8 (__TEXT,__const) non-external (was a private external) _VP8I16ModeOffsets
+00000001000684c0 (__TEXT,__const) non-external (was a private external) _VP8UVModeOffsets
+00000001000684c8 (__TEXT,__const) non-external (was a private external) _VP8Scan
+00000001000684e8 (__TEXT,__const) non-external _kAcTable
+00000001000685e8 (__TEXT,__const) non-external _kDcTable
+0000000100068668 (__TEXT,__const) non-external _kAcTable2
+0000000100068768 (__TEXT,__const) non-external _kBiasMatrices
+000000010006876e (__TEXT,__const) non-external _kWeightY
+000000010006878e (__TEXT,__const) non-external _kZigzag
+000000010006879e (__TEXT,__const) non-external _kWeightTrellis
+00000001000687be (__TEXT,__const) non-external _VP8I4ModeOffsets
+00000001000687ec (__TEXT,__const) non-external (was a private external) _VP8CoeffsProba0
+0000000100068c0c (__TEXT,__const) non-external _kBModesProba
+0000000100068f90 (__TEXT,__const) non-external (was a private external) _VP8CoeffsUpdateProba
+00000001000693b8 (__TEXT,__const) non-external _AnalyzeEntropy.kHistoPairs
+00000001000693c2 (__TEXT,__const) non-external _StoreHuffmanTreeOfHuffmanTreeToBitMask.kStorageOrder
+0000000100069400 (__TEXT,__const) non-external (was a private external) _VP8EntropyCost
+0000000100069600 (__TEXT,__const) non-external (was a private external) _VP8LevelFixedCosts
+000000010006a600 (__TEXT,__const) non-external (was a private external) _VP8EncBands
+000000010006a670 (__TEXT,__const) non-external (was a private external) _VP8DspScan
+000000010006a6f0 (__TEXT,__const) non-external _Intra4Preds_NEON.kLookupTbl1
+000000010006a730 (__TEXT,__const) non-external _Intra4Preds_NEON.kLookupTbl2
+000000010006a770 (__TEXT,__const) non-external _Intra4Preds_NEON.kLookupTbl3
+000000010006a7c0 (__TEXT,__const) non-external (was a private external) _kLog2Table
+000000010006abc0 (__TEXT,__const) non-external (was a private external) _kSLog2Table
+000000010006b3c0 (__TEXT,__const) non-external (was a private external) _kPrefixEncodeCode
+000000010006b7c0 (__TEXT,__const) non-external (was a private external) _kPrefixEncodeExtraBitsValue
+000000010006b9c0 (__TEXT,__const) non-external _kWeight
+000000010006b9f0 (__TEXT,__const) non-external _kNewRange
+000000010006ba70 (__TEXT,__const) non-external _kReversedBits
+000000010006ba90 (__TEXT,__const) non-external _kWebpMatrix
+000000010006bac0 (__TEXT,__const) non-external _kRec601LimitedMatrix
+000000010006baf0 (__TEXT,__const) non-external _kRec601FullMatrix
+000000010006bb20 (__TEXT,__const) non-external _kRec709LimitedMatrix
+000000010006bb50 (__TEXT,__const) non-external _kRec709FullMatrix
+0000000100070180 (__DATA_CONST,__const) non-external _kCat3456
+00000001000701a0 (__DATA_CONST,__const) non-external (was a private external) _VP8ksclip1
+00000001000701a8 (__DATA_CONST,__const) non-external (was a private external) _VP8ksclip2
+00000001000701b0 (__DATA_CONST,__const) non-external (was a private external) _VP8kclip1
+00000001000701b8 (__DATA_CONST,__const) non-external (was a private external) _VP8kabs0
+00000001000701c0 (__DATA_CONST,__const) non-external _kStageNames
+0000000100074000 (__DATA,__data) non-external __MergedGlobals
+0000000100074048 (__DATA,__data) non-external __MergedGlobals
+0000000100074090 (__DATA,__data) external _VP8GetCPUInfo
+0000000100074098 (__DATA,__data) non-external __MergedGlobals
+00000001000740e0 (__DATA,__data) non-external __MergedGlobals
+0000000100074128 (__DATA,__data) non-external __MergedGlobals
+0000000100074170 (__DATA,__data) non-external __MergedGlobals
+00000001000741b8 (__DATA,__data) non-external __MergedGlobals
+0000000100074248 (__DATA,__data) non-external __MergedGlobals
+0000000100074320 (__DATA,__data) non-external _g_worker_interface
+0000000100074350 (__DATA,__data) non-external __MergedGlobals
+0000000100074398 (__DATA,__data) non-external __MergedGlobals
+00000001000743e0 (__DATA,__data) non-external __MergedGlobals
+0000000100074428 (__DATA,__data) non-external __MergedGlobals
+0000000100074470 (__DATA,__data) non-external __MergedGlobals
+00000001000744b8 (__DATA,__data) non-external (was a private external) _SharpYuvGetCPUInfo
+00000001000744c0 (__DATA,__thread_vars) non-external _profile_context
+00000001000744d8 (__DATA,__thread_vars) non-external _process_encode_index
+00000001000744f0 (__DATA,__thread_bss) non-external _process_encode_index$tlv$init
+00000001000744f8 (__DATA,__thread_bss) non-external _profile_context$tlv$init
+00000001000746c0 (__DATA,__bss) non-external _GetCoeffs
+00000001000746d0 (__DATA,__bss) non-external __MergedGlobals.1
+0000000100074964 (__DATA,__bss) non-external _ProfileNowNs.timebase
+000000010007496c (__DATA,__bss) non-external __MergedGlobals.1
+0000000100074c70 (__DATA,__bss) non-external _kGammaToLinearTabS
+0000000100075c78 (__DATA,__bss) non-external __MergedGlobals
+0000000100076488 (__DATA,__common) non-external (was a private external) _WebPMultARGBRow
+0000000100076490 (__DATA,__common) non-external (was a private external) _WebPMultRow
+0000000100076498 (__DATA,__common) non-external (was a private external) _WebPApplyAlphaMultiply
+00000001000764a0 (__DATA,__common) non-external (was a private external) _WebPApplyAlphaMultiply4444
+00000001000764a8 (__DATA,__common) non-external (was a private external) _WebPDispatchAlpha
+00000001000764b0 (__DATA,__common) non-external (was a private external) _WebPDispatchAlphaToGreen
+00000001000764b8 (__DATA,__common) non-external (was a private external) _WebPExtractAlpha
+00000001000764c0 (__DATA,__common) non-external (was a private external) _WebPExtractGreen
+00000001000764c8 (__DATA,__common) non-external (was a private external) _WebPPackRGB
+00000001000764d0 (__DATA,__common) non-external (was a private external) _WebPHasAlpha8b
+00000001000764d8 (__DATA,__common) non-external (was a private external) _WebPHasAlpha32b
+00000001000764e0 (__DATA,__common) non-external (was a private external) _WebPAlphaReplace
+00000001000764e8 (__DATA,__common) non-external (was a private external) _VP8TransformWHT
+00000001000764f0 (__DATA,__common) non-external (was a private external) _VP8PredLuma16
+0000000100076528 (__DATA,__common) non-external (was a private external) _VP8PredLuma4
+0000000100076578 (__DATA,__common) non-external (was a private external) _VP8PredChroma8
+00000001000765b0 (__DATA,__common) non-external (was a private external) _VP8Transform
+00000001000765b8 (__DATA,__common) non-external (was a private external) _VP8TransformAC3
+00000001000765c0 (__DATA,__common) non-external (was a private external) _VP8TransformUV
+00000001000765c8 (__DATA,__common) non-external (was a private external) _VP8TransformDC
+00000001000765d0 (__DATA,__common) non-external (was a private external) _VP8TransformDCUV
+00000001000765d8 (__DATA,__common) non-external (was a private external) _VP8VFilter16
+00000001000765e0 (__DATA,__common) non-external (was a private external) _VP8HFilter16
+00000001000765e8 (__DATA,__common) non-external (was a private external) _VP8VFilter8
+00000001000765f0 (__DATA,__common) non-external (was a private external) _VP8HFilter8
+00000001000765f8 (__DATA,__common) non-external (was a private external) _VP8VFilter16i
+0000000100076600 (__DATA,__common) non-external (was a private external) _VP8HFilter16i
+0000000100076608 (__DATA,__common) non-external (was a private external) _VP8VFilter8i
+0000000100076610 (__DATA,__common) non-external (was a private external) _VP8HFilter8i
+0000000100076618 (__DATA,__common) non-external (was a private external) _VP8SimpleVFilter16
+0000000100076620 (__DATA,__common) non-external (was a private external) _VP8SimpleHFilter16
+0000000100076628 (__DATA,__common) non-external (was a private external) _VP8SimpleVFilter16i
+0000000100076630 (__DATA,__common) non-external (was a private external) _VP8SimpleHFilter16i
+0000000100076638 (__DATA,__common) non-external (was a private external) _VP8DitherCombine8x8
+0000000100076640 (__DATA,__common) non-external (was a private external) _WebPFilters
+0000000100076660 (__DATA,__common) non-external (was a private external) _WebPUnfilters
+0000000100076680 (__DATA,__common) non-external (was a private external) _VP8LMapColor8b
+0000000100076688 (__DATA,__common) non-external (was a private external) _VP8LAddGreenToBlueAndRed
+0000000100076690 (__DATA,__common) non-external (was a private external) _VP8LConvertBGRAToRGB
+0000000100076698 (__DATA,__common) non-external (was a private external) _VP8LConvertBGRAToRGBA
+00000001000766a0 (__DATA,__common) non-external (was a private external) _VP8LConvertBGRAToBGR
+00000001000766a8 (__DATA,__common) non-external (was a private external) _VP8LConvertBGRAToRGBA4444
+00000001000766b0 (__DATA,__common) non-external (was a private external) _VP8LConvertBGRAToRGB565
+00000001000766b8 (__DATA,__common) non-external (was a private external) _VP8LAddGreenToBlueAndRed_SSE
+00000001000766c0 (__DATA,__common) non-external (was a private external) _VP8LPredictorsAdd
+0000000100076740 (__DATA,__common) non-external (was a private external) _VP8LPredictorsAdd_SSE
+00000001000767c0 (__DATA,__common) non-external (was a private external) _VP8LPredictors
+0000000100076840 (__DATA,__common) non-external (was a private external) _VP8LPredictorsAdd_C
+00000001000768c0 (__DATA,__common) non-external (was a private external) _VP8LTransformColorInverse
+00000001000768c8 (__DATA,__common) non-external (was a private external) _VP8LTransformColorInverse_SSE
+00000001000768d0 (__DATA,__common) non-external (was a private external) _VP8LConvertBGRAToRGB_SSE
+00000001000768d8 (__DATA,__common) non-external (was a private external) _VP8LConvertBGRAToRGBA_SSE
+00000001000768e0 (__DATA,__common) non-external (was a private external) _VP8LMapColor32b
+00000001000768e8 (__DATA,__common) non-external (was a private external) _WebPRescalerImportRowShrink
+00000001000768f0 (__DATA,__common) non-external (was a private external) _WebPRescalerImportRowExpand
+00000001000768f8 (__DATA,__common) non-external (was a private external) _WebPRescalerExportRowExpand
+0000000100076900 (__DATA,__common) non-external (was a private external) _WebPRescalerExportRowShrink
+0000000100076908 (__DATA,__common) non-external (was a private external) _WebPUpsamplers
+0000000100076970 (__DATA,__common) non-external (was a private external) _WebPYUV444Converters
+00000001000769d8 (__DATA,__common) non-external (was a private external) _WebPSamplers
+0000000100076a40 (__DATA,__common) non-external (was a private external) _WebPConvertRGBToY
+0000000100076a48 (__DATA,__common) non-external (was a private external) _WebPConvertBGRToY
+0000000100076a50 (__DATA,__common) non-external (was a private external) _WebPConvertRGBA32ToUV
+0000000100076a58 (__DATA,__common) non-external (was a private external) _WebPImportYUVAFromRGBA
+0000000100076a60 (__DATA,__common) non-external (was a private external) _WebPImportYUVAFromRGBALastLine
+0000000100076a68 (__DATA,__common) non-external (was a private external) _WebPConvertARGBToY
+0000000100076a70 (__DATA,__common) non-external (was a private external) _WebPConvertARGBToUV
+0000000100076a78 (__DATA,__common) non-external (was a private external) _VP8GetResidualCost
+0000000100076a80 (__DATA,__common) non-external (was a private external) _VP8SetResidualCoeffs
+0000000100076a88 (__DATA,__common) non-external (was a private external) _VP8CollectHistogram
+0000000100076a90 (__DATA,__common) non-external (was a private external) _VP8ITransform
+0000000100076a98 (__DATA,__common) non-external (was a private external) _VP8FTransform
+0000000100076aa0 (__DATA,__common) non-external (was a private external) _VP8FTransform2
+0000000100076aa8 (__DATA,__common) non-external (was a private external) _VP8FTransformWHT
+0000000100076ab0 (__DATA,__common) non-external (was a private external) _VP8EncPredLuma4
+0000000100076ab8 (__DATA,__common) non-external (was a private external) _VP8EncPredLuma16
+0000000100076ac0 (__DATA,__common) non-external (was a private external) _VP8EncPredChroma8
+0000000100076ac8 (__DATA,__common) non-external (was a private external) _VP8SSE16x16
+0000000100076ad0 (__DATA,__common) non-external (was a private external) _VP8SSE8x8
+0000000100076ad8 (__DATA,__common) non-external (was a private external) _VP8SSE16x8
+0000000100076ae0 (__DATA,__common) non-external (was a private external) _VP8SSE4x4
+0000000100076ae8 (__DATA,__common) non-external (was a private external) _VP8TDisto4x4
+0000000100076af0 (__DATA,__common) non-external (was a private external) _VP8TDisto16x16
+0000000100076af8 (__DATA,__common) non-external (was a private external) _VP8Mean16x4
+0000000100076b00 (__DATA,__common) non-external (was a private external) _VP8EncQuantizeBlock
+0000000100076b08 (__DATA,__common) non-external (was a private external) _VP8EncQuantize2Blocks
+0000000100076b10 (__DATA,__common) non-external (was a private external) _VP8EncQuantizeBlockWHT
+0000000100076b18 (__DATA,__common) non-external (was a private external) _VP8Copy4x4
+0000000100076b20 (__DATA,__common) non-external (was a private external) _VP8Copy16x8
+0000000100076b28 (__DATA,__common) non-external (was a private external) _VP8LSubtractGreenFromBlueAndRed
+0000000100076b30 (__DATA,__common) non-external (was a private external) _VP8LSubtractGreenFromBlueAndRed_SSE
+0000000100076b38 (__DATA,__common) non-external (was a private external) _VP8LTransformColor
+0000000100076b40 (__DATA,__common) non-external (was a private external) _VP8LTransformColor_SSE
+0000000100076b48 (__DATA,__common) non-external (was a private external) _VP8LCollectColorBlueTransforms
+0000000100076b50 (__DATA,__common) non-external (was a private external) _VP8LCollectColorBlueTransforms_SSE
+0000000100076b58 (__DATA,__common) non-external (was a private external) _VP8LCollectColorRedTransforms
+0000000100076b60 (__DATA,__common) non-external (was a private external) _VP8LCollectColorRedTransforms_SSE
+0000000100076b68 (__DATA,__common) non-external (was a private external) _VP8LFastLog2Slow
+0000000100076b70 (__DATA,__common) non-external (was a private external) _VP8LFastSLog2Slow
+0000000100076b78 (__DATA,__common) non-external (was a private external) _VP8LExtraCost
+0000000100076b80 (__DATA,__common) non-external (was a private external) _VP8LCombinedShannonEntropy
+0000000100076b88 (__DATA,__common) non-external (was a private external) _VP8LShannonEntropy
+0000000100076b90 (__DATA,__common) non-external (was a private external) _VP8LGetEntropyUnrefined
+0000000100076b98 (__DATA,__common) non-external (was a private external) _VP8LGetCombinedEntropyUnrefined
+0000000100076ba0 (__DATA,__common) non-external (was a private external) _VP8LAddVector
+0000000100076ba8 (__DATA,__common) non-external (was a private external) _VP8LAddVectorEq
+0000000100076bb0 (__DATA,__common) non-external (was a private external) _VP8LVectorMismatch
+0000000100076bb8 (__DATA,__common) non-external (was a private external) _VP8LBundleColorMap
+0000000100076bc0 (__DATA,__common) non-external (was a private external) _VP8LBundleColorMap_SSE
+0000000100076bc8 (__DATA,__common) non-external (was a private external) _VP8LPredictorsSub
+0000000100076c48 (__DATA,__common) non-external (was a private external) _VP8LPredictorsSub_C
+0000000100076cc8 (__DATA,__common) non-external (was a private external) _VP8LPredictorsSub_SSE
+0000000100076d48 (__DATA,__common) non-external (was a private external) _VP8SSIMGet
+0000000100076d50 (__DATA,__common) non-external (was a private external) _VP8SSIMGetClipped
+0000000100076d58 (__DATA,__common) non-external (was a private external) _VP8AccumulateSSE
+0000000100076d60 (__DATA,__common) non-external (was a private external) _SharpYuvUpdateY
+0000000100076d68 (__DATA,__common) non-external (was a private external) _SharpYuvUpdateRGB
+0000000100076d70 (__DATA,__common) non-external (was a private external) _SharpYuvFilterRow

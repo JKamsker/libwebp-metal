@@ -1,0 +1,15 @@
+{
+  "benchmark_lease_attempted": false,
+  "encoder_workloads": 0,
+  "performance_samples": 0,
+  "phase_2_fail_closed_prerequisites": [
+    "bitstream/pixel correctness before first profile",
+    "coarse monotonic timer records pass schema/count/accounting",
+    "all timed children remain serial and directly owned"
+  ],
+  "profile_commands_constructed": 24,
+  "profiler_invocations": 0,
+  "schema": "libwebp-backref-cost-attribution-v2-rehearsal-v1",
+  "source_commit": "4e0b23260769704f50afa0fa41be95043ce1087f",
+  "status": "PASS"
+}

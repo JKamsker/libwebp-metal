@@ -35,7 +35,8 @@
      defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT) + \
      defined(WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT) + \
      defined(WEBP_USE_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT) + \
-     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT)) > 1
+     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT) + \
+     defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)) > 1
 #error "overlapping backref cost experiments are mutually exclusive"
 #elif defined(WEBP_USE_BACKREF_COST_TRACEBACK_EXPERIMENT)
 #include "src/enc/backref_cost_traceback_experiment_enc.h"
@@ -105,6 +106,16 @@
 #define VP8LBackrefCostIntervalSpecializationV1ExperimentEnabled \
   VP8LBackrefCostAttributionV1ExperimentEnabled
 #define VP8LBackrefCostIntervalSpecializationV1ExperimentInjectFallback() 0
+#define VP8LBackrefCostAttributionExperimentEnabled \
+  VP8LBackrefCostAttributionV1ExperimentEnabled
+#elif defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
+#include "src/enc/backref_cost_attribution_v2_experiment_enc.h"
+#define WEBP_USE_BACKREF_COST_INTERVAL_SPECIALIZATION_LOCAL 1
+#define VP8LBackrefCostIntervalSpecializationV1ExperimentEnabled \
+  VP8LBackrefCostAttributionV2ExperimentEnabled
+#define VP8LBackrefCostIntervalSpecializationV1ExperimentInjectFallback() 0
+#define VP8LBackrefCostAttributionExperimentEnabled \
+  VP8LBackrefCostAttributionV2ExperimentEnabled
 #endif
 
 #include "src/enc/profile_enc.h"
@@ -1444,11 +1455,12 @@ int VP8LBackwardReferencesTraceBackwards(int xsize, int ysize,
 
   if (dist_array == NULL) goto Error;
 
-#if defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
   {
     const uint64_t dp_start =
         WebPProfileStageBegin(WEBP_PROFILE_BACKREF_COST_DP_TOTAL);
-    const int dp_ok = VP8LBackrefCostAttributionV1ExperimentEnabled()
+    const int dp_ok = VP8LBackrefCostAttributionExperimentEnabled()
                           ? BackwardReferencesHashChainDistanceOnlySpecialized(
                                 xsize, ysize, argb, cache_bits, hash_chain,
                                 refs_src, dist_array)

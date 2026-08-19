@@ -1,0 +1,206 @@
+{
+  "member_inventory": {
+    "member_count": 39,
+    "members": [
+      {
+        "name": "evidence/correctness-files",
+        "size": 0,
+        "type": "directory"
+      },
+      {
+        "name": "evidence/runner",
+        "size": 0,
+        "type": "directory"
+      },
+      {
+        "name": "evidence/stages",
+        "size": 0,
+        "type": "directory"
+      },
+      {
+        "name": "evidence/artifact-hashes.json",
+        "size": 6132,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build-identity.json",
+        "size": 1234,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build.log",
+        "size": 60041,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/commands.jsonl",
+        "size": 3054,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/graphic-large-m4-baseline-0.webp",
+        "size": 1274,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/graphic-large-m4-baseline-1.webp",
+        "size": 1274,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/graphic-large-m4-candidate-0.webp",
+        "size": 1274,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/graphic-large-m4-candidate-1.webp",
+        "size": 1274,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/graphic-large-m6-baseline-0.webp",
+        "size": 1274,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/graphic-large-m6-baseline-1.webp",
+        "size": 1274,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/graphic-large-m6-candidate-0.webp",
+        "size": 1274,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/graphic-large-m6-candidate-1.webp",
+        "size": 1274,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/photo-large-m4-baseline-0.webp",
+        "size": 283992,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/photo-large-m4-baseline-1.webp",
+        "size": 283992,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/photo-large-m4-candidate-0.webp",
+        "size": 283992,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/photo-large-m4-candidate-1.webp",
+        "size": 283992,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/photo-large-m6-baseline-0.webp",
+        "size": 286706,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/photo-large-m6-baseline-1.webp",
+        "size": 286706,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/photo-large-m6-candidate-0.webp",
+        "size": 286706,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness-files/photo-large-m6-candidate-1.webp",
+        "size": 286706,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness.json",
+        "size": 883,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/diagnostic-admission.json",
+        "size": 1566,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/lease-record.json",
+        "size": 222,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-status.json",
+        "size": 140,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-before-p00-photo-large-m4-baseline-r0.txt",
+        "size": 93154,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-pre-profiles.txt",
+        "size": 93154,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-resources-admission.txt",
+        "size": 93154,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-resources-pre-profiles.txt",
+        "size": 93154,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/profile-plan.json",
+        "size": 48629,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/refusal.json",
+        "size": 198,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/resource-admission-admission.json",
+        "size": 3130,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/resource-admission-pre-profiles.json",
+        "size": 3133,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/runner/p00-photo-large-m4-baseline-r0.jsonl",
+        "size": 1088,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/runner/p00-photo-large-m4-baseline-r0.stderr",
+        "size": 0,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/stages/p00-photo-large-m4-baseline-r0.jsonl",
+        "size": 6978,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/symbols.txt",
+        "size": 70203,
+        "type": "regular"
+      }
+    ],
+    "offending": null,
+    "schema": "libwebp-backref-cost-attribution-v2-archive-inventory-v1",
+    "status": "accepted"
+  },
+  "status": "accepted"
+}

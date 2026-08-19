@@ -52,7 +52,8 @@ typedef enum {
 
 // This internal API is compiled only for the encoder-stage-profile experiment.
 #if defined(WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT) || \
-    defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS)
+    defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
 void WebPProfileBeginSession(const WebPConfig* config,
                              const WebPPicture* picture);
 void WebPProfileEndSession(int ok, int error_code);
@@ -75,7 +76,8 @@ void WebPProfileMarkMetalHash(void);
 #define WebPProfileMarkMetalHash() ((void)0)
 #endif
 
-#if defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS)
+#if defined(WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS) || \
+    defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
 #if defined(_MSC_VER)
 #define WEBP_PROFILE_NOINLINE __declspec(noinline)
 #elif defined(__GNUC__) || defined(__clang__)
