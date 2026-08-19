@@ -1,0 +1,145 @@
+// Copyright 2026
+//
+// Private controls and untimed work recorder for backref-cost specialization
+// factorization v3. Recorder declarations are absent from timed builds.
+
+#ifndef WEBP_ENC_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT_ENC_H_
+#define WEBP_ENC_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT_ENC_H_
+
+#include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+typedef enum {
+  WEBP_BACKREF_FACTORIZATION_VARIANT_INVALID = -1,
+  WEBP_BACKREF_FACTORIZATION_VARIANT_B = 0,
+  WEBP_BACKREF_FACTORIZATION_VARIANT_L = 1,
+  WEBP_BACKREF_FACTORIZATION_VARIANT_H = 2
+} VP8LBackrefCostSpecializationFactorizationV3Variant;
+
+VP8LBackrefCostSpecializationFactorizationV3Variant
+VP8LBackrefCostSpecializationFactorizationV3GetVariant(void);
+
+#if defined(WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_RECORDER)
+typedef struct {
+  uint64_t selector_evaluations;
+  uint64_t baseline_dp_calls;
+  uint64_t layout_clone_dp_calls;
+  uint64_t hint_dp_calls;
+  uint64_t exact_activations;
+  uint64_t push_calls;
+  uint64_t short_push_calls;
+  uint64_t cache_segments;
+  uint64_t overlap_scans;
+  uint64_t disjoint_prefix_scans;
+  uint64_t insert_calls;
+  uint64_t null_hint_insert_calls;
+  uint64_t position_backward_steps;
+  uint64_t position_forward_steps;
+  uint64_t append_hint_fast_paths;
+  uint64_t append_hint_branch_checks;
+  uint64_t append_hint_loads;
+  uint64_t append_hint_start_loads;
+  uint64_t append_hint_update_checks;
+  uint64_t append_hint_updates;
+  uint64_t pop_tail_branch_checks;
+  uint64_t pop_tail_updates;
+  uint64_t interval_updates;
+  uint64_t interval_pops;
+  uint64_t max_live_intervals;
+} VP8LBackrefCostSpecializationFactorizationV3Stats;
+
+void VP8LBackrefCostSpecializationFactorizationV3StatsReset(void);
+void VP8LBackrefCostSpecializationFactorizationV3StatsGet(
+    VP8LBackrefCostSpecializationFactorizationV3Stats* stats);
+void VP8LBackrefCostSpecializationFactorizationV3RecordSelector(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordDP(int variant);
+void VP8LBackrefCostSpecializationFactorizationV3RecordActivation(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordPush(int is_short);
+void VP8LBackrefCostSpecializationFactorizationV3RecordCacheSegment(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordOverlapScan(
+    int is_disjoint_prefix);
+void VP8LBackrefCostSpecializationFactorizationV3RecordInsert(int has_null_hint);
+void VP8LBackrefCostSpecializationFactorizationV3RecordPositionBackwardStep(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordPositionForwardStep(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordAppendHintFastPath(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordAppendHintBranchCheck(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordAppendHintLoad(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordAppendHintStartLoad(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordAppendHintUpdateCheck(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordAppendHintUpdate(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordPopTailBranchCheck(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordPopTailUpdate(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordUpdate(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordPop(void);
+void VP8LBackrefCostSpecializationFactorizationV3RecordLiveIntervals(int count);
+#endif
+
+// Keep the already-audited factorization call sites structurally identical
+// while selecting fresh V3 recorder/control symbols in the V3-only build.
+#define VP8LBackrefCostSpecializationFactorizationV1Variant \
+  VP8LBackrefCostSpecializationFactorizationV3Variant
+#define VP8LBackrefCostSpecializationFactorizationV1GetVariant \
+  VP8LBackrefCostSpecializationFactorizationV3GetVariant
+#if defined(WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_RECORDER)
+#define VP8LBackrefCostSpecializationFactorizationV1RecordSelector \
+  VP8LBackrefCostSpecializationFactorizationV3RecordSelector
+#define VP8LBackrefCostSpecializationFactorizationV1RecordDP \
+  VP8LBackrefCostSpecializationFactorizationV3RecordDP
+#define VP8LBackrefCostSpecializationFactorizationV1RecordActivation \
+  VP8LBackrefCostSpecializationFactorizationV3RecordActivation
+#define VP8LBackrefCostSpecializationFactorizationV1RecordPush \
+  VP8LBackrefCostSpecializationFactorizationV3RecordPush
+#define VP8LBackrefCostSpecializationFactorizationV1RecordCacheSegment \
+  VP8LBackrefCostSpecializationFactorizationV3RecordCacheSegment
+#define VP8LBackrefCostSpecializationFactorizationV1RecordOverlapScan \
+  VP8LBackrefCostSpecializationFactorizationV3RecordOverlapScan
+#define VP8LBackrefCostSpecializationFactorizationV1RecordInsert \
+  VP8LBackrefCostSpecializationFactorizationV3RecordInsert
+#define VP8LBackrefCostSpecializationFactorizationV1RecordPositionBackwardStep \
+  VP8LBackrefCostSpecializationFactorizationV3RecordPositionBackwardStep
+#define VP8LBackrefCostSpecializationFactorizationV1RecordPositionForwardStep \
+  VP8LBackrefCostSpecializationFactorizationV3RecordPositionForwardStep
+#define VP8LBackrefCostSpecializationFactorizationV1RecordAppendHintFastPath \
+  VP8LBackrefCostSpecializationFactorizationV3RecordAppendHintFastPath
+#define VP8LBackrefCostSpecializationFactorizationV1RecordAppendHintBranchCheck \
+  VP8LBackrefCostSpecializationFactorizationV3RecordAppendHintBranchCheck
+#define VP8LBackrefCostSpecializationFactorizationV1RecordAppendHintLoad \
+  VP8LBackrefCostSpecializationFactorizationV3RecordAppendHintLoad
+#define VP8LBackrefCostSpecializationFactorizationV1RecordAppendHintStartLoad \
+  VP8LBackrefCostSpecializationFactorizationV3RecordAppendHintStartLoad
+#define VP8LBackrefCostSpecializationFactorizationV1RecordAppendHintUpdateCheck \
+  VP8LBackrefCostSpecializationFactorizationV3RecordAppendHintUpdateCheck
+#define VP8LBackrefCostSpecializationFactorizationV1RecordAppendHintUpdate \
+  VP8LBackrefCostSpecializationFactorizationV3RecordAppendHintUpdate
+#define VP8LBackrefCostSpecializationFactorizationV1RecordPopTailBranchCheck \
+  VP8LBackrefCostSpecializationFactorizationV3RecordPopTailBranchCheck
+#define VP8LBackrefCostSpecializationFactorizationV1RecordPopTailUpdate \
+  VP8LBackrefCostSpecializationFactorizationV3RecordPopTailUpdate
+#define VP8LBackrefCostSpecializationFactorizationV1RecordUpdate \
+  VP8LBackrefCostSpecializationFactorizationV3RecordUpdate
+#define VP8LBackrefCostSpecializationFactorizationV1RecordPop \
+  VP8LBackrefCostSpecializationFactorizationV3RecordPop
+#define VP8LBackrefCostSpecializationFactorizationV1RecordLiveIntervals \
+  VP8LBackrefCostSpecializationFactorizationV3RecordLiveIntervals
+#endif
+
+#if defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT)
+#if defined(_MSC_VER)
+#define WEBP_BACKREF_ATTRIBUTION_NOINLINE __declspec(noinline)
+#elif defined(__GNUC__) || defined(__clang__)
+#define WEBP_BACKREF_ATTRIBUTION_NOINLINE __attribute__((noinline))
+#else
+#define WEBP_BACKREF_ATTRIBUTION_NOINLINE
+#endif
+#else
+#define WEBP_BACKREF_ATTRIBUTION_NOINLINE
+#endif
+
+#ifdef __cplusplus
+}  // extern "C"
+#endif
+
+#endif  // WEBP_ENC_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT_ENC_H_

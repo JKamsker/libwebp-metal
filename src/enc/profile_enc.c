@@ -22,7 +22,9 @@
     !defined(                                                      \
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) && \
     !defined(                                                      \
-        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT) && \
+    !defined(                                                      \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT)
 #define WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT 1
 #endif
 #include "src/enc/profile_enc.h"
@@ -89,6 +91,21 @@
   "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_CASE_ID"
 #define WEBP_FACTORIZATION_SAMPLE_SET_ENV \
   "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_SAMPLE_SET"
+#elif defined(                                                          \
+    WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT)
+#include "src/enc/backref_cost_specialization_factorization_v3_experiment_enc.h"
+#define WEBP_FACTORIZATION_VARIANT_ENV \
+  "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_VARIANT"
+#define WEBP_FACTORIZATION_TIMERS_ENV \
+  "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_TIMERS"
+#define WEBP_FACTORIZATION_STAGE_OUTPUT_ENV \
+  "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_STAGE_OUTPUT"
+#define WEBP_FACTORIZATION_RUN_ID_ENV \
+  "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_RUN_ID"
+#define WEBP_FACTORIZATION_CASE_ID_ENV \
+  "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_CASE_ID"
+#define WEBP_FACTORIZATION_SAMPLE_SET_ENV \
+  "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_SAMPLE_SET"
 #endif
 
 #include <stdio.h>
@@ -210,7 +227,9 @@ static uint64_t ProfileNowNs(void) {
     defined(                                                       \
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) || \
     defined(                                                       \
-        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT) || \
+    defined(                                                       \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT)
 uint64_t WebPProfileClockNowForValidation(void) { return ProfileNowNs(); }
 #endif
 
@@ -368,7 +387,9 @@ void WebPProfileBeginSession(const WebPConfig* config,
 #elif defined(                                                          \
           WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) || \
     defined(                                                            \
-        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT) || \
+    defined(                                                            \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT)
   {
     const char* const variant = getenv(WEBP_FACTORIZATION_VARIANT_ENV);
     if (variant == NULL ||
@@ -583,7 +604,9 @@ void WebPProfileEndSession(int ok, int error_code) {
 #elif defined(                                                          \
           WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) || \
     defined(                                                            \
-        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT) || \
+    defined(                                                            \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT)
   const char* const output_path = getenv(WEBP_FACTORIZATION_STAGE_OUTPUT_ENV);
   const char* const run_id = getenv(WEBP_FACTORIZATION_RUN_ID_ENV);
   const char* const case_id = getenv(WEBP_FACTORIZATION_CASE_ID_ENV);

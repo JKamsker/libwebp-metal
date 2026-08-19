@@ -1,0 +1,176 @@
+{
+  "derivation": "independent exact-file capture from pinned Xcode paths and SDK metadata; no xcrun discovery",
+  "identity": {
+    "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+    "executables": {
+      "ar": {
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+        "sha256": "e914ec3c1eb8ca99c7d5f2f9bd82ac3458d0ab14556a8a3441b28f37baaa77c9",
+        "version": {
+          "arguments": [],
+          "output_lines": [],
+          "output_sha256": null,
+          "returncode": null,
+          "version_source": "Xcode bundle metadata; ar has no standalone version query"
+        }
+      },
+      "clang": {
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+        "version": {
+          "arguments": [
+            "--version"
+          ],
+          "output_lines": [
+            "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+            "Thread model: posix",
+            "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+          ],
+          "output_sha256": "6245580a5236b07a40ed12d781b8de4fd917816b89b392e680687166f647a901",
+          "returncode": 0
+        }
+      },
+      "clang++": {
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+        "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+        "version": {
+          "arguments": [
+            "--version"
+          ],
+          "output_lines": [
+            "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+            "Thread model: posix",
+            "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+          ],
+          "output_sha256": "6245580a5236b07a40ed12d781b8de4fd917816b89b392e680687166f647a901",
+          "returncode": 0
+        }
+      },
+      "llvm-objdump": {
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump",
+        "sha256": "fa24edaea7afab86d88b9706e1b952f32abc819bd62f8f9bf8dafb5ae01ba159",
+        "version": {
+          "arguments": [
+            "--version"
+          ],
+          "output_lines": [
+            "Apple LLVM version 17.0.0",
+            "  Optimized build.",
+            "",
+            "",
+            "  Registered Targets:",
+            "    aarch64    - AArch64 (little endian)",
+            "    aarch64_32 - AArch64 (little endian ILP32)",
+            "    aarch64_be - AArch64 (big endian)",
+            "    arm        - ARM",
+            "    arm64      - ARM64 (little endian)",
+            "    arm64_32   - ARM64 (little endian ILP32)",
+            "    armeb      - ARM (big endian)",
+            "    thumb      - Thumb",
+            "    thumbeb    - Thumb (big endian)",
+            "    x86        - 32-bit X86: Pentium-Pro and above",
+            "    x86-64     - 64-bit X86: EM64T and AMD64"
+          ],
+          "output_sha256": "ae22f35526e555c21ee08130898b7515d118f32ca500c9580ba132c327eb60cd",
+          "returncode": 0
+        }
+      },
+      "nm": {
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-nm",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm",
+        "sha256": "a42f25b6363f3d43b911733a276a46bdbed894f1ef8e764cb7461ebdb37a15e7",
+        "version": {
+          "arguments": [
+            "--version"
+          ],
+          "output_lines": [
+            "llvm-nm, compatible with GNU nm",
+            "Apple LLVM version 17.0.0",
+            "  Optimized build."
+          ],
+          "output_sha256": "20384fe0739a6ed54aac86eaeed689fb86e8d58cdb6824550305171821fbbb4d",
+          "returncode": 0
+        }
+      },
+      "ranlib": {
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+        "sha256": "779903653ff38059513ef4f34846ab8b53f71f9cb7c066b29a47e520527b6cfa",
+        "version": {
+          "arguments": [
+            "-V"
+          ],
+          "output_lines": [
+            "Apple Inc. version cctools-1030.6.3",
+            "error: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: no archives specified",
+            "Usage: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib [-sactfqLT] [-] archive [...]"
+          ],
+          "output_sha256": "d498dee5d1ba26aace88be9c733100c05e4f1b29b0d3967446e7798576dcf459",
+          "returncode": 1
+        }
+      }
+    },
+    "metadata": {
+      "sdk-settings-json": {
+        "bytes": 7627,
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.json",
+        "sha256": "95882a9cea02396e76f3e406a5728269b2a1a11bcd241430a84c9e63d09a6cd3"
+      },
+      "sdk-settings-plist": {
+        "bytes": 5346,
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.plist",
+        "sha256": "03cb7d21a91023f6dff9ea019a3710061e2eb570bdb260faf4daa74151abf15d"
+      },
+      "toolchain-info-plist": {
+        "bytes": 95,
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/ToolchainInfo.plist",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/ToolchainInfo.plist",
+        "sha256": "b2e3b746c87ddfd6d2145656d87569054807e2196d6f46ef09dec3923ed31541"
+      },
+      "xcode-version-plist": {
+        "bytes": 523,
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/version.plist",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/version.plist",
+        "sha256": "79504c54fc47124dbc5945b628d9c9071923a57c0cd109ff5afdd7884c1c889c"
+      }
+    },
+    "required_executable_names": [
+      "clang",
+      "clang++",
+      "nm",
+      "ar",
+      "ranlib",
+      "llvm-objdump"
+    ],
+    "required_metadata_names": [
+      "xcode-version-plist",
+      "toolchain-info-plist",
+      "sdk-settings-json",
+      "sdk-settings-plist"
+    ],
+    "schema": "libwebp-backref-cost-specialization-factorization-v3-toolchain-identity-v1",
+    "sdk": {
+      "canonical_name": "macosx26.2",
+      "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+      "display_name": "macOS 26.2",
+      "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "version": "26.2"
+    },
+    "stale_v2_xcrun_rejected": true,
+    "stale_v2_xcrun_sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152",
+    "xcode": {
+      "bundle_version": "24587",
+      "product_build_version": "17C529",
+      "short_version": "26.3",
+      "toolchain_identifier": "com.apple.dt.toolchain.XcodeDefault"
+    },
+    "xcrun_required": false
+  },
+  "schema": "libwebp-backref-cost-specialization-factorization-v3-independent-toolchain-fixture-v1"
+}

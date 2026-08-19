@@ -71,7 +71,9 @@ typedef enum {
     defined(                                                       \
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) || \
     defined(                                                       \
-        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT) || \
+    defined(                                                       \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT)
 void WebPProfileBeginSession(const WebPConfig* config,
                              const WebPPicture* picture);
 void WebPProfileEndSession(int ok, int error_code);
@@ -97,7 +99,9 @@ void WebPProfileMarkMetalHash(void);
     defined(                                                       \
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) || \
     defined(                                                       \
-        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT) || \
+    defined(                                                       \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT)
 uint64_t WebPProfileClockNowForValidation(void);
 #endif
 #else
@@ -131,7 +135,9 @@ uint64_t WebPProfileClockNowForValidation(void);
     defined(                                                       \
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_EXPERIMENT) || \
     defined(                                                       \
-        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT)
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT) || \
+    defined(                                                       \
+        WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT)
 #if defined(_MSC_VER)
 #define WEBP_PROFILE_NOINLINE __declspec(noinline)
 #elif defined(__GNUC__) || defined(__clang__)
