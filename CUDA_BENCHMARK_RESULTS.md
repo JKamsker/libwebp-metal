@@ -730,3 +730,25 @@ reference hashes and byte counts. Five order-balanced process medians were:
 The added shared writes and larger footprint outweighed any reduction in read
 bank aliasing, so the candidate was removed. Raw timing evidence is retained
 locally in `/tmp/libwebp-residual-transpose-ab.ffrAEp.json`.
+
+## Two-token boolean-coder loop-unroll rejection
+
+The retained end-to-end profiles still attributed 54.0--54.3% of sampled CPU
+time to `VP8PutTokenPage`. Its generated code had one token load and loop
+back-edge per coded bit. A GCC-only two-way unroll duplicated the exact coder
+body so the processor could overlap token and probability loads without
+changing the serial range/value state. Disassembly confirmed a two-token hot
+body and all seven focused CTests passed.
+
+All 60 timed outputs matched between variants. Five order-balanced process
+medians were:
+
+| Format | Baseline | Two-token unroll | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.968 ms/image | 41.950 ms/image | -0.018 ms |
+| JPEG lossy | 42.004 ms/image | 41.958 ms/image | -0.046 ms |
+
+The effectively zero gains show that loop bookkeeping and load overlap are
+not limiting the serial arithmetic-coder chain. The candidate was removed;
+raw timing evidence is retained locally in
+`/tmp/libwebp-token-unroll-ab.frMCAJ.json`.

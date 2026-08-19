@@ -404,3 +404,19 @@ registers stayed at 93 and static shared memory increased from 17,912 to
 The extra shared writes and footprint outweighed the read-layout improvement,
 so the candidate was removed. The local raw summary is
 `/tmp/libwebp-residual-transpose-ab.ffrAEp.json`.
+
+## Two-token boolean-coder loop unroll
+
+Current whole-process profiles attributed 54.0--54.3% of sampled CPU time to
+`VP8PutTokenPage`. A GCC-only candidate unrolled its exact coder loop twice;
+disassembly confirmed two token bodies per back-edge. All seven focused CTests
+passed and all 60 timed outputs matched between variants. Five order-balanced
+process medians measured:
+
+| Format | Baseline | Two-token unroll | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.968 ms/image | 41.950 ms/image | -0.018 ms |
+| JPEG lossy | 42.004 ms/image | 41.958 ms/image | -0.046 ms |
+
+The gains are effectively zero, so the larger generated loop was removed. The
+local raw summary is `/tmp/libwebp-token-unroll-ab.frMCAJ.json`.
