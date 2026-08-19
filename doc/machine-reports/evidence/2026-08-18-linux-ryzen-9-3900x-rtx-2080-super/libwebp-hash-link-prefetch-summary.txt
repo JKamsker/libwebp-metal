@@ -1,0 +1,37 @@
+Experiment: pre-Ampere hash-chain next-link prefetch
+Machine: AMD Ryzen 9 3900X; NVIDIA GeForce RTX 2080 SUPER (sm_75)
+Decision: rejected and removed
+
+Candidate:
+- Load the next hash-chain link at the beginning of each candidate-loop
+  iteration, before the pixel check and match scan.
+- Select the candidate only for compute capability below 8; retain the parent
+  specialization for Ampere and newer.
+
+Validation:
+- Candidate CTest: 7/7 passed.
+- Restored-parent CTest: 7/7 passed.
+- Timing rows: 48 (12 per format/arm), all output hashes and byte counts exact.
+- PNG output: ae63469bc03eece1, 6720632 bytes.
+- JPEG output: 7396c2ca11b0f48f, 8956690 bytes.
+
+Median native-sm_75 batch time:
+- PNG lossless parent: 77.034969 ms/image.
+- PNG lossless candidate: 77.694023 ms/image.
+- PNG gain: -0.659054 ms/image.
+- JPEG lossless parent: 130.080130 ms/image.
+- JPEG lossless candidate: 128.167394 ms/image.
+- JPEG gain: 1.912736 ms/image.
+
+Generated-code checks:
+- Parent hash kernel: 26 registers, 296 mnemonic instructions.
+- Candidate pre-Ampere specialization: 26 registers, 296 instructions.
+- Candidate Ampere+ specialization: 26 registers, 296 instructions.
+- Ampere+ specialization mnemonic stream exactly matches the parent.
+
+Conclusion:
+The load reordering regresses PNG by 0.659 ms/image. Its JPEG gain does not
+justify retaining a format-dependent regression, and it cannot be composed
+with the rejected grouped matcher as a generally safe improvement. The exact
+candidate patch was removed. These measurements characterize only the RTX
+2080 SUPER and make no Ampere+ performance claim.

@@ -1570,6 +1570,32 @@ raw timing rows, sampling reports, and complete profile are stored under the
 `libwebp-token-grow-*` and `libwebp-token-lines-*` prefixes. This is RTX 2080
 SUPER-only evidence and makes no Ampere+ claim.
 
+## Hash-chain next-link prefetch rejection
+
+A native-sm_75 candidate moved each next-chain-link read ahead of the pixel
+rejection and match scan, allowing the dependency to overlap loop work. The
+change was compile-time selected only below compute capability 8. Generated
+code stayed at 26 registers and 296 mnemonic instructions for both candidate
+specializations; the Ampere+ false specialization's full mnemonic stream was
+identical to the parent.
+
+All seven CTests passed. Two order-reversed pairs per format, with six samples
+per arm, produced 48 exact rows:
+
+| Format | Parent | Link prefetch | Gain |
+|---|---:|---:|---:|
+| PNG lossless | 77.035 ms/image | 77.694 ms/image | -0.659 ms/image |
+| JPEG lossless | 130.080 ms/image | 128.167 ms/image | 1.913 ms/image |
+
+PNG retained `ae63469bc03eece1` / 6,720,632 bytes and JPEG retained
+`7396c2ca11b0f48f` / 8,956,690 bytes in every row. The PNG regression rejects
+the candidate despite the JPEG improvement, so the source was restored. Raw
+profile output, exact patch, timing rows, resources, compressed SASS,
+specialization comparison, binary hashes, explicit native cache, and both
+CTest transcripts are stored under `libwebp-hash-link-prefetch-*` in the
+adjacent evidence directory. This result is specific to the RTX 2080 SUPER
+and makes no Ampere+ performance claim.
+
 ## Two-pixel grouped hash-matcher rejection
 
 A current forced-lossless refresh measured dominant hash-candidate kernel

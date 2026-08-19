@@ -317,3 +317,26 @@ despite the large JPEG win. Raw profile output, exact patch, all timing rows,
 resources, SASS and false-specialization comparison, binary hashes, native
 cache, and restored-parent CTest log are stored under `libwebp-hash-pair-*` in
 the RTX 2080 SUPER evidence directory. No Ampere+ performance claim is made.
+
+## Pre-Ampere hash-chain next-link prefetch rejection
+
+The next isolated hash-candidate dependency was the chain-link load. A
+pre-Ampere-only candidate issued that load at the top of the loop so it could
+overlap the pixel rejection and match scan; Ampere+ retained a separately
+compiled parent specialization. Both candidate specializations stayed at 26
+registers and 296 mnemonic instructions, and the Ampere+ mnemonic stream was
+identical to the parent.
+
+Seven CTests passed and all 48 native-sm_75 timing rows retained exact hashes
+and byte counts:
+
+| Format | Parent | Link prefetch | Gain |
+|---|---:|---:|---:|
+| PNG lossless | 77.035 ms/image | 77.694 ms/image | -0.659 ms/image |
+| JPEG lossless | 130.080 ms/image | 128.167 ms/image | 1.913 ms/image |
+
+The candidate was removed because PNG regressed. The exact patch, raw timing
+rows, profile, resources, compressed SASS, specialization comparison, binary
+hashes, native cache, and candidate/restored CTest logs are stored under
+`libwebp-hash-link-prefetch-*` in the RTX 2080 SUPER evidence directory. This
+is Turing-only performance evidence and makes no Ampere+ claim.

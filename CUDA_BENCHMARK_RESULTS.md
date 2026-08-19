@@ -1467,6 +1467,27 @@ screen left the production eight-event backend cap unchanged while requesting
 fallback. The eight-band default and cap remain shared, and no Ampere+ claim is
 made.
 
+## Pre-Ampere hash-chain next-link prefetch rejection
+
+The retained hash-candidate loop reads its next chain link after the pixel
+check and any match scan. A Turing-only candidate moved that read to the top
+of the loop to expose more memory latency. It preserved the parent path as the
+Ampere+ specialization; generated-code inspection found that specialization's
+296-instruction mnemonic stream identical to the parent, while both candidate
+specializations used 26 registers.
+
+Two order-reversed pairs per format produced 48 byte-exact rows after all
+seven CTests passed:
+
+| Format | Parent | Link prefetch | Gain |
+|---|---:|---:|---:|
+| PNG lossless | 77.035 ms/image | 77.694 ms/image | -0.659 ms/image |
+| JPEG lossless | 130.080 ms/image | 128.167 ms/image | 1.913 ms/image |
+
+The source was restored because PNG regressed. The full reproduction evidence
+is archived under `libwebp-hash-link-prefetch-*` with the RTX 2080 SUPER
+machine report. These results do not characterize Ampere+ performance.
+
 ## Turing two-pixel grouped hash-matcher rejection
 
 The retained lossless profile continued to show hash-candidate kernels large
