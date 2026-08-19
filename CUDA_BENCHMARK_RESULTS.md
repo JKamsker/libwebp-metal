@@ -500,3 +500,22 @@ samples were neutral-to-negative:
 The experiment was removed. Directional per-pixel formula and branch overhead
 cancelled the four-leader prediction work; after whole-macroblock prediction
 was parallelized, I4 prediction alone is not an evidenced latency target.
+
+The next isolated follow-up retained thread 0's exact winner scan and context
+commit but distributed the selected I4 mode's sixteen level and reconstruction
+copies over warp 0. A warp shuffle broadcast the selected mode and non-zero
+word, and no additional CTA barrier was introduced. The focused method-5/6
+trellis and fallback check remained byte-exact. Three alternating processes
+per variant and format, each retaining three post-warmup 24-image samples,
+gave:
+
+| Format | Parent median | Warp-parallel commit | Change |
+|---|---:|---:|---:|
+| PNG lossy | 53.040 ms/image | 52.387 ms/image | -0.654 ms/image |
+| JPEG lossy | 53.377 ms/image | 52.830 ms/image | -0.547 ms/image |
+
+All nine samples in each cell retained the same output hash and byte count.
+Both movements are below the 1.5 ms/image retention threshold, so the change
+was removed. This rules out winner copying as a material post-prediction
+bottleneck; the measured I4 transform/quantization subphase remains the next
+addressable target.
