@@ -1,0 +1,13 @@
+{
+  "attempts": 1,
+  "benchmark_session_present": false,
+  "command": "env -u WEBP_BENCHMARK_SESSION EXPECTED_FREEZE_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_specialization_factorization_v2.py rehearse \"$PWD/evidence/backref-cost-specialization-factorization-v2-design/rehearsal\"",
+  "mode": "rehearse",
+  "remote_contacts": 0,
+  "retries": 0,
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-rehearsal-invocation-v1",
+  "source_commit": "9e7a75998061c84cd25cdbba58376293f71edbda",
+  "source_tree": "dae4719b68d79bbbcd1c383732771451eaf2b617",
+  "status": "COMPLETED_REFUSED",
+  "transport": "local-direct-child"
+}

@@ -1,0 +1,23 @@
+{
+  "member_count": 3,
+  "members": [
+    {
+      "name": "evidence/artifact-hashes.json",
+      "size": 411,
+      "type": "regular"
+    },
+    {
+      "name": "evidence/operator-status.json",
+      "size": 273,
+      "type": "regular"
+    },
+    {
+      "name": "evidence/refusal.json",
+      "size": 287,
+      "type": "regular"
+    }
+  ],
+  "offending": null,
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-archive-inventory-v1",
+  "status": "accepted"
+}

@@ -1,0 +1,15 @@
+{
+  "artifacts": [
+    {
+      "bytes": 273,
+      "path": "operator-status.json",
+      "sha256": "6713fb35b59187b7d8b96fbafe05b98d9f6bdf22b6d9f788148bc035caf934c1"
+    },
+    {
+      "bytes": 287,
+      "path": "refusal.json",
+      "sha256": "ae1ee47831836971590dfcddec5639723bc3b07e3834d731af7f23fbf7e35594"
+    }
+  ],
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-artifact-hashes-v1"
+}
