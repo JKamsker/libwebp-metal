@@ -708,3 +708,25 @@ reference hashes and byte counts. Five order-balanced process medians were:
 
 The candidate was removed. Raw timing evidence is retained locally in
 `/tmp/libwebp-small-level-cost-ab.OHZMcV.json`.
+
+## Coefficient-major I4 residual mirror rejection
+
+The ten simultaneous scalar residual walks read coefficient `n` from
+mode-major level arrays separated by a 32-byte stride, so those reads alias
+shared-memory banks. An exact candidate wrote basic-quantizer output through
+to a 320-byte coefficient-major mirror and copied method-6 trellis output to
+the same layout. This made each coefficient step contiguous across modes and
+did not add a barrier. Kernel registers remained 93 while static shared memory
+rose from 17,912 to 18,232 bytes.
+
+All seven focused CTests passed and all 60 timed outputs retained their
+reference hashes and byte counts. Five order-balanced process medians were:
+
+| Format | Baseline | Coefficient-major mirror | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.765 ms/image | 41.918 ms/image | +0.153 ms |
+| JPEG lossy | 41.582 ms/image | 41.994 ms/image | +0.412 ms |
+
+The added shared writes and larger footprint outweighed any reduction in read
+bank aliasing, so the candidate was removed. Raw timing evidence is retained
+locally in `/tmp/libwebp-residual-transpose-ab.ffrAEp.json`.

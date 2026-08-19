@@ -385,3 +385,22 @@ processes per variant measured:
 All 60 outputs retained their reference hash and byte count. The added range
 test outweighed the saved load, so the candidate was removed. The local raw
 summary is `/tmp/libwebp-small-level-cost-ab.OHZMcV.json`.
+
+## Coefficient-major I4 residual mirror
+
+The ten scalar I4 residual walks originally read coefficient `n` from
+mode-major level arrays at a 32-byte stride. A candidate added a 320-byte
+coefficient-major shared-memory mirror, populated without a new barrier, to
+make those simultaneous reads contiguous. All seven focused CTests passed;
+all 60 outputs retained their reference hashes and byte counts. Kernel
+registers stayed at 93 and static shared memory increased from 17,912 to
+18,232 bytes. Five order-balanced process medians measured:
+
+| Format | Baseline | Coefficient-major mirror | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.765 ms/image | 41.918 ms/image | +0.153 ms |
+| JPEG lossy | 41.582 ms/image | 41.994 ms/image | +0.412 ms |
+
+The extra shared writes and footprint outweighed the read-layout improvement,
+so the candidate was removed. The local raw summary is
+`/tmp/libwebp-residual-transpose-ab.ffrAEp.json`.
