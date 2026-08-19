@@ -1,0 +1,66 @@
+{
+  "member_inventory": {
+    "member_count": 11,
+    "members": [
+      {
+        "name": "evidence/artifact-hashes.json",
+        "size": 1643,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build-identity.json",
+        "size": 1234,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build.log",
+        "size": 60041,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/diagnostic-admission.json",
+        "size": 1566,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/lease-record.json",
+        "size": 225,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-status.json",
+        "size": 226,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-resources-admission.txt",
+        "size": 93544,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/profile-plan.json",
+        "size": 48629,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/rehearsal.json",
+        "size": 536,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/resource-admission-admission.json",
+        "size": 3130,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/symbols.txt",
+        "size": 70203,
+        "type": "regular"
+      }
+    ],
+    "offending": null,
+    "schema": "libwebp-backref-cost-attribution-v2-archive-inventory-v1",
+    "status": "accepted"
+  },
+  "status": "accepted"
+}

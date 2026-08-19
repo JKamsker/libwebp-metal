@@ -1,0 +1,54 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v2-phase-1-validation-v1",
+  "base_commit": "d63c9ed99e2d72e3f0aca1d375d31fad19e13455",
+  "rehearsal_source_commit": "4e0b23260769704f50afa0fa41be95043ce1087f",
+  "diagnostic": {
+    "selected": "coarse monotonic stage timers",
+    "clock": "mach_continuous_time",
+    "xctrace_selected": false,
+    "sample_selected": false,
+    "profiler_invocations": 0,
+    "encoder_workloads": 0,
+    "performance_samples": 0
+  },
+  "tests": {
+    "python_syntax_and_json_schemas": "PASS",
+    "v2_process_ownership": "PASS",
+    "v2_admission_paths_receipts_modes": "PASS",
+    "v2_archive_transfer_extraction_fixtures": "PASS",
+    "v2_protocol_command_shape_counts_order": "PASS",
+    "v1_process_ownership_remediation_guard": "PASS",
+    "global_experiment_guards": "PASS (22 rows)",
+    "candidate_build_exact_runtime_guard": "PASS (absent=false, 0=false, 1=true)",
+    "ordinary_build_v2_object_and_string_omission": "PASS",
+    "public_symbol_and_header_export_surface": "PASS",
+    "controlled_remote_refusal_return_cleanup": "PASS",
+    "remote_no_workload_rehearsal": "PASS"
+  },
+  "remote_rehearsal": {
+    "ssh_batch_mode": true,
+    "ssh_connect_timeout_seconds": 10,
+    "repository_owned_direct_child_timeout": true,
+    "benchmark_session_present": false,
+    "benchmark_lease_attempts": 0,
+    "profile_commands_constructed": 24,
+    "source_toolchain_build_symbols_corpus_order_counts": "PASS",
+    "archive_transfer_extraction": "PASS",
+    "independent_lease_receipt": "PASS",
+    "exact_child_removed": true,
+    "exact_child_absence_proved": true,
+    "host_runner_service_power_auth_toolchain_mutations": 0
+  },
+  "evidence_sha256": {
+    "success_rehearsal": "34264fc9160df0db91228a752138faccbcb4e9b7f8504e7518d97e4b66b028f4",
+    "success_build_identity": "c70216ae7550076a008811b9d9ad0bb8c3e05886175d3d05e02adb55cd4a6489",
+    "success_profile_plan": "f86f6677fd4929c1ac4e8c8cd423d0eb4897b55e046c65dbf94c02ab55d84115",
+    "success_returned_index": "c38f208b9785d08ed42e7f32c9f854f649a98cfb624e26bb151b6c3e01227d3d",
+    "success_transfer_cleanup": "7fa41ecb8f4adc81cef8a5aa597d7870260f01dbd7cc4484c01cfa21e24f8adf",
+    "success_exact_child_cleanup": "ce8ebd58975dd2662678cf117d0c3788147484f640f979ec2f99282097b7de03",
+    "refusal_returned_index": "f902f6c47a9036fc446c3b6ed19093eb77f884a8ea5348bd127baee9fd82ade1",
+    "refusal_transfer_cleanup": "b8e1f1a1227591f48dfe87441663da04d0a092f82678034817d80544d24ddb8a"
+  },
+  "timed_execution_authorized": true,
+  "phase_1_timed_samples": 0
+}

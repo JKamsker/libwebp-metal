@@ -1,0 +1,12 @@
+{
+  "protocol_version": 1,
+  "schemas": [
+    "libwebp-backref-cost-attribution-v2-artifact-hashes-v1",
+    "libwebp-backref-cost-attribution-v2-cleanup-receipt-v1",
+    "libwebp-backref-cost-attribution-v2-lease-v1",
+    "libwebp-backref-cost-attribution-v2-operator-status-v1",
+    "libwebp-backref-cost-attribution-v2-refusal-v1",
+    "libwebp-backref-cost-attribution-v2-rehearsal-v1",
+    "libwebp-backref-cost-attribution-v2-transfer-cleanup-v1"
+  ]
+}

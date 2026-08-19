@@ -1,0 +1,63 @@
+{
+  "archive": {
+    "bytes": 594,
+    "hashes_match": true,
+    "local_sha256": "3a1ba968530235dd088c63f1a3200f59a2ee9f7c435b4d965486da8adc61d40a",
+    "path": "evidence.tar.gz",
+    "remote_sha256": "3a1ba968530235dd088c63f1a3200f59a2ee9f7c435b4d965486da8adc61d40a"
+  },
+  "builder_exit_code": 0,
+  "builder_stderr": "",
+  "builder_stdout": "{\"archive_bytes\": 594, \"archive_sha256\": \"3a1ba968530235dd088c63f1a3200f59a2ee9f7c435b4d965486da8adc61d40a\", \"inventory_sha256\": \"fd614fb04f89367e76fde17d32d0125743565b242e99ca179cdd6c73faa704c6\", \"member_count\": 4, \"schema\": \"libwebp-backref-cost-attribution-v2-archive-v1\", \"status\": \"accepted\"}\n",
+  "digest": {
+    "bytes": 312,
+    "hashes_match": true,
+    "local_sha256": "eb1db6f8b79c5b31a85b15d3b71eacaebb0c4bbfdd7d6ebf5e0432f1bd7f963e",
+    "path": "archive-digest.json",
+    "remote_sha256": "eb1db6f8b79c5b31a85b15d3b71eacaebb0c4bbfdd7d6ebf5e0432f1bd7f963e"
+  },
+  "digest_record": {
+    "archive_bytes": 594,
+    "archive_sha256": "3a1ba968530235dd088c63f1a3200f59a2ee9f7c435b4d965486da8adc61d40a",
+    "inventory_sha256": "fd614fb04f89367e76fde17d32d0125743565b242e99ca179cdd6c73faa704c6",
+    "member_count": 4,
+    "schema": "libwebp-backref-cost-attribution-v2-archive-v1",
+    "status": "accepted"
+  },
+  "inventory": {
+    "bytes": 561,
+    "hashes_match": true,
+    "local_sha256": "fd614fb04f89367e76fde17d32d0125743565b242e99ca179cdd6c73faa704c6",
+    "path": "archive-inventory.json",
+    "remote_sha256": "fd614fb04f89367e76fde17d32d0125743565b242e99ca179cdd6c73faa704c6"
+  },
+  "member_inventory": {
+    "member_count": 4,
+    "members": [
+      {
+        "name": "evidence/artifact-hashes.json",
+        "size": 545,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/lease-record.json",
+        "size": 139,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-status.json",
+        "size": 123,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/refusal.json",
+        "size": 164,
+        "type": "regular"
+      }
+    ],
+    "offending": null,
+    "schema": "libwebp-backref-cost-attribution-v2-archive-inventory-v1",
+    "status": "accepted"
+  },
+  "status": "accepted"
+}

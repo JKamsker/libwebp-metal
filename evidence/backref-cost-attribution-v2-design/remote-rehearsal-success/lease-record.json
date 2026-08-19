@@ -1,0 +1,7 @@
+{
+  "acquired": false,
+  "acquisition_attempted": false,
+  "path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v2.lock",
+  "released": false,
+  "schema": "libwebp-backref-cost-attribution-v2-lease-v1"
+}

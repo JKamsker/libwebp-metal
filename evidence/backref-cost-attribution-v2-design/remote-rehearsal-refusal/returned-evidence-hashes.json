@@ -1,0 +1,63 @@
+{
+  "artifacts": [
+    {
+      "bytes": 545,
+      "path": "artifact-hashes.json",
+      "sha256": "93e3d42d6abe635b5dc397e948324a27092154a877839212dbc6180276c446e3"
+    },
+    {
+      "bytes": 139,
+      "path": "lease-record.json",
+      "sha256": "f3febc474ced3a6e8083818e8b6d1e1a55b226293b070e978abb8954bd5305fd"
+    },
+    {
+      "bytes": 123,
+      "path": "operator-status.json",
+      "sha256": "209fed73eb8ed58f3a1b9bdac4af4b9230b64eacc725cf5bf0d9913fa07ff036"
+    },
+    {
+      "bytes": 164,
+      "path": "refusal.json",
+      "sha256": "2db3a038b7062a2c80c47911cd03210c7284493dc1b355dde5d49dc802d2bdb5"
+    },
+    {
+      "bytes": 2229,
+      "path": "return-protocol/archive-return.json",
+      "sha256": "04c6a2c5b538a70ca2346bb37497ad34c09b70ab7c453f468bea335170a75c18"
+    },
+    {
+      "bytes": 435,
+      "path": "return-protocol/cleanup-receipt.json",
+      "sha256": "4bb70236a30c576ccad27b4ece0525352ede3593271d8210a8532b41ac31bb87"
+    },
+    {
+      "bytes": 665,
+      "path": "return-protocol/extraction.json",
+      "sha256": "ce8a01674e7d3926217b5d5b96671d7072cef2743fc5c2446ee06492b2f02aca"
+    },
+    {
+      "bytes": 139,
+      "path": "return-protocol/lease-record.json",
+      "sha256": "f3febc474ced3a6e8083818e8b6d1e1a55b226293b070e978abb8954bd5305fd"
+    },
+    {
+      "bytes": 280,
+      "path": "return-protocol/lease-transfer.json",
+      "sha256": "9d5a2e0d26ebbf8c089025a46970e4227011e5a66ed7ec9c9e65da02ff0eb857"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/pipeline.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/pipeline.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "excluded_after_index": [
+    "transfer-cleanup.json"
+  ],
+  "schema": "libwebp-backref-cost-attribution-v2-returned-evidence-hashes-v1"
+}
