@@ -1,5 +1,5 @@
 {
-  "schema": "libwebp-backref-cost-attribution-v7-phase3-artifact-hashes-v1",
+  "schema": "libwebp-backref-cost-attribution-v7-artifact-hashes-v1",
   "artifacts": [
     {
       "path": "operator-report.md",
