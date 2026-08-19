@@ -1,0 +1,369 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v3-phase3-audit-v1",
+  "generated_at_utc": "2026-08-19T04:27:48Z",
+  "phase": 3,
+  "evaluator": "Sol/high",
+  "evaluation_status": "complete",
+  "evaluated_head": "e9b807695a7db1b688c1a920ef5038132fbab4cb",
+  "ancestry": {
+    "frozen_main": {
+      "commit": "086059436a46f1d5cd48d401fc06e2f96bbf095b",
+      "tree": "68e364d94feafb9a85e8d138f5e5ea5a37f2a594",
+      "parents": [
+        "d63c9ed99e2d72e3f0aca1d375d31fad19e13455",
+        "4c93aa895fd9c583c2a245cda3ffe1d4961d0497"
+      ]
+    },
+    "phase1": {
+      "commit": "a8a9dfdb3cd882d63980f4234c40e5c8cb91f5e1",
+      "parent": "086059436a46f1d5cd48d401fc06e2f96bbf095b",
+      "tree": "af7eabc288db9de596d16b1b6a51c38ab25174bf",
+      "changed_files": 24,
+      "insertions": 4051,
+      "deletions": 180
+    },
+    "phase2": {
+      "commit": "e9b807695a7db1b688c1a920ef5038132fbab4cb",
+      "parent": "a8a9dfdb3cd882d63980f4234c40e5c8cb91f5e1",
+      "tree": "3750887d3c87849a2b6cd29bee02f0641d8d2170",
+      "changed_files": 2,
+      "insertions": 134,
+      "deletions": 0
+    },
+    "linear_exact": true
+  },
+  "identity": {
+    "manifest": {
+      "path": "scripts/backref_cost_attribution_v3_manifest.json",
+      "sha256": "123fed6025da0fe1e054c7d6384f8a02bd63bdc11a7c2e93b9948da70f908e64"
+    },
+    "protocol": {
+      "path": "doc/backref-cost-attribution-v3-protocol-20260819.md",
+      "sha256": "9deb1aeaa39434d4c0e4cbfca98da4e5cdcfc90414071a2e1f851cfab8a5c76c"
+    },
+    "schema_catalog": {
+      "path": "scripts/backref_cost_attribution_v3_schemas.json",
+      "sha256": "99bdd77af00dec49ae080a4c92cd18e002c2d4da877a2a7f7592d14980d7f90a",
+      "schema_count": 9,
+      "schemas": [
+        "libwebp-backref-cost-attribution-v3-artifact-hashes-v1",
+        "libwebp-backref-cost-attribution-v3-cleanup-receipt-v1",
+        "libwebp-backref-cost-attribution-v3-counter-check-v1",
+        "libwebp-backref-cost-attribution-v3-lease-v1",
+        "libwebp-backref-cost-attribution-v3-operator-status-v1",
+        "libwebp-backref-cost-attribution-v3-refusal-v1",
+        "libwebp-backref-cost-attribution-v3-rehearsal-v1",
+        "libwebp-backref-cost-attribution-v3-timer-check-v1",
+        "libwebp-backref-cost-attribution-v3-transfer-cleanup-v1"
+      ]
+    },
+    "phase2_evidence": [
+      {
+        "path": "evidence/backref-cost-attribution-v3-execution-20260819/phase2-refusal-observation.json",
+        "sha256": "edfdc29b4e24a1c6bec4f0b394e6b942db132f455461f7795267c6266f0be106",
+        "git_blob": "c07791bed27420e83cb26557eb4b771c00d22659"
+      },
+      {
+        "path": "evidence/backref-cost-attribution-v3-execution-20260819/phase2-command-and-refusal.txt",
+        "sha256": "2c85ed5f4414d4a675e859960f928c0d2834632de7523b2eb02668ae64ac92de",
+        "git_blob": "f9c807657aa8253123646d34dba90af5fda3af90"
+      }
+    ],
+    "frozen_artifact_count": 25,
+    "frozen_artifact_hash_mismatches": 0,
+    "frozen_artifacts": {
+      "scripts/backref_cost_attribution_v3_schemas.json": "99bdd77af00dec49ae080a4c92cd18e002c2d4da877a2a7f7592d14980d7f90a",
+      "scripts/backref_cost_attribution_v3_archive.py": "3650e79cd7c8382cd568bb9913b42f802f80a4b2393933fd652f42593cecb7e4",
+      "scripts/backref_cost_attribution_v3_admission.py": "d824c0061983b42fe6f26fb7806a5cc245da67d54271e1ca5abb965d28293315",
+      "scripts/backref_cost_attribution_v3_paths.py": "cb6c7250d29331e90966ea866292b35dd6bc7981d8e52f4ce09617f2a0fac1d6",
+      "scripts/run_backref_cost_attribution_v3_experiment.py": "a893d67f25d19148d67f1e527308baf41d683108043b4d0b7f6efef44961cb6b",
+      "scripts/execute_backref_cost_attribution_v3.py": "88181893c2027e8dfcd4480d92eeb52e07edfea0b1f7968f8587e84aba55e8b2",
+      "doc/backref-cost-attribution-v3-protocol-20260819.md": "9deb1aeaa39434d4c0e4cbfca98da4e5cdcfc90414071a2e1f851cfab8a5c76c",
+      "CMakeLists.txt": "d53043a0c341e2b0e303289375ea29c39543dd49bb1da1c72b88551f2ac76919",
+      "makefile.unix": "c50347b63be4bc1511c669ed5d29a0c655951fb6f05d080209de9561a56c765f",
+      "src/enc/backref_cost_attribution_v3_experiment_enc.c": "fadd6d688209a66d38d19617d4541235286feb915f4f9f7b5d32afeb8710e795",
+      "src/enc/backref_cost_attribution_v3_experiment_enc.h": "796cc1533082d2c0d30c13e9da6a7e03a47ba18a918796a222edd0a030c2d4d0",
+      "src/enc/backward_references_cost_enc.c": "41f7e018c74c53a044aed71ddf422ac5a209feeba6522665a805acfa861e7af9",
+      "src/enc/backward_references_cost_distance_only_enc.inc": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5",
+      "src/enc/profile_enc.c": "31223e62e53b602a64002baaecc1827b1f8fb4d435aa15680b3e933f8616d50a",
+      "src/enc/profile_enc.h": "81b9af2955e734a45dfb31c34fadcfe0efd28c800628720b765e86acee8e8ddf",
+      "src/enc/backward_references_enc.c": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03",
+      "src/enc/vp8l_enc.c": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0",
+      "tools/backref_cost_attribution_v3_experiment_runner.c": "51182ac070060ce5bd82e4a315eceac540f25282e871d9be0ce2a5b4c2d2ddd4",
+      "scripts/test_backref_cost_attribution_v3_protocol.py": "7ee6a66c754576099bd335a9b1f2811efa27c09040fbba0ae582291769241a9e",
+      "scripts/test_backref_cost_attribution_v3_admission.py": "9bc8a284208549263951c38e14abfd5a97f69fae111f6e118ef1aab33dc6187f",
+      "scripts/test_backref_cost_attribution_v3_archive.py": "3cb3f0aa5e1b1f4ac6936e985dcdfb7e0433ae4f27a2d7a1eaf722eaa70f74f4",
+      "scripts/test_backref_cost_attribution_v3_process_ownership.py": "5e023ec81b5f4dc36d8a8961e0a3a4052b3fd11825240a9e18013cde8a727cb4",
+      "scripts/test_backref_cost_attribution_v3_experiment.py": "2d50056cee23d78afc8b2ebc02b953d12a46b0c74ee8e35fd2c7bc05ddfdffad",
+      "scripts/test_experiment_guards.py": "b165a9a61cec0c7512978d9f0f651f724691023125d00408295adc53ddd58441",
+      "doc/experiment-guard-matrix.md": "0f23430d760f514fe3713b56f9aceef2cf21f5cd9b5ec3ddb969447ca766c12b"
+    }
+  },
+  "authorization_and_execution": {
+    "phase1_decision": "PENDING_REMOTE_REHEARSAL",
+    "timed_execution_authorized": false,
+    "phase1_performance_samples": 0,
+    "first_failed_phase2_gate": "phase_1_decision.timed_execution_authorized",
+    "frozen_wrapper_invocations": 1,
+    "frozen_wrapper_exit_status": 1,
+    "frozen_wrapper_stderr": "ERROR: phase-1 handoff rejected timing; see frozen blocker evidence",
+    "frozen_wrapper_expanded_expected_commit": "a8a9dfdb3cd882d63980f4234c40e5c8cb91f5e1",
+    "timed_pipeline_invocations": 0,
+    "timing_command_invocations": 0,
+    "encoder_workload_invocations": 0,
+    "profiler_invocations": 0,
+    "cuda_invocations": 0,
+    "production_promotions": 0,
+    "execution_output_path_created": false
+  },
+  "frozen_plan": {
+    "command": "env WEBP_BENCHMARK_SESSION=exclusive WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V3_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_attribution_v3.py run \"$PWD/evidence/backref-cost-attribution-v3-execution-20260819\"",
+    "planned_processes": 24,
+    "planned_correctness_encodes": 16,
+    "planned_counter_check_encodes": 8,
+    "planned_profile_encodes": 120,
+    "planned_total_encoder_encodes": 144,
+    "planned_warmups": 24,
+    "planned_retained_records": 96,
+    "planned_total_runner_records": 120,
+    "planned_total_stage_records": 120,
+    "actual_processes": 0,
+    "actual_correctness_encodes": 0,
+    "actual_counter_check_encodes": 0,
+    "actual_profile_encodes": 0,
+    "actual_total_encoder_encodes": 0,
+    "actual_warmups": 0,
+    "actual_retained_records": 0,
+    "actual_runner_records": 0,
+    "actual_stage_records": 0,
+    "planned_profile_order": [
+      "p00-photo-large-m4-baseline-r0",
+      "p01-photo-large-m4-candidate-r0",
+      "p02-photo-large-m4-candidate-r1",
+      "p03-photo-large-m4-baseline-r1",
+      "p04-photo-large-m4-baseline-r2",
+      "p05-photo-large-m4-candidate-r2",
+      "p06-photo-large-m6-baseline-r0",
+      "p07-photo-large-m6-candidate-r0",
+      "p08-photo-large-m6-candidate-r1",
+      "p09-photo-large-m6-baseline-r1",
+      "p10-photo-large-m6-baseline-r2",
+      "p11-photo-large-m6-candidate-r2",
+      "p12-graphic-large-m4-baseline-r0",
+      "p13-graphic-large-m4-candidate-r0",
+      "p14-graphic-large-m4-candidate-r1",
+      "p15-graphic-large-m4-baseline-r1",
+      "p16-graphic-large-m4-baseline-r2",
+      "p17-graphic-large-m4-candidate-r2",
+      "p18-graphic-large-m6-baseline-r0",
+      "p19-graphic-large-m6-candidate-r0",
+      "p20-graphic-large-m6-candidate-r1",
+      "p21-graphic-large-m6-baseline-r1",
+      "p22-graphic-large-m6-baseline-r2",
+      "p23-graphic-large-m6-candidate-r2"
+    ],
+    "executed_profile_order": []
+  },
+  "implementation_audit": {
+    "baseline_identity": "production PushInterval and baseline DP body at frozen main 086059436a46f1d5cd48d401fc06e2f96bbf095b",
+    "candidate_identity": "exact always-specialized local-hint PushInterval implementation frozen at source identity 673bc3fa9e8b247a834e293aedb32363f8410f11",
+    "single_binary_identity_planned": true,
+    "selector_evaluated_once_before_dp_mutation": true,
+    "closed_baseline_candidate_if_else": true,
+    "predecessor_common_fallthrough_excluded_by_preprocessor_branch": true,
+    "selected_body_entry_counter_present": true,
+    "counter_reset_is_thread_local_and_explicit": true,
+    "dp_total_boundary": "immediately around exactly one selected DP body; the body performs cleanup before returning",
+    "dp_setup_boundary": "before CostModel/CostManager allocation through successful CostManagerInit",
+    "dp_steady_boundary": "initial literal and pixel DP loop only",
+    "traceback_separately_timed": true,
+    "materialization_separately_timed": true,
+    "per_pixel_or_push_interval_clocks": 0,
+    "required_success_invariant": "selected_dp_calls == selector_evaluations == dp_total.calls == dp_setup.calls == dp_steady.calls; setup+steady <= dp_total; dp_total+traceback+materialize <= lossless_backward_refs"
+  },
+  "correctness_and_untimed_validation": {
+    "status": "PASS",
+    "commands": [
+      "python3 scripts/test_backref_cost_attribution_v3_protocol.py",
+      "python3 scripts/test_backref_cost_attribution_v3_admission.py",
+      "python3 scripts/test_backref_cost_attribution_v3_archive.py",
+      "python3 scripts/test_backref_cost_attribution_v3_process_ownership.py",
+      "python3 scripts/test_backref_cost_attribution_v3_experiment.py",
+      "python3 scripts/test_experiment_guards.py",
+      "env -u WEBP_BENCHMARK_SESSION WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V3_COMMIT=e9b807695a7db1b688c1a920ef5038132fbab4cb python3 scripts/execute_backref_cost_attribution_v3.py validate"
+    ],
+    "correctness_encodes": 16,
+    "correctness_cells": 4,
+    "baseline_candidate_bitstreams_equal": true,
+    "repeat_deterministic": true,
+    "decoded_rgb_equal": true,
+    "input_immutable": true,
+    "counter_cells": 4,
+    "opposite_dp_body_calls": 0,
+    "candidate_result_overwrite_observed": false,
+    "post_reset_counters_zero": true,
+    "synthetic_timer_accounting": {
+      "variants": 2,
+      "selector_evaluations_each": 1,
+      "selected_dp_calls_each": 1,
+      "dp_total_calls_each": 1,
+      "dp_setup_calls_each": 1,
+      "dp_steady_calls_each": 1,
+      "setup_plus_steady_le_total": true
+    },
+    "sanitizer_configurations": 2,
+    "boundary_fixtures": 16,
+    "public_api_abi_equal": true,
+    "default_omission": true,
+    "exact_runtime_truth_table": {
+      "absent": false,
+      "": false,
+      "0": false,
+      "01": false,
+      "1": true,
+      "true": false
+    },
+    "guard_count": 23,
+    "clock_validation": {
+      "schema": "libwebp-backref-cost-attribution-v3-timer-check-v1",
+      "clock_reads": 4096,
+      "positive_deltas": 1043,
+      "elapsed_ns": 43459,
+      "mean_read_delta_ns": 10,
+      "minimum_positive_delta_ns": 41,
+      "maximum_delta_ns": 42,
+      "monotonic": true
+    },
+    "driver_validate": {
+      "status": "PASS",
+      "source_commit": "e9b807695a7db1b688c1a920ef5038132fbab4cb",
+      "benchmark_lease_acquisition_attempted": false,
+      "timed_binary_invoked": false
+    }
+  },
+  "source_toolchain_device_resources": {
+    "phase2_source_identity": "a8a9dfdb3cd882d63980f4234c40e5c8cb91f5e1",
+    "frozen_remote_target": {
+      "host_alias": "pandocs-agent",
+      "system": "Darwin",
+      "architecture": "arm64",
+      "hardware_model": "Mac16,10",
+      "cpu_brand": "Apple M4",
+      "physical_memory_bytes": 25769803776,
+      "compiler": "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+      "sdk_version": "26.2"
+    },
+    "phase2_observed_remote_device": null,
+    "phase2_observed_remote_toolchain": null,
+    "phase2_observed_remote_resources": null,
+    "reason_unobserved": "authorization failed before remote admission",
+    "phase3_local_validation_host": {
+      "system": "Darwin",
+      "kernel": "25.5.0",
+      "architecture": "arm64",
+      "macos_version": "26.5.1",
+      "macos_build": "25F80",
+      "compiler": "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+      "compiler_target": "arm64-apple-darwin25.5.0",
+      "cmake_version": "4.4.2",
+      "python_version": "3.9.6"
+    },
+    "phase3_local_host_is_timing_evidence": false
+  },
+  "ownership_lease_archive_cleanup": {
+    "remote_host_contacted": false,
+    "remote_admission_attempted": false,
+    "process_discovery_performed": false,
+    "direct_child_workload_spawned": false,
+    "discovered_pid_signals": 0,
+    "session_37199_touched": false,
+    "lease_acquisition_attempted": false,
+    "lease_receipt": null,
+    "archive_transfer_attempted": false,
+    "archive_receipt": null,
+    "extraction_attempted": false,
+    "cleanup_attempted": false,
+    "cleanup_receipt": null,
+    "cleanup_applicability": "not applicable to Phase 2 because no remote run directory was created",
+    "phase3_remote_mutation": false,
+    "phase3_process_signals": 0
+  },
+  "raw_evidence_statistics": {
+    "raw_row_files": 0,
+    "timed_rows": 0,
+    "warmup_rows": 0,
+    "retained_rows": 0,
+    "successful_encode_rows": 0,
+    "failed_encode_rows": 0,
+    "cells": [
+      {
+        "case_id": "photo-large",
+        "method": 4,
+        "baseline_rows": 0,
+        "candidate_rows": 0,
+        "statistics": null
+      },
+      {
+        "case_id": "photo-large",
+        "method": 6,
+        "baseline_rows": 0,
+        "candidate_rows": 0,
+        "statistics": null
+      },
+      {
+        "case_id": "graphic-large",
+        "method": 4,
+        "baseline_rows": 0,
+        "candidate_rows": 0,
+        "statistics": null
+      },
+      {
+        "case_id": "graphic-large",
+        "method": 6,
+        "baseline_rows": 0,
+        "candidate_rows": 0,
+        "statistics": null
+      }
+    ],
+    "unavailable_metrics": [
+      "whole encode",
+      "backward-reference generation",
+      "selected DP total",
+      "selected DP setup",
+      "selected DP steady",
+      "traceback",
+      "materialization",
+      "histogram",
+      "Huffman",
+      "serialization/bitstream",
+      "stage shares",
+      "baseline-candidate deltas",
+      "paired repetition medians",
+      "repeatability ratios"
+    ],
+    "null_is_not_zero_duration": true
+  },
+  "consequence": {
+    "interval_family_decision": "UNASSESSED",
+    "interval_family_closed": false,
+    "interval_family_reopened": false,
+    "reason": "no V3 timed rows exist, so the frozen coarse-stage attribution question was not measured",
+    "ranked_next_cpu_boundary": null,
+    "new_independent_experiment_proposed": false,
+    "future_gate_rule": "any future experiment requires wholly new independent default-off gates and is not run by this cycle",
+    "production_change": false
+  },
+  "limitations": [
+    "No accepted no-workload remote rehearsal exists for V3.",
+    "No Phase 2 remote admission, device/resource observation, lease, workload, archive, extraction, or cleanup receipt exists.",
+    "No timed row exists for any case, method, variant, repetition, or stage.",
+    "Untimed structural, correctness, sanitizer, counter, and synthetic timer checks establish diagnostic credibility but cannot estimate performance or causal stage shares.",
+    "V1/V2 and interval-specialization timing samples are not reused, relabeled, extrapolated, or pooled.",
+    "Coarse timers could not resolve PushInterval self time, code layout, cache, branch prediction, or call-stack causality even if rows had existed."
+  ],
+  "blocker": {
+    "status": "PENDING_REMOTE_REHEARSAL",
+    "detail": "the required controlled no-workload remote rehearsal was not accepted; reported session 37199 remained active and was left untouched",
+    "phase3_complete_despite_blocker": true
+  }
+}

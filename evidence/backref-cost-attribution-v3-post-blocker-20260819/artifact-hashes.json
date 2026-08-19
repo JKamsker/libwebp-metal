@@ -1,0 +1,20 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v3-post-blocker-artifact-hashes-v1",
+  "artifacts": [
+    {
+      "path": "operator-report.md",
+      "bytes": 3526,
+      "sha256": "76b519d78f1d63b95e6693ebe725fa323f93060c206d82e28a743b37ff91fc84"
+    },
+    {
+      "path": "receipt-index.json",
+      "bytes": 1616,
+      "sha256": "8a23899a1e1aecc6359b0b5c5e6f2626b66db79e77fc6669f1dd0d363a42bbdc"
+    },
+    {
+      "path": "supplemental-audit.json",
+      "bytes": 5583,
+      "sha256": "e363a574e8f76f0cff59cb3c994962be71d6cf40f2c1c5468e766552d188d29a"
+    }
+  ]
+}

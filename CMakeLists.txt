@@ -76,6 +76,8 @@ option(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT
        "Build the diagnostic-only backref-cost attribution v1 pipeline." OFF)
 option(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT
        "Build the diagnostic-only backref-cost attribution v2 pipeline." OFF)
+option(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT
+       "Build the diagnostic-only backref-cost attribution v3 pipeline." OFF)
 option(WEBP_BUILD_ANIM_UTILS "Build animation utilities." ON)
 option(WEBP_BUILD_CWEBP "Build the cwebp command line tool." ON)
 option(WEBP_BUILD_DWEBP "Build the dwebp command line tool." ON)
@@ -448,7 +450,8 @@ if(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT)
      WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT OR
      WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT OR
      WEBP_BUILD_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT OR
-     WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
+     WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
     message(FATAL_ERROR
             "backref-cost attribution v1 is mutually exclusive with overlapping experiments")
   endif()
@@ -468,12 +471,34 @@ if(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
      WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT OR
      WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT OR
      WEBP_BUILD_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT OR
-     WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT)
+     WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
     message(FATAL_ERROR
             "backref-cost attribution v2 is mutually exclusive with overlapping experiments")
   endif()
   list(APPEND WEBP_ENC_SRCS
        ${WEBP_SRC_DIR}/enc/backref_cost_attribution_v2_experiment_enc.c
+       ${WEBP_SRC_DIR}/enc/profile_enc.c)
+endif()
+if(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
+  if(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT OR
+     WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
+    message(FATAL_ERROR
+            "backref-cost attribution v3 is mutually exclusive with overlapping experiments")
+  endif()
+  list(APPEND WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/backref_cost_attribution_v3_experiment_enc.c
        ${WEBP_SRC_DIR}/enc/profile_enc.c)
 endif()
 
@@ -738,6 +763,10 @@ if(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
   target_compile_definitions(
     webpencode PRIVATE WEBP_USE_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT=1)
 endif()
+if(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
+  target_compile_definitions(
+    webpencode PRIVATE WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT=1)
+endif()
 add_library(webp $<TARGET_OBJECTS:webpdecode> $<TARGET_OBJECTS:webpdsp>
                  $<TARGET_OBJECTS:webpencode> $<TARGET_OBJECTS:webputils>)
 if(WEBP_ENABLE_FBOUNDS_SAFETY)
@@ -913,6 +942,18 @@ if(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT)
     ${CMAKE_CURRENT_SOURCE_DIR}/tools/backref_cost_attribution_v2_experiment_runner.c)
   target_link_libraries(backref_cost_attribution_v2_experiment_runner PRIVATE webp)
   target_include_directories(backref_cost_attribution_v2_experiment_runner
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                                     ${CMAKE_CURRENT_SOURCE_DIR})
+endif()
+if(WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
+  add_executable(
+    backref_cost_attribution_v3_experiment_runner
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/backref_cost_attribution_v3_experiment_runner.c)
+  target_link_libraries(backref_cost_attribution_v3_experiment_runner PRIVATE webp)
+  target_compile_definitions(
+    backref_cost_attribution_v3_experiment_runner
+    PRIVATE WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT=1)
+  target_include_directories(backref_cost_attribution_v3_experiment_runner
                              PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
                                      ${CMAKE_CURRENT_SOURCE_DIR})
 endif()

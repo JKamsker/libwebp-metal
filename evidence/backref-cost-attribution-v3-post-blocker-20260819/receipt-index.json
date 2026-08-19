@@ -1,0 +1,48 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v3-post-blocker-receipt-index-v1",
+  "raw_root": "evidence/backref-cost-attribution-v3-design/remote-rehearsal-refusal",
+  "natural_completion_observed_at": "2026-08-19T06:32:22+0200",
+  "raw_files_preserved_byte_for_byte": true,
+  "artifacts": [
+    {
+      "path": "return-protocol/archive-return.json",
+      "bytes": 32,
+      "sha256": "ec970c026a4bd13d7d5208d4307f9cb7b1e61ef59c7613724dfb3b3b0485eaf3"
+    },
+    {
+      "path": "return-protocol/cleanup-receipt.json",
+      "bytes": 435,
+      "sha256": "1a98ff59d6fcee1b5da5cfdbc98db9c3c49f65dcc45d223f55ebfa03aa34d9cd"
+    },
+    {
+      "path": "return-protocol/extraction.json",
+      "bytes": 32,
+      "sha256": "ec970c026a4bd13d7d5208d4307f9cb7b1e61ef59c7613724dfb3b3b0485eaf3"
+    },
+    {
+      "path": "return-protocol/lease-transfer.json",
+      "bytes": 32,
+      "sha256": "ec970c026a4bd13d7d5208d4307f9cb7b1e61ef59c7613724dfb3b3b0485eaf3"
+    },
+    {
+      "path": "return-protocol/pipeline.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "return-protocol/pipeline.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "returned-evidence-hashes.json",
+      "bytes": 1160,
+      "sha256": "aa631cc8ef9cbdb2be7fb213a896a424b47cc60f2a955f925f58a2ab800ec2db"
+    },
+    {
+      "path": "transfer-cleanup.json",
+      "bytes": 9967,
+      "sha256": "f02288a41e4b3fb26f8894e6b5c37068458a9ab981030058ff99e44973435a63"
+    }
+  ]
+}
