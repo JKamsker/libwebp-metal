@@ -446,3 +446,19 @@ The mixed result is neutral-to-negative (the JPEG movement is below the 1.5 ms
 noise floor), so the experiment was removed. A useful I4 change must eliminate
 barriers or restructure the 16-step recurrence; redistributing the existing
 serial walks is insufficient.
+
+Two subsequent barrier-reduction experiments were also removed. Both used the
+same native-sm_75 24-image method-4 corpus and retained exact output hashes:
+
+| I4 experiment | Baseline PNG / JPEG | Candidate PNG / JPEG | Result |
+|---|---:|---:|---|
+| Fuse prediction + transform on four warp leaders | 57.402 / 57.244 ms | 68.425 / 68.491 ms | Regressed 11.0 / 11.2 ms per image |
+| One warp per mode (320-thread CTA) | 57.402 / 57.244 ms | 59.225 / 60.227 ms | Regressed 1.8 / 3.0 ms per image |
+
+The first saved one CTA barrier but reduced transform concurrency from ten
+modes to four. The second retained ten-way mode concurrency and removed two
+CTA barriers per I4 step, but ten mostly idle warps increased scheduling and
+register cost: warm photo/texture device wall rose from 39.89/38.38 to
+44.74/43.39 ms and I4's cycle share rose from 64.9/65.6% to 69.2/69.9%.
+Barrier removal on this Turing wavefront must therefore preserve the compact
+mode-lane packing as well as ten-way concurrency.
