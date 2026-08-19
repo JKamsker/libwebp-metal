@@ -1,0 +1,3680 @@
+{
+  "admission_and_ownership": {
+    "build_stderr_digest_only": {
+      "bytes": 131,
+      "sha256": "a582ecbb6ba870c18fd19482264231b6663d310a99cb94e745c93a3be3c58fcd"
+    },
+    "build_stdout_digest_only": {
+      "bytes": 62670,
+      "sha256": "eb833a6d1040064b1e85ad0ba357eed72bd216e006316157d63a8f9446157c38"
+    },
+    "cuda_invocations": 0,
+    "external_profiler_invocations": 0,
+    "lease": {
+      "acquired": true,
+      "acquisition_attempted": true,
+      "path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v16.lock",
+      "released": true,
+      "schema": "libwebp-backref-cost-attribution-v16-lease-v1"
+    },
+    "metal_enabled": false,
+    "nm_output_digest_only": {
+      "bytes": 70897,
+      "sha256": "37e3a578c405fb8f59ed475a1031a6dd5582bc0bc095ac4cb0a87d12ac99701b"
+    },
+    "process_isolation_receipts": 52,
+    "resources": [
+      {
+        "available_disk_bytes": 18957602816,
+        "available_memory_bytes": 10773921792,
+        "label": "admission",
+        "process_snapshot_bytes": 68780,
+        "process_snapshot_sha256": "22e4b8cff8616786388fbeaf6ca42f2ef8fc8183bf0e1d754a6512d04b1f8aef"
+      },
+      {
+        "available_disk_bytes": 18838188032,
+        "available_memory_bytes": 10821435392,
+        "label": "pre-profiles",
+        "process_snapshot_bytes": 68552,
+        "process_snapshot_sha256": "5433baa5ec53ebd4a151741eb8357071047875e883110bf423705b65203a06b9"
+      },
+      {
+        "available_disk_bytes": 18837540864,
+        "available_memory_bytes": 10759028736,
+        "label": "post-profiles",
+        "process_snapshot_bytes": 68588,
+        "process_snapshot_sha256": "3c8e558e623b60584d54196b286828f17e95f66d4dbebd3b9d578a026b086c1f"
+      }
+    ],
+    "runner_sha256": "66939ff6783673a9231602e08c5db8ecaead54a287a98a694ed40074b138115c",
+    "source_bundle_digest_only_receipt": "c129237335451563279ba27780b9794e0c5bf7b224ee46a115d37491f10f5a06",
+    "source_commit": "6f0cbbaf8a3ee527526edbd29779bd9f8c7d941c",
+    "source_hash_count": 29,
+    "source_tree": "633eaa7df1090e9f8f6f2a82df492372a1114a4d",
+    "timer_validation": {
+      "clock_reads": 4096,
+      "elapsed_ns": 157209,
+      "maximum_delta_ns": 750,
+      "mean_read_delta_ns": 38,
+      "minimum_positive_delta_ns": 41,
+      "monotonic": true,
+      "positive_deltas": 3756,
+      "schema": "libwebp-backref-cost-attribution-v16-timer-check-v1"
+    }
+  },
+  "blocker": null,
+  "correctness_and_semantics": {
+    "baseline_encodes": 8,
+    "bitstream_sha256_by_cell": [
+      {
+        "bitstream_bytes": 283992,
+        "bitstream_sha256": "d21aa8d0755b8c6bc377afcf1142499c66a42d2de1d00561fdd65a126a7ce83c",
+        "case_id": "photo-large",
+        "method": 4
+      },
+      {
+        "bitstream_bytes": 286706,
+        "bitstream_sha256": "7c72ce50697d343dafe98a21b39e9255a669b7b84c1ca820b2fcd7206579a521",
+        "case_id": "photo-large",
+        "method": 6
+      },
+      {
+        "bitstream_bytes": 1274,
+        "bitstream_sha256": "f4bd94160601ce53fad92579816fce9866267fdc00eebee62dd2d2ef9f71074a",
+        "case_id": "graphic-large",
+        "method": 4
+      },
+      {
+        "bitstream_bytes": 1274,
+        "bitstream_sha256": "f4bd94160601ce53fad92579816fce9866267fdc00eebee62dd2d2ef9f71074a",
+        "case_id": "graphic-large",
+        "method": 6
+      }
+    ],
+    "candidate_encodes": 8,
+    "cells": 4,
+    "compact_boundary": "Encoded products and corpus bytes were intentionally omitted after the indexed raw equality/hash/pixel/input records were emitted.",
+    "correctness_encodes": 16,
+    "correctness_raw": {
+      "bytes": 1999,
+      "path": "evidence/backref-cost-attribution-v16-execution-20260819/correctness.json",
+      "sha256": "a45c2110ea81ad34799b62dd931158ce3e394f5656c24758f6dd4bc8483f2f66"
+    },
+    "counter_cells": 4,
+    "counter_encodes": 8,
+    "counter_raw": {
+      "bytes": 2995,
+      "path": "evidence/backref-cost-attribution-v16-execution-20260819/selected-dp-counter-check.json",
+      "sha256": "a52d4eed638ebfad3a786bc75d4ae49fb17678c6d31e6ead840eebfd110d64eb"
+    },
+    "decoded_pixel_comparisons": 16,
+    "input_hash_before_after_comparisons": 4,
+    "input_hash_fields": 8,
+    "opposite_body_zero": true,
+    "phase1_local_prerequisite_checks": {
+      "boundary_fixtures": 16,
+      "checks": 11,
+      "default_omission": true,
+      "guard_count": 36,
+      "public_api_abi_equal": true,
+      "sanitizer_configurations": 2
+    },
+    "phase1_local_prerequisite_raw": {
+      "bytes": 5998,
+      "path": "evidence/backref-cost-attribution-v16-design/phase1-local-validation.json",
+      "sha256": "7aae0b53aca499d63ca4b3bdc486de7ff0a34dc4f911c4b7beda510276cc3827"
+    },
+    "post_reset_zero": true,
+    "selector_once_and_one_selected_dp": true,
+    "source_static_audit": {
+      "closed_if_else_exactly_one_selected_dp_body": true,
+      "dp_setup_allocation_through_cost_manager_init": true,
+      "dp_steady_initial_literal_and_pixel_loop_only": true,
+      "dp_total_includes_selected_body_cleanup": true,
+      "exact_runtime_value_one_enables_candidate_other_values_fallback": true,
+      "opposite_preprocessor_fallthrough_unreachable": true,
+      "per_pixel_or_push_interval_clocks": 0,
+      "production_default": "OFF",
+      "public_header_changes_from_baseline": 0,
+      "selector_evaluated_once_before_dp_mutation": true,
+      "thread_local_resettable_counters": true,
+      "traceback_and_materialization_separate": true
+    }
+  },
+  "decision": {
+    "broader_interval_family_status": "NO_CLOSE_OR_REOPEN_DECISION; frozen consistency support is absent.",
+    "exact_decision": "RETAIN_V16_DEFAULT_OFF_AS_FORENSIC_EVIDENCE_AND_REJECT_PRODUCTION_PROMOTION",
+    "next_experiment_executed": false,
+    "next_experiment_proposed": false,
+    "production_consequence": "NONE",
+    "production_files_modified_in_phase3": [],
+    "production_status": "UNCHANGED; V16 remains compile-time default-off, runtime exact-opt-in diagnostic code and is not promoted.",
+    "rationale": "All frozen diagnostic/evidence gates pass, but the measured candidate is not consistently beneficial: photo DP improves while graphic DP regresses, and whole-encode paired directions are inconsistent in three of four case/method cells. The frozen protocol also expressly forbids promotion from this diagnostic.",
+    "selected_consequence": 2
+  },
+  "evaluation_date": "2026-08-19",
+  "evaluator": "Sol/high",
+  "frozen_identity": {
+    "manifest": {
+      "bytes": 30836,
+      "path": "scripts/backref_cost_attribution_v16_manifest.json",
+      "sha256": "dcededba2b466801c340331222f51fb15ee72ddd57b42e82cda28bf9172bc5d5"
+    },
+    "phase1b_authorization": {
+      "bytes": 6056,
+      "path": "evidence/backref-cost-attribution-v16-design/phase1b-authorization.json",
+      "sha256": "eb21c62bc786ea44944328724b5aff1ff9938d6134e018f7d070610969703175"
+    },
+    "phase1b_hash_index": {
+      "bytes": 3262,
+      "path": "evidence/backref-cost-attribution-v16-design/phase1b-rehearsal-hashes.json",
+      "sha256": "5b3ff3ac3a9e8583745b82c16be674dd7f6817aa5029c4bf17832710cb7cd6cc"
+    },
+    "protocol": {
+      "bytes": 22485,
+      "path": "doc/backref-cost-attribution-v16-protocol-20260819.md",
+      "sha256": "b5500ff8f0e82736e3208f4a52d363d35989d52a98dfabaf91a10be5c92a1e00"
+    },
+    "schema_catalog": {
+      "bytes": 1207,
+      "path": "scripts/backref_cost_attribution_v16_schemas.json",
+      "sha256": "538ceb10963028bc77e5e0a2fd2ee98a3df516d1b4d004318a9db0d2954987d9"
+    },
+    "schema_count": 19
+  },
+  "gate_verdicts": {
+    "correctness_pixels_determinism_fallback_abi_input_immutability": "PASS",
+    "exact_profile_corpus_order_counts_serial_lifecycle": "PASS",
+    "exclusive_lease_acquired_and_released": "PASS",
+    "frozen_manifest_protocol_schema_and_source_hashes": "PASS",
+    "frozen_repeatability_and_uncertainty_rules": "PASS_96_COMPARISONS",
+    "linear_phase_ancestry": "PASS",
+    "phase1_rehearsal_transport_archive_integrity_cleanup": "PASS",
+    "phase1b_additions_only_and_complete_hash_index": "PASS_22_FILES",
+    "phase2_inner_artifact_hashes_and_coverage": "PASS_85_FILES",
+    "phase2_returned_hashes_and_coverage": "PASS_95_FILES",
+    "production_promotion_forbidden": "PASS_NO_PROMOTION",
+    "response_archive_caps_frames_transfer_extraction_integrity": "PASS",
+    "selector_once_one_selected_dp_and_timer_nesting": "PASS_120_ROWS",
+    "source_toolchain_device_resource_process_ownership": "PASS"
+  },
+  "input_commits": {
+    "main_baseline": "8ac198e565ab36eedd6e124202b78c09e5180ec1",
+    "phase1a": "6f0cbbaf8a3ee527526edbd29779bd9f8c7d941c",
+    "phase1b": "ef24e275a714f76bd78a04363524bc32f2e4076d",
+    "phase2": "85817c0f97ea5fe1227d0d04466736f570fba731"
+  },
+  "limitations": [
+    "The frozen compact boundary intentionally retains digest/count receipts, not bytes, for the request, source bundle, process snapshots, build/nm streams, corpus, and correctness products; their receipt fields cannot be independently rehashed without violating the frozen evidence boundary.",
+    "Remote absence is established by the cleanup-last in-session receipt; the protocol forbids a follow-up remote inspection and Phase 3 performed none.",
+    "Coarse nested timers bound stages but cannot identify PushInterval self time, call-stack, code-layout, branch-predictor, or cache causality.",
+    "Only two 3000x2000 corpus cases, methods 4 and 6, three process repetitions, and four retained encodes per process are admitted; no pooling or generalization beyond those cells is authorized.",
+    "The frozen statistical rule is descriptive repeatability only; it defines no confidence interval or significance test."
+  ],
+  "raw_inventory": {
+    "all_recorded_stages": [
+      "backref_cost_dp_setup",
+      "backref_cost_dp_steady",
+      "backref_cost_dp_total",
+      "backref_cost_materialize",
+      "backref_cost_traceback",
+      "lossless_analyze",
+      "lossless_backward_refs",
+      "lossless_bitstream",
+      "lossless_container_setup",
+      "lossless_cross_color",
+      "lossless_encoder_init",
+      "lossless_hash_chain",
+      "lossless_histogram",
+      "lossless_huffman",
+      "lossless_input_copy",
+      "lossless_palette",
+      "lossless_predictor",
+      "lossless_prepare",
+      "lossless_riff_write",
+      "lossless_stream_finalize",
+      "lossless_subtract_green"
+    ],
+    "commands_raw": {
+      "bytes": 49766,
+      "path": "evidence/backref-cost-attribution-v16-execution-20260819/commands.jsonl",
+      "sha256": "3bf05cabb47eaafb2a647662ad1caf52a49d7b12289186a4e14801236131b260"
+    },
+    "cuda_invocations": 0,
+    "parallel_profile_processes": 1,
+    "profile_plan_raw": {
+      "bytes": 49121,
+      "path": "evidence/backref-cost-attribution-v16-execution-20260819/profile-plan.json",
+      "sha256": "b99940408a2910240bf0a839fbdafbacdff95c57b0890524826824022f9c6383"
+    },
+    "profile_processes": 24,
+    "profiler_invocations": 0,
+    "required_timer_stages": [
+      "lossless_analyze",
+      "lossless_hash_chain",
+      "lossless_backward_refs",
+      "lossless_histogram",
+      "lossless_huffman",
+      "lossless_bitstream",
+      "backref_cost_dp_total",
+      "backref_cost_dp_setup",
+      "backref_cost_dp_steady",
+      "backref_cost_traceback",
+      "backref_cost_materialize"
+    ],
+    "reruns": 0,
+    "retained_records": 96,
+    "retries": 0,
+    "runner_records": 120,
+    "serial_direct_process_order": [
+      "p00-photo-large-m4-baseline-r0",
+      "p01-photo-large-m4-candidate-r0",
+      "p02-photo-large-m4-candidate-r1",
+      "p03-photo-large-m4-baseline-r1",
+      "p04-photo-large-m4-baseline-r2",
+      "p05-photo-large-m4-candidate-r2",
+      "p06-photo-large-m6-baseline-r0",
+      "p07-photo-large-m6-candidate-r0",
+      "p08-photo-large-m6-candidate-r1",
+      "p09-photo-large-m6-baseline-r1",
+      "p10-photo-large-m6-baseline-r2",
+      "p11-photo-large-m6-candidate-r2",
+      "p12-graphic-large-m4-baseline-r0",
+      "p13-graphic-large-m4-candidate-r0",
+      "p14-graphic-large-m4-candidate-r1",
+      "p15-graphic-large-m4-baseline-r1",
+      "p16-graphic-large-m4-baseline-r2",
+      "p17-graphic-large-m4-candidate-r2",
+      "p18-graphic-large-m6-baseline-r0",
+      "p19-graphic-large-m6-candidate-r0",
+      "p20-graphic-large-m6-candidate-r1",
+      "p21-graphic-large-m6-baseline-r1",
+      "p22-graphic-large-m6-baseline-r2",
+      "p23-graphic-large-m6-candidate-r2"
+    ],
+    "stage_records": 120,
+    "timer_accounting_rows": 120,
+    "unique_runner_pids": 24,
+    "variant_order": [
+      [
+        "baseline",
+        "candidate"
+      ],
+      [
+        "candidate",
+        "baseline"
+      ],
+      [
+        "baseline",
+        "candidate"
+      ]
+    ],
+    "warmups": 24
+  },
+  "raw_provenance": {
+    "digest_only_receipts": [
+      "framed request",
+      "source bundle",
+      "representative request payload",
+      "raw process snapshots",
+      "build stdout/stderr",
+      "nm output",
+      "correctness WebP products and corpus bytes"
+    ],
+    "phase1": {
+      "archive_bytes": 6292,
+      "archive_inventory_canonical_sha256": "e7ce00aabbb4859d9253a71db61ab35f3867f938d626c555a3ae785d09ce7ffc",
+      "archive_inventory_pretty_sha256": "c9d0a69ebd052d80846893a09f4323b1204687bd302b557570042558c5c6c5d9",
+      "archive_member_count": 8,
+      "archive_sha256": "d007759baf03f900d0dc3ef76277fb8d986802339eda977ac52adf51d2f241fd",
+      "cleanup_last_and_absence": true,
+      "frame_count": 8,
+      "frame_kinds": [
+        "source-admission",
+        "operator-status",
+        "archive-build",
+        "lease-state",
+        "bulk-declaration",
+        "bulk-chunk",
+        "integrity-footer",
+        "cleanup-footer"
+      ],
+      "framed_request_digest_only_receipt": {
+        "bytes": 22358794,
+        "sha256": "433899783cbcc08f2ee5c967c29375dd344968120af7c2aefbdc2b9260064161"
+      },
+      "framed_stdout": {
+        "bytes": 15629,
+        "path": "evidence/backref-cost-attribution-v16-design/rehearsal/return-protocol/framed-stdout.bin",
+        "sha256": "d2552b8004b548064ac52d78c9629c0798c24ff482ad18e7bf63836432608cb7"
+      },
+      "inner_index": {
+        "bytes": 1188,
+        "path": "evidence/backref-cost-attribution-v16-design/rehearsal/artifact-hashes.json",
+        "sha256": "2e2cb5af3e844efcbb80d579c7cb204da0514d6c47d61dab007397f4864b860a"
+      },
+      "inner_indexed_files": 7,
+      "lease_transfer_state": "not-attempted",
+      "recomputed_transport_calibration": {
+        "archive_cap_margin_ratio": 124.98919262555626,
+        "cleanup_elapsed_ns": 31846642916,
+        "framed_response_cap_margin_ratio": 67.0916885277369,
+        "throughput_bytes_per_second_integer": 191,
+        "transaction_elapsed_ns": 32788993458
+      },
+      "returned_index": {
+        "bytes": 2937,
+        "path": "evidence/backref-cost-attribution-v16-design/rehearsal/returned-evidence-hashes.json",
+        "sha256": "e19088967aa86785e289c44dc90d816ab5799e5b699609890a329e1e0c5dbd3d"
+      },
+      "returned_indexed_files": 17,
+      "transport_stderr": {
+        "bytes": 0,
+        "path": "evidence/backref-cost-attribution-v16-design/rehearsal/return-protocol/transport-stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "phase1_rehearsal_root": "evidence/backref-cost-attribution-v16-design/rehearsal",
+    "phase2": {
+      "archive_bytes": 30700,
+      "archive_inventory_canonical_sha256": "fc4b74de337a9bb7d7ee2de465e6f011f48da694450de845bbb07fd3a5ab6507",
+      "archive_inventory_pretty_sha256": "15370a4de70dd50649577bcaa6d12f538b509668bd559c49616b8f8615590162",
+      "archive_member_count": 88,
+      "archive_sha256": "c0e5ebb5a54d53f6bff0dfec52284a8413d4e72e578868d63768f3e927531a47",
+      "cleanup_last_and_absence": true,
+      "frame_count": 8,
+      "frame_kinds": [
+        "source-admission",
+        "operator-status",
+        "archive-build",
+        "lease-state",
+        "bulk-declaration",
+        "bulk-chunk",
+        "integrity-footer",
+        "cleanup-footer"
+      ],
+      "framed_request_digest_only_receipt": {
+        "bytes": 20291115,
+        "sha256": "7b547e1c5731863185b8f7063756d2e974ce74f5843e6f525c644a663617f9e7"
+      },
+      "framed_stdout": {
+        "bytes": 40238,
+        "path": "evidence/backref-cost-attribution-v16-execution-20260819/return-protocol/framed-stdout.bin",
+        "sha256": "acf0b2847caf46d1ae0a8a8c11708b1e6b5464c992f53081399c5ef7b47f35af"
+      },
+      "inner_index": {
+        "bytes": 15037,
+        "path": "evidence/backref-cost-attribution-v16-execution-20260819/artifact-hashes.json",
+        "sha256": "9c2a1bad74ef66a482c09390ead68fbc13d68de6d4e93de860c1bd3f84a56f77"
+      },
+      "inner_indexed_files": 85,
+      "lease_transfer_state": "verified",
+      "recomputed_transport_calibration": {
+        "archive_cap_margin_ratio": 25.616677524429967,
+        "cleanup_elapsed_ns": 113782612083,
+        "framed_response_cap_margin_ratio": 26.059346886028134,
+        "throughput_bytes_per_second_integer": 267,
+        "transaction_elapsed_ns": 114797087125
+      },
+      "returned_index": {
+        "bytes": 16787,
+        "path": "evidence/backref-cost-attribution-v16-execution-20260819/returned-evidence-hashes.json",
+        "sha256": "e57efc36ef1730b6019d6a16995fc7ca8decaec5ea99055a2fd2d0040a3841fc"
+      },
+      "returned_indexed_files": 95,
+      "transport_stderr": {
+        "bytes": 0,
+        "path": "evidence/backref-cost-attribution-v16-execution-20260819/return-protocol/transport-stderr.bin",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "phase2_execution_root": "evidence/backref-cost-attribution-v16-execution-20260819",
+    "retained_hash_verdict": "Every SHA-256 whose source bytes are retained was recomputed; both hash indexes have exact frozen coverage."
+  },
+  "recomputed_statistics": {
+    "cells": [
+      {
+        "case_id": "photo-large",
+        "deltas": {
+          "backref_cost_dp_setup": {
+            "aggregate_delta_fraction": 0.011867003041958535,
+            "aggregate_delta_ns": 14812.5,
+            "candidate_minus_baseline_share_points": 2.460615504595756e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.0030716009898983376,
+                "delta_ns": -3834.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.015946260719453154,
+                "delta_ns": 19832.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.001990848182714,
+                "delta_ns": -2519.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.001990848182714,
+            "paired_direction_consistent": false
+          },
+          "backref_cost_dp_steady": {
+            "aggregate_delta_fraction": -0.017014792815170487,
+            "aggregate_delta_ns": -510939.0,
+            "candidate_minus_baseline_share_points": -0.0003517484947259328,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.0045400615992595705,
+                "delta_ns": -134625.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.04245425774982858,
+                "delta_ns": -1304729.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.015148536727951134,
+                "delta_ns": -454897.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.015148536727951134,
+            "paired_direction_consistent": true
+          },
+          "backref_cost_dp_total": {
+            "aggregate_delta_fraction": -0.016898488555957436,
+            "aggregate_delta_ns": -528916.0,
+            "candidate_minus_baseline_share_points": -0.00036266954837538973,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.004788084840290696,
+                "delta_ns": -148041.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.0399536606341383,
+                "delta_ns": -1277500.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.014518266748678399,
+                "delta_ns": -454416.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.014518266748678399,
+            "paired_direction_consistent": true
+          },
+          "backref_cost_materialize": {
+            "aggregate_delta_fraction": 0.003995610209077904,
+            "aggregate_delta_ns": 8874.5,
+            "candidate_minus_baseline_share_points": 2.4760799429827864e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.009354216843474594,
+                "delta_ns": 20666.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.0015949573683766705,
+                "delta_ns": 3542.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.0013428593749335027,
+                "delta_ns": -2999.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.0015949573683766705,
+            "paired_direction_consistent": false
+          },
+          "backref_cost_traceback": {
+            "aggregate_delta_fraction": -0.0202102927351695,
+            "aggregate_delta_ns": -16521.5,
+            "candidate_minus_baseline_share_points": -1.241805433102876e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.00881655029034778,
+                "delta_ns": -7124.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.020796851786497372,
+                "delta_ns": -17001.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.0010699273977836654,
+                "delta_ns": 875.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.00881655029034778,
+            "paired_direction_consistent": false
+          },
+          "lossless_analyze": {
+            "aggregate_delta_fraction": -0.004158218886385345,
+            "aggregate_delta_ns": -54834.0,
+            "candidate_minus_baseline_share_points": 3.0011566214389537e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.038704786933938085,
+                "delta_ns": -510396.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.009170524139301084,
+                "delta_ns": -121542.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.04487995101893971,
+                "delta_ns": 568125.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.009170524139301084,
+            "paired_direction_consistent": false
+          },
+          "lossless_backward_refs": {
+            "aggregate_delta_fraction": -0.0005760054834873518,
+            "aggregate_delta_ns": -79813.0,
+            "candidate_minus_baseline_share_points": 0.0008554497387336102,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.014414837698421334,
+                "delta_ns": -1968457.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.010494677014048936,
+                "delta_ns": -1468749.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.0024242849910556252,
+                "delta_ns": 335916.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.010494677014048936,
+            "paired_direction_consistent": false
+          },
+          "lossless_bitstream": {
+            "aggregate_delta_fraction": 0.0092226867546914,
+            "aggregate_delta_ns": 11979.5,
+            "candidate_minus_baseline_share_points": 2.1868357168034055e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.03389773695665288,
+                "delta_ns": 42979.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.0016359789101147992,
+                "delta_ns": 2125.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.00918378082410598,
+                "delta_ns": 11959.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.00918378082410598,
+            "paired_direction_consistent": true
+          },
+          "lossless_container_setup": {
+            "aggregate_delta_fraction": -0.005186721991701226,
+            "aggregate_delta_ns": -7187.5,
+            "candidate_minus_baseline_share_points": 1.6029410232914782e-06,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.003853574368633206,
+                "delta_ns": 5292.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.006868326593420404,
+                "delta_ns": -9520.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.013620782969511191,
+                "delta_ns": 18875.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.003853574368633206,
+            "paired_direction_consistent": false
+          },
+          "lossless_cross_color": {
+            "aggregate_delta_fraction": 0.00206042500668957,
+            "aggregate_delta_ns": 931166.5,
+            "candidate_minus_baseline_share_points": 0.004086557895924436,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.0007130085969513367,
+                "delta_ns": 322229.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.0029123136479427547,
+                "delta_ns": 1315042.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.0028522205708478854,
+                "delta_ns": 1291125.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.0028522205708478854,
+            "paired_direction_consistent": true
+          },
+          "lossless_encoder_init": {
+            "aggregate_delta_fraction": 0.48406449193850776,
+            "aggregate_delta_ns": 645.5,
+            "candidate_minus_baseline_share_points": 7.114475662869492e-07,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.18751875187518752,
+                "delta_ns": 312.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.5620547431571055,
+                "delta_ns": 749.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.43953934740882916,
+                "delta_ns": 458.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.43953934740882916,
+            "paired_direction_consistent": true
+          },
+          "lossless_hash_chain": {
+            "aggregate_delta_fraction": 0.008166458974874002,
+            "aggregate_delta_ns": 440083.5,
+            "candidate_minus_baseline_share_points": 0.0008453345946783167,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.01051065540623708,
+                "delta_ns": 560438.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.015711642563420947,
+                "delta_ns": 846687.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.00510260068389945,
+                "delta_ns": 275813.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.01051065540623708,
+            "paired_direction_consistent": true
+          },
+          "lossless_histogram": {
+            "aggregate_delta_fraction": -0.0028055908070038216,
+            "aggregate_delta_ns": -40208.5,
+            "candidate_minus_baseline_share_points": 5.3710103884455074e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.007051309030141839,
+                "delta_ns": 99687.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.0028055908070038216,
+                "delta_ns": -40208.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.0020445991815138953,
+                "delta_ns": -29416.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.0020445991815138953,
+            "paired_direction_consistent": false
+          },
+          "lossless_huffman": {
+            "aggregate_delta_fraction": -0.008777123357439631,
+            "aggregate_delta_ns": -5833.5,
+            "candidate_minus_baseline_share_points": -1.8277485290916096e-06,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.014189680023061424,
+                "delta_ns": 9229.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.022381025103610952,
+                "delta_ns": -14875.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.020839371415237173,
+                "delta_ns": -14021.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.020839371415237173,
+            "paired_direction_consistent": false
+          },
+          "lossless_input_copy": {
+            "aggregate_delta_fraction": -0.005187951283499137,
+            "aggregate_delta_ns": -2375.0,
+            "candidate_minus_baseline_share_points": 5.289296155270998e-07,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.005778831629682957,
+                "delta_ns": 2645.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.0007306645426928826,
+                "delta_ns": -333.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.020666861044973506,
+                "delta_ns": -9604.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.0007306645426928826,
+            "paired_direction_consistent": false
+          },
+          "lossless_predictor": {
+            "aggregate_delta_fraction": -0.01876333084391335,
+            "aggregate_delta_ns": -4647958.5,
+            "candidate_minus_baseline_share_points": -0.0033729366213161027,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.0008905919010409047,
+                "delta_ns": -216666.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.020073388773388823,
+                "delta_ns": -4972479.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.09782674740997432,
+                "delta_ns": -26504728.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.020073388773388823,
+            "paired_direction_consistent": true
+          },
+          "lossless_prepare": {
+            "aggregate_delta_fraction": -1.0,
+            "aggregate_delta_ns": -20.5,
+            "candidate_minus_baseline_share_points": -2.216697548723731e-08,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": null,
+                "delta_ns": 0.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -1.0,
+                "delta_ns": -20.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 1.9761904761904763,
+                "delta_ns": 41.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": null,
+            "paired_direction_consistent": false
+          },
+          "lossless_riff_write": {
+            "aggregate_delta_fraction": -0.017606371829805068,
+            "aggregate_delta_ns": -84.0,
+            "candidate_minus_baseline_share_points": -5.8956642525001015e-08,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.017396772165164442,
+                "delta_ns": 83.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.0,
+                "delta_ns": 0.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.06259999999999999,
+                "delta_ns": -313.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.0,
+            "paired_direction_consistent": false
+          },
+          "lossless_stream_finalize": {
+            "aggregate_delta_fraction": -0.009817671809256634,
+            "aggregate_delta_ns": -63.0,
+            "candidate_minus_baseline_share_points": -2.4912594207850148e-08,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.012693284098776791,
+                "delta_ns": -82.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.045504129655602354,
+                "delta_ns": -292.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.0,
+                "delta_ns": 0.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.012693284098776791,
+            "paired_direction_consistent": false
+          },
+          "lossless_subtract_green": {
+            "aggregate_delta_fraction": -0.0002613474225493517,
+            "aggregate_delta_ns": -166.5,
+            "candidate_minus_baseline_share_points": 4.151304454729854e-06,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.014299193789190756,
+                "delta_ns": 8979.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.008735703848027243,
+                "delta_ns": -5604.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.01121674883806345,
+                "delta_ns": 7146.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.01121674883806345,
+            "paired_direction_consistent": false
+          },
+          "total_ns": {
+            "aggregate_delta_fraction": -0.006249780857821019,
+            "aggregate_delta_ns": -5779792.0,
+            "candidate_minus_baseline_share_points": null,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.002303092547947694,
+                "delta_ns": -2114979.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.006249780857821019,
+                "delta_ns": -5779792.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.02796185195189449,
+                "delta_ns": -26513562.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.006249780857821019,
+            "paired_direction_consistent": true
+          }
+        },
+        "method": 4,
+        "variants": {
+          "baseline": {
+            "median_of_profile_medians_ns": {
+              "backref_cost_dp_setup": 1248209.0,
+              "backref_cost_dp_steady": 30029105.0,
+              "backref_cost_dp_total": 31299604.0,
+              "backref_cost_materialize": 2221062.5,
+              "backref_cost_traceback": 817479.5,
+              "lossless_analyze": 13186896.0,
+              "lossless_backward_refs": 138562917.0,
+              "lossless_bitstream": 1298916.5,
+              "lossless_container_setup": 1385750.0,
+              "lossless_cross_color": 451929333.5,
+              "lossless_encoder_init": 1333.5,
+              "lossless_hash_chain": 53889146.0,
+              "lossless_histogram": 14331562.5,
+              "lossless_huffman": 664625.5,
+              "lossless_input_copy": 457791.5,
+              "lossless_predictor": 247715000.0,
+              "lossless_prepare": 20.5,
+              "lossless_riff_write": 4771.0,
+              "lossless_stream_finalize": 6417.0,
+              "lossless_subtract_green": 637083.0,
+              "total_ns": 924799146.0
+            },
+            "profile_ids": [
+              "p00-photo-large-m4-baseline-r0",
+              "p03-photo-large-m4-baseline-r1",
+              "p04-photo-large-m4-baseline-r2"
+            ],
+            "profile_medians_ns": {
+              "backref_cost_dp_setup": [
+                1248209.0,
+                1243708.5,
+                1265541.0
+              ],
+              "backref_cost_dp_steady": [
+                29652791.5,
+                30732583.0,
+                30029105.0
+              ],
+              "backref_cost_dp_total": [
+                30918729.5,
+                31974542.0,
+                31299604.0
+              ],
+              "backref_cost_materialize": [
+                2209271.0,
+                2221062.5,
+                2233666.5
+              ],
+              "backref_cost_traceback": [
+                808082.5,
+                817479.5,
+                817812.5
+              ],
+              "lossless_analyze": [
+                13186896.0,
+                13253604.5,
+                12658770.5
+              ],
+              "lossless_backward_refs": [
+                136557729.0,
+                139951853.5,
+                138562917.0
+              ],
+              "lossless_bitstream": [
+                1267916.5,
+                1298916.5,
+                1302187.0
+              ],
+              "lossless_container_setup": [
+                1373270.5,
+                1386145.5,
+                1385750.0
+              ],
+              "lossless_cross_color": [
+                451929333.5,
+                451545458.0,
+                452673791.5
+              ],
+              "lossless_encoder_init": [
+                1666.5,
+                1333.5,
+                1042.0
+              ],
+              "lossless_hash_chain": [
+                53320937.5,
+                53889146.0,
+                54053416.5
+              ],
+              "lossless_histogram": [
+                14137375.0,
+                14331562.5,
+                14387416.5
+              ],
+              "lossless_huffman": [
+                650437.5,
+                664625.5,
+                672813.0
+              ],
+              "lossless_input_copy": [
+                457791.5,
+                455749.5,
+                464729.5
+              ],
+              "lossless_predictor": [
+                243283708.0,
+                247715000.0,
+                270935395.5
+              ],
+              "lossless_prepare": [
+                0.0,
+                20.5,
+                21.0
+              ],
+              "lossless_riff_write": [
+                4771.0,
+                4666.5,
+                5000.0
+              ],
+              "lossless_stream_finalize": [
+                6499.5,
+                6417.0,
+                6354.0
+              ],
+              "lossless_subtract_green": [
+                627937.5,
+                641562.5,
+                637083.0
+              ],
+              "total_ns": [
+                918321542.0,
+                924799146.0,
+                948204791.5
+              ]
+            },
+            "repeatability": {
+              "maximum_required_stage_share_range": 0.005200314809116008,
+              "pass": true,
+              "required_stage_share_ranges": {
+                "backref_cost_dp_setup": 2.4558165828579646e-05,
+                "backref_cost_dp_steady": 0.0015622002370453275,
+                "backref_cost_dp_total": 0.0015652508557704031,
+                "backref_cost_materialize": 5.009122984429241e-05,
+                "backref_cost_traceback": 2.1468467479092185e-05,
+                "lossless_analyze": 0.0010095312947815231,
+                "lossless_backward_refs": 0.005200314809116008,
+                "lossless_bitstream": 3.1220726795707374e-05,
+                "lossless_hash_chain": 0.0012651320767575677,
+                "lossless_histogram": 0.00032362420968758826,
+                "lossless_huffman": 1.038061203260639e-05
+              },
+              "retained_total_median_max_min_ratio": 1.0325411613833186
+            },
+            "stage_share_of_total": {
+              "backref_cost_dp_setup": 0.0013497082100462927,
+              "backref_cost_dp_steady": 0.0324709480213988,
+              "backref_cost_dp_total": 0.03384475876235292,
+              "backref_cost_materialize": 0.0024016701460059524,
+              "backref_cost_traceback": 0.0008839535628204397,
+              "lossless_analyze": 0.014259200018768183,
+              "lossless_backward_refs": 0.14983028217459016,
+              "lossless_bitstream": 0.001404539034900882,
+              "lossless_container_setup": 0.001498433477143371,
+              "lossless_cross_color": 0.48867836378819496,
+              "lossless_encoder_init": 1.4419347225478515e-06,
+              "lossless_hash_chain": 0.058271189190739155,
+              "lossless_histogram": 0.015496946079576072,
+              "lossless_huffman": 0.0007186701056923337,
+              "lossless_input_copy": 0.0004950172175007609,
+              "lossless_predictor": 0.2678581625766337,
+              "lossless_prepare": 2.216697548723731e-08,
+              "lossless_riff_write": 5.158958051200449e-06,
+              "lossless_stream_finalize": 6.938803985443992e-06,
+              "lossless_subtract_green": 0.0006888879631383224
+            }
+          },
+          "candidate": {
+            "median_of_profile_medians_ns": {
+              "backref_cost_dp_setup": 1263021.5,
+              "backref_cost_dp_steady": 29518166.0,
+              "backref_cost_dp_total": 30770688.0,
+              "backref_cost_materialize": 2229937.0,
+              "backref_cost_traceback": 800958.0,
+              "lossless_analyze": 13132062.0,
+              "lossless_backward_refs": 138483104.0,
+              "lossless_bitstream": 1310896.0,
+              "lossless_container_setup": 1378562.5,
+              "lossless_cross_color": 452860500.0,
+              "lossless_encoder_init": 1979.0,
+              "lossless_hash_chain": 54329229.5,
+              "lossless_histogram": 14291354.0,
+              "lossless_huffman": 658792.0,
+              "lossless_input_copy": 455416.5,
+              "lossless_predictor": 243067041.5,
+              "lossless_prepare": 0.0,
+              "lossless_riff_write": 4687.0,
+              "lossless_stream_finalize": 6354.0,
+              "lossless_subtract_green": 636916.5,
+              "total_ns": 919019354.0
+            },
+            "profile_ids": [
+              "p01-photo-large-m4-candidate-r0",
+              "p02-photo-large-m4-candidate-r1",
+              "p05-photo-large-m4-candidate-r2"
+            ],
+            "profile_medians_ns": {
+              "backref_cost_dp_setup": [
+                1244375.0,
+                1263541.0,
+                1263021.5
+              ],
+              "backref_cost_dp_steady": [
+                29518166.0,
+                29427854.0,
+                29574208.0
+              ],
+              "backref_cost_dp_total": [
+                30770688.0,
+                30697042.0,
+                30845188.0
+              ],
+              "backref_cost_materialize": [
+                2229937.0,
+                2224605.0,
+                2230667.0
+              ],
+              "backref_cost_traceback": [
+                800958.0,
+                800478.5,
+                818687.5
+              ],
+              "lossless_analyze": [
+                12676500.0,
+                13132062.0,
+                13226895.5
+              ],
+              "lossless_backward_refs": [
+                134589271.5,
+                138483104.0,
+                138898833.0
+              ],
+              "lossless_bitstream": [
+                1310896.0,
+                1301041.5,
+                1314146.0
+              ],
+              "lossless_container_setup": [
+                1378562.5,
+                1376625.0,
+                1404625.0
+              ],
+              "lossless_cross_color": [
+                452251563.0,
+                452860500.0,
+                453964917.0
+              ],
+              "lossless_encoder_init": [
+                1979.0,
+                2083.0,
+                1500.0
+              ],
+              "lossless_hash_chain": [
+                53881375.5,
+                54735833.0,
+                54329229.5
+              ],
+              "lossless_histogram": [
+                14237062.0,
+                14291354.0,
+                14358000.0
+              ],
+              "lossless_huffman": [
+                659667.0,
+                649750.5,
+                658792.0
+              ],
+              "lossless_input_copy": [
+                460437.0,
+                455416.5,
+                455125.0
+              ],
+              "lossless_predictor": [
+                243067041.5,
+                242742520.5,
+                244430667.0
+              ],
+              "lossless_prepare": [
+                0.0,
+                0.0,
+                62.5
+              ],
+              "lossless_riff_write": [
+                4854.0,
+                4666.5,
+                4687.0
+              ],
+              "lossless_stream_finalize": [
+                6417.0,
+                6125.0,
+                6354.0
+              ],
+              "lossless_subtract_green": [
+                636916.5,
+                635958.0,
+                644229.0
+              ],
+              "total_ns": [
+                916206562.5,
+                919019354.0,
+                921691229.5
+              ]
+            },
+            "repeatability": {
+              "maximum_required_stage_share_range": 0.003801568920843379,
+              "pass": true,
+              "required_stage_share_ranges": {
+                "backref_cost_dp_setup": 1.6697926927084763e-05,
+                "backref_cost_dp_steady": 0.00019687721729499258,
+                "backref_cost_dp_total": 0.00018292679683896973,
+                "backref_cost_materialize": 1.3691160273299977e-05,
+                "backref_cost_traceback": 1.7231106443258435e-05,
+                "lossless_analyze": 0.0005148258270821944,
+                "lossless_backward_refs": 0.003801568920843379,
+                "lossless_bitstream": 1.5101971578661277e-05,
+                "lossless_hash_chain": 0.0007497551357417628,
+                "lossless_histogram": 3.874507074785871e-05,
+                "lossless_huffman": 1.2993964199125695e-05
+              },
+              "retained_total_median_max_min_ratio": 1.0059862777942066
+            },
+            "stage_share_of_total": {
+              "backref_cost_dp_setup": 0.0013743143650922502,
+              "backref_cost_dp_steady": 0.032119199526672866,
+              "backref_cost_dp_total": 0.03348208921397753,
+              "backref_cost_materialize": 0.0024264309454357803,
+              "backref_cost_traceback": 0.000871535508489411,
+              "lossless_analyze": 0.014289211584982572,
+              "lossless_backward_refs": 0.15068573191332377,
+              "lossless_bitstream": 0.0014264073920689162,
+              "lossless_container_setup": 0.0015000364181666625,
+              "lossless_cross_color": 0.4927649216841194,
+              "lossless_encoder_init": 2.1533822888348006e-06,
+              "lossless_hash_chain": 0.05911652378541747,
+              "lossless_histogram": 0.015550656183460528,
+              "lossless_huffman": 0.0007168423571632421,
+              "lossless_input_copy": 0.000495546147116288,
+              "lossless_predictor": 0.2644852259553176,
+              "lossless_prepare": 0.0,
+              "lossless_riff_write": 5.100001408675448e-06,
+              "lossless_stream_finalize": 6.9138913912361416e-06,
+              "lossless_subtract_green": 0.0006930392675930522
+            }
+          }
+        }
+      },
+      {
+        "case_id": "photo-large",
+        "deltas": {
+          "backref_cost_dp_setup": {
+            "aggregate_delta_fraction": 0.0010134872672569184,
+            "aggregate_delta_ns": 1291.5,
+            "candidate_minus_baseline_share_points": 4.4757968787972023e-07,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.021628779871640358,
+                "delta_ns": 27063.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.009719557387504074,
+                "delta_ns": -12520.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.00037667354880632775,
+                "delta_ns": -480.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.00037667354880632775,
+            "paired_direction_consistent": false
+          },
+          "backref_cost_dp_steady": {
+            "aggregate_delta_fraction": -0.015029689002787894,
+            "aggregate_delta_ns": -454187.5,
+            "candidate_minus_baseline_share_points": -0.00039727153484769157,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.005533908136419519,
+                "delta_ns": -165521.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.011877233089986339,
+                "delta_ns": -359146.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.015029689002787894,
+                "delta_ns": -454187.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.011877233089986339,
+            "paired_direction_consistent": true
+          },
+          "backref_cost_dp_total": {
+            "aggregate_delta_fraction": -0.014638513085987959,
+            "aggregate_delta_ns": -461084.5,
+            "candidate_minus_baseline_share_points": -0.0004037153222885802,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.005156139171018093,
+                "delta_ns": -160771.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.011865401287731725,
+                "delta_ns": -374125.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.014638513085987959,
+                "delta_ns": -461084.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.011865401287731725,
+            "paired_direction_consistent": true
+          },
+          "backref_cost_materialize": {
+            "aggregate_delta_fraction": -0.011951382928652499,
+            "aggregate_delta_ns": -26979.5,
+            "candidate_minus_baseline_share_points": -2.3830439555825407e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.007063645205368951,
+                "delta_ns": -15854.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.006479293402871122,
+                "delta_ns": -14645.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.011951382928652499,
+                "delta_ns": -26979.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.007063645205368951,
+            "paired_direction_consistent": true
+          },
+          "backref_cost_traceback": {
+            "aggregate_delta_fraction": 0.008028618668715515,
+            "aggregate_delta_ns": 6499.5,
+            "candidate_minus_baseline_share_points": 5.062244105467732e-06,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.011150596871042584,
+                "delta_ns": 8999.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.00875063230235873,
+                "delta_ns": 7084.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.008014807429765458,
+                "delta_ns": -6584.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.00875063230235873,
+            "paired_direction_consistent": false
+          },
+          "lossless_analyze": {
+            "aggregate_delta_fraction": 0.03863828780891576,
+            "aggregate_delta_ns": 490146.0,
+            "candidate_minus_baseline_share_points": 0.00040601012317382536,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.043227958133759126,
+                "delta_ns": 548271.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.03730268547450266,
+                "delta_ns": 473812.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.003532576563793355,
+                "delta_ns": -44812.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.03730268547450266,
+            "paired_direction_consistent": false
+          },
+          "lossless_backward_refs": {
+            "aggregate_delta_fraction": 0.023761935781338117,
+            "aggregate_delta_ns": 3238937.0,
+            "candidate_minus_baseline_share_points": 0.002656642363286832,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.00010102556409907759,
+                "delta_ns": -13688.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.02632140061369337,
+                "delta_ns": 3587812.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.006274135535791925,
+                "delta_ns": -881063.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.00010102556409907759,
+            "paired_direction_consistent": false
+          },
+          "lossless_bitstream": {
+            "aggregate_delta_fraction": 0.005232982312020518,
+            "aggregate_delta_ns": 6918.0,
+            "candidate_minus_baseline_share_points": 5.157371862047656e-06,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -7.791228362796776e-05,
+                "delta_ns": -103.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.010216438435306507,
+                "delta_ns": 13439.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.0008750469043151687,
+                "delta_ns": -1166.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -7.791228362796776e-05,
+            "paired_direction_consistent": false
+          },
+          "lossless_container_setup": {
+            "aggregate_delta_fraction": 0.007438861332912605,
+            "aggregate_delta_ns": 10395.5,
+            "candidate_minus_baseline_share_points": 8.0452346683912e-06,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.006570484312062197,
+                "delta_ns": 9104.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.015116370182012506,
+                "delta_ns": 21124.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.008116952884192008,
+                "delta_ns": -11521.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.006570484312062197,
+            "paired_direction_consistent": false
+          },
+          "lossless_cross_color": {
+            "aggregate_delta_fraction": -0.0027373533732953925,
+            "aggregate_delta_ns": -1971583.5,
+            "candidate_minus_baseline_share_points": -0.002019900200861291,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -1.8153586105573716e-05,
+                "delta_ns": -13021.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.00473148392348266,
+                "delta_ns": -3414687.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.004409627040270481,
+                "delta_ns": 3176041.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -1.8153586105573716e-05,
+            "paired_direction_consistent": false
+          },
+          "lossless_encoder_init": {
+            "aggregate_delta_fraction": 0.1393333333333333,
+            "aggregate_delta_ns": 209.0,
+            "candidate_minus_baseline_share_points": 1.7508435512847936e-07,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.1393333333333333,
+                "delta_ns": 209.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.28005759539236863,
+                "delta_ns": -583.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.6551724137931034,
+                "delta_ns": 750.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.1393333333333333,
+            "paired_direction_consistent": false
+          },
+          "lossless_hash_chain": {
+            "aggregate_delta_fraction": -0.02220277776711188,
+            "aggregate_delta_ns": -1231644.5,
+            "candidate_minus_baseline_share_points": -0.001064026917750989,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.01408230279672873,
+                "delta_ns": -759897.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.012975894678714517,
+                "delta_ns": -722646.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.02220277776711188,
+                "delta_ns": -1231644.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.01408230279672873,
+            "paired_direction_consistent": true
+          },
+          "lossless_histogram": {
+            "aggregate_delta_fraction": -0.0029197023070669514,
+            "aggregate_delta_ns": -39479.0,
+            "candidate_minus_baseline_share_points": -3.999482811876086e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.0009779484580657583,
+                "delta_ns": -13146.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.004317060782227822,
+                "delta_ns": 58373.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.006431394224125975,
+                "delta_ns": -87270.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.0009779484580657583,
+            "paired_direction_consistent": false
+          },
+          "lossless_huffman": {
+            "aggregate_delta_fraction": -0.006918462403745829,
+            "aggregate_delta_ns": -5375.5,
+            "candidate_minus_baseline_share_points": -4.912138737555986e-06,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.00954119578612489,
+                "delta_ns": 7270.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.006918462403745829,
+                "delta_ns": -5375.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.025571425330984332,
+                "delta_ns": -20292.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.006918462403745829,
+            "paired_direction_consistent": false
+          },
+          "lossless_input_copy": {
+            "aggregate_delta_fraction": -0.010956223803922138,
+            "aggregate_delta_ns": -5062.0,
+            "candidate_minus_baseline_share_points": -4.490451799958725e-06,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.004221004564219921,
+                "delta_ns": -1937.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.017439069513559335,
+                "delta_ns": -8083.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.0023440518331978577,
+                "delta_ns": -1083.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.004221004564219921,
+            "paired_direction_consistent": true
+          },
+          "lossless_predictor": {
+            "aggregate_delta_fraction": -0.0020300459947417693,
+            "aggregate_delta_ns": -497771.0,
+            "candidate_minus_baseline_share_points": -0.0005417397273562163,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.002252270546342805,
+                "delta_ns": 550688.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.0030913079578749336,
+                "delta_ns": -758062.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.0020300459947417693,
+                "delta_ns": -497771.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.0020300459947417693,
+            "paired_direction_consistent": false
+          },
+          "lossless_prepare": {
+            "aggregate_delta_fraction": null,
+            "aggregate_delta_ns": 0.0,
+            "candidate_minus_baseline_share_points": 0.0,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": null,
+                "delta_ns": 0.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": null,
+                "delta_ns": 20.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": null,
+                "delta_ns": 0.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": null,
+            "paired_direction_consistent": false
+          },
+          "lossless_riff_write": {
+            "aggregate_delta_fraction": 0.0017499999999999183,
+            "aggregate_delta_ns": 21.0,
+            "candidate_minus_baseline_share_points": 1.1650527176062608e-08,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.031304783370899036,
+                "delta_ns": -375.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.0017499999999999183,
+                "delta_ns": 21.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.005190167746221608,
+                "delta_ns": 62.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.0017499999999999183,
+            "paired_direction_consistent": false
+          },
+          "lossless_stream_finalize": {
+            "aggregate_delta_fraction": -0.015798268266747684,
+            "aggregate_delta_ns": -104.0,
+            "candidate_minus_baseline_share_points": -9.079856111580657e-08,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.013358931285497144,
+                "delta_ns": -83.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.031177570093457896,
+                "delta_ns": -208.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.028558408020659343,
+                "delta_ns": 188.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.013358931285497144,
+            "paired_direction_consistent": false
+          },
+          "lossless_subtract_green": {
+            "aggregate_delta_fraction": 0.0009404130032337754,
+            "aggregate_delta_ns": 604.0,
+            "candidate_minus_baseline_share_points": 1.8610000285940176e-07,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.011275042757366238,
+                "delta_ns": 7166.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.0018162115368747234,
+                "delta_ns": 1166.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.00736667871028307,
+                "delta_ns": -4771.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.0018162115368747234,
+            "paired_direction_consistent": false
+          },
+          "total_ns": {
+            "aggregate_delta_fraction": 0.0005960112987304367,
+            "aggregate_delta_ns": 707999.5,
+            "candidate_minus_baseline_share_points": null,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.00137432192325182,
+                "delta_ns": 1626437.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.0005960112987304367,
+                "delta_ns": 707999.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.003922523847696202,
+                "delta_ns": -4692521.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.0005960112987304367,
+            "paired_direction_consistent": false
+          }
+        },
+        "method": 6,
+        "variants": {
+          "baseline": {
+            "median_of_profile_medians_ns": {
+              "backref_cost_dp_setup": 1274313.0,
+              "backref_cost_dp_steady": 30219354.5,
+              "backref_cost_dp_total": 31498042.0,
+              "backref_cost_materialize": 2257437.5,
+              "backref_cost_traceback": 809541.5,
+              "lossless_analyze": 12685500.0,
+              "lossless_backward_refs": 136307792.0,
+              "lossless_bitstream": 1321999.5,
+              "lossless_container_setup": 1397458.5,
+              "lossless_cross_color": 720251729.0,
+              "lossless_encoder_init": 1500.0,
+              "lossless_hash_chain": 55472541.0,
+              "lossless_histogram": 13521584.0,
+              "lossless_huffman": 776979.0,
+              "lossless_input_copy": 462020.5,
+              "lossless_predictor": 245201833.5,
+              "lossless_prepare": 0.0,
+              "lossless_riff_write": 12000.0,
+              "lossless_stream_finalize": 6583.0,
+              "lossless_subtract_green": 642271.0,
+              "total_ns": 1187896104.5
+            },
+            "profile_ids": [
+              "p06-photo-large-m6-baseline-r0",
+              "p09-photo-large-m6-baseline-r1",
+              "p10-photo-large-m6-baseline-r2"
+            ],
+            "profile_medians_ns": {
+              "backref_cost_dp_setup": [
+                1251249.5,
+                1288124.5,
+                1274313.0
+              ],
+              "backref_cost_dp_steady": [
+                29910417.0,
+                30238229.5,
+                30219354.5
+              ],
+              "backref_cost_dp_total": [
+                31180500.5,
+                31530792.0,
+                31498042.0
+              ],
+              "backref_cost_materialize": [
+                2244521.0,
+                2260354.5,
+                2257437.5
+              ],
+              "backref_cost_traceback": [
+                807042.0,
+                809541.5,
+                821479.5
+              ],
+              "lossless_analyze": [
+                12683250.0,
+                12701833.5,
+                12685500.0
+              ],
+              "lossless_backward_refs": [
+                135490458.5,
+                136307792.0,
+                140427792.0
+              ],
+              "lossless_bitstream": [
+                1321999.5,
+                1315478.0,
+                1332500.0
+              ],
+              "lossless_container_setup": [
+                1385666.5,
+                1397458.5,
+                1419375.0
+              ],
+              "lossless_cross_color": [
+                717296292.0,
+                721694833.0,
+                720251729.0
+              ],
+              "lossless_encoder_init": [
+                1500.0,
+                2083.5,
+                1145.5
+              ],
+              "lossless_hash_chain": [
+                53961167.5,
+                55691458.5,
+                55472541.0
+              ],
+              "lossless_histogram": [
+                13442937.5,
+                13521584.0,
+                13569375.0
+              ],
+              "lossless_huffman": [
+                761959.0,
+                776979.0,
+                793542.0
+              ],
+              "lossless_input_copy": [
+                458895.5,
+                463499.5,
+                462020.5
+              ],
+              "lossless_predictor": [
+                244503708.0,
+                245223708.0,
+                245201833.5
+              ],
+              "lossless_prepare": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "lossless_riff_write": [
+                11979.0,
+                12000.0,
+                12042.0
+              ],
+              "lossless_stream_finalize": [
+                6250.5,
+                6687.5,
+                6583.0
+              ],
+              "lossless_subtract_green": [
+                635563.0,
+                642271.0,
+                647646.0
+              ],
+              "total_ns": [
+                1183447249.5,
+                1187896104.5,
+                1196301458.5
+              ]
+            },
+            "repeatability": {
+              "maximum_required_stage_share_range": 0.0028969966897953447,
+              "pass": true,
+              "required_stage_share_ranges": {
+                "backref_cost_dp_setup": 2.7082554072406983e-05,
+                "backref_cost_dp_steady": 0.00019462958009082085,
+                "backref_cost_dp_total": 0.00021387302055597343,
+                "backref_cost_materialize": 1.5807796571037707e-05,
+                "backref_cost_traceback": 5.190848683338744e-06,
+                "lossless_analyze": 0.0001132751506588564,
+                "lossless_backward_refs": 0.0028969966897953447,
+                "lossless_bitstream": 9.673577740699655e-06,
+                "lossless_hash_chain": 0.001285834969016908,
+                "lossless_histogram": 4.002792501811049e-05,
+                "lossless_huffman": 1.948242686780502e-05
+              },
+              "retained_total_median_max_min_ratio": 1.0108616662089762
+            },
+            "stage_share_of_total": {
+              "backref_cost_dp_setup": 0.001072747856628736,
+              "backref_cost_dp_steady": 0.025439391867287667,
+              "backref_cost_dp_total": 0.0265158222850288,
+              "backref_cost_materialize": 0.0019003661106795052,
+              "backref_cost_traceback": 0.0006814918383293679,
+              "lossless_analyze": 0.010678964222497794,
+              "lossless_backward_refs": 0.11474723377207606,
+              "lossless_bitstream": 0.0011128915188727264,
+              "lossless_container_setup": 0.0011764147510090603,
+              "lossless_cross_color": 0.6063255248262328,
+              "lossless_encoder_init": 1.2627366941584243e-06,
+              "lossless_hash_chain": 0.04669814202593843,
+              "lossless_histogram": 0.011382800186630295,
+              "lossless_huffman": 0.0006540799292603455,
+              "lossless_input_copy": 0.00038894015920228146,
+              "lossless_predictor": 0.20641690175691624,
+              "lossless_prepare": 0.0,
+              "lossless_riff_write": 1.0101893553267394e-05,
+              "lossless_stream_finalize": 5.541730438429937e-06,
+              "lossless_subtract_green": 0.0005406794395292168
+            }
+          },
+          "candidate": {
+            "median_of_profile_medians_ns": {
+              "backref_cost_dp_setup": 1275604.5,
+              "backref_cost_dp_steady": 29765167.0,
+              "backref_cost_dp_total": 31036957.5,
+              "backref_cost_materialize": 2230458.0,
+              "backref_cost_traceback": 816041.0,
+              "lossless_analyze": 13175646.0,
+              "lossless_backward_refs": 139546729.0,
+              "lossless_bitstream": 1328917.5,
+              "lossless_container_setup": 1407854.0,
+              "lossless_cross_color": 718280145.5,
+              "lossless_encoder_init": 1709.0,
+              "lossless_hash_chain": 54240896.5,
+              "lossless_histogram": 13482105.0,
+              "lossless_huffman": 771603.5,
+              "lossless_input_copy": 456958.5,
+              "lossless_predictor": 244704062.5,
+              "lossless_prepare": 0.0,
+              "lossless_riff_write": 12021.0,
+              "lossless_stream_finalize": 6479.0,
+              "lossless_subtract_green": 642875.0,
+              "total_ns": 1188604104.0
+            },
+            "profile_ids": [
+              "p07-photo-large-m6-candidate-r0",
+              "p08-photo-large-m6-candidate-r1",
+              "p11-photo-large-m6-candidate-r2"
+            ],
+            "profile_medians_ns": {
+              "backref_cost_dp_setup": [
+                1278312.5,
+                1275604.5,
+                1273833.0
+              ],
+              "backref_cost_dp_steady": [
+                29744895.5,
+                29879083.0,
+                29765167.0
+              ],
+              "backref_cost_dp_total": [
+                31019729.5,
+                31156666.5,
+                31036957.5
+              ],
+              "backref_cost_materialize": [
+                2228666.5,
+                2245709.0,
+                2230458.0
+              ],
+              "backref_cost_traceback": [
+                816041.0,
+                816625.5,
+                814895.5
+              ],
+              "lossless_analyze": [
+                13231521.0,
+                13175646.0,
+                12640687.5
+              ],
+              "lossless_backward_refs": [
+                135476770.5,
+                139895604.0,
+                139546729.0
+              ],
+              "lossless_bitstream": [
+                1321896.5,
+                1328917.5,
+                1331334.0
+              ],
+              "lossless_container_setup": [
+                1394771.0,
+                1418583.0,
+                1407854.0
+              ],
+              "lossless_cross_color": [
+                717283270.5,
+                718280145.5,
+                723427770.5
+              ],
+              "lossless_encoder_init": [
+                1709.0,
+                1500.0,
+                1896.0
+              ],
+              "lossless_hash_chain": [
+                53201270.0,
+                54968812.0,
+                54240896.5
+              ],
+              "lossless_histogram": [
+                13429791.0,
+                13579957.5,
+                13482105.0
+              ],
+              "lossless_huffman": [
+                769229.0,
+                771603.5,
+                773250.0
+              ],
+              "lossless_input_copy": [
+                456958.5,
+                455416.5,
+                460937.5
+              ],
+              "lossless_predictor": [
+                245054396.5,
+                244465646.0,
+                244704062.5
+              ],
+              "lossless_prepare": [
+                0.0,
+                20.5,
+                0.0
+              ],
+              "lossless_riff_write": [
+                11604.0,
+                12021.0,
+                12104.5
+              ],
+              "lossless_stream_finalize": [
+                6167.0,
+                6479.0,
+                6771.0
+              ],
+              "lossless_subtract_green": [
+                642729.0,
+                643437.5,
+                642875.0
+              ],
+              "total_ns": [
+                1185073687.0,
+                1188604104.0,
+                1191608937.5
+              ]
+            },
+            "repeatability": {
+              "maximum_required_stage_share_range": 0.0033781128277944744,
+              "pass": true,
+              "required_stage_share_ranges": {
+                "backref_cost_dp_setup": 9.675094143685474e-06,
+                "backref_cost_dp_steady": 0.00015898788589808685,
+                "backref_cost_dp_total": 0.0001665598134807135,
+                "backref_cost_materialize": 1.7563003818617685e-05,
+                "backref_cost_traceback": 4.737854199487611e-06,
+                "lossless_analyze": 0.0005570623939989642,
+                "lossless_backward_refs": 0.0033781128277944744,
+                "lossless_bitstream": 2.593780642535593e-06,
+                "lossless_hash_chain": 0.0013537322546748887,
+                "lossless_histogram": 0.0001109282684695137,
+                "lossless_huffman": 2.552356855613485e-07
+              },
+              "retained_total_median_max_min_ratio": 1.005514636407584
+            },
+            "stage_share_of_total": {
+              "backref_cost_dp_setup": 0.0010731954363166157,
+              "backref_cost_dp_steady": 0.025042120332439976,
+              "backref_cost_dp_total": 0.02611210696274022,
+              "backref_cost_materialize": 0.0018765356711236798,
+              "backref_cost_traceback": 0.0006865540824348357,
+              "lossless_analyze": 0.011084974345671619,
+              "lossless_backward_refs": 0.11740387613536289,
+              "lossless_bitstream": 0.001118048890734774,
+              "lossless_container_setup": 0.0011844599856774515,
+              "lossless_cross_color": 0.6043056246253715,
+              "lossless_encoder_init": 1.4378210492869037e-06,
+              "lossless_hash_chain": 0.04563411510818744,
+              "lossless_histogram": 0.011342805358511534,
+              "lossless_huffman": 0.0006491677905227896,
+              "lossless_input_copy": 0.00038444970740232273,
+              "lossless_predictor": 0.20587516202956002,
+              "lossless_prepare": 0.0,
+              "lossless_riff_write": 1.0113544080443457e-05,
+              "lossless_stream_finalize": 5.450931877314131e-06,
+              "lossless_subtract_green": 0.0005408655395320762
+            }
+          }
+        }
+      },
+      {
+        "case_id": "graphic-large",
+        "deltas": {
+          "backref_cost_dp_setup": {
+            "aggregate_delta_fraction": -0.002597420582865495,
+            "aggregate_delta_ns": -1688.0,
+            "candidate_minus_baseline_share_points": -0.0001536888563351494,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.0030541136781543354,
+                "delta_ns": 1979.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.012924310447541165,
+                "delta_ns": -8417.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.002597420582865495,
+                "delta_ns": -1688.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.002597420582865495,
+            "paired_direction_consistent": false
+          },
+          "backref_cost_dp_steady": {
+            "aggregate_delta_fraction": 0.0214738180857581,
+            "aggregate_delta_ns": 444937.5,
+            "candidate_minus_baseline_share_points": 0.00573818098696921,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.03336073824004715,
+                "delta_ns": 685375.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.020029006274831174,
+                "delta_ns": 415001.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.015369691736154323,
+                "delta_ns": 320374.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.020029006274831174,
+            "paired_direction_consistent": true
+          },
+          "backref_cost_dp_total": {
+            "aggregate_delta_fraction": 0.020802513562297786,
+            "aggregate_delta_ns": 444645.5,
+            "candidate_minus_baseline_share_points": 0.005613411741702046,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.03293929488018876,
+                "delta_ns": 697937.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.01931125789953203,
+                "delta_ns": 412770.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.015138009894958282,
+                "delta_ns": 325374.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.01931125789953203,
+            "paired_direction_consistent": true
+          },
+          "backref_cost_materialize": {
+            "aggregate_delta_fraction": -0.005835751810356338,
+            "aggregate_delta_ns": -3437.5,
+            "candidate_minus_baseline_share_points": -0.0001799886235203385,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.00014256749546470715,
+                "delta_ns": -83.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.006826344154019726,
+                "delta_ns": -4021.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.003290470366670628,
+                "delta_ns": -1938.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.003290470366670628,
+            "paired_direction_consistent": true
+          },
+          "backref_cost_traceback": {
+            "aggregate_delta_fraction": -0.1397218964650695,
+            "aggregate_delta_ns": -1668.0,
+            "candidate_minus_baseline_share_points": -3.7739533229136965e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.1290941280613751,
+                "delta_ns": 1312.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.14711622306191086,
+                "delta_ns": -1771.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.17276763276930807,
+                "delta_ns": -2062.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.14711622306191086,
+            "paired_direction_consistent": false
+          },
+          "lossless_analyze": {
+            "aggregate_delta_fraction": -0.002895228039974218,
+            "aggregate_delta_ns": -4749.5,
+            "candidate_minus_baseline_share_points": -0.0003983717625920466,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.03019748486259899,
+                "delta_ns": 48625.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.002895228039974218,
+                "delta_ns": -4749.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.03783597212736711,
+                "delta_ns": -64292.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.002895228039974218,
+            "paired_direction_consistent": false
+          },
+          "lossless_backward_refs": {
+            "aggregate_delta_fraction": 0.012840787167363255,
+            "aggregate_delta_ns": 440500.0,
+            "candidate_minus_baseline_share_points": 0.003183497678213465,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.020595643972970423,
+                "delta_ns": 701978.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.00952551746441066,
+                "delta_ns": 326770.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.004869002770939934,
+                "delta_ns": 168355.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.00952551746441066,
+            "paired_direction_consistent": true
+          },
+          "lossless_bitstream": {
+            "aggregate_delta_fraction": 0.018347470939365396,
+            "aggregate_delta_ns": 146.0,
+            "candidate_minus_baseline_share_points": 1.6731092058031418e-06,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.005242215625592017,
+                "delta_ns": 41.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.018219513727461223,
+                "delta_ns": 145.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.03669494187873079,
+                "delta_ns": 292.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.018219513727461223,
+            "paired_direction_consistent": true
+          },
+          "lossless_container_setup": {
+            "aggregate_delta_fraction": 0.006481612244241708,
+            "aggregate_delta_ns": 9271.0,
+            "candidate_minus_baseline_share_points": -6.12733813744569e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.01592797224296194,
+                "delta_ns": 22666.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.004631720539111317,
+                "delta_ns": 6625.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.02512580168737799,
+                "delta_ns": -37104.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.004631720539111317,
+            "paired_direction_consistent": false
+          },
+          "lossless_encoder_init": {
+            "aggregate_delta_fraction": 0.0,
+            "aggregate_delta_ns": 0.0,
+            "candidate_minus_baseline_share_points": -7.551363449080357e-08,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.1007194244604317,
+                "delta_ns": -42.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.1020408163265305,
+                "delta_ns": 42.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.13034410844629818,
+                "delta_ns": -62.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.1007194244604317,
+            "paired_direction_consistent": false
+          },
+          "lossless_hash_chain": {
+            "aggregate_delta_fraction": -0.003356309708606897,
+            "aggregate_delta_ns": -13980.5,
+            "candidate_minus_baseline_share_points": -0.001052508138772959,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.009601143177848215,
+                "delta_ns": 39500.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.003356309708606897,
+                "delta_ns": -13980.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.011122326163379603,
+                "delta_ns": -46666.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.003356309708606897,
+            "paired_direction_consistent": false
+          },
+          "lossless_histogram": {
+            "aggregate_delta_fraction": -0.031604999999999994,
+            "aggregate_delta_ns": -31605.0,
+            "candidate_minus_baseline_share_points": -0.0008552086032316102,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.01568070493662388,
+                "delta_ns": -15396.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.026209000000000038,
+                "delta_ns": -26209.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.04267455413058796,
+                "delta_ns": -43168.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.026209000000000038,
+            "paired_direction_consistent": true
+          },
+          "lossless_huffman": {
+            "aggregate_delta_fraction": -0.03930994449080294,
+            "aggregate_delta_ns": -1083.5,
+            "candidate_minus_baseline_share_points": -2.8101902976118134e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.03479301962776182,
+                "delta_ns": -959.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.04628402089994543,
+                "delta_ns": -1187.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.0450955643707176,
+                "delta_ns": -1250.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.0450955643707176,
+            "paired_direction_consistent": true
+          },
+          "lossless_palette": {
+            "aggregate_delta_fraction": -0.00018056225071549914,
+            "aggregate_delta_ns": -708.5,
+            "candidate_minus_baseline_share_points": -0.0007256743783269765,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.00018056225071549914,
+                "delta_ns": -708.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.0013878992794793543,
+                "delta_ns": 5437.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.018705471895394066,
+                "delta_ns": -74583.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.00018056225071549914,
+            "paired_direction_consistent": false
+          },
+          "lossless_prepare": {
+            "aggregate_delta_fraction": null,
+            "aggregate_delta_ns": 21.0,
+            "candidate_minus_baseline_share_points": 4.4792076460842384e-07,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": null,
+                "delta_ns": 0.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": null,
+                "delta_ns": 21.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": null,
+                "delta_ns": 21.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": null,
+            "paired_direction_consistent": false
+          },
+          "lossless_riff_write": {
+            "aggregate_delta_fraction": -0.05657708628005653,
+            "aggregate_delta_ns": -20.0,
+            "candidate_minus_baseline_share_points": -4.906057602462873e-07,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": -0.45899999999999996,
+                "delta_ns": -229.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.05657708628005653,
+                "delta_ns": -20.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.06296851574212892,
+                "delta_ns": 21.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.05657708628005653,
+            "paired_direction_consistent": false
+          },
+          "lossless_stream_finalize": {
+            "aggregate_delta_fraction": 0.0004001600640255454,
+            "aggregate_delta_ns": 0.5,
+            "candidate_minus_baseline_share_points": -2.1560449158394238e-07,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.07112253641816624,
+                "delta_ns": 83.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.05002000800320128,
+                "delta_ns": -62.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.015378844711177786,
+                "delta_ns": -20.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.015378844711177786,
+            "paired_direction_consistent": false
+          },
+          "total_ns": {
+            "aggregate_delta_fraction": 0.008489994666219802,
+            "aggregate_delta_ns": 394688.0,
+            "candidate_minus_baseline_share_points": null,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.018582924460308847,
+                "delta_ns": 857396.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.006913887971340182,
+                "delta_ns": 321417.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.0024261068119586504,
+                "delta_ns": -114020.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.006913887971340182,
+            "paired_direction_consistent": false
+          }
+        },
+        "method": 4,
+        "variants": {
+          "baseline": {
+            "median_of_profile_medians_ns": {
+              "backref_cost_dp_setup": 649875.5,
+              "backref_cost_dp_steady": 20719999.5,
+              "backref_cost_dp_total": 21374604.5,
+              "backref_cost_materialize": 589041.5,
+              "backref_cost_traceback": 11938.0,
+              "lossless_analyze": 1640458.0,
+              "lossless_backward_refs": 34304750.5,
+              "lossless_bitstream": 7957.5,
+              "lossless_container_setup": 1430354.0,
+              "lossless_encoder_init": 417.0,
+              "lossless_hash_chain": 4165438.0,
+              "lossless_histogram": 1000000.0,
+              "lossless_huffman": 27563.0,
+              "lossless_palette": 3923854.5,
+              "lossless_prepare": 0.0,
+              "lossless_riff_write": 353.5,
+              "lossless_stream_finalize": 1249.5,
+              "total_ns": 46488604.0
+            },
+            "profile_ids": [
+              "p12-graphic-large-m4-baseline-r0",
+              "p15-graphic-large-m4-baseline-r1",
+              "p16-graphic-large-m4-baseline-r2"
+            ],
+            "profile_medians_ns": {
+              "backref_cost_dp_setup": [
+                647978.5,
+                651292.0,
+                649875.5
+              ],
+              "backref_cost_dp_steady": [
+                20544374.5,
+                20719999.5,
+                20844562.5
+              ],
+              "backref_cost_dp_total": [
+                21188583.5,
+                21374604.5,
+                21493875.5
+              ],
+              "backref_cost_materialize": [
+                585687.5,
+                589041.5,
+                589125.5
+              ],
+              "backref_cost_traceback": [
+                10167.0,
+                12041.5,
+                11938.0
+              ],
+              "lossless_analyze": [
+                1610250.0,
+                1640458.0,
+                1699229.5
+              ],
+              "lossless_backward_refs": [
+                34083833.5,
+                34304750.5,
+                34576895.5
+              ],
+              "lossless_bitstream": [
+                7916.5,
+                7958.5,
+                7957.5
+              ],
+              "lossless_container_setup": [
+                1423062.5,
+                1430354.0,
+                1476729.0
+              ],
+              "lossless_encoder_init": [
+                417.0,
+                416.5,
+                479.5
+              ],
+              "lossless_hash_chain": [
+                4114145.5,
+                4165438.0,
+                4195750.0
+              ],
+              "lossless_histogram": [
+                981875.5,
+                1000000.0,
+                1011563.0
+              ],
+              "lossless_huffman": [
+                27563.0,
+                25646.0,
+                27730.0
+              ],
+              "lossless_palette": [
+                3923854.5,
+                3917791.5,
+                3987229.0
+              ],
+              "lossless_prepare": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "lossless_riff_write": [
+                500.0,
+                353.5,
+                333.5
+              ],
+              "lossless_stream_finalize": [
+                1167.0,
+                1249.5,
+                1333.0
+              ],
+              "total_ns": [
+                46138916.5,
+                46488604.0,
+                46997312.5
+              ]
+            },
+            "repeatability": {
+              "maximum_required_stage_share_range": 0.003001321091841813,
+              "pass": true,
+              "required_stage_share_ranges": {
+                "backref_cost_dp_setup": 0.00021614809558504963,
+                "backref_cost_dp_steady": 0.0021739262744737142,
+                "backref_cost_dp_total": 0.0024389438344793457,
+                "backref_cost_materialize": 0.00015870015060719458,
+                "backref_cost_traceback": 3.866418882704091e-05,
+                "lossless_analyze": 0.0012558472539992219,
+                "lossless_backward_refs": 0.003001321091841813,
+                "lossless_bitstream": 2.2614761462919476e-06,
+                "lossless_hash_chain": 0.0004326078092432989,
+                "lossless_histogram": 0.00024299476488285482,
+                "lossless_huffman": 4.5729494617812306e-05
+              },
+              "retained_total_median_max_min_ratio": 1.0186045981378864
+            },
+            "stage_share_of_total": {
+              "backref_cost_dp_setup": 0.013979243171079089,
+              "backref_cost_dp_steady": 0.44570061729536986,
+              "backref_cost_dp_total": 0.4597815950765052,
+              "backref_cost_materialize": 0.012670664406270406,
+              "backref_cost_traceback": 0.0002567941166828757,
+              "lossless_analyze": 0.035287314714806235,
+              "lossless_backward_refs": 0.7379174152013684,
+              "lossless_bitstream": 0.00017117098203249984,
+              "lossless_container_setup": 0.030767841512298368,
+              "lossless_encoder_init": 8.969940246000934e-06,
+              "lossless_hash_chain": 0.08960127088350513,
+              "lossless_histogram": 0.021510648071944687,
+              "lossless_huffman": 0.0005928979928070114,
+              "lossless_palette": 0.08440465323501647,
+              "lossless_prepare": 0.0,
+              "lossless_riff_write": 7.6040140934324465e-06,
+              "lossless_stream_finalize": 2.6877554765894884e-05
+            }
+          },
+          "candidate": {
+            "median_of_profile_medians_ns": {
+              "backref_cost_dp_setup": 648187.5,
+              "backref_cost_dp_steady": 21164937.0,
+              "backref_cost_dp_total": 21819250.0,
+              "backref_cost_materialize": 585604.0,
+              "backref_cost_traceback": 10270.0,
+              "lossless_analyze": 1635708.5,
+              "lossless_backward_refs": 34745250.5,
+              "lossless_bitstream": 8103.5,
+              "lossless_container_setup": 1439625.0,
+              "lossless_encoder_init": 417.0,
+              "lossless_hash_chain": 4151457.5,
+              "lossless_histogram": 968395.0,
+              "lossless_huffman": 26479.5,
+              "lossless_palette": 3923146.0,
+              "lossless_prepare": 21.0,
+              "lossless_riff_write": 333.5,
+              "lossless_stream_finalize": 1250.0,
+              "total_ns": 46883292.0
+            },
+            "profile_ids": [
+              "p13-graphic-large-m4-candidate-r0",
+              "p14-graphic-large-m4-candidate-r1",
+              "p17-graphic-large-m4-candidate-r2"
+            ],
+            "profile_medians_ns": {
+              "backref_cost_dp_setup": [
+                649957.5,
+                642874.5,
+                648187.5
+              ],
+              "backref_cost_dp_steady": [
+                21229750.0,
+                21135000.5,
+                21164937.0
+              ],
+              "backref_cost_dp_total": [
+                21886520.5,
+                21787375.0,
+                21819250.0
+              ],
+              "backref_cost_materialize": [
+                585604.0,
+                585020.5,
+                587187.0
+              ],
+              "backref_cost_traceback": [
+                11479.5,
+                10270.0,
+                9875.5
+              ],
+              "lossless_analyze": [
+                1658875.5,
+                1635708.5,
+                1634937.5
+              ],
+              "lossless_backward_refs": [
+                34785812.0,
+                34631521.0,
+                34745250.5
+              ],
+              "lossless_bitstream": [
+                7958.0,
+                8103.5,
+                8249.5
+              ],
+              "lossless_container_setup": [
+                1445729.0,
+                1436979.0,
+                1439625.0
+              ],
+              "lossless_encoder_init": [
+                375.0,
+                459.0,
+                417.0
+              ],
+              "lossless_hash_chain": [
+                4153646.0,
+                4151457.5,
+                4149083.5
+              ],
+              "lossless_histogram": [
+                966479.0,
+                973791.0,
+                968395.0
+              ],
+              "lossless_huffman": [
+                26604.0,
+                24459.0,
+                26479.5
+              ],
+              "lossless_palette": [
+                3923146.0,
+                3923229.0,
+                3912646.0
+              ],
+              "lossless_prepare": [
+                0.0,
+                21.0,
+                21.0
+              ],
+              "lossless_riff_write": [
+                270.5,
+                333.5,
+                354.5
+              ],
+              "lossless_stream_finalize": [
+                1250.0,
+                1187.0,
+                1312.5
+              ],
+              "total_ns": [
+                46996312.5,
+                46810021.0,
+                46883292.0
+              ]
+            },
+            "repeatability": {
+              "maximum_required_stage_share_range": 0.0012695635195805188,
+              "pass": true,
+              "required_stage_share_ranges": {
+                "backref_cost_dp_setup": 9.627413985506018e-05,
+                "backref_cost_dp_steady": 0.00029345198729646693,
+                "backref_cost_dp_total": 0.0003121803148258273,
+                "backref_cost_materialize": 6.380327232871803e-05,
+                "backref_cost_traceback": 3.362377322153724e-05,
+                "lossless_analyze": 0.00042549493336245525,
+                "lossless_backward_refs": 0.0012695635195805188,
+                "lossless_bitstream": 6.625772703713147e-06,
+                "lossless_hash_chain": 0.0003049856854811517,
+                "lossless_histogram": 0.00023804911425382574,
+                "lossless_huffman": 4.357064505055956e-05
+              },
+              "retained_total_median_max_min_ratio": 1.0039797354502362
+            },
+            "stage_share_of_total": {
+              "backref_cost_dp_setup": 0.01382555431474394,
+              "backref_cost_dp_steady": 0.45143879828233907,
+              "backref_cost_dp_total": 0.4653950068182072,
+              "backref_cost_materialize": 0.012490675782750068,
+              "backref_cost_traceback": 0.0002190545834537387,
+              "lossless_analyze": 0.03488894295221419,
+              "lossless_backward_refs": 0.7411009128795819,
+              "lossless_bitstream": 0.00017284409123830298,
+              "lossless_container_setup": 0.03070656813092391,
+              "lossless_encoder_init": 8.89442661151013e-06,
+              "lossless_hash_chain": 0.08854876274473217,
+              "lossless_histogram": 0.020655439468713076,
+              "lossless_huffman": 0.0005647960898308933,
+              "lossless_palette": 0.0836789788566895,
+              "lossless_prepare": 4.4792076460842384e-07,
+              "lossless_riff_write": 7.113408333186159e-06,
+              "lossless_stream_finalize": 2.6661950274310942e-05
+            }
+          }
+        }
+      },
+      {
+        "case_id": "graphic-large",
+        "deltas": {
+          "backref_cost_dp_setup": {
+            "aggregate_delta_fraction": 0.0020933062880323927,
+            "aggregate_delta_ns": 1354.5,
+            "candidate_minus_baseline_share_points": -8.586882676539162e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.01760295909540477,
+                "delta_ns": 11355.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.0020933062880323927,
+                "delta_ns": 1354.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.01048667697044392,
+                "delta_ns": -6832.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.0020933062880323927,
+            "paired_direction_consistent": false
+          },
+          "backref_cost_dp_steady": {
+            "aggregate_delta_fraction": 0.023818256087731804,
+            "aggregate_delta_ns": 492041.5,
+            "candidate_minus_baseline_share_points": 0.006851616240144409,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.0370076862646862,
+                "delta_ns": 761125.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.021568346832716356,
+                "delta_ns": 445562.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.01953073895921742,
+                "delta_ns": 405166.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.021568346832716356,
+            "paired_direction_consistent": true
+          },
+          "backref_cost_dp_total": {
+            "aggregate_delta_fraction": 0.02299444322263766,
+            "aggregate_delta_ns": 490105.0,
+            "candidate_minus_baseline_share_points": 0.006693834624363737,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.03613343698507121,
+                "delta_ns": 766604.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.020673956454805298,
+                "delta_ns": 440646.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.018990540224171903,
+                "delta_ns": 406356.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.020673956454805298,
+            "paired_direction_consistent": true
+          },
+          "backref_cost_materialize": {
+            "aggregate_delta_fraction": -0.008075390718657038,
+            "aggregate_delta_ns": -4749.0,
+            "candidate_minus_baseline_share_points": -0.00020586551235079152,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.0020275317468787524,
+                "delta_ns": 1187.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.012915498938428915,
+                "delta_ns": -7604.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.008075390718657038,
+                "delta_ns": -4749.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.008075390718657038,
+            "paired_direction_consistent": false
+          },
+          "backref_cost_traceback": {
+            "aggregate_delta_fraction": -0.0038200530313244885,
+            "aggregate_delta_ns": -42.5,
+            "candidate_minus_baseline_share_points": -2.8826610445533286e-06,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.023077633157943422,
+                "delta_ns": 250.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.0036852276302188347,
+                "delta_ns": 41.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.20793131643499596,
+                "delta_ns": -2543.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.0036852276302188347,
+            "paired_direction_consistent": false
+          },
+          "lossless_analyze": {
+            "aggregate_delta_fraction": -0.026118931622301833,
+            "aggregate_delta_ns": -43833.0,
+            "candidate_minus_baseline_share_points": -0.001234730722269435,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.022469503184348927,
+                "delta_ns": 37708.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.01688518384615123,
+                "delta_ns": -27812.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.03280689425601957,
+                "delta_ns": -55437.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.01688518384615123,
+            "paired_direction_consistent": false
+          },
+          "lossless_backward_refs": {
+            "aggregate_delta_fraction": 0.012651418239267853,
+            "aggregate_delta_ns": 432979.5,
+            "candidate_minus_baseline_share_points": 0.003181941133319155,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.027848170753936197,
+                "delta_ns": 950667.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.011315841495820322,
+                "delta_ns": 387271.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.003155661367238105,
+                "delta_ns": 109021.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.011315841495820322,
+            "paired_direction_consistent": true
+          },
+          "lossless_bitstream": {
+            "aggregate_delta_fraction": 0.07923306456732915,
+            "aggregate_delta_ns": 624.0,
+            "candidate_minus_baseline_share_points": 1.194052144604159e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.08204964990451935,
+                "delta_ns": 644.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.1269125769792394,
+                "delta_ns": 999.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.03602936640138199,
+                "delta_ns": -292.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.08204964990451935,
+            "paired_direction_consistent": false
+          },
+          "lossless_container_setup": {
+            "aggregate_delta_fraction": 0.004667120264700841,
+            "aggregate_delta_ns": 6708.5,
+            "candidate_minus_baseline_share_points": -0.00011167160734199336,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.03295704634406049,
+                "delta_ns": 46999.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.004667120264700841,
+                "delta_ns": 6708.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.023732189486854294,
+                "delta_ns": -34958.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.004667120264700841,
+            "paired_direction_consistent": false
+          },
+          "lossless_encoder_init": {
+            "aggregate_delta_fraction": 0.44399999999999995,
+            "aggregate_delta_ns": 166.5,
+            "candidate_minus_baseline_share_points": 3.492401703738354e-06,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.11066666666666669,
+                "delta_ns": 41.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.44399999999999995,
+                "delta_ns": 166.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.4204545454545454,
+                "delta_ns": 166.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.4204545454545454,
+            "paired_direction_consistent": true
+          },
+          "lossless_hash_chain": {
+            "aggregate_delta_fraction": -0.0051814746496539055,
+            "aggregate_delta_ns": -21583.0,
+            "candidate_minus_baseline_share_points": -0.0012004913920267285,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.011731048245868791,
+                "delta_ns": 48666.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.0051814746496539055,
+                "delta_ns": -21583.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.016149914480425687,
+                "delta_ns": -67833.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.0051814746496539055,
+            "paired_direction_consistent": false
+          },
+          "lossless_histogram": {
+            "aggregate_delta_fraction": -0.0044378250266481345,
+            "aggregate_delta_ns": -4396.5,
+            "candidate_minus_baseline_share_points": -0.0002697731203819796,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.023552503953960358,
+                "delta_ns": 23104.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": -0.0044378250266481345,
+                "delta_ns": -4396.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.029102400547978857,
+                "delta_ns": -29188.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": -0.0044378250266481345,
+            "paired_direction_consistent": false
+          },
+          "lossless_huffman": {
+            "aggregate_delta_fraction": -0.03386269425148114,
+            "aggregate_delta_ns": -894.5,
+            "candidate_minus_baseline_share_points": -2.3807414605472497e-05,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.06800301305657852,
+                "delta_ns": 1625.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.048910677443167794,
+                "delta_ns": 1292.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.09229051888660833,
+                "delta_ns": -2563.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.048910677443167794,
+            "paired_direction_consistent": false
+          },
+          "lossless_palette": {
+            "aggregate_delta_fraction": 0.0018246159860670907,
+            "aggregate_delta_ns": 7145.5,
+            "candidate_minus_baseline_share_points": -0.0005421888765925337,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.016927778734637577,
+                "delta_ns": 66292.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.0018779568115898648,
+                "delta_ns": 7354.0,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.01579517181725254,
+                "delta_ns": -62771.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.0018779568115898648,
+            "paired_direction_consistent": false
+          },
+          "lossless_prepare": {
+            "aggregate_delta_fraction": null,
+            "aggregate_delta_ns": 21.0,
+            "candidate_minus_baseline_share_points": 4.488760096624195e-07,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": null,
+                "delta_ns": 21.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": null,
+                "delta_ns": 41.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": null,
+                "delta_ns": 0.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": null,
+            "paired_direction_consistent": false
+          },
+          "lossless_riff_write": {
+            "aggregate_delta_fraction": 0.05782792665726366,
+            "aggregate_delta_ns": 20.5,
+            "candidate_minus_baseline_share_points": 3.752824119927568e-07,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.05782792665726366,
+                "delta_ns": 20.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.2503748125937031,
+                "delta_ns": 83.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.22266666666666668,
+                "delta_ns": -83.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.05782792665726366,
+            "paired_direction_consistent": false
+          },
+          "lossless_stream_finalize": {
+            "aggregate_delta_fraction": 0.00038714672861006605,
+            "aggregate_delta_ns": 0.5,
+            "candidate_minus_baseline_share_points": -2.1848932812755802e-07,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.10912265386294195,
+                "delta_ns": 125.0,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.015873015873015817,
+                "delta_ns": 20.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": 0.00038714672861006605,
+                "delta_ns": 0.5,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.015873015873015817,
+            "paired_direction_consistent": true
+          },
+          "total_ns": {
+            "aggregate_delta_fraction": 0.00830174213045809,
+            "aggregate_delta_ns": 385187.0,
+            "candidate_minus_baseline_share_points": null,
+            "paired_by_repetition": [
+              {
+                "delta_fraction": 0.025263864028840066,
+                "delta_ns": 1170458.5,
+                "repetition": 0
+              },
+              {
+                "delta_fraction": 0.00679307803156326,
+                "delta_ns": 315187.5,
+                "repetition": 1
+              },
+              {
+                "delta_fraction": -0.003212384701705817,
+                "delta_ns": -150771.0,
+                "repetition": 2
+              }
+            ],
+            "paired_delta_fraction_median": 0.00679307803156326,
+            "paired_direction_consistent": false
+          }
+        },
+        "method": 6,
+        "variants": {
+          "baseline": {
+            "median_of_profile_medians_ns": {
+              "backref_cost_dp_setup": 647062.5,
+              "backref_cost_dp_steady": 20658166.5,
+              "backref_cost_dp_total": 21314062.5,
+              "backref_cost_materialize": 588083.0,
+              "backref_cost_traceback": 11125.5,
+              "lossless_analyze": 1678208.0,
+              "lossless_backward_refs": 34223791.5,
+              "lossless_bitstream": 7875.5,
+              "lossless_container_setup": 1437396.0,
+              "lossless_encoder_init": 375.0,
+              "lossless_hash_chain": 4165416.5,
+              "lossless_histogram": 990688.0,
+              "lossless_huffman": 26415.5,
+              "lossless_palette": 3916166.5,
+              "lossless_prepare": 0.0,
+              "lossless_riff_write": 354.5,
+              "lossless_stream_finalize": 1291.5,
+              "total_ns": 46398333.5
+            },
+            "profile_ids": [
+              "p18-graphic-large-m6-baseline-r0",
+              "p21-graphic-large-m6-baseline-r1",
+              "p22-graphic-large-m6-baseline-r2"
+            ],
+            "profile_medians_ns": {
+              "backref_cost_dp_setup": [
+                645062.0,
+                647062.5,
+                651541.0
+              ],
+              "backref_cost_dp_steady": [
+                20566687.0,
+                20658166.5,
+                20745042.0
+              ],
+              "backref_cost_dp_total": [
+                21215917.0,
+                21314062.5,
+                21397811.5
+              ],
+              "backref_cost_materialize": [
+                585687.5,
+                588750.0,
+                588083.0
+              ],
+              "backref_cost_traceback": [
+                10833.0,
+                11125.5,
+                12230.0
+              ],
+              "lossless_analyze": [
+                1678208.0,
+                1647124.5,
+                1689812.5
+              ],
+              "lossless_backward_refs": [
+                34137520.5,
+                34223791.5,
+                34547750.0
+              ],
+              "lossless_bitstream": [
+                7855.0,
+                7875.5,
+                8104.5
+              ],
+              "lossless_container_setup": [
+                1426083.5,
+                1437396.0,
+                1473041.5
+              ],
+              "lossless_encoder_init": [
+                375.0,
+                375.0,
+                396.0
+              ],
+              "lossless_hash_chain": [
+                4148521.0,
+                4165416.5,
+                4200208.0
+              ],
+              "lossless_histogram": [
+                980978.5,
+                990688.0,
+                1002958.5
+              ],
+              "lossless_huffman": [
+                23896.0,
+                26415.5,
+                27771.0
+              ],
+              "lossless_palette": [
+                3916166.5,
+                3915958.0,
+                3974062.5
+              ],
+              "lossless_prepare": [
+                0.0,
+                0.0,
+                0.0
+              ],
+              "lossless_riff_write": [
+                354.5,
+                333.5,
+                375.0
+              ],
+              "lossless_stream_finalize": [
+                1145.5,
+                1291.5,
+                1291.5
+              ],
+              "total_ns": [
+                46329354.0,
+                46398333.5,
+                46934291.5
+              ]
+            },
+            "repeatability": {
+              "maximum_required_stage_share_range": 0.0034613225171896134,
+              "pass": true,
+              "required_stage_share_ranges": {
+                "backref_cost_dp_setup": 6.383115948325677e-05,
+                "backref_cost_dp_steady": 0.0032332822564756225,
+                "backref_cost_dp_total": 0.0034613225171896134,
+                "backref_cost_materialize": 0.00015911157245723957,
+                "backref_cost_traceback": 2.6751229054471342e-05,
+                "lossless_analyze": 0.0007237797435888024,
+                "lossless_backward_refs": 0.0015206050031639773,
+                "lossless_bitstream": 3.130647037311268e-06,
+                "lossless_hash_chain": 0.0002838905116629292,
+                "lossless_histogram": 0.00019540176657980093,
+                "lossless_huffman": 7.5914262535295e-05
+              },
+              "retained_total_median_max_min_ratio": 1.0130573264630454
+            },
+            "stage_share_of_total": {
+              "backref_cost_dp_setup": 0.013945813377111918,
+              "backref_cost_dp_steady": 0.44523509664414995,
+              "backref_cost_dp_total": 0.4593712940142559,
+              "backref_cost_materialize": 0.012674657808561163,
+              "backref_cost_traceback": 0.000239782318905915,
+              "lossless_analyze": 0.03616957492665119,
+              "lossless_backward_refs": 0.737608205260217,
+              "lossless_bitstream": 0.00016973669970280292,
+              "lossless_container_setup": 0.030979474726177396,
+              "lossless_encoder_init": 8.08218683112832e-06,
+              "lossless_hash_chain": 0.08977513168657232,
+              "lossless_histogram": 0.02135180135295161,
+              "lossless_huffman": 0.0005693200166337871,
+              "lossless_palette": 0.08440317150614902,
+              "lossless_prepare": 0.0,
+              "lossless_riff_write": 7.640360617693306e-06,
+              "lossless_stream_finalize": 2.7835051446405936e-05
+            }
+          },
+          "candidate": {
+            "median_of_profile_medians_ns": {
+              "backref_cost_dp_setup": 648417.0,
+              "backref_cost_dp_steady": 21150208.0,
+              "backref_cost_dp_total": 21804167.5,
+              "backref_cost_materialize": 583334.0,
+              "backref_cost_traceback": 11083.0,
+              "lossless_analyze": 1634375.0,
+              "lossless_backward_refs": 34656771.0,
+              "lossless_bitstream": 8499.5,
+              "lossless_container_setup": 1444104.5,
+              "lossless_encoder_init": 541.5,
+              "lossless_hash_chain": 4143833.5,
+              "lossless_histogram": 986291.5,
+              "lossless_huffman": 25521.0,
+              "lossless_palette": 3923312.0,
+              "lossless_prepare": 21.0,
+              "lossless_riff_write": 375.0,
+              "lossless_stream_finalize": 1292.0,
+              "total_ns": 46783520.5
+            },
+            "profile_ids": [
+              "p19-graphic-large-m6-candidate-r0",
+              "p20-graphic-large-m6-candidate-r1",
+              "p23-graphic-large-m6-candidate-r2"
+            ],
+            "profile_medians_ns": {
+              "backref_cost_dp_setup": [
+                656417.0,
+                648417.0,
+                644708.5
+              ],
+              "backref_cost_dp_steady": [
+                21327812.5,
+                21103729.0,
+                21150208.0
+              ],
+              "backref_cost_dp_total": [
+                21982521.0,
+                21754708.5,
+                21804167.5
+              ],
+              "backref_cost_materialize": [
+                586875.0,
+                581146.0,
+                583334.0
+              ],
+              "backref_cost_traceback": [
+                11083.0,
+                11166.5,
+                9687.0
+              ],
+              "lossless_analyze": [
+                1715916.5,
+                1619312.5,
+                1634375.0
+              ],
+              "lossless_backward_refs": [
+                35088188.0,
+                34611062.5,
+                34656771.0
+              ],
+              "lossless_bitstream": [
+                8499.5,
+                8875.0,
+                7812.5
+              ],
+              "lossless_container_setup": [
+                1473083.0,
+                1444104.5,
+                1438083.0
+              ],
+              "lossless_encoder_init": [
+                416.5,
+                541.5,
+                562.5
+              ],
+              "lossless_hash_chain": [
+                4197187.5,
+                4143833.5,
+                4132375.0
+              ],
+              "lossless_histogram": [
+                1004083.0,
+                986291.5,
+                973770.0
+              ],
+              "lossless_huffman": [
+                25521.0,
+                27707.5,
+                25208.0
+              ],
+              "lossless_palette": [
+                3982458.5,
+                3923312.0,
+                3911291.5
+              ],
+              "lossless_prepare": [
+                21.0,
+                41.5,
+                0.0
+              ],
+              "lossless_riff_write": [
+                375.0,
+                417.0,
+                291.5
+              ],
+              "lossless_stream_finalize": [
+                1270.5,
+                1312.0,
+                1292.0
+              ],
+              "total_ns": [
+                47499812.5,
+                46713521.0,
+                46783520.5
+              ]
+            },
+            "repeatability": {
+              "maximum_required_stage_share_range": 0.0032733860396357284,
+              "pass": true,
+              "required_stage_share_ranges": {
+                "backref_cost_dp_setup": 0.00010003828169108733,
+                "backref_cost_dp_steady": 0.0030783615355390315,
+                "backref_cost_dp_total": 0.0032733860396357284,
+                "backref_cost_materialize": 0.00011348036734749531,
+                "backref_cost_traceback": 3.19820486839764e-05,
+                "lossless_analyze": 0.0014599510720441494,
+                "lossless_backward_refs": 0.0022201130482458753,
+                "lossless_bitstream": 2.299525646807935e-05,
+                "lossless_hash_chain": 0.00037765373833781313,
+                "lossless_histogram": 0.00032429234776774896,
+                "lossless_huffman": 5.585028958619549e-05
+              },
+              "retained_total_median_max_min_ratio": 1.0168322036782456
+            },
+            "stage_share_of_total": {
+              "backref_cost_dp_setup": 0.013859944550346526,
+              "backref_cost_dp_steady": 0.45208671288429436,
+              "backref_cost_dp_total": 0.46606512863861965,
+              "backref_cost_materialize": 0.012468792296210372,
+              "backref_cost_traceback": 0.00023689965786136168,
+              "lossless_analyze": 0.034934844204381754,
+              "lossless_backward_refs": 0.7407901463935361,
+              "lossless_bitstream": 0.0001816772211488445,
+              "lossless_container_setup": 0.030867803118835403,
+              "lossless_encoder_init": 1.1574588534866674e-05,
+              "lossless_hash_chain": 0.08857464029454559,
+              "lossless_histogram": 0.02108202823256963,
+              "lossless_huffman": 0.0005455126020283146,
+              "lossless_palette": 0.08386098262955649,
+              "lossless_prepare": 4.488760096624195e-07,
+              "lossless_riff_write": 8.015643029686063e-06,
+              "lossless_stream_finalize": 2.7616562118278378e-05
+            }
+          }
+        }
+      }
+    ],
+    "method": "For each process, median each metric across its four retained rows; for each variant/cell, median the three process medians. Stage share is that stage median divided by whole-encode median. Deltas are candidate/baseline-1; paired deltas compare equal repetitions.",
+    "repeatability_pass": true,
+    "required_stage_share_range_comparisons": 88,
+    "total_ratio_comparisons": 8,
+    "uncertainty_rule": "Frozen descriptive repeatability only: three retained-total process medians must have max/min <=2.0 and each required stage-share range must be <=0.10 absolute. No confidence interval, hypothesis test, pooling, prior sample, threshold, or outlier removal is authorized."
+  },
+  "schema": "libwebp-backref-cost-attribution-v16-phase3-evaluation-consequence-v1"
+}
