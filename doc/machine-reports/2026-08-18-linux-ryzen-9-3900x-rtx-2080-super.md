@@ -420,3 +420,21 @@ process medians measured:
 
 The gains are effectively zero, so the larger generated loop was removed. The
 local raw summary is `/tmp/libwebp-token-unroll-ab.frMCAJ.json`.
+
+## Phase-aliased decimate workspace
+
+The I16, I4, and UV scratch arrays have disjoint barrier-delimited lifetimes.
+A POD union reduced `DecimateKernel` static shared memory from 17,912 to
+11,704 bytes, raising the Turing residency ceiling from three to five CTAs/SM;
+registers rose from 93 to 96. All seven focused CTests passed and all 60 timed
+outputs matched. Direct medium-texture GPU wall moved from 28.48 to about
+28.97 ms. Five order-balanced process medians measured:
+
+| Format | Baseline | Aliased workspace | Change |
+|---|---:|---:|---:|
+| PNG lossy | 42.108 ms/image | 42.193 ms/image | +0.085 ms |
+| JPEG lossy | 41.889 ms/image | 42.070 ms/image | +0.182 ms |
+
+The sparse wavefront did not benefit from the additional theoretical
+occupancy, so the candidate was removed. The local raw summary is
+`/tmp/libwebp-phase-union-ab.yLDGe1.json`.

@@ -752,3 +752,27 @@ The effectively zero gains show that loop bookkeeping and load overlap are
 not limiting the serial arithmetic-coder chain. The candidate was removed;
 raw timing evidence is retained locally in
 `/tmp/libwebp-token-unroll-ab.frMCAJ.json`.
+
+## Phase-aliased decimate workspace rejection
+
+A fresh medium-texture stage profile measured decimation at 53.72 ms of a
+78.77 ms encode; direct phase timing still put I4 at 68.4% of block cycles.
+The I16, I4, and UV scratch arrays have disjoint, barrier-delimited lifetimes,
+so an exact POD union reduced `DecimateKernel` static shared memory from
+17,912 to 11,704 bytes. This raised the Turing residency ceiling from three to
+five CTAs/SM, while registers increased from 93 to 96. Direct medium-texture
+GPU wall nevertheless moved from 28.48 to about 28.97 ms.
+
+All seven focused CTests passed and all 60 timed outputs matched between
+variants. Five order-balanced process medians were:
+
+| Format | Baseline | Aliased workspace | Change |
+|---|---:|---:|---:|
+| PNG lossy | 42.108 ms/image | 42.193 ms/image | +0.085 ms |
+| JPEG lossy | 41.889 ms/image | 42.070 ms/image | +0.182 ms |
+
+The sparse dependency wavefront could not use the extra theoretical
+occupancy, while wider union-member addressing and register pressure cost
+slightly. The candidate was removed; raw timing evidence is retained locally
+in `/tmp/libwebp-phase-union-ab.yLDGe1.json` and the parent stage profile in
+`/tmp/libwebp-stage-current.mkaP1J.jsonl`.
