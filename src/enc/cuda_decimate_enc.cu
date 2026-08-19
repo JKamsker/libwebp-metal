@@ -1,8 +1,9 @@
 // Copyright 2026
 //
 // Whole-pass CUDA port of the VP8 lossy macroblock decimation (VP8Decimate at
-// RD_OPT_BASIC): intra16/intra4/chroma mode search, quantization, and
-// reconstruction. Macroblocks are processed in skewed anti-diagonal order
+// RD_OPT_BASIC through RD_OPT_TRELLIS_ALL): intra16/intra4/chroma mode search,
+// quantization, trellis optimization, and reconstruction. Macroblocks are
+// processed in skewed anti-diagonal order
 // (t = x + 2y) so every block sees its left, top, and top-right neighbors'
 // reconstruction, non-zero context, prediction modes, and diffusion errors
 // exactly as the CPU raster scan does. Cost tables are fixed for the whole
@@ -54,6 +55,9 @@ constexpr int kFlatnessPenalty = 140;
 constexpr int kRDDistoMult = 256;
 constexpr long long kMaxCost = 0x7fffffffffffffLL;
 constexpr unsigned int kDecimateThreads = 128u;
+constexpr uint32_t kRDBasic = 1u;
+constexpr uint32_t kRDTrellis = 2u;
+constexpr uint32_t kRDTrellisAll = 3u;
 
 // StoreDiffusionErrors / CorrectDCValues constants.
 constexpr int kDerrC1 = 7;
@@ -94,6 +98,7 @@ struct DecimateKernelParams {
   uint32_t recon_uv_stride;
   int32_t max_i4_header_bits;
   uint32_t use_error_diffusion;
+  uint32_t rd_opt_level;
   uint32_t diagonal;       // current skewed diagonal (x + 2y)
   uint32_t y_min;          // first tile row on this diagonal
 };
@@ -107,6 +112,9 @@ struct DeviceSegment {
   int32_t lambda_i4;
   int32_t lambda_uv;
   int32_t lambda_mode;
+  int32_t lambda_trellis_i16;
+  int32_t lambda_trellis_i4;
+  int32_t lambda_trellis_uv;
   int32_t tlambda;
   int32_t min_disto;
 };
@@ -264,6 +272,155 @@ __device__ __forceinline__ int BlockNonZero(const int16_t* coeffs) {
     if (coeffs[n]) return 1;
   }
   return 0;
+}
+
+// TrellisQuantizeBlock, kept integer- and tie-exact with quant_enc.c. The
+// method-5 path calls this only for the modes selected by the basic search.
+struct TrellisNode {
+  int8_t prev;
+  int8_t sign;
+  int16_t level;
+};
+
+struct TrellisScoreState {
+  long long score;
+  const uint16_t* costs;
+};
+
+__device__ __forceinline__ long long TrellisRDScore(int lambda,
+                                                    long long rate,
+                                                    long long distortion) {
+  return rate * lambda + kRDDistoMult * distortion;
+}
+
+__device__ int TrellisQuantizeBlockDev(
+    const CostCache* c, int16_t in[16], int16_t out[16], int ctx0,
+    int coeff_type, const CudaVP8Matrix* mtx, int lambda) {
+  static const int kWeights[16] = {30, 27, 19, 11, 27, 24, 17, 10,
+                                   19, 17, 12, 8,  11, 10, 8,  6};
+  TrellisNode nodes[16][2];
+  TrellisScoreState states[2][2];
+  TrellisScoreState* current = states[0];
+  TrellisScoreState* previous = states[1];
+  int best_path[3] = {-1, -1, -1};
+  const int first = (coeff_type == 0) ? 1 : 0;
+  long long best_score;
+  int last;
+
+  {
+    const int threshold = mtx->q[1] * mtx->q[1] / 4;
+    const int last_proba = FirstProba(c, coeff_type, kEncBands[first], ctx0);
+    last = first - 1;
+    for (int n = 15; n >= first; --n) {
+      const int j = kCudaZigzag[n];
+      const int error = in[j] * in[j];
+      if (error > threshold) {
+        last = n;
+        break;
+      }
+    }
+    if (last < 15) ++last;
+    best_score = TrellisRDScore(lambda, BitCostDev(c, 0, last_proba), 0);
+    for (int m = 0; m <= 1; ++m) {
+      const long long rate = (ctx0 == 0) ? BitCostDev(c, 1, last_proba) : 0;
+      current[m].score = TrellisRDScore(lambda, rate, 0);
+      current[m].costs =
+          LevelCostTable(c, coeff_type, kEncBands[first], ctx0);
+    }
+  }
+
+  for (int n = first; n <= last; ++n) {
+    const int j = kCudaZigzag[n];
+    const uint32_t q = mtx->q[j];
+    const uint32_t iq = mtx->iq[j];
+    const int sign = (in[j] < 0);
+    const int32_t coeff0 = (sign ? -in[j] : in[j]) + mtx->sharpen[j];
+    int level0 = CudaQuantDiv(coeff0, iq, 0);
+    int threshold_level = CudaQuantDiv(coeff0, iq, 0x80u << 9);
+    TrellisScoreState* const swap = current;
+    if (threshold_level > kMaxLevel) threshold_level = kMaxLevel;
+    if (level0 > kMaxLevel) level0 = kMaxLevel;
+    current = previous;
+    previous = swap;
+
+    for (int m = 0; m <= 1; ++m) {
+      TrellisNode* const node = &nodes[n][m];
+      const int level = level0 + m;
+      const int ctx = (level > 2) ? 2 : level;
+      const int band = kEncBands[n + 1];
+      long long best_current;
+      int best_previous = 0;
+      if (n + 1 < 16) {
+        current[m].costs = LevelCostTable(c, coeff_type, band, ctx);
+      } else {
+        current[m].costs = nullptr;
+      }
+      if (level < 0 || level > threshold_level) {
+        current[m].score = kMaxCost;
+        continue;
+      }
+      {
+        const int new_error = coeff0 - level * (int32_t)q;
+        const int delta_error =
+            kWeights[j] * (new_error * new_error - coeff0 * coeff0);
+        const long long base_score = TrellisRDScore(lambda, 0, delta_error);
+        best_current =
+            previous[0].score +
+            TrellisRDScore(lambda,
+                           LevelCostDev(c, previous[0].costs, level), 0);
+        for (int p = 1; p <= 1; ++p) {
+          const long long score =
+              previous[p].score +
+              TrellisRDScore(lambda,
+                             LevelCostDev(c, previous[p].costs, level), 0);
+          if (score < best_current) {
+            best_current = score;
+            best_previous = p;
+          }
+        }
+        best_current += base_score;
+      }
+      node->sign = (int8_t)sign;
+      node->level = (int16_t)level;
+      node->prev = (int8_t)best_previous;
+      current[m].score = best_current;
+      if (level != 0 && best_current < best_score) {
+        const long long last_position_cost =
+            (n < 15) ? BitCostDev(c, 0, FirstProba(c, coeff_type, band, ctx))
+                     : 0;
+        const long long score =
+            best_current + TrellisRDScore(lambda, last_position_cost, 0);
+        if (score < best_score) {
+          best_score = score;
+          best_path[0] = n;
+          best_path[1] = m;
+          best_path[2] = best_previous;
+        }
+      }
+    }
+  }
+
+  if (coeff_type == 0) {
+    for (int i = 1; i < 16; ++i) in[i] = out[i] = 0;
+  } else {
+    for (int i = 0; i < 16; ++i) in[i] = out[i] = 0;
+  }
+  if (best_path[0] == -1) return 0;
+  {
+    int non_zero = 0;
+    int best_node = best_path[1];
+    int n = best_path[0];
+    nodes[n][best_node].prev = (int8_t)best_path[2];
+    for (; n >= first; --n) {
+      const TrellisNode* const node = &nodes[n][best_node];
+      const int j = kCudaZigzag[n];
+      out[n] = node->sign ? -node->level : node->level;
+      non_zero |= node->level;
+      in[j] = (int16_t)(out[n] * mtx->q[j]);
+      best_node = node->prev;
+    }
+    return (non_zero != 0);
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -657,6 +814,119 @@ __device__ void LoadDiffusionErrors(const DeviceView* v,
   }
 }
 
+// Method 5 performs the ordinary mode search above, then trellis-quantizes
+// only the selected modes. This must happen before the macroblock publishes
+// its reconstruction: later wavefront blocks predict from these final pixels.
+__device__ void ApplySelectedModeTrellis(
+    const DecimateKernelParams* p, const CostCache* costs,
+    const DeviceSegment* dqm, MBWork* w) {
+  NzContext context = w->nz_ctx;
+  uint32_t non_zero = 0;
+
+  if (!w->rd.is_i4) {
+    const int mode = w->rd.mode_i16;
+    for (int block = 0; block < 16; ++block) {
+      const uint8_t* const src =
+          w->yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
+      const uint8_t* const ref =
+          w->yuv_p + kCudaVP8I16ModeOffsets[mode] + kCudaVP8Scan[block];
+      CudaFTransform(src, ref, w->i16_tmp[mode][block]);
+    }
+    CudaFTransformWHT(w->i16_tmp[mode][0], w->i16_dc[mode]);
+    non_zero |=
+        (uint32_t)CudaQuantizeBlockWHT(w->i16_dc[mode],
+                                       w->rd.y_dc_levels, &dqm->y2)
+        << 24;
+    for (int by = 0; by < 4; ++by) {
+      for (int bx = 0; bx < 4; ++bx) {
+        const int block = bx + by * 4;
+        const int ctx = context.top_nz[bx] + context.left_nz[by];
+        int16_t* const transformed = w->i16_tmp[mode][block];
+        transformed[0] = 0;
+        const int nz = TrellisQuantizeBlockDev(
+            costs, transformed, w->rd.y_ac_levels[block], ctx, 0, &dqm->y1,
+            dqm->lambda_trellis_i16);
+        context.top_nz[bx] = context.left_nz[by] = nz;
+        non_zero |= (uint32_t)nz << block;
+        w->rd.y_ac_levels[block][0] = 0;
+      }
+    }
+    CudaTransformWHT(w->i16_dc[mode], w->i16_tmp[mode][0]);
+    for (int block = 0; block < 16; ++block) {
+      const uint8_t* const ref =
+          w->yuv_p + kCudaVP8I16ModeOffsets[mode] + kCudaVP8Scan[block];
+      CudaITransformOne(ref, w->i16_tmp[mode][block],
+                        w->yuv_out + kCudaYOffEnc + kCudaVP8Scan[block]);
+    }
+  } else {
+    int block = 0;
+    StartI4Boundary(w);
+    do {
+      const int mode = w->rd.modes_i4[block];
+      const int bx = block & 3;
+      const int by = block >> 2;
+      const int ctx = context.top_nz[bx] + context.left_nz[by];
+      const uint8_t* const src =
+          w->yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
+      uint8_t* const dst =
+          w->yuv_out + kCudaYOffEnc + kCudaVP8Scan[block];
+      CudaIntra4PredMode(w->yuv_p,
+                         w->i4_boundary + kTopLeftI4[block], mode);
+      const uint8_t* const ref = w->yuv_p + kCudaVP8I4ModeOffsets[mode];
+      CudaFTransform(src, ref, w->i4_tmp[mode]);
+      const int nz = TrellisQuantizeBlockDev(
+          costs, w->i4_tmp[mode], w->rd.y_ac_levels[block], ctx, 3,
+          &dqm->y1, dqm->lambda_trellis_i4);
+      non_zero |= (uint32_t)nz << block;
+      CudaITransformOne(ref, w->i4_tmp[mode], dst);
+    } while (RotateI4(w, &block, w->yuv_out + kCudaYOffEnc));
+  }
+
+  {
+    const int mode = w->rd.mode_uv;
+    int8_t discarded_derr[2][3];
+    for (int block = 0; block < 8; ++block) {
+      const uint8_t* const src =
+          w->yuv_in + kCudaUOffEnc + kCudaVP8ScanUV[block];
+      const uint8_t* const ref =
+          w->yuv_p + kCudaVP8UVModeOffsets[mode] + kCudaVP8ScanUV[block];
+      CudaFTransform(src, ref, w->uv_tmp[mode][block]);
+    }
+    if (p->use_error_diffusion) {
+      int8_t top_derr[2][2];
+      int8_t left_derr[2][2];
+      // The CPU stores the basic-search diffusion errors before running the
+      // selected-mode trellis pass. CorrectDCValues therefore reads the
+      // just-stored current errors, not the macroblock's original incoming
+      // errors. Rebuild those top/left values exactly and deliberately retain
+      // w->rd.derr from the basic selected UV mode.
+      for (int ch = 0; ch < 2; ++ch) {
+        const int8_t left1 = (int8_t)(3 * w->rd.derr[ch][2] >> 2);
+        left_derr[ch][0] = w->rd.derr[ch][0];
+        left_derr[ch][1] = left1;
+        top_derr[ch][0] = w->rd.derr[ch][1];
+        top_derr[ch][1] = (int8_t)(w->rd.derr[ch][2] - left1);
+      }
+      CorrectDCValuesDev(top_derr, left_derr, &dqm->uv,
+                         w->uv_tmp[mode], discarded_derr);
+    }
+    // DO_TRELLIS_UV is disabled in quant_enc.c. Method 5 re-runs the selected
+    // chroma mode with the ordinary quantizer after luma trellis.
+    for (int block = 0; block < 8; ++block) {
+      const int nz = CudaQuantizeBlock(w->uv_tmp[mode][block],
+                                       w->rd.uv_levels[block], &dqm->uv);
+      non_zero |= (uint32_t)nz << (16 + block);
+    }
+    for (int block = 0; block < 8; ++block) {
+      const uint8_t* const ref =
+          w->yuv_p + kCudaVP8UVModeOffsets[mode] + kCudaVP8ScanUV[block];
+      CudaITransformOne(ref, w->uv_tmp[mode][block],
+                        w->yuv_out + kCudaUOffEnc + kCudaVP8ScanUV[block]);
+    }
+  }
+  w->rd.nz = non_zero;
+}
+
 // ---------------------------------------------------------------------------
 // The per-macroblock decision (thread 0 orchestrates; all threads help with
 // the numeric phases; __syncthreads separates the phases).
@@ -720,7 +990,23 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
     w.i16_sd[mode] = 0;
   }
   __syncthreads();
-  if (tid < 64) {
+  if (p.rd_opt_level == kRDTrellisAll && tid < 4) {
+    const int mode = tid;
+    NzContext context = w.nz_ctx;
+    for (int by = 0; by < 4; ++by) {
+      for (int bx = 0; bx < 4; ++bx) {
+        const int block = bx + by * 4;
+        const int ctx = context.top_nz[bx] + context.left_nz[by];
+        w.i16_tmp[mode][block][0] = 0;
+        w.i16_ac_levels[mode][block][0] = 0;
+        const int nz = TrellisQuantizeBlockDev(
+            &cc, w.i16_tmp[mode][block], w.i16_ac_levels[mode][block], ctx,
+            0, &dqm->y1, dqm->lambda_trellis_i16);
+        context.top_nz[bx] = context.left_nz[by] = nz;
+        w.i16_nz[mode] |= (uint32_t)nz << block;
+      }
+    }
+  } else if (p.rd_opt_level != kRDTrellisAll && tid < 64) {
     const int mode = tid >> 4;
     const int block = tid & 15;
     int nz_bit;
@@ -913,14 +1199,26 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
         }
       }
       __syncthreads();
-      if (tid < kNumBModes) {  // data-parallel: same code, per-mode data
+      if (p.rd_opt_level == kRDTrellisAll && tid < kNumBModes) {
+        const int mode = tid;
+        const uint8_t* const src =
+            w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[i4_index];
+        const int bx = i4_index & 3, by = i4_index >> 2;
+        const int ctx = i4_ctx.top_nz[bx] + i4_ctx.left_nz[by];
+        const uint8_t* const ref = w.yuv_p + kCudaVP8I4ModeOffsets[mode];
+        CudaFTransform(src, ref, w.i4_tmp[mode]);
+        w.i4_nz[mode] = TrellisQuantizeBlockDev(
+            &cc, w.i4_tmp[mode], w.i4_levels[mode], ctx, 3, &dqm->y1,
+            dqm->lambda_trellis_i4);
+        CudaITransformOne(ref, w.i4_tmp[mode], w.i4_out[mode]);
+      } else if (p.rd_opt_level != kRDTrellisAll && tid < kNumBModes) {
         const int mode = tid;
         const uint8_t* const src =
             w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[i4_index];
         const uint8_t* const ref = w.yuv_p + kCudaVP8I4ModeOffsets[mode];
         CudaFTransform(src, ref, w.i4_tmp[mode]);
-        w.i4_nz[mode] = CudaQuantizeBlock(w.i4_tmp[mode], w.i4_levels[mode],
-                                          &dqm->y1);
+        w.i4_nz[mode] = CudaQuantizeBlock(
+            w.i4_tmp[mode], w.i4_levels[mode], &dqm->y1);
         CudaITransformOne(ref, w.i4_tmp[mode], w.i4_out[mode]);
       }
       __syncthreads();
@@ -1167,6 +1465,10 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
       w.yuv_out[kCudaUOffEnc + r * kCudaBPS + cx] =
           w.uv_out[m][r * kCudaBPS + cx];
     }
+  }
+  __syncthreads();
+  if (tid == 0 && p.rd_opt_level == kRDTrellis) {
+    ApplySelectedModeTrellis(&p, &cc, dqm, &w);
   }
   __syncthreads();
   if (tid == 0) {
@@ -1422,6 +1724,10 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
       request->height <= 0 || request->mb_w <= 0 || request->mb_h <= 0) {
     return WEBP_ACCELERATOR_ERROR;
   }
+  if (request->rd_opt_level < (int)kRDBasic ||
+      request->rd_opt_level > (int)kRDTrellisAll) {
+    return WEBP_ACCELERATOR_NOT_RUN;
+  }
   const size_t mb_count = (size_t)request->mb_w * request->mb_h;
   if (request->phase == WEBP_ACCELERATOR_DECIMATE_COLLECT) {
     // Wait for one band's completion event, then copy its rows out on the
@@ -1650,6 +1956,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     params.recon_uv_stride = (uint32_t)request->mb_w * 8u;
     params.max_i4_header_bits = request->max_i4_header_bits;
     params.use_error_diffusion = (uint32_t)request->use_error_diffusion;
+    params.rd_opt_level = (uint32_t)request->rd_opt_level;
 
     (void)cudaGetLastError();
     const int last_diagonal =

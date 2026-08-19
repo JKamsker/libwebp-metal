@@ -623,10 +623,12 @@ static int TryAcceleratedDecimate(VP8Encoder* const enc,
   memset(pass, 0, sizeof(*pass));
   segment_params = pass->segment_params;
   request = &pass->request;
-  // The exact contract requires the basic (non-trellis) search and the
-  // fork's stable cost tables; a restored upstream mid-pass refresh cadence
-  // would serialize decisions on token statistics again.
-  if (enc->rd_opt_level != RD_OPT_BASIC || enc->method < 2 ||
+  // The exact contract requires the fork's stable cost tables; a restored
+  // upstream mid-pass refresh cadence would serialize decisions on token
+  // statistics again. Basic and both trellis RD levels are supported.
+  if (enc->rd_opt_level < RD_OPT_BASIC ||
+      enc->rd_opt_level > RD_OPT_TRELLIS_ALL ||
+      enc->method < 2 ||
       getenv("WEBP_TOKEN_REFRESH_SHIFT") != NULL) {
     return 0;
   }
@@ -665,6 +667,9 @@ static int TryAcceleratedDecimate(VP8Encoder* const enc,
     params->lambda_i4 = dqm->lambda_i4;
     params->lambda_uv = dqm->lambda_uv;
     params->lambda_mode = dqm->lambda_mode;
+    params->lambda_trellis_i16 = dqm->lambda_trellis_i16;
+    params->lambda_trellis_i4 = dqm->lambda_trellis_i4;
+    params->lambda_trellis_uv = dqm->lambda_trellis_uv;
     params->tlambda = dqm->tlambda;
     params->min_disto = dqm->min_disto;
   }
@@ -686,6 +691,7 @@ static int TryAcceleratedDecimate(VP8Encoder* const enc,
   request->segment_params = segment_params;
   request->level_costs = &enc->proba.level_cost[0][0][0][0];
   request->coeff_probas = &enc->proba.coeffs[0][0][0][0];
+  request->rd_opt_level = enc->rd_opt_level;
   request->max_i4_header_bits = enc->max_i4_header_bits;
   request->use_error_diffusion = (enc->top_derr != NULL);
   request->results = pass->results;

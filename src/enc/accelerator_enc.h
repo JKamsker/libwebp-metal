@@ -12,7 +12,7 @@
 extern "C" {
 #endif
 
-#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 10u
+#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 11u
 #define WEBP_ACCELERATOR_MAX_HISTOGRAM_SPANS 16u
 
 // These are deliberately encoder stages, not low-level GPU kernels. A backend
@@ -211,6 +211,9 @@ typedef struct {
   int32_t lambda_i4;
   int32_t lambda_uv;
   int32_t lambda_mode;
+  int32_t lambda_trellis_i16;
+  int32_t lambda_trellis_i4;
+  int32_t lambda_trellis_uv;
   int32_t tlambda;
   int32_t min_disto;
 } WebPAcceleratorDecimateSegment;
@@ -277,6 +280,9 @@ typedef struct {
   // and coefficient probabilities (4 x 8 x 3 x 11 uint8 entries, contiguous).
   const uint16_t* level_costs;
   const uint8_t* coeff_probas;
+  // VP8RDLevel. The CUDA backend accepts BASIC, selected-mode TRELLIS, and
+  // all-candidate TRELLIS; other values are declined transactionally.
+  int rd_opt_level;
   int max_i4_header_bits;
   int use_error_diffusion;  // it->top_derr != NULL
   // Transactional outputs, committed only on SUCCESS: one result per

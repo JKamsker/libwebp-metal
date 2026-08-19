@@ -127,8 +127,13 @@ measurements are meaningless until they pass.
   in `doc/async-multi-image-encoder-design-20260819.md`. The design rejects
   concurrent raw `WebPEncode()` calls and launches N+1 only after N's final
   GPU band is collected, while N completes CPU replay/tokenization.
-- [ ] 9. **Trellis (m5/m6) decimate support** — currently declines to
-  CPU; methods 5+ add trellis quantization to the search.
+- [x] 9. **Trellis (m5/m6) decimate support** — the CUDA whole-pass path now
+  reproduces selected-mode trellis (method 5) and all-candidate trellis
+  (method 6), including CPU non-zero-context and UV diffusion behavior. A
+  focused odd-size/alpha/two-pass/fallback test and the canonical PNG/JPEG
+  corpus are byte-exact. On the canonical small+medium 12-image batches,
+  method 5 measured 1.44--1.45x and method 6 measured 2.95--3.03x; the
+  three-class medium PNG batch measured 1.69x and 3.47x respectively.
 - [ ] 10. **Merge decision:** the branch is many CI-green commits ahead
   of main and self-contained. Consider a PR to main once cross-hardware
   numbers from this machine are in.

@@ -1016,6 +1016,14 @@ if(WEBP_BUILD_CUDA_BENCHMARK)
     cuda_histogram_test
     PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
             ${CMAKE_CURRENT_SOURCE_DIR})
+  if(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+    add_executable(cuda_trellis_test tests/cuda_trellis_test.c)
+    target_link_libraries(cuda_trellis_test PRIVATE webp)
+    target_include_directories(
+      cuda_trellis_test
+      PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+              ${CMAKE_CURRENT_SOURCE_DIR})
+  endif()
   if(WEBP_NEAR_LOSSLESS)
     add_executable(cuda_near_lossless_test tests/cuda_near_lossless_test.c)
     target_link_libraries(cuda_near_lossless_test PRIVATE webp)

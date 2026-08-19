@@ -4,7 +4,7 @@
 
 This is the private interface between the current libwebp encoder and optional
 compute backends. It is deliberately not a public WebP API and not a generic
-GPU runtime. ABI version 7 describes the complete stages already in this tree:
+GPU runtime. ABI version 11 describes the complete stages already in this tree:
 
 - `VP8LColorSpaceTransform()`: lossless cross-color transform search and
   application;
@@ -18,7 +18,9 @@ GPU runtime. ABI version 7 describes the complete stages already in this tree:
 - an experimental lossless predictor selector plus exact residual transform;
   and
 - exact population counting for full-stream lossless backward-reference
-  histograms, with entropy and merge policy retained on the CPU.
+  histograms, with entropy and merge policy retained on the CPU; and
+- exact whole-pass lossy macroblock decimation for basic, selected-mode
+  trellis, and all-candidate trellis RD levels.
 
 The local `15418-Final-Project` repository was reviewed at commit `b55ba547`.
 Its final CUDA path installs a `VP8LColorSpaceTransform` function pointer,
@@ -39,7 +41,7 @@ removes the encoder-to-Metal dependency without changing those kernel caches.
 
 ## ABI and capability discovery
 
-`src/enc/accelerator_enc.h` defines ABI version 7. A backend returns one static,
+`src/enc/accelerator_enc.h` defines ABI version 11. A backend returns one static,
 immutable `WebPEncoderAccelerator` descriptor with:
 
 - a name used by `WEBP_ACCELERATOR=auto|none|metal|cuda` selection;
@@ -60,7 +62,8 @@ under `WEBP_USE_METAL`, and CUDA is added under `WEBP_USE_CUDA` through
 `WebPGetCUDAEncoderAccelerator()`. The current CUDA descriptor advertises the
 lossless color-transform, lossless hash-candidate, opaque RGB-to-YUV, exact
 near-lossless, experimental lossy-analysis, experimental lossless predictor,
-and exact lossless histogram-counting stages. In automatic mode, a
+exact lossless histogram-counting, and exact lossy-decimation stages. In
+automatic mode, a
 backend that returns
 `NOT_RUN` permits the next backend to try the stage; an attempted backend error
 goes directly to CPU fallback. An explicit, unknown backend name selects none,
@@ -100,6 +103,7 @@ All request buffers are borrowed until the synchronous callback returns:
 | RGB to YUV420 | packed-channel pointers, source step/stride, dimensions, and optional active-encode method/quality | caller-allocated Y/U/V planes and their strides |
 | Near-lossless | original ARGB and preprocessing parameters | tightly packed preprocessed ARGB |
 | Lossy analysis | Y/U/V planes, geometry, method, quality | one susceptibility/mode record per macroblock |
+| Lossy decimation | Y/U/V planes, segments, quantizers, stable coefficient costs, RD level | mode decisions, levels, non-zero contexts, diffusion errors, reconstructed planes |
 | Lossless predictor | ARGB, allowed tile-bit range, exact/quantization semantics | residual ARGB, predictor map, selected tile bits |
 | Lossless histogram | at most 16 linked command spans, command count, cache bits | five complete population-count arrays |
 

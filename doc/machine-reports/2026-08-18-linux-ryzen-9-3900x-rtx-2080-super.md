@@ -116,3 +116,23 @@ ms/image, but the reference hash changed from `b274cb32eed00ca3` to
 the next pass failed the deterministic-output check. The prototype was
 removed. Concurrent calls require an explicit design that isolates or safely
 schedules shared CUDA encoder state before this overlap can be used.
+
+## Trellis decimation
+
+The whole-pass CUDA decimator was extended from method 4's basic RD search to
+method 5 selected-mode trellis and method 6 all-candidate trellis. The
+canonical small+medium corpus used 12-image persistent batches with two timing
+samples per backend; every PNG and JPEG CPU/CUDA output was byte-identical.
+
+| Method | Input | CPU time | CUDA time | CUDA speedup |
+|---|---|---:|---:|---:|
+| Method 5 | PNG | 109.6 ms | 76.2 ms | **1.44x** |
+| Method 5 | JPEG | 111.8 ms | 77.2 ms | **1.45x** |
+| Method 6 | PNG | 249.0 ms | 84.4 ms | **2.95x** |
+| Method 6 | JPEG | 260.6 ms | 86.2 ms | **3.03x** |
+
+On the three canonical 1600x1200 PNG content classes, method 5 measured
+192.4 ms CPU versus 114.1 ms CUDA (**1.69x**), while method 6 measured
+435.3 ms CPU versus 125.3 ms CUDA (**3.47x**). A focused 513x517 RGBA test
+also covers quality 75/99, one/two-pass encodes, alpha, and transactional CPU
+fallback after a deliberately failed collect.
