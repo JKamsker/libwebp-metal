@@ -26,6 +26,7 @@ shared experimental build or runtime switch.
 | 17 backref-cost interval-search v1 | `WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT` | `WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT` | `WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=1` | strictly-after-tail null-hint positioning index; separate untimed recorder build and recorder-free timed runner |
 | 18 backref-cost interval-search v2 | `WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT` | `WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT` | `WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT=1` | PushInterval-local scan-derived append hint with narrow in-call maintenance; separate untimed recorder build and recorder-free timed runner |
 | 19 backref-cost interval-search v3 | `WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT` | `WEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT` | `WEBP_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT=1` | exact v2 PushInterval-local candidate under repaired receipt/mode infrastructure; separate v3-only untimed recorder and recorder-free timed runner |
+| 20 backref-cost interval specialization v1 | `WEBP_BUILD_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT` | `WEBP_USE_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT` | `WEBP_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT=1` | production-shaped outer selection between baseline and distinct always-specialized v3-local-hint paths; separate untimed recorder and recorder-free runner |
 
 Every runtime value is exact: values other than `1` are disabled. Every timed
 launcher additionally requires `WEBP_BENCHMARK_SESSION=exclusive`. Correctness,
@@ -179,6 +180,7 @@ WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT=1 examples/cwebp
 WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT=1 examples/cwebp
 WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT=1 examples/cwebp
 WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT=1 examples/cwebp
+WEBP_BUILD_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT=1 examples/cwebp
 ```
 
 CMake uses the same names with `-D<name>=ON`. Items 2--8 require
@@ -190,7 +192,7 @@ experiment target is deliberately non-installed.
 
 The focused guard test does not grant the benchmark lease, read benchmark
 results, or run an encoder. It verifies default-off make commands, forced
-dry-run macro isolation for all eighteen rows, omitted driver targets, runtime
+dry-run macro isolation for all twenty rows, omitted driver targets, runtime
 refusal, lease refusal, the promoted item-4 default/legacy correctness mapping, and the fact
 that item 4's released timed matrix was not repurposed as a follow-up:
 

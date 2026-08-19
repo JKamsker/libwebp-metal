@@ -1,0 +1,26 @@
+{
+  "schema": "libwebp-backref-cost-interval-specialization-v1-local-validation-v1",
+  "status": "PASS",
+  "base_commit": "b2c71348c21371877328639efb5a929f2130bd09",
+  "premise_valid": true,
+  "timed_samples": 0,
+  "benchmark_leases": 0,
+  "tests": {
+    "exact_v3_normalized_semantic_identity": "PASS",
+    "optimized_arm64_cfg_and_control_dataflow": "PASS",
+    "cost_manager_layout_33224_bytes": "PASS",
+    "correctness_bitstream_pixels_determinism_inputs_fallback": "PASS (26 cells)",
+    "undefined_integer_array_bounds_pointer_overflow_sanitizers": "PASS",
+    "fuzzed_boundaries": "PASS",
+    "default_omission_and_mutual_exclusion": "PASS (20 guard rows)",
+    "installed_headers_exports_api_abi": "PASS (193 exports)",
+    "receipt_mode_archive_admission_contracts": "PASS",
+    "local_full_publication_work": "PASS (36 rows, 99.0466% positioning reduction)",
+    "remote_success_rehearsal": "PASS (26 correctness cells, 16 work rows)",
+    "remote_controlled_refusal_rehearsal": "PASS"
+  },
+  "work_evidence": "evidence/backref-cost-interval-specialization-v1-design-work/summary.json",
+  "codegen_evidence": "evidence/backref-cost-interval-specialization-v1-design-work/codegen.json",
+  "remote_success": "evidence/backref-cost-interval-specialization-v1-design/remote-rehearsal-success/transfer-cleanup.json",
+  "remote_refusal": "evidence/backref-cost-interval-specialization-v1-design/remote-rehearsal-refusal/transfer-cleanup.json"
+}

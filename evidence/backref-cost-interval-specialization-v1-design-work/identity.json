@@ -1,0 +1,29 @@
+{
+  "schema": "libwebp-backref-cost-interval-specialization-v1-candidate-identity-v1",
+  "status": "PASS",
+  "base_commit": "b2c71348c21371877328639efb5a929f2130bd09",
+  "v3_reference_commit": "b2c71348c21371877328639efb5a929f2130bd09",
+  "normalized_v3_specialized_candidate_sha256": "e8f07cd30016566188a5a73e7c7f10c23dbc4f8e3d3ff08de332555e35eb0c35",
+  "normalized_v3_specialized_candidate_identical": true,
+  "cost_manager_baseline_bytes": 33224,
+  "cost_manager_v3_bytes": 33224,
+  "cost_manager_specialization_v1_bytes": 33224,
+  "selection_before_dp_mutation": true,
+  "distinct_baseline_and_candidate_dp_paths": true,
+  "candidate_push_has_use_append_hint_argument": false,
+  "candidate_hot_path_has_experiment_control": false,
+  "candidate_hot_path_has_recorder_code_in_timed_build": false,
+  "equal_start_uses_baseline_positioning": true,
+  "local_lifetime_only": true,
+  "persistent_tail_bookkeeping": false,
+  "preserved": [
+    "integer costs and ties",
+    "equal-start and interval order",
+    "interval lifetime and node cap",
+    "updates and traceback",
+    "cache and reference order",
+    "allocations and CostManager layout",
+    "immutable inputs",
+    "transactional pre-DP fallback"
+  ]
+}

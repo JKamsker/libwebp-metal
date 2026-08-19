@@ -89,6 +89,12 @@ sanitizers, fuzzed boundaries, default omission, gate isolation, and the
 v3-only recorder/recorder-free timing split. Its protocol tests additionally
 enforce the repaired admission-receipt fields and disjoint mode/session table.
 
+`scripts/test_backref_cost_interval_specialization_v1_experiment.py` verifies
+the production-shaped continuation: one pre-DP runtime selection chooses the
+ordinary DP or a distinct always-on v3 local-hint DP, while the optimized hot
+candidate has no experiment-control parameter or dataflow. It retains the v3
+semantic, work, fallback, sanitizer, ABI, omission, and protocol gates.
+
 ## Building
 
 ### Fuzzers
