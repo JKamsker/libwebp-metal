@@ -628,3 +628,19 @@ cross-team publication outweighed the parallel work:
 The full CUDA trellis parity test passed and all 60 order-balanced outputs
 matched. The candidate was removed; raw evidence is
 `/tmp/libwebp-i4-singleton-split-ab.CKXjFR.jsonl`.
+
+## I16 warp reductions
+
+The non-trellis I16 phase used 64 contending atomics for nonzero flags and up
+to 128 contending 64-bit atomics for SSE and texture distortion per
+macroblock. An exact candidate replaced them with four independent 16-lane
+warp reductions and one shared-memory writer per mode.
+
+| Format | Parent | Warp reductions | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.283 ms/image | 39.850 ms/image | -0.433 ms |
+| JPEG lossy | 40.405 ms/image | 39.870 ms/image | -0.535 ms |
+
+The full CUDA trellis parity test passed and all 60 order-balanced outputs
+matched. The gains are below the 1.5 ms/image threshold, so the candidate was
+removed. Raw evidence is `/tmp/libwebp-i16-warp-reduce-ab.pW8SQc.jsonl`.
