@@ -14,9 +14,9 @@ speedup is CPU time divided by CUDA time, so values above `1x` favor CUDA.
 | CUDA toolkit | 12.0.140 |
 | Compiler | GCC 13.3.0 / NVCC 12.0.140 |
 | Python / Pillow | Python 3.12.3 / Pillow 10.2.0 |
-| Source revision | `8ae71f74a90aad2754fcfab458d8e4ef0387dfcc` |
+| Source revision | `4852f92e1075124ab420d2d56524113a54255216` |
 | Build | CMake Release, CUDA enabled |
-| Result label | `win-2080super-i4-score-prep` |
+| Result label | `win-2080super-token-local` |
 
 ## Protocol
 
@@ -233,3 +233,45 @@ All 180 official validation pairs, six registered CTests, and an additional
 105 exact-byte cases across methods 2--6, qualities 25/75/98, tiny and odd
 dimensions, three content classes, and band-3 fallback passed. Exact code CI
 run `32214115280` passed all eleven jobs.
+
+## Local-state token-page arithmetic coding
+
+After the GPU work reduced decimation, the current encoder-stage profile put
+texture token emission at 45--46 ms/image. `gprofng` clock sampling attributed
+81.2% of sampled CPU time inclusively to `VP8EmitTokens`. Plain table-driven
+inlining was measurable but below the retention threshold. Revision
+`4852f92e` instead keeps the arithmetic coder's `range`, `value`, and
+`nb_bits` in locals across each token page, committing them to the writer only
+when the unchanged byte-flush path is required.
+
+Five alternating baseline/candidate processes, each retaining three samples
+after one warmup, measured PNG 48.646 to 44.735 ms/image and JPEG 49.576 to
+44.544 ms/image. Every one of the 60 samples retained the same output hash and
+byte count.
+
+### Persistent 24-image batch
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy | 94.4 ms | 44.3 ms | **2.13x** |
+| PNG lossless | 143.9 ms | 90.2 ms | **1.59x** |
+| PNG near-lossless | 209.8 ms | 92.6 ms | **2.27x** |
+| JPEG lossy | 93.9 ms | 44.0 ms | **2.13x** |
+| JPEG lossless | 679.3 ms | 145.6 ms | **4.66x** |
+| JPEG near-lossless | 792.0 ms | 148.3 ms | **5.34x** |
+
+### Fresh process per image
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy | 97.6 ms | 263.1 ms | **0.37x** |
+| PNG lossless | 155.2 ms | 321.4 ms | **0.48x** |
+| PNG near-lossless | 222.5 ms | 328.6 ms | **0.68x** |
+| JPEG lossy | 97.3 ms | 264.2 ms | **0.37x** |
+| JPEG lossless | 702.2 ms | 366.6 ms | **1.92x** |
+| JPEG near-lossless | 819.8 ms | 379.4 ms | **2.16x** |
+
+The suite passed all 180 validation pairs. Six registered CTests and an
+additional 105 exact-byte cases covering methods 2--6, qualities 25/75/98,
+three content classes, 17x13 and 257x255 dimensions, and forced band-3
+fallback also passed. Exact CI run `32217152201` passed all eleven jobs.

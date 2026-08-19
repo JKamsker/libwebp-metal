@@ -560,3 +560,34 @@ ms CUDA (**2.056x**) and JPEG lossy at 99.723 / 48.552 ms (**2.054x**). All
 180 official validations, the six-test CTest set, and the extra 105-case exact
 methods 2--6 / qualities 25--98 / tiny / odd / band-3 fallback battery passed.
 Exact CI run `32214115280` passed all eleven jobs.
+
+The next CPU stage profile measured 45--46 ms of token emission on the
+texture inputs. Cross-thread clock sampling attributed 81.2% of sampled CPU
+time inclusively to `VP8EmitTokens`, with `VP8PutBit` and `Flush` dominating.
+A plain cross-translation-unit inline experiment saved only 1.130 ms/image
+PNG and 1.369 ms/image JPEG and was removed. Generated assembly showed that
+the arithmetic coder still loaded and stored its state for every token.
+
+Revision `4852f92e` keeps `range`, `value`, and `nb_bits` in locals across a
+whole token page, synchronizing them to the existing writer only at an actual
+byte flush. It retains the original `kNorm` / `kNewRange` lookup tables, carry
+propagation, allocation behavior, and bitstream. Five alternating processes,
+each retaining three samples after one warmup, measured:
+
+| Format | `147c590d` baseline | Local-state token coder | Change |
+|---|---:|---:|---:|
+| PNG lossy | 48.646 ms/image | 44.735 ms/image | **-3.910 ms** |
+| JPEG lossy | 49.576 ms/image | 44.544 ms/image | **-5.031 ms** |
+
+The complete portable suite at `4852f92e` measured:
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy — batch | 94.4 ms | 44.3 ms | **2.13x** |
+| JPEG lossy — batch | 93.9 ms | 44.0 ms | **2.13x** |
+| PNG lossy — fresh process | 97.6 ms | 263.1 ms | **0.37x** |
+| JPEG lossy — fresh process | 97.3 ms | 264.2 ms | **0.37x** |
+
+All 180 official validations, six registered CTests, and the separate 105-case
+exact methods 2--6 / qualities 25--98 / tiny / odd / band-3 fallback battery
+passed. Exact CI run `32217152201` passed all eleven jobs.
