@@ -872,3 +872,31 @@ pairs passed. The official RTX 2080 SUPER suite now measures PNG lossy at
 (**2.30x**) in persistent 24-image batches. Raw local evidence is in
 `/tmp/libwebp-i4-diagonal-ab.we3FD8.json` and
 `/tmp/libwebp-cuda-results-2080super-i4-diagonal/results.json`.
+
+## I4 team-local named-barrier rejection
+
+A fresh retained-head stage profile measured medium texture at about
+73.6--73.9 ms end to end, with 49.2--49.4 ms in accelerated decimation/replay
+and 11.2--11.4 ms in token emission. Direct device timing still attributed
+64.8--66.5% of photo/texture block cycles to I4. A temporary cycle probe
+captured over 96% of I4 and found no single arithmetic target: transform and
+quantization used 25.6--26.5%, selection/publication 22.7--23.3%, metrics
+21.7--24.0%, prediction/boundary 20.9--21.4%, and raster aggregation about
+7%.
+
+The candidate replaced the four intra-team numeric-phase CTA barriers on each
+dependency diagonal with separate 128-thread named barriers. The two
+cross-team winner-publication and abort barriers remained block-wide. The
+focused trellis, padded-stride, band-remainder, and fallback test passed.
+Five order-balanced parent/candidate processes measured:
+
+| Format | Parent | Team-local barriers | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.291 ms/image | 39.994 ms/image | -0.297 ms |
+| JPEG lossy | 40.210 ms/image | 39.892 ms/image | -0.318 ms |
+
+All 60 outputs retained the same hashes and byte counts. The gains are far
+below the retention threshold, so the candidate was removed. The two teams'
+numeric work is uniform enough that independent barrier progress does not
+materially shorten the critical path. Raw timing evidence is retained locally
+in `/tmp/libwebp-i4-team-barrier-ab.6N0G7E.tsv`.

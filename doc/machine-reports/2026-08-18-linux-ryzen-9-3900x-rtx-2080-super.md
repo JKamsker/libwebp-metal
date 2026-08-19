@@ -526,3 +526,21 @@ passed all 180 validation pairs (including 60 exact lossy pairs) and produced
 the tables at the top of this report. Raw official results are in
 `/tmp/libwebp-cuda-results-2080super-i4-diagonal/results.json`; the local A/B
 summary is `/tmp/libwebp-i4-diagonal-ab.we3FD8.json`.
+
+## I4 team-local named barriers
+
+Temporary subphase timing on the retained diagonal scheduler captured over
+96% of I4 cycles. Transform/quantization used 25.6--26.5%,
+selection/publication 22.7--23.3%, metrics 21.7--24.0%, prediction/boundary
+20.9--21.4%, and raster aggregation about 7%. A byte-exact candidate replaced
+four per-diagonal CTA barriers with independent 128-thread named barriers,
+leaving the two publication/abort barriers block-wide.
+
+| Format | Parent | Team-local barriers | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.291 ms/image | 39.994 ms/image | -0.297 ms |
+| JPEG lossy | 40.210 ms/image | 39.892 ms/image | -0.318 ms |
+
+All 60 order-balanced timing outputs matched. The gains are far below the
+1.5 ms/image retention threshold, so the candidate was removed. Raw evidence
+is `/tmp/libwebp-i4-team-barrier-ab.6N0G7E.tsv`.
