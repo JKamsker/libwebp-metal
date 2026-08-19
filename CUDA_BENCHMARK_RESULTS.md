@@ -957,3 +957,22 @@ Five order-balanced processes measured:
 All 60 outputs retained the same hashes and byte counts. The candidate was
 removed because both deltas are far below the 1.5 ms/image threshold. Raw
 timing evidence is `/tmp/libwebp-i4-quant8-ab.R8YBlE.tsv`.
+
+## Chroma/I16 phase-overlap rejection
+
+A fresh guarded wall-stage trace of the retained native-sm_75 build used 24
+warmup images and 72 measured images per content class. Median encode-stage
+times were:
+
+| Content | Encode total | CUDA decimate | Token emission |
+|---|---:|---:|---:|
+| Graphic | 25.845 ms | 20.620 ms | 0.583 ms |
+| Photo | 31.656 ms | 21.727 ms | 2.750 ms |
+| Texture | 76.342 ms | 51.895 ms | 10.959 ms |
+
+The candidate scheduled independent chroma mode work on the upper 128 threads
+while I16 used the lower half of the CTA. All seven CTests passed, but the full
+five-process native-sm_75 gate measured only 1.399 ms/image PNG and 1.093
+ms/image JPEG gains. Both are below the 1.5 ms/image threshold, so the source
+change was removed. This result applies only to the RTX 2080 SUPER; the raw
+records are linked from its machine report.

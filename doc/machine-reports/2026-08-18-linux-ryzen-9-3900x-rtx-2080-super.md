@@ -869,3 +869,37 @@ timing is
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/token-arithmetic-normalization-screen.jsonl`;
 the complete sampling experiment is
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/gprof-current-token-profile.tar.gz`.
+
+## Retained wall-stage profile and chroma/I16 overlap
+
+The aggregate CPU sampler above counts worker-thread CPU time, so a fresh
+guarded, single-threaded wall-stage run profiled the retained native-sm_75
+CUDA path directly. Each content class used a 24-image discarded warmup batch
+and three measured 24-image batches at method 4 and quality 75. The 72 retained
+records per class measured:
+
+| Content | Encode total | CUDA decimate | Token emission | Token recording |
+|---|---:|---:|---:|---:|
+| Graphic | 25.845 ms | 20.620 ms | 0.583 ms | 0.184 ms |
+| Photo | 31.656 ms | 21.727 ms | 2.750 ms | 0.177 ms |
+| Texture | 76.342 ms | 51.895 ms | 10.959 ms | 0.195 ms |
+
+This confirms that decimation, not the token loop, remains the serial wall
+target on this machine. A scheduling-only candidate evaluated chroma modes in
+the otherwise idle upper 128 CTA threads while the lower half performed I16
+work. It did not change math, dispatch thresholds, or output order.
+
+All seven CTests passed. Five order-balanced native-sm_75 processes measured:
+
+| Format | Parent | Overlap candidate | Change |
+|---|---:|---:|---:|
+| PNG lossy | 39.973 ms/image | 38.574 ms/image | -1.399 ms |
+| JPEG lossy | 40.002 ms/image | 38.910 ms/image | -1.093 ms |
+
+All 60 timing outputs retained the parent hash and byte count. Both gains are
+below the 1.5 ms/image retention threshold, so the candidate was removed. This
+was measured only on the RTX 2080 SUPER and makes no Ampere+ performance claim.
+The raw A/B records are
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/chroma-i16-overlap-ab.jsonl`;
+the six `retained-lossy-stage-*.jsonl` files in the same directory contain the
+raw per-encode stage records and batch-harness outputs.
