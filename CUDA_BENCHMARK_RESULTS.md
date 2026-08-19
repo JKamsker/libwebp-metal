@@ -2073,3 +2073,27 @@ Candidate and restored focused exact tests passed. Neither format approached
 the 1.5 ms/image gate, so the source was restored. Raw artifacts use the
 `libwebp-i4-clip-minmax-*` prefix. This is Turing-only evidence; Ampere+
 behavior and thresholds remain unchanged.
+
+## Vectorized I4 transform-row I/O rejection
+
+The retained native-sm_75 phase trace measured I4 at 63.8% of photo-medium
+and 65.2% of texture-medium block cycles. The next distinct transform
+candidate replaced aligned four-byte source/prediction loads and inverse-row
+stores with `uchar4` operations on pre-Ampere only. Ampere+ compiled the
+unchanged scalar path.
+
+Resources were unchanged at 103 registers, a 352-byte stack, and 23,392
+shared bytes. Although static byte-wide sites fell by twelve loads and four
+stores, extraction and packing grew the kernel by eight instructions. Two
+order-reversed process pairs per format remained exact:
+
+| Format | Parent | Candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 39.501 ms/image | 39.400 ms/image | 0.101 ms/image | `99f33682e7cc9063` / 6,441,688 |
+| JPEG lossy | 39.922 ms/image | 39.533 ms/image | 0.389 ms/image | `1b9eceb1d93cad23` / 6,400,792 |
+
+Candidate and restored focused trellis, padded-stride, band-remainder, and
+transactional-fallback tests passed. Both gains are below 1.5 ms/image, so
+the candidate was removed. Raw artifacts use the
+`libwebp-i4-vector-rowio-*` prefix. This is Turing-only evidence; Ampere+
+behavior and thresholds remain unchanged.

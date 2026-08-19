@@ -310,6 +310,12 @@ code-size change, 24 order-reversed timing rows, candidate/restored focused
 tests, and decision summary. The candidate was removed after gains of only
 0.396 ms/image PNG and 0.014 ms/image JPEG.
 
+The `libwebp-i4-vector-rowio-*` files preserve the refreshed native I4 profile,
+exact rejected pre-Ampere vector-row patch, complete parent/candidate sm_75
+SASS, resource and instruction counts, 24 exact order-reversed timing rows,
+candidate/restored focused tests, and decision summary. The candidate was
+removed after gains of only 0.101 ms/image PNG and 0.389 ms/image JPEG.
+
 Inspect the sampling archives with:
 
 ```sh

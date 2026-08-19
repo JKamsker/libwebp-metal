@@ -781,3 +781,29 @@ The shorter code is largely outside the critical path, and both gains are
 below 1.5 ms/image. The candidate was removed. Exact patch, partition/profile
 evidence, resources, 24 rows, tests, and summary are archived under
 `libwebp-i4-clip-minmax-*`. RTX 2080 SUPER only; no Ampere+ claim.
+
+## Pre-Ampere vectorized I4 transform-row I/O rejection
+
+The refreshed native-sm_75 profile again put I4 at 63.8% of photo and 65.2%
+of texture block cycles. After excluding the previously tested coefficient
+handoff, quantizer-width, matrix, transpose, and clipping variants, generated
+code showed aligned four-byte I4 row accesses still emitted as byte-wide
+shared-memory operations. A pre-Ampere candidate used `uchar4` loads for the
+source/prediction rows and one `uchar4` store for the inverse-transform row;
+Ampere+ retained the established scalar source.
+
+The candidate reduced static byte-wide sites from 893 to 881 loads and from
+203 to 199 stores, but extraction/packing increased the sm_75 kernel from
+23,704 to 23,712 instructions. Registers, stack, and shared memory stayed at
+103, 352 bytes, and 23,392 bytes. Candidate and restored focused exact tests
+passed, and all 24 order-reversed rows matched hashes and byte counts:
+
+| Format | Parent | Vector row I/O | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.501 ms/image | 39.400 ms/image | 0.101 ms/image |
+| JPEG lossy | 39.922 ms/image | 39.533 ms/image | 0.389 ms/image |
+
+Both gains are noise under the strict 1.5 ms/image gate, so the source was
+restored. Exact patch, full parent/candidate SASS, profile, raw rows, tests,
+and summary are archived under `libwebp-i4-vector-rowio-*`. RTX 2080 SUPER
+only; no Ampere+ behavior, threshold, or performance claim changed.

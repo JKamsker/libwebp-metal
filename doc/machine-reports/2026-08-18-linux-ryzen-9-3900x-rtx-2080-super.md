@@ -2218,3 +2218,28 @@ output:
 The code-size improvement did not move the critical path, so the candidate was
 removed. Exact artifacts are under `libwebp-i4-clip-minmax-*`. This result is
 RTX 2080 SUPER-only and changes no Ampere+ behavior, threshold, or claim.
+
+## Pre-Ampere vectorized I4 transform row I/O
+
+The refreshed medium phase trace measured I4 at 63.8% of photo and 65.2% of
+texture block cycles. Native SASS inspection found the aligned source,
+prediction, and reconstructed rows in the four-lane transform still used
+byte-wide shared-memory operations. The candidate used `uchar4` loads and a
+packed output store on pre-Ampere only; Ampere+ retained the existing source.
+
+The DecimateKernel kept 103 registers, a 352-byte stack, and 23,392 shared
+bytes. Static byte operations fell by twelve loads and four stores, but the
+extraction/packing sequence grew the kernel from 23,704 to 23,712
+instructions. Candidate and restored focused exact tests passed, and all 24
+timing rows retained the format-specific output:
+
+| Format | Parent | Vector row I/O | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.501 ms/image | 39.400 ms/image | 0.101 ms/image |
+| JPEG lossy | 39.922 ms/image | 39.533 ms/image | 0.389 ms/image |
+
+The source was restored because neither format reached 1.5 ms/image. Evidence
+under `libwebp-i4-vector-rowio-*` includes the exact patch, complete
+parent/candidate sm_75 SASS, profile/resource counts, all timing rows, tests,
+and computed summary. This result is RTX 2080 SUPER-only and changes no
+Ampere+ behavior, threshold, or performance claim.
