@@ -369,3 +369,19 @@ All 60 outputs retained their reference hash and byte count. The larger table
 and wider addressing outweighed the saved load, so the candidate was removed.
 The local raw summary is
 `/tmp/libwebp-combined-level-cost-ab.Xn4ND3.json`.
+
+## Small-level residual-cost specialization
+
+A compact follow-up used the exact VP8 fixed costs directly for levels 0–4,
+avoiding their fixed-table load without changing table size or the kernel's
+93-register footprint. All seven focused CTests passed. Five order-balanced
+processes per variant measured:
+
+| Format | Baseline | Small-level specialization | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.851 ms/image | 42.423 ms/image | +0.572 ms |
+| JPEG lossy | 41.712 ms/image | 42.392 ms/image | +0.680 ms |
+
+All 60 outputs retained their reference hash and byte count. The added range
+test outweighed the saved load, so the candidate was removed. The local raw
+summary is `/tmp/libwebp-small-level-cost-ab.OHZMcV.json`.

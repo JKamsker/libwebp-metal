@@ -689,3 +689,22 @@ reference hashes and byte counts. Five order-balanced process medians were:
 
 The candidate was removed. Raw timing evidence is retained locally in
 `/tmp/libwebp-combined-level-cost-ab.Xn4ND3.json`.
+
+## Small-level residual-cost specialization rejection
+
+A follow-up retained the compact tables and specialized only the exact VP8
+fixed costs for levels 0–4: zero at level 0 and 256 at levels 1–4. This kept
+the kernel at 93 registers and avoided the second table load for small
+coefficients, but introduced a divergent range test into every residual-cost
+step.
+
+All seven focused CTests passed and all 60 timed outputs retained their
+reference hashes and byte counts. Five order-balanced process medians were:
+
+| Format | Baseline | Small-level specialization | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.851 ms/image | 42.423 ms/image | +0.572 ms |
+| JPEG lossy | 41.712 ms/image | 42.392 ms/image | +0.680 ms |
+
+The candidate was removed. Raw timing evidence is retained locally in
+`/tmp/libwebp-small-level-cost-ab.OHZMcV.json`.
