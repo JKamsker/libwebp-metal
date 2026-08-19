@@ -799,3 +799,25 @@ The stride-aware metric arithmetic offset the bank-layout improvement, so the
 candidate was removed. This is distinct from padding the per-mode arrays,
 which preserved the 32-byte row stride. Raw timing evidence is retained
 locally in `/tmp/libwebp-i4-compact-output-ab.4oaeP2.json`.
+
+## Whole-I4 lower-bound pruning rejection
+
+Before generating any I4 predictions, an exact lower bound combined the
+mandatory 211-bit-cost I4 flag with 16 times the minimum entry computed from
+the canonical fixed mode-cost table. All omitted rate and distortion terms
+are non-negative, so a search whose bound could not beat I16—or already
+exceeded the header limit—could be skipped without changing the decision.
+
+All seven focused CTests passed and all 60 timed outputs matched. The pruning
+was active on flat content: graphic-medium device wall improved from 28.25 to
+23.97 ms, while photo and texture were unchanged. Five order-balanced
+six-image process medians were:
+
+| Format | Baseline | I4 lower-bound pruning | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.943 ms/image | 41.803 ms/image | -0.140 ms |
+| JPEG lossy | 41.869 ms/image | 41.784 ms/image | -0.085 ms |
+
+The content-specific gain is diluted far below the 1.5 ms/image aggregate
+retention threshold. The candidate was removed; raw timing evidence is
+retained locally in `/tmp/libwebp-i4-lower-bound-ab.pvCGmK.json`.

@@ -455,3 +455,20 @@ and all 60 timed outputs matched. Five order-balanced process medians measured:
 The added stride-aware metric work offset the bank-layout improvement, so the
 candidate was removed. The local raw summary is
 `/tmp/libwebp-i4-compact-output-ab.4oaeP2.json`.
+
+## Whole-I4 lower-bound pruning
+
+An exact lower bound skipped the complete I4 search when its mandatory flag
+and minimum possible 16-block mode cost could not beat I16 or satisfy the
+header limit. All seven focused CTests passed and all 60 timed outputs matched.
+Graphic-medium device wall improved from 28.25 to 23.97 ms, but photo and
+texture were unchanged. Five order-balanced aggregate medians measured:
+
+| Format | Baseline | I4 lower-bound pruning | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.943 ms/image | 41.803 ms/image | -0.140 ms |
+| JPEG lossy | 41.869 ms/image | 41.784 ms/image | -0.085 ms |
+
+The aggregate gains are far below the retention threshold, so the candidate
+was removed. The local raw summary is
+`/tmp/libwebp-i4-lower-bound-ab.pvCGmK.json`.
