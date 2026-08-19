@@ -171,6 +171,23 @@ SASS, and normalized original/Ampere mnemonic streams. The normalized streams
 are byte-identical, demonstrating that the architecture-specialized candidate
 left the established Ampere+ instruction path unchanged.
 
+The `libwebp-hash-combined-*` files preserve both ten-pair screens for the
+rejected composition of precheck removal and four-pixel load-ahead. The
+`final` transcripts are the decisive final-build repeat; PNG's paired median
+gain fell below the retention threshold. The exact candidate patch, 90-case
+method/quality/tiny/odd transcript, official candidate run, native cache,
+resource report, SASS, normalized Ampere+ equivalence proof, and six copied
+PPM inputs are included.
+
+The `libwebp-resident-handoff-*` files preserve the independently retained
+correctness fix. They include the original failing predictor/hash stage
+combination probe, the exact patch, final 7-test and six-corpus public-encoder
+transcripts, the default/baseline/all-disabled CUDA variant run, native cache,
+system capture, and final official `raw.jsonl`, `results.json`, report, and run
+transcript. The earlier parent and candidate failures under
+`libwebp-hash-combined-test-cuda-*` demonstrate that the stale resident-pixel
+bug predated the rejected matcher.
+
 Inspect the sampling archives with:
 
 ```sh

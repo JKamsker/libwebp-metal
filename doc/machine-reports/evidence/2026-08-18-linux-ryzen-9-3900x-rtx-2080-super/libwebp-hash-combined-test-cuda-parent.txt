@@ -1,0 +1,4 @@
+Script started on 2026-08-19 15:15:49+00:00 [COMMAND="WEBP_TEST_BIN_DIR=/tmp/libwebp-cursor-inline-baseline/build-native /tmp/libwebp-cursor-inline-baseline/scripts/test_cuda.sh /tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png" <not executed on terminal>]
+/tmp/libwebp-cuda-test.8f8emT/photo-small.png-cpu.pam /tmp/libwebp-cuda-test.8f8emT/photo-small.png-cuda.pam differ: byte 67944, line 8
+
+Script done on 2026-08-19 15:15:51+00:00 [COMMAND_EXIT_CODE="1"]

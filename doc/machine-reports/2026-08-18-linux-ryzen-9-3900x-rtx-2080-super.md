@@ -1382,3 +1382,72 @@ RTX 2080 SUPER-only evidence and makes no Ampere+ performance claim. The exact
 patch, 20 timing transcripts, CTest log, baseline/candidate resources, both
 specialization SASS listings, normalized mnemonic streams, and native caches
 are stored in the adjacent evidence directory.
+
+## Combined hash matcher rejection
+
+The pre-Ampere initial-precheck and load-ahead candidates were composed while
+Ampere+ retained the original specialization. A preliminary ten-pair gate
+measured gains of 1.932 ms/image PNG and 1.844 JPEG. The complete ten-pair gate
+was repeated after the resident-handoff correction below, on the exact final
+binary:
+
+| Format | Parent | Combined matcher | Paired gain |
+|---|---:|---:|---:|
+| PNG lossless | 77.838 ms/image | 76.964 ms/image | +1.184 ms/image |
+| JPEG lossless | 128.780 ms/image | 126.256 ms/image | +2.203 ms/image |
+
+All output hashes and byte counts matched. Because the final PNG gain is below
+1.5 ms/image, the matcher was removed. Its Turing specialization used 30
+registers without stack, shared, or local memory. The Ampere+ specialization
+kept the parent's 26 registers and byte-identical 296-instruction normalized
+stream. This result is RTX 2080 SUPER-only and makes no Ampere+ performance
+claim.
+
+## Resident predictor-to-hash correction and final numbers
+
+Running the public encoder suite on the candidate exposed a pre-existing
+decoded-pixel mismatch also reproduced on the frozen parent. With CUDA
+predictor and hash enabled but cross-color disabled, predictor published
+pre-color residuals as resident; the CPU could then apply cross-color to the
+host buffer while hash consumed the stale device copy.
+
+Resident state now records whether pixels are hash-ready. Predictor output may
+feed CUDA color but cannot feed hash directly. CUDA color republishes its
+transformed buffer as hash-ready; when color remains on CPU, hash uploads the
+final host residuals. The public test covers both paths and disables the
+intentional CUDA prewarm only for its cold-decline assertion.
+
+All seven CTests passed. The public suite passed on its default input and all
+six canonical PNG cases, including the new predictor-without-CUDA-color
+regression. The default/baseline/all-disabled CUDA variant matrix also passed;
+its full-feature arm now explicitly enables the otherwise default-off
+histogram stage required by its preflight mask. The exact final native-sm_75
+build passed all 180 official validation pairs and produced these definitive
+machine numbers.
+
+### Persistent 24-image batch
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy | 92.7 ms | 40.5 ms | **2.29x** |
+| PNG lossless | 145.0 ms | 78.3 ms | **1.85x** |
+| PNG near-lossless | 211.6 ms | 79.5 ms | **2.66x** |
+| JPEG lossy | 92.9 ms | 40.5 ms | **2.29x** |
+| JPEG lossless | 725.1 ms | 133.5 ms | **5.43x** |
+| JPEG near-lossless | 853.6 ms | 133.9 ms | **6.38x** |
+
+### Fresh process per image
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy | 95.5 ms | 260.3 ms | **0.37x** |
+| PNG lossless | 155.5 ms | 299.4 ms | **0.52x** |
+| PNG near-lossless | 221.4 ms | 308.5 ms | **0.72x** |
+| JPEG lossy | 95.6 ms | 257.7 ms | **0.37x** |
+| JPEG lossless | 722.5 ms | 348.8 ms | **2.07x** |
+| JPEG near-lossless | 833.3 ms | 364.6 ms | **2.29x** |
+
+The raw paired screens, failing parent reproducer, final public-test logs,
+official JSONL/results, exact patches, SASS, resource reports, and copied
+tiny/odd inputs are in the adjacent evidence directory under the
+`libwebp-hash-combined-*` and `libwebp-resident-handoff-*` prefixes.

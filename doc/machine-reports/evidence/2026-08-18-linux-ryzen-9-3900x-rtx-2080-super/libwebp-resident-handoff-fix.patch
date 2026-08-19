@@ -1,0 +1,153 @@
+diff --git a/scripts/test_cuda.sh b/scripts/test_cuda.sh
+index b8b1b9bc..989c4116 100755
+--- a/scripts/test_cuda.sh
++++ b/scripts/test_cuda.sh
+@@ -26,7 +26,7 @@ fi
+ WEBP_ACCELERATOR=none \
+   "$encoder" -quiet -lossless -exact -m 4 "$root_dir/examples/test_ref.ppm" \
+   -o "$temporary_dir/cold-cpu.webp"
+-WEBP_ACCELERATOR=cuda WEBP_CUDA_VERBOSE=1 \
++WEBP_ACCELERATOR=cuda WEBP_CUDA_PREWARM=0 WEBP_CUDA_VERBOSE=1 \
+   "$encoder" -quiet -lossless -exact -m 4 "$root_dir/examples/test_ref.ppm" \
+   -o "$temporary_dir/cold-default.webp" 2>>"$cold_log"
+ cmp "$temporary_dir/cold-cpu.webp" "$temporary_dir/cold-default.webp"
+@@ -84,14 +84,16 @@ for input do
+ 
+   WEBP_ACCELERATOR=cuda WEBP_CUDA_MIN_PIXELS=0 \
+     WEBP_CUDA_HASH_MIN_PIXELS=0 \
+-    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_PREDICTOR=1 \
++    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_COLOR=1 \
++    WEBP_CUDA_PREDICTOR=1 \
+     WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 WEBP_CUDA_HISTOGRAM=1 \
+     WEBP_CUDA_HISTOGRAM_MIN_COMMANDS=0 WEBP_CUDA_VERBOSE=1 \
+     "$encoder" -quiet -lossless -exact -m 4 "$input" \
+     -o "$temporary_dir/$name-cuda-1.webp" 2>>"$cuda_log"
+   WEBP_ACCELERATOR=cuda WEBP_CUDA_MIN_PIXELS=0 \
+     WEBP_CUDA_HASH_MIN_PIXELS=0 \
+-    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_PREDICTOR=1 \
++    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_COLOR=1 \
++    WEBP_CUDA_PREDICTOR=1 \
+     WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 WEBP_CUDA_HISTOGRAM=1 \
+     WEBP_CUDA_HISTOGRAM_MIN_COMMANDS=0 \
+     "$encoder" -quiet -lossless -exact -m 4 "$input" \
+@@ -105,6 +107,27 @@ for input do
+     -o "$temporary_dir/$name-cuda.pam"
+   cmp "$temporary_dir/$name-cpu.pam" "$temporary_dir/$name-cuda.pam"
+ 
++  # Predictor residuals are not hash-ready because an optional CPU
++  # cross-color transform may rewrite them. With CUDA color disabled, hash
++  # must upload the CPU's final residuals.
++  predictor_hash_log="$temporary_dir/$name-predictor-hash.log"
++  WEBP_ACCELERATOR=cuda WEBP_CUDA_COLOR=0 WEBP_CUDA_PREDICTOR=1 \
++    WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 WEBP_CUDA_HASH=1 \
++    WEBP_CUDA_HASH_MIN_PIXELS=0 WEBP_CUDA_HISTOGRAM=0 \
++    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_VERBOSE=1 \
++    "$encoder" -quiet -lossless -exact -m 4 "$input" \
++    -o "$temporary_dir/$name-predictor-hash.webp" \
++    2>"$predictor_hash_log"
++  "$decoder" -quiet "$temporary_dir/$name-predictor-hash.webp" -pam \
++    -o "$temporary_dir/$name-predictor-hash.pam"
++  cmp "$temporary_dir/$name-cpu.pam" \
++    "$temporary_dir/$name-predictor-hash.pam"
++  if grep -q "WebP-CUDA: hash candidates.*resident pixels" \
++      "$predictor_hash_log"; then
++    echo "CUDA hash consumed predictor residuals before CPU color" >&2
++    exit 1
++  fi
++
+   WEBP_ACCELERATOR=cuda WEBP_CUDA=0 \
+     "$encoder" -quiet -lossless -exact -m 4 "$input" \
+     -o "$temporary_dir/$name-disabled.webp"
+diff --git a/scripts/test_cuda_variants.sh b/scripts/test_cuda_variants.sh
+index 0d07eb8f..4c815a42 100755
+--- a/scripts/test_cuda_variants.sh
++++ b/scripts/test_cuda_variants.sh
+@@ -62,7 +62,7 @@ build_and_test() {
+   fi
+ }
+ 
+-build_and_test defaults
++build_and_test defaults -DWEBP_CUDA_ENABLE_HISTOGRAM=ON
+ build_and_test baseline \
+   -DWEBP_CUDA_ENABLE_COLOR_SHARED_TILE=OFF \
+   -DWEBP_CUDA_ENABLE_NEAR_LOSSLESS=OFF \
+diff --git a/src/enc/cuda_enc.cu b/src/enc/cuda_enc.cu
+index eb46ef2e..2b0829ac 100644
+--- a/src/enc/cuda_enc.cu
++++ b/src/enc/cuda_enc.cu
+@@ -219,6 +219,7 @@ struct CudaState {
+   size_t host_analysis_result_capacity = 0;
+   size_t host_histogram_count_capacity = 0;
+   bool resident_lossless_pixels_valid = false;
++  bool resident_lossless_pixels_hash_ready = false;
+   uint64_t resident_lossless_generation = 0;
+   const uint32_t* resident_lossless_host_pixels = nullptr;
+   size_t resident_lossless_pixel_count = 0;
+@@ -2398,6 +2399,7 @@ cudaError_t FinishDownloads(cudaStream_t stream) {
+ 
+ void ReleaseStagingBuffers(CudaState* state) {
+   state->resident_lossless_pixels_valid = false;
++  state->resident_lossless_pixels_hash_ready = false;
+   state->resident_lossless_generation = 0;
+   state->resident_yuv_valid = false;
+   state->resident_yuv_generation = 0;
+@@ -2589,6 +2591,7 @@ WebPAcceleratorResult CUDAColorTransformLocked(
+     error = cudaSuccess;
+   } else {
+     state->resident_lossless_pixels_valid = false;
++    state->resident_lossless_pixels_hash_ready = false;
+     state->resident_lossless_generation = 0;
+     error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
+                                pixel_bytes, state->stream);
+@@ -2684,6 +2687,8 @@ WebPAcceleratorResult CUDAColorTransformLocked(
+     state->resident_lossless_xsize = request->width;
+     state->resident_lossless_generation = request->handoff_generation;
+     state->resident_lossless_pixels_valid = request->handoff_generation != 0;
++    state->resident_lossless_pixels_hash_ready =
++        state->resident_lossless_pixels_valid;
+   }
+   if (verbose) {
+     if (timing) {
+@@ -2974,6 +2979,7 @@ WebPAcceleratorResult CUDAPredictorLocked(
+   state->resident_yuv_valid = false;
+   state->resident_yuv_generation = 0;
+   state->resident_lossless_pixels_valid = false;
++  state->resident_lossless_pixels_hash_ready = false;
+   state->resident_lossless_generation = 0;
+   error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
+                              pixel_bytes, state->stream);
+@@ -3133,6 +3139,10 @@ WebPAcceleratorResult CUDAPredictorLocked(
+     state->resident_lossless_xsize = request->width;
+     state->resident_lossless_generation = request->handoff_generation;
+     state->resident_lossless_pixels_valid = request->handoff_generation != 0;
++    // CPU cross-color may still rewrite these residuals before hash-chain
++    // construction. Only a subsequent CUDA color transform can make this
++    // resident copy safe for the hash consumer.
++    state->resident_lossless_pixels_hash_ready = false;
+   }
+ #endif
+   if (verbose) {
+@@ -3241,6 +3251,7 @@ WebPAcceleratorResult CUDAHashChainLocked(
+       EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", true) &&
+       request->handoff_generation != 0 &&
+       state->resident_lossless_pixels_valid &&
++      state->resident_lossless_pixels_hash_ready &&
+       state->resident_lossless_generation == request->handoff_generation &&
+       state->resident_lossless_host_pixels == request->pixels &&
+       state->resident_lossless_pixel_count ==
+@@ -3250,6 +3261,7 @@ WebPAcceleratorResult CUDAHashChainLocked(
+     // Matching consumption is one-shot. Non-matching nested image requests
+     // must not discard an outer image's offer in the same encode generation.
+     state->resident_lossless_pixels_valid = false;
++    state->resident_lossless_pixels_hash_ready = false;
+     state->resident_lossless_generation = 0;
+     device_pixels = state->resident_lossless_pixels;
+     error = cudaSuccess;
+@@ -3992,6 +4004,7 @@ void CUDAEndEncode(void* context) {
+   CudaState* const state = static_cast<CudaState*>(context);
+   LockCudaMutex(&g_cuda_mutex);
+   state->resident_lossless_pixels_valid = false;
++  state->resident_lossless_pixels_hash_ready = false;
+   state->resident_lossless_generation = 0;
+   state->resident_yuv_valid = false;
+   state->resident_yuv_generation = 0;

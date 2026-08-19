@@ -1294,3 +1294,66 @@ The candidate was removed because the PNG result remains below the strict
 1.5 ms/image gate. This is RTX 2080 SUPER-only evidence; load-ahead may be
 composed later with another independently validated exact match-loop change,
 but it is not retained alone and no Ampere+ behavior changed.
+
+## Combined Turing hash matcher rejection
+
+The exact pre-Ampere precheck-removal and four-pixel load-ahead candidates
+were composed. A first ten-pair native-sm_75 gate appeared to clear the rule,
+at +1.932 ms/image PNG and +1.844 JPEG. After the subsequently discovered
+resident-handoff correctness fix was applied, the complete gate was repeated
+on the final binary rather than carrying the preliminary result forward:
+
+| Format | Parent | Combined matcher | Paired gain |
+|---|---:|---:|---:|
+| PNG lossless | 77.838 ms/image | 76.964 ms/image | +1.184 ms/image |
+| JPEG lossless | 128.780 ms/image | 126.256 ms/image | +2.203 ms/image |
+
+All 120 final-gate outputs retained aggregate hash `eec6c490be6aaf6d`
+for PNG or `06227eb38e0ac1e3` for JPEG. The candidate was removed because the
+final PNG result is below the strict 1.5 ms/image threshold. The Turing
+specialization used 30 registers with no stack, shared, or local memory. The
+Ampere+ specialization remained the original 26-register kernel and its full
+296-instruction normalized stream was identical to the parent. No Ampere+
+performance conclusion is made.
+
+## Resident lossless handoff correctness fix
+
+The public encoder suite reproduced a decoded-pixel mismatch on both the
+retained parent and the hash candidate when CUDA predictor and hash were
+enabled but the independently opt-in cross-color stage stayed on CPU.
+Predictor residuals were published as resident before the CPU could apply its
+cross-color transform, so hash could consume stale pre-color device pixels.
+
+The resident state now distinguishes a buffer that may feed CUDA color from a
+buffer that is ready for CUDA hash. Predictor output is not hash-ready; a
+successful CUDA color transform republishes it as hash-ready. If color stays
+on CPU, hash uploads the final host residuals. The public test explicitly
+covers this fallback and the predictor-to-color-to-hash resident path. It also
+sets `WEBP_CUDA_PREWARM=0` for the cold-decline assertion so intentional
+process-start prewarm is not mistaken for a stage dispatch.
+
+On the exact retained build, all seven CTests, the public test on its default
+input and all six canonical PNG cases, the default/baseline/all-disabled CUDA
+variant matrix, and all 180 official validation pairs passed. The variant's
+full-feature arm now explicitly compiles the otherwise default-off histogram
+stage required by its preflight mask. The native-sm_75 official timing rows
+were:
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy — batch | 92.7 ms | 40.5 ms | 2.29x |
+| PNG lossless — batch | 145.0 ms | 78.3 ms | 1.85x |
+| PNG near-lossless — batch | 211.6 ms | 79.5 ms | 2.66x |
+| JPEG lossy — batch | 92.9 ms | 40.5 ms | 2.29x |
+| JPEG lossless — batch | 725.1 ms | 133.5 ms | 5.43x |
+| JPEG near-lossless — batch | 853.6 ms | 133.9 ms | 6.38x |
+| PNG lossy — single | 95.5 ms | 260.3 ms | 0.37x |
+| PNG lossless — single | 155.5 ms | 299.4 ms | 0.52x |
+| PNG near-lossless — single | 221.4 ms | 308.5 ms | 0.72x |
+| JPEG lossy — single | 95.6 ms | 257.7 ms | 0.37x |
+| JPEG lossless — single | 722.5 ms | 348.8 ms | 2.07x |
+| JPEG near-lossless — single | 833.3 ms | 364.6 ms | 2.29x |
+
+These measurements are specific to the Ryzen 9 3900X / RTX 2080 SUPER. Raw
+suite JSONL, results, public-test transcripts, the reproducer, and the exact
+patch are stored with that machine's report.

@@ -26,7 +26,7 @@ fi
 WEBP_ACCELERATOR=none \
   "$encoder" -quiet -lossless -exact -m 4 "$root_dir/examples/test_ref.ppm" \
   -o "$temporary_dir/cold-cpu.webp"
-WEBP_ACCELERATOR=cuda WEBP_CUDA_VERBOSE=1 \
+WEBP_ACCELERATOR=cuda WEBP_CUDA_PREWARM=0 WEBP_CUDA_VERBOSE=1 \
   "$encoder" -quiet -lossless -exact -m 4 "$root_dir/examples/test_ref.ppm" \
   -o "$temporary_dir/cold-default.webp" 2>>"$cold_log"
 cmp "$temporary_dir/cold-cpu.webp" "$temporary_dir/cold-default.webp"
@@ -84,14 +84,16 @@ for input do
 
   WEBP_ACCELERATOR=cuda WEBP_CUDA_MIN_PIXELS=0 \
     WEBP_CUDA_HASH_MIN_PIXELS=0 \
-    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_PREDICTOR=1 \
+    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_COLOR=1 \
+    WEBP_CUDA_PREDICTOR=1 \
     WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 WEBP_CUDA_HISTOGRAM=1 \
     WEBP_CUDA_HISTOGRAM_MIN_COMMANDS=0 WEBP_CUDA_VERBOSE=1 \
     "$encoder" -quiet -lossless -exact -m 4 "$input" \
     -o "$temporary_dir/$name-cuda-1.webp" 2>>"$cuda_log"
   WEBP_ACCELERATOR=cuda WEBP_CUDA_MIN_PIXELS=0 \
     WEBP_CUDA_HASH_MIN_PIXELS=0 \
-    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_PREDICTOR=1 \
+    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_COLOR=1 \
+    WEBP_CUDA_PREDICTOR=1 \
     WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 WEBP_CUDA_HISTOGRAM=1 \
     WEBP_CUDA_HISTOGRAM_MIN_COMMANDS=0 \
     "$encoder" -quiet -lossless -exact -m 4 "$input" \
@@ -104,6 +106,27 @@ for input do
   "$decoder" -quiet "$temporary_dir/$name-cuda-1.webp" -pam \
     -o "$temporary_dir/$name-cuda.pam"
   cmp "$temporary_dir/$name-cpu.pam" "$temporary_dir/$name-cuda.pam"
+
+  # Predictor residuals are not hash-ready because an optional CPU
+  # cross-color transform may rewrite them. With CUDA color disabled, hash
+  # must upload the CPU's final residuals.
+  predictor_hash_log="$temporary_dir/$name-predictor-hash.log"
+  WEBP_ACCELERATOR=cuda WEBP_CUDA_COLOR=0 WEBP_CUDA_PREDICTOR=1 \
+    WEBP_CUDA_PREDICTOR_MIN_PIXELS=0 WEBP_CUDA_HASH=1 \
+    WEBP_CUDA_HASH_MIN_PIXELS=0 WEBP_CUDA_HISTOGRAM=0 \
+    WEBP_CUDA_RESIDENT_LOSSLESS=1 WEBP_CUDA_VERBOSE=1 \
+    "$encoder" -quiet -lossless -exact -m 4 "$input" \
+    -o "$temporary_dir/$name-predictor-hash.webp" \
+    2>"$predictor_hash_log"
+  "$decoder" -quiet "$temporary_dir/$name-predictor-hash.webp" -pam \
+    -o "$temporary_dir/$name-predictor-hash.pam"
+  cmp "$temporary_dir/$name-cpu.pam" \
+    "$temporary_dir/$name-predictor-hash.pam"
+  if grep -q "WebP-CUDA: hash candidates.*resident pixels" \
+      "$predictor_hash_log"; then
+    echo "CUDA hash consumed predictor residuals before CPU color" >&2
+    exit 1
+  fi
 
   WEBP_ACCELERATOR=cuda WEBP_CUDA=0 \
     "$encoder" -quiet -lossless -exact -m 4 "$input" \

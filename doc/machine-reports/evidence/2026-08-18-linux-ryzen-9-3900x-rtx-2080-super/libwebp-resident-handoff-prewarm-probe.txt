@@ -1,0 +1,1 @@
+WebP-CUDA: using NVIDIA GeForce RTX 2080 SUPER (device 0)

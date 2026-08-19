@@ -219,6 +219,7 @@ struct CudaState {
   size_t host_analysis_result_capacity = 0;
   size_t host_histogram_count_capacity = 0;
   bool resident_lossless_pixels_valid = false;
+  bool resident_lossless_pixels_hash_ready = false;
   uint64_t resident_lossless_generation = 0;
   const uint32_t* resident_lossless_host_pixels = nullptr;
   size_t resident_lossless_pixel_count = 0;
@@ -2398,6 +2399,7 @@ cudaError_t FinishDownloads(cudaStream_t stream) {
 
 void ReleaseStagingBuffers(CudaState* state) {
   state->resident_lossless_pixels_valid = false;
+  state->resident_lossless_pixels_hash_ready = false;
   state->resident_lossless_generation = 0;
   state->resident_yuv_valid = false;
   state->resident_yuv_generation = 0;
@@ -2589,6 +2591,7 @@ WebPAcceleratorResult CUDAColorTransformLocked(
     error = cudaSuccess;
   } else {
     state->resident_lossless_pixels_valid = false;
+    state->resident_lossless_pixels_hash_ready = false;
     state->resident_lossless_generation = 0;
     error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
                                pixel_bytes, state->stream);
@@ -2684,6 +2687,8 @@ WebPAcceleratorResult CUDAColorTransformLocked(
     state->resident_lossless_xsize = request->width;
     state->resident_lossless_generation = request->handoff_generation;
     state->resident_lossless_pixels_valid = request->handoff_generation != 0;
+    state->resident_lossless_pixels_hash_ready =
+        state->resident_lossless_pixels_valid;
   }
   if (verbose) {
     if (timing) {
@@ -2974,6 +2979,7 @@ WebPAcceleratorResult CUDAPredictorLocked(
   state->resident_yuv_valid = false;
   state->resident_yuv_generation = 0;
   state->resident_lossless_pixels_valid = false;
+  state->resident_lossless_pixels_hash_ready = false;
   state->resident_lossless_generation = 0;
   error = EnsureDeviceBuffer(&state->pixels, &state->pixel_capacity,
                              pixel_bytes, state->stream);
@@ -3133,6 +3139,10 @@ WebPAcceleratorResult CUDAPredictorLocked(
     state->resident_lossless_xsize = request->width;
     state->resident_lossless_generation = request->handoff_generation;
     state->resident_lossless_pixels_valid = request->handoff_generation != 0;
+    // CPU cross-color may still rewrite these residuals before hash-chain
+    // construction. Only a subsequent CUDA color transform can make this
+    // resident copy safe for the hash consumer.
+    state->resident_lossless_pixels_hash_ready = false;
   }
 #endif
   if (verbose) {
@@ -3241,6 +3251,7 @@ WebPAcceleratorResult CUDAHashChainLocked(
       EnvironmentFlag("WEBP_CUDA_RESIDENT_LOSSLESS", true) &&
       request->handoff_generation != 0 &&
       state->resident_lossless_pixels_valid &&
+      state->resident_lossless_pixels_hash_ready &&
       state->resident_lossless_generation == request->handoff_generation &&
       state->resident_lossless_host_pixels == request->pixels &&
       state->resident_lossless_pixel_count ==
@@ -3250,6 +3261,7 @@ WebPAcceleratorResult CUDAHashChainLocked(
     // Matching consumption is one-shot. Non-matching nested image requests
     // must not discard an outer image's offer in the same encode generation.
     state->resident_lossless_pixels_valid = false;
+    state->resident_lossless_pixels_hash_ready = false;
     state->resident_lossless_generation = 0;
     device_pixels = state->resident_lossless_pixels;
     error = cudaSuccess;
@@ -3992,6 +4004,7 @@ void CUDAEndEncode(void* context) {
   CudaState* const state = static_cast<CudaState*>(context);
   LockCudaMutex(&g_cuda_mutex);
   state->resident_lossless_pixels_valid = false;
+  state->resident_lossless_pixels_hash_ready = false;
   state->resident_lossless_generation = 0;
   state->resident_yuv_valid = false;
   state->resident_yuv_generation = 0;

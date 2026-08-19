@@ -62,7 +62,7 @@ build_and_test() {
   fi
 }
 
-build_and_test defaults
+build_and_test defaults -DWEBP_CUDA_ENABLE_HISTOGRAM=ON
 build_and_test baseline \
   -DWEBP_CUDA_ENABLE_COLOR_SHARED_TILE=OFF \
   -DWEBP_CUDA_ENABLE_NEAR_LOSSLESS=OFF \
