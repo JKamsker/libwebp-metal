@@ -611,3 +611,20 @@ The bit-writer and trellis tests passed and all 60 order-balanced outputs
 matched. Both gains are far below the 1.5 ms/image threshold, so the candidate
 was removed. Raw evidence is
 `/tmp/libwebp-tokenprob-branchless-ab.shxSHc.jsonl`.
+
+## Split singleton I4 diagonals
+
+Four of the ten retained I4 dependency diagonals contain one sub-block and
+normally leave the second 128-thread team idle. A candidate split those
+blocks' ten prediction modes 5/5 across both teams, retained global mode
+comparison order, and used the existing per-team scratch. The necessary
+cross-team publication outweighed the parallel work:
+
+| Format | Parent | Split singleton | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.219 ms/image | 40.537 ms/image | +0.318 ms |
+| JPEG lossy | 40.263 ms/image | 40.525 ms/image | +0.262 ms |
+
+The full CUDA trellis parity test passed and all 60 order-balanced outputs
+matched. The candidate was removed; raw evidence is
+`/tmp/libwebp-i4-singleton-split-ab.CKXjFR.jsonl`.
