@@ -1,0 +1,64 @@
+phase: 2
+executor: Luna/max
+status: REFUSED_BEFORE_FROZEN_COMMAND
+audit_mode: local untimed read-only
+branch: codex/backref-cost-attribution-v9
+worktree_clean_before_audit: true
+
+base_commit: 2940104e909e41f973aea7f4cc525792ac088ccb
+base_tree: 59f6484f1c1d731bbda7855e5faca45b03059e41
+phase1a_commit: d88197ad053965628b158421fca3968299a3d94a
+phase1a_parent: 2940104e909e41f973aea7f4cc525792ac088ccb
+phase1a_tree: b144753c05544c69b84d0cd35485805f6c5f51a0
+phase1b_commit: 117da2578e5af3daa1328ba52a6847ba30a288ae
+phase1b_parent: d88197ad053965628b158421fca3968299a3d94a
+phase1b_tree: 987c63ffd16bd32a1449f1fd8798f110633277dc
+phase1b_parent_count: 1
+phase1b_diff: five additions only under the predeclared Phase-1B evidence/envelope paths
+frozen_artifact_mismatches: 0
+
+manifest_sha256: a0b50086949cbd49e83d1f2a4a0877ce451ee1d1a2b5db7c767b30ffbc988ad2
+phase1b_authorization_sha256: 8290002b1ce3bd5293c6e7abac9fefa3e3c5a399ab6d8ccf1a41ba83a5c576c7
+phase1b_rehearsal_hash_index_sha256: 0f2de810ca0c3ac15ee0171154ea7fca0ccc380f25b33e0b8488381492f587c8
+raw_rehearsal_invocation_sha256: e5e4a79951ac8cb4266d4e2dcb42789164ad7680f656af503615450e1bf47b34
+raw_framed_stdout_bytes: 1879
+raw_framed_stdout_sha256: 79c114f954a2cd3cf478bf372590b33188f2de3590e5dc050249f8b581c7f0f3
+raw_transport_stderr_bytes: 0
+raw_transport_stderr_sha256: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+
+phase1b_authorization_status: REFUSED
+timed_execution_authorized: false
+phase_2_authority: NONE
+first_failed_gate: phase1b-authorization.timed_execution_authorized
+phase1b_source_admission_reached: false
+phase1b_remote_operator_invoked: false
+phase1b_synchronous_invocation_count: 1
+phase1b_retry_count: 0
+phase1b_rerun_count: 0
+phase1b_encoder_workloads: 0
+phase1b_profiler_workloads: 0
+phase1b_benchmark_lease_acquisition_attempted: none (JSON null)
+phase1b_archive_calibration: incomplete
+phase1b_integrated_cleanup_footer: complete in the same session; exact V9 child removed; absence proved
+phase1b_post_run_remote_cleanup_operations: 0
+
+frozen_phase_2_command_not_invoked:
+env WEBP_BENCHMARK_SESSION=exclusive EXPECTED_FREEZE_COMMIT="$(git rev-parse HEAD)" python3 scripts/execute_backref_cost_attribution_v9.py run "$PWD/evidence/backref-cost-attribution-v9-execution-20260819"
+
+phase2_command_invoked: false
+phase2_remote_session_started: false
+phase2_lease_acquisition_attempted: none (not applicable; command not invoked)
+phase2_process_discovery_performed: false
+phase2_discovered_pid_signals: 0
+phase2_encoder_workloads: 0
+phase2_profiler_workloads: 0
+phase2_raw_runner_rows: 0
+phase2_raw_stage_rows: 0
+phase2_timing_rows: 0
+phase2_performance_samples: 0
+phase2_statistics: N/A; unassessed because no Phase-2 data exists
+phase2_remote_cleanup: N/A; no Phase-2 remote child was created by this audit
+phase3_evaluation: not performed
+
+refusal_reason: the sole rehearsal failed before source admission because V9 still rejects a slash-bearing comm token even though /bin/ps comm is an opaque process-table executable-name identity
+consequence: no Phase-2 authority exists; the exact command remains forbidden; zero counts are execution counts, not timing results, and all performance/statistical values remain N/A

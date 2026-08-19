@@ -1,0 +1,64 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v9-authorization-v1",
+  "authorization_status": "REFUSED",
+  "base_commit": "2940104e909e41f973aea7f4cc525792ac088ccb",
+  "source_commit": "d88197ad053965628b158421fca3968299a3d94a",
+  "source_tree": "b144753c05544c69b84d0cd35485805f6c5f51a0",
+  "phase_1b_parent_rule": "the commit containing this envelope has exactly one parent equal to source_commit",
+  "phase_1b_identity_rule": "HEAD must equal the dynamically supplied EXPECTED_FREEZE_COMMIT; this envelope never embeds its own Phase-1B commit hash",
+  "manifest_sha256": "a0b50086949cbd49e83d1f2a4a0877ce451ee1d1a2b5db7c767b30ffbc988ad2",
+  "protocol_sha256": "2848ff0a7b9dbe00fdad298275792be84a9ae200d1fcf8e22a9672d2074c1fd4",
+  "schema_catalog_sha256": "51868efc35c53797232b25afb3890dbcc2103e6d3ca9690dccf68b0e6804dc31",
+  "transport_source_sha256": "5d9fd085400c4b50b1bb447d96565c802eb5c6c2f1606b84eb9f11382d50657b",
+  "rehearsal_hash_index_sha256": "0f2de810ca0c3ac15ee0171154ea7fca0ccc380f25b33e0b8488381492f587c8",
+  "raw_rehearsal_evidence_hashes": {
+    "rehearsal-invocation.json": "e5e4a79951ac8cb4266d4e2dcb42789164ad7680f656af503615450e1bf47b34",
+    "return-protocol/framed-stdout.bin": "79c114f954a2cd3cf478bf372590b33188f2de3590e5dc050249f8b581c7f0f3",
+    "return-protocol/transport-stderr.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "rehearsal_receipt_hashes": {
+    "rehearsal-invocation.json": "e5e4a79951ac8cb4266d4e2dcb42789164ad7680f656af503615450e1bf47b34",
+    "return-protocol/framed-stdout.bin": "79c114f954a2cd3cf478bf372590b33188f2de3590e5dc050249f8b581c7f0f3"
+  },
+  "missing_required_success_receipts": [
+    "rehearsal.json",
+    "transfer-cleanup.json",
+    "return-protocol/source-admission.json",
+    "return-protocol/operator-status.json",
+    "return-protocol/bulk-declaration.json",
+    "return-protocol/integrity-footer.json",
+    "return-protocol/cleanup-footer.json"
+  ],
+  "observed_process_isolation": {
+    "snapshot_fields": ["pid", "ppid", "comm"],
+    "argument_text_collected": false,
+    "status": "FAIL_CLOSED_OVERRESTRICTIVE_COMM_VALIDATION",
+    "reason": "comm is not an opaque executable-name token",
+    "source_admission_reached": false,
+    "discovered_pid_signals": 0
+  },
+  "observed_transport_calibration": {
+    "status": "REFUSED_BEFORE_SOURCE_ADMISSION",
+    "representative_payload_bytes": 5242880,
+    "representative_payload_sha256": "070e40f477074a4986b33ddbac48c3b244f29bc3ff2694aa095e9737da90fedc",
+    "maximum_expected_run_archive_bytes": 4194304,
+    "finite_margin_ratio": 0,
+    "archive_bytes": 0,
+    "archive_sha256": null,
+    "chunk_count": 0,
+    "chunk_bytes": 524288,
+    "transaction_elapsed_ns": 9976613167,
+    "throughput_bytes_per_second": 0,
+    "reason": "the overrestrictive comm parser refused before source admission and archive construction; representative archive capacity was not calibrated"
+  },
+  "single_noninteractive_remote_session_count": 1,
+  "post_run_remote_cleanup_operations": 0,
+  "cleanup_footer_verified": true,
+  "remote_cleanup_absence_proved": true,
+  "benchmark_lease_acquisition_attempted": null,
+  "encoder_workloads": 0,
+  "profiler_workloads": 0,
+  "timed_execution_authorized": false,
+  "phase_2_authority": "NONE",
+  "blocker": "the sole no-retry rehearsal failed closed before source admission because V9 rejected a slash-bearing comm token instead of treating it as an exact opaque non-path identity; cleanup succeeded, but the required PASS rehearsal and archive calibration do not exist, so Phase 2 is forbidden"
+}

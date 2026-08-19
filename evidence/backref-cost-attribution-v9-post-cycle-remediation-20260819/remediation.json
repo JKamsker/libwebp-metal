@@ -1,0 +1,68 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v9-post-cycle-remediation-v1",
+  "status": "FIXTURE_CORRECTED_FROZEN_V9_UNCHANGED",
+  "date": "2026-08-19",
+  "branch": "codex/backref-cost-attribution-v9",
+  "pull_request": 31,
+  "remediation_parent": "99836b465330612aaaf6d0b40195257cb6ef894b",
+  "base_commit": "2940104e909e41f973aea7f4cc525792ac088ccb",
+  "trigger": {
+    "ci_job": "Research experiment guards",
+    "mismatch": "The frozen v9 implementation rejected the local ownership fixture's nominal resolved path as noncanonical, while the fixture incorrectly expected classification success.",
+    "exact_refusal": "FrameRefusal: resolved executable path is not absolute/canonical/provenanced"
+  },
+  "remediation": {
+    "fixture_only": true,
+    "v9_implementation_changed": false,
+    "expected_behavior": "The ownership fixture deterministically asserts v9's frozen fail-closed path rejection.",
+    "v1_through_v8_guards_weakened": false,
+    "default_off_or_isolation_guards_weakened": false,
+    "discovered_pid_signal_exclusion_weakened": false
+  },
+  "authorization": {
+    "timed_execution_authorized": false,
+    "phase_2_authority": "NONE",
+    "v9_execution_authority_after_remediation": false
+  },
+  "frozen_artifact_hashes": {
+    "status": "INTENTIONALLY_SUPERSEDED_INVALIDATED",
+    "reason": "The post-cycle fixture correction changes a manifest-frozen test artifact without re-freezing the v9 protocol or authorization envelope.",
+    "changed_frozen_path": "scripts/test_backref_cost_attribution_v9_process_ownership.py",
+    "frozen_sha256": "5ba46470a79485eb6fbc274a7ea99ec8833ed8109cb6b394d88798a8e0bd2a52",
+    "post_cycle_sha256": "4c81a14fa8b62102d3258cf46c8282615412323f0601d047b3e2de8c95dd57e9",
+    "new_v9_freeze_created": false
+  },
+  "preserved_evidence": {
+    "byte_for_byte": true,
+    "roots": [
+      "evidence/backref-cost-attribution-v9-design",
+      "evidence/backref-cost-attribution-v9-execution-20260819",
+      "evidence/backref-cost-attribution-v9-evaluation-20260819"
+    ],
+    "phase_1_files": 6,
+    "phase_2_files": 2,
+    "phase_3_files": 4
+  },
+  "safety": {
+    "remote_contact": false,
+    "lease_acquisition_attempted": false,
+    "process_inspection": false,
+    "process_signals": 0,
+    "cleanup_operations": 0,
+    "encoder_workloads": 0,
+    "profiler_workloads": 0,
+    "benchmark_workloads": 0,
+    "sanitizer_workloads": 0,
+    "timed_workloads": 0,
+    "host_runner_service_power_auth_or_toolchain_changes": false
+  },
+  "conclusion": {
+    "interval_family": "UNASSESSED",
+    "production_consequence": "NONE"
+  },
+  "future_v10": {
+    "semantic_correction_deferred": true,
+    "fresh_gates_required": true,
+    "v9_authority_reusable": false
+  }
+}
