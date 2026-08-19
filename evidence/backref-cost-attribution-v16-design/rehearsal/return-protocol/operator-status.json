@@ -1,0 +1,12 @@
+{
+  "benchmark_lease_acquisition_attempted": false,
+  "mode": "rehearse",
+  "operator_exit_code": 0,
+  "operator_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "operator_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "production_promotion_authorized": false,
+  "schema": "libwebp-backref-cost-attribution-v16-operator-status-v1",
+  "source_commit": "6f0cbbaf8a3ee527526edbd29779bd9f8c7d941c",
+  "source_tree": "633eaa7df1090e9f8f6f2a82df492372a1114a4d",
+  "status": "complete"
+}

@@ -1,0 +1,41 @@
+{
+  "build_stderr_bytes": 131,
+  "build_stderr_sha256": "a582ecbb6ba870c18fd19482264231b6663d310a99cb94e745c93a3be3c58fcd",
+  "build_stdout_bytes": 62670,
+  "build_stdout_sha256": "eb833a6d1040064b1e85ad0ba357eed72bd216e006316157d63a8f9446157c38",
+  "cflags": "-O3 -g -DNDEBUG -fno-omit-frame-pointer",
+  "command": [
+    "/usr/bin/make",
+    "-f",
+    "makefile.unix",
+    "WEBP_ENABLE_METAL=0",
+    "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT=1",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V16_DETERMINISTIC_BUILD=1",
+    "CFLAGS=-O3 -g -DNDEBUG -fno-omit-frame-pointer",
+    "tools/backref_cost_attribution_v16_experiment_runner"
+  ],
+  "nm_output_bytes": 70897,
+  "nm_output_sha256": "37e3a578c405fb8f59ed475a1031a6dd5582bc0bc095ac4cb0a87d12ac99701b",
+  "required_symbols": [
+    "WebPEncode",
+    "VP8LEncodeStream",
+    "VP8LHashChainFill",
+    "VP8LGetBackwardReferences",
+    "VP8LBackwardReferencesTraceBackwards",
+    "BackwardReferencesHashChainDistanceOnly",
+    "BackwardReferencesHashChainDistanceOnlySpecialized",
+    "PushInterval",
+    "PushIntervalSpecialized",
+    "InsertInterval",
+    "CostManagerInit",
+    "CostModelBuild",
+    "TraceBackwards",
+    "BackwardReferencesHashChainFollowChosenPath",
+    "EncodeImageInternal",
+    "GetHuffBitLengthsAndCodes",
+    "StoreImageToBitMask"
+  ],
+  "runner": "/var/folders/rd/1mq9b7ss625_gzsqfpm3lqsh0000gn/T/backref-attribution-v16-tarqziri/source-build/tools/backref_cost_attribution_v16_experiment_runner",
+  "runner_sha256": "cb2baea7cbba4146d14da0f18142dc6f728efb280cb3bdf1d767398d3f38da9d",
+  "same_binary_for_both_variants": true
+}
