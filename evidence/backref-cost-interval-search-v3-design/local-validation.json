@@ -1,0 +1,32 @@
+{
+  "base_commit": "c472599ce8d3aee1e4f5bcf70b56b9c354351660",
+  "benchmark_lease_acquisition_attempted": false,
+  "candidate_identity": "PASS",
+  "codegen_normalized_v2_v3_identity": true,
+  "commands": [
+    "python3 scripts/test_backref_cost_interval_search_v3_experiment.py",
+    "python3 scripts/test_backref_cost_interval_search_v3_admission.py",
+    "python3 scripts/test_backref_cost_interval_search_v3_archive.py",
+    "python3 scripts/test_experiment_guards.py",
+    "python3 scripts/collect_backref_cost_interval_search_v3_work.py --runner <untimed-recorder-runner> --corpus <verified-publication-corpus> --output evidence/backref-cost-interval-search-v3-design-work"
+  ],
+  "correctness_cells": 26,
+  "cost_manager_size_bytes": 33224,
+  "decoded_pixels_exact": true,
+  "default_omission": true,
+  "determinism": true,
+  "fuzzed_boundaries": 16,
+  "gate_isolation": true,
+  "immutable_inputs": true,
+  "mode_environment_truth_table": "PASS",
+  "normalized_v2_v3_identity": true,
+  "public_api_abi": "PASS",
+  "receipt_contract_fixtures": 8,
+  "sanitizer_configurations": ["undefined,integer", "array-bounds,pointer-overflow"],
+  "schema": "libwebp-backref-cost-interval-search-v3-local-validation-v1",
+  "status": "PASS",
+  "timed_binary_invoked": false,
+  "timing_fields_recorded": false,
+  "transactional_fallback": true,
+  "work_evidence": "evidence/backref-cost-interval-search-v3-design-work/summary.json"
+}

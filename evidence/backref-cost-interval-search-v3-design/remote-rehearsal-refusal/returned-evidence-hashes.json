@@ -1,0 +1,63 @@
+{
+  "artifacts": [
+    {
+      "bytes": 549,
+      "path": "artifact-hashes.json",
+      "sha256": "6f21dfdbf7daa2dafa47657e3a5f5771fb55ebb322affef12c2ce5604e23e612"
+    },
+    {
+      "bytes": 159,
+      "path": "lease-record.json",
+      "sha256": "a9c493a0faf499b8e37b5fa34ea01098a10bb7732844b9ba1f69c466406c551e"
+    },
+    {
+      "bytes": 161,
+      "path": "operator-status.json",
+      "sha256": "2e0978101d1d69b4758697b3b26a4476fe8707b93997fb8d22cc5c7dca1da5d9"
+    },
+    {
+      "bytes": 297,
+      "path": "refusal.json",
+      "sha256": "c713eda7dcce57aee25c7b33b9d8b650e0f4da0e74f4bcbc15dda2b76575d4e3"
+    },
+    {
+      "bytes": 2241,
+      "path": "return-protocol/archive-return.json",
+      "sha256": "49b90cb41a75058d0b833e27ac959441e582c0e4e13cf241495f82c73c4c80d7"
+    },
+    {
+      "bytes": 447,
+      "path": "return-protocol/cleanup-receipt.json",
+      "sha256": "5844753d9248085dad312c1ababb672859a5c7625c99e6b13f3a3e565ce8d422"
+    },
+    {
+      "bytes": 669,
+      "path": "return-protocol/extraction.json",
+      "sha256": "adfa878bc3e7f133a6b210376eddb03bd43d7cfd390411999e7b8ff1f502a84f"
+    },
+    {
+      "bytes": 159,
+      "path": "return-protocol/lease-record.json",
+      "sha256": "a9c493a0faf499b8e37b5fa34ea01098a10bb7732844b9ba1f69c466406c551e"
+    },
+    {
+      "bytes": 280,
+      "path": "return-protocol/lease-transfer.json",
+      "sha256": "1ed3664fc3c62807f0e1ead8c17c20631a220d19835b5bac2b626da2c068a2df"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/pipeline.stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/pipeline.stdout",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "excluded_after_index": [
+    "transfer-cleanup.json"
+  ],
+  "schema": "libwebp-backref-cost-interval-search-v3-returned-evidence-hashes-v1"
+}

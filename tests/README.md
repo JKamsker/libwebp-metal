@@ -82,6 +82,13 @@ boundaries. Its recorder is untimed and absent from both timed binaries; the
 v2 protocol/admission/archive tests retain indexed safe return, independent
 lease/cleanup, exact-child absence, and admitted noninteractive Unix make.
 
+`scripts/test_backref_cost_interval_search_v3_experiment.py` verifies the
+same normalized PushInterval-local candidate under fresh v3 gates, including
+unchanged `CostManager` layout, equal-start behavior, transactional fallback,
+sanitizers, fuzzed boundaries, default omission, gate isolation, and the
+v3-only recorder/recorder-free timing split. Its protocol tests additionally
+enforce the repaired admission-receipt fields and disjoint mode/session table.
+
 ## Building
 
 ### Fuzzers

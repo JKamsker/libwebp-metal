@@ -1,0 +1,14 @@
+{
+  "command_processes": 272,
+  "elapsed_seconds": 528.054930709,
+  "lease_released": true,
+  "maximum_child_rss_bytes": 269516800,
+  "measured_samples": 1040,
+  "output_bytes_before_index": 1136937,
+  "parallel_timed_processes": 1,
+  "post_timing_available_disk_bytes": 18905694208,
+  "pre_timing_available_disk_bytes": 18908307456,
+  "preflight_available_disk_bytes": 19120066560,
+  "schema": "libwebp-backref-cost-interval-search-v3-resources-v1",
+  "source_commit": "a3ebde3d12f1be7f5bb3dc8dd7969383595cf68e"
+}

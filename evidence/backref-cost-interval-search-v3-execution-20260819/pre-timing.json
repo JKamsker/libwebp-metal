@@ -1,0 +1,68 @@
+{
+  "ac_power_effective": true,
+  "available_disk_bytes": 18908307456,
+  "available_memory_bytes": 11431673856,
+  "captured_at_utc": "2026-08-18T23:52:35Z",
+  "compiler_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+  "compiler_version_lines": [
+    "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+    "Target: arm64-apple-darwin25.2.0",
+    "Thread model: posix",
+    "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+  ],
+  "cpu_brand": "Apple M4",
+  "disk_record": "Filesystem   1024-blocks      Used Available Capacity  Mounted on\n/dev/disk3s5   482797652 425881628  18465144    96%    /System/Volumes/Data",
+  "disk_record_path": "/Users/pandocs-agent-001",
+  "effective_cc_environment": null,
+  "effective_developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+  "effective_developer_dir_environment": null,
+  "effective_sdkroot_environment": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+  "hardware_model": "Mac16,10",
+  "low_power_mode_pmset_off": true,
+  "low_power_mode_profiler_off": true,
+  "noninteractive_path": "/usr/bin:/bin:/usr/sbin:/sbin",
+  "physical_memory_bytes": 25769803776,
+  "pmset_batt": "Now drawing from 'AC Power'",
+  "pmset_custom": "AC Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              0\n ttyskeepawake        1\n powernap             1\n displaysleep         0\n womp                 1\n networkoversleep     0\n sleep                0\n tcpkeepalive         1\n autorestart          1\n disksleep            0",
+  "pmset_thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded",
+  "process_isolation": {
+    "benchmark_or_cuda_matches": [],
+    "captured_at_utc": "2026-08-18T23:52:35Z",
+    "github_runner_listener_present": true,
+    "process_table_sha256": "4cfd79fb7af7847c8117c5edb128bf679b2a1a0095e05bf1359bc366d3326d10",
+    "runner_worker_matches": [],
+    "stage": "pre-timing"
+  },
+  "schema": "libwebp-backref-cost-interval-search-v3-preflight-v1",
+  "sdk_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+  "sdk_version": "26.2",
+  "stage": "pre-timing",
+  "sw_vers": "ProductName:\t\tmacOS\nProductVersion:\t\t26.2\nBuildVersion:\t\t25C56",
+  "system_profiler_power": {
+    "SPPowerDataType": [
+      {
+        "AC Power": {
+          "Automatic Restart On Power Loss": "Yes",
+          "Current Power Source": "TRUE",
+          "Disk Sleep Timer": 0,
+          "Display Sleep Timer": 0,
+          "LowPowerMode": "No",
+          "PrioritizeNetworkReachabilityOverSleep": "No",
+          "Sleep On Power Button": "Yes",
+          "System Sleep Timer": 0,
+          "Wake On LAN": "Yes"
+        },
+        "_name": "sppower_information"
+      },
+      {
+        "_name": "sppower_hwconfig_information",
+        "sppower_ups_installed": "FALSE"
+      },
+      {
+        "_name": "sppower_ac_charger_information",
+        "sppower_ac_charger_family": "0x0000"
+      }
+    ]
+  },
+  "uname": "Darwin pandocs-agent-001s-Mac-mini.local 25.2.0 Darwin Kernel Version 25.2.0: Tue Nov 18 21:08:48 PST 2025; root:xnu-12377.61.12~1/RELEASE_ARM64_T8132 arm64"
+}

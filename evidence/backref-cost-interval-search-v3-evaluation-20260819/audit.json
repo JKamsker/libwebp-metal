@@ -1,0 +1,153 @@
+{
+  "ancestry": {
+    "base_commit": "c472599ce8d3aee1e4f5bcf70b56b9c354351660",
+    "base_tree": "bdc5031514b6695ed4cf472fcf37407ad5af6c76",
+    "exact_commits_above_base_before_phase_3": 2,
+    "phase_1_commit": "a3ebde3d12f1be7f5bb3dc8dd7969383595cf68e",
+    "phase_1_tree": "5911207050ff446281c4941c94c69a225e8c32a1",
+    "phase_2_commit": "b781fa2ac1a288801ddc5a93bafe51c209e66d5b",
+    "phase_2_only_added_raw_execution_evidence": true,
+    "phase_2_tree": "63c75ce917d73d12d5760c27e5c2f8b9ebd406cf"
+  },
+  "consequence": {
+    "candidate_or_protocol_changed": false,
+    "evidence_retained": true,
+    "experiment_remains_default_off": true,
+    "production_enabled": false,
+    "reason": "all semantic, work, and operational gates pass, so removal is unsupported; all four photo holdouts fail the frozen median ceiling, so production promotion is forbidden"
+  },
+  "contracts": {
+    "admission_bundle_sha256": "e8fde6753675533903a2675d9b780bfcabcd88a973190fef0ff8f3da595f7eb0",
+    "admission_hash_fields_equal": true,
+    "mode_session_truth_table": "PASS",
+    "receipt_failure_fixtures": "PASS: missing, renamed, wrong top type, wrong nested type, unequal, wrong local hash, and unexpected version fail closed",
+    "receipt_schema": "libwebp-backref-cost-interval-search-v3-source-admission-receipt-v1",
+    "receipt_version": 1,
+    "run_accepts_only_exact_exclusive": true,
+    "source_bundle_sha256": "e8fde6753675533903a2675d9b780bfcabcd88a973190fef0ff8f3da595f7eb0",
+    "untimed_modes_accept_only_unset_session": true
+  },
+  "decision": "REJECT_AND_RETAIN_DEFAULT_OFF",
+  "frozen_hashes": {
+    "artifact_index_sha256": "b1131441ff1d1b6f880e3d35bebf2b8195fe67534b4f0707dfe379fab8691c6f",
+    "commands_jsonl_sha256": "d8a388c21c7bfd739ad7ec10bd187e1221ac786bc5d16f5e54f882e47e874dac",
+    "freeze_receipt_sha256": "b526c4c58718faecd194f5345368744d9e0966b92c2272d896b766bf81b639ae",
+    "manifest_sha256": "ba1d460ffd1a9b301472fa1886b0da00b2ed79b0de62352394284982933d5bc2",
+    "records_jsonl_sha256": "869c25b99733f02432eab647c1c4bcdf8dd65de959b7266d2e0b71d31e17279a",
+    "returned_index_sha256": "6fc3d7ed794ae8114588193b937d0706556d0eda014116bf2018c9f731595d46",
+    "schema_catalog_sha256": "48a7b79dbeaf2f642cd41f8f7606359ba045e7b7a61c111fc282709e2b4bb9d0",
+    "transfer_cleanup_sha256": "7bc2768423a84f70953142041071e1a84751776bf402394af011e102c41d80ca",
+    "work_metrics_jsonl_sha256": "63ae29c35a0c3a470172a6d1b1d823b6eb867e6f18f3b52bc7a9d6879536eca8"
+  },
+  "frozen_protocol": {
+    "command": "env WEBP_BENCHMARK_SESSION=exclusive WEBP_EXPECTED_BACKREF_COST_INTERVAL_SEARCH_V3_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_interval_search_v3.py run /Users/jonaskamsker/.codex/worktrees/f379/libwebp-metal/evidence/backref-cost-interval-search-v3-execution-20260819",
+    "command_processes": 272,
+    "corpus_order": [
+      "photo-medium tune",
+      "graphic-medium tune",
+      "photo-large holdout",
+      "graphic-large holdout"
+    ],
+    "lifecycle_order": [
+      "cold",
+      "warm"
+    ],
+    "methods": [
+      4,
+      6
+    ],
+    "mode": "run",
+    "p95_ratio_maximum": 1.005,
+    "paired_median_ratio_maximum": 0.995,
+    "retained_samples": 1040,
+    "warmups_excluded": 192
+  },
+  "gate_checklist": {
+    "ancestry_and_phase_ownership": "PASS",
+    "api_abi_and_public_headers": "PASS",
+    "archive_index_transfer_extraction_cleanup": "PASS",
+    "candidate_v2_v3_identity_and_semantic_boundary": "PASS",
+    "correctness_determinism_inputs_fallback_sanitizers_boundaries": "PASS",
+    "default_omission_gate_isolation_recorder_absence": "PASS",
+    "device_power_process_resource_thermal": "PASS",
+    "exclusive_lease_acquire_and_release": "PASS",
+    "frozen_artifacts_schemas_corpus_order_counts": "PASS",
+    "graphic_holdout_performance": "PASS: 4/4 cells",
+    "mode_and_receipt_contracts": "PASS",
+    "photo_holdout_performance": "FAIL: 0/4 cells",
+    "production_promotion": "FAIL",
+    "raw_command_and_sample_records": "PASS",
+    "source_and_toolchain_admission": "PASS",
+    "work_reduction_and_counter_consistency": "PASS"
+  },
+  "identity": {
+    "cost_manager_bytes_baseline": 33224,
+    "cost_manager_bytes_v2": 33224,
+    "cost_manager_bytes_v3": 33224,
+    "equal_start_uses_baseline_path": true,
+    "local_lifetime_only": true,
+    "normalized_assembly_bytes_v2": 67593,
+    "normalized_assembly_bytes_v3": 67593,
+    "normalized_assembly_sha256_v2": "7c75943dd1e7287d69f7b77b596ccf7f034c11baeee4253e7dc762ea13953215",
+    "normalized_assembly_sha256_v3": "7c75943dd1e7287d69f7b77b596ccf7f034c11baeee4253e7dc762ea13953215",
+    "normalized_candidate_sha256": "c45f3bc4337f7986fadff6caff53213252d5a914025bb17cf746f0b06e9eae2a",
+    "persistent_tail_bookkeeping": false,
+    "v2_v3_normalized_assembly_identical": true,
+    "v2_v3_normalized_source_identical": true
+  },
+  "operational": {
+    "ac_power_all_snapshots": true,
+    "archive_member_count": 23,
+    "archive_sha256": "4fcd9aa2027ec78368d30b364c7c2285def228eb9f59f40518f301b6a0586dc4",
+    "available_disk_minimum_satisfied_all_snapshots": true,
+    "available_memory_minimum_satisfied_all_snapshots": true,
+    "benchmark_or_cuda_matches_all_snapshots": 0,
+    "cmake_used_remotely": false,
+    "evidence_archive_hashes_match": true,
+    "evidence_extraction_status": "accepted",
+    "exact_child_absence_proved": true,
+    "exclusive_lease_acquired": true,
+    "exclusive_lease_released": true,
+    "host_or_global_path_changed": false,
+    "low_power_mode_off_all_snapshots": true,
+    "maximum_child_rss_bytes": 269516800,
+    "maximum_child_rss_limit_bytes": 4294967296,
+    "output_bytes_before_index": 1136937,
+    "parallel_timed_processes": 1,
+    "remote_elapsed_seconds": 528.054930709,
+    "remote_total_limit_seconds": 3000,
+    "returned_index_entries": 30,
+    "runner_worker_matches_all_snapshots": 0,
+    "thermal_or_performance_warnings_all_snapshots": 0,
+    "toolchain_status": "admitted"
+  },
+  "raw_recomputation": "evidence/backref-cost-interval-search-v3-evaluation-20260819/raw-stat-recomputation.json",
+  "schema": "libwebp-backref-cost-interval-search-v3-phase-3-independent-audit-v1",
+  "status": "COMPLETE",
+  "validation": [
+    {
+      "command": "python3 scripts/test_backref_cost_interval_search_v3_experiment.py",
+      "outcome": "PASS: source/layout identity, default/candidate builds, omission, API/ABI, 26 correctness cells, deterministic fallback, sanitizers, and 16 fuzzed boundaries"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_interval_search_v3_admission.py",
+      "outcome": "PASS: receipt contract, repository-context bundle verification, full mode/session truth table, malformed rejection, and cleanup"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_interval_search_v3_archive.py",
+      "outcome": "PASS: indexed safe builder/extractor, hashes, no partial extraction, malicious archives"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_interval_search_v3_protocol.py",
+      "outcome": "PASS: frozen hashes, contracts, untimed rehearsals, matrix, and authorization"
+    },
+    {
+      "command": "python3 scripts/test_experiment_guards.py",
+      "outcome": "PASS: nineteen independent build/runtime guards and fail-closed leases"
+    },
+    {
+      "command": "/usr/bin/cc -S -O3 -DNDEBUG -I. -DWEBP_USE_BACKREF_COST_INTERVAL_SEARCH_V{2,3}_EXPERIMENT=1 src/enc/backward_references_cost_enc.c; normalize private v2/v3 identities; compare SHA-256",
+      "outcome": "PASS: both normalized assemblies are 67593 bytes and SHA-256 7c75943dd1e7287d69f7b77b596ccf7f034c11baeee4253e7dc762ea13953215"
+    }
+  ]
+}

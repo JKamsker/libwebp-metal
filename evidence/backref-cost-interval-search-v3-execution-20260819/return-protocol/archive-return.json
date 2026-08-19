@@ -1,0 +1,158 @@
+{
+  "archive": {
+    "bytes": 90163,
+    "hashes_match": true,
+    "local_sha256": "4fcd9aa2027ec78368d30b364c7c2285def228eb9f59f40518f301b6a0586dc4",
+    "path": "evidence.tar.gz",
+    "remote_sha256": "4fcd9aa2027ec78368d30b364c7c2285def228eb9f59f40518f301b6a0586dc4"
+  },
+  "builder_exit_code": 0,
+  "builder_stderr": "",
+  "builder_stdout": "{\"archive_bytes\": 90163, \"archive_sha256\": \"4fcd9aa2027ec78368d30b364c7c2285def228eb9f59f40518f301b6a0586dc4\", \"inventory_sha256\": \"fc00030ce9d6709deb095ae159b16448bb452c82a7530ae7541b90bab72ad112\", \"member_count\": 23, \"schema\": \"libwebp-backref-cost-interval-search-v3-archive-v1\", \"status\": \"accepted\"}\n",
+  "digest": {
+    "bytes": 319,
+    "hashes_match": true,
+    "local_sha256": "8eab62830f52aac775209549ee12f65272a5f2628904c03a52916b28e50accf2",
+    "path": "archive-digest.json",
+    "remote_sha256": "8eab62830f52aac775209549ee12f65272a5f2628904c03a52916b28e50accf2"
+  },
+  "digest_record": {
+    "archive_bytes": 90163,
+    "archive_sha256": "4fcd9aa2027ec78368d30b364c7c2285def228eb9f59f40518f301b6a0586dc4",
+    "inventory_sha256": "fc00030ce9d6709deb095ae159b16448bb452c82a7530ae7541b90bab72ad112",
+    "member_count": 23,
+    "schema": "libwebp-backref-cost-interval-search-v3-archive-v1",
+    "status": "accepted"
+  },
+  "inventory": {
+    "bytes": 2510,
+    "hashes_match": true,
+    "local_sha256": "fc00030ce9d6709deb095ae159b16448bb452c82a7530ae7541b90bab72ad112",
+    "path": "archive-inventory.json",
+    "remote_sha256": "fc00030ce9d6709deb095ae159b16448bb452c82a7530ae7541b90bab72ad112"
+  },
+  "member_inventory": {
+    "member_count": 23,
+    "members": [
+      {
+        "name": "evidence/artifact-hashes.json",
+        "size": 3461,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build-commands.json",
+        "size": 9333,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/build.log",
+        "size": 169140,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/commands.jsonl",
+        "size": 174429,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/correctness.json",
+        "size": 13571,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/evaluation.json",
+        "size": 4462,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/lease-record.json",
+        "size": 320,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-report.md",
+        "size": 376,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-stage.json",
+        "size": 135,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/operator-status.json",
+        "size": 162,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/post-timing.json",
+        "size": 3397,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/pre-timing.json",
+        "size": 3395,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/preflight.json",
+        "size": 3393,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-post-timing.txt",
+        "size": 93921,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-pre-timing.txt",
+        "size": 95081,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/processes-preflight.txt",
+        "size": 93593,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/records.jsonl",
+        "size": 415648,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/resources.json",
+        "size": 515,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/source-hashes.json",
+        "size": 7725,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/timed-child-stderr.log",
+        "size": 28169,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/toolchain.json",
+        "size": 7848,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/work-metric-summary.json",
+        "size": 224,
+        "type": "regular"
+      },
+      {
+        "name": "evidence/work-metrics.jsonl",
+        "size": 13150,
+        "type": "regular"
+      }
+    ],
+    "offending": null,
+    "schema": "libwebp-backref-cost-interval-search-v3-archive-inventory-v1",
+    "status": "accepted"
+  },
+  "status": "accepted"
+}
