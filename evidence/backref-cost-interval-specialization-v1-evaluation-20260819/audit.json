@@ -1,0 +1,222 @@
+{
+  "ancestry": {
+    "base_commit": "b2c71348c21371877328639efb5a929f2130bd09",
+    "base_tree": "13388a5a5e9526a620725eec6e064a44f3d11ca0",
+    "exact_commits_above_base_before_phase_3": 2,
+    "phase_1_commit": "673bc3fa9e8b247a834e293aedb32363f8410f11",
+    "phase_1_tree": "d342db600e16ca70bb1a29e5a91442580cf01dcd",
+    "phase_2_commit": "4c101e1508c165ff7f0b337d92c7f55093df4d5f",
+    "phase_2_only_added_raw_execution_evidence": true,
+    "phase_2_tree": "47f2968310f394790b4c6cf04d1a4b56a740082c"
+  },
+  "causal_audit": {
+    "candidate_control_arguments_tests_spills_reloads": 0,
+    "candidate_hot_path_has_experiment_control": false,
+    "candidate_hot_path_has_recorder_code_in_timed_build": false,
+    "distinct_baseline_and_candidate_dp_paths": true,
+    "exact_v3_algorithm_and_work_identity": true,
+    "outer_gate_checked_once_before_dp_mutation": true,
+    "premise": "VALID",
+    "proof": "recorder-free v3 retains use_append_hint in w4, one control spill/reload, and six direct control tests or branches; the distinct specialized PushInterval has no gate-derived argument, load, spill, reload, test, or branch",
+    "specialized_candidate_push": {
+      "branch_instructions": 42,
+      "conditional_branch_instructions": 27,
+      "instructions": 197,
+      "load_instructions": 37,
+      "store_instructions": 20,
+      "text_bytes": 788
+    },
+    "v3_recorder_free_dynamic_push": {
+      "branch_instructions": 64,
+      "conditional_branch_instructions": 39,
+      "instructions": 290,
+      "load_instructions": 52,
+      "store_instructions": 37,
+      "text_bytes": 1160
+    }
+  },
+  "consequence": {
+    "candidate_or_protocol_changed": false,
+    "evidence_retained": true,
+    "experiment_remains_default_off": true,
+    "production_enabled": false,
+    "production_files_changed": [],
+    "reason": "semantic, causal, correctness, work, ABI, guard, and operational gates pass, so deleting the evidence is unsupported; all eight holdout cells fail the frozen conjunctive performance criteria, so production promotion is forbidden"
+  },
+  "contracts": {
+    "admission_bundle_sha256": "c33efb6b9cfcafed06130dbd7fb7f6dbefa89e5efafb8b3885bb3ae0ef6c994d",
+    "admission_hash_fields_equal": true,
+    "frozen_artifact_count": 40,
+    "frozen_artifact_mismatches": 0,
+    "mode_session_truth_table": "PASS",
+    "receipt_failure_fixtures": "PASS: missing, malformed, unequal, wrong hash, wrong context, and unexpected values fail closed",
+    "receipt_schema": "libwebp-backref-cost-interval-specialization-v1-source-admission-receipt-v1",
+    "receipt_version": 1,
+    "run_accepts_only_exact_exclusive": true,
+    "source_bundle_sha256": "c33efb6b9cfcafed06130dbd7fb7f6dbefa89e5efafb8b3885bb3ae0ef6c994d",
+    "untimed_modes_accept_only_unset_session": true
+  },
+  "decision": "REJECT_AND_RETAIN_DEFAULT_OFF",
+  "frozen_hashes": {
+    "archive_inventory_sha256": "f9812b3d9a88fdf2fb7c33fc8cadfbf98653aacdaf005d3d324194252ab8eb3a",
+    "archive_sha256": "c2df692b48c612d5a0788c3860cbc53894da11d675c59800239d8df6365e7ca8",
+    "artifact_index_sha256": "9ce995a9b1ea788f64fc45220c8b4513b01b3477cc33c8fcdc30e5310d3cc7f1",
+    "commands_jsonl_sha256": "65ea51cca37cf207cb02a2f1dc72a582801de5112525929b5c9e77eb55089af5",
+    "freeze_receipt_sha256": "52eb02f980a35ce57eacc32f4fe75d56ee95779b4b8a1d37a33c5e092f1ace0d",
+    "manifest_sha256": "2fefb68b60e6b0136ad67bae3c2ed0d25a4d39d953f5cd58b4e4e410c5e13784",
+    "records_jsonl_sha256": "ded49ef31d4406e3a911b49e08a2cd771cfc20ca97ead7088561291ae12507d4",
+    "returned_index_sha256": "18be24cf8ac06e5305b7a95ed9bcd8f613abe7a8032dbf0de9c0f7c8ed05c75d",
+    "schema_catalog_sha256": "f81c2257aa9745ff909c6f76332bd0adda21df6c5d69b94f2546d60a514f21a7",
+    "transfer_cleanup_sha256": "61af3e478905112ddbf98c554e0286a76e7604901cba02108606f0a3e5c2a54f",
+    "work_metrics_jsonl_sha256": "2b8042f8674d1cd2fdafa9232a98aa51276ceb8d1f78204fbb538be1692aa991"
+  },
+  "frozen_protocol": {
+    "command": "env WEBP_BENCHMARK_SESSION=exclusive WEBP_EXPECTED_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_interval_specialization_v1.py run /Users/jonaskamsker/.codex/worktrees/c038/libwebp-metal/evidence/backref-cost-interval-specialization-v1-execution-20260819",
+    "command_processes": 272,
+    "corpus_order": [
+      "photo-medium tune",
+      "graphic-medium tune",
+      "photo-large holdout",
+      "graphic-large holdout"
+    ],
+    "lifecycles": [
+      "cold",
+      "warm"
+    ],
+    "methods": [
+      4,
+      6
+    ],
+    "mode": "run",
+    "order": "alternating baseline-candidate and candidate-baseline",
+    "p95_ratio_maximum": 1.005,
+    "paired_median_ratio_maximum": 0.995,
+    "retained_samples": 1040,
+    "warmups_excluded": 192
+  },
+  "gate_checklist": {
+    "ancestry_and_phase_ownership": "PASS",
+    "api_abi_public_headers_exports_and_backends": "PASS",
+    "archive_index_transfer_extraction_cleanup": "PASS",
+    "candidate_v3_identity_and_semantic_boundary": "PASS",
+    "correctness_determinism_inputs_fallback_sanitizers_boundaries": "PASS",
+    "default_omission_gate_isolation_recorder_absence": "PASS",
+    "device_power_process_resource_thermal": "PASS",
+    "exactly_one_run_lease_no_retry_or_pooling": "PASS",
+    "exclusive_lease_acquire_and_release": "PASS",
+    "frozen_artifacts_schemas_corpus_order_counts": "PASS",
+    "graphic_holdout_performance": "FAIL: 0/4 cells",
+    "mode_and_receipt_contracts": "PASS",
+    "photo_holdout_performance": "FAIL: 0/4 cells",
+    "premise_codegen_cfg_and_control_dataflow": "PASS",
+    "production_promotion": "FAIL",
+    "raw_command_and_sample_records": "PASS",
+    "source_and_toolchain_admission": "PASS",
+    "work_reduction_and_counter_consistency": "PASS"
+  },
+  "identity": {
+    "cost_manager_bytes_baseline": 33224,
+    "cost_manager_bytes_specialization_v1": 33224,
+    "cost_manager_bytes_v3": 33224,
+    "equal_start_uses_baseline_path": true,
+    "local_lifetime_only": true,
+    "normalized_v3_specialized_candidate_identical": true,
+    "normalized_v3_specialized_candidate_sha256": "e8f07cd30016566188a5a73e7c7f10c23dbc4f8e3d3ff08de332555e35eb0c35",
+    "persistent_tail_bookkeeping": false,
+    "preserved": [
+      "integer costs and ties",
+      "equal-start and interval order",
+      "interval lifetime and node cap",
+      "updates and traceback",
+      "cache and reference order",
+      "allocations and CostManager layout",
+      "immutable inputs",
+      "transactional pre-DP fallback"
+    ]
+  },
+  "one_run_audit": {
+    "benchmark_lease_attempts_in_phase_1": 0,
+    "benchmark_lease_attempts_in_phase_2": 1,
+    "execution_directories": 1,
+    "frozen_run_invocations": 1,
+    "prior_samples_pooled": false,
+    "retries": 0,
+    "timed_binary_invoked": true
+  },
+  "operational": {
+    "ac_power_all_snapshots": true,
+    "archive_member_count": 23,
+    "archive_sha256": "c2df692b48c612d5a0788c3860cbc53894da11d675c59800239d8df6365e7ca8",
+    "artifact_index_entries": 22,
+    "artifact_index_mismatches": 0,
+    "available_disk_minimum_bytes": 18873503744,
+    "available_disk_minimum_satisfied_all_snapshots": true,
+    "available_memory_minimum_bytes": 11376001024,
+    "available_memory_minimum_satisfied_all_snapshots": true,
+    "benchmark_or_cuda_matches_all_snapshots": 0,
+    "cmake_used_remotely": false,
+    "evidence_archive_hashes_match": true,
+    "evidence_extraction_status": "accepted",
+    "exact_child_absence_proved": true,
+    "exclusive_lease_acquired": true,
+    "exclusive_lease_released": true,
+    "host_or_global_path_changed": false,
+    "installed_runner_directory_touched": false,
+    "low_power_mode_off_all_snapshots": true,
+    "maximum_child_rss_bytes": 269516800,
+    "maximum_child_rss_limit_bytes": 4294967296,
+    "output_bytes_before_index": 1159678,
+    "parallel_timed_processes": 1,
+    "remote_elapsed_seconds": 529.122599958,
+    "remote_total_limit_seconds": 3000,
+    "returned_index_entries": 30,
+    "returned_index_mismatches": 0,
+    "runner_worker_matches_all_snapshots": 0,
+    "thermal_or_performance_warnings_all_snapshots": 0,
+    "toolchain_status": "admitted"
+  },
+  "production_validation": {
+    "ordinary_build_and_default_omission": "PASS",
+    "production_change_required": false,
+    "production_files_changed": [],
+    "reason": "promotion failed before production implementation; the ordinary default remains the verified baseline"
+  },
+  "surface_audit": {
+    "api_abi_change": false,
+    "cuda_change": false,
+    "exported_public_symbol_count": 193,
+    "exported_public_symbols_match": true,
+    "host_runner_service_power_or_toolchain_change": false,
+    "installed_public_header_changes": 0,
+    "metal_change": false
+  },
+  "raw_recomputation": "evidence/backref-cost-interval-specialization-v1-evaluation-20260819/raw-stat-recomputation.json",
+  "schema": "libwebp-backref-cost-interval-specialization-v1-phase-3-independent-audit-v1",
+  "status": "COMPLETE",
+  "validation": [
+    {
+      "command": "env -u WEBP_BENCHMARK_SESSION python3 scripts/test_backref_cost_interval_specialization_v1_experiment.py",
+      "outcome": "PASS: exact normalized v3 identity, source layout, default/candidate builds, omission, 193-symbol API/ABI, 26 correctness cells, deterministic fallback, sanitizers, and fuzzed boundaries"
+    },
+    {
+      "command": "env -u WEBP_BENCHMARK_SESSION python3 scripts/test_backref_cost_interval_specialization_v1_admission.py",
+      "outcome": "PASS: canonical paths, repository-context bundle verification, receipt schema/hash failure closure, full mode/session truth table, malformed rejection, and cleanup"
+    },
+    {
+      "command": "env -u WEBP_BENCHMARK_SESSION python3 scripts/test_backref_cost_interval_specialization_v1_archive.py",
+      "outcome": "PASS: indexed safe builder/extractor, normalized order, complete inventory, hash verification, no partial extraction, and malicious archive rejection"
+    },
+    {
+      "command": "env -u WEBP_BENCHMARK_SESSION python3 scripts/test_backref_cost_interval_specialization_v1_protocol.py",
+      "outcome": "PASS: frozen hashes, contracts, recorded untimed rehearsal evidence, matrix, and Phase-1 authorization"
+    },
+    {
+      "command": "env -u WEBP_BENCHMARK_SESSION python3 scripts/test_experiment_guards.py",
+      "outcome": "PASS: twenty independent build/runtime guards, default omission, and fail-closed leases"
+    },
+    {
+      "command": "independent raw JSONL recomputation and frozen traversal/index/hash audit",
+      "outcome": "PASS: 272 commands, 1,232 sample rows, 1,040 retained samples, 192 excluded warmups, 16 work rows, 26 correctness rows, 16 timing cells, zero traversal mismatches, and zero index/hash mismatches"
+    }
+  ]
+}
