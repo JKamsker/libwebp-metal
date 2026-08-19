@@ -760,3 +760,43 @@ traffic:
 
 The candidate was removed. Raw evidence is
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-shuffle-transpose-screen.jsonl`.
+
+## Composite I4 dispatch/publication and I16 reductions
+
+Three independently exact but subthreshold changes were combined: static
+direct I4 prediction calls, scalar-only I4 score selection with a 16-lane
+winner copy, and 16-lane I16 nonzero/SSE/distortion reductions. This was
+measured only on the RTX 2080 SUPER; no cross-architecture performance claim
+is made.
+
+Preliminary sm_75-cubin screens looked promising, but the build directory had
+not been configured with the handoff's required
+`CMAKE_CUDA_ARCHITECTURES=native`. After rebasing onto `fa078ac0`, both an
+isolated parent and candidate were rebuilt as confirmed native `sm_75` cubins.
+Two independent five-process, order-balanced runs produced these medians:
+
+| Run | Format | Parent | Composite | Change |
+|---|---|---:|---:|---:|
+| Native 1 | PNG lossy | 40.493 ms/image | 38.934 ms/image | -1.559 ms |
+| Native 1 | JPEG lossy | 40.338 ms/image | 39.233 ms/image | -1.105 ms |
+| Native 2 | PNG lossy | 40.383 ms/image | 39.104 ms/image | -1.279 ms |
+| Native 2 | JPEG lossy | 40.227 ms/image | 38.850 ms/image | -1.377 ms |
+| Combined 10-process median | PNG lossy | 40.435 ms/image | 39.068 ms/image | **-1.368 ms** |
+| Combined 10-process median | JPEG lossy | 40.259 ms/image | 38.951 ms/image | **-1.309 ms** |
+
+All 120 native timing outputs matched their parent hashes and byte counts.
+The candidate also passed all seven focused CTests and a 105-case exact-byte
+methods 2--6 / qualities 25--98 / tiny / odd / band-3 fallback matrix. A
+provisional pre-rebase suite completed all 180 validation pairs, but its
+timings are excluded because that build directory was not configured with
+`native`. Both aggregate native gains remain below 1.5 ms/image, so the
+candidate was removed.
+
+Raw evidence is in
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-i16-combined-native-ab.jsonl`,
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-i16-combined-native-ab-rerun.jsonl`,
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-i16-combined-exact-matrix.jsonl`,
+and
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-i16-combined-provisional-official-results.json`.
+The preliminary screen and two pre-`native` A/Bs are retained alongside them
+for auditability, but are not used for the decision.
