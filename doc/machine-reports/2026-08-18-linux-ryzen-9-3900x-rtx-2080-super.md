@@ -1356,3 +1356,29 @@ This is RTX 2080 SUPER-only evidence and makes no Ampere+ claim. The adjacent
 evidence directory contains the exact rejected patch, 20 raw timing
 transcripts, both native caches, the seven-test transcript, baseline/candidate
 resource reports, candidate kernel SASS, and raw Nsight permission error.
+
+## Hash four-pixel load-ahead rejection
+
+The retained native-sm_75 SASS serialized its unrolled matcher: it issued one
+pixel pair, compared, and branched before loading the next pair. An exact
+pre-Ampere specialization issued all eight in-bounds loads for a four-pixel
+group first, then retained the original ordered comparisons and first-mismatch
+returns. The Ampere+ false specialization's full 296-instruction mnemonic
+stream matched the original, so the experiment did not perturb that path.
+
+The Turing specialization used 32 registers rather than 26, with no stack,
+shared, or local memory in either form. Seven CTests passed. Five alternating
+baseline/candidate processes per format, each with one warmup and three
+measured six-image batches, found:
+
+| Format | Baseline | Load ahead | Paired baseline - candidate |
+|---|---:|---:|---:|
+| PNG lossless | 77.490 ms/image | 76.191 ms/image | +1.395 ms/image |
+| JPEG lossless | 128.278 ms/image | 126.760 ms/image | +1.851 ms/image |
+
+All aggregate hashes and byte counts matched. PNG remained below the strict
+1.5 ms/image gate, so load-ahead was removed as a standalone change. This is
+RTX 2080 SUPER-only evidence and makes no Ampere+ performance claim. The exact
+patch, 20 timing transcripts, CTest log, baseline/candidate resources, both
+specialization SASS listings, normalized mnemonic streams, and native caches
+are stored in the adjacent evidence directory.

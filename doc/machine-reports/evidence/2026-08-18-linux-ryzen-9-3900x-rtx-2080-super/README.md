@@ -163,6 +163,14 @@ stored with the same prefix. `libwebp-hash-ncu-permission.txt` is the raw
 Nsight Compute attempt showing `ERR_NVGPUCTRPERM`; no system setting was
 changed to bypass it.
 
+The 20 `libwebp-hash-loadahead-{png,jpeg}-*.txt` files preserve the
+five-process gate for the rejected pre-Ampere four-pixel load-ahead. The same
+prefix includes the exact patch, native baseline/candidate caches, seven-test
+transcript, resource reports, candidate and Ampere-baseline specialization
+SASS, and normalized original/Ampere mnemonic streams. The normalized streams
+are byte-identical, demonstrating that the architecture-specialized candidate
+left the established Ampere+ instruction path unchanged.
+
 Inspect the sampling archives with:
 
 ```sh

@@ -1271,3 +1271,26 @@ counts. The candidate was removed because PNG's paired median remained below
 the 1.5 ms/image retention threshold. This is RTX 2080 SUPER evidence only;
 the exact rejected patch and raw artifacts are stored with the machine report,
 and no Ampere+ behavior changed.
+
+## Turing hash four-pixel load-ahead rejection
+
+The retained sm_75 SASS serialized each of the four unrolled pixel pairs:
+two loads, a comparison, and an exit branch completed before the next loads
+were issued. A pre-Ampere specialization instead issued all eight safe
+in-bounds loads before performing the same four comparisons in the same order.
+The Ampere+ false specialization retained a mnemonic-identical 296-instruction
+stream. The Turing specialization increased register use from 26 to 32 without
+stack, shared, or local memory; all seven CTests passed.
+
+Five order-balanced native-sm_75 forced-batch processes per format measured:
+
+| Format | Baseline | Load ahead | Paired gain |
+|---|---:|---:|---:|
+| PNG lossless | 77.490 ms/image | 76.191 ms/image | +1.395 ms/image |
+| JPEG lossless | 128.278 ms/image | 126.760 ms/image | +1.851 ms/image |
+
+All 60 aggregate timing rows retained the expected hashes and byte counts.
+The candidate was removed because the PNG result remains below the strict
+1.5 ms/image gate. This is RTX 2080 SUPER-only evidence; load-ahead may be
+composed later with another independently validated exact match-loop change,
+but it is not retained alone and no Ampere+ behavior changed.
