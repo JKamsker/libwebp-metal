@@ -1,0 +1,38 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v6-authorization-v1",
+  "authorization_status": "REFUSED",
+  "base_commit": "c9d21ac9c512c94f036fc2db7eb118da83b4f7f9",
+  "source_commit": "f3e0aa9bf9ac1dfefaf2687743387838b7d204db",
+  "source_tree": "dfb525f81979cd1ff5992a1d1f4c4865807812d2",
+  "phase_1b_parent_rule": "the commit containing this envelope has exactly one parent equal to source_commit",
+  "phase_1b_identity_rule": "HEAD must equal the dynamically supplied EXPECTED_FREEZE_COMMIT",
+  "manifest_sha256": "cb3dbeb9f6cb60b7c0100e8a25a5c5459da291edca1e87e90d41e98b65f022e9",
+  "protocol_sha256": "84134ae5725615122b46022465b166ebe1a3d62d3cbd974af272e66b74e973e7",
+  "schema_catalog_sha256": "5177ad4a5c144b50dd26a71672dbc5a59ced7577f0f709377c6f2837ce0da2ea",
+  "rehearsal_hash_index_sha256": "ee221e70e43c8505118a7f83f572163e8d304120c3d710d2e686c65d8090a3cf",
+  "raw_rehearsal_evidence_hashes": {
+    "rehearsal-invocation.json": "5c6a71df1947fc330592e851ba0a3b4bac324094f5e1e31f218fe6ab45ec2d99"
+  },
+  "rehearsal_receipt_hashes": {},
+  "missing_required_rehearsal_receipts": [
+    "transfer-cleanup.json",
+    "rehearsal.json",
+    "return-protocol/source-admission-receipt.json",
+    "return-protocol/operator-status.json",
+    "return-protocol/cleanup-receipt.json"
+  ],
+  "observed_transport_calibration": {
+    "status": "NOT_OBSERVED",
+    "predeclared_representative_payload_bytes": 4194304,
+    "archive_bytes": 0,
+    "archive_sha256": null,
+    "elapsed_ns": 0,
+    "throughput_bytes_per_second": 0,
+    "chunk_count": 0,
+    "reason": "the sole rehearsal refused before remote operator invocation and did not return transport receipts"
+  },
+  "benchmark_lease_acquisition_attempted": false,
+  "timed_execution_authorized": false,
+  "phase_2_authority": "NONE",
+  "blocker": "the sole no-retry rehearsal ended in SSH cleanup timeout without independent cleanup/absence proof; no timed Phase 2 execution is authorized"
+}
