@@ -742,3 +742,21 @@ screen put both gains near 1.36 ms/image. The improvement therefore did not
 robustly clear the retention threshold across the two target formats, so the
 candidate was removed. Raw evidence is
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-static-pred-warp-commit-screen.jsonl`.
+
+## Shuffle-transposed I4 transforms
+
+An exact candidate packed each four-lane transform row into two 32-bit
+registers and replaced both shared-memory transposes and their inner warp
+barriers with eight width-four shuffle operations. This removed 1,280 bytes
+of shared scratch. The corrected implementation passed the full CUDA trellis
+parity test, and all 24 order-balanced screen outputs matched their baseline
+hash and byte count, but shuffle cost on Turing outweighed the saved shared
+traffic:
+
+| Format | Parent | Shuffle transpose | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.446 ms/image | 41.096 ms/image | +0.650 ms |
+| JPEG lossy | 40.368 ms/image | 41.104 ms/image | +0.736 ms |
+
+The candidate was removed. Raw evidence is
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-shuffle-transpose-screen.jsonl`.
