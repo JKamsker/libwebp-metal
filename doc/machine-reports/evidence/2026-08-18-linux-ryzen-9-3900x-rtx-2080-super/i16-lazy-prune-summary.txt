@@ -1,0 +1,62 @@
+Experiment: exact lazy I16 residual-cost pruning feasibility probe
+Date: 2026-08-19 UTC
+Machine: AMD Ryzen 9 3900X / NVIDIA GeForce RTX 2080 SUPER (compute 7.5)
+Branch parent: f18c1d47
+Build: build-cuda-sm75-gate, Release, WEBP_ENABLE_CUDA=ON,
+       CMAKE_CUDA_ARCHITECTURES=native
+
+Question
+--------
+Could the non-negative I16 residual cost be evaluated lazily? Mode 0 must be
+evaluated. For later modes, the exact base score (distortion, spatial
+distortion, fixed header cost, and the existing flatness chain) is a lower
+bound on the full score. A mode whose base score already meets or exceeds the
+best full score cannot win under the original strict-less tie rule.
+
+Probe
+-----
+Temporary WEBP_CUDA_DECIMATE_TIMING=2 counters simulated that exact ordered
+policy after the retained kernel had computed all four residual costs. The
+probe counted how many mode residual walks a lazy implementation would need
+and the resulting winner. It did not alter an encoder decision.
+
+Command:
+  WEBP_CUDA_DECIMATE_TIMING=2 \
+    build-cuda-sm75-gate/webp_cuda_batch_benchmark \
+    --variant cuda --mode lossy --batch-size 6 --method 4 --quality 75 \
+    --warmups 0 --samples 1 --force-cuda \
+    <photo-small/medium, texture-small/medium, graphic-small/medium PPM>
+
+Results:
+  photo-small:    4096 / 4096 evaluations; winners 0:1024
+  photo-medium:   30000 / 30000 evaluations; winners 0:7500
+  texture-small:  4096 / 4096 evaluations; winners 0:981, 2:26, 3:17
+  texture-medium: 30000 / 30000 evaluations; winners 0:7374, 2:78, 3:48
+  graphic-small:  3262 / 4096 evaluations (20.36% pruned)
+                  winners 0:394, 1:231, 2:364, 3:35
+  graphic-medium: 14757 / 30000 evaluations (50.81% pruned)
+                  winners 0:5220, 1:1198, 2:1027, 3:55
+
+Retention decision
+------------------
+Photo and texture, four of the six equally weighted suite images, cannot skip
+any residual walk. For an intentionally optimistic upper bound, charge the
+entire instrumented graphic I16-selection interval to residual walks and make
+its cost scale perfectly with the pruned fraction:
+
+  ((10.31 ms * 25.9% * 20.36%) +
+   (27.56 ms * 30.3% * 50.81%)) / 6 = 0.80 ms/image
+
+Real savings must be smaller because flatness, scalar selection, barriers, and
+winner publication remain, and a lazy implementation introduces at least one
+dependency/barrier after mode 0. The candidate's theoretical suite ceiling is
+therefore already below the strict 1.5 ms/image retention threshold. No
+candidate was implemented; the probe was removed and the retained source was
+rebuilt with 7/7 CTests passing. This is Turing-only evidence and makes no
+Ampere+ claim.
+
+Raw files
+---------
+i16-lazy-prune-profile.txt
+i16-lazy-prune-probe.patch.gz
+i16-lazy-prune-restored-ctest.txt

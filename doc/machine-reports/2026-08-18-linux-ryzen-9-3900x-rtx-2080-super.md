@@ -1673,3 +1673,30 @@ resource and SASS reports, binary hashes, restored-parent CTest transcript,
 and a command/result summary are stored under the `i4-deferred-copy-*` prefix
 in the adjacent evidence directory. These results characterize only the RTX
 2080 SUPER and do not alter or claim Ampere+ behavior.
+
+## I16 lazy residual-cost pruning feasibility rejection
+
+The refreshed graphic trace made I16 selection the next distinct device
+target at 25.2% of block cycles. Since every residual cost is non-negative, a
+temporary counter probe simulated an exact ordered lazy policy: evaluate mode
+0, then skip any later mode whose base score already cannot beat the current
+best full score. The probe replayed the existing source-flatness chain and
+strict-less tie behavior without changing encoder decisions.
+
+Photo and texture required every one of the four mode walks. Graphic-small
+needed 3,262 of 4,096 walks (20.36% pruned); graphic-medium needed 14,757 of
+30,000 (50.81% pruned). The corresponding winner histograms are preserved in
+the raw trace.
+
+Even the deliberately unrealistic assumption that the complete instrumented
+graphic I16-selection intervals scale perfectly with the pruned fraction
+limits the equally weighted six-image suite to 0.80 ms/image. The real ceiling
+is lower because flatness, scalar selection, barriers, and winner publication
+remain, while a lazy implementation adds a dependency after mode 0.
+
+No candidate was implemented because the optimistic bound is already below
+the 1.5 ms/image gate. The probe was removed, the retained native-sm_75 source
+was rebuilt, and all seven CTests passed. The raw counter output, exact probe
+patch, restored-parent CTest log, and calculation summary are stored under the
+`i16-lazy-prune-*` prefix in the adjacent evidence directory. This is RTX 2080
+SUPER-only evidence and makes no Ampere+ claim.

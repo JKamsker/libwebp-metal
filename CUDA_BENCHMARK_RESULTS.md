@@ -1597,3 +1597,24 @@ The sub-threshold PNG change and slight JPEG regression reject the candidate.
 The source was restored. Raw evidence is archived under the
 `i4-deferred-copy-*` prefix with the RTX 2080 SUPER machine report; no Ampere+
 performance or behavior claim is made.
+
+## Turing I16 lazy-pruning feasibility rejection
+
+A temporary native-sm_75 counter probe evaluated an exact lower-bound policy
+for I16 selection: after mode 0, a later mode's residual walk may be skipped
+when its base score already meets or exceeds the best full score because the
+omitted residual cost is non-negative. The probe replayed the original
+flatness chain and strict-less tie rule but did not change decisions.
+
+Photo and texture required all four residual walks. Graphic-small pruned
+20.36% and graphic-medium pruned 50.81%. Charging the complete measured
+graphic I16-selection intervals to residual walks and assuming perfectly
+proportional savings gives an intentionally optimistic aggregate ceiling of
+0.80 ms/image across the equally weighted six-image suite. Fixed selection
+work and the new mode-0 dependency make the realizable saving lower.
+
+Because even the upper bound misses the 1.5 ms/image retention threshold, no
+candidate was built. The diagnostic was removed and 7/7 CTests passed on the
+restored source. Raw evidence is archived under `i16-lazy-prune-*` with the
+RTX 2080 SUPER machine report; no Ampere+ behavior or performance claim is
+made.
