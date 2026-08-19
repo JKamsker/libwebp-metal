@@ -403,6 +403,19 @@ also normally initializes the shared CUDA state in the earlier cross-color
 stage. No lower-bound-only calibration improves the observed policy, so its
 existing conservative threshold remains.
 
+**Amendment (2026-08-19, RTX 5070 Ti follow-up):** the raised decimate gates
+had been applied unconditionally, which regressed the faster hardware they
+were never measured on. On the RTX 5070 Ti, `WEBP_CUDA_DECIMATE_TIMING=1`
+confirmed no GPU decimate pass ran at 576 macroblocks with a warm context
+(previously a measured win at the sm_120-tuned 64-MB gate) nor at 7,500
+macroblocks in a cold plain-`cwebp` process (previously above the 4,000-MB
+cold gate). The gate is now architecture-conditional via a memoized
+compute-capability query: Ampere-or-newer devices use the original 64 warm /
+4,000 cold macroblock cutoffs, older devices use the Turing-measured 784 /
+12,544. Sizes below both brackets decline and sizes at or above both dispatch
+without touching the CUDA runtime, so the cold small-image path stays free of
+CUDA-init cost.
+
 ### Nsight Compute Turing I4 deep-dive
 
 Nsight Compute 2022.4 profiled a native-sm_75 Release build with line info and

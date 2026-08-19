@@ -63,8 +63,10 @@ must be warp-aligned.
   measured init cost (~140 ms, CUDA 12.0 at the time). The historical
   2080 SUPER rows at the top of `CUDA_BENCHMARK_RESULTS.md` predate
   every stage on this branch — they are not comparable evidence.
-- `CMAKE_CUDA_ARCHITECTURES=native` is the default; a fresh build dir on
-  the 2080 machine picks sm_75 automatically.
+- The default `CMAKE_CUDA_ARCHITECTURES` is now `75-real;75-virtual` (a
+  distributable sm_75 SASS + PTX build). For benchmarking or threshold
+  tuning, pass `-DCMAKE_CUDA_ARCHITECTURES=native` explicitly so the build
+  uses native codegen for the local GPU instead of driver-JIT'd PTX.
 - Every perf change must keep CPU-vs-CUDA byte parity (lossy) and pass
   the verify-only gates; fault-inject the fallback path when touching
   the streaming/recording machinery.

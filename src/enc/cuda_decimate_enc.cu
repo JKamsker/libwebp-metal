@@ -1916,6 +1916,31 @@ int DecimateEnvironmentDevice(void) {
   return (int)parsed;
 }
 
+// Dispatch cutoffs are architecture-dependent: Blackwell (sm_120, RTX 5070
+// Ti) sustains wins from far smaller images than Turing (sm_75, RTX 2080
+// SUPER), whose higher per-dispatch overhead needs more work to amortize.
+// Memoized so the query (which may initialize the CUDA runtime) runs at most
+// once per process, and only for sizes where the generations disagree. A
+// failed query conservatively reports the slower generation.
+bool DecimateDeviceIsAmpereOrNewer(void) {
+  static int cached = -1;  // -1 unknown, 0 pre-Ampere, 1 Ampere or newer
+  if (cached < 0) {
+    int major = 0;
+    const int device = g_decimate_state.available
+                           ? g_decimate_state.device
+                           : DecimateEnvironmentDevice();
+    if (device >= 0 &&
+        cudaDeviceGetAttribute(&major, cudaDevAttrComputeCapabilityMajor,
+                               device) == cudaSuccess) {
+      cached = (major >= 8) ? 1 : 0;
+    } else {
+      (void)cudaGetLastError();
+      cached = 0;
+    }
+  }
+  return cached == 1;
+}
+
 bool CheckedAddSize(size_t a, size_t b, size_t* result) {
   if (a > SIZE_MAX - b) return false;
   *result = a + b;
@@ -2455,27 +2480,38 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     return collect_result;
   }
   {
-    // The context-creation cost is only worth paying for large images. Once a
+    // The context-creation cost is only worth paying for large images; once a
     // context exists (the unit ran before, or the process committed to CUDA
-    // and the prewarm created one), Turing still needs enough work to cover
-    // its higher per-dispatch overhead. These conservative cutoffs are the
-    // first repeatable wins across both the RTX 2080 SUPER and the faster
-    // hardware used for the original implementation.
+    // and the prewarm created one), smaller images still win on fast devices.
+    // The break-even point is architecture-dependent: Blackwell (RTX 5070 Ti)
+    // measured wins from 64 warm / 4000 cold macroblocks, while Turing
+    // (RTX 2080 SUPER) needs 784 warm / 12544 cold to cover its higher
+    // per-dispatch overhead. Sizes below both brackets decline and sizes at
+    // or above both dispatch without touching the CUDA runtime; only the
+    // band between them pays the one-time compute-capability query.
     const char* const backend = getenv("WEBP_ACCELERATOR");
     const bool context_warm =
         g_decimate_state.available ||
         (backend != nullptr && strcmp(backend, "cuda") == 0);
+    const size_t ampere_minimum = context_warm ? 64u : 4000u;
+    const size_t turing_minimum = context_warm ? 784u : 12544u;
     const char* const min_mbs = getenv("WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS");
-    size_t minimum = context_warm ? 784u : 12544u;
-    if (min_mbs != nullptr && min_mbs[0] != '\0' &&
-        !DecimateParseSize("WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS", &minimum)) {
-      if (DecimateFlag("WEBP_CUDA_VERBOSE", false)) {
-        fprintf(stderr,
-                "WebP-CUDA: invalid WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS\n");
+    if (min_mbs != nullptr && min_mbs[0] != '\0') {
+      size_t minimum = 0;
+      if (!DecimateParseSize("WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS", &minimum)) {
+        if (DecimateFlag("WEBP_CUDA_VERBOSE", false)) {
+          fprintf(stderr,
+                  "WebP-CUDA: invalid WEBP_CUDA_LOSSY_DECIMATE_MIN_MBS\n");
+        }
+        return WEBP_ACCELERATOR_ERROR;
       }
-      return WEBP_ACCELERATOR_ERROR;
+      if (mb_count < minimum) return WEBP_ACCELERATOR_NOT_RUN;
+    } else if (mb_count < ampere_minimum) {
+      return WEBP_ACCELERATOR_NOT_RUN;
+    } else if (mb_count < turing_minimum &&
+               !DecimateDeviceIsAmpereOrNewer()) {
+      return WEBP_ACCELERATOR_NOT_RUN;
     }
-    if (mb_count < minimum) return WEBP_ACCELERATOR_NOT_RUN;
   }
 
   WebPAcceleratorResult result = WEBP_ACCELERATOR_NOT_RUN;
