@@ -1,0 +1,184 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v4-phase3-audit-v1",
+  "status": "REFUSED_NO_USABLE_TIMING_EVIDENCE",
+  "decision": {
+    "interval_search_family": "unassessed",
+    "production_promotion_authorized": false,
+    "next_cpu_stage": null,
+    "new_experiment_supported": "at-most-one-independent-v5-transport-repaired-diagnostic",
+    "new_experiment_run": false
+  },
+  "ancestry": {
+    "linear": true,
+    "base": {
+      "commit": "d8e015e8395a1ae3d5d17637cacf8b99bd084901",
+      "tree": "23f0084230dad6932432be80027a462b2109117f"
+    },
+    "phase1": {
+      "commit": "615b42b4766a6aad17e74707dd69f3925cb4ce3b",
+      "tree": "cedbffc7436a600f3941d2e28a1bb449fe428851",
+      "exact_parent": "d8e015e8395a1ae3d5d17637cacf8b99bd084901"
+    },
+    "phase2": {
+      "commit": "de1d9f94f01403dfc58149cfd5b33649b0a4b95c",
+      "tree": "43229241e2c7a50e9b76d95e5651c13644c7a678",
+      "exact_parent": "615b42b4766a6aad17e74707dd69f3925cb4ce3b"
+    }
+  },
+  "frozen_identity": {
+    "manifest_sha256": "06919ccc231f92aa8bc6fee0e88794784e4e74a449e47f79cec2e7991f90dd79",
+    "protocol_sha256": "34e4a91c1c9ce770690628f29ca88125af82b59285c352a98e0a874f21bb14e5",
+    "phase1_local_validation_sha256": "1afbb47fb739d7a1ce5ea7ec65d341f684f16e9d515827c37e414a993eb682e7",
+    "frozen_artifacts_checked": 25,
+    "frozen_artifact_hash_mismatches": 0,
+    "source_bundle_sha256": "efd576691d1a0615f645a0c3bcc2f2f908db2ae04dced7ad17241ba88483d654",
+    "remote_source_commit": "615b42b4766a6aad17e74707dd69f3925cb4ce3b",
+    "remote_source_tree": "cedbffc7436a600f3941d2e28a1bb449fe428851",
+    "remote_source_clean": true,
+    "remote_source_hashes_match": true
+  },
+  "gates_and_semantics": {
+    "build_gate": "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT",
+    "compile_gate": "WEBP_USE_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT",
+    "runtime_gate": "WEBP_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT=1",
+    "fresh_and_default_off": true,
+    "mutually_isolated_from_predecessors": true,
+    "ordinary_surface_omits_v4": true,
+    "public_api_abi_preserved": true,
+    "v3_selected_dp_semantic_identity": true,
+    "selector_once_before_mutation": true,
+    "exactly_one_closed_selected_dp_body": true,
+    "predecessor_fallthrough_excluded": true,
+    "timer_boundaries_match_frozen_contract": true,
+    "per_pixel_clock": false
+  },
+  "phase2_execution": {
+    "phase2_handoff_invocation_count": 1,
+    "returned_run_receipts": 1,
+    "independent_outer_shell_transcript_available": false,
+    "timed_binary_invoked": true,
+    "pipeline_exit_code": 0,
+    "retry_evidence": 0,
+    "alternate_command_evidence": 0,
+    "external_profiler_invocations_returned": 0,
+    "cuda_evidence": 0,
+    "failure": "Command ['scp', '-q', 'pandocs-agent:/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v4/run.44yTUf/evidence.tar.gz', '/var/folders/g_/y0l39t0x5q39xs0msnnn7hb80000gn/T/attribution-v4-return-thh0zlyj/evidence.tar.gz'] timed out after 30 seconds",
+    "frozen_transfer_timeout_seconds": 30,
+    "usable_timing_rows": 0
+  },
+  "return_audit": {
+    "returned_indexed_artifacts": 6,
+    "returned_indexed_bytes": 772,
+    "transfer_cleanup_sha256": "bb700155d68a55e91f5e6f90e6d420e346945f9e2e76e22eccc4fb339b3c1ae2",
+    "returned_index_sha256": "b161d8b91ac32b3fceefdf83b2157d078cdb8124e3f1c7ca9e461c4052302564",
+    "archive_returned": false,
+    "archive_hash": null,
+    "archive_size_bytes": null,
+    "archive_inventory_returned": false,
+    "archive_digest_returned": false,
+    "extraction_attempted": false,
+    "operator_status_returned": false,
+    "lease_receipt_returned": false,
+    "lease_release_independently_verified": false,
+    "executor_recorded_lease_state": "not-attempted",
+    "evaluated_lease_state": "unavailable-after-attempt",
+    "lease_state_reason": "run-mode pipeline exit 0 is reachable only after the operator sets acquisition_attempted, acquires the lease, and executes release; archive timeout occurred before extraction could update the executor's initialized false value",
+    "executor_recorded_archive_state": "not-attempted",
+    "evaluated_archive_state": "built-and-bulk-transfer-failed-unverified",
+    "archive_state_reason": "the failing SCP of evidence.tar.gz is reached only after successful archive builder completion and remote file existence/hash probing, but the timeout exception discarded in-memory transfer details"
+  },
+  "ownership_and_resources": {
+    "remote_child": "run.44yTUf",
+    "canonical_child_validated": true,
+    "exact_child_removed": true,
+    "exact_child_absence_proved": true,
+    "cleanup_receipt_sha256": "85fa98c4a8d28f278c7d0be2dd6f4682a3d1fc0ad277a5a88226d46379b03365",
+    "process_discovery_policy": "observe-only",
+    "post_admission_benchmark_or_cuda_matches": 0,
+    "pretransfer_benchmark_or_cuda_matches": 0,
+    "runner_worker_matches": 0,
+    "runner_listener_present": true,
+    "source_admission_verified": true,
+    "realized_toolchain_verified": false,
+    "realized_device_verified": false,
+    "ac_lpm_thermal_memory_disk_verified": false,
+    "reason_unverified": "records unavailable with bulk archive"
+  },
+  "returned_raw_counts": {
+    "correctness_records": 0,
+    "counter_records": 0,
+    "profile_records": 0,
+    "runner_records": 0,
+    "stage_records": 0,
+    "warmup_records": 0,
+    "retained_records": 0,
+    "accepted_statistics": 0
+  },
+  "frozen_planned_counts": {
+    "correctness_encodes": 16,
+    "counter_cells": 4,
+    "profile_processes": 24,
+    "runner_records": 120,
+    "stage_records": 120,
+    "warmups": 24,
+    "retained_records": 96
+  },
+  "statistics": {
+    "recomputation_input_rows": 0,
+    "recomputation_result": "N/A-empty-raw-row-set",
+    "metrics": [
+      "whole_encode",
+      "lossless_backward_refs",
+      "backref_cost_dp_total",
+      "backref_cost_dp_setup",
+      "backref_cost_dp_steady",
+      "backref_cost_traceback",
+      "backref_cost_materialize",
+      "lossless_analyze",
+      "lossless_hash_chain",
+      "lossless_histogram",
+      "lossless_huffman",
+      "lossless_bitstream"
+    ],
+    "cells": [
+      {"case": "photo-large", "method": 4, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "photo-large", "method": 6, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "graphic-large", "method": 4, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "graphic-large", "method": 6, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null}
+    ]
+  },
+  "returned_artifacts": [
+    {"path": "return-protocol/archive-return.json", "bytes": 32, "sha256": "ec970c026a4bd13d7d5208d4307f9cb7b1e61ef59c7613724dfb3b3b0485eaf3"},
+    {"path": "return-protocol/cleanup-receipt.json", "bytes": 435, "sha256": "85fa98c4a8d28f278c7d0be2dd6f4682a3d1fc0ad277a5a88226d46379b03365"},
+    {"path": "return-protocol/extraction.json", "bytes": 32, "sha256": "ec970c026a4bd13d7d5208d4307f9cb7b1e61ef59c7613724dfb3b3b0485eaf3"},
+    {"path": "return-protocol/lease-transfer.json", "bytes": 273, "sha256": "6e5367b29ab3d3664ec664a06c0d55c40adb490262b631c2dd3acc0ec5891fe6"},
+    {"path": "return-protocol/pipeline.stderr", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+    {"path": "return-protocol/pipeline.stdout", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+  ],
+  "next_action": {
+    "kind": "new-independent-diagnostic-only-if-authorized",
+    "experiment_id": "backref_cost_attribution_v5",
+    "gates": [
+      "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT",
+      "WEBP_USE_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT",
+      "WEBP_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT=1"
+    ],
+    "requirements": [
+      "new manifest schemas evidence root safe root and lease",
+      "independently return operator lease archive-build and cleanup receipts before bulk transfer",
+      "derive lease state on every exception path",
+      "preserve partial successful transfer records",
+      "rehearse representative bulk transfer under a justified frozen bound",
+      "naturally test success refusal timeout and missing-artifact paths"
+    ],
+    "implemented": false,
+    "run": false
+  },
+  "limitations": [
+    "no raw workload archive or row returned",
+    "outer invocation count lacks an independent shell transcript",
+    "executor lease and archive not-attempted states are stale initialized values after timeout",
+    "realized toolchain device resources correctness order counters timers lease and archive are unverified",
+    "coarse timers cannot establish PushInterval self time or layout branch predictor cache or call-stack causality"
+  ]
+}
