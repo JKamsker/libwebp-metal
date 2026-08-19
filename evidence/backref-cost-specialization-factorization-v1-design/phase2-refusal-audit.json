@@ -1,0 +1,365 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v1-phase2-refusal-audit-v1",
+  "phase": "2",
+  "auditor": "Luna/max",
+  "audit_status": "REFUSED_FAIL_CLOSED",
+  "phase_2_authority": "NONE",
+  "timed_execution_authorized": false,
+  "production_promotion_authorized": false,
+  "audit_date": "2026-08-19",
+  "base_commit": "c6046dc7cde6e7ea1cc9d54a6a90c55f8a2f2edb",
+  "commits": {
+    "main": "c6046dc7cde6e7ea1cc9d54a6a90c55f8a2f2edb",
+    "main_tree": "dd99d2a26bf6eb5c3ab441c24c4faaadcaf72d25",
+    "phase1a": "cede7f5a3f075355b8e8894c137cb388508d422a",
+    "phase1a_parent": "c6046dc7cde6e7ea1cc9d54a6a90c55f8a2f2edb",
+    "phase1a_tree": "6a8e7566e1ed84cd01fc6e7ae148249323572930",
+    "phase1b": "313b157286e602c4d3e6ef6d8b6c97268a66413b",
+    "phase1b_parent": "cede7f5a3f075355b8e8894c137cb388508d422a",
+    "phase1b_tree": "1bb98b32515deab217c02d8a7374544d00aaa25e",
+    "phase1b_diff_entries": 22,
+    "phase1b_diff_rule": "all 22 entries are additions under the frozen rehearsal evidence prefix, hash index, or refusal envelope; no Phase 1A path is modified",
+    "ancestry_verified": true,
+    "head_verified_before_audit": true
+  },
+  "authority_audit": {
+    "envelope_path": "evidence/backref-cost-specialization-factorization-v1-design/phase1b-authorization.json",
+    "envelope_sha256": "2f761330d9045664637c4b7611927b331073444ee50d63e1d9dc0fd20b4af105",
+    "authorization_status": "REFUSED",
+    "phase_2_authority": "NONE",
+    "timed_execution_authorized": false,
+    "production_promotion_authorized": false,
+    "source_commit": "cede7f5a3f075355b8e8894c137cb388508d422a",
+    "source_tree": "6a8e7566e1ed84cd01fc6e7ae148249323572930",
+    "executor_authority_check": "rejected before transport: RuntimeError: Phase-1B did not authorize timed execution",
+    "authority_scope": "no host contact, no lease, no pipeline, and refusal/audit evidence only",
+    "blocking_reason": "Phase 1A froze representative payload SHA-256 2e858dcda0cfd71415b1a7b1ea39a1b5488241a5dddbc75c70a594f05efc4d03; the sole fresh Factorization V1 rehearsal receipt proved 60a1a48b8128a82eae9474a69c0dfe8364745747f04a886341c3da03fd5dee85. Additions-only Phase 1B cannot repair Phase 1A and no retry is authorized."
+  },
+  "hash_audit": {
+    "protocol": {
+      "path": "doc/backref-cost-specialization-factorization-v1-protocol-20260819.md",
+      "sha256": "774342dc80d59fd6154be6ff07a84126c271c495df0559f18598092245befa16"
+    },
+    "manifest": {
+      "path": "scripts/backref_cost_specialization_factorization_v1_manifest.json",
+      "sha256": "173ad4aca6a60ced82ac26b05da95e653894f326e726fd7e9f0d0707a9ef2629"
+    },
+    "schema_catalog": {
+      "path": "scripts/backref_cost_specialization_factorization_v1_schemas.json",
+      "sha256": "41782b4600289d685a2aadaf463d23bd9517b7486fa9d26c6c621da540bdabbc"
+    },
+    "transport_source": {
+      "path": "scripts/backref_cost_specialization_factorization_v1_transport.py",
+      "sha256": "3e39a81e2f12c03c909512d15b91b88ab5a1534ab5d4d6db5c0112a541a1d56d"
+    },
+    "phase1_local_gate_records": {
+      "phase1_prior_evidence_audit.json": "761bd4e67966aabb72544034012e3d3ab734a05e0d84e8fbe0681fe9a2df1bd1",
+      "phase1-local-codegen.json": "7399f9b61c98b8847ee3aac2a8e91885a804de3bea43f2de8f716a047c82c1bf",
+      "phase1-local-validation.json": "d53d351969f126e7f2c4e5b8a75de55d1f24859f239da1d9797bda3cd400ca22"
+    },
+    "phase1b_receipts": {
+      "phase1b-rehearsal-hashes.json": "289a7f8028048208fae5341745981ef4c74885a274a3b68d88b16b51af19def4",
+      "rehearsal/rehearsal.json": "427abc0ed60e5ae9a39e842b4491f5d944a4de9d980803b4fb900b1184ca0a3c",
+      "rehearsal/return-protocol/source-admission.json": "4b92f5abdbcc4d72d27bb8a20002ca7cc2c68525e0bc8ff509f1359d0ace3447",
+      "rehearsal/return-protocol/cleanup-footer.json": "2258f2d6799390be61a1c2544493e424ddae6729546e46e48854d7c31e4d05de",
+      "rehearsal/transfer-cleanup.json": "cbd985fc96a5662c29f75ed71650beb9e9073864afcbfd1a5e4939a87a6718d8"
+    },
+    "rehearsal_artifact_hashes": {
+      "rehearsal/artifact-hashes.json": "dc4d4c47817036374a5f82c1cfcdac01f3214aae33019b0441258a03410732cb",
+      "rehearsal/returned-evidence-hashes.json": "e342e4b2e1ce5b08e625ca0f26810f20c51d2c53c6e2133e98d07ea27e00c9cc",
+      "rehearsal/return-protocol/framed-stdout.bin": "a860ff4a29a6f690a3f99e768b38c08d3f337b2b9c32a2e4fbaea111fb9092b0",
+      "rehearsal/return-protocol/transport-stderr.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "frozen_artifact_check": {
+      "manifest_declared_artifacts": 32,
+      "worktree_hash_mismatches": [],
+      "phase1a_hash_mismatches": [],
+      "all_declared_hashes_match_worktree_and_phase1a": true,
+      "source_admission_common_hash_mismatches": [],
+      "source_admission_hash_set_observation": {
+        "source_receipt_hashes": 32,
+        "manifest_frozen_artifacts": 32,
+        "source_only_path": "scripts/backref_cost_specialization_factorization_v1_manifest.json",
+        "frozen_only_path": "src/enc/backref_cost_factorization_layout_clone_enc.inc",
+        "classification": "coverage discrepancy recorded for Phase 3; exact Phase 1A commit/tree and all common hashes match; no repair attempted"
+      }
+    },
+    "hash_checks_passed": true
+  },
+  "source_and_guard_audit": {
+    "ordinary_build_default_off": true,
+    "experiment_mutual_exclusion_guard": true,
+    "forbidden_environment_entries": 29,
+    "cuda_guard_present": true,
+    "prior_experiment_guards_present": true,
+    "variant_mapping": {
+      "absent": "B semantics",
+      "B": 0,
+      "L": 1,
+      "H": 2,
+      "other": "INVALID/fail closed"
+    },
+    "selector_switch_count": 1,
+    "selector_static_order": "variant is read once before selected DP mutation; one closed switch dispatches B, L, or H; default goes to Error",
+    "selector_dispatch_targets": [
+      "BackwardReferencesHashChainDistanceOnly",
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+      "BackwardReferencesHashChainDistanceOnlySpecialized"
+    ],
+    "layout_clone_boundary": "L instantiates the baseline DP template and separate baseline PushIntervalLayoutClone; no append-hint path is present",
+    "hint_boundary": "H uses the specialized DP body and PushIntervalSpecialized; static evidence isolates the larger PushInterval body",
+    "timed_recorder_separation": "timed build uses recorder=0 and has no recorder symbols; recorder build uses recorder=1 and is separately hashed",
+    "semantics_preserved_by_frozen_gate": [
+      "bitstream and pixel output",
+      "input immutability and repeat determinism",
+      "integer costs and strict tie/update order",
+      "interval/reference order and traceback",
+      "allocation fallback and ABI/default omission"
+    ],
+    "static_source_audit_passed": true
+  },
+  "codegen_audit": {
+    "evidence_path": "evidence/backref-cost-specialization-factorization-v1-design/rehearsal/codegen.json",
+    "evidence_sha256": "8c5ead2bf9d67718d94c66d253804d07cb3ecdf35f395614927b923d82c07baa",
+    "timed_runner_sha256": "ba4afa7b3faf979ba3aaaf855ac85e98bf3c448fe35ce9ba4208afcfba7071c2",
+    "disassembly_sha256": "b610865d225135104b28e4027230942c68e5964d75e64124ca2e450052785c93",
+    "linker_flag": "-Wl,-no_deduplicate",
+    "all_six_private_addresses_distinct": true,
+    "timed_recorder_symbols_present": false,
+    "b_l_mnemonics_equal": {
+      "dp": true,
+      "push_interval": true
+    },
+    "symbols": {
+      "BackwardReferencesHashChainDistanceOnly": {
+        "size_bytes": 1292,
+        "instructions": 323,
+        "branches": 54,
+        "loads": 55,
+        "stores": 23,
+        "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"
+      },
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone": {
+        "size_bytes": 1292,
+        "instructions": 323,
+        "branches": 54,
+        "loads": 55,
+        "stores": 23,
+        "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"
+      },
+      "BackwardReferencesHashChainDistanceOnlySpecialized": {
+        "size_bytes": 1292,
+        "instructions": 323,
+        "branches": 54,
+        "loads": 55,
+        "stores": 23,
+        "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"
+      },
+      "PushInterval": {
+        "size_bytes": 508,
+        "instructions": 127,
+        "branches": 30,
+        "loads": 25,
+        "stores": 11,
+        "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8"
+      },
+      "PushIntervalLayoutClone": {
+        "size_bytes": 508,
+        "instructions": 127,
+        "branches": 30,
+        "loads": 25,
+        "stores": 11,
+        "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8"
+      },
+      "PushIntervalSpecialized": {
+        "size_bytes": 732,
+        "instructions": 183,
+        "branches": 45,
+        "loads": 34,
+        "stores": 12,
+        "mnemonics_sha256": "453c8695e2523dc281903d227f9896d68decf895d5676690c8bd67a59431f190"
+      }
+    },
+    "codegen_audit_passed": true
+  },
+  "counter_and_work_semantics_audit": {
+    "recorder_runner_sha256": "361a74989417ba3597bb27b799692d7b3742e1ebd1ac1b311314839473c3cf81",
+    "recorder_evidence_path": "evidence/backref-cost-specialization-factorization-v1-design/rehearsal/codegen.json",
+    "mandatory_static_fields": [
+      "selector_evaluations",
+      "baseline_dp_calls",
+      "layout_clone_dp_calls",
+      "hint_dp_calls",
+      "exact_activations",
+      "push_calls",
+      "short_push_calls",
+      "cache_segments",
+      "overlap_scans",
+      "disjoint_prefix_scans",
+      "insert_calls",
+      "null_hint_insert_calls",
+      "position_backward_steps",
+      "position_forward_steps",
+      "append_hint_fast_paths",
+      "append_hint_branch_checks",
+      "append_hint_loads",
+      "append_hint_start_loads",
+      "append_hint_update_checks",
+      "append_hint_updates",
+      "pop_tail_branch_checks",
+      "pop_tail_updates",
+      "interval_updates",
+      "interval_pops",
+      "max_live_intervals",
+      "bitstream_bytes",
+      "bitstream_fnv1a64"
+    ],
+    "static_field_emission_check": "all 25 counter fields are declared and both bitstream fields are emitted by the recorder runner",
+    "recorder_work_rows_expected": 12,
+    "recorder_work_rows_observed": 0,
+    "real_b_l_h_rows_observed": 0,
+    "v16_rows_reused": 0,
+    "work_semantics_runtime_gate": "not executed because authority NONE; no counters are claimed",
+    "counter_audit_passed": true
+  },
+  "toolchain_device_resource_audit": {
+    "build_identity_path": "evidence/backref-cost-specialization-factorization-v1-design/rehearsal/build-identity.json",
+    "build_identity_sha256": "6840a6da674ff194f5937d95f8ff3bb41e1d7c6def470a9f654c8dec98598240",
+    "timed_runner_sha256": "ba4afa7b3faf979ba3aaaf855ac85e98bf3c448fe35ce9ba4208afcfba7071c2",
+    "recorder_runner_sha256": "361a74989417ba3597bb27b799692d7b3742e1ebd1ac1b311314839473c3cf81",
+    "compiler": "Apple clang 17.0.0, arm64-apple-darwin25.2.0, Xcode 26.3.0 toolchain",
+    "clang_sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+    "nm_sha256": "a42f25b6363f3d43b911733a276a46bdbed894f1ef8e764cb7461ebdb37a15e7",
+    "xcrun_sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152",
+    "sdk": "MacOSX26.2.sdk / SDK version 26.2",
+    "device": "Apple M4 / Mac16,10",
+    "resource_evidence_path": "evidence/backref-cost-specialization-factorization-v1-design/rehearsal/resource-admission-admission.json",
+    "resource_evidence_sha256": "3d4d9e1dea5b22966e4eabad1918355f77d7b858fd4a4329a8140e6887364d16",
+    "available_memory_bytes": 10882580480,
+    "available_disk_bytes": 18957021184,
+    "ac_power": true,
+    "low_power_mode": false,
+    "thermal_warning": false,
+    "settings_changed": false,
+    "external_profiler_invocations": 0,
+    "toolchain_resource_audit_passed": true
+  },
+  "transport_archive_process_audit": {
+    "rehearsal_files": 20,
+    "rehearsal_total_bytes": 129796,
+    "phase1b_hash_index_rows": 20,
+    "phase1b_hash_index_sha256": "289a7f8028048208fae5341745981ef4c74885a274a3b68d88b16b51af19def4",
+    "all_indexed_files_match_bytes_and_sha256": true,
+    "archive_sha256": "d49e1b1ed00f9e46e8a3525800a069e642a2d9f6cc9ebb952812d55a3a008de0",
+    "archive_bytes": 7972,
+    "archive_cap_bytes": 786432,
+    "archive_member_count": 9,
+    "archive_member_inventory_verified": true,
+    "framed_stdout_sha256": "a860ff4a29a6f690a3f99e768b38c08d3f337b2b9c32a2e4fbaea111fb9092b0",
+    "framed_stdout_bytes": 18226,
+    "framed_response_cap_bytes": 1048576,
+    "bulk_chunk_bytes": 262144,
+    "bulk_chunk_count": 1,
+    "transport_stderr_bytes": 0,
+    "frame_order": [
+      "source-admission",
+      "operator-status",
+      "archive-build",
+      "lease-state",
+      "bulk-declaration",
+      "bulk-chunk",
+      "integrity-footer",
+      "cleanup-footer"
+    ],
+    "integrity_footer_matches_archive": true,
+    "cleanup_footer_last": true,
+    "safe_extraction_and_cleanup_receipts": true,
+    "process_ownership": {
+      "pre_operator_process_snapshot_count": 750,
+      "pre_operator_process_snapshot_sha256": "8d2bb78bc5fc7f19ebf2a75931b372c71dad496e4e1c975252b19551b8332f31",
+      "resource_process_snapshot_count": 744,
+      "resource_process_snapshot_sha256": "3be749d279c168bc21de1f1bb24f3ebdcfeadbee3fbf60f89dbe4088b3942bf5",
+      "discovered_pid_signals": 0,
+      "direct_child_timeout_signals": 0,
+      "exact_identity_conflicts": [],
+      "filesystem_identity_operations": [],
+      "policy": "observe-only discovery; only retained directly spawned child may be stopped on its own timeout"
+    },
+    "transport_process_audit_passed": true
+  },
+  "execution_audit": {
+    "phase1_rehearsal_remote_session_artifact": {
+      "present": true,
+      "remote_host": "pandocs-agent",
+      "sessions": 1,
+      "classification": "pre-existing Phase 1 required rehearsal, not Phase 2 execution",
+      "encoder_workloads": 0,
+      "profiler_workloads": 0,
+      "timed_workloads": 0,
+      "performance_samples": 0,
+      "lease_attempts": 0,
+      "remote_cleanup_operations_after_run": 0,
+      "exact_child_absence_proved": true
+    },
+    "phase2_host_contact": 0,
+    "phase2_ssh_invocations": 0,
+    "phase2_benchmark_lease_attempts": 0,
+    "phase2_factorization_pipeline_runs": 0,
+    "phase2_timed_binary_invocations": 0,
+    "phase2_recorder_workloads": 0,
+    "phase2_performance_samples": 0,
+    "phase2_remote_cleanup_operations": 0,
+    "real_execution_evidence_path_present": false,
+    "real_b_l_h_rows_present": false,
+    "pairwise_results_present": false,
+    "v16_timing_samples_pooled_or_reused": false,
+    "all_phase2_actions_local_and_read_only_except_this_evidence_commit": true
+  },
+  "frozen_inventory_audit": {
+    "variants": ["B", "L", "H"],
+    "methods": [4, 6],
+    "corpus_case_order": ["photo-large", "graphic-large"],
+    "profile_plan_rows_constructed_only": 36,
+    "warmups_planned": 36,
+    "retained_timing_rows_planned": 144,
+    "runner_rows_planned": 180,
+    "stage_rows_planned": 180,
+    "correctness_encodes_planned": 24,
+    "untimed_work_rows_planned": 12,
+    "variant_orders": [["B", "L", "H"], ["H", "L", "B"], ["L", "B", "H"]],
+    "pairwise_families": ["B_to_L", "L_to_H", "B_to_H"],
+    "primary_metrics": ["dp_total", "dp_steady", "whole_encode"],
+    "pairwise_results": "none; no B_to_L, L_to_H, or B_to_H timing rows exist",
+    "production_consequence": "not evaluated by Phase 2"
+  },
+  "findings": [
+    {
+      "id": "F-AUTH-001",
+      "severity": "BLOCKING",
+      "status": "confirmed",
+      "finding": "The frozen representative-payload identity is stale; Phase 2 authority is correctly NONE.",
+      "action": "fail closed; no retry, repair, lease, host contact, or pipeline execution"
+    },
+    {
+      "id": "F-AUDIT-001",
+      "severity": "WARNING",
+      "status": "recorded",
+      "finding": "The Phase 1 rehearsal source receipt hash set differs in path coverage from manifest.frozen_artifacts by one path in each direction: the source receipt includes the manifest where the frozen set includes src/enc/backref_cost_factorization_layout_clone_enc.inc.",
+      "action": "do not repair Phase 1; retain exact commit/tree and common-hash evidence for Phase 3"
+    },
+    {
+      "id": "F-SCOPE-001",
+      "severity": "INFORMATIONAL",
+      "status": "recorded",
+      "finding": "A pre-existing Phase 1 remote rehearsal receipt exists, as required by the protocol, but it records zero encoder/profiler/timed workloads and zero lease attempts; no Phase 2 host-contact or pipeline artifact exists.",
+      "action": "do not contact the host or perform cleanup"
+    }
+  ],
+  "interpretation": {
+    "content_reversal": "not interpreted",
+    "causal_factor": "not interpreted",
+    "production_consequence": "not evaluated",
+    "reason": "Phase 2 has no timing or work rows and Phase 3 owns interpretation"
+  },
+  "audit_conclusion": "Phase 1A/1B ancestry, frozen source hashes, authority envelope, rehearsal receipt/hash index, codegen, counter schema, toolchain/device/resource, archive/transport, process ownership, and fail-closed state were audited locally. The stale payload identity blocks authority. Phase 2 performed zero host contact, zero lease attempts, zero factorization pipeline execution, zero timing/workload execution, and committed refusal evidence only."
+}
