@@ -1,0 +1,80 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v7-phase3-local-validation-v1",
+  "status": "PASS_WITH_EXPECTED_FAIL_CLOSED_VALIDATE_REFUSAL",
+  "source_commit_before_phase3_files": "ff9d7b4fc9692853dab11d61458e9d0fd27a483a",
+  "timed_workload_invoked": false,
+  "remote_command_invoked": false,
+  "benchmark_lease_acquisition_attempted": false,
+  "profiler_invocations": 0,
+  "cuda_invocations": 0,
+  "process_signals": 0,
+  "production_promotion_authorized": false,
+  "commands": [
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v7_protocol.py",
+      "status": "PASS",
+      "summary": "frozen semantic identity, one selected DP body, strict eight-frame single-session contract, truncation/malformed/missing-footer/timeout/refusal/corruption fixtures, non-circular authority rejection fixtures, and 24-command plan"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v7_admission.py",
+      "status": "PASS",
+      "summary": "canonical V7-only paths, repository-context source admission, strict request frames, receipt hashes, exact-child cleanup contract, and disjoint modes"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v7_archive.py",
+      "status": "PASS",
+      "summary": "indexed archive build/extract, normalized full inventory, hash verification, all-or-nothing extraction, no partial extraction, and malicious-member rejection"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v7_process_ownership.py",
+      "status": "PASS",
+      "summary": "one retained directly owned SSH transport signal site; discovery is refusal-only; in-session exact-child cleanup; no SCP or reconnect"
+    },
+    {
+      "command": "python3 scripts/test_experiment_guards.py",
+      "status": "PASS",
+      "summary": "27 independent build/runtime guards, fail-closed leases, and V1-V7 ownership guards"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v7_experiment.py",
+      "status": "PASS",
+      "summary": {
+        "correctness_encodes": 16,
+        "counter_cells": 4,
+        "sanitizer_configurations": 2,
+        "boundary_fixtures": 16,
+        "default_omission": true,
+        "public_api_abi_equal": true,
+        "exact_runtime_truth_table": {
+          "absent": false,
+          "": false,
+          "0": false,
+          "01": false,
+          "1": true,
+          "true": false
+        },
+        "timer_validation": {
+          "clock_reads": 4096,
+          "positive_deltas": 1464,
+          "elapsed_ns": 61083,
+          "mean_read_delta_ns": 14,
+          "minimum_positive_delta_ns": 41,
+          "maximum_delta_ns": 83,
+          "monotonic": true,
+          "performance_sample": false
+        }
+      }
+    },
+    {
+      "command": "env -u WEBP_BENCHMARK_SESSION EXPECTED_FREEZE_COMMIT=ff9d7b4fc9692853dab11d61458e9d0fd27a483a python3 scripts/execute_backref_cost_attribution_v7.py validate",
+      "status": "EXPECTED_REFUSAL",
+      "exit_code": 1,
+      "summary": "failed closed locally because rehearsal/return-protocol/source-admission.json is absent; no remote contact or timed binary invocation"
+    },
+    {
+      "command": "independent SHA-256, Git ancestry/tree/diff, evidence inventory, raw frame/archive parse, embedded index verification, and empty-row reconstruction",
+      "status": "PASS",
+      "summary": "linear four-commit pre-evaluation ancestry; 28 immutable artifacts and zero mismatches; Phase 1B and Phase 2 additions-only boundaries; exact eight-frame refusal stream and final cleanup footer; zero timed rows"
+    }
+  ]
+}

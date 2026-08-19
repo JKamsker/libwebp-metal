@@ -1,0 +1,296 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v7-phase3-audit-v1",
+  "generated_at_utc": "2026-08-19T08:38:09Z",
+  "phase": 3,
+  "evaluator": "Sol/high",
+  "evaluation_status": "complete",
+  "evaluated_head": "ff9d7b4fc9692853dab11d61458e9d0fd27a483a",
+  "decision": {
+    "interval_family": "unassessed",
+    "close_family": false,
+    "reopen_family": false,
+    "new_bounded_experiment_selected": false,
+    "new_bounded_experiment_implemented": false,
+    "new_bounded_experiment_run": false,
+    "next_cpu_stage_ranked": false,
+    "next_cpu_stage": null,
+    "production_promotion_authorized": false,
+    "production_disposition": "NO-GO",
+    "reason": "Phase 1B refused timing authority, Phase 2 failed closed locally, and no V7 timed rows exist"
+  },
+  "blocking_chain": {
+    "phase1_authorization_status": "REFUSED",
+    "timed_execution_authorized": false,
+    "phase2_authority": "NONE",
+    "rehearsal_first_failure": "observe-only process guard matched the ancestor transport command because its argv embeds frozen source containing _experiment_runner",
+    "phase2_first_failure": "required successful-rehearsal receipt return-protocol/source-admission.json absent",
+    "phase2_failed_gate": "validate_authorized_handoff",
+    "retry_count": 0,
+    "rerun_count": 0,
+    "fallback_count": 0
+  },
+  "ancestry": {
+    "linear_from_frozen_main": true,
+    "commit_distance_from_main_before_phase3": 3,
+    "frozen_main": {
+      "commit": "567e48ddfeacfaa65fb11a1611fba7aa7f5590a5",
+      "tree": "4b87a36bf671fe05789c81b3fac1580cc6aba2c6"
+    },
+    "phase_1a": {
+      "commit": "7ad55d44e5a78f3b8ef197c2a26cd4c78dd7bbba",
+      "parent": "567e48ddfeacfaa65fb11a1611fba7aa7f5590a5",
+      "tree": "3e6fde30702fefe9c01432255263efc1760d0980",
+      "changed_files": 25,
+      "insertions": 4545,
+      "deletions": 24
+    },
+    "phase_1b": {
+      "commit": "193bc6bee12acfc2140799d90b58f1f6bc79bb89",
+      "parent": "7ad55d44e5a78f3b8ef197c2a26cd4c78dd7bbba",
+      "tree": "8aa3d6c58b5e557021f9935185fe751018cad483",
+      "changed_files": 5,
+      "insertions": 120,
+      "deletions": 0,
+      "only_predeclared_additions": true
+    },
+    "phase_2": {
+      "commit": "ff9d7b4fc9692853dab11d61458e9d0fd27a483a",
+      "parent": "193bc6bee12acfc2140799d90b58f1f6bc79bb89",
+      "tree": "1a2938106e454be5751f43cb2e41cac577c05e00",
+      "changed_files": 2,
+      "insertions": 215,
+      "deletions": 0,
+      "only_phase2_refusal_evidence_additions": true
+    }
+  },
+  "identity": {
+    "immutable_artifact_count": 28,
+    "manifest_enumerated_frozen_artifacts": 27,
+    "manifest_itself_is_separately_enveloped": true,
+    "phase1a_to_phase2_byte_identical": 28,
+    "digest_mismatches": 0,
+    "core_sha256": {
+      "manifest": "3b888a952009fe0e8b3c82379b7128f7c7d6574b4ebfae4b6cd5dde87cf8117e",
+      "protocol": "49e0fe6c9612c8ec5e1170b1e93c5e6d01ce5bfff42e4860427c1a78218edc04",
+      "schema_catalog": "9c6244495556d5a3865fdd6723d58949d391efe636aaac3a3a3444c176d31bb7",
+      "transport": "ef8b8d4429da42528d40652b7cd67afe3d6fce8bd93f2f12360a094221e97da0",
+      "phase1_local_validation": "354967a6ec49a8b357304f45e5638b28e83d47aad9477fbcbce2a94ecf0d4bb3",
+      "phase1b_authorization": "e13cf921b15e80ef000d0533d7ecddfbc09ac6398eddd985056f2ef7b502e4cd",
+      "phase1b_hash_index": "08460cc31852bd93ea5130e909af78a447c838518bf6e3b80983516eded7c61c",
+      "raw_framed_stdout": "c27491f8341bf6981d1f6460ae3c7be7b81bd6844ecb25dee5ee3131b42fcbd8",
+      "raw_transport_stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "phase1b_diff": [
+      {"status": "A", "path": "evidence/backref-cost-attribution-v7-design/phase1b-authorization.json"},
+      {"status": "A", "path": "evidence/backref-cost-attribution-v7-design/phase1b-rehearsal-hashes.json"},
+      {"status": "A", "path": "evidence/backref-cost-attribution-v7-design/rehearsal/rehearsal-invocation.json"},
+      {"status": "A", "path": "evidence/backref-cost-attribution-v7-design/rehearsal/return-protocol/framed-stdout.bin"},
+      {"status": "A", "path": "evidence/backref-cost-attribution-v7-design/rehearsal/return-protocol/transport-stderr.bin"}
+    ],
+    "phase2_diff": [
+      {"status": "A", "path": "evidence/backref-cost-attribution-v7-execution-20260819/phase2-command-and-refusal.txt"},
+      {"status": "A", "path": "evidence/backref-cost-attribution-v7-execution-20260819/phase2-refusal-observation.json"}
+    ]
+  },
+  "evidence_inventory": {
+    "pre_evaluation_files": 8,
+    "pre_evaluation_bytes": 48311,
+    "jsonl_files": 0,
+    "timed_rows": 0,
+    "files": [
+      {"path": "evidence/backref-cost-attribution-v7-design/phase1-local-validation.json", "bytes": 2635, "sha256": "354967a6ec49a8b357304f45e5638b28e83d47aad9477fbcbce2a94ecf0d4bb3"},
+      {"path": "evidence/backref-cost-attribution-v7-design/phase1b-authorization.json", "bytes": 3219, "sha256": "e13cf921b15e80ef000d0533d7ecddfbc09ac6398eddd985056f2ef7b502e4cd"},
+      {"path": "evidence/backref-cost-attribution-v7-design/phase1b-rehearsal-hashes.json", "bytes": 594, "sha256": "08460cc31852bd93ea5130e909af78a447c838518bf6e3b80983516eded7c61c"},
+      {"path": "evidence/backref-cost-attribution-v7-design/rehearsal/rehearsal-invocation.json", "bytes": 2513, "sha256": "29a9dcb525d91453f35f744c4d903c9bfbc4b014bebd16a74b90a055f3b7ba0a"},
+      {"path": "evidence/backref-cost-attribution-v7-design/rehearsal/return-protocol/framed-stdout.bin", "bytes": 31671, "sha256": "c27491f8341bf6981d1f6460ae3c7be7b81bd6844ecb25dee5ee3131b42fcbd8"},
+      {"path": "evidence/backref-cost-attribution-v7-design/rehearsal/return-protocol/transport-stderr.bin", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"},
+      {"path": "evidence/backref-cost-attribution-v7-execution-20260819/phase2-command-and-refusal.txt", "bytes": 2313, "sha256": "68461dcb2db54568bb4df8b5335d8ddf53609fc9bb59db5a66c3cf7a25689ec0"},
+      {"path": "evidence/backref-cost-attribution-v7-execution-20260819/phase2-refusal-observation.json", "bytes": 5366, "sha256": "c693a71f625cb5ed58cd6970d9ab0656c24a4a7e8e16f7ade1373ba28eb691b0"}
+    ]
+  },
+  "implementation_audit": {
+    "build_gate": "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT",
+    "compile_gate": "WEBP_USE_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT",
+    "runtime_gate": "WEBP_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT=1",
+    "fresh_default_off_identity": true,
+    "predecessor_gate_isolation": true,
+    "ordinary_surface_omits_v7": true,
+    "public_api_abi_preserved_locally": true,
+    "specialized_push_interval_matches_673bc3fa": true,
+    "selector_once_before_dp_mutation": true,
+    "closed_baseline_candidate_if_else": true,
+    "predecessor_fallthrough_excluded": true,
+    "single_selected_dp_no_overwrite": true,
+    "local_bitstream_pixel_and_input_correctness": true,
+    "timer_clock": "mach_continuous_time",
+    "timer_boundaries_match_frozen_contract": true,
+    "per_pixel_or_push_interval_clocks": 0,
+    "production_behavior_changed_by_phase3": false
+  },
+  "frozen_plan_and_actual": {
+    "case_order": ["photo-large", "graphic-large"],
+    "method_order": [4, 6],
+    "repetition_variant_order": [
+      ["baseline", "candidate"],
+      ["candidate", "baseline"],
+      ["baseline", "candidate"]
+    ],
+    "planned": {
+      "remote_admissions": 1,
+      "exclusive_lease_attempts": 1,
+      "correctness_encodes": 16,
+      "serial_profile_processes": 24,
+      "warmups": 24,
+      "retained_runner_rows": 96,
+      "total_runner_rows": 120,
+      "total_stage_rows": 120
+    },
+    "actual_phase2": {
+      "remote_admissions": 0,
+      "exclusive_lease_attempts": 0,
+      "correctness_encodes": 0,
+      "serial_profile_processes": 0,
+      "warmups": 0,
+      "retained_runner_rows": 0,
+      "total_runner_rows": 0,
+      "total_stage_rows": 0,
+      "timing_rows": 0,
+      "performance_samples": 0,
+      "executed_profile_order": []
+    }
+  },
+  "source_toolchain_device_resources": {
+    "remote_source_admission": {
+      "status": "verified",
+      "source_commit": "7ad55d44e5a78f3b8ef197c2a26cd4c78dd7bbba",
+      "source_tree": "3e6fde30702fefe9c01432255263efc1760d0980",
+      "bundle_sha256": "4fbca681e2b3396a557e34cb9d394f329a31bd7e6387cebc08365f94b76901c9",
+      "clean_status": true,
+      "verification_repository_removed": true
+    },
+    "observed_diagnostic_toolchain": {
+      "compiler": "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+      "target": "arm64-apple-darwin25.2.0",
+      "sdk_version": "26.2",
+      "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+      "exact_executable_hashes_verified": true,
+      "external_profiler_invocations": 0
+    },
+    "frozen_device": {
+      "system": "Darwin",
+      "architecture": "arm64",
+      "hardware_model": "Mac16,10",
+      "cpu_brand": "Apple M4",
+      "physical_memory_bytes": 25769803776
+    },
+    "resource_gate_reached_process_guard": true,
+    "resource_prerequisites_before_process_guard_passed": true,
+    "completed_resource_receipt_available": false,
+    "exact_observed_free_memory_bytes": null,
+    "exact_observed_free_disk_bytes": null,
+    "remote_runner_build_identity": null,
+    "remote_correctness_receipt": null,
+    "remote_timer_receipt": null,
+    "limitation": "the process guard raised before resource-admission was written and before corpus generation or runner build"
+  },
+  "ownership_and_phase2_safety": {
+    "process_discovery_policy": "observe-only-refusal-only",
+    "rehearsal_direct_remote_sessions": 1,
+    "rehearsal_discovered_pid_signals": 0,
+    "rehearsal_encoder_workloads": 0,
+    "rehearsal_profiler_workloads": 0,
+    "rehearsal_lease_attempted": false,
+    "rehearsal_post_run_remote_cleanup_operations": 0,
+    "phase2_remote_transport_started": false,
+    "phase2_remote_child_created": false,
+    "phase2_signals": 0,
+    "phase2_cleanup_attempted": false,
+    "phase2_absence_claim": null,
+    "profiler_invocations": 0,
+    "cuda_invocations": 0,
+    "host_or_service_mutation": false
+  },
+  "return_protocol": {
+    "raw_stream_sha256": "c27491f8341bf6981d1f6460ae3c7be7b81bd6844ecb25dee5ee3131b42fcbd8",
+    "transport_stderr_empty": true,
+    "frame_count": 8,
+    "frame_kinds": [
+      "source-admission",
+      "operator-status",
+      "archive-build",
+      "lease-state",
+      "bulk-declaration",
+      "bulk-chunk",
+      "integrity-footer",
+      "cleanup-footer"
+    ],
+    "frame_sequence_and_payload_hashes_verified": true,
+    "transaction_success": false,
+    "operator_status": "refused",
+    "integrity_status": "refused",
+    "lease_state": "not-attempted",
+    "bulk_archive": {
+      "bytes": 24145,
+      "sha256": "e696706c0af41a7417841b1563d68c9d2c4f4faef28c4d6ebe286fef3b1f10c2",
+      "chunk_bytes": 524288,
+      "chunk_count": 1,
+      "member_count": 5,
+      "declaration_inventory_exact": true,
+      "embedded_index_payload_count": 4,
+      "embedded_index_membership_exact": true,
+      "embedded_member_hashes_match": true,
+      "safe_all_or_nothing_extraction_contract": "PASS_LOCAL_FIXTURES"
+    },
+    "representative_calibration": {
+      "predeclared_payload_bytes": 5242880,
+      "maximum_expected_archive_bytes": 4194304,
+      "actual_representative_payload_bytes": 0,
+      "finite_margin_ratio": 0,
+      "status": "REFUSED_BEFORE_REPRESENTATIVE_PAYLOAD",
+      "refusal_archive_nominal_throughput_bytes_per_second": 2226,
+      "usable_capacity_calibration": false
+    },
+    "cleanup": {
+      "footer_is_final_frame": true,
+      "status": "complete",
+      "removed_exact_validated_child": true,
+      "absence_proved": true,
+      "elapsed_transaction_ns": 10843368416,
+      "same_session": true,
+      "post_run_remote_cleanup_operations": 0
+    }
+  },
+  "raw_stat_reconstruction": {
+    "raw_runner_rows": 0,
+    "raw_stage_rows": 0,
+    "retained_rows": 0,
+    "performance_samples": 0,
+    "accepted_statistics": 0,
+    "recomputation_result": "N/A-empty-raw-row-set",
+    "metrics": [
+      "whole_encode",
+      "lossless_backward_refs",
+      "backref_cost_dp_total",
+      "backref_cost_dp_setup",
+      "backref_cost_dp_steady",
+      "backref_cost_traceback",
+      "backref_cost_materialize",
+      "lossless_histogram",
+      "lossless_huffman",
+      "lossless_bitstream"
+    ],
+    "cells": [
+      {"case": "photo-large", "method": 4, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "photo-large", "method": 6, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "graphic-large", "method": 4, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "graphic-large", "method": 6, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null}
+    ],
+    "limitations": [
+      "the rehearsal was untimed and ran no encoder workload",
+      "Phase 2 failed before remote admission and produced no runner or stage rows",
+      "local correctness and timer checks are invariants, not performance samples",
+      "the small refusal archive is not the required representative transport calibration",
+      "no attribution, stage ranking, share, delta, median, or repeatability claim is supported"
+    ]
+  }
+}
