@@ -289,7 +289,7 @@ typedef struct {
 // kPaletteAndSpatial.
 #define CRUNCH_CONFIGS_MAX (kNumEntropyIx + 2 * kPaletteSortingNum)
 
-static int EncoderAnalyze(VP8LEncoder* const enc,
+static WEBP_PROFILE_NOINLINE int EncoderAnalyze(VP8LEncoder* const enc,
                           CrunchConfig crunch_configs[CRUNCH_CONFIGS_MAX],
                           int* const crunch_configs_size,
                           int* const red_and_blue_always_zero) {
@@ -420,7 +420,7 @@ static int EncoderInit(VP8LEncoder* const enc) {
 }
 
 // Returns false in case of memory error.
-static int GetHuffBitLengthsAndCodes(
+static WEBP_PROFILE_NOINLINE int GetHuffBitLengthsAndCodes(
     const VP8LHistogramSet* const histogram_image,
     HuffmanTreeCode* const huffman_codes) {
   int i, k;
@@ -678,7 +678,8 @@ static WEBP_INLINE void WriteHuffmanCodeWithExtraBits(
   VP8LPutBits(bw, (bits << depth) | symbol, depth + n_bits);
 }
 
-static int StoreImageToBitMask(VP8LBitWriter* const bw, int width,
+static WEBP_PROFILE_NOINLINE int StoreImageToBitMask(
+    VP8LBitWriter* const bw, int width,
                                int histo_bits,
                                const VP8LBackwardRefs* const refs,
                                const uint32_t* histogram_symbols,
@@ -854,7 +855,7 @@ Error:
 }
 
 // pic and percent are for progress.
-static int EncodeImageInternal(
+static WEBP_PROFILE_NOINLINE int EncodeImageInternal(
     VP8LBitWriter* const bw, const uint32_t* const argb,
     VP8LHashChain* const hash_chain, VP8LBackwardRefs refs_array[4], int width,
     int height, int quality, int low_effort, const CrunchConfig* const config,
@@ -1530,7 +1531,7 @@ typedef struct {
   WebPAuxStats* stats;
 } StreamEncodeContext;
 
-static int EncodeStreamHook(void* input, void* data2) {
+static WEBP_PROFILE_NOINLINE int EncodeStreamHook(void* input, void* data2) {
   StreamEncodeContext* const params = (StreamEncodeContext*)input;
   const WebPConfig* const config = params->config;
   const WebPPicture* const picture = params->picture;

@@ -1,0 +1,14 @@
+post_run_check_command:
+test ! -e evidence/backref-cost-attribution-v1-execution-20260819; printf 'local_execution_output_absent_after_run=true\n'; pgrep -af '(^|/)(xctrace|sample|backref_cost_attribution_v1_experiment_runner|run_backref_cost_attribution_v1_experiment|Runner.Worker)( |$)' || true; printf 'prohibited_profiler_or_runner_processes_checked=true\n'; git status --short
+post_run_check_output:
+local_execution_output_absent_after_run=true
+prohibited_profiler_or_runner_processes_checked=true
+
+lease_acquisition:
+not attempted; local phase-1 authorization gate refused before remote admission
+remote_cleanup:
+not applicable; no remote admission or child process was started
+archive_transfer_extraction:
+not attempted; local phase-1 authorization gate refused before remote admission
+profiler_workload:
+not invoked

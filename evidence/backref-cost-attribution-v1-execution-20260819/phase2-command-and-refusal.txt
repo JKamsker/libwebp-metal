@@ -1,0 +1,13 @@
+frozen_command:
+env WEBP_BENCHMARK_SESSION=exclusive WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V1_COMMIT="$(git rev-parse HEAD)" python3 scripts/execute_backref_cost_attribution_v1.py run "$PWD/evidence/backref-cost-attribution-v1-execution-20260819"
+working_directory:
+/Users/jonaskamsker/.codex/worktrees/3a02/libwebp-metal
+expanded_expected_commit:
+454946a800124781296cd5d3a34772d4228103be
+return_status:
+1
+stdout:
+
+stderr:
+ERROR: phase-1 handoff rejected timing; see frozen blocker evidence
+

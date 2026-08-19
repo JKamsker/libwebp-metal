@@ -28,6 +28,7 @@
 #include "src/dsp/lossless_common.h"
 #include "src/enc/accelerator_enc.h"
 #include "src/enc/histogram_enc.h"
+#include "src/enc/profile_enc.h"
 #include "src/enc/vp8i_enc.h"
 #include "src/utils/color_cache_utils.h"
 #include "src/utils/utils.h"
@@ -1036,7 +1037,7 @@ extern int VP8LBackwardReferencesTraceBackwards(
     int xsize, int ysize, const uint32_t* const argb, int cache_bits,
     const VP8LHashChain* const hash_chain,
     const VP8LBackwardRefs* const refs_src, VP8LBackwardRefs* const refs_dst);
-static int GetBackwardReferences(int width, int height,
+static WEBP_PROFILE_NOINLINE int GetBackwardReferences(int width, int height,
                                  const uint32_t* const argb, int quality,
                                  int lz77_types_to_try, int cache_bits_max,
                                  int do_no_cache,

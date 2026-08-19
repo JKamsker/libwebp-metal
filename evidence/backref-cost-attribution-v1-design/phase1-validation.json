@@ -1,0 +1,31 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v1-phase1-validation-v1",
+  "base_commit": "db1d9e8e66055ff943f57664733316df83b0a965",
+  "date": "2026-08-19",
+  "phase": 1,
+  "status": "BLOCKED_REMOTE_REHEARSAL",
+  "workloads_invoked": 0,
+  "profiler_invocations": 0,
+  "performance_samples_collected": 0,
+  "completed": [
+    "Python syntax checks",
+    "protocol contract tests",
+    "source admission tests",
+    "safe archive/index/extraction tests",
+    "21-row experiment guard matrix",
+    "attribution optimized make build and stable-symbol inspection",
+    "default make and CMake builds with ordinary object/string/target omission",
+    "attribution CMake build and overlapping-gate refusal",
+    "public-header and linker-map API/ABI identity",
+    "exact 673bc3fa specialized PushInterval body identity"
+  ],
+  "non_attribution_local_limitation": "the optional make examples/dwebp target could not compile because this workstation lacks jerror.h; the complete default CMake build passed",
+  "sanitizer_blocker": "the ASan+UBSan attribution runner built, but its non-encoding guard command hung twice; the first attempt reported that detect_leaks is unsupported, and detect_leaks=0 also hung. Both were interrupted and no encoder workload ran",
+  "remote_blocker": {
+    "process": "ssh pandocs-agent-001@100.85.234.14",
+    "observed_elapsed": "19:16:45",
+    "action": "SIGTERM",
+    "result": "terminated; no matching ssh, xctrace, sample, attribution runner, or attribution operator remained",
+    "consequence": "required noninteractive remote rehearsal, build/symbol verification, command construction, refusal return, and cleanup proof were not completed; timed execution is not authorized"
+  }
+}

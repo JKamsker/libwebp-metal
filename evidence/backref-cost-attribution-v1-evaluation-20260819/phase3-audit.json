@@ -1,0 +1,504 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v1-phase3-audit-v1",
+  "date": "2026-08-19",
+  "phase": 3,
+  "role": "independent_evaluator_and_research_consequence_owner",
+  "overall_status": "INCONCLUSIVE_BLOCKED_BEFORE_REMOTE_ADMISSION",
+  "diagnostic_acceptance": "NOT_MET",
+  "protocol_and_code_validation": "PASS_WITH_RECORDED_PHASE1_LIMITATIONS",
+  "performance_evidence": "ABSENT",
+  "production_promotion_authorized": false,
+  "ancestry": {
+    "base_commit": "db1d9e8e66055ff943f57664733316df83b0a965",
+    "base_tree": "e0ec3d46c31bbcc3c7601c78b977e1a8bc298477",
+    "phase1_commit": "454946a800124781296cd5d3a34772d4228103be",
+    "phase1_tree": "61e8b32caa13a5c22078719cf569194af41cc182",
+    "phase1_parent": "db1d9e8e66055ff943f57664733316df83b0a965",
+    "phase1_exactly_descends_from_base": true,
+    "phase2_commit": "ebfac68393959fd79e60039eb3d911fcad0181ad",
+    "phase2_tree": "f39b9a3e35e579b478542909cf9240820679aa70",
+    "phase2_parent": "454946a800124781296cd5d3a34772d4228103be",
+    "phase2_exactly_descends_from_phase1": true,
+    "phase3_starting_head": "ebfac68393959fd79e60039eb3d911fcad0181ad"
+  },
+  "authoritative_inputs": [
+    {
+      "path": "doc/backref-cost-attribution-v1-protocol-20260819.md",
+      "sha256": "0089245302345ba29dfd2fb8d61251892d2bd0f0504a1a2720a0f03e1dad0b14"
+    },
+    {
+      "path": "scripts/backref_cost_attribution_v1_manifest.json",
+      "sha256": "5bd2419eeb98b3273964e91d93a39cca31cd21eea113c94e14892e53a6caa64e"
+    },
+    {
+      "path": "evidence/backref-cost-attribution-v1-design/phase1-validation.json",
+      "sha256": "90d613f859b6719b02290ab5d2b75f5df39af2a791f4b1a81d4fb3116d9b56f6"
+    },
+    {
+      "path": "evidence/backref-cost-attribution-v1-design/profiler-inspection.json",
+      "sha256": "948542fb68fcbf2543aea0025e3f6335b3d1c3ae7344e9b110332b8c79a2a6ea"
+    },
+    {
+      "path": "evidence/backref-cost-attribution-v1-execution-20260819/phase2-command-and-refusal.txt",
+      "sha256": "cffef375c816639c14c658b52019337972d77603b8d9874994963f43d90afb96"
+    },
+    {
+      "path": "evidence/backref-cost-attribution-v1-execution-20260819/phase2-cleanup-observation.txt",
+      "sha256": "d4ffd96d3ea6f66d8406b192f9e07715c0e4c36d68773d522d8b4620b7bb24fe"
+    },
+    {
+      "path": "evidence/backref-cost-attribution-v1-execution-20260819/phase2-refusal-observation.json",
+      "sha256": "9f3efaf6df712e69864521d8548250e0363d5e64f78e1da13bac62e80bf91bdd"
+    }
+  ],
+  "phase1_freeze": {
+    "status": "BLOCKED_REMOTE_REHEARSAL",
+    "timed_execution_authorized": false,
+    "workloads_invoked": 0,
+    "profiler_invocations": 0,
+    "performance_samples_collected": 0,
+    "frozen_artifacts_expected": 23,
+    "frozen_artifacts_verified_by_phase3": 23,
+    "frozen_artifact_hash_mismatches": 0,
+    "blocker": "The required noninteractive remote rehearsal did not complete after an interactive SSH process remained alive for 19:16:45; it was terminated with SIGTERM, and the protocol was frozen fail-closed.",
+    "limitations": [
+      "Noninteractive xctrace permission and symbolization were not established by rehearsal.",
+      "The ASan/UBSan non-encoding guard command hung twice and was interrupted without invoking an encoder workload.",
+      "The optional make examples/dwebp build lacked local jerror.h; the complete default CMake build was reported passing."
+    ]
+  },
+  "gates_and_surface": {
+    "status": "PASS_FOR_PROTOCOL_AND_CODE_ONLY",
+    "fresh_build_gate": "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT",
+    "fresh_compile_gate": "WEBP_USE_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT",
+    "fresh_runtime_gate": "WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT=1",
+    "additional_marker_guard": "WEBP_BACKREF_COST_ATTRIBUTION_V1_MARKERS",
+    "cmake_default": "OFF",
+    "make_default": "0",
+    "ordinary_build_omission": {
+      "phase3_make_dry_run_guard_matrix": "PASS",
+      "phase1_default_make_and_cmake_object_string_target_omission": "RECORDED_PASS",
+      "attribution_object_omitted": true,
+      "attribution_runner_target_omitted": true,
+      "attribution_compile_macro_omitted": true
+    },
+    "overlap_exclusion": {
+      "status": "PASS_STATIC_AND_PHASE1_RECORDED_CONFIGURE_REFUSAL",
+      "excluded_overlapping_build_gates": [
+        "WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT",
+        "WEBP_BUILD_BACKREF_COST_TRACEBACK_EXPERIMENT",
+        "WEBP_BUILD_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+        "WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT",
+        "WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT",
+        "WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT",
+        "WEBP_BUILD_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT",
+        "WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT",
+        "WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT",
+        "WEBP_BUILD_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT",
+        "WEBP_BUILD_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT"
+      ],
+      "compile_time_backref_gate_sum_excludes_multiple_active_implementations": true
+    },
+    "api_abi_neutrality": {
+      "public_header_diff_from_base": "EMPTY",
+      "export_control_file_diff_from_base": "EMPTY",
+      "phase1_public_header_and_linker_map_identity": "RECORDED_PASS",
+      "phase3_runtime_abi_rebuild_performed": false,
+      "conclusion": "No public API or export-control source changed; Phase 1 records linker-map identity. Phase 3 performed no build or workload."
+    }
+  },
+  "specialization_identity": {
+    "status": "PASS_FOR_SOURCE_IDENTITY",
+    "reference_commit": "673bc3fa",
+    "reference_path": "src/enc/backward_references_cost_enc.c",
+    "current_path": "src/enc/backward_references_cost_enc.c",
+    "identity_rule": "The PushIntervalSpecialized function body is byte-for-byte equal to the function body at 673bc3fa.",
+    "phase3_protocol_identity_test": "PASS",
+    "selector": "The attribution runtime identity selects BackwardReferencesHashChainDistanceOnlySpecialized only when WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT is exactly 1.",
+    "fault_injection_in_attribution_selector": false,
+    "runtime_semantic_evidence_in_phase2": "ABSENT_BECAUSE_NO_CORRECTNESS_OR_PROFILE_WORKLOAD_RAN"
+  },
+  "profiler_toolchain_build_identity": {
+    "frozen_claims": {
+      "remote_host": "pandocs-agent",
+      "system": "macOS 26.2 build 25C56, arm64",
+      "hardware": "Mac16,10 / Apple M4 / 25769803776 bytes physical memory",
+      "xcode": "26.3.0",
+      "xctrace": "xctrace version 26.0 (17C529)",
+      "compiler": "Apple clang 17.0.0 (clang-1700.6.4.2)",
+      "sdk": "macOS 26.2",
+      "flags": "-O3 -g -DNDEBUG -fno-omit-frame-pointer",
+      "single_binary_for_variants": true,
+      "profiler": "Xcode Time Profiler via /usr/bin/xcrun; no fallback"
+    },
+    "phase1_facility_inspection": "RECORDED",
+    "phase1_remote_rehearsal_build_symbol_verification": "NOT_COMPLETED",
+    "phase2_profiler_admission": "NOT_ATTEMPTED",
+    "phase2_build_identity_artifact": "ABSENT",
+    "phase2_runner_sha256": null,
+    "phase2_binary_uuid": null,
+    "phase2_dsym_uuid": null,
+    "phase2_trace_symbolization": "NOT_EVALUABLE",
+    "conclusion": "The versions, paths, and executable hashes are frozen inspection claims, not a realized Phase 2 build/profile identity."
+  },
+  "frozen_corpus_and_plan": {
+    "status": "PASS_AS_FROZEN_PLAN_NOT_EXECUTED",
+    "case_order": [
+      "photo-large",
+      "graphic-large"
+    ],
+    "dimensions": "3000x2000 each",
+    "methods": [
+      4,
+      6
+    ],
+    "profile_repetitions_per_case_method_variant": 3,
+    "variant_order_by_repetition": [
+      [
+        "baseline",
+        "candidate"
+      ],
+      [
+        "candidate",
+        "baseline"
+      ],
+      [
+        "baseline",
+        "candidate"
+      ]
+    ],
+    "warmups_per_profile": 1,
+    "retained_encodes_per_profile": 4,
+    "expected_profile_processes": 24,
+    "expected_timer_records": 120,
+    "expected_warmups": 24,
+    "expected_retained_stage_records": 96,
+    "phase3_serial_plan_contract_test": "PASS",
+    "observed_profile_processes": 0,
+    "observed_timer_records": 0,
+    "observed_warmups": 0,
+    "observed_retained_stage_records": 0
+  },
+  "phase2_execution": {
+    "frozen_command": "env WEBP_BENCHMARK_SESSION=exclusive WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V1_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_attribution_v1.py run \"$PWD/evidence/backref-cost-attribution-v1-execution-20260819\"",
+    "expanded_expected_commit": "454946a800124781296cd5d3a34772d4228103be",
+    "invocations": 1,
+    "exit_status": 1,
+    "stdout": "",
+    "stderr": "ERROR: phase-1 handoff rejected timing; see frozen blocker evidence\n",
+    "refusal_boundary": "local authorization check before prepare_remote",
+    "remote_admission_attempted": false,
+    "lease_acquisition_attempted": false,
+    "profiler_invocations": 0,
+    "workloads_invoked": 0,
+    "archive_transfer_attempted": false,
+    "extraction_attempted": false,
+    "execution_output_path_existed_after_run": false,
+    "post_refusal_process_check": "No prohibited profiler, runner, operator, or Runner.Worker process was reported.",
+    "remote_cleanup": "NOT_APPLICABLE_NO_REMOTE_ACTION",
+    "local_cleanup": "PASS_OUTPUT_ABSENT_AND_NO_PROHIBITED_PROCESS_REPORTED"
+  },
+  "correctness_determinism_fallback": {
+    "required_correctness_cells": 4,
+    "required_encodes_per_cell": {
+      "baseline": 2,
+      "candidate": 2
+    },
+    "expected_correctness_encodes": 16,
+    "observed_correctness_encodes": 0,
+    "correctness_artifact": "ABSENT",
+    "bitstream_equality": "NOT_EVALUABLE",
+    "decoded_rgb_pixel_equality": "NOT_EVALUABLE",
+    "repeat_determinism": "NOT_EVALUABLE",
+    "runtime_fallback_behavior": "NOT_EVALUABLE",
+    "source_level_selector_and_no_fault_injection": "PASS"
+  },
+  "profile_sample_stage_inventory": {
+    "raw_traces_expected": 24,
+    "raw_traces_observed": 0,
+    "toc_exports_expected": 24,
+    "toc_exports_observed": 0,
+    "sample_table_exports_observed": 0,
+    "usable_symbolized_samples_observed": 0,
+    "minimum_usable_symbolized_samples_per_profile": 500,
+    "minimum_export_rows_per_profile": 500,
+    "unsymbolized_share_observed": null,
+    "maximum_unsymbolized_share": 0.05,
+    "required_profile_symbols_observed": false,
+    "timer_records_expected": 120,
+    "timer_records_observed": 0,
+    "retained_stage_records_expected": 96,
+    "retained_stage_records_observed": 0,
+    "required_stage_positive_calls": "NOT_EVALUABLE",
+    "timer_nesting_and_accounting": "NOT_EVALUABLE",
+    "three_repeat_total_stability": "NOT_EVALUABLE",
+    "major_stage_share_stability": "NOT_EVALUABLE",
+    "profiler_or_export_errors": "NO_PROFILER_OR_EXPORT_WAS_INVOKED",
+    "profile_completeness": "NOT_MET"
+  },
+  "operational_evidence": {
+    "source_identity": "LOCAL_PHASE2_HANDOFF_VERIFIED",
+    "remote_toolchain_identity": "NOT_OBSERVED",
+    "device_identity": "NOT_OBSERVED_IN_PHASE2",
+    "power_ac_lpm_thermal": "NOT_CHECKED_IN_PHASE2",
+    "process_isolation_during_profiles": "NOT_EVALUABLE_NO_PROFILES",
+    "resource_admission": "NOT_CHECKED_IN_PHASE2",
+    "exclusive_lease": "NOT_ATTEMPTED",
+    "archive": "NOT_CREATED",
+    "index": "NOT_CREATED",
+    "transfer": "NOT_ATTEMPTED",
+    "extraction": "NOT_ATTEMPTED",
+    "remote_cleanup": "NOT_APPLICABLE",
+    "local_refusal_cleanup_observation": "PRESENT",
+    "controlled_remote_refusal_bundle": "NOT_CREATED_BECAUSE_LOCAL_GATE_REFUSED_FIRST"
+  },
+  "diagnostic_acceptance_criteria": [
+    {
+      "criterion": "All 24 serial profiles are present and complete",
+      "status": "NOT_MET",
+      "evidence": "0/24 profiles"
+    },
+    {
+      "criterion": "Raw trace, TOC, and every discovered sample/profile XML export exist for each profile",
+      "status": "NOT_MET",
+      "evidence": "0 traces, 0 TOCs, 0 sample/profile exports"
+    },
+    {
+      "criterion": "At least 500 export rows and 500 usable symbolized samples per profile",
+      "status": "NOT_MET",
+      "evidence": "0 samples because profiling never started"
+    },
+    {
+      "criterion": "Unsymbolized share is at most 5 percent and every required profile symbol is present",
+      "status": "NOT_EVALUABLE",
+      "evidence": "No trace or symbolized export exists"
+    },
+    {
+      "criterion": "Five timer records and four retained records exist per profile",
+      "status": "NOT_MET",
+      "evidence": "0/120 timer records and 0/96 retained records"
+    },
+    {
+      "criterion": "Required timer stages have positive calls and timer nesting/accounting is valid",
+      "status": "NOT_EVALUABLE",
+      "evidence": "No stage record exists"
+    },
+    {
+      "criterion": "Three-repeat retained-total and major-stage-share stability bounds pass",
+      "status": "NOT_EVALUABLE",
+      "evidence": "No repetition was executed"
+    },
+    {
+      "criterion": "Baseline/candidate build, binary, dSYM, compiler, SDK, flags, and frame-policy identities match",
+      "status": "NOT_MET_FOR_EXECUTION",
+      "evidence": "The design freezes these identities, but no Phase 2 build identity artifact exists"
+    },
+    {
+      "criterion": "Exact bitstream, decoded RGB, repeat determinism, and correctness inventory pass",
+      "status": "NOT_MET",
+      "evidence": "0/16 required correctness encodes"
+    },
+    {
+      "criterion": "Source, host, process, resources, AC power, LPM, thermal state, and one-child isolation pass",
+      "status": "NOT_MET_FOR_EXECUTION",
+      "evidence": "Local source/refusal identity exists; remote admission never started"
+    },
+    {
+      "criterion": "Lease acquire/release and archive/index/transfer/extraction/cleanup evidence are complete",
+      "status": "NOT_MET_FOR_COMPLETED_DIAGNOSTIC",
+      "evidence": "Lease and remote return were not attempted; local refusal cleanup evidence is present"
+    },
+    {
+      "criterion": "No profiler or export errors",
+      "status": "NOT_APPLICABLE",
+      "evidence": "No profiler or export command was invoked"
+    },
+    {
+      "criterion": "Diagnostic-only evidence cannot authorize production promotion",
+      "status": "PASS",
+      "evidence": "The manifest and protocol explicitly set diagnostic_only and production_promotion_forbidden"
+    }
+  ],
+  "attribution_recomputation": {
+    "input_profiles": 0,
+    "input_samples": 0,
+    "input_stage_records": 0,
+    "method": "No aggregation or percentage calculation is defined on an empty evidence set; all attribution values remain null.",
+    "cells": [
+      {
+        "case_id": "photo-large",
+        "method": 4,
+        "expected_profiles": {
+          "baseline": 3,
+          "candidate": 3
+        },
+        "observed_profiles": {
+          "baseline": 0,
+          "candidate": 0
+        },
+        "expected_retained_stage_records": {
+          "baseline": 12,
+          "candidate": 12
+        },
+        "observed_retained_stage_records": {
+          "baseline": 0,
+          "candidate": 0
+        },
+        "total_encode_attribution": null,
+        "per_stage_attribution": null,
+        "baseline_candidate_delta": null,
+        "interval_materiality": null,
+        "status": "NOT_DETERMINABLE"
+      },
+      {
+        "case_id": "photo-large",
+        "method": 6,
+        "expected_profiles": {
+          "baseline": 3,
+          "candidate": 3
+        },
+        "observed_profiles": {
+          "baseline": 0,
+          "candidate": 0
+        },
+        "expected_retained_stage_records": {
+          "baseline": 12,
+          "candidate": 12
+        },
+        "observed_retained_stage_records": {
+          "baseline": 0,
+          "candidate": 0
+        },
+        "total_encode_attribution": null,
+        "per_stage_attribution": null,
+        "baseline_candidate_delta": null,
+        "interval_materiality": null,
+        "status": "NOT_DETERMINABLE"
+      },
+      {
+        "case_id": "graphic-large",
+        "method": 4,
+        "expected_profiles": {
+          "baseline": 3,
+          "candidate": 3
+        },
+        "observed_profiles": {
+          "baseline": 0,
+          "candidate": 0
+        },
+        "expected_retained_stage_records": {
+          "baseline": 12,
+          "candidate": 12
+        },
+        "observed_retained_stage_records": {
+          "baseline": 0,
+          "candidate": 0
+        },
+        "total_encode_attribution": null,
+        "per_stage_attribution": null,
+        "baseline_candidate_delta": null,
+        "interval_materiality": null,
+        "status": "NOT_DETERMINABLE"
+      },
+      {
+        "case_id": "graphic-large",
+        "method": 6,
+        "expected_profiles": {
+          "baseline": 3,
+          "candidate": 3
+        },
+        "observed_profiles": {
+          "baseline": 0,
+          "candidate": 0
+        },
+        "expected_retained_stage_records": {
+          "baseline": 12,
+          "candidate": 12
+        },
+        "observed_retained_stage_records": {
+          "baseline": 0,
+          "candidate": 0
+        },
+        "total_encode_attribution": null,
+        "per_stage_attribution": null,
+        "baseline_candidate_delta": null,
+        "interval_materiality": null,
+        "status": "NOT_DETERMINABLE"
+      }
+    ],
+    "required_stage_results": {
+      "total_encode": null,
+      "lossless_analysis_and_backward_references": null,
+      "hash_chain_and_search": null,
+      "cost_manager_dp": null,
+      "push_interval": null,
+      "insert_interval_and_update": null,
+      "traceback": null,
+      "histogram": null,
+      "huffman": null,
+      "serialization": null,
+      "allocation_and_setup": null,
+      "steady_computation": null
+    },
+    "code_layout_icache_control_attribution": "UNRESOLVED_NO_CALL_STACK_OR_STAGE_EVIDENCE"
+  },
+  "research_consequence": {
+    "attribution_question": "UNRESOLVED",
+    "interval_search_family_decision": "NO_EVIDENCE_SUPPORTED_CLOSE_OR_REOPEN_DECISION_IN_THIS_CYCLE",
+    "close_family_threshold_evaluable": false,
+    "baseline_interval_total_cpu_share": null,
+    "consistent_recoverable_win_bound": null,
+    "ranked_next_stages": {
+      "method_4": "NOT_DETERMINABLE_FROM_THIS_RUN",
+      "method_6": "NOT_DETERMINABLE_FROM_THIS_RUN"
+    },
+    "quantified_next_internal_boundary": null,
+    "follow_up_experiment_proposed": false,
+    "follow_up_experiment_run": false,
+    "reason": "Zero profiles, samples, and stage records provide no basis for interval materiality, stage ranking, causal attribution, or a quantified follow-up boundary."
+  },
+  "evidence_limit": "This cycle validates frozen source, guard, admission, archive, plan, and refusal contracts. It contributes no performance evidence and cannot answer where baseline or specialized execution time is spent.",
+  "phase3_verification": {
+    "workloads_invoked": 0,
+    "profiler_invocations": 0,
+    "remote_pipeline_invocations": 0,
+    "performance_samples_collected": 0,
+    "checks": [
+      {
+        "command": "env -u WEBP_BENCHMARK_SESSION PYTHONDONTWRITEBYTECODE=1 WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V1_COMMIT=$HEAD python3 scripts/execute_backref_cost_attribution_v1.py validate",
+        "status": "PASS",
+        "note": "Untimed local handoff validation; no lease or timed binary."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/test_backref_cost_attribution_v1_protocol.py",
+        "status": "PASS",
+        "note": "Exact specialization identity, mode truth table, 24-command serial plan, no-workload rehearsal, diagnostic-only policy."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/test_backref_cost_attribution_v1_admission.py",
+        "status": "PASS",
+        "note": "Canonical paths, bundle/receipt hashes, disjoint modes, malformed refusal, cleanup, shared admission implementation."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/test_backref_cost_attribution_v1_archive.py",
+        "status": "PASS",
+        "note": "Indexed archive/extractor safety contract only; no Phase 2 archive existed."
+      },
+      {
+        "command": "PYTHONDONTWRITEBYTECODE=1 python3 scripts/test_experiment_guards.py",
+        "status": "PASS",
+        "note": "Twenty-one independent default-off build/runtime guards and fail-closed leases; make checks are dry-runs."
+      },
+      {
+        "command": "sha256sum verification of all scripts/backref_cost_attribution_v1_manifest.json frozen_artifacts entries",
+        "status": "PASS",
+        "note": "23/23 matched."
+      },
+      {
+        "command": "git ancestry, parent, public-header diff, export-control diff, evidence inventory, and git diff --check inspections",
+        "status": "PASS",
+        "note": "Read-only repository checks."
+      }
+    ]
+  }
+}

@@ -1,7 +1,7 @@
 // Intentionally no include guard: the specialization experiment instantiates
 // this private DP body once for the production baseline and once for the
 // always-specialized candidate. The two names below must be macros.
-static int BACKREF_DISTANCE_ONLY_NAME(
+static WEBP_BACKREF_ATTRIBUTION_NOINLINE int BACKREF_DISTANCE_ONLY_NAME(
     int xsize, int ysize, const uint32_t* const argb, int cache_bits,
     const VP8LHashChain* const hash_chain, const VP8LBackwardRefs* const refs,
     uint16_t* const dist_array) {
@@ -13,15 +13,18 @@ static int BACKREF_DISTANCE_ONLY_NAME(
   const size_t literal_array_size =
       sizeof(*((CostModel*)NULL)->literal) * VP8LHistogramNumCodes(cache_bits);
   const size_t cost_model_size = sizeof(CostModel) + literal_array_size;
-  CostModel* const cost_model =
-      (CostModel*)WebPSafeCalloc(1ULL, cost_model_size);
+  CostModel* cost_model;
   VP8LColorCache hashers;
-  CostManager* cost_manager =
-      (CostManager*)WebPSafeCalloc(1ULL, sizeof(*cost_manager));
+  CostManager* cost_manager;
   int offset_prev = -1, len_prev = -1;
   int64_t offset_cost = -1;
   int first_offset_is_constant = -1;
   int reach = 0;
+  const uint64_t attribution_setup_start =
+      WebPProfileStageBegin(WEBP_PROFILE_BACKREF_COST_DP_SETUP);
+
+  cost_model = (CostModel*)WebPSafeCalloc(1ULL, cost_model_size);
+  cost_manager = (CostManager*)WebPSafeCalloc(1ULL, sizeof(*cost_manager));
 
   if (cost_model == NULL || cost_manager == NULL) goto Error;
   cost_model->literal = (uint32_t*)(cost_model + 1);
@@ -33,7 +36,12 @@ static int BACKREF_DISTANCE_ONLY_NAME(
   if (!CostManagerInit(cost_manager, dist_array, pix_count, cost_model)) {
     goto Error;
   }
+  WebPProfileStageEnd(WEBP_PROFILE_BACKREF_COST_DP_SETUP,
+                      attribution_setup_start);
 
+  {
+  const uint64_t attribution_steady_start =
+      WebPProfileStageBegin(WEBP_PROFILE_BACKREF_COST_DP_STEADY);
   dist_array[0] = 0;
   AddSingleLiteralWithCostModel(argb, &hashers, cost_model, /*idx=*/0,
                                 use_color_cache, /*prev_cost=*/0,
@@ -83,6 +91,9 @@ static int BACKREF_DISTANCE_ONLY_NAME(
     UpdateCostAtIndex(cost_manager, i, 1);
     offset_prev = offset;
     len_prev = len;
+  }
+  WebPProfileStageEnd(WEBP_PROFILE_BACKREF_COST_DP_STEADY,
+                      attribution_steady_start);
   }
 
   ok = !refs->error;

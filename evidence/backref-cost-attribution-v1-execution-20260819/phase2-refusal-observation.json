@@ -1,0 +1,18 @@
+{
+  "command": "env WEBP_BENCHMARK_SESSION=exclusive WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V1_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_attribution_v1.py run \"$PWD/evidence/backref-cost-attribution-v1-execution-20260819\"",
+  "expanded_expected_commit": "454946a800124781296cd5d3a34772d4228103be",
+  "phase1_performance_samples": 0,
+  "phase1_status": "BLOCKED_REMOTE_REHEARSAL",
+  "timed_execution_authorized": false,
+  "return_status": 1,
+  "stdout": "",
+  "stderr": "ERROR: phase-1 handoff rejected timing; see frozen blocker evidence\n",
+  "remote_admission_attempted": false,
+  "lease_acquisition_attempted": false,
+  "archive_transfer_attempted": false,
+  "extraction_attempted": false,
+  "profiler_invocations": 0,
+  "workloads_invoked": 0,
+  "execution_output_path_existed_after_run": false,
+  "prohibited_profiler_or_runner_processes_found_after_run": false
+}
