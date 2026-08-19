@@ -27,6 +27,7 @@ import test_backref_cost_attribution_v9_process_ownership as attribution_v9_owne
 import test_backref_cost_attribution_v10_process_ownership as attribution_v10_ownership
 import test_backref_cost_attribution_v11_process_ownership as attribution_v11_ownership
 import test_backref_cost_attribution_v12_process_ownership as attribution_v12_ownership
+import test_backref_cost_attribution_v13_process_ownership as attribution_v13_ownership
 import test_next_boundary_operator_portability as boundary_portability
 
 
@@ -224,6 +225,12 @@ MATRIX = (
         "WEBP_BACKREF_COST_ATTRIBUTION_V12_EXPERIMENT",
         "src/enc/backref_cost_attribution_v12_experiment_enc.o",
     ),
+    (
+        "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT",
+        "WEBP_USE_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT",
+        "WEBP_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT",
+        "src/enc/backref_cost_attribution_v13_experiment_enc.o",
+    ),
 )
 
 
@@ -263,6 +270,7 @@ def run(argv: list[str], environment: dict[str, str] | None = None) -> subproces
         "WEBP_BACKREF_COST_ATTRIBUTION_V10_EXPERIMENT",
         "WEBP_BACKREF_COST_ATTRIBUTION_V11_EXPERIMENT",
         "WEBP_BACKREF_COST_ATTRIBUTION_V12_EXPERIMENT",
+        "WEBP_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT",
     ):
         env.pop(name, None)
     if environment:
@@ -600,12 +608,13 @@ def main() -> int:
     attribution_v10_ownership.main()
     attribution_v11_ownership.main()
     attribution_v12_ownership.main()
+    attribution_v13_ownership.main()
     check_build_matrix()
     check_omitted_targets()
     check_promoted_ablation_control()
     check_runtime_and_lease_refusals()
-    print("PASS: thirty-two independent build/runtime guards, fail-closed "
-          "leases, and attribution v1-v12 process ownership")
+    print("PASS: thirty-three independent build/runtime guards, fail-closed "
+          "leases, and attribution v1-v13 process ownership")
     return 0
 
 
