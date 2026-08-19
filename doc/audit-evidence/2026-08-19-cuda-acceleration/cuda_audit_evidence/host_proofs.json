@@ -1,0 +1,187 @@
+{
+  "env_parser": {
+    "null": {
+      "main": true,
+      "decimate": true
+    },
+    "": {
+      "main": true,
+      "decimate": true
+    },
+    "0": {
+      "main": false,
+      "decimate": false
+    },
+    "false": {
+      "main": false,
+      "decimate": true
+    },
+    "FALSE": {
+      "main": false,
+      "decimate": true
+    },
+    "no": {
+      "main": false,
+      "decimate": true
+    },
+    "1": {
+      "main": true,
+      "decimate": true
+    }
+  },
+  "empty_band_example": {
+    "mb_w": 80,
+    "mb_h": 17,
+    "band_count": 8,
+    "rows_per_band": 3,
+    "last_diagonal": 111,
+    "bands": [
+      {
+        "band": 0,
+        "row_start": 0,
+        "row_end": 3,
+        "rows": 3,
+        "target_diagonal": 83,
+        "target_within_launches": true,
+        "event_recorded": true
+      },
+      {
+        "band": 1,
+        "row_start": 3,
+        "row_end": 6,
+        "rows": 3,
+        "target_diagonal": 89,
+        "target_within_launches": true,
+        "event_recorded": true
+      },
+      {
+        "band": 2,
+        "row_start": 6,
+        "row_end": 9,
+        "rows": 3,
+        "target_diagonal": 95,
+        "target_within_launches": true,
+        "event_recorded": true
+      },
+      {
+        "band": 3,
+        "row_start": 9,
+        "row_end": 12,
+        "rows": 3,
+        "target_diagonal": 101,
+        "target_within_launches": true,
+        "event_recorded": true
+      },
+      {
+        "band": 4,
+        "row_start": 12,
+        "row_end": 15,
+        "rows": 3,
+        "target_diagonal": 107,
+        "target_within_launches": true,
+        "event_recorded": true
+      },
+      {
+        "band": 5,
+        "row_start": 15,
+        "row_end": 17,
+        "rows": 2,
+        "target_diagonal": 111,
+        "target_within_launches": true,
+        "event_recorded": true
+      },
+      {
+        "band": 6,
+        "row_start": 18,
+        "row_end": 17,
+        "rows": -1,
+        "target_diagonal": 111,
+        "target_within_launches": true,
+        "event_recorded": false
+      },
+      {
+        "band": 7,
+        "row_start": 21,
+        "row_end": 17,
+        "rows": -4,
+        "target_diagonal": 111,
+        "target_within_launches": true,
+        "event_recorded": false
+      }
+    ]
+  },
+  "padded_stride_example": {
+    "width": 4,
+    "height": 3,
+    "caller_stride": 7,
+    "actual_rows": [
+      [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7
+      ],
+      [
+        8,
+        9,
+        10,
+        11,
+        12,
+        238,
+        238
+      ],
+      [
+        238,
+        238,
+        238,
+        238,
+        238,
+        238,
+        238
+      ]
+    ],
+    "expected_rows": [
+      [
+        1,
+        2,
+        3,
+        4,
+        238,
+        238,
+        238
+      ],
+      [
+        5,
+        6,
+        7,
+        8,
+        238,
+        238,
+        238
+      ],
+      [
+        9,
+        10,
+        11,
+        12,
+        238,
+        238,
+        238
+      ]
+    ],
+    "equal": false
+  },
+  "transactional_sequence_example": {
+    "returned": "WEBP_ACCELERATOR_ERROR",
+    "outputs_after_error": {
+      "results": "modified",
+      "recon_y": "modified",
+      "recon_u": "sentinel",
+      "recon_v": "sentinel"
+    },
+    "transactional_contract_satisfied": false
+  }
+}

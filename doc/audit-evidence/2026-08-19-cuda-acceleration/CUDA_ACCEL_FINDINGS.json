@@ -1,0 +1,29 @@
+{
+  "target": "libwebp-metal-codex-cuda-encoder-acceleration",
+  "runtime_limit": "No nvcc, NVIDIA driver/GPU, or Compute Sanitizer was available.",
+  "counts": {
+    "confirmed_defects": 18,
+    "compression_quality_divergences": 4,
+    "build_test_issues": 6
+  },
+  "confirmed_defects": [
+    {"id":"C-01","severity":"high","title":"Decimate ignores WEBP_CUDA_DEVICE"},
+    {"id":"C-02","severity":"high","title":"Decimate does not establish the selected device on each host thread"},
+    {"id":"C-03","severity":"medium","title":"Decimate environment boolean parser is inconsistent"},
+    {"id":"C-04","severity":"high","title":"Incomplete request validation permits device out-of-bounds access and arithmetic overflow"},
+    {"id":"C-05","severity":"high","title":"Reconstruction output strides are ignored"},
+    {"id":"C-06","severity":"high","title":"Empty streaming bands produce unrecorded events, negative row counts, and stale pending state"},
+    {"id":"C-07","severity":"high","title":"Decimate violates transactional output semantics"},
+    {"id":"C-08","severity":"medium","title":"Uninitialized result bytes violate determinism and may disclose stale shared memory"},
+    {"id":"C-09","severity":"medium","title":"Partial decimate initialization leaks resources"},
+    {"id":"C-10","severity":"medium","title":"Backend lifecycle callbacks ignore decimate resources and work"},
+    {"id":"C-11","severity":"medium","title":"Transient initialization failures are permanent"},
+    {"id":"C-12","severity":"medium","title":"Timing mode makes streaming BEGIN synchronous"},
+    {"id":"C-13","severity":"low","title":"Unchecked threshold parsing can silently disable/force decimate"},
+    {"id":"C-14","severity":"low","title":"Decimate success is absent from successful-stage telemetry"},
+    {"id":"C-15","severity":"medium","title":"Lossy-analysis NULL probe reports unavailable backends as available"},
+    {"id":"C-16","severity":"high","title":"Detached global prewarm thread is unsafe under shared-library unload"},
+    {"id":"C-17","severity":"high","title":"Malformed hash predecessor links cause device out-of-bounds reads"},
+    {"id":"C-18","severity":"low","title":"Resident handoffs confuse pointer reuse with unchanged content"}
+  ]
+}

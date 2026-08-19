@@ -7,6 +7,10 @@ already existed by the time remediation began, but its narrower coverage and
 lack of CTest registration meant the substance of B-03 still applied. All
 other confirmed defects remained applicable.
 
+The supplied audit and its raw reproduction artifacts are preserved verbatim
+under [`audit-evidence/2026-08-19-cuda-acceleration/`](audit-evidence/2026-08-19-cuda-acceleration/README.md),
+with a SHA-256 manifest for independent verification.
+
 ## Confirmed defects
 
 | ID | Disposition | Remediation |
