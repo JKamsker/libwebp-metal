@@ -929,3 +929,10 @@ than rounded into a win. This is RTX 2080 SUPER-only evidence. Raw records are
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-i16-chroma-overlap-ab.jsonl`
 and
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-chroma-overlap-ab.jsonl`.
+
+An additional screen composed the lean GPU candidate with the previously
+exact dynamic-token probability fall-through hint. All seven CTests passed
+and all 24 outputs were byte-exact, but the gains were 1.867 ms/image PNG and
+only 1.155 JPEG. Because the CPU hint reduced rather than increased the JPEG
+gain, that variant was removed without a full gate. Raw records are
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-chroma-token-fallthrough-screen.jsonl`.

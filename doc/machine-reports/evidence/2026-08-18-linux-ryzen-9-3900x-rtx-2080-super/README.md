@@ -21,6 +21,9 @@ screen. `i4-chroma-overlap-ab.jsonl` contains both five-process blocks for the
 lean composition (120 records total), including the borderline repeat used
 for its decision.
 
+`i4-chroma-token-fallthrough-screen.jsonl` contains the 24-record screen that
+showed the CPU probability layout did not compose with the lean GPU candidate.
+
 Inspect the sampling archives with:
 
 ```sh

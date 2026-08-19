@@ -993,3 +993,8 @@ blocks, for 30 samples per cell:
 All 120 outputs matched their parent hashes and byte counts. JPEG remained
 0.013 ms/image below the strict 1.5 ms gate, so the composition was removed.
 This is RTX 2080 SUPER-only evidence.
+
+Adding the previously exact dynamic-token probability fall-through did not
+rescue the borderline result. The two-process screen remained byte-exact and
+gained 1.867 ms/image PNG, but JPEG fell to a 1.155 ms/image gain. The CPU
+hint was therefore removed without extending that variant to the full gate.
