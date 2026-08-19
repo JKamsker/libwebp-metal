@@ -1914,3 +1914,25 @@ out a 1.5 ms/image end-to-end gain, so no behavior candidate was implemented.
 The probe was removed and the restored source passed all seven CTests. Raw
 probe, output, build, and restored test transcript are archived under
 `libwebp-i4-zero-residual-*`. Turing-only diagnostic; no Ampere+ change.
+
+## I4 last-nonzero-index handoff rejection
+
+The next pre-Ampere candidate extended the measured zero-mode idea to all
+basic I4 residuals. The four-lane quantizer reduced its exact last nonzero
+coefficient and packed it above the low nonzero bit in existing scratch, so
+the residual warp no longer scanned sixteen levels backwards. Method 5/6
+trellis and Ampere+ compiled the original residual path.
+
+Candidate and restored source passed all seven CTests. All 24 order-reversed
+rows matched hashes and byte counts:
+
+| Format | Parent | Last-index handoff | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.887 ms/image | 39.833 ms/image | 0.054 ms/image |
+| JPEG lossy | 39.893 ms/image | 39.897 ms/image | -0.005 ms/image |
+
+The kernel moved from 103 to 102 registers with the 352-byte stack and 23,392
+shared bytes unchanged. The result is noise: the scan is not a meaningful
+part of the residual critical path, and the quantizer-side shuffles consume
+its saving. The candidate was removed; raw artifacts are under
+`libwebp-i4-last-handoff-*`. Turing-only evidence; no Ampere+ change.

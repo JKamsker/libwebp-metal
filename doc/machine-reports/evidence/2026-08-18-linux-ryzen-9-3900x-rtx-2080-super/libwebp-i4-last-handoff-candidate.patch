@@ -1,0 +1,111 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index d5dd4a6e..80ac1c10 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -237,6 +237,40 @@ __device__ int ResidualCostDev(const CostCache* c, int ctx0, int first,
+   return cost;
+ }
+ 
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++// ResidualCostDev with the quantizer's exact last-nonzero index. Basic I4
++// quantization already visits every coefficient, so this avoids rescanning
++// the sixteen published levels on the residual warp's critical path.
++__device__ int ResidualCostKnownLastDev(const CostCache* c, int ctx0,
++                                        int first, int coeff_type,
++                                        const int16_t* coeffs, int last) {
++  int n = first;
++  const int p0 = FirstProba(c, coeff_type, kEncBands[n], ctx0);
++  const uint16_t* t = LevelCostTable(c, coeff_type, kEncBands[n], ctx0);
++  int cost = (ctx0 == 0) ? BitCostDev(c, 1, p0) : 0;
++  if (last < 0) {
++    return BitCostDev(c, 0, p0);
++  }
++  for (; n < last; ++n) {
++    const int val = CudaAbs(coeffs[n]);
++    const int ctx = (val >= 2) ? 2 : val;
++    cost += LevelCostDev(c, t, val);
++    t = LevelCostTable(c, coeff_type, kEncBands[n + 1], ctx);
++  }
++  {
++    const int val = CudaAbs(coeffs[n]);
++    cost += LevelCostDev(c, t, val);
++    if (n < 15) {
++      const int b = kEncBands[n + 1];
++      const int ctx = (val == 1) ? 1 : 2;
++      const int last_p0 = FirstProba(c, coeff_type, b, ctx);
++      cost += BitCostDev(c, 0, last_p0);
++    }
++  }
++  return cost;
++}
++#endif
++
+ // Warp-cooperative GetResidualCost_C: each coefficient's incoming context
+ // depends only on the previous coefficient's value (0/1/2+), so all 16
+ // costs are computed on parallel lanes and warp-reduced. Bit-exact against
+@@ -610,6 +644,7 @@ __device__ __forceinline__ int I4QuantizeBlockCoop4(
+     int16_t* in, int16_t* out, const CudaVP8Matrix* mtx, int lane,
+     unsigned int warp_mask) {
+   int non_zero = 0;
++  int last = -1;
+   for (int n = lane; n < 16; n += 4) {
+     const int j = kCudaZigzag[n];
+     const int sign = (in[j] < 0);
+@@ -624,6 +659,7 @@ __device__ __forceinline__ int I4QuantizeBlockCoop4(
+       in[j] = (int16_t)(level * (int)Q);
+       out[n] = (int16_t)level;
+       non_zero |= level;
++      if (level != 0) last = n;
+     } else {
+       out[n] = 0;
+       in[j] = 0;
+@@ -632,7 +668,16 @@ __device__ __forceinline__ int I4QuantizeBlockCoop4(
+   const unsigned int group_shift = ((threadIdx.x & 31) >> 2) * 4;
+   const unsigned int group_mask = 0xfu << group_shift;
+   const unsigned int non_zero_lanes = __ballot_sync(warp_mask, non_zero != 0);
+-  return (non_zero_lanes & group_mask) != 0;
++  const int nz = (non_zero_lanes & group_mask) != 0;
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  int other = __shfl_down_sync(group_mask, last, 2, 4);
++  if (lane < 2 && other > last) last = other;
++  other = __shfl_down_sync(group_mask, last, 1, 4);
++  if (lane == 0 && other > last) last = other;
++  return nz | ((last + 1) << 1);
++#else
++  return nz;
++#endif
+ }
+ 
+ __device__ __forceinline__ void I4ITransformCoop4(
+@@ -1480,8 +1525,19 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+         const uint8_t* const src =
+             w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
+         if (warp == 0 && lane < kNumBModes) {
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++          if (p.rd_opt_level != kRDTrellisAll) {
++            const int last = (w.i4_nz[team][lane] >> 1) - 1;
++            w.i4_rcost[team][lane] = ResidualCostKnownLastDev(
++                &cc, ctx, 0, 3, w.i4_levels[team][lane], last);
++          } else {
++            w.i4_rcost[team][lane] = ResidualCostDev(
++                &cc, ctx, 0, 3, w.i4_levels[team][lane]);
++          }
++#else
+           w.i4_rcost[team][lane] = ResidualCostDev(
+               &cc, ctx, 0, 3, w.i4_levels[team][lane]);
++#endif
+         } else if (warp == 2 && lane < kNumBModes) {
+           w.i4_sse[team][lane] =
+               CudaSSE4x4(src, w.i4_out[team][lane]);
+@@ -1520,7 +1576,11 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+           rd_tmp.SD =
+               tlambda ? MULT_8B_DEV(tlambda, w.i4_sd[team][mode]) : 0;
+           rd_tmp.H = w.i4_mode_cost[team][mode];
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++          rd_tmp.nz = (uint32_t)(w.i4_nz[team][mode] & 1) << block;
++#else
+           rd_tmp.nz = (uint32_t)w.i4_nz[team][mode] << block;
++#endif
+           rd_tmp.R = w.i4_flat[team][mode] ? kFlatnessPenalty : 0;
+           rd_tmp.score = w.i4_base_score[team][mode];
+           if (best_mode >= 0 && rd_tmp.score >= rd_i4.score) continue;

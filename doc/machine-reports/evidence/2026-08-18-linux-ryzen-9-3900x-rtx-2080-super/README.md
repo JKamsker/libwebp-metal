@@ -270,6 +270,11 @@ zero-mode counter patch, raw medium-content counts and timing output, probe
 build log, and restored-parent build/test transcript. The measured critical
 path ruled out a candidate, and the probe was removed.
 
+The `libwebp-i4-last-handoff-*` files contain the exact rejected
+pre-Ampere patch, 24 byte-exact timing rows, candidate build and explicit
+resource output, plus candidate/restored seven-test transcripts. The
+last-nonzero scratch handoff was removed.
+
 Inspect the sampling archives with:
 
 ```sh

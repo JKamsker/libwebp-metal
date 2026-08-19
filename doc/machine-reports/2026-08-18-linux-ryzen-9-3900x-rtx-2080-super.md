@@ -2035,3 +2035,26 @@ but their zero rates are 0.35% and 0.00%. The end-to-end ceiling is far below
 source passed all seven CTests. Raw probe patch, counts, build log, and
 restored test transcript are archived under
 `libwebp-i4-zero-residual-*`. RTX 2080 SUPER only; no Ampere+ path changed.
+
+## I4 last-nonzero-index handoff
+
+To test the stronger form of the zero-residual idea, a pre-Ampere candidate
+published every basic quantizer's exact last-nonzero index. Two four-lane
+reductions packed it into the unused upper bits of existing `i4_nz` scratch,
+leaving the low bit unchanged. Residual scoring consumed the index directly
+instead of rescanning sixteen levels. Trellis and Ampere+ used the original
+code.
+
+Both candidate and restored source passed all seven CTests. All 24
+order-reversed native-sm_75 rows were byte-exact:
+
+| Format | Parent | Last-index handoff | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.887 ms/image | 39.833 ms/image | 0.054 ms/image |
+| JPEG lossy | 39.893 ms/image | 39.897 ms/image | -0.005 ms/image |
+
+Resources moved from 103 to 102 registers; the 352-byte stack and 23,392-byte
+shared allocation stayed fixed. The quantizer reduction cost canceled the
+tiny scan saving, so the candidate was removed. Exact patch, raw rows,
+candidate build/resources, and candidate/restored tests are archived under
+`libwebp-i4-last-handoff-*`. RTX 2080 SUPER only; no Ampere+ path changed.

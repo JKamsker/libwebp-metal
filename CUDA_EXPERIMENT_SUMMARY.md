@@ -605,3 +605,25 @@ their zero rates are negligible or zero. The ceiling is therefore far below
 1.5 ms/image and no candidate was built. The probe was removed and the
 restored tree passed 7/7 CTests. Raw patch, counts, build, and restored test
 output are under `libwebp-i4-zero-residual-*`. RTX 2080 SUPER only.
+
+## Pre-Ampere I4 last-index handoff rejection
+
+The zero-mode probe showed that a zero-only bypass could not move the critical
+warp, so a stronger candidate reused quantization's exact last-nonzero index
+for every basic I4 mode. On pre-Ampere, two subgroup reductions packed that
+index into the unused upper bits of the existing `i4_nz` scratch word; the
+residual warp skipped its backwards sixteen-level scan. Trellis and Ampere+
+retained the original path and scratch interpretation.
+
+Candidate and restored trees passed 7/7 CTests. All 24 order-reversed
+native-sm_75 rows were byte-exact:
+
+| Format | Parent | Last-index handoff | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.887 ms/image | 39.833 ms/image | 0.054 ms/image |
+| JPEG lossy | 39.893 ms/image | 39.897 ms/image | -0.005 ms/image |
+
+Registers fell from 103 to 102, with stack and shared memory unchanged, but
+the quantizer reduction offset the eliminated scan. The candidate was
+removed. Exact patch, rows, build/resources, and both test logs are archived
+under `libwebp-i4-last-handoff-*`. RTX 2080 SUPER only; no Ampere+ claim.
