@@ -1,0 +1,279 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v8-phase3-audit-v1",
+  "generated_at_utc": "2026-08-19T09:31:53Z",
+  "phase": 3,
+  "evaluator": "Sol/high",
+  "evaluation_status": "complete_with_genuine_blocker",
+  "evaluated_head": "8fd0ab2511a84be24fd39926f1dd974ede372e52",
+  "decision": {
+    "interval_family": "unassessed",
+    "close_family": false,
+    "reopen_family": false,
+    "new_bounded_experiment_selected": false,
+    "new_bounded_experiment_implemented": false,
+    "new_bounded_experiment_run": false,
+    "next_cpu_stage_ranked": false,
+    "next_cpu_stage": null,
+    "production_promotion_authorized": false,
+    "production_disposition": "NO-GO",
+    "reason": "The sole Phase-1A rehearsal refused before source admission, Phase 1B granted no Phase 2 authority, no Phase 2 commit exists, and no V8 diagnostic rows exist."
+  },
+  "blocking_chain": {
+    "phase1_authorization_status": "REFUSED",
+    "timed_execution_authorized": false,
+    "phase2_authority": "NONE",
+    "rehearsal_failure_plane": "outer frozen process-identity snapshot before source admission",
+    "rehearsal_error": "FrameRefusal: relative executable identity is ambiguous",
+    "source_admission_reached": false,
+    "operator_invoked": false,
+    "representative_archive_calibrated": false,
+    "phase2_execution_invoked": false,
+    "phase2_commit_exists": false,
+    "retry_count": 0,
+    "rerun_count": 0,
+    "fallback_count": 0,
+    "blocker": "A successful synchronous rehearsal, source receipt, representative archive calibration, and authorization envelope are absent. The fail-closed refusal cannot be overridden in Phase 3."
+  },
+  "ancestry": {
+    "linear_from_frozen_main": true,
+    "commit_distance_from_main_before_phase3": 2,
+    "frozen_main": {
+      "commit": "fea767272f7d9d13e5e5f19cb910e6152418dcdd",
+      "parent": "567e48ddfeacfaa65fb11a1611fba7aa7f5590a5",
+      "tree": "d5ba3adc3aa0fab159ea7612c4698375c6847977"
+    },
+    "phase_1a": {
+      "commit": "9ab1014f9a72c4c82e53044a458ac0a1ee1d07c1",
+      "parent": "fea767272f7d9d13e5e5f19cb910e6152418dcdd",
+      "tree": "43b6cd35383ad6bae86c1b6a57436c0e4814117c",
+      "changed_files": 25,
+      "insertions": 4744,
+      "deletions": 26
+    },
+    "phase_1b": {
+      "commit": "8fd0ab2511a84be24fd39926f1dd974ede372e52",
+      "parent": "9ab1014f9a72c4c82e53044a458ac0a1ee1d07c1",
+      "tree": "0775cdde9554753fbf2e29249b9cf1fa186da4a7",
+      "changed_files": 5,
+      "insertions": 136,
+      "deletions": 0,
+      "only_predeclared_additions": true
+    },
+    "phase_2": {
+      "commit": null,
+      "tree": null,
+      "reason": "Phase 2 audited the refusal and correctly executed no diagnostic; no Phase 2 evidence commit was created."
+    }
+  },
+  "identity": {
+    "manifest_enumerated_frozen_artifacts": 27,
+    "manifest_itself_is_separately_enveloped": true,
+    "immutable_artifact_count": 28,
+    "phase1a_to_phase1b_frozen_bytes_identical": true,
+    "frozen_artifact_digest_mismatches": 0,
+    "phase1b_self_hash_cycle": false,
+    "phase3_self_hash_cycle": false,
+    "core_sha256": {
+      "manifest": "9ed7d303cbb565c2510dc051818e72d50bd0414452b042df9b17bfb58cde683a",
+      "protocol": "6c93e6c13ef2ffe476447c97a8bbba05cc6097d048bd7c886a2a61d9ba3bfe13",
+      "schema_catalog": "e5b06a34d6c1e957904ddeb2d83f0794aa6ca3f59a0a87a9dd59baf1a90dc142",
+      "transport": "c9b15dc9fff6fd01d4a685d1c9fbcaf66ea424c3bed0becd7c17c3b202b021ed",
+      "phase1_local_validation": "112f910f8fc8e6a72cbafae80e0aabaf87f7531a4987cc270f763029eb1ee748",
+      "phase1b_authorization": "fe5472ce26860f307401820e7b795ff5cc5a1ecb99b97a1d5b96b3cf5a279f9f",
+      "phase1b_hash_index": "42837de6289dbaa5d5297cf6222186c66aed08a61a0a323411ddba15e46ded5a",
+      "raw_rehearsal_invocation": "871b83da598c709e696b0ef664e707fd0a3b10f195d1939a4be4424ff3416707",
+      "raw_framed_stdout": "c5920e9cee82461135bacc35fd199da22ccca9b98ba3d79c3634972456ee4fdb",
+      "raw_transport_stderr": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "phase1b_diff": [
+      {"status": "A", "path": "evidence/backref-cost-attribution-v8-design/phase1b-authorization.json"},
+      {"status": "A", "path": "evidence/backref-cost-attribution-v8-design/phase1b-rehearsal-hashes.json"},
+      {"status": "A", "path": "evidence/backref-cost-attribution-v8-design/rehearsal/rehearsal-invocation.json"},
+      {"status": "A", "path": "evidence/backref-cost-attribution-v8-design/rehearsal/return-protocol/framed-stdout.bin"},
+      {"status": "A", "path": "evidence/backref-cost-attribution-v8-design/rehearsal/return-protocol/transport-stderr.bin"}
+    ]
+  },
+  "evidence_inventory": {
+    "pre_evaluation_files": 6,
+    "pre_evaluation_bytes": 11921,
+    "jsonl_files": 0,
+    "phase2_execution_directories": 0,
+    "timed_rows": 0,
+    "files": [
+      {"path": "evidence/backref-cost-attribution-v8-design/phase1-local-validation.json", "bytes": 3034, "sha256": "112f910f8fc8e6a72cbafae80e0aabaf87f7531a4987cc270f763029eb1ee748"},
+      {"path": "evidence/backref-cost-attribution-v8-design/phase1b-authorization.json", "bytes": 3526, "sha256": "fe5472ce26860f307401820e7b795ff5cc5a1ecb99b97a1d5b96b3cf5a279f9f"},
+      {"path": "evidence/backref-cost-attribution-v8-design/phase1b-rehearsal-hashes.json", "bytes": 717, "sha256": "42837de6289dbaa5d5297cf6222186c66aed08a61a0a323411ddba15e46ded5a"},
+      {"path": "evidence/backref-cost-attribution-v8-design/rehearsal/rehearsal-invocation.json", "bytes": 2767, "sha256": "871b83da598c709e696b0ef664e707fd0a3b10f195d1939a4be4424ff3416707"},
+      {"path": "evidence/backref-cost-attribution-v8-design/rehearsal/return-protocol/framed-stdout.bin", "bytes": 1877, "sha256": "c5920e9cee82461135bacc35fd199da22ccca9b98ba3d79c3634972456ee4fdb"},
+      {"path": "evidence/backref-cost-attribution-v8-design/rehearsal/return-protocol/transport-stderr.bin", "bytes": 0, "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"}
+    ]
+  },
+  "implementation_audit": {
+    "build_gate": "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT",
+    "compile_gate": "WEBP_USE_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT",
+    "runtime_gate": "WEBP_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT=1",
+    "fresh_default_off_identity": true,
+    "predecessor_gate_isolation": true,
+    "ordinary_surface_omits_v8": true,
+    "public_api_abi_preserved_locally": true,
+    "specialized_push_interval_matches_673bc3fa": true,
+    "selector_once_before_dp_mutation": true,
+    "closed_baseline_candidate_if_else": true,
+    "predecessor_fallthrough_excluded": true,
+    "single_selected_dp_no_overwrite": true,
+    "local_bitstream_pixel_and_input_correctness": true,
+    "exact_runtime_fallback": true,
+    "timer_clock": "mach_continuous_time",
+    "timer_boundaries_match_frozen_contract": true,
+    "per_pixel_or_push_interval_clocks": 0,
+    "phase3_production_code_changes": 0
+  },
+  "process_identity_and_ownership": {
+    "snapshot_command": ["/bin/ps", "-axo", "pid=,ppid=,comm="],
+    "frozen_fields": ["pid", "ppid", "comm"],
+    "argument_text_collected": false,
+    "argv_source_payload_scanned_for_conflicts": false,
+    "denied_exact_executable_basenames": 34,
+    "allowed_exact_transport_ancestor_paths": 10,
+    "conflict_match": "exact executable basename only",
+    "transport_ancestor_match": "exact executable path on the verified self-to-PID-1 chain only",
+    "hostile_ancestor_argv_and_source_fixture": "PASS",
+    "exact_runner_benchmark_cuda_identity_with_benign_argv_fixture": "PASS",
+    "prefix_suffix_lookalike_fixture": "PASS",
+    "malformed_ambiguous_fail_closed_fixture": "PASS",
+    "live_rehearsal_fail_closed_on_ambiguous_relative_identity": true,
+    "discovered_pid_signal_paths": 0,
+    "retained_direct_child_timeout_signal_sites": 1,
+    "phase3_timeout_signal_fixture_invoked": false,
+    "rehearsal_discovered_pid_signals": 0,
+    "phase2_signals": 0,
+    "phase3_signals": 0,
+    "external_process_policy": "observe-only and refusal-only",
+    "host_or_service_mutation": false
+  },
+  "frozen_plan_and_actual": {
+    "case_order": ["photo-large", "graphic-large"],
+    "method_order": [4, 6],
+    "repetition_variant_order": [["baseline", "candidate"], ["candidate", "baseline"], ["baseline", "candidate"]],
+    "planned": {
+      "remote_admissions": 1,
+      "exclusive_lease_attempts": 1,
+      "correctness_encodes": 16,
+      "serial_profile_processes": 24,
+      "warmups": 24,
+      "retained_runner_rows": 96,
+      "total_runner_rows": 120,
+      "total_stage_rows": 120
+    },
+    "actual_phase2": {
+      "remote_admissions": 0,
+      "exclusive_lease_attempts": 0,
+      "correctness_encodes": 0,
+      "serial_profile_processes": 0,
+      "warmups": 0,
+      "retained_runner_rows": 0,
+      "total_runner_rows": 0,
+      "total_stage_rows": 0,
+      "timing_rows": 0,
+      "performance_samples": 0,
+      "executed_profile_order": []
+    }
+  },
+  "source_toolchain_device_resources": {
+    "frozen_source_commit": "9ab1014f9a72c4c82e53044a458ac0a1ee1d07c1",
+    "frozen_source_tree": "43b6cd35383ad6bae86c1b6a57436c0e4814117c",
+    "local_frozen_source_hashes_verified": true,
+    "remote_source_admission": null,
+    "remote_toolchain_receipt": null,
+    "remote_runner_build_identity": null,
+    "remote_device_receipt": null,
+    "remote_resource_receipt": null,
+    "remote_correctness_receipt": null,
+    "remote_timer_receipt": null,
+    "frozen_manifest_host_declarations_are_observations": false,
+    "limitation": "The process snapshot refused before source admission and before operator, toolchain, device, resource, corpus, build, correctness, timer, plan, or lease evidence could be observed. Manifest declarations are frozen requirements, not live V8 receipts."
+  },
+  "lease": {
+    "rehearsal_acquisition_attempted": null,
+    "rehearsal_state": "unavailable-after-attempt",
+    "phase2_acquisition_attempted": false,
+    "phase2_receipt": null,
+    "exclusive_lease_verified": false,
+    "reason": "The operator was never invoked and Phase 2 was unauthorized."
+  },
+  "return_protocol": {
+    "single_noninteractive_remote_session_count": 1,
+    "post_run_remote_cleanup_operations": 0,
+    "raw_stream_bytes": 1877,
+    "raw_stream_sha256": "c5920e9cee82461135bacc35fd199da22ccca9b98ba3d79c3634972456ee4fdb",
+    "transport_stderr_bytes": 0,
+    "transport_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "frame_count": 6,
+    "frame_kinds": ["source-admission", "operator-status", "archive-build", "lease-state", "integrity-footer", "cleanup-footer"],
+    "frame_order_and_payload_hashes_verified": true,
+    "transaction_success": false,
+    "source_admission_status": "unavailable",
+    "operator_status": "unavailable",
+    "archive_status": "not-attempted",
+    "integrity_status": "refused",
+    "integrity_error": "FrameRefusal: relative executable identity is ambiguous",
+    "bulk_archive_returned": false,
+    "bulk_archive_bytes": 0,
+    "archive_extraction_performed": false,
+    "archive_security_fixtures": "PASS_LOCAL",
+    "representative_calibration": {
+      "declared_payload_bytes": 5242880,
+      "maximum_expected_archive_bytes": 4194304,
+      "archive_bytes": 0,
+      "chunk_count": 0,
+      "finite_margin_ratio": 0,
+      "usable_capacity_calibration": false
+    },
+    "cleanup": {
+      "footer_is_final_frame": true,
+      "status": "complete",
+      "removed_exact_validated_child": true,
+      "absence_proved": true,
+      "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v8/run.ev2dl3x3",
+      "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v8",
+      "elapsed_transaction_ns": 9808014250,
+      "same_session": true,
+      "post_run_remote_cleanup_operations": 0
+    }
+  },
+  "local_invariant_validation": {
+    "correctness_encodes": 16,
+    "counter_cells": 4,
+    "sanitizer_configurations": 2,
+    "boundary_fixtures": 16,
+    "default_omission": true,
+    "public_api_abi_equal": true,
+    "timer_reads": 4096,
+    "timer_mean_read_delta_ns": 14,
+    "timer_maximum_read_delta_ns": 83,
+    "timer_monotonic": true,
+    "performance_samples": 0
+  },
+  "raw_stat_reconstruction": {
+    "raw_runner_rows": 0,
+    "raw_stage_rows": 0,
+    "retained_rows": 0,
+    "performance_samples": 0,
+    "accepted_statistics": 0,
+    "recomputation_result": "UNASSESSED_NO_PHASE2_RAW_DATA",
+    "metrics": ["whole_encode", "lossless_backward_refs", "backref_cost_dp_total", "backref_cost_dp_setup", "backref_cost_dp_steady", "backref_cost_traceback", "backref_cost_materialize", "lossless_histogram", "lossless_huffman", "lossless_bitstream", "downstream"],
+    "cells": [
+      {"case": "photo-large", "method": 4, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "photo-large", "method": 6, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "graphic-large", "method": 4, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "graphic-large", "method": 6, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null}
+    ],
+    "limitations": [
+      "The rehearsal was untimed and refused before source admission.",
+      "No Phase 2 diagnostic execution or raw runner/stage data exists.",
+      "Local correctness, counter, sanitizer, timer-accounting, and clock checks are invariants, not performance samples.",
+      "Zero rows means unassessed; it does not mean zero duration or zero effect.",
+      "No attribution, stage ranking, share, delta, median, repeatability, interval-family closure, or production claim is supported."
+    ]
+  }
+}
