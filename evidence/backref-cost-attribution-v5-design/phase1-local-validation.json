@@ -1,0 +1,51 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v5-phase1-local-validation-v1",
+  "base_commit": "a192d9b8562b497b03bf8cc83c2de5c7a6ea8cae",
+  "status": "PASS_PENDING_EXACT_COMMIT_REMOTE_REHEARSAL",
+  "timed_execution_authorized": false,
+  "phase_2_executed": false,
+  "phase_3_executed": false,
+  "checks": {
+    "source_ancestry_clean_start": true,
+    "build_runtime_gate_isolation": true,
+    "ordinary_object_target_string_omission": true,
+    "public_api_abi_equal": true,
+    "correctness_encodes": 16,
+    "boundary_fixtures": 16,
+    "counter_cells": 4,
+    "single_selected_dp_no_overwrite": true,
+    "sanitizer_configurations": 2,
+    "timer_clock": "mach_continuous_time",
+    "timer_reads": 4096,
+    "timer_mean_read_delta_ns": 14,
+    "timer_maximum_read_delta_ns": 83,
+    "archive_security_and_no_partial_extraction": true,
+    "control_plane_contract_states": [
+      "not-attempted",
+      "unavailable-after-attempt",
+      "verified"
+    ],
+    "bulk_contract_fixtures": [
+      "normal",
+      "controlled-refusal",
+      "missing-artifact",
+      "truncated-archive",
+      "corrupt-archive",
+      "timeout"
+    ],
+    "process_ownership_v1_v2_v3_v4_v5": true,
+    "discovered_pid_signals": 0,
+    "external_profiler_invocations": 0
+  },
+  "frozen_inventory": {
+    "cases": ["photo-large", "graphic-large"],
+    "methods": [4, 6],
+    "serial_processes": 24,
+    "correctness_encodes": 16,
+    "warmups": 24,
+    "retained_rows": 96,
+    "total_runner_rows": 120,
+    "total_stage_rows": 120
+  },
+  "remaining_gate": "synchronous exact-commit remote success/refusal/timeout rehearsal with representative bulk-transfer measurement and exact-child cleanup"
+}
