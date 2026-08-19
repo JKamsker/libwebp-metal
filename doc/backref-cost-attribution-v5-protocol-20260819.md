@@ -102,10 +102,11 @@ bound. The finite bulk timeout is frozen from the representative transfer as
 measured transport evidence: two bounded representative SCP calibrations moved
 2,088,960 bytes in 120 seconds and 2,350,080 bytes in 1,020 seconds before
 channel stalls. The separate data plane therefore transfers predeclared
-512 KiB byte ranges, each below the first progress window, with a finite
-180-second per-range bound and 1,800-second total bound (at most ten ranges for
-the frozen archive cap plus overhead). Remote archive construction has a
-180-second bound.
+512 KiB byte ranges. Its successful 4,230,194-byte representative completed in
+8.135333 seconds at 519,977 B/s over nine ranges. Four-times elapsed plus ten
+seconds is 42.55 seconds, rounded upward to a finite 60-second total bound; the
+finite 20-second per-range bound is over twenty times the observed mean range
+elapsed. Remote archive construction has a 180-second bound.
 Cleanup is independent of archive and lease success: every mode requires an
 independently validated exact-child removal receipt and absence proof. Local
 contract tests cover naturally completed not-attempted, verified, and missing

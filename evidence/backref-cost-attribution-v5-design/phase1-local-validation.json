@@ -1,8 +1,8 @@
 {
   "schema": "libwebp-backref-cost-attribution-v5-phase1-local-validation-v1",
   "base_commit": "a192d9b8562b497b03bf8cc83c2de5c7a6ea8cae",
-  "status": "PASS_PENDING_EXACT_COMMIT_REMOTE_REHEARSAL",
-  "timed_execution_authorized": false,
+  "status": "PASS_AUTHORIZED_CONDITIONED_EXACT_COMMIT_REHEARSAL",
+  "timed_execution_authorized": true,
   "phase_2_executed": false,
   "phase_3_executed": false,
   "checks": {
@@ -51,8 +51,13 @@
     "second_elapsed_seconds": 1020,
     "second_declared_archive_bytes": 4230225,
     "chunk_bytes": 524288,
-    "derived_bulk_chunk_timeout_seconds": 180,
-    "derived_bulk_total_timeout_seconds": 1800
+    "successful_archive_bytes": 4230194,
+    "successful_archive_sha256": "52e6633b294c6c8c624df94e729191a18cc77b025f56bd8e4e695ac8013b78ce",
+    "successful_elapsed_ns": 8135333000,
+    "successful_throughput_bytes_per_second": 519977,
+    "successful_chunk_count": 9,
+    "derived_bulk_chunk_timeout_seconds": 20,
+    "derived_bulk_total_timeout_seconds": 60
   },
   "frozen_inventory": {
     "cases": ["photo-large", "graphic-large"],
@@ -64,5 +69,5 @@
     "total_runner_rows": 120,
     "total_stage_rows": 120
   },
-  "remaining_gate": "synchronous exact-commit remote success/refusal/timeout rehearsal with representative bulk-transfer measurement and exact-child cleanup"
+  "remaining_gate": "the final handoff must retain verified exact-commit synchronous success/refusal/timeout receipts; any mismatch fails closed"
 }

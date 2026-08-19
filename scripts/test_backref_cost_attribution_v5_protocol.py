@@ -135,7 +135,7 @@ def lease_transfer_truth_table() -> None:
     assert record["state"] == "unavailable-after-attempt"
     assert record["receipt_required"] and record["receipt_requested"]
     assert value is None and requests == ["verified", "refused"]
-    assert record["transfer_timeout_seconds"] == 1800
+    assert record["transfer_timeout_seconds"] == 60
 
 
 def two_plane_state_contract() -> None:
@@ -228,7 +228,7 @@ def main() -> int:
     assert manifest["acceptance"]["maximum_mean_clock_read_delta_ns"] == 10000
     assert manifest["return_contract"]["lease_transfer_states"] == [
         "not-attempted", "unavailable-after-attempt", "verified"]
-    assert manifest["resources"]["transfer_timeout_seconds"] == 1800
+    assert manifest["resources"]["transfer_timeout_seconds"] == 60
     assert manifest["resources"]["archive_build_timeout_seconds"] == 180
     assert manifest["diagnostic"]["primary"] == "coarse monotonic stage timers"
     assert manifest["diagnostic"]["fallback"] is None
