@@ -134,9 +134,10 @@ measurements are meaningless until they pass.
   corpus are byte-exact. On the canonical small+medium 12-image batches,
   method 5 measured 1.44--1.45x and method 6 measured 2.95--3.03x; the
   three-class medium PNG batch measured 1.69x and 3.47x respectively.
-- [ ] 10. **Merge decision:** the branch is many CI-green commits ahead
-  of main and self-contained. Consider a PR to main once cross-hardware
-  numbers from this machine are in.
+- [x] 10. **Merge decision:** PR #5 is open against `main`, non-draft,
+  merge-clean, and green after the RTX 2080 SUPER cross-hardware results and
+  trellis support. Keep the final merge as an explicit repository-owner
+  decision; this machine handoff does not merge to `main` implicitly.
 
 ## Goal: the endless lossy optimization loop
 
