@@ -154,6 +154,15 @@ that only the named switch changed and every build requested
 `CMAKE_CUDA_ARCHITECTURES=native`. Commands, raw nanosecond timings, hashes,
 and byte counts are retained in each transcript.
 
+The 20 `libwebp-hash-precheck-{png,jpeg}-*.txt` files preserve the five-process
+gate for the rejected pre-Ampere initial-pixel-precheck removal. Each process
+contains one discarded warmup and three measured rows. The matching baseline
+and candidate CMake caches, exact candidate patch, seven-test transcript,
+baseline/candidate `cuobjdump` resource reports, and candidate-kernel SASS are
+stored with the same prefix. `libwebp-hash-ncu-permission.txt` is the raw
+Nsight Compute attempt showing `ERR_NVGPUCTRPERM`; no system setting was
+changed to bypass it.
+
 Inspect the sampling archives with:
 
 ```sh

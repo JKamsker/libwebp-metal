@@ -1,0 +1,9 @@
+Script started on 2026-08-19 14:56:49+00:00 [COMMAND="ncu --set full --kernel-name-base function --kernel-name 'regex:HashChainCandidatesKernel' --launch-count 1 --kill yes --export /tmp/libwebp-hash-sm75-full-retry --force-overwrite /home/jonas/priv/repos/libwebp-metal/build-cuda-sm75-ncu/webp_cuda_batch_benchmark --variant cuda --mode lossless --batch-size 1 --method 4 --quality 75 --warmups 0 --samples 1 --force-cuda /tmp/libwebp-cuda-batch-corpus-20260818/png/photo-medium.png" <not executed on terminal>]
+==PROF== Connected to process 2580196 (/home/jonas/priv/repos/libwebp-metal/build-cuda-sm75-ncu/webp_cuda_batch_benchmark)
+==ERROR== ERR_NVGPUCTRPERM - The user does not have permission to access NVIDIA GPU Performance Counters on the target device 0. For instructions on enabling permissions and to get more information see https://developer.nvidia.com/ERR_NVGPUCTRPERM
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossless","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":535219576,"ns_per_image":535219576.000,"images_per_second":1.868392,"resident_lossless_handoffs":1,"resident_lossless_handoff_observed":true,"output_hash":"f43a2d25afc7d2d8","output_bytes":136506}
+==PROF== Disconnected from process 2580196
+==WARNING== No kernels were profiled.
+==WARNING== Profiling kernels launched by child processes requires the --target-processes all option.
+
+Script done on 2026-08-19 14:56:50+00:00 [COMMAND_EXIT_CODE="255"]

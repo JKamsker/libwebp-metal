@@ -1245,3 +1245,29 @@ rejected without a source change: 128-thread blocks and four-pixel unrolling
 are materially better on this Turing GPU, while the read-only-load difference
 is noise. These are RTX 2080 SUPER measurements only; no Ampere+ setting or
 performance conclusion changes.
+
+## Turing hash initial-pixel precheck rejection
+
+Static sm_75 inspection showed the hash kernel used 26 registers and no stack,
+shared, or local memory. Nsight Compute hardware counters were unavailable to
+this user (`ERR_NVGPUCTRPERM`), so no host setting was changed. Source and SASS
+inspection identified an exact redundancy instead: chain candidates always
+call `HashMatchLength` from length zero, where the helper's initial pixel-zero
+comparison was repeated immediately by the four-pixel match loop.
+
+A separate pre-Ampere kernel specialization removed that first comparison;
+the baseline specialization remained selected on Ampere+. The candidate used
+24 registers with the other resource counts unchanged. Seven CTests passed.
+Five order-balanced native-sm_75 forced-batch processes per format, with one
+warmup and three measured rows in each process, produced:
+
+| Format | Baseline | Candidate | Paired gain |
+|---|---:|---:|---:|
+| PNG lossless | 77.390 ms/image | 76.376 ms/image | +1.013 ms/image |
+| JPEG lossless | 127.794 ms/image | 126.187 ms/image | +1.881 ms/image |
+
+All 60 aggregate timing rows retained their format-specific hashes and byte
+counts. The candidate was removed because PNG's paired median remained below
+the 1.5 ms/image retention threshold. This is RTX 2080 SUPER evidence only;
+the exact rejected patch and raw artifacts are stored with the machine report,
+and no Ampere+ behavior changed.

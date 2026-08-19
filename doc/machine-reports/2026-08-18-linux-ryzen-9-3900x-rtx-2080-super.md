@@ -1327,3 +1327,32 @@ blocks, four-pixel matching, and `__ldg` reads. No Ampere+ behavior or claim is
 changed. The adjacent evidence directory contains the raw function, calltree,
 and source-line reports, collection transcripts, three native CMake caches,
 and all 24 timing transcripts.
+
+## Hash initial-pixel precheck rejection
+
+Nsight Compute could attach to the process but could not access hardware
+counters under this user's permissions (`ERR_NVGPUCTRPERM`), so the system
+configuration was left untouched. `cuobjdump` showed the retained native-sm_75
+hash kernel used 26 registers and no stack, shared, or local memory. Source and
+SASS inspection then found that chain candidates call the match helper from
+length zero, causing its pixel-zero precheck to be repeated by the first
+comparison in the four-pixel loop.
+
+An exact template specialization removed that duplicated comparison only for
+pre-Ampere devices; Ampere+ selected the original kernel. The Turing candidate
+fell to 24 registers with all other static resource counts unchanged. All
+seven CTests passed. Five alternating baseline/candidate processes per format,
+each with one discarded warmup and three measured six-image batches, found:
+
+| Format | Baseline | Candidate | Paired baseline - candidate |
+|---|---:|---:|---:|
+| PNG lossless | 77.390 ms/image | 76.376 ms/image | +1.013 ms/image |
+| JPEG lossless | 127.794 ms/image | 126.187 ms/image | +1.881 ms/image |
+
+Every aggregate output retained hash `eec6c490be6aaf6d` for PNG or
+`06227eb38e0ac1e3` for JPEG and unchanged bytes. PNG did not clear the strict
+1.5 ms/image gate, so the candidate was removed despite the JPEG improvement.
+This is RTX 2080 SUPER-only evidence and makes no Ampere+ claim. The adjacent
+evidence directory contains the exact rejected patch, 20 raw timing
+transcripts, both native caches, the seven-test transcript, baseline/candidate
+resource reports, candidate kernel SASS, and raw Nsight permission error.
