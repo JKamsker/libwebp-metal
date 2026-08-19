@@ -1402,3 +1402,26 @@ Both results remain below the strict 1.5 ms/image gate. The candidate was
 removed; this is RTX 2080 SUPER evidence only and makes no Ampere+ performance
 claim. Raw profiles, all timing rows, native caches, summaries, and the exact
 rejected patch are stored with the machine report.
+
+## Turing warp-helper elimination rejection
+
+The retained native-sm_75 SASS contains 206 out-of-line synchronized
+ballot/shuffle helper calls in the CUDA module. Replacing the decimate call
+sites with pre-Ampere inline-PTX wrappers did not remove any of them: ptxas
+still emitted 206 calls. Decimate resources moved only from 103 to 102
+registers; stack and shared memory remained 352 and 23,392 bytes.
+
+Two order-reversed processes with six measured samples per cell produced:
+
+| Format | Parent | Inline PTX | Parent minus candidate |
+|---|---:|---:|---:|
+| PNG lossy | 40.013 ms/image | 40.227 ms/image | -0.214 ms/image |
+| JPEG lossy | 40.002 ms/image | 40.094 ms/image | -0.092 ms/image |
+
+The candidate also changed both aggregate hashes and byte counts. A clean
+rebuild of the restored source in that same native cache reproduced the
+parent's exact PNG hash and bytes, so the mismatch was caused by the wrapper
+candidate rather than the cache's unrelated histogram option. The legacy
+`__shfl*` alternative does not compile for native sm_75 under CUDA 12. The
+candidate was removed; this is RTX 2080 SUPER-only evidence and makes no
+Ampere+ claim.

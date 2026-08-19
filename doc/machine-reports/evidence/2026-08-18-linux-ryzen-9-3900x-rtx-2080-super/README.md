@@ -197,6 +197,16 @@ screens, their summary, the exact rejected pre-Ampere patch, and parent and
 candidate native CMake caches. Raw input-format controls were not promoted to
 a performance claim; the report documents the invalid cross-format contrast.
 
+The `libwebp-warp-helper-*` files preserve the rejected attempt to replace
+sm_75 sync intrinsics after SASS inspection found 206 out-of-line warp-helper
+calls. The complete compressed parent/candidate SASS, resource reports, native
+CMake caches, 48 timing rows, computed summary, and legacy-intrinsic compiler
+failure are included. The inline-PTX build retained all 206 calls, was slightly
+slower, and changed both PNG and JPEG output. The clean-rebuild transcript
+shows that the candidate cache produces the parent's exact bytes once the
+source wrappers are removed, isolating the mismatch from the one differing
+histogram build option.
+
 Inspect the sampling archives with:
 
 ```sh

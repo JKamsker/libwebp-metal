@@ -1479,3 +1479,26 @@ The adjacent evidence directory stores the retained profile under
 `libwebp-lossy-retained-profile-*`, the 20-process recorder gate under
 `libwebp-token-record-inline-*`, and the composite screen, exact rejected
 patch, summaries, and native caches under `libwebp-static-i4-inline-*`.
+
+## Warp-helper call-elimination rejection
+
+Native-sm_75 disassembly exposed 206 out-of-line synchronized ballot/shuffle
+helper calls in the CUDA module. A pre-Ampere inline-PTX wrapper candidate did
+not change that count, and the decimate kernel changed only from 103 to 102
+registers while retaining its 352-byte stack and 23,392-byte shared-memory
+allocation.
+
+Two order-reversed processes with six samples per cell measured PNG at 40.013
+ms/image parent versus 40.227 candidate and JPEG at 40.002 versus 40.094. The
+candidate changed both hashes and byte counts. Rebuilding the restored source
+in the same cache reproduced the parent's exact output, isolating the failure
+to the wrapper code rather than the cache configuration. CUDA 12 rejects the
+legacy `__shfl*` intrinsics for a native sm_75 build, so there is no safe
+fallback shortcut.
+
+The candidate was removed for correctness and performance. Complete compressed
+parent/candidate SASS, resource reports, CMake caches, 48 raw timing rows,
+compiler failure, summary, and clean-rebuild control are stored under the
+`libwebp-warp-helper-*` prefix in the adjacent evidence directory. This result
+is specific to the RTX 2080 SUPER and does not change or characterize the
+Ampere+ path.
