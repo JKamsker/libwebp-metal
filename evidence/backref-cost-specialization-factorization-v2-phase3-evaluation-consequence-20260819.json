@@ -1,0 +1,423 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-phase3-evaluation-consequence-v1",
+  "phase": "3",
+  "evaluator": "Sol/high",
+  "evaluation_date": "2026-08-19",
+  "evaluation_status": "REFUSAL_VALID_CAUSAL_INTERPRETATION_UNIDENTIFIABLE",
+  "phase_2_authority": "NONE",
+  "timed_execution_authorized": false,
+  "production_promotion_authorized": false,
+  "exact_linear_chain": {
+    "main": {
+      "commit": "ccdd4900633064f203010cbd437d2682e1cba51e",
+      "tree": "48096c14936e5ebc44266d84084e8b24f73b744b"
+    },
+    "phase1a": {
+      "commit": "9e7a75998061c84cd25cdbba58376293f71edbda",
+      "sole_parent": "ccdd4900633064f203010cbd437d2682e1cba51e",
+      "tree": "dae4719b68d79bbbcd1c383732771451eaf2b617"
+    },
+    "phase1b": {
+      "commit": "5662d392599d55b018eff8f2b2a4e477c527051f",
+      "sole_parent": "9e7a75998061c84cd25cdbba58376293f71edbda",
+      "tree": "9a2aeec1ab65765ef0dbcc01f5db4a7ac28a96b7",
+      "added_paths": 21,
+      "modified_or_deleted_paths": 0
+    },
+    "phase2_refusal_audit": {
+      "commit": "e648880397168d4d063dcb6f9e645555487c59c3",
+      "sole_parent": "5662d392599d55b018eff8f2b2a4e477c527051f",
+      "tree": "b79b663d714ca42ecec66e9a470bb847a6c92d3c",
+      "added_paths": 2,
+      "modified_or_deleted_paths": 0
+    },
+    "raw_hash_resolution": "PASS",
+    "linear_ancestry_exact": true,
+    "pre_evaluation_worktree_clean": true
+  },
+  "hash_schema_count_order_audit": {
+    "protocol": {
+      "path": "doc/backref-cost-specialization-factorization-v2-protocol-20260819.md",
+      "sha256": "763c4a4cbe9342e1d955e3c70bb108296d5f4f360489d49632eb5909bd8160cb"
+    },
+    "manifest": {
+      "path": "scripts/backref_cost_specialization_factorization_v2_manifest.json",
+      "sha256": "44ae2ea07f9d350f71616d0dd430af0bbea09d05f76f2127186762524cb97f25",
+      "frozen_members": 36,
+      "all_member_hashes_recomputed": true,
+      "hash_mismatches": []
+    },
+    "schema_catalog": {
+      "path": "scripts/backref_cost_specialization_factorization_v2_schemas.json",
+      "sha256": "c023ef1714f1f98a60a4c601b150265669e2c582f682bf47add64034fdc7327d",
+      "protocol_version": 7,
+      "catalog_entries": 24,
+      "entries_unique": true
+    },
+    "cycle_json_before_phase3": {
+      "files": 25,
+      "schema_bearing_records": 24,
+      "json_parse_failures": [],
+      "frozen_unversioned_records": [
+        "evidence/backref-cost-specialization-factorization-v2-design/rehearsal/return-protocol/archive-build.json"
+      ]
+    },
+    "phase1_local_evidence": {
+      "phase1-local-codegen.json": "3b4cd466846a0d34c7df4b3c972c4a71a572d5bc0e15d6262c39a407cd7cc023",
+      "phase1-local-validation.json": "bda6dcd24f7fe44cb8cc3fb0365c238340df3957d1b2c3fcd668725f6c2ebd3b",
+      "phase1-prior-evidence-audit.json": "f73d2fdfe1d8b25eb2b810c54fa4e3a982237d7e8fa8b498cf16fcf5679740c8"
+    },
+    "phase1b_evidence": {
+      "authorization": {
+        "path": "evidence/backref-cost-specialization-factorization-v2-design/phase1b-authorization.json",
+        "sha256": "fc6072b821ebaf705ee6b4984afb35da1c742d0a4245445ddbf79f69b0c5ec9e"
+      },
+      "rehearsal_hash_index": {
+        "path": "evidence/backref-cost-specialization-factorization-v2-design/phase1b-rehearsal-hashes.json",
+        "sha256": "d7f9f00231703cbc43a96d33b5eb916ce17dbadad03b0a599dbf341e500b4270",
+        "indexed_files": 19,
+        "indexed_bytes": 31790,
+        "exact_sorted_membership": true,
+        "all_sizes_and_hashes_recomputed": true,
+        "mismatches": []
+      }
+    },
+    "phase2_evidence": {
+      "audit": {
+        "path": "evidence/backref-cost-specialization-factorization-v2-phase2-refusal-audit-20260819/audit.json",
+        "sha256": "5da8a851f38e368ec3338b1f62ed79bb2fd5955dd163e76f242270d191370d35"
+      },
+      "local_audit_receipt": {
+        "path": "evidence/backref-cost-specialization-factorization-v2-phase2-refusal-audit-20260819/local-audit-receipt.json",
+        "sha256": "12c8af23dd717224af1e5e5095e9b1a0bf09e63627e1c8fef9654e34b2c52bf1"
+      }
+    },
+    "frozen_plan_order": {
+      "case_order": [
+        "photo-large",
+        "graphic-large"
+      ],
+      "method_order": [
+        4,
+        6
+      ],
+      "variant_orders": [
+        [
+          "B",
+          "L",
+          "H"
+        ],
+        [
+          "H",
+          "L",
+          "B"
+        ],
+        [
+          "L",
+          "B",
+          "H"
+        ]
+      ],
+      "planned_profile_processes": 36,
+      "planned_warmups": 36,
+      "planned_retained_rows": 144,
+      "planned_runner_rows": 180,
+      "planned_stage_rows": 180,
+      "planned_correctness_encodes": 24,
+      "planned_work_rows": 12,
+      "observed_phase2_plan_or_rows": 0,
+      "order_runtime_status": "UNOBSERVED_AUTHORITY_NONE"
+    }
+  },
+  "payload_identity_audit": {
+    "status": "PASS",
+    "payload_bytes": 2097152,
+    "generator": {
+      "path": "scripts/backref_cost_specialization_factorization_v2_payload.py",
+      "file_sha256": "6e35a024a77de1516b32c6794626ea3517272179c9d392cfe73a92439f90be8b",
+      "independently_recomputed_payload_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0"
+    },
+    "manifest_payload_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "fixture": {
+      "path": "evidence/backref-cost-specialization-factorization-v2-design/representative-payload-fixture.json",
+      "file_sha256": "53dd754ddac2c4c394ec4a2ccc4c31e34506b1d4d6ad4af3e8ff9a0d48c5a66b",
+      "payload_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0"
+    },
+    "agreement_receipt": {
+      "path": "evidence/backref-cost-specialization-factorization-v2-design/representative-payload-agreement.json",
+      "file_sha256": "843056c2c86b68d6587507dea9faefced70768a966a1e7203e9c0005805ac17a",
+      "status": "PASS"
+    },
+    "rehearsal_payload_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "manifest_generator_fixture_agreement": true,
+    "stale_predecessor_sha256": "60a1a48b8128a82eae9474a69c0dfe8364745747f04a886341c3da03fd5dee85",
+    "stale_predecessor_rejected": true
+  },
+  "codegen_work_boundary_audit": {
+    "local_codegen_status": "PASS",
+    "timed_runner_sha256": "dbf9091a3f41a4b17b4f51069e511f21f57cbc1724f1601b16e29482905a0855",
+    "recorder_runner_sha256": "6c7757f684400cfc20f5580dc7446306baec1da4b0772f9e5ebae214253f8855",
+    "timed_recorder_symbols_present": false,
+    "recorder_symbols_present_in_untimed_binary": true,
+    "all_six_private_addresses_distinct": true,
+    "linker_identical_code_deduplication_disabled": true,
+    "b_l_dp_mnemonics_equal": true,
+    "b_l_push_interval_mnemonics_equal": true,
+    "l_h_push_interval_mnemonics_differ": true,
+    "dp_mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+    "b_l_push_interval_mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8",
+    "h_push_interval_mnemonics_sha256": "453c8695e2523dc281903d227f9896d68decf895d5676690c8bd67a59431f190",
+    "local_fixture_not_phase2_rows": {
+      "common_algorithm_fields_equal_B_L": true,
+      "common_algorithm_fields_equal_B_L_H": true,
+      "B_L_forward_steps_equal": true,
+      "B_forward_steps": 723,
+      "L_forward_steps": 723,
+      "B_L_hint_and_pop_tail_activity_zero": true,
+      "H_forward_steps": 0,
+      "H_append_hint_fast_paths": 146,
+      "H_append_hint_branch_checks": 157,
+      "H_append_hint_updates": 157,
+      "B_L_H_bitstream_bytes": 134,
+      "B_L_H_bitstream_fnv1a64": "847636c89f55c705",
+      "intended_h_boundary_active": true
+    },
+    "claim_boundary": "Static codegen and the Phase 1 local untimed fixture verify a credible B/L matched-layout and H append-hint boundary. They are not authorized full-corpus Phase 2 work rows and cannot substitute for runtime performance evidence."
+  },
+  "correctness_abi_default_off_audit": {
+    "ordinary_build_omits_experiment": true,
+    "cmake_default": "OFF",
+    "makefile_unix_default": 0,
+    "public_api_abi_equal": true,
+    "runtime_truth_table": {
+      "absent": "B",
+      "B": "B",
+      "L": "L",
+      "H": "H",
+      "all_other_values": "INVALID_FAIL_CLOSED"
+    },
+    "selector_once_before_dist_array_mutation": true,
+    "closed_switch_invokes_exactly_one_selected_dp": true,
+    "shared_dp_template_sha256": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5",
+    "layout_clone_source_sha256": "30f144d46895f210cf1969cda8696a7ad21fd7cf708c94ad32703f6caa675a7b",
+    "local_correctness_encodes": 3,
+    "sanitizer_configurations": 2,
+    "sanitizer_boundary_encodes": 36,
+    "local_bitstream_pixel_determinism_input_immutability_receipt": "PASS",
+    "production_correctness_gate": "NOT_RUN_AUTHORITY_NONE",
+    "abi_and_default_off_conclusion": "PASS_FOR_FROZEN_IMPLEMENTATION; NO_PRODUCTION_OR_PERFORMANCE_AUTHORITY"
+  },
+  "source_toolchain_device_resource_process_lease_audit": {
+    "source": {
+      "status": "PASS_EXACT",
+      "commit": "9e7a75998061c84cd25cdbba58376293f71edbda",
+      "tree": "dae4719b68d79bbbcd1c383732771451eaf2b617",
+      "source_bundle_sha256": "54e1a06f47df2e702b59efb7ffe29083b9b47320d0e863a9fad8fea928f82d15",
+      "source_receipt_hashes": 37,
+      "hash_mismatches": [],
+      "clean_status": true,
+      "repository_context_verified": true,
+      "verification_repository_removed": true
+    },
+    "toolchain": {
+      "status": "FAIL_DIAGNOSTIC_EXECUTABLE_IDENTITY_MISMATCH_XCRUN",
+      "verified": false,
+      "refusal_reason": "diagnostic executable identity mismatch: xcrun"
+    },
+    "device": {
+      "status": "NOT_REACHED_UNPROVEN",
+      "verified": false
+    },
+    "resources": {
+      "status": "NOT_REACHED_UNPROVEN",
+      "verified": false
+    },
+    "process_ownership": {
+      "status": "PASS_OBSERVE_ONLY",
+      "snapshot_processes": 831,
+      "snapshot_sha256": "76ff83572de399470bae14fec3bd830ff31a254b14f109d726d0bda6f38e7989",
+      "ancestor_chain_complete_to_pid1": true,
+      "exact_identity_conflicts": [],
+      "filesystem_identity_operations": [],
+      "discovered_pid_signals": 0,
+      "direct_child_timeout_signals": 0,
+      "prior_cycle_paths_contacted": false
+    },
+    "lease": {
+      "state": "not-attempted",
+      "acquisition_attempted": false,
+      "receipt_required": false,
+      "release_required": false,
+      "release_claimed": false,
+      "assertion": "No lease was acquired in the sole rehearsal and Phase 2 made no host contact, so no lease-release assertion is applicable or inferred."
+    },
+    "authority_conclusion": "NONE"
+  },
+  "transport_archive_integrity_cleanup_audit": {
+    "raw_framed_stdout": {
+      "path": "evidence/backref-cost-specialization-factorization-v2-design/rehearsal/return-protocol/framed-stdout.bin",
+      "bytes": 11783,
+      "sha256": "1c3751dbc465aff31e63940f859404d4bc02d0573a30abef7111aad00688e172",
+      "exclusive_cap_bytes": 1048576,
+      "below_cap": true
+    },
+    "transport_stderr": {
+      "path": "evidence/backref-cost-specialization-factorization-v2-design/rehearsal/return-protocol/transport-stderr.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "decoded_frame_order": [
+      "source-admission",
+      "operator-status",
+      "archive-build",
+      "lease-state",
+      "bulk-declaration",
+      "bulk-chunk",
+      "integrity-footer",
+      "cleanup-footer"
+    ],
+    "decoded_frame_payload_bytes": [
+      7498,
+      450,
+      225,
+      213,
+      594,
+      570,
+      403,
+      520
+    ],
+    "control_payload_cap_bytes": 8192,
+    "all_control_payloads_within_cap": true,
+    "archive": {
+      "path": "evidence/backref-cost-specialization-factorization-v2-design/rehearsal/return-protocol/returned-evidence.tar.gz",
+      "bytes": 570,
+      "sha256": "0674b5edd3a66a94272501f5785d9f57fa9fc492d6dff54393bf7b860e715f61",
+      "cap_bytes": 786432,
+      "within_cap": true,
+      "chunk_count": 1,
+      "chunk_bytes": 262144,
+      "member_count": 3,
+      "members_in_order": [
+        "evidence/artifact-hashes.json",
+        "evidence/operator-status.json",
+        "evidence/refusal.json"
+      ],
+      "members_all_regular": true,
+      "inspection_verified": true,
+      "safe_extraction_after_complete_verification": true,
+      "extracted_bytes_equal_retained_bytes": true,
+      "integrity_verified": true
+    },
+    "cleanup": {
+      "cleanup_footer_last": true,
+      "removed_exact_validated_child": true,
+      "absence_proved": true,
+      "post_run_remote_cleanup_operations": 0,
+      "prior_cycle_paths_contacted": false
+    }
+  },
+  "phase1_rehearsal_counts": {
+    "attempts": 1,
+    "retries": 0,
+    "reruns": 0,
+    "remote_contacts": 0,
+    "remote_connection_established": false,
+    "encoder_workloads": 0,
+    "work_counter_workloads": 0,
+    "profiler_workloads": 0,
+    "timed_workloads": 0,
+    "timing_samples": 0,
+    "benchmark_lease_acquisition_attempted": false,
+    "raw_artifact_files": 19,
+    "raw_artifact_bytes": 31790
+  },
+  "phase2_zero_count_no_host_contact_audit": {
+    "authority_checked_before_contact": true,
+    "host": "pandocs-agent",
+    "host_contact_made": false,
+    "ssh_invocations": 0,
+    "host_resolution_or_probe": 0,
+    "remote_workspaces": 0,
+    "lease_attempts": 0,
+    "benchmark_runs": 0,
+    "timing_samples": 0,
+    "timing_rows": 0,
+    "runner_rows": 0,
+    "stage_rows": 0,
+    "remote_raw_artifact_files": 0,
+    "execution_evidence_directories": 0,
+    "no_retry_or_alternate_timing_path": true,
+    "no_host_side_mutation": true,
+    "v1_or_v16_authority_or_samples_loaded": false,
+    "zero_counts_mean_no_observations_not_zero_effect": true
+  },
+  "statistics_recomputation": {
+    "required_cells": [
+      "photo-m4",
+      "photo-m6",
+      "graphic-m4",
+      "graphic-m6"
+    ],
+    "available_cells": [],
+    "available_cell_count": 0,
+    "pairs": [
+      "B_to_L",
+      "L_to_H",
+      "B_to_H"
+    ],
+    "metrics": [
+      "dp_total",
+      "dp_steady",
+      "whole_encode"
+    ],
+    "recomputation_domain": [],
+    "expected_cell_metric_pair_summary_slots": 36,
+    "defined_cell_metric_pair_statistics": 0,
+    "statistics": null,
+    "status": "EMPTY_DOMAIN_NO_STATISTIC_DEFINED",
+    "statement": "Phase 2 produced zero cells and zero rows. There is no B-to-L, L-to-H, or B-to-H DP-total, DP-steady, or whole-encode statistic to compute. Zero rows are not a zero performance effect.",
+    "missing_data_policy": {
+      "acceptance_weakened": false,
+      "thresholds_weakened": false,
+      "fit_performed": false,
+      "imputation_performed": false,
+      "inference_from_missing_rows": false,
+      "manufactured_results": false
+    }
+  },
+  "causal_interpretation": {
+    "layout_B_to_L": "UNIDENTIFIABLE_WITHOUT_AUTHORIZED_ROWS",
+    "hint_L_to_H": "UNIDENTIFIABLE_WITHOUT_AUTHORIZED_ROWS",
+    "interaction_and_total_B_to_H": "UNIDENTIFIABLE_WITHOUT_AUTHORIZED_ROWS",
+    "status": "UNIDENTIFIABLE",
+    "statement": "The static B/L/H boundary is credible, but without authorized simultaneous rows the observed behavior cannot be assigned to layout, hint, or interaction. Prior V16 or V1 evidence is not substituted, pooled, relabeled, or inferred."
+  },
+  "production_consequence": {
+    "consequence_count": 1,
+    "decision": "RETAIN_V2_DEFAULT_OFF_AND_MAKE_NO_PERFORMANCE_OR_ROLLOUT_CLAIM",
+    "implementation": "Backref-cost specialization factorization V2 remains diagnostic-only and default-off.",
+    "performance_claim": "NONE",
+    "rollout_claim": "NONE",
+    "production_promotion": false,
+    "single_blocker": "The xcrun diagnostic executable identity mismatch left the required toolchain identity/device/resource gate unproven.",
+    "thresholds_weakened": false,
+    "missing_rows_inferred": false,
+    "next_lead_proposed": false
+  },
+  "publication_scope": {
+    "repository": "JKamsker/libwebp-metal",
+    "branch": "codex/backref-cost-specialization-factorization-v2",
+    "base": "main",
+    "benchmark_host_contact_authorized": false,
+    "status_at_evaluation_commit": "PENDING_POST_COMMIT_REPOSITORY_ONLY_HANDOFF"
+  },
+  "phase3_actions": {
+    "phase1_or_phase2_rerun": false,
+    "benchmark_lease_acquired": false,
+    "timing_samples_created": 0,
+    "cuda_tuning_pooling_or_alternate_timing": false,
+    "prior_remote_path_contacted": false,
+    "benchmark_host_contacted": false,
+    "phase1_or_phase2_evidence_edited": false
+  }
+}

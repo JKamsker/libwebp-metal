@@ -1,0 +1,11 @@
+{
+  "absence_proved": true,
+  "elapsed_transaction_ns": 1275564959,
+  "removed_exact_validated_child": true,
+  "run_directory": "/Users/jonaskamsker/.libwebp-metal-backref-cost-specialization-factorization-v2/run.u_dv20iv",
+  "safe_root": "/Users/jonaskamsker/.libwebp-metal-backref-cost-specialization-factorization-v2",
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-cleanup-receipt-v1",
+  "source_commit": "9e7a75998061c84cd25cdbba58376293f71edbda",
+  "source_tree": "dae4719b68d79bbbcd1c383732771451eaf2b617",
+  "status": "complete"
+}

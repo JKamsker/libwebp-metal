@@ -1,0 +1,12 @@
+{
+  "benchmark_lease_acquisition_attempted": false,
+  "controlled_exit": true,
+  "mode": "rehearse",
+  "operator_exit_code": 1,
+  "operator_stderr_sha256": "b16f20b885babc76f19db24a497a71029089a7d047d80425cb65df51edf2b666",
+  "operator_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "process_refusal": null,
+  "process_refusal_sha256": null,
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-operator-status-v1",
+  "status": "refused"
+}

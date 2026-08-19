@@ -1,0 +1,168 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-phase2-local-audit-receipt-v1",
+  "status": "PASS",
+  "audit_execution": {
+    "mode": "local-only",
+    "host_contact": false,
+    "remote_commands": 0,
+    "lease_attempts": 0,
+    "benchmark_invocations": 0,
+    "phase2_timing_samples": 0,
+    "phase2_raw_rows": 0,
+    "phase3_evaluation": false
+  },
+  "local_commands": [
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v2_payload_identity.py",
+      "status": "PASS",
+      "result": "manifest_generator_fixture_agree=true; transport_generator_agrees=true; negative_stale_predecessor_test=PASS_REJECTED; payload_bytes=2097152; sha256=68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v2_protocol.py",
+      "status": "PASS",
+      "result": "frozen semantics, strict single-session frames, refusal fixtures, authority separation, and 36-command plan"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v2_admission.py",
+      "status": "PASS",
+      "result": "canonical-only paths, repository-context source admission, strict request frames, receipt hashes, and disjoint modes"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v2_archive.py",
+      "status": "PASS",
+      "result": "archive_bytes=7918; archive_cap_bytes=786432; deterministic two-build archive; safe extraction and malicious rejection"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v2_process_ownership.py",
+      "status": "PASS",
+      "result": "opaque identity guards, exact denied identities, discovered PIDs excluded from signal APIs, one in-session cleanup"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v2_streaming.py",
+      "status": "PASS",
+      "result": "request_bytes=2101248; response_bytes=530893; response_cap_bytes=1048576; archive_cap_bytes=786432; bounded state transitions and retained-child timeout"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_experiment_guards.py",
+      "status": "PASS",
+      "result": "38 independent build/runtime guards, fail-closed leases, and attribution v1-v16 process ownership"
+    },
+    {
+      "command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v2_experiment.py",
+      "status": "PASS",
+      "result": "local_correctness_encodes=3; boundary_correctness_encodes=36; sanitizer_configurations=2; public_api_abi_equal=true; default_omission=true; timed_recorder_free=true; matched_layout_codegen=true"
+    },
+    {
+      "command": "independent local hash/index/receipt audit over the exact Phase 1 chain",
+      "status": "PASS",
+      "result": "36 frozen manifest members and all 19 rehearsal hash-index entries recomputed; source-admission file hashes, receipt hashes, archive references, counts, and authority gates matched"
+    }
+  ],
+  "manifest_hash_members_checked": [
+    {"path":"CMakeLists.txt","sha256":"e96ac3eacd57231d645e14967ff19d6a2ae44f25660bc2a64c97de88776ea881"},
+    {"path":"makefile.unix","sha256":"54f14bf2a0f6c4f87e4c7acbbc4a99e7113909f475b66014cef273d768fabd75"},
+    {"path":"src/enc/backward_references_cost_enc.c","sha256":"9ff6d32511c7c66ee9692eca494814d804583bbe4672ebe71ba6537ff9e05395"},
+    {"path":"src/enc/backward_references_cost_distance_only_enc.inc","sha256":"b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5"},
+    {"path":"src/enc/backward_references_enc.c","sha256":"825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03"},
+    {"path":"src/enc/profile_enc.c","sha256":"5f963c97531559972f4e67455366fafa2d705c9536c0fcc099c030905d077c99"},
+    {"path":"src/enc/profile_enc.h","sha256":"1df731a53eea819b906f11e9e525a3b4a1e913364e311b09b014d2a3eacd0617"},
+    {"path":"src/enc/vp8l_enc.c","sha256":"63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0"},
+    {"path":"src/enc/backref_cost_specialization_factorization_v2_experiment_enc.c","sha256":"fc8775451fcfb9502cb6d235f1856a5f37c33d09e1f80146c3b915d3d2e30467"},
+    {"path":"src/enc/backref_cost_specialization_factorization_v2_experiment_enc.h","sha256":"727eed235b1a8a85b5218b243f079cd1bcee80aacfde70e9342573789767e2bc"},
+    {"path":"src/enc/backref_cost_factorization_v2_layout_clone_enc.inc","sha256":"30f144d46895f210cf1969cda8696a7ad21fd7cf708c94ad32703f6caa675a7b"},
+    {"path":"tools/backref_cost_specialization_factorization_v2_experiment_runner.c","sha256":"be332c8dfb576b9b1b6934c6bf43ff09d2d6f49724fcc9afce28e8c3906f7fb2"},
+    {"path":"scripts/backref_cost_specialization_factorization_v2_paths.py","sha256":"eb07fee9ba5e97d8629ea28200aa0d608176c188f6a8881542342982887794ae"},
+    {"path":"scripts/backref_cost_specialization_factorization_v2_admission.py","sha256":"cea1689df2b50d1f89521d20a1e5a1b4aae0838a34c4831a71c627e3b855b732"},
+    {"path":"scripts/backref_cost_specialization_factorization_v2_transport.py","sha256":"6c9929e9e60b7746107e40da069d9e4396f94311e828679e97f62f44d95abb52"},
+    {"path":"scripts/backref_cost_specialization_factorization_v2_payload.py","sha256":"6e35a024a77de1516b32c6794626ea3517272179c9d392cfe73a92439f90be8b"},
+    {"path":"scripts/backref_cost_specialization_factorization_v2_archive.py","sha256":"4cf9ef730bb18e599df24077c983e5dda8cbe4806ae4c43366c380cd4957d536"},
+    {"path":"scripts/backref_cost_specialization_factorization_v2_schemas.json","sha256":"c023ef1714f1f98a60a4c601b150265669e2c582f682bf47add64034fdc7327d"},
+    {"path":"scripts/run_backref_cost_specialization_factorization_v2_experiment.py","sha256":"531843ef3d9652642469c5409d7f037233275ebe670ae37979b59e1eec4b6c99"},
+    {"path":"scripts/execute_backref_cost_specialization_factorization_v2.py","sha256":"ce6fd15e237a9d0a95bfc901e417bde08298e269a0336db700e324a6c10943f9"},
+    {"path":"scripts/evaluate_backref_cost_specialization_factorization_v2.py","sha256":"f9083b662ea58bbbbb51b56119053485d935296dc9a9a03231cb764a2410182c"},
+    {"path":"scripts/test_backref_cost_specialization_factorization_v2_admission.py","sha256":"71bb95b07fff9470ff34b959f60447a3a151abca9e34167e324689d536449ecb"},
+    {"path":"scripts/test_backref_cost_specialization_factorization_v2_archive.py","sha256":"053b9c7e2417d435e5d514114917f6b756aabfa6b36c482f0ba8028e48f98a13"},
+    {"path":"scripts/test_backref_cost_specialization_factorization_v2_experiment.py","sha256":"fef9294e8049a7dc19e19ad4617940ba4582c6dfe5e5f8d258926fa4de7c6cb7"},
+    {"path":"scripts/test_backref_cost_specialization_factorization_v2_process_ownership.py","sha256":"119e8c8814d0fbfb2e966321be2f7f66021aa6437ce7f02b8035f0aaf28a1b0c"},
+    {"path":"scripts/test_backref_cost_specialization_factorization_v2_protocol.py","sha256":"19715cfaf4ec4ff60aa9757b8f3fbd043e305c7999c019427f648b95686b4d9a"},
+    {"path":"scripts/test_backref_cost_specialization_factorization_v2_streaming.py","sha256":"dabde364c2622df8c3e687592b220aba74ab1677a270ab1db70f9c97dfd513cc"},
+    {"path":"scripts/test_backref_cost_specialization_factorization_v2_payload_identity.py","sha256":"3841b94280b6b7ab319937b27f2ccff5320fbb0d6dac7e7a84f8b0bf672c305b"},
+    {"path":"scripts/test_experiment_guards.py","sha256":"22869ef2e68ae012296def4328da6bbcdaab90fd335d2788948493309a6ff789"},
+    {"path":"doc/backref-cost-specialization-factorization-v2-protocol-20260819.md","sha256":"763c4a4cbe9342e1d955e3c70bb108296d5f4f360489d49632eb5909bd8160cb"},
+    {"path":"doc/experiment-guard-matrix.md","sha256":"a4bc52cefca6da7f96f031347a02df1a81bd00fe807e3172c2fa5106e45d3a6d"},
+    {"path":"evidence/backref-cost-specialization-factorization-v2-design/phase1-prior-evidence-audit.json","sha256":"f73d2fdfe1d8b25eb2b810c54fa4e3a982237d7e8fa8b498cf16fcf5679740c8"},
+    {"path":"evidence/backref-cost-specialization-factorization-v2-design/phase1-local-codegen.json","sha256":"3b4cd466846a0d34c7df4b3c972c4a71a572d5bc0e15d6262c39a407cd7cc023"},
+    {"path":"evidence/backref-cost-specialization-factorization-v2-design/phase1-local-validation.json","sha256":"bda6dcd24f7fe44cb8cc3fb0365c238340df3957d1b2c3fcd668725f6c2ebd3b"},
+    {"path":"evidence/backref-cost-specialization-factorization-v2-design/representative-payload-fixture.json","sha256":"53dd754ddac2c4c394ec4a2ccc4c31e34506b1d4d6ad4af3e8ff9a0d48c5a66b"},
+    {"path":"evidence/backref-cost-specialization-factorization-v2-design/representative-payload-agreement.json","sha256":"843056c2c86b68d6587507dea9faefced70768a966a1e7203e9c0005805ac17a"}
+  ],
+  "codegen_receipt": {
+    "timed_runner_sha256": "dbf9091a3f41a4b17b4f51069e511f21f57cbc1724f1601b16e29482905a0855",
+    "recorder_runner_sha256": "6c7757f684400cfc20f5580dc7446306baec1da4b0772f9e5ebae214253f8855",
+    "timed_recorder_symbols_present": false,
+    "untimed_recorder_symbols_present": true,
+    "linker_identical_code_deduplication_disabled": true,
+    "all_six_symbol_addresses_distinct": true,
+    "baseline_layout_dp_mnemonics_equal": true,
+    "baseline_layout_push_interval_mnemonics_equal": true,
+    "layout_vs_specialized_push_interval_mnemonics_differ": true,
+    "facts": {
+      "BackwardReferencesHashChainDistanceOnly": {"size_bytes":1292,"instruction_count":323,"branch_count":54,"load_count":55,"store_count":23,"mnemonics_sha256":"0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"},
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone": {"size_bytes":1292,"instruction_count":323,"branch_count":54,"load_count":55,"store_count":23,"mnemonics_sha256":"0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"},
+      "BackwardReferencesHashChainDistanceOnlySpecialized": {"size_bytes":1292,"instruction_count":323,"branch_count":54,"load_count":55,"store_count":23,"mnemonics_sha256":"0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"},
+      "PushInterval": {"size_bytes":508,"instruction_count":127,"branch_count":30,"load_count":25,"store_count":11,"mnemonics_sha256":"d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8"},
+      "PushIntervalLayoutClone": {"size_bytes":508,"instruction_count":127,"branch_count":30,"load_count":25,"store_count":11,"mnemonics_sha256":"d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8"},
+      "PushIntervalSpecialized": {"size_bytes":732,"instruction_count":183,"branch_count":45,"load_count":34,"store_count":12,"mnemonics_sha256":"453c8695e2523dc281903d227f9896d68decf895d5676690c8bd67a59431f190"}
+    }
+  },
+  "work_rows": {
+    "fixture": {"width":257,"height":97,"seed":7,"method":4},
+    "common_algorithm_fields_equal_B_L": true,
+    "common_algorithm_fields_equal_B_L_H": true,
+    "B_L_forward_steps_equal": true,
+    "B_L_hint_and_pop_tail_zero": true,
+    "H_forward_steps_zero": true,
+    "H_hint_fast_paths_positive": true,
+    "dispatch_identity_and_selector_once": true,
+    "rows": {
+      "B": {"selector_evaluations":2,"baseline_dp_calls":2,"layout_clone_dp_calls":0,"hint_dp_calls":0,"exact_activations":2,"push_calls":174,"short_push_calls":153,"cache_segments":207,"overlap_scans":68,"disjoint_prefix_scans":12,"insert_calls":158,"null_hint_insert_calls":157,"position_backward_steps":1,"position_forward_steps":723,"append_hint_fast_paths":0,"append_hint_branch_checks":0,"append_hint_loads":0,"append_hint_start_loads":0,"append_hint_update_checks":0,"append_hint_updates":0,"pop_tail_branch_checks":0,"pop_tail_updates":0,"interval_updates":0,"interval_pops":158,"max_live_intervals":21,"bitstream_bytes":134,"bitstream_fnv1a64":"847636c89f55c705"},
+      "L": {"selector_evaluations":2,"baseline_dp_calls":0,"layout_clone_dp_calls":2,"hint_dp_calls":0,"exact_activations":2,"push_calls":174,"short_push_calls":153,"cache_segments":207,"overlap_scans":68,"disjoint_prefix_scans":12,"insert_calls":158,"null_hint_insert_calls":157,"position_backward_steps":1,"position_forward_steps":723,"append_hint_fast_paths":0,"append_hint_branch_checks":0,"append_hint_loads":0,"append_hint_start_loads":0,"append_hint_update_checks":0,"append_hint_updates":0,"pop_tail_branch_checks":0,"pop_tail_updates":0,"interval_updates":0,"interval_pops":158,"max_live_intervals":21,"bitstream_bytes":134,"bitstream_fnv1a64":"847636c89f55c705"},
+      "H": {"selector_evaluations":2,"baseline_dp_calls":0,"layout_clone_dp_calls":0,"hint_dp_calls":2,"exact_activations":2,"push_calls":174,"short_push_calls":153,"cache_segments":207,"overlap_scans":68,"disjoint_prefix_scans":12,"insert_calls":158,"null_hint_insert_calls":157,"position_backward_steps":1,"position_forward_steps":0,"append_hint_fast_paths":146,"append_hint_branch_checks":157,"append_hint_loads":157,"append_hint_start_loads":146,"append_hint_update_checks":12,"append_hint_updates":157,"pop_tail_branch_checks":0,"pop_tail_updates":0,"interval_updates":0,"interval_pops":158,"max_live_intervals":21,"bitstream_bytes":134,"bitstream_fnv1a64":"847636c89f55c705"}
+    }
+  },
+  "correctness_and_separation": {
+    "local_correctness_encodes": 3,
+    "sanitizer_boundary_encodes": 36,
+    "sanitizer_configurations": 2,
+    "public_api_abi_equal": true,
+    "ordinary_build_default_omission": true,
+    "timed_recorder_free": true,
+    "runtime_truth_table": {"absent":0,"":-1,"0":-1,"B":0,"L":1,"H":2,"b":-1,"HL":-1},
+    "selector_once_and_one_selected_dp": true,
+    "bitstream_pixel_determinism_and_input_immutability": true,
+    "local_timer_validation_not_a_phase2_sample": {"clock_reads":4096,"monotonic":true,"positive_deltas":1318,"elapsed_ns":54959}
+  },
+  "rehearsal_and_transport": {
+    "rehearsal_raw_file_count": 19,
+    "rehearsal_raw_total_bytes": 31790,
+    "framed_stdout_bytes": 11783,
+    "framed_stdout_cap_bytes": 1048576,
+    "transport_stderr_bytes": 0,
+    "archive_bytes": 570,
+    "archive_cap_bytes": 786432,
+    "control_payload_cap_bytes": 8192,
+    "archive_member_count": 3,
+    "archive_integrity": true,
+    "safe_extraction_after_complete_verification": true,
+    "cleanup_footer_last": true,
+    "exact_child_removed_and_absence_proved": true,
+    "discovered_pid_signals": 0,
+    "remote_contacts": 0,
+    "lease_state": "not-attempted"
+  },
+  "audit_notes": [
+    "DP dispatch counters are variant identity fields, not common work; B/L equality was evaluated on common algorithm fields.",
+    "The local timer-check validates clock monotonicity only and creates no Phase 2 timing row or timing authority.",
+    "The Phase 1 refusal rehearsal is retained as prior evidence; it was not rerun by this audit."
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "archive_bytes": 570,
+  "archive_sha256": "0674b5edd3a66a94272501f5785d9f57fa9fc492d6dff54393bf7b860e715f61",
+  "chunk_bytes": 262144,
+  "chunk_count": 1,
+  "compression_format": "tar+gzip",
+  "inventory": {
+    "inventory_sha256": "b60005d3371edeee7e317e3be2aebd98f382d9891b603b616d35600e81f75dd5",
+    "member_count": 3,
+    "schema": "libwebp-backref-cost-specialization-factorization-v2-archive-inventory-v1",
+    "status": "accepted"
+  },
+  "inventory_sha256": "bb60d71e2537bf45d253c5f63c2f1406647a6ca697f116c5dc202b8aee2ce390",
+  "member_count": 3,
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-archive-v1",
+  "status": "accepted"
+}

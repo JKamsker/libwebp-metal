@@ -1,0 +1,9 @@
+{
+  "controlled_exit": true,
+  "error_type": "RuntimeError",
+  "process_refusal": null,
+  "process_refusal_sha256": null,
+  "reason": "diagnostic executable identity mismatch: xcrun",
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-refusal-v1",
+  "status": "refused"
+}

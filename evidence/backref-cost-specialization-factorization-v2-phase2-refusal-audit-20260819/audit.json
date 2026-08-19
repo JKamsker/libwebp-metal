@@ -1,0 +1,173 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-phase2-refusal-audit-v1",
+  "status": "REFUSED_FAIL_CLOSED",
+  "audit_role": "Luna/max PHASE 2 EXECUTOR/AUDITOR",
+  "audit_scope": {
+    "branch": "codex/backref-cost-specialization-factorization-v2",
+    "phase1_artifacts_edited": false,
+    "phase1b_additions_only_verified": true,
+    "phase2_remote_execution_performed": false,
+    "phase3_interpretation_or_evaluation_performed": false,
+    "v1_or_v16_timing_authority_or_samples_reused": false
+  },
+  "exact_linear_chain": {
+    "main": {
+      "commit": "ccdd4900633064f203010cbd437d2682e1cba51e",
+      "tree": "48096c14936e5ebc44266d84084e8b24f73b744b"
+    },
+    "phase1a": {
+      "commit": "9e7a75998061c84cd25cdbba58376293f71edbda",
+      "parent": "ccdd4900633064f203010cbd437d2682e1cba51e",
+      "tree": "dae4719b68d79bbbcd1c383732771451eaf2b617"
+    },
+    "phase1b": {
+      "commit": "5662d392599d55b018eff8f2b2a4e477c527051f",
+      "sole_parent": "9e7a75998061c84cd25cdbba58376293f71edbda",
+      "tree": "9a2aeec1ab65765ef0dbcc01f5db4a7ac28a96b7"
+    },
+    "ancestry_and_hash_resolution": "PASS",
+    "phase1b_diff": {
+      "entry_count": 21,
+      "all_statuses_added": true,
+      "all_paths_in_rehearsal_hash_index_or_authorization_prefix": true,
+      "phase1a_source_and_protocol_bytes_modified": false
+    }
+  },
+  "hash_audit": {
+    "manifest_path": "scripts/backref_cost_specialization_factorization_v2_manifest.json",
+    "manifest_sha256": "44ae2ea07f9d350f71616d0dd430af0bbea09d05f76f2127186762524cb97f25",
+    "frozen_manifest_member_count": 36,
+    "all_frozen_manifest_member_hashes_recomputed": true,
+    "phase1a_artifacts": {
+      "phase1-local-codegen.json": "3b4cd466846a0d34c7df4b3c972c4a71a572d5bc0e15d6262c39a407cd7cc023",
+      "phase1-local-validation.json": "bda6dcd24f7fe44cb8cc3fb0365c238340df3957d1b2c3fcd668725f6c2ebd3b",
+      "phase1-prior-evidence-audit.json": "f73d2fdfe1d8b25eb2b810c54fa4e3a982237d7e8fa8b498cf16fcf5679740c8",
+      "representative-payload-fixture.json": "53dd754ddac2c4c394ec4a2ccc4c31e34506b1d4d6ad4af3e8ff9a0d48c5a66b",
+      "representative-payload-agreement.json": "843056c2c86b68d6587507dea9faefced70768a966a1e7203e9c0005805ac17a"
+    },
+    "phase1b_artifacts": {
+      "phase1b-authorization.json": "fc6072b821ebaf705ee6b4984afb35da1c742d0a4245445ddbf79f69b0c5ec9e",
+      "phase1b-rehearsal-hashes.json": "d7f9f00231703cbc43a96d33b5eb916ce17dbadad03b0a599dbf341e500b4270",
+      "source-admission.json": "7fc8782091ed0ce4e4346def01202464c5965097ce4a68ba46e5c678e4dd194a",
+      "rehearsal-invocation.json": "ad2ee3f2b587bdb01d67b53d7827a0438326a705a1b433615e44348918f80522",
+      "rehearsal.json": "8b30d44ea0f92f19b4fa37ac9ec7a93c0372f78309719d37983434132e8e63db",
+      "cleanup-footer.json": "afc45c207f4dcff367e34fa5076a685a78728422b2ed6c4a18449f7babd60de9",
+      "transfer-cleanup.json": "fe37f26ea2d4e97a8d2c2615504a7e3ffb9c41dad080e28951a994e3e6cc5fad",
+      "returned-evidence.tar.gz": "0674b5edd3a66a94272501f5785d9f57fa9fc492d6dff54393bf7b860e715f61",
+      "framed-stdout.bin": "1c3751dbc465aff31e63940f859404d4bc02d0573a30abef7111aad00688e172",
+      "transport-stderr.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "source_bundle_receipt_sha256": "54e1a06f47df2e702b59efb7ffe29083b9b47320d0e863a9fad8fea928f82d15",
+    "source_bundle_receipt_note": "Recorded and checked from the Phase 1 source-admission receipt; the compact Phase 1 evidence does not retain the source bundle itself.",
+    "all_rehearsal_hash_index_entries_recomputed": true,
+    "rehearsal_raw_artifact_count": 19,
+    "rehearsal_raw_total_bytes": 31790
+  },
+  "payload_audit": {
+    "status": "PASS",
+    "payload_bytes": 2097152,
+    "manifest_sha256_value": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "generator_recomputation_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "independent_fixture_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "transport_generator_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "rehearsal_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "triple_agreement": true,
+    "stale_predecessor_sha256": "60a1a48b8128a82eae9474a69c0dfe8364745747f04a886341c3da03fd5dee85",
+    "stale_predecessor_is_not_observed": true,
+    "negative_stale_predecessor_test": "PASS_REJECTED"
+  },
+  "phase1_local_gate_audit": {
+    "local_codegen": "PASS",
+    "local_validation": "PASS",
+    "prior_evidence_audit": "PASS",
+    "codegen_and_work_identity": "PASS",
+    "guards": "PASS",
+    "correctness_abi_default_off": "PASS",
+    "recorder_free_timing_separation": "PASS",
+    "archive_transport_caps": "PASS",
+    "process_and_cleanup_evidence": "PASS",
+    "authority": "NONE",
+    "authority_binding": true,
+    "authority_reason_exact": "diagnostic executable identity mismatch: xcrun",
+    "authorization_blocker": "The sole synchronous zero-workload, zero-lease rehearsal refused before build or workload because the diagnostic executable identity for xcrun did not match the frozen toolchain gate. Device and resource identity therefore remain unproven. The no-retry and additions-only rules forbid retrying or changing Phase 1A; no Phase 2 authority exists.",
+    "failed_gate": "FAIL_DIAGNOSTIC_EXECUTABLE_IDENTITY_MISMATCH_XCRUN",
+    "device_gate": "NOT_REACHED_UNPROVEN",
+    "resource_gate": "NOT_REACHED_UNPROVEN",
+    "toolchain_identity_verified": false,
+    "device_identity_verified": false,
+    "resource_admission_verified": false
+  },
+  "rehearsal_receipt_audit": {
+    "status": "REFUSED_FAIL_CLOSED",
+    "attempts": 1,
+    "retry_count": 0,
+    "rerun_count": 0,
+    "encoder_workloads": 0,
+    "work_counter_workloads": 0,
+    "profiler_workloads": 0,
+    "timed_workloads": 0,
+    "timing_samples": 0,
+    "remote_contacts": 0,
+    "remote_connection_established": false,
+    "benchmark_lease_acquisition_attempted": false,
+    "discovered_pid_signals": 0,
+    "post_run_remote_cleanup_operations": 0,
+    "cleanup_footer_last": true,
+    "exact_child_cleanup_and_absence": true,
+    "framed_stdout_bytes": 11783,
+    "framed_response_cap_bytes": 1048576,
+    "archive_bytes": 570,
+    "archive_cap_bytes": 786432,
+    "transport_stderr_bytes": 0,
+    "all_control_payloads_within_cap": true
+  },
+  "phase2_refusal": {
+    "host": "pandocs-agent",
+    "host_contact_made": false,
+    "ssh_invocations": 0,
+    "host_resolution_or_probe": 0,
+    "remote_workspace_created": false,
+    "lease_acquisition_attempted": false,
+    "benchmark_invocations": 0,
+    "timing_samples": 0,
+    "raw_timing_rows": 0,
+    "raw_runner_rows": 0,
+    "raw_stage_rows": 0,
+    "remote_raw_artifact_files": 0,
+    "phase2_remote_or_raw_timing_evidence_present": false,
+    "expected_raw_counts": {
+      "host_contacts": 0,
+      "remote_workspaces": 0,
+      "leases": 0,
+      "benchmark_runs": 0,
+      "timing_samples": 0,
+      "timing_rows": 0,
+      "runner_rows": 0,
+      "stage_rows": 0,
+      "remote_raw_artifact_files": 0
+    },
+    "observed_raw_counts": {
+      "host_contacts": 0,
+      "remote_workspaces": 0,
+      "leases": 0,
+      "benchmark_runs": 0,
+      "timing_samples": 0,
+      "timing_rows": 0,
+      "runner_rows": 0,
+      "stage_rows": 0,
+      "remote_raw_artifact_files": 0
+    },
+    "no_retry_or_alternate_time_path": true,
+    "no_host_side_mutation": true
+  },
+  "phase3_boundary": {
+    "evaluation_performed": false,
+    "production_consequence_decided": false,
+    "benchmark_rows_manufactured": false
+  },
+  "evidence_set": [
+    "evidence/backref-cost-specialization-factorization-v2-phase2-refusal-audit-20260819/audit.json",
+    "evidence/backref-cost-specialization-factorization-v2-phase2-refusal-audit-20260819/local-audit-receipt.json"
+  ],
+  "local_receipt_path": "evidence/backref-cost-specialization-factorization-v2-phase2-refusal-audit-20260819/local-audit-receipt.json"
+}

@@ -1,0 +1,697 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v2-frozen-protocol-v1",
+  "protocol_version": 7,
+  "experiment_id": "backref_cost_specialization_factorization_v2",
+  "base_commit": "ccdd4900633064f203010cbd437d2682e1cba51e",
+  "required_expected_commit_environment": "EXPECTED_FREEZE_COMMIT",
+  "phase_1_decision": {
+    "status": "PENDING_PHASE_1B_AUTHORIZATION",
+    "timed_execution_authorized": false,
+    "phase_2_authority": "NONE",
+    "reason": "Phase 1A freezes local gates and exactly one optional untimed zero-workload rehearsal; Phase 2 remains forbidden until an additions-only Phase 1B envelope records complete live receipts",
+    "phase_1_performance_samples": 0
+  },
+  "phase_1_identity_contract": {
+    "source_commit": "the exact Phase-1A commit recorded by the Phase-1B envelope",
+    "freeze_commit": "the exact Phase-1B HEAD passed dynamically as EXPECTED_FREEZE_COMMIT",
+    "authorization_envelope": "evidence/backref-cost-specialization-factorization-v2-design/phase1b-authorization.json",
+    "rehearsal_hash_index": "evidence/backref-cost-specialization-factorization-v2-design/phase1b-rehearsal-hashes.json",
+    "rehearsal_evidence_prefix": "evidence/backref-cost-specialization-factorization-v2-design/rehearsal/",
+    "phase_1b_parent_rule": "exactly one parent equal to source_commit",
+    "phase_1b_diff_rule": "additions only at the rehearsal evidence prefix, hash index, and authorization envelope; every source/protocol/manifest/schema/corpus/order/count/timeout artifact remains byte-identical to Phase 1A"
+  },
+  "payload_identity_gate": {
+    "status": "PASS_BEFORE_PHASE_1A",
+    "generator": "scripts/backref_cost_specialization_factorization_v2_payload.py",
+    "fixture": "evidence/backref-cost-specialization-factorization-v2-design/representative-payload-fixture.json",
+    "agreement_receipt": "evidence/backref-cost-specialization-factorization-v2-design/representative-payload-agreement.json",
+    "payload_bytes": 2097152,
+    "sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "negative_stale_predecessor_sha256": "60a1a48b8128a82eae9474a69c0dfe8364745747f04a886341c3da03fd5dee85",
+    "negative_test": "PASS_REJECTED"
+  },
+  "execution_modes": {
+    "validate": "local, WEBP_BENCHMARK_SESSION absent, hashes and contracts only",
+    "rehearse": "local synchronous transport mirror, WEBP_BENCHMARK_SESSION absent, admission/build/command/refusal/archive/cleanup only; no host resolution/contact and no encoder or profiler workload",
+    "run": "Phase 2 only, exact exclusive session, one lease and 36 serial directly spawned coarse-timer processes"
+  },
+  "return_contract": {
+    "single_remote_session": false,
+    "remote_interactions_per_transaction": 0,
+    "post_run_ssh_cleanup_operations": 0,
+    "lease_transfer_states": [
+      "not-attempted",
+      "unavailable-after-attempt",
+      "verified"
+    ],
+    "not_attempted_rule": "when benchmark_lease_acquisition_attempted is false, no lease artifact is requested, copied, or awaited",
+    "attempted_rule": "an acquisition attempt requires an independently transferred and verified lease receipt",
+    "cleanup_rule": "the same local rehearsal transaction validates and removes only its exact factorization-v2 child before response emission, proves absence, and places the mandatory cleanup receipt in the preflighted final frame; no SSH/SCP cleanup exists",
+    "control_plane": [
+      "source-admission",
+      "operator-status",
+      "archive-build",
+      "lease-state",
+      "integrity-footer",
+      "cleanup-footer-last"
+    ],
+    "data_plane": "one framed stdout stream returns a compact deterministic tar+gzip archive with full artifact hash index; the declaration carries archive hash/size/count plus member-count and full-inventory digest before ordered chunks",
+    "maximum_expected_run_archive_bytes": 524288,
+    "maximum_expected_run_archive_justification": "Factorization V2 compaction retains raw runner/stage JSONL, correctness/resource/counter records and cryptographic indexes, while omitting the redundant representative request payload, repeated raw process tables, full nm output, build text, and duplicated command stdout/stderr; the 512 KiB expected bound must be proven by deterministic local archive fixtures and the sole rehearsal",
+    "representative_rehearsal_payload_bytes": 2097152,
+    "representative_rehearsal_payload_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "representative_payload_margin_ratio": 4.0,
+    "maximum_response_archive_bytes": 786432,
+    "frame_header_maximum_bytes": 65536,
+    "bulk_chunk_bytes": 262144,
+    "timeouts": {
+      "ssh_connect_seconds": 10,
+      "server_alive_interval_seconds": 15,
+      "server_alive_count_max": 3,
+      "absolute_transaction_seconds": 1800,
+      "silent_operator_seconds": 900,
+      "request_and_bulk_progress_seconds": 15,
+      "footer_progress_seconds": 15
+    },
+    "transport_timeout_derivation": "the 900-second silent operator bound covers two serial builds, 24 untimed correctness encodes, 12 untimed work encodes, and the exact 36-process/180-encode timing inventory using prior approximately 0.94-1.22 second representative evidence plus margin; the 15-second progress bound is over 7x the prior approximately 0.51 second 256 KiB cadence; the 1,800-second absolute bound covers request, operator, stream, and finally",
+    "incremental_pump": "one retained directly-owned SSH Popen uses nonblocking selectors to write framed request chunks while concurrently draining stdout/stderr; REQUEST_WRITE retains request-progress plus absolute bounds until stdin half-close; SILENT_OPERATOR covers the remote build and complete-response preflight; BULK_STREAM starts only after a complete schema-valid size-valid declaration arrives and resets 15 seconds per received byte; FOOTERS separately bounds integrity plus cleanup for 15 seconds; only deadline expiry may stop that retained creation identity",
+    "online_validation": "the remote encodes and checks every frame, control payload, archive byte, footer, and cleanup receipt before writing its first response byte; reject archive above 786432 bytes, any control above 8192 bytes, or total framed stdout greater than or equal to 1048576 bytes; then verify ordered frames/chunks, archive digest, compact full-inventory digest, integrity footer, cleanup-last receipt, raw stream hashes/counts, and exact-child absence before extraction",
+    "state_machine_fixture_set": [
+      "magic-then-long-bounded-silence",
+      "partial-control-then-silence",
+      "complete-controls-then-silence",
+      "partial-bulk-declaration-then-silence",
+      "complete-valid-declaration-then-15-second-stall",
+      "chunks-with-progress-reset",
+      "chunks-done-then-footer-stall",
+      "refusal-before-bulk",
+      "cleanup-footer-last",
+      "retained-child-only-timeout"
+    ],
+    "maximum_framed_response_bytes": 1048576,
+    "maximum_control_payload_bytes": 8192,
+    "request_direction_validation": "a 2097152-byte deterministic payload is streamed only client-to-remote; remote admission checks exact size/SHA-256 and returns only its compact receipt, so request capacity and capped response capacity are independently exercised without performance evidence",
+    "compaction": {
+      "preserved_raw": [
+        "stages/*.jsonl",
+        "runner/*.jsonl",
+        "runner/*.stderr",
+        "commands.jsonl",
+        "correctness.json",
+        "work-metrics.jsonl",
+        "work-metric-summary.json",
+        "codegen.json",
+        "resource-admission-*.json",
+        "artifact-hashes.json"
+      ],
+      "digest_only": [
+        "representative request payload",
+        "process snapshots",
+        "build stdout/stderr",
+        "nm output",
+        "duplicated command stdout/stderr"
+      ],
+      "archive_cap_bytes": 786432,
+      "framed_response_cap_bytes": 1048576
+    }
+  },
+  "process_isolation": {
+    "snapshot_command": [
+      "/bin/ps",
+      "-axo",
+      "pid=,ppid=,comm="
+    ],
+    "frozen_fields": [
+      "pid",
+      "ppid",
+      "comm"
+    ],
+    "argument_text_collected": false,
+    "raw_comm_semantics": "the complete remaining comm field is a nonempty exact opaque process-table string; slashless, slash-bearing, space-bearing, and path-like strings are valid and never filesystem-canonicalized",
+    "lexical_basename_semantics": "derived only as raw_comm.rsplit('/', 1)[-1], recorded separately, and never resolved, normalized, statted, or checked against the filesystem",
+    "resolved_path_api": null,
+    "v9_live_shape_fixture": "/sbin/launchd",
+    "conflict_rule": "exact frozen raw_comm and/or exact lexical_basename deny-set membership; no substring, prefix, suffix, argv, source, payload, filesystem, or symlink matching",
+    "ancestor_rule": "the self PID must exist and exact PPID edges must form a complete acyclic chain ending at PID 1; every ancestor requires a well-formed nonempty opaque raw_comm and lexical_basename, but no positive ancestor identity allowlist or filesystem identity match exists",
+    "scope_rule": "every process row is checked for exact denied raw_comm or lexical_basename membership; arbitrary well-formed non-denied ancestors and nonancestors pass, including slash, spaces, path-like values, and benign lexical collisions",
+    "malformed_rule": "invalid UTF-8, truncation, malformed PID/PPID/remaining-comm structure, control-bearing or empty raw_comm or lexical basename, duplicate PIDs, self-parent edges, missing ancestor parents, ancestor cycles, non-PID1 ppid0, and absent self PID fail closed",
+    "discovery_policy": "read-only observation/refusal; raw snapshots are classified in memory and retained as exact SHA-256/byte-count/structural receipts; discovered PIDs never enter signal APIs",
+    "denied_identity_sets_source": "DENIED_RAW_COMM_IDENTITIES and DENIED_LEXICAL_BASENAMES in scripts/backref_cost_specialization_factorization_v2_transport.py",
+    "positive_ancestor_identity_sets": null,
+    "refusal_diagnostic": "bounded libwebp-backref-cost-specialization-factorization-v2-process-refusal-v1 object in the integrity footer with failure_code, PID, PPID, raw_comm, lexical_basename, is_ancestor, is_conflict, and SHA-256; no argv, environment, source, payload, command, or filesystem identity"
+  },
+  "frozen_phase_1_rehearsal_command": "env -u WEBP_BENCHMARK_SESSION EXPECTED_FREEZE_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_specialization_factorization_v2.py rehearse \"$PWD/evidence/backref-cost-specialization-factorization-v2-design/rehearsal\"",
+  "frozen_phase_2_command": "env WEBP_BENCHMARK_SESSION=exclusive EXPECTED_FREEZE_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_specialization_factorization_v2.py run \"$PWD/evidence/backref-cost-specialization-factorization-v2-execution-20260819\"",
+  "candidate": {
+    "build_flag": "WEBP_BUILD_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT",
+    "compile_macro": "WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_EXPERIMENT",
+    "runtime_flag": "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_VARIANT",
+    "runtime_values": [
+      "B",
+      "L",
+      "H"
+    ],
+    "source": "src/enc/backref_cost_specialization_factorization_v2_experiment_enc.c",
+    "runner": "tools/backref_cost_specialization_factorization_v2_experiment_runner.c",
+    "runner_target": "backref_cost_specialization_factorization_v2_experiment_runner",
+    "equivalence": {
+      "source_commit": "ccdd4900633064f203010cbd437d2682e1cba51e",
+      "algorithm": "B is the merged original baseline; L is a separately named noinline clone of B's DP template and PushInterval algorithm; H is the merged always-specialized append-hint body. One exact B/L/H selector is cached before mutation and one closed switch owns exactly one selected DP body.",
+      "preserved": [
+        "integer costs",
+        "strict comparisons and ties",
+        "interval ordering",
+        "update order",
+        "traceback",
+        "reference order",
+        "cache choice",
+        "immutable inputs",
+        "transactional allocation fallback"
+      ],
+      "baseline": "production PushInterval at exact merged V16 main ccdd4900633064f203010cbd437d2682e1cba51e",
+      "single_binary_identity": true
+    }
+  },
+  "forbidden_environment": [
+    "CUDA_VISIBLE_DEVICES",
+    "MallocNanoZone",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V10_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V11_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V12_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V14_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V15_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V9_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT",
+    "WEBP_BACKREF_COST_TRACEBACK_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT",
+    "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT"
+  ],
+  "remote_host": {
+    "ssh_alias": "pandocs-agent",
+    "system": "Darwin",
+    "architecture": "arm64",
+    "hardware_model": "Mac16,10",
+    "cpu_brand": "Apple M4",
+    "physical_memory_bytes": 25769803776,
+    "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+    "compiler_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "compiler_version_lines": [
+      "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+      "Target: arm64-apple-darwin25.2.0",
+      "Thread model: posix",
+      "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+    ],
+    "sdk_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+    "sdk_version": "26.2",
+    "required_thermal_lines": [
+      "No thermal warning level has been recorded",
+      "No performance warning level has been recorded",
+      "No CPU power status has been recorded"
+    ],
+    "safe_root_basename": ".libwebp-metal-backref-cost-specialization-factorization-v2",
+    "runner_policy": "Runner.Listener may remain; exact Runner.Worker and frozen runner/benchmark/profiler/CUDA executable basenames fail closed",
+    "permission_rule": "the selected diagnostic uses no attach API, profiler, authentication UI, privacy prompt, or discovered-PID control"
+  },
+  "diagnostic": {
+    "primary": "coarse monotonic stage timers",
+    "fallback": null,
+    "clock": "mach_continuous_time converted with mach_timebase_info",
+    "external_profiler_invocations": 0,
+    "record_command_template": [
+      "/usr/bin/env",
+      "FROZEN_ENV...",
+      "RUNNER",
+      "profile",
+      "INPUT",
+      "CASE",
+      "METHOD",
+      "VARIANT",
+      "1",
+      "4"
+    ],
+    "executables": {
+      "clang": {
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+        "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a"
+      },
+      "xcrun": {
+        "path": "/usr/bin/xcrun",
+        "sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152"
+      },
+      "nm": {
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm",
+        "sha256": "a42f25b6363f3d43b911733a276a46bdbed894f1ef8e764cb7461ebdb37a15e7"
+      }
+    },
+    "selection": {
+      "sample": "rejected: PID attachment and task-port permission are unnecessary risks",
+      "xctrace": "rejected: v1 never established noninteractive launch permission and prompting cannot be rehearsed safely",
+      "coarse_timers": "selected: in-process, noninteractive, no attach rights, and availability can be validated without encoder execution"
+    }
+  },
+  "build": {
+    "system": "makefile.unix",
+    "metal": false,
+    "cflags": "-O3 -g -DNDEBUG -fno-omit-frame-pointer",
+    "ldflags": "-Wl,-no_deduplicate",
+    "ar": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+    "ranlib": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+    "identity_rule": "one optimized recorder-free Mach-O serves B/L/H timing and one separately hashed recorder Mach-O serves untimed work; Apple ld identical-code deduplication is disabled so all six private symbols have distinct addresses; exact private symbols and codegen facts are recorded"
+  },
+  "corpus": [
+    {
+      "case_id": "photo-large",
+      "file": "photo-large.ppm",
+      "category": "photo",
+      "width": 3000,
+      "height": 2000,
+      "sha256": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612"
+    },
+    {
+      "case_id": "graphic-large",
+      "file": "graphic-large.ppm",
+      "category": "graphic",
+      "width": 3000,
+      "height": 2000,
+      "sha256": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc"
+    }
+  ],
+  "protocol": {
+    "purpose": "fresh simultaneous B/L/H causal factorization; never a V16 rerun and never pooled with V16 samples",
+    "methods": [
+      4,
+      6
+    ],
+    "profile_repetitions": 3,
+    "warmups_per_profile": 1,
+    "retained_encodes_per_profile": 4,
+    "profile_processes": 36,
+    "runner_output_records": 180,
+    "stage_records": 180,
+    "retained_stage_records": 144,
+    "variant_order": [
+      [
+        "B",
+        "L",
+        "H"
+      ],
+      [
+        "H",
+        "L",
+        "B"
+      ],
+      [
+        "L",
+        "B",
+        "H"
+      ]
+    ],
+    "case_order": [
+      "photo-large",
+      "graphic-large"
+    ],
+    "lifecycle": "one import, one excluded warmup, then four retained coarse-timer encodes per process",
+    "serial_rule": "one synchronous directly spawned runner at a time under one exclusive lease; no overlap or retry",
+    "correctness": "before timing, exactly two B, two L and two H encodes per case/method (24 total); exact bitstreams, decoded RGB pixels, repeat determinism, immutable inputs, integer costs, ties, update order and traceback must match",
+    "selected_dp_structure": "a separate recorder build emits exactly 12 untimed work rows, one per case/method/variant; one selector evaluation per selected DP, no opposite body, B/L exact work equality, common B/L/H algorithm work equality, and H-only append-hint activations are mandatory",
+    "pairing": "within each case/method/repetition, retained ordinal 0..3 aligns B, L and H; compute B->L, L->H and B->H as 100*(Y-X)/X for each of 12 paired retained rows per cell and metric",
+    "statistics": "for DP total, DP steady and whole encode in every cell/pair report all 12 paired percentages, arithmetic mean, median, sample standard deviation, min/max, sign counts, and deterministic 100000-resample paired bootstrap 95% percentile CI for the mean with seed 0x424c4801; setup is retained and reported but not causal-decision primary",
+    "perturbation": "monotonic clocks occur only at whole stages and DP setup/steady/trace/materialize boundaries; no per-PushInterval clock; timed binaries contain no recorder symbols or work counters"
+  },
+  "acceptance": {
+    "diagnostic_only": true,
+    "required_symbols": [
+      "WebPEncode",
+      "VP8LEncodeStream",
+      "VP8LHashChainFill",
+      "VP8LGetBackwardReferences",
+      "VP8LBackwardReferencesTraceBackwards",
+      "BackwardReferencesHashChainDistanceOnly",
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+      "BackwardReferencesHashChainDistanceOnlySpecialized",
+      "PushInterval",
+      "PushIntervalLayoutClone",
+      "PushIntervalSpecialized",
+      "InsertInterval",
+      "CostManagerInit",
+      "CostModelBuild",
+      "TraceBackwards",
+      "BackwardReferencesHashChainFollowChosenPath",
+      "EncodeImageInternal",
+      "GetHuffBitLengthsAndCodes",
+      "StoreImageToBitMask"
+    ],
+    "codegen_symbols": [
+      "BackwardReferencesHashChainDistanceOnly",
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+      "BackwardReferencesHashChainDistanceOnlySpecialized",
+      "PushInterval",
+      "PushIntervalLayoutClone",
+      "PushIntervalSpecialized"
+    ],
+    "required_timer_stages": [
+      "lossless_analyze",
+      "lossless_hash_chain",
+      "lossless_backward_refs",
+      "lossless_histogram",
+      "lossless_huffman",
+      "lossless_bitstream",
+      "backref_cost_dp_total",
+      "backref_cost_dp_setup",
+      "backref_cost_dp_steady",
+      "backref_cost_traceback",
+      "backref_cost_materialize"
+    ],
+    "per_profile": "five runner output records, five stage records, four retained records, exact schemas, and zero stderr",
+    "work_counters": {
+      "rows": 12,
+      "cell_keys": [
+        "case_id",
+        "method",
+        "variant"
+      ],
+      "fields": [
+        "selector_evaluations",
+        "baseline_dp_calls",
+        "layout_clone_dp_calls",
+        "hint_dp_calls",
+        "exact_activations",
+        "push_calls",
+        "short_push_calls",
+        "cache_segments",
+        "overlap_scans",
+        "disjoint_prefix_scans",
+        "insert_calls",
+        "null_hint_insert_calls",
+        "position_backward_steps",
+        "position_forward_steps",
+        "append_hint_fast_paths",
+        "append_hint_branch_checks",
+        "append_hint_loads",
+        "append_hint_start_loads",
+        "append_hint_update_checks",
+        "append_hint_updates",
+        "pop_tail_branch_checks",
+        "pop_tail_updates",
+        "interval_updates",
+        "interval_pops",
+        "max_live_intervals",
+        "bitstream_bytes",
+        "bitstream_fnv1a64"
+      ],
+      "rules": "B and L are exactly equal for all work and have zero hint/pop activity; B/L/H common push/cache/overlap/disjoint/insert/backward/update/pop/live/bitstream work is equal; H differs only in intended append-hint/pop-tail positioning fields, has exact activation, positive hint activity, and zero forward positioning in every active cell"
+    },
+    "repeatability": "for each case/method/variant, three retained-total medians have max/min <=2.0 and each major stage-share range <=0.10 absolute",
+    "timer_accounting": "on every successful timed encode DP total.calls == DP setup.calls == DP steady.calls > 0, backend equals the frozen B/L/H launch, setup+steady <= DP total, and DP total+traceback+materialize <= backward refs",
+    "timer_boundaries": "DP total is immediately around exactly one selected DP body including cleanup; setup starts before allocation and ends only after successful CostManagerInit; steady covers only initial literal plus pixel DP loop; traceback and materialization are separately timed; no per-pixel or PushInterval clock",
+    "maximum_mean_clock_read_delta_ns": 10000,
+    "build_identity": "one recorder-free timed runner serves B/L/H; a distinct recorder runner serves untimed work only; frozen clang/SDK/flags and all six private DP/PushInterval symbols are mandatory",
+    "resources": "AC power, LPM off, no thermal warning, >=4 GiB free memory, >=8 GiB disk, output <=2 GiB, one directly owned child",
+    "correctness_required": true,
+    "diagnostic_success": "all correctness, schema, count, order, hash, resource, work, codegen, repeatability and transport gates pass; this can pass even when production promotion fails",
+    "production_promotion": "H may be proposed only if B->H DP steady and whole-encode mean are negative in all four required cells, each upper 95% bootstrap CI is <=0, no paired row regresses by more than +0.50%, and correctness/work gates pass; otherwise retain diagnostic only",
+    "repeatability_max_ratio": 2.0,
+    "maximum_material_regression_percent": 0.5
+  },
+  "interpretation": {
+    "quantify": "report B->L, L->H and B->H for DP total, DP steady and whole encode separately in every photo/graphic method-4/method-6 cell",
+    "layout_limit": "B->L estimates duplication/code-placement/control-layout cost; L->H estimates the append-hint algorithm within matched always-specialized structure; B->H is the simultaneous total boundary. Coarse timers plus work/codegen may still leave interaction unresolved.",
+    "classification": "per cell and metric, classify layout-dominant when abs(B->L) >= 0.60*abs(B->H) and abs(L->H) < 0.60*abs(B->H); hint-dominant uses the symmetric rule; opposite-signed components or neither rule are interaction/mixed; abs(B->H)<0.10% is indeterminate-small",
+    "close_family": "diagnostic validity and production promotion are separate decisions; do not weaken thresholds after results",
+    "next_stage": "Phase 3 alone decides consequence or one independently gated next lead",
+    "follow_up": "a later evaluator may propose one new gated experiment but cannot implement it from this evidence",
+    "no_pooling": "no old samples, call-stack claims, relabeling, thresholds, graphic-only path, Metal, or CUDA"
+  },
+  "resources": {
+    "lease_path": "~/.libwebp-metal-backref-cost-specialization-factorization-v2.lock",
+    "profile_timeout_seconds": 600,
+    "remote_timeout_seconds": 1800,
+    "single_session_transaction_timeout_seconds": 1800,
+    "silent_operator_timeout_seconds": 900,
+    "stream_progress_timeout_seconds": 15,
+    "footer_progress_timeout_seconds": 15,
+    "maximum_response_archive_bytes": 786432,
+    "maximum_output_bytes": 2147483648,
+    "minimum_available_memory_bytes": 4294967296,
+    "minimum_available_disk_bytes": 8589934592,
+    "parallel_profile_processes": 1,
+    "maximum_framed_response_bytes": 1048576,
+    "maximum_control_payload_bytes": 8192
+  },
+  "schemas": {
+    "catalog": "scripts/backref_cost_specialization_factorization_v2_schemas.json",
+    "artifact_hashes": "libwebp-backref-cost-specialization-factorization-v2-artifact-hashes-v1",
+    "cleanup_receipt": "libwebp-backref-cost-specialization-factorization-v2-cleanup-receipt-v1",
+    "frame": "libwebp-backref-cost-specialization-factorization-v2-frame-v1",
+    "integrity_footer": "libwebp-backref-cost-specialization-factorization-v2-integrity-footer-v1",
+    "lease": "libwebp-backref-cost-specialization-factorization-v2-lease-v1",
+    "lease_transfer": "libwebp-backref-cost-specialization-factorization-v2-lease-transfer-v1",
+    "operator_status": "libwebp-backref-cost-specialization-factorization-v2-operator-status-v1",
+    "process_refusal": "libwebp-backref-cost-specialization-factorization-v2-process-refusal-v1",
+    "refusal": "libwebp-backref-cost-specialization-factorization-v2-refusal-v1",
+    "rehearsal": "libwebp-backref-cost-specialization-factorization-v2-rehearsal-v1",
+    "transfer_cleanup": "libwebp-backref-cost-specialization-factorization-v2-transfer-cleanup-v1"
+  },
+  "admission_identity_paths": [
+    "scripts/backref_cost_specialization_factorization_v2_manifest.json",
+    "scripts/backref_cost_specialization_factorization_v2_schemas.json",
+    "scripts/backref_cost_specialization_factorization_v2_archive.py",
+    "scripts/backref_cost_specialization_factorization_v2_admission.py",
+    "scripts/backref_cost_specialization_factorization_v2_transport.py",
+    "scripts/backref_cost_specialization_factorization_v2_payload.py",
+    "scripts/backref_cost_specialization_factorization_v2_paths.py",
+    "scripts/run_backref_cost_specialization_factorization_v2_experiment.py",
+    "scripts/execute_backref_cost_specialization_factorization_v2.py",
+    "scripts/evaluate_backref_cost_specialization_factorization_v2.py",
+    "doc/backref-cost-specialization-factorization-v2-protocol-20260819.md",
+    "scripts/test_backref_cost_specialization_factorization_v2_admission.py",
+    "scripts/test_backref_cost_specialization_factorization_v2_archive.py",
+    "scripts/test_backref_cost_specialization_factorization_v2_experiment.py",
+    "scripts/test_backref_cost_specialization_factorization_v2_process_ownership.py",
+    "scripts/test_backref_cost_specialization_factorization_v2_protocol.py",
+    "scripts/test_backref_cost_specialization_factorization_v2_streaming.py",
+    "scripts/test_backref_cost_specialization_factorization_v2_payload_identity.py",
+    "scripts/test_experiment_guards.py",
+    "doc/experiment-guard-matrix.md",
+    "evidence/backref-cost-specialization-factorization-v2-design/phase1-prior-evidence-audit.json",
+    "evidence/backref-cost-specialization-factorization-v2-design/phase1-local-codegen.json",
+    "evidence/backref-cost-specialization-factorization-v2-design/phase1-local-validation.json",
+    "evidence/backref-cost-specialization-factorization-v2-design/representative-payload-fixture.json",
+    "evidence/backref-cost-specialization-factorization-v2-design/representative-payload-agreement.json"
+  ],
+  "frozen_artifact_set": {
+    "self_manifest": "scripts/backref_cost_specialization_factorization_v2_manifest.json",
+    "hashed_members_field": "frozen_artifacts",
+    "identity_rule": "admission identity paths equal self_manifest plus every frozen_artifacts path",
+    "payload_identity_required_members": [
+      "scripts/backref_cost_specialization_factorization_v2_payload.py",
+      "scripts/backref_cost_specialization_factorization_v2_manifest.json",
+      "evidence/backref-cost-specialization-factorization-v2-design/representative-payload-fixture.json",
+      "evidence/backref-cost-specialization-factorization-v2-design/representative-payload-agreement.json"
+    ]
+  },
+  "frozen_artifacts": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "e96ac3eacd57231d645e14967ff19d6a2ae44f25660bc2a64c97de88776ea881"
+    },
+    {
+      "path": "makefile.unix",
+      "sha256": "54f14bf2a0f6c4f87e4c7acbbc4a99e7113909f475b66014cef273d768fabd75"
+    },
+    {
+      "path": "src/enc/backward_references_cost_enc.c",
+      "sha256": "9ff6d32511c7c66ee9692eca494814d804583bbe4672ebe71ba6537ff9e05395"
+    },
+    {
+      "path": "src/enc/backward_references_cost_distance_only_enc.inc",
+      "sha256": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5"
+    },
+    {
+      "path": "src/enc/backward_references_enc.c",
+      "sha256": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03"
+    },
+    {
+      "path": "src/enc/profile_enc.c",
+      "sha256": "5f963c97531559972f4e67455366fafa2d705c9536c0fcc099c030905d077c99"
+    },
+    {
+      "path": "src/enc/profile_enc.h",
+      "sha256": "1df731a53eea819b906f11e9e525a3b4a1e913364e311b09b014d2a3eacd0617"
+    },
+    {
+      "path": "src/enc/vp8l_enc.c",
+      "sha256": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0"
+    },
+    {
+      "path": "src/enc/backref_cost_specialization_factorization_v2_experiment_enc.c",
+      "sha256": "fc8775451fcfb9502cb6d235f1856a5f37c33d09e1f80146c3b915d3d2e30467"
+    },
+    {
+      "path": "src/enc/backref_cost_specialization_factorization_v2_experiment_enc.h",
+      "sha256": "727eed235b1a8a85b5218b243f079cd1bcee80aacfde70e9342573789767e2bc"
+    },
+    {
+      "path": "src/enc/backref_cost_factorization_v2_layout_clone_enc.inc",
+      "sha256": "30f144d46895f210cf1969cda8696a7ad21fd7cf708c94ad32703f6caa675a7b"
+    },
+    {
+      "path": "tools/backref_cost_specialization_factorization_v2_experiment_runner.c",
+      "sha256": "be332c8dfb576b9b1b6934c6bf43ff09d2d6f49724fcc9afce28e8c3906f7fb2"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v2_paths.py",
+      "sha256": "eb07fee9ba5e97d8629ea28200aa0d608176c188f6a8881542342982887794ae"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v2_admission.py",
+      "sha256": "cea1689df2b50d1f89521d20a1e5a1b4aae0838a34c4831a71c627e3b855b732"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v2_transport.py",
+      "sha256": "6c9929e9e60b7746107e40da069d9e4396f94311e828679e97f62f44d95abb52"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v2_payload.py",
+      "sha256": "6e35a024a77de1516b32c6794626ea3517272179c9d392cfe73a92439f90be8b"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v2_archive.py",
+      "sha256": "4cf9ef730bb18e599df24077c983e5dda8cbe4806ae4c43366c380cd4957d536"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v2_schemas.json",
+      "sha256": "c023ef1714f1f98a60a4c601b150265669e2c582f682bf47add64034fdc7327d"
+    },
+    {
+      "path": "scripts/run_backref_cost_specialization_factorization_v2_experiment.py",
+      "sha256": "531843ef3d9652642469c5409d7f037233275ebe670ae37979b59e1eec4b6c99"
+    },
+    {
+      "path": "scripts/execute_backref_cost_specialization_factorization_v2.py",
+      "sha256": "ce6fd15e237a9d0a95bfc901e417bde08298e269a0336db700e324a6c10943f9"
+    },
+    {
+      "path": "scripts/evaluate_backref_cost_specialization_factorization_v2.py",
+      "sha256": "f9083b662ea58bbbbb51b56119053485d935296dc9a9a03231cb764a2410182c"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v2_admission.py",
+      "sha256": "71bb95b07fff9470ff34b959f60447a3a151abca9e34167e324689d536449ecb"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v2_archive.py",
+      "sha256": "053b9c7e2417d435e5d514114917f6b756aabfa6b36c482f0ba8028e48f98a13"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v2_experiment.py",
+      "sha256": "fef9294e8049a7dc19e19ad4617940ba4582c6dfe5e5f8d258926fa4de7c6cb7"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v2_process_ownership.py",
+      "sha256": "119e8c8814d0fbfb2e966321be2f7f66021aa6437ce7f02b8035f0aaf28a1b0c"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v2_protocol.py",
+      "sha256": "19715cfaf4ec4ff60aa9757b8f3fbd043e305c7999c019427f648b95686b4d9a"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v2_streaming.py",
+      "sha256": "dabde364c2622df8c3e687592b220aba74ab1677a270ab1db70f9c97dfd513cc"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v2_payload_identity.py",
+      "sha256": "3841b94280b6b7ab319937b27f2ccff5320fbb0d6dac7e7a84f8b0bf672c305b"
+    },
+    {
+      "path": "scripts/test_experiment_guards.py",
+      "sha256": "22869ef2e68ae012296def4328da6bbcdaab90fd335d2788948493309a6ff789"
+    },
+    {
+      "path": "doc/backref-cost-specialization-factorization-v2-protocol-20260819.md",
+      "sha256": "763c4a4cbe9342e1d955e3c70bb108296d5f4f360489d49632eb5909bd8160cb"
+    },
+    {
+      "path": "doc/experiment-guard-matrix.md",
+      "sha256": "a4bc52cefca6da7f96f031347a02df1a81bd00fe807e3172c2fa5106e45d3a6d"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-factorization-v2-design/phase1-prior-evidence-audit.json",
+      "sha256": "f73d2fdfe1d8b25eb2b810c54fa4e3a982237d7e8fa8b498cf16fcf5679740c8"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-factorization-v2-design/phase1-local-codegen.json",
+      "sha256": "3b4cd466846a0d34c7df4b3c972c4a71a572d5bc0e15d6262c39a407cd7cc023"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-factorization-v2-design/phase1-local-validation.json",
+      "sha256": "bda6dcd24f7fe44cb8cc3fb0365c238340df3957d1b2c3fcd668725f6c2ebd3b"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-factorization-v2-design/representative-payload-fixture.json",
+      "sha256": "53dd754ddac2c4c394ec4a2ccc4c31e34506b1d4d6ad4af3e8ff9a0d48c5a66b"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-factorization-v2-design/representative-payload-agreement.json",
+      "sha256": "843056c2c86b68d6587507dea9faefced70768a966a1e7203e9c0005805ac17a"
+    }
+  ],
+  "transport_repair_audit": {
+    "decision": "retain V15's evidence-supported compact capped stdout response, corrected V14 inventory comparison, and complete-response preflight; use fresh Factorization V2 identities with no timeout extension and no alternate data plane",
+    "v11_raw": {
+      "path": "evidence/backref-cost-attribution-v11-design/rehearsal/return-protocol/framed-stdout.bin",
+      "bytes": 1941990,
+      "sha256": "f6cb02af4d445ac355bdf007f8cfc19daf19d98d3e45647e0689f89264f848f4"
+    },
+    "v13_raw": {
+      "path": "evidence/backref-cost-attribution-v13-design/rehearsal/return-protocol/framed-stdout.bin",
+      "bytes": 1942116,
+      "sha256": "edaafe783c94d5cb9dcef376012bb64960730d1f6a92f493f3f60464be41109d"
+    },
+    "shared_boundary": {
+      "complete_chunks": 3,
+      "chunk_bytes": 524288,
+      "partial_fourth_chunk_bytes": 359772
+    },
+    "v14_local_groundwork": {
+      "authority": "NONE",
+      "remote_observations": 0,
+      "independent_local_gate_status": "REEXECUTED_PASS",
+      "audit_finding": "the compact archive boundary is complete and auditable, but execute_backref_cost_attribution_v14.py contains an invalid unary-plus inventory digest comparison that would reject a complete response; merged V15 corrected it and added an end-to-end fixture"
+    },
+    "v15_exact_refusal": {
+      "authority": "NONE",
+      "timed_execution_authorized": false,
+      "framed_stdout_path": "evidence/backref-cost-attribution-v15-design/rehearsal/return-protocol/framed-stdout.bin",
+      "framed_stdout_bytes": 0,
+      "framed_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transport_stderr_path": "evidence/backref-cost-attribution-v15-design/rehearsal/return-protocol/transport-stderr.bin",
+      "transport_stderr_bytes": 65,
+      "transport_stderr_sha256": "561ab6a0b87eb9dbd145fcb63a6dddd66c215f13680aa83763b3260d3e904eaa",
+      "transport_stderr_exact": "ssh: connect to host 100.85.234.14 port 22: Operation timed out\r\n",
+      "remote_connection_established": false,
+      "required_success_receipts_present": false,
+      "prior_cycle_remote_paths_contacted": false
+    },
+    "post_v15_reachability_context": "transient read-only ICMP/TCP context only; not Factorization V2 authority, evidence, source admission, or retry authority",
+    "inference": "V13 full-duplex draining and deadline transitions did not move the V11 effective channel-window boundary; V14's 768 KiB archive, 1 MiB-exclusive response, 8 KiB control, 256 KiB chunk, and 2 MiB request-direction boundaries remain the smallest credible evidence-supported repair after the comparison and preflight fixes",
+    "prior_remote_paths_contacted": false
+  }
+}
