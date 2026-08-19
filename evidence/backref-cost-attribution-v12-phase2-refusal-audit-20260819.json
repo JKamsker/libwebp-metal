@@ -1,0 +1,131 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v12-phase2-refusal-audit-v1",
+  "phase": "2",
+  "executor": "Luna/max",
+  "audit_scope": "independent local untimed static, protocol, guard, JSON, and evidence audit",
+  "audit_status": "BLOCKED",
+  "phase1_chain": {
+    "base_commit": "6e6fa6905b67c65a10b3a0e80111fd93d9a82552",
+    "phase1a_commit": "d8f0866d6d86e8f489934c2aa98a88ae1c2e1ea8",
+    "phase1b_commit": "13fdac78babb2132fd3cf344a8d07a720d53678d",
+    "phase1a_parent": "6e6fa6905b67c65a10b3a0e80111fd93d9a82552",
+    "phase1b_parent": "d8f0866d6d86e8f489934c2aa98a88ae1c2e1ea8",
+    "phase1b_parent_count": 1,
+    "phase1a_tree": "96c1899a85ef4b2e04b44f731e3ee679d7d28a49",
+    "phase1b_tree": "21af683ada5ce92d8f7e15ab2e33349ad624aceb",
+    "linear_ancestry_verified": true,
+    "worktree_clean_before_audit": true
+  },
+  "phase1b_authority_audit": {
+    "diff_entries": [
+      "A evidence/backref-cost-attribution-v12-design/phase1b-authorization.json",
+      "A evidence/backref-cost-attribution-v12-design/phase1b-rehearsal-hashes.json",
+      "A evidence/backref-cost-attribution-v12-design/rehearsal/return-protocol/framed-stdout.bin",
+      "A evidence/backref-cost-attribution-v12-design/rehearsal/return-protocol/transport-stderr.bin",
+      "A evidence/backref-cost-attribution-v12-design/rehearsal/transfer-cleanup.json"
+    ],
+    "additions_only": true,
+    "permitted_paths_only": true,
+    "frozen_phase1a_files_modified": false,
+    "source_tree_matches_authorization": true,
+    "frozen_source_hashes_match": true,
+    "frozen_artifact_count": 26,
+    "hash_index_membership_order_and_digests_match": true,
+    "authorization_status": "REFUSED",
+    "timed_execution_authorized": false,
+    "phase_2_authority": "NONE",
+    "authorization_precondition_failed": true
+  },
+  "frozen_hash_audit": {
+    "manifest_sha256": "597cb067f784786b3ffc57492149367ac9523534d4511174c4760528703c7a4d",
+    "protocol_sha256": "bf83bba38f3d22a7c7096c6dfbc559939f14c737bd7780e82579db00d109e73d",
+    "schema_catalog_sha256": "0d5cfa30679281af0eeef3aa8c5710fcd73ec9e8815f027196f66577c2dfe98b",
+    "transport_source_sha256": "1c17c48a028cf8aa4b3a3bd595b6192e610325b84f2a30a4abd770c2b55e78a0",
+    "phase1_local_validation_sha256": "90a28db2dd27a5ff9b636e08178fa6b61502675f38fa5644f7be160f89093e0d",
+    "all_declared_phase1a_blob_hashes_verified": true
+  },
+  "rehearsal_evidence_audit": {
+    "rehearsal_attempts": 1,
+    "rehearsal_retry_count": 0,
+    "rehearsal_rerun_count": 0,
+    "framed_stdout_bytes": 46,
+    "framed_stdout_sha256": "4a4e5e7b013357b96f3446d2591639e61da0c372e3a111945cbb6b16634b1a97",
+    "framed_stdout_is_exact_magic_only": true,
+    "framed_stdout_magic_hex": "4c4942574542502d4241434b5245462d434f53542d4154545249425554494f4e2d5631322d4652414d455300010a",
+    "transport_stderr_bytes": 0,
+    "transport_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "complete_protocol_frames_returned": 0,
+    "response_state": "magic-only; no complete control, archive, integrity, or cleanup frame"
+  },
+  "timeout_audit": {
+    "direct_transport_child_timed_out": true,
+    "observed_timeout_phase": "response-progress",
+    "absolute_transaction_seconds": 1800,
+    "silent_operator_seconds": 900,
+    "response_progress_seconds": 15,
+    "exact_bound_source": "frozen request_and_bulk_progress_seconds and STREAM_PROGRESS_TIMEOUT_SECONDS",
+    "timeout_signal_authority": "retained direct SSH Popen creation identity only"
+  },
+  "process_stop_audit": {
+    "retained_direct_child_only": true,
+    "creation_identity_guarded": true,
+    "sole_static_signal_site": "self.process.kill",
+    "non_timeout_signal_sites": 0,
+    "discovered_pid_signals": 0,
+    "pre_existing_pid_signals": 0,
+    "discovery_policy": "observe-only refusal; discovered PIDs never enter signal APIs"
+  },
+  "cleanup_audit": {
+    "cleanup_footer_verified": false,
+    "remote_cleanup_state": "unknown-after-truncation",
+    "remote_cleanup_absence_proved": false,
+    "post_run_remote_cleanup_operations": 0,
+    "follow_up_cleanup_performed_by_this_audit": false,
+    "cleanup_or_remote_absence_claimed": false
+  },
+  "workload_and_lease_audit": {
+    "phase1b_performance_samples": 0,
+    "phase1_rehearsal_contract_lease_attempted": false,
+    "phase2_benchmark_lease_acquisition_attempts": 0,
+    "phase2_encoder_workloads": 0,
+    "phase2_profiler_workloads": 0,
+    "phase2_benchmark_workloads": 0,
+    "phase2_sanitizer_workloads": 0,
+    "phase2_timing_workloads": 0,
+    "phase2_cuda_workloads": 0,
+    "note": "The truncated stream did not return operator status; zero counts here are the frozen rehearsal/Phase2 fail-closed state, not a claim about unobserved remote state."
+  },
+  "phase2_execution": {
+    "action": "FAIL_CLOSED_NO_EXECUTION",
+    "blocker": "Phase1B authorization_status=REFUSED, timed_execution_authorized=false, and phase_2_authority=NONE after the magic-only response-progress timeout.",
+    "phase2_correctly_not_invoked": true,
+    "frozen_phase2_command_invoked": false,
+    "phase2_remote_contact": false,
+    "remote_contact_by_this_audit": false,
+    "remote_paths_inspected_or_cleaned_by_this_audit": false,
+    "rehearsal_retried_or_rerun": false,
+    "process_discovery_by_this_audit": false,
+    "process_signaling_by_this_audit": false
+  },
+  "local_checks": {
+    "commit_parent_tree_and_clean_status": "PASS",
+    "phase1b_additions_only_diff": "PASS",
+    "JSON_parse": "PASS",
+    "frozen_hashes_and_envelope_linkage": "PASS",
+    "rehearsal_hash_index_membership_order_and_digests": "PASS",
+    "raw_magic_only_stream_and_sha256": "PASS",
+    "timeout_constant_and_failure_linkage": "PASS",
+    "static_direct_child_signal_guard": "PASS",
+    "phase2_output_path_present": false
+  },
+  "decision": {
+    "phase2_was_correctly_not_invoked_because_authorization_preconditions_failed": true,
+    "cleanup_state_remains_unknown": true,
+    "no_follow_up_cleanup": true,
+    "performance_statistics": "N/A_UNASSESSED_NO_PHASE2_DATA",
+    "interval_family": "UNASSESSED",
+    "production_consequence": "NONE",
+    "phase1_files_modified_by_this_audit": false,
+    "audit_evidence_is_additional_single_file": true
+  }
+}

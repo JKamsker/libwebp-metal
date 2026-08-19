@@ -1,0 +1,40 @@
+{
+  "authorization_status": "REFUSED",
+  "cleanup_footer_verified": false,
+  "failure": {
+    "classification": "magic-only response activated the short response-progress deadline before the silent operator phase completed",
+    "framed_stdout_bytes": 46,
+    "framed_stdout_is_exact_v12_magic": true,
+    "framed_stdout_sha256": "4a4e5e7b013357b96f3446d2591639e61da0c372e3a111945cbb6b16634b1a97",
+    "remote_cleanup_state": "unknown-after-truncation",
+    "timeout_phase": "response-progress",
+    "transport_stderr_bytes": 0,
+    "transport_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "manifest_sha256": "597cb067f784786b3ffc57492149367ac9523534d4511174c4760528703c7a4d",
+  "observed_transport_calibration": {
+    "archive_bytes": null,
+    "chunk_count": 0,
+    "finite_margin_ratio": 2.0,
+    "integrity_footer_received": false,
+    "representative_payload_bytes": 16777216,
+    "transaction_elapsed_ns": null
+  },
+  "performance_samples": 0,
+  "post_run_remote_cleanup_operations": 0,
+  "protocol_sha256": "bf83bba38f3d22a7c7096c6dfbc559939f14c737bd7780e82579db00d109e73d",
+  "rehearsal_attempts": 1,
+  "rehearsal_hash_index_sha256": "9ba0060479e5b078ab2b5762473b9420b316366bdd6432478f5b2549d472b038",
+  "rehearsal_receipt_hashes": {
+    "return-protocol/framed-stdout.bin": "4a4e5e7b013357b96f3446d2591639e61da0c372e3a111945cbb6b16634b1a97",
+    "return-protocol/transport-stderr.bin": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "transfer-cleanup.json": "4340911271efe6754b5ccd210ab908a911fd080da0ac770e82116506f0afc2cd"
+  },
+  "remote_follow_up_performed": false,
+  "schema": "libwebp-backref-cost-attribution-v12-authorization-v1",
+  "schema_catalog_sha256": "0d5cfa30679281af0eeef3aa8c5710fcd73ec9e8815f027196f66577c2dfe98b",
+  "source_commit": "d8f0866d6d86e8f489934c2aa98a88ae1c2e1ea8",
+  "source_tree": "96c1899a85ef4b2e04b44f731e3ee679d7d28a49",
+  "timed_execution_authorized": false,
+  "transport_source_sha256": "1c17c48a028cf8aa4b3a3bd595b6192e610325b84f2a30a4abd770c2b55e78a0"
+}

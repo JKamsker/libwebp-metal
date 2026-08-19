@@ -1,0 +1,20 @@
+{
+  "artifacts": [
+    {
+      "bytes": 46,
+      "path": "return-protocol/framed-stdout.bin",
+      "sha256": "4a4e5e7b013357b96f3446d2591639e61da0c372e3a111945cbb6b16634b1a97"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/transport-stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 645,
+      "path": "transfer-cleanup.json",
+      "sha256": "4340911271efe6754b5ccd210ab908a911fd080da0ac770e82116506f0afc2cd"
+    }
+  ],
+  "schema": "libwebp-backref-cost-attribution-v12-phase1b-hash-index-v1"
+}
