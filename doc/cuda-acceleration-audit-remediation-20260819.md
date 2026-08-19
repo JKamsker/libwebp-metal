@@ -28,7 +28,7 @@ other confirmed defects remained applicable.
 | C-15 | Fixed | The null lossy-analysis probe checks quarantine, current availability, device count, and configured device. The concurrency test rejects an unavailable configured device before accepting device 0. |
 | C-16 | Fixed | The process prewarm object retains its thread handle and joins it during destruction on POSIX and Windows, preventing code/global teardown while it is running. |
 | C-17 | Fixed | Hash requests reject unrepresentable packed fields and scan every usable predecessor for `-1 <= predecessor < position`. Invalid-chain and oversized-window tests require unchanged output. |
-| C-18 | Fixed | ABI v12 adds dispatcher-owned, non-zero encode-generation tokens to resident producer/consumer requests. Reuse requires token and identity agreement, terminal consumers invalidate offers one-shot, mismatches invalidate them, and end-of-encode clears all generations. Dispatcher tests prove matching lossy and lossless generations; concurrent forced predictor/hash encodes exercise the real path. |
+| C-18 | Fixed | ABI v12 adds dispatcher-owned, non-zero encode-generation tokens to resident producer/consumer requests. Reuse requires token and identity agreement, matching terminal consumers invalidate offers one-shot, and end-of-encode clears all generations. Non-matching nested lossless requests preserve the outer image's offer. Dispatcher tests prove matching lossy and lossless generations; concurrent forced predictor/hash encodes exercise the real path. |
 
 ## Compression-policy findings
 

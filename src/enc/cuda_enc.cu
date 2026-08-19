@@ -3244,11 +3244,11 @@ WebPAcceleratorResult CUDAHashChainLocked(
       state->resident_lossless_pixel_count ==
           static_cast<size_t>(request->size) &&
       state->resident_lossless_xsize == request->xsize;
-  // Hash is the terminal consumer of this handoff. Make residency one-shot
-  // even if this request later fails or its identity check did not match.
-  state->resident_lossless_pixels_valid = false;
-  state->resident_lossless_generation = 0;
   if (use_resident_pixels) {
+    // Matching consumption is one-shot. Non-matching nested image requests
+    // must not discard an outer image's offer in the same encode generation.
+    state->resident_lossless_pixels_valid = false;
+    state->resident_lossless_generation = 0;
     device_pixels = state->resident_lossless_pixels;
     error = cudaSuccess;
   } else {
@@ -3859,11 +3859,9 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
       state->resident_width == request->width &&
       state->resident_height == request->height &&
       state->resident_y_size == y_bytes && state->resident_uv_size == uv_bytes;
-  // Analysis is the terminal consumer. A mismatching call also invalidates
-  // the offer so pointer reuse later in the same encode cannot revive it.
-  state->resident_yuv_valid = false;
-  state->resident_yuv_generation = 0;
   if (use_resident_yuv) {
+    state->resident_yuv_valid = false;
+    state->resident_yuv_generation = 0;
     device_y = reinterpret_cast<const uint8_t*>(state->transform);
     device_u = device_y + y_bytes;
     device_v = device_u + uv_bytes;

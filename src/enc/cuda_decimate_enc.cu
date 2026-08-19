@@ -545,6 +545,7 @@ struct MBWork {
   int16_t i4_tmp[kNumBModes][16];
   int16_t i4_levels[kNumBModes][16];
   uint8_t i4_out[kNumBModes][4 * kCudaBPS];  // 4x4 samples, BPS stride
+  int i4_transform_tmp[kNumBModes][16];
   int i4_nz[kNumBModes];
   long long i4_sse[kNumBModes];
   long long i4_sd[kNumBModes];
@@ -563,6 +564,98 @@ struct MBWork {
   long long rd_score;
   long long rd_D, rd_SD, rd_R, rd_H;
 };
+
+// Four lanes cooperate on one I4 mode. Eight mode groups fit in warp 0 and
+// the remaining two in warp 1, preserving the compact ten-way mode mapping
+// while exposing the independent rows/columns of the separable transforms.
+__device__ __forceinline__ void I4FTransformCoop4(
+    const uint8_t* src, const uint8_t* ref, int16_t* out, int* tmp, int lane,
+    unsigned int warp_mask) {
+  const uint8_t* const src_row = src + lane * kCudaBPS;
+  const uint8_t* const ref_row = ref + lane * kCudaBPS;
+  const int d0 = src_row[0] - ref_row[0];
+  const int d1 = src_row[1] - ref_row[1];
+  const int d2 = src_row[2] - ref_row[2];
+  const int d3 = src_row[3] - ref_row[3];
+  const int a0 = d0 + d3;
+  const int a1 = d1 + d2;
+  const int a2 = d1 - d2;
+  const int a3 = d0 - d3;
+  tmp[0 + lane * 4] = (a0 + a1) * 8;
+  tmp[1 + lane * 4] = (a2 * 2217 + a3 * 5352 + 1812) >> 9;
+  tmp[2 + lane * 4] = (a0 - a1) * 8;
+  tmp[3 + lane * 4] = (a3 * 2217 - a2 * 5352 + 937) >> 9;
+  __syncwarp(warp_mask);
+
+  const int b0 = tmp[0 + lane] + tmp[12 + lane];
+  const int b1 = tmp[4 + lane] + tmp[8 + lane];
+  const int b2 = tmp[4 + lane] - tmp[8 + lane];
+  const int b3 = tmp[0 + lane] - tmp[12 + lane];
+  out[0 + lane] = (int16_t)((b0 + b1 + 7) >> 4);
+  out[4 + lane] =
+      (int16_t)(((b2 * 2217 + b3 * 5352 + 12000) >> 16) + (b3 != 0));
+  out[8 + lane] = (int16_t)((b0 - b1 + 7) >> 4);
+  out[12 + lane] = (int16_t)((b3 * 2217 - b2 * 5352 + 51000) >> 16);
+}
+
+__device__ __forceinline__ int I4QuantizeBlockCoop4(
+    int16_t* in, int16_t* out, const CudaVP8Matrix* mtx, int lane,
+    unsigned int warp_mask) {
+  int non_zero = 0;
+  for (int n = lane; n < 16; n += 4) {
+    const int j = kCudaZigzag[n];
+    const int sign = (in[j] < 0);
+    const uint32_t coeff = (sign ? -in[j] : in[j]) + mtx->sharpen[j];
+    if (coeff > mtx->zthresh[j]) {
+      const uint32_t Q = mtx->q[j];
+      const uint32_t iQ = mtx->iq[j];
+      const uint32_t B = mtx->bias[j];
+      int level = CudaQuantDiv(coeff, iQ, B);
+      if (level > kMaxLevel) level = kMaxLevel;
+      if (sign) level = -level;
+      in[j] = (int16_t)(level * (int)Q);
+      out[n] = (int16_t)level;
+      non_zero |= level;
+    } else {
+      out[n] = 0;
+      in[j] = 0;
+    }
+  }
+  const unsigned int group_shift = ((threadIdx.x & 31) >> 2) * 4;
+  const unsigned int group_mask = 0xfu << group_shift;
+  const unsigned int non_zero_lanes = __ballot_sync(warp_mask, non_zero != 0);
+  return (non_zero_lanes & group_mask) != 0;
+}
+
+__device__ __forceinline__ void I4ITransformCoop4(
+    const uint8_t* ref, const int16_t* in, uint8_t* dst, int* tmp, int lane,
+    unsigned int warp_mask) {
+  const int a = in[lane] + in[8 + lane];
+  const int b = in[lane] - in[8 + lane];
+  const int c = CudaTransformAc3Mul2(in[4 + lane]) -
+                CudaTransformAc3Mul1(in[12 + lane]);
+  const int d = CudaTransformAc3Mul1(in[4 + lane]) +
+                CudaTransformAc3Mul2(in[12 + lane]);
+  tmp[0 + lane * 4] = a + d;
+  tmp[1 + lane * 4] = b + c;
+  tmp[2 + lane * 4] = b - c;
+  tmp[3 + lane * 4] = a - d;
+  __syncwarp(warp_mask);
+
+  const int dc = tmp[lane] + 4;
+  const int e = dc + tmp[8 + lane];
+  const int f = dc - tmp[8 + lane];
+  const int g = CudaTransformAc3Mul2(tmp[4 + lane]) -
+                CudaTransformAc3Mul1(tmp[12 + lane]);
+  const int h = CudaTransformAc3Mul1(tmp[4 + lane]) +
+                CudaTransformAc3Mul2(tmp[12 + lane]);
+  uint8_t* const dst_row = dst + lane * kCudaBPS;
+  const uint8_t* const ref_row = ref + lane * kCudaBPS;
+  dst_row[0] = CudaClip8b(ref_row[0] + ((e + h) >> 3));
+  dst_row[1] = CudaClip8b(ref_row[1] + ((f + g) >> 3));
+  dst_row[2] = CudaClip8b(ref_row[2] + ((f - g) >> 3));
+  dst_row[3] = CudaClip8b(ref_row[3] + ((e - h) >> 3));
+}
 
 // ---------------------------------------------------------------------------
 // Import and borders.
@@ -1292,27 +1385,33 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
         }
       }
       __syncthreads();
-      if (p.rd_opt_level == kRDTrellisAll && tid < kNumBModes) {
-        const int mode = tid;
-        const uint8_t* const src =
-            w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[i4_index];
-        const int bx = i4_index & 3, by = i4_index >> 2;
-        const int ctx = i4_ctx.top_nz[bx] + i4_ctx.left_nz[by];
-        const uint8_t* const ref = w.yuv_p + kCudaVP8I4ModeOffsets[mode];
-        CudaFTransform(src, ref, w.i4_tmp[mode]);
-        w.i4_nz[mode] = TrellisQuantizeBlockDev(
-            &cc, w.i4_tmp[mode], w.i4_levels[mode], ctx, 3, &dqm->y1,
-            dqm->lambda_trellis_i4);
-        CudaITransformOne(ref, w.i4_tmp[mode], w.i4_out[mode]);
-      } else if (p.rd_opt_level != kRDTrellisAll && tid < kNumBModes) {
-        const int mode = tid;
+      if (tid < 4 * kNumBModes) {
+        const int mode = tid >> 2;
+        const int mode_lane = tid & 3;
+        const unsigned int warp_mask = __activemask();
         const uint8_t* const src =
             w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[i4_index];
         const uint8_t* const ref = w.yuv_p + kCudaVP8I4ModeOffsets[mode];
-        CudaFTransform(src, ref, w.i4_tmp[mode]);
-        w.i4_nz[mode] = CudaQuantizeBlock(
-            w.i4_tmp[mode], w.i4_levels[mode], &dqm->y1);
-        CudaITransformOne(ref, w.i4_tmp[mode], w.i4_out[mode]);
+        int nz = 0;
+        I4FTransformCoop4(src, ref, w.i4_tmp[mode],
+                          w.i4_transform_tmp[mode], mode_lane, warp_mask);
+        __syncwarp(warp_mask);
+        if (p.rd_opt_level == kRDTrellisAll) {
+          if (mode_lane == 0) {
+            const int bx = i4_index & 3, by = i4_index >> 2;
+            const int ctx = i4_ctx.top_nz[bx] + i4_ctx.left_nz[by];
+            nz = TrellisQuantizeBlockDev(
+                &cc, w.i4_tmp[mode], w.i4_levels[mode], ctx, 3, &dqm->y1,
+                dqm->lambda_trellis_i4);
+          }
+        } else {
+          nz = I4QuantizeBlockCoop4(w.i4_tmp[mode], w.i4_levels[mode],
+                                    &dqm->y1, mode_lane, warp_mask);
+        }
+        if (mode_lane == 0) w.i4_nz[mode] = nz;
+        __syncwarp(warp_mask);
+        I4ITransformCoop4(ref, w.i4_tmp[mode], w.i4_out[mode],
+                          w.i4_transform_tmp[mode], mode_lane, warp_mask);
       }
       __syncthreads();
       {
