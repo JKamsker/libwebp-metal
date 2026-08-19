@@ -845,3 +845,27 @@ All 60 timing outputs retained the parent hash and byte count. Both gains are
 below 1.5 ms/image, so the candidate was removed. This was measured only on
 the RTX 2080 SUPER and makes no Ampere+ performance claim. Raw evidence is
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-token-layout-combined-ab.jsonl`.
+
+## Arithmetic token-range normalization
+
+A fresh retained-head `gprofng` texture-batch profile attributed 60.10% of
+sampled CPU time to `VP8PutTokenPage` and 36.26% to
+`VP8RecordCoeffTokens`; all other named functions were below 1%. The two
+normalization-table accesses were prominent instruction clusters. An exact
+GCC/Clang candidate computed the shift from `clz(range + 1)` and reconstructed
+the normalized range arithmetically, while retaining the tables for other
+compilers. Disassembly confirmed that `bsr` and shifts replaced both loads.
+
+The bit-writer growth/failure and CUDA trellis/fallback tests passed. Two
+order-reversed native-sm_75 processes measured:
+
+| Format | Parent | Arithmetic normalization | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.201 ms/image | 40.613 ms/image | +0.412 ms |
+| JPEG lossy | 40.076 ms/image | 40.654 ms/image | +0.578 ms |
+
+All 24 output hashes and byte counts matched. The candidate was removed. Raw
+timing is
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/token-arithmetic-normalization-screen.jsonl`;
+the complete sampling experiment is
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/gprof-current-token-profile.tar.gz`.
