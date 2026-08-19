@@ -539,3 +539,24 @@ validation pairs passed, as did the focused six-test CTest set and an extra
 105-case exact-byte battery covering methods 2--6, qualities 25/75/98, three
 content classes at tiny and odd dimensions, and band-3 fallback. Exact CI run
 `32212085424` passed all eleven jobs.
+
+The next profile split I4 itself into prediction, transform/quantization,
+metrics, and serial selection/commit intervals. Selection/commit was the
+largest at 36--42% of measured I4 cycles across photo, graphic, and texture,
+while transform/quantization accounted for 23--27%. Revision `8ae71f74`
+prepares all ten modes' header/base/full scores on parallel lanes, but retains
+thread 0's exact ordered scan and copies only the final winner.
+
+Five alternating baseline/candidate processes, each with one warmup and three
+24-image samples, gave these medians of process medians:
+
+| Format | `ec4fd694` baseline | Parallel score preparation | Change |
+|---|---:|---:|---:|
+| PNG lossy | 51.625 ms/image | 49.787 ms/image | **-1.838 ms** |
+| JPEG lossy | 50.667 ms/image | 49.148 ms/image | **-1.519 ms** |
+
+The complete portable suite then measured PNG lossy at 99.844 ms CPU / 48.565
+ms CUDA (**2.056x**) and JPEG lossy at 99.723 / 48.552 ms (**2.054x**). All
+180 official validations, the six-test CTest set, and the extra 105-case exact
+methods 2--6 / qualities 25--98 / tiny / odd / band-3 fallback battery passed.
+Exact CI run `32214115280` passed all eleven jobs.

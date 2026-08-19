@@ -14,9 +14,9 @@ speedup is CPU time divided by CUDA time, so values above `1x` favor CUDA.
 | CUDA toolkit | 12.0.140 |
 | Compiler | GCC 13.3.0 / NVCC 12.0.140 |
 | Python / Pillow | Python 3.12.3 / Pillow 10.2.0 |
-| Source revision | `5d841ba0c2346de7adfff2caa2e7c59dab4bffb7` |
+| Source revision | `8ae71f74a90aad2754fcfab458d8e4ef0387dfcc` |
 | Build | CMake Release, CUDA enabled |
-| Result label | `win-2080super-i4-coop-audit` |
+| Result label | `win-2080super-i4-score-prep` |
 
 ## Protocol
 
@@ -36,9 +36,9 @@ Command:
 
 ```sh
 python3 scripts/benchmark_cuda_end_to_end.py run \
-  --build-dir build-cuda-sm75-gate \
-  --output-dir /tmp/libwebp-cuda-results-2080super \
-  --label "win-2080super"
+  --build-dir build-cuda \
+  --output-dir /tmp/libwebp-cuda-results-2080super-i4-score-prep \
+  --label "win-2080super-i4-score-prep"
 ```
 
 ## Persistent 24-image batch
@@ -194,3 +194,42 @@ Relative to the preceding same-machine official CUDA batch medians, PNG lossy
 improved from 53.0 to 50.0 ms/image and JPEG lossy from 53.3 to 49.6 ms/image.
 All 180 suite validation pairs and the additional 105-case exact lossy battery
 passed. Exact CI run `32212085424` passed all eleven jobs.
+
+## Parallel intra4 score preparation
+
+A temporary subphase profile found that serial I4 score selection and commit
+consumed 36--42% of measured I4 cycles, more than the 23--27% transform and
+quantization interval. Revision `8ae71f74` prepares each mode's header, base,
+and full scores on ten parallel lanes, while thread 0 retains the exact ordered
+comparison and tie behavior and copies only the final winning levels.
+
+Five alternating baseline/candidate processes, each retaining three samples
+after one warmup, improved PNG from 51.625 to 49.787 ms/image and JPEG from
+50.667 to 49.148 ms/image. The complete official suite measured:
+
+### Persistent 24-image batch
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy | 99.8 ms | 48.6 ms | **2.06x** |
+| PNG lossless | 151.1 ms | 92.1 ms | **1.64x** |
+| PNG near-lossless | 206.5 ms | 93.7 ms | **2.20x** |
+| JPEG lossy | 99.7 ms | 48.6 ms | **2.05x** |
+| JPEG lossless | 673.6 ms | 146.7 ms | **4.59x** |
+| JPEG near-lossless | 790.8 ms | 147.2 ms | **5.37x** |
+
+### Fresh process per image
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy | 101.1 ms | 262.8 ms | **0.38x** |
+| PNG lossless | 154.0 ms | 312.4 ms | **0.49x** |
+| PNG near-lossless | 220.2 ms | 327.4 ms | **0.67x** |
+| JPEG lossy | 100.7 ms | 269.8 ms | **0.37x** |
+| JPEG lossless | 700.8 ms | 365.4 ms | **1.92x** |
+| JPEG near-lossless | 812.4 ms | 384.3 ms | **2.11x** |
+
+All 180 official validation pairs, six registered CTests, and an additional
+105 exact-byte cases across methods 2--6, qualities 25/75/98, tiny and odd
+dimensions, three content classes, and band-3 fallback passed. Exact code CI
+run `32214115280` passed all eleven jobs.
