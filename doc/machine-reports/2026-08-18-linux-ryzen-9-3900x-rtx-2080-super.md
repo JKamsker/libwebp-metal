@@ -684,3 +684,12 @@ output but did not improve a two-process order-balanced screen: PNG was flat
 (40.323 vs. 40.316 ms/image) and JPEG regressed (40.095 vs.
 40.552 ms/image). The candidate was removed. Raw evidence is
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-metric-inline-ab.jsonl`.
+
+## Cooperative I4 metrics
+
+Four-lane groups computed the per-mode SSE and Hadamard metrics in parallel,
+reusing expired transform scratch for the exact Hadamard transpose. The full
+trellis parity test passed, but a two-process order-balanced screen was
+neutral: PNG moved from 40.247 to 40.316 ms/image and JPEG from 40.298 to
+40.379 ms/image. The candidate was removed. Raw evidence is
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-coop-metrics-screen.jsonl`.
