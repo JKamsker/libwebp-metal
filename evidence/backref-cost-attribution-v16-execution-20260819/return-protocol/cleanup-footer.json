@@ -1,0 +1,11 @@
+{
+  "absence_proved": true,
+  "elapsed_transaction_ns": 113782612083,
+  "removed_exact_validated_child": true,
+  "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v16/run._k3s0o2e",
+  "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v16",
+  "schema": "libwebp-backref-cost-attribution-v16-cleanup-receipt-v1",
+  "source_commit": "6f0cbbaf8a3ee527526edbd29779bd9f8c7d941c",
+  "source_tree": "633eaa7df1090e9f8f6f2a82df492372a1114a4d",
+  "status": "complete"
+}

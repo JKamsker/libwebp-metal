@@ -1,0 +1,97 @@
+{
+  "admission": {
+    "bundle_sha256": "b7b64e70ed777f0ac1f7ded14c9bb5e140c27e8f813a5766babe06c2f1e6e063",
+    "bundle_verified_in_repository_context": true,
+    "clean_status": true,
+    "source_hashes": {
+      "CMakeLists.txt": "b1d6a37255bdfca776018ed81ba37bb3c3974dd5d96f5777b90f59652c14ee12",
+      "doc/backref-cost-attribution-v16-protocol-20260819.md": "b5500ff8f0e82736e3208f4a52d363d35989d52a98dfabaf91a10be5c92a1e00",
+      "doc/experiment-guard-matrix.md": "84070331b91b7425283e2bcca70f7b819f49c97726d190e3c0904c5f90b367e0",
+      "evidence/backref-cost-attribution-v16-design/phase1-local-validation.json": "7aae0b53aca499d63ca4b3bdc486de7ff0a34dc4f911c4b7beda510276cc3827",
+      "makefile.unix": "66e96c7343ed89742c71b586234c275d713215aee63144aa3256b579ddb50f49",
+      "scripts/backref_cost_attribution_v16_admission.py": "7574a42cb19e4ab78530a88d16cb71f9911a2230e81b1366c9c15e115eb20ff5",
+      "scripts/backref_cost_attribution_v16_archive.py": "777392692b379f02f70bbff96e14200111a986c4e3ad9b84058781d32a5ace6b",
+      "scripts/backref_cost_attribution_v16_manifest.json": "dcededba2b466801c340331222f51fb15ee72ddd57b42e82cda28bf9172bc5d5",
+      "scripts/backref_cost_attribution_v16_paths.py": "d3f8ce29e60f65ad0b40442a64927954a187d6737f06175ff9b2d9f5add384b5",
+      "scripts/backref_cost_attribution_v16_schemas.json": "538ceb10963028bc77e5e0a2fd2ee98a3df516d1b4d004318a9db0d2954987d9",
+      "scripts/backref_cost_attribution_v16_transport.py": "86d2fe95f86a560deea7895f3ab2d6332f906375f9c8c2b91998904ea6af3a61",
+      "scripts/execute_backref_cost_attribution_v16.py": "f42b29769c23cd88cdd89a9e30fe51c78f7a31792a453b0753083de324cb8a9f",
+      "scripts/run_backref_cost_attribution_v16_experiment.py": "25ea58b0ebce3742b2e8abf0bab95e7a34bb3c428ac86ac8ca5649519bd82d7a",
+      "scripts/test_backref_cost_attribution_v16_admission.py": "19268f7b42f676c170c52702b041c650d05a09f5e3557995727fa6407c983038",
+      "scripts/test_backref_cost_attribution_v16_archive.py": "4819feac87f053a10f95d8843582fc6e6f4cf81e477b283cb86fb782c5f2a297",
+      "scripts/test_backref_cost_attribution_v16_experiment.py": "bff201422a94b9c369ae36aba001abb575c501b1cd2778e29d0b9000e48f3686",
+      "scripts/test_backref_cost_attribution_v16_process_ownership.py": "3e9ecfc3242b13cddccb985a728c6fcb3bd8b0d523c48e90c00827dd9e37b0d2",
+      "scripts/test_backref_cost_attribution_v16_protocol.py": "87d1d9395aa6513620c1a34723bcc2d3d28071726ef64cfbb4a49bb95077c13d",
+      "scripts/test_backref_cost_attribution_v16_streaming.py": "bfd63b3cb2962d424a72012ae28cca84e3e3c99691ae3d15b51fc27a82e17728",
+      "scripts/test_experiment_guards.py": "5ae335940d66a730a2678a6aeacad1539c685e304bda1192ffcfd0e0e7134e11",
+      "src/enc/backref_cost_attribution_v16_experiment_enc.c": "61ddbfe54c9b0b538a25891c1d056f23e9d67ab4d28c3e7859c021d2e35f7a39",
+      "src/enc/backref_cost_attribution_v16_experiment_enc.h": "5a7b8e1c1a0ddf9002d293ddfb5595bb1a5d7b3f38bd5f310f368784302e0543",
+      "src/enc/backward_references_cost_distance_only_enc.inc": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5",
+      "src/enc/backward_references_cost_enc.c": "a2a442fc86316b627b3b88d9dc31c1cd7861487bb49452e288e90889f73be55c",
+      "src/enc/backward_references_enc.c": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03",
+      "src/enc/profile_enc.c": "3ef42608e07ba6761e4da8cf3b4c7dfc9f1578cf7923380852440c542cc39cd1",
+      "src/enc/profile_enc.h": "3947d75b540f7122a1bcaac25c854c0fc374b6cd23b3c13820aaf1c0785d5bd3",
+      "src/enc/vp8l_enc.c": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0",
+      "tools/backref_cost_attribution_v16_experiment_runner.c": "54666df194e2bec22271e7f9febc3320e88f647d74b6bfc43d5f6a40ab9bcb45"
+    },
+    "verification_repository_removed": true
+  },
+  "pre_operator_process_isolation": {
+    "ancestor_identity_policy": "structural self-to-PID1 proof; no positive identity allowlist",
+    "argument_text_collected": false,
+    "discovered_pid_signals": 0,
+    "exact_identity_conflicts": [],
+    "external_process_policy": "observe-only; exact-identity refusal; never signal",
+    "filesystem_identity_operations": [],
+    "identity_fields": [
+      "pid",
+      "ppid",
+      "comm"
+    ],
+    "lexical_basename_semantics": "exact final slash component; string operation only",
+    "parsed_process_count": 742,
+    "process_snapshot_sha256": "9b7a37c84cae46424bde0a4ea03da968e799884f217edb51ae0726fcfffd483b",
+    "raw_comm_semantics": "complete exact opaque process-table string; never a path",
+    "resolved_path_api_used": false,
+    "verified_ancestor_chain": [
+      {
+        "lexical_basename": "Python",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 3906,
+        "ppid": 3905,
+        "raw_comm": "/Applications/Xcode-26.3.0.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "sshd-session: pandocs-agent-001@notty",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 3905,
+        "ppid": 3902,
+        "raw_comm": "sshd-session: pandocs-agent-001@notty",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "sshd-session: pandocs-agent-001 [priv]",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 3902,
+        "ppid": 1,
+        "raw_comm": "sshd-session: pandocs-agent-001 [priv]",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "launchd",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 1,
+        "ppid": 0,
+        "raw_comm": "/sbin/launchd",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      }
+    ]
+  },
+  "receipt_version": 1,
+  "schema": "libwebp-backref-cost-attribution-v16-source-admission-receipt-v1",
+  "source_bundle_sha256": "b7b64e70ed777f0ac1f7ded14c9bb5e140c27e8f813a5766babe06c2f1e6e063",
+  "source_commit": "6f0cbbaf8a3ee527526edbd29779bd9f8c7d941c",
+  "source_tree": "633eaa7df1090e9f8f6f2a82df492372a1114a4d",
+  "status": "verified"
+}

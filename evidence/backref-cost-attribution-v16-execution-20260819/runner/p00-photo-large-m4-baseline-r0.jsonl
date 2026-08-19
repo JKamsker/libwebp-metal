@@ -1,0 +1,5 @@
+{"schema":"libwebp-backref-cost-attribution-v16-output-v1","case_id":"photo-large","method":4,"variant":"baseline","iteration":0,"sample_role":"warmup","bitstream_bytes":283992,"bitstream_fnv1a64":"f63cfcd7ef39adfa"}
+{"schema":"libwebp-backref-cost-attribution-v16-output-v1","case_id":"photo-large","method":4,"variant":"baseline","iteration":1,"sample_role":"retained","bitstream_bytes":283992,"bitstream_fnv1a64":"f63cfcd7ef39adfa"}
+{"schema":"libwebp-backref-cost-attribution-v16-output-v1","case_id":"photo-large","method":4,"variant":"baseline","iteration":2,"sample_role":"retained","bitstream_bytes":283992,"bitstream_fnv1a64":"f63cfcd7ef39adfa"}
+{"schema":"libwebp-backref-cost-attribution-v16-output-v1","case_id":"photo-large","method":4,"variant":"baseline","iteration":3,"sample_role":"retained","bitstream_bytes":283992,"bitstream_fnv1a64":"f63cfcd7ef39adfa"}
+{"schema":"libwebp-backref-cost-attribution-v16-output-v1","case_id":"photo-large","method":4,"variant":"baseline","iteration":4,"sample_role":"retained","bitstream_bytes":283992,"bitstream_fnv1a64":"f63cfcd7ef39adfa"}

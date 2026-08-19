@@ -1,0 +1,93 @@
+{
+  "artifacts": [
+    {
+      "bytes": 1188,
+      "path": "artifact-hashes.json",
+      "sha256": "2e2cb5af3e844efcbb80d579c7cb204da0514d6c47d61dab007397f4864b860a"
+    },
+    {
+      "bytes": 1603,
+      "path": "build-identity.json",
+      "sha256": "021f7b16a48bc268e2555b8fafe8a03f6585eb80db6933eb406af2b8fcb20505"
+    },
+    {
+      "bytes": 1566,
+      "path": "diagnostic-admission.json",
+      "sha256": "004665604620073c65c460820e4ae77cc1181fa7c7fff9a8913758e4f1e35d7a"
+    },
+    {
+      "bytes": 338,
+      "path": "operator-status.json",
+      "sha256": "9ab1e7dcd08a372e269de0af568278829d9367fffe78bd772c751f0f4c9df3e5"
+    },
+    {
+      "bytes": 49121,
+      "path": "profile-plan.json",
+      "sha256": "4ffe125588c7f68a5321ecd8d2ca68e0d2d41dde4565aa5c6407fdf326aa2731"
+    },
+    {
+      "bytes": 1428,
+      "path": "rehearsal.json",
+      "sha256": "3ee2a3d5b98ab05109439e053b5f4b10173be6342c63589717a6fb1a528f0937"
+    },
+    {
+      "bytes": 5679,
+      "path": "resource-admission-admission.json",
+      "sha256": "e58cee745ff1991cd05fee99f1e42cd4b5bbb6f3ca75219c06a6df885ec82b61"
+    },
+    {
+      "bytes": 243,
+      "path": "return-protocol/archive-build.json",
+      "sha256": "f5481bd5a7f95066d6a4b1dab510c9952fe24e9adbf66c18a5fc60c354f57cd9"
+    },
+    {
+      "bytes": 632,
+      "path": "return-protocol/bulk-declaration.json",
+      "sha256": "f6c157256642a00834b425e62793f740a1e8833d287cc7908a9ddd981fe67541"
+    },
+    {
+      "bytes": 521,
+      "path": "return-protocol/cleanup-footer.json",
+      "sha256": "850959006aa8099f46d049add3a187eb54aba01d6d04e8d96d793cb68aac4c79"
+    },
+    {
+      "bytes": 15629,
+      "path": "return-protocol/framed-stdout.bin",
+      "sha256": "d2552b8004b548064ac52d78c9629c0798c24ff482ad18e7bf63836432608cb7"
+    },
+    {
+      "bytes": 432,
+      "path": "return-protocol/integrity-footer.json",
+      "sha256": "b3c142f16f9e5c203ce9ddca93cbb2929f428ebdb40a4989854f5dec47c4127e"
+    },
+    {
+      "bytes": 223,
+      "path": "return-protocol/lease-state.json",
+      "sha256": "3469e0ceeac886ad0b6766101b1e899de65b7c0fe0b6cd489ca67fb6bb3007da"
+    },
+    {
+      "bytes": 557,
+      "path": "return-protocol/operator-status.json",
+      "sha256": "c4d5f71535d054cb7345e87eb839f39e8468111460ed681263e12b93e22b2623"
+    },
+    {
+      "bytes": 6381,
+      "path": "return-protocol/source-admission.json",
+      "sha256": "b9011ff13542773465de2f9d4206771c3d801788ea05db5f0ec3f0e0f969f9a5"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/transport-stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 255,
+      "path": "timer-validation.json",
+      "sha256": "345e44914bc17d7cee8515b41df8a0373f247834e3df12d77d8b1da8ece0b8a7"
+    }
+  ],
+  "excluded_after_index": [
+    "transfer-cleanup.json"
+  ],
+  "schema": "libwebp-backref-cost-attribution-v16-returned-evidence-hashes-v1"
+}
