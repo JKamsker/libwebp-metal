@@ -1,0 +1,85 @@
+{
+  "evidence_type": "backref_cost_attribution_v3_phase2_refusal_observation",
+  "evidence_version": 1,
+  "phase": 2,
+  "executor": "Luna/max",
+  "status": "REFUSED_BEFORE_REMOTE_ADMISSION",
+  "ancestry": {
+    "frozen_main_commit": "086059436a46f1d5cd48d401fc06e2f96bbf095b",
+    "frozen_main_tree": "68e364d94feafb9a85e8d138f5e5ea5a37f2a594",
+    "phase1_commit": "a8a9dfdb3cd882d63980f4234c40e5c8cb91f5e1",
+    "phase1_parent": "086059436a46f1d5cd48d401fc06e2f96bbf095b",
+    "phase1_tree": "af7eabc288db9de596d16b1b6a51c38ab25174bf",
+    "worktree_clean_at_audit": true
+  },
+  "frozen_identity": {
+    "manifest": {
+      "path": "scripts/backref_cost_attribution_v3_manifest.json",
+      "sha256": "123fed6025da0fe1e054c7d6384f8a02bd63bdc11a7c2e93b9948da70f908e64"
+    },
+    "protocol": {
+      "path": "doc/backref-cost-attribution-v3-protocol-20260819.md",
+      "sha256": "9deb1aeaa39434d4c0e4cbfca98da4e5cdcfc90414071a2e1f851cfab8a5c76c"
+    },
+    "schema_catalog": {
+      "path": "scripts/backref_cost_attribution_v3_schemas.json",
+      "sha256": "99bdd77af00dec49ae080a4c92cd18e002c2d4da877a2a7f7592d14980d7f90a"
+    },
+    "manifest_base_matches_frozen_main": true,
+    "frozen_artifact_count": 25,
+    "frozen_artifact_hash_mismatches": 0
+  },
+  "phase1_authorization": {
+    "status": "PENDING_REMOTE_REHEARSAL",
+    "timed_execution_authorized": false,
+    "phase1_performance_samples": 0,
+    "reason": "authorization remains fail-closed until all local checks and the V3 no-workload remote rehearsal pass",
+    "reported_active_rehearsal_session": "37199",
+    "reported_session_action": "not signaled, killed, interrupted, inspected, or cleaned up by Phase 2"
+  },
+  "untimed_driver_validation": {
+    "command": "env WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V3_COMMIT=a8a9dfdb3cd882d63980f4234c40e5c8cb91f5e1 env -u WEBP_BENCHMARK_SESSION python3 scripts/execute_backref_cost_attribution_v3.py validate",
+    "status": "PASS",
+    "source_commit": "a8a9dfdb3cd882d63980f4234c40e5c8cb91f5e1",
+    "manifest_sha256": "123fed6025da0fe1e054c7d6384f8a02bd63bdc11a7c2e93b9948da70f908e64",
+    "schema_catalog_sha256": "99bdd77af00dec49ae080a4c92cd18e002c2d4da877a2a7f7592d14980d7f90a",
+    "benchmark_lease_acquisition_attempted": false,
+    "timed_binary_invoked": false,
+    "raw_stdout": "{\"benchmark_lease_acquisition_attempted\": false, \"manifest_sha256\": \"123fed6025da0fe1e054c7d6384f8a02bd63bdc11a7c2e93b9948da70f908e64\", \"mode\": \"validate\", \"schema_catalog_sha256\": \"99bdd77af00dec49ae080a4c92cd18e002c2d4da877a2a7f7592d14980d7f90a\", \"source_commit\": \"a8a9dfdb3cd882d63980f4234c40e5c8cb91f5e1\", \"status\": \"PASS\", \"timed_binary_invoked\": false}",
+    "raw_stderr": ""
+  },
+  "frozen_executor": {
+    "command": "env WEBP_BENCHMARK_SESSION=exclusive WEBP_EXPECTED_BACKREF_COST_ATTRIBUTION_V3_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_attribution_v3.py run \"$PWD/evidence/backref-cost-attribution-v3-execution-20260819\"",
+    "expanded_expected_commit": "a8a9dfdb3cd882d63980f4234c40e5c8cb91f5e1",
+    "wrapper_invoked_once": true,
+    "return_status": 1,
+    "raw_stdout": "",
+    "raw_stderr": "ERROR: phase-1 handoff rejected timing; see frozen blocker evidence\n",
+    "timed_pipeline_invoked": false,
+    "timing_commands_invoked": 0,
+    "encoder_workloads_invoked": 0,
+    "profiler_invocations": 0,
+    "cuda_invocations": 0,
+    "production_promotion": false,
+    "execution_output_path_existed_after_run": false
+  },
+  "ownership_lease_archive_cleanup": {
+    "remote_host_contacted": false,
+    "remote_admission_attempted": false,
+    "direct_child_workload_spawned": false,
+    "process_discovery_performed": false,
+    "discovered_pid_signals": 0,
+    "observed_session_37199_touched": false,
+    "benchmark_lease_acquisition_attempted": false,
+    "archive_transfer_attempted": false,
+    "extraction_attempted": false,
+    "remote_cleanup_attempted": false,
+    "remote_cleanup": "not applicable; authorization gate refused before remote admission and no Phase-2 run directory was created",
+    "ownership_policy": "no pre-existing or process-table-discovered PID/session was signaled, killed, interrupted, or cleaned up"
+  },
+  "blocker": {
+    "first_failed_gate": "phase_1_decision.timed_execution_authorized",
+    "exact_reason": "PENDING_REMOTE_REHEARSAL; controlled refusal rehearsal session 37199 remained active, so Phase 1 did not accept the required no-workload remote rehearsal and set timed_execution_authorized=false",
+    "consequence": "fail closed; zero timing commands and no Phase-2 timing evidence"
+  }
+}
