@@ -575,3 +575,21 @@ method-6 trellis chain. It was byte-exact but neutral:
 
 All 60 order-balanced outputs matched. The candidate was removed; raw
 evidence is `/tmp/libwebp-i4-quant8-ab.R8YBlE.tsv`.
+
+## Cold coefficient-statistics renormalization
+
+The retained CPU profile attributed 36.7% of samples to
+`VP8RecordCoeffTokens`. Generated code for its inlined statistics update took
+a forward branch around probability-count renormalization on every recorded
+event even though renormalization is rare. A compiler branch-probability hint
+moved that exceptional path out of line and made the common increment
+fall-through, but the end-to-end result regressed:
+
+| Format | Parent | Cold renormalization | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.363 ms/image | 40.440 ms/image | +0.077 ms |
+| JPEG lossy | 40.227 ms/image | 40.528 ms/image | +0.301 ms |
+
+The focused trellis test passed and all 60 order-balanced outputs matched.
+The candidate was removed; raw evidence is
+`/tmp/libwebp-recordstats-hint-ab.XRmLrK.jsonl`.
