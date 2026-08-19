@@ -660,3 +660,19 @@ memory and occupancy were unchanged.
 The full CUDA trellis parity test passed and all 60 order-balanced outputs
 matched. The candidate was removed; raw evidence is
 `/tmp/libwebp-i16-coop-forward-ab.8LpvKa.jsonl`.
+
+## Cooperative I16 quantization with warp reductions
+
+A final I16 candidate combined the measured metric warp reductions with
+four-lane basic quantization for all 64 mode/block pairs. It remained exact,
+but cooperative quantization added no measurable gain beyond the separately
+measured reductions:
+
+| Format | Parent | Quantize + reduce | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.271 ms/image | 39.840 ms/image | -0.431 ms |
+| JPEG lossy | 40.126 ms/image | 39.602 ms/image | -0.525 ms |
+
+The full CUDA trellis parity test passed and all 60 order-balanced outputs
+matched. The combination remains below the 1.5 ms/image threshold and was
+removed. Raw evidence is `/tmp/libwebp-i16-quant-reduce-ab.iLk0Fr.jsonl`.
