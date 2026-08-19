@@ -1035,3 +1035,26 @@ threshold, so the candidate was removed. This host result was measured only
 on the Ryzen 9 3900X / RTX 2080 SUPER machine; it is not a cross-architecture
 claim. Raw records are
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/partition0-token-overlap-screen.jsonl`.
+
+## Singleton-I4/chroma overlap
+
+The I4 dependency schedule has four singleton diagonals (blocks 0, 1, 14,
+and 15), where its upper 128-thread team is idle. A scheduling candidate used
+those windows for the independent chroma transform, diffusion correction,
+quantization/reconstruction/SSE, and residual-cost stages. If I4 aborted
+before reaching a window, the original post-I4 path completed only the
+remaining stages.
+
+Two order-reversed native-sm_75 processes, each with one warmup and six timed
+samples per cell over the six small/medium PPM corpus images, measured:
+
+| Parent | Singleton-I4/chroma overlap | Gain |
+|---:|---:|---:|
+| 32.340 ms/image | 31.829 ms/image | 0.510 ms/image |
+
+All 24 aggregate records retained the same output hash
+(`d01c3571a90d2653`) and byte count (1,610,422 bytes per batch), and all seven
+CTests passed. The singleton intervals hide only part of the chroma path, and
+the gain is far below the 1.5 ms/image retention threshold, so the candidate
+was removed. This is RTX 2080 SUPER-only evidence. Raw records are
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-singleton-chroma-overlap-screen.jsonl`.

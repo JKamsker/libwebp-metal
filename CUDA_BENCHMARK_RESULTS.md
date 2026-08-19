@@ -1062,3 +1062,18 @@ six-image small/medium PPM lossy corpus from 32.301 to 31.228 ms/image, a
 seven CTests passed. The gain remained below the 1.5 ms/image retention gate,
 so the candidate was removed. Raw evidence is archived with the RTX 2080
 SUPER machine report.
+
+## Singleton-I4/chroma overlap rejection
+
+Four of the ten I4 dependency diagonals contain only one block and leave the
+upper 128-thread team idle. A candidate moved the independent chroma
+transform, error correction, quantization/reconstruction/SSE, and residual
+cost stages into those four windows, with exact post-I4 completion when an
+early I4 abort skipped a window.
+
+All seven CTests and all 24 aggregate timing outputs were exact. Two
+order-reversed native-sm_75 processes moved the six-image PPM-fed lossy corpus
+from 32.340 to 31.829 ms/image, a 0.510 ms/image gain. The singleton intervals
+hide only a fraction of the chroma critical path, so the candidate was removed
+well below the 1.5 ms/image gate. Raw evidence is archived with the RTX 2080
+SUPER machine report.

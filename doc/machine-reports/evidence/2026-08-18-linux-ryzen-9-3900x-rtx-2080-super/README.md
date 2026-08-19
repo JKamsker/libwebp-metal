@@ -47,6 +47,10 @@ token partitions emitted on worker threads. The `parent` rows set
 `WEBP_PARTITION0_PIPELINE=0`; candidate and parent rows came from the same
 native-sm_75 binary.
 
+`i4-singleton-chroma-overlap-screen.jsonl` contains the 24 exact timing rows
+for the rejected device schedule that moved the four chroma search stages
+into the idle upper team on the four singleton I4 dependency diagonals.
+
 Inspect the sampling archives with:
 
 ```sh
