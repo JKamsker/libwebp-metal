@@ -250,6 +250,10 @@ byte-exact timing rows, direct phase trace, resource output, and
 candidate/restored test logs for the rejected pre-Ampere source-transform
 overlap.
 
+The `libwebp-i4-source-hadamard-pred-*` files contain the exact patch, 24
+byte-exact rows, resource output, and candidate/restored tests for the also
+rejected prediction-stage placement.
+
 Inspect the sampling archives with:
 
 ```sh

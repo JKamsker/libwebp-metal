@@ -525,3 +525,11 @@ A texture trace was likewise flat at 26.08 versus 26.15 ms GPU wall, with I4
 not shorten its critical path, so the candidate was removed. Exact patch,
 rows, phase trace, resources, and tests are archived under
 `libwebp-i4-source-hadamard-*`. RTX 2080 SUPER only; Ampere+ stayed unchanged.
+
+A follow-up moved the same exact precompute into the earlier prediction
+interval, where four warp leaders generate modes and the remaining lanes are
+idle. It also passed 7/7 CTests and all 24 rows matched, but PNG moved only
+39.715 to 39.629 ms/image (-0.086) while JPEG regressed from 39.619 to 39.758
+(+0.138). That placement was removed too; neither existing I4 barrier hides
+this work. Raw follow-up artifacts use the
+`libwebp-i4-source-hadamard-pred-*` prefix.

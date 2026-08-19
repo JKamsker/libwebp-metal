@@ -1955,3 +1955,10 @@ source transform to the earlier barrier's critical path, so it was removed.
 Exact patch, rows, phase trace, resource output, and candidate/restored tests
 are archived under `libwebp-i4-source-hadamard-*`. Turing-only evidence; no
 Ampere+ behavior or performance claim changed.
+
+The follow-up prediction-stage placement used the same exact source sum but
+computed it beside the four prediction warp leaders. Candidate and restored
+source passed all seven CTests and all 24 rows matched. PNG moved from 39.715
+to 39.629 ms/image (-0.086), while JPEG regressed from 39.619 to 39.758
+(+0.138). It was removed; raw patch, rows, resources, and tests are archived
+under `libwebp-i4-source-hadamard-pred-*`. No Ampere+ path changed.

@@ -1840,3 +1840,10 @@ The representative texture GPU wall was also unchanged at 26.08 versus
 26.15 ms. The source transform became part of the preceding barrier's wait
 instead of reducing total critical-path work. The candidate was removed and
 raw evidence archived with the RTX 2080 SUPER report; no Ampere+ claim.
+
+Moving the same source precompute one interval earlier, alongside I4
+prediction leaders, did not help either. Candidate/restored tests passed and
+all 24 rows were exact; PNG changed 39.715 to 39.629 ms/image (-0.086), while
+JPEG changed 39.619 to 39.758 (+0.138). The follow-up was removed and archived
+under `libwebp-i4-source-hadamard-pred-*`. Further movement of this transform
+between existing barriers has no measured Turing benefit.
