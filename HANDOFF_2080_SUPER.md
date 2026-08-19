@@ -121,10 +121,12 @@ measurements are meaningless until they pass.
   changed the output hash/byte count and was non-deterministic on the next
   pass. The prototype was removed: concurrency needs an explicit backend/API
   design rather than an unsafe benchmark-only switch (task 8).
-- [ ] 8. **Multi-image GPU overlap** (design task): batch callers could
-  hide the entire GPU wall by decimating image N+1 while tokenizing image
-  N, but that changes the synchronous encode-call contract — needs an
-  explicit async batch API sketch before any code.
+- [x] 8. **Multi-image GPU overlap** (design task): the explicit async queue,
+  ownership, cancellation, fallback, ordered-result, per-encode accelerator
+  session, decimate-ticket, scheduler, and acceptance contracts are specified
+  in `doc/async-multi-image-encoder-design-20260819.md`. The design rejects
+  concurrent raw `WebPEncode()` calls and launches N+1 only after N's final
+  GPU band is collected, while N completes CPU replay/tokenization.
 - [ ] 9. **Trellis (m5/m6) decimate support** — currently declines to
   CPU; methods 5+ add trellis quantization to the search.
 - [ ] 10. **Merge decision:** the branch is many CI-green commits ahead
