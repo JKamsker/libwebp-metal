@@ -56,7 +56,7 @@ constexpr int kFlatnessLimitUV = 2;
 constexpr int kFlatnessPenalty = 140;
 constexpr int kRDDistoMult = 256;
 constexpr long long kMaxCost = 0x7fffffffffffffLL;
-constexpr unsigned int kDecimateThreads = 128u;
+constexpr unsigned int kDecimateThreads = 256u;
 constexpr uint32_t kRDBasic = 1u;
 constexpr uint32_t kRDTrellis = 2u;
 constexpr uint32_t kRDTrellisAll = 3u;
@@ -76,6 +76,10 @@ __device__ static const uint8_t kEncBands[16 + 1] = {
 // Snake positions of the i4 top pointer (VP8TopLeftI4).
 __device__ static const uint8_t kTopLeftI4[16] = {
     17, 21, 25, 29, 13, 17, 21, 25, 9, 13, 17, 21, 5, 9, 13, 17};
+
+__device__ static const int8_t kI4DiagonalBlocks[10][2] = {
+    {0, -1}, {1, -1}, {2, 4}, {3, 5}, {6, 8},
+    {7, 9},  {10, 12}, {11, 13}, {14, -1}, {15, -1}};
 
 // ---------------------------------------------------------------------------
 // Host-uploaded static cost tables (copied from the encoder's symbols so the
@@ -521,6 +525,7 @@ struct MBWork {
   uint8_t yuv_out[kCudaYuvSizeEnc];    // running best (i16 -> maybe i4 -> +uv)
   uint8_t yuv_out2[kCudaYuvSizeEnc];   // scratch
   uint8_t yuv_p[kCudaPredSizeEnc];     // prediction cache
+  uint8_t i4_yuv_p2[kCudaPredSizeEnc]; // second concurrent I4 prediction cache
   // Borders: index 0 holds the top-left sample, samples start at index 1.
   uint8_t y_left[1 + 16];
   // U and V left borders share one buffer with the iterator's 16-byte
@@ -542,18 +547,18 @@ struct MBWork {
   long long i16_sd[4];
   int i16_flat[4];
   // Intra4 per-mode scratch (one sub-block at a time).
-  int16_t i4_tmp[kNumBModes][16];
-  int16_t i4_levels[kNumBModes][16];
-  uint8_t i4_out[kNumBModes][4 * kCudaBPS];  // 4x4 samples, BPS stride
-  int i4_transform_tmp[kNumBModes][16];
-  int i4_nz[kNumBModes];
-  long long i4_sse[kNumBModes];
-  long long i4_sd[kNumBModes];
-  int i4_flat[kNumBModes];
-  long long i4_rcost[kNumBModes];
-  long long i4_base_score[kNumBModes];
-  long long i4_full_score[kNumBModes];
-  uint16_t i4_mode_cost[kNumBModes];
+  int16_t i4_tmp[2][kNumBModes][16];
+  int16_t i4_levels[2][kNumBModes][16];
+  uint8_t i4_out[2][kNumBModes][4 * kCudaBPS];
+  int i4_transform_tmp[2][kNumBModes][16];
+  int i4_nz[2][kNumBModes];
+  long long i4_sse[2][kNumBModes];
+  long long i4_sd[2][kNumBModes];
+  int i4_flat[2][kNumBModes];
+  long long i4_rcost[2][kNumBModes];
+  long long i4_base_score[2][kNumBModes];
+  long long i4_full_score[2][kNumBModes];
+  uint16_t i4_mode_cost[2][kNumBModes];
   // Chroma per-mode scratch.
   int16_t uv_tmp[4][8][16];
   int16_t uv_levels_all[4][8][16];
@@ -905,6 +910,36 @@ __device__ int RotateI4(MBWork* w, int* i4, const uint8_t* best_blocks_bps) {
   return (*i4 < 16);
 }
 
+// Builds the exact Intra4Preds boundary for an arbitrary block whose skew
+// predecessors have completed. The returned top pointer is boundary + 5.
+__device__ void BuildI4BoundaryDirect(const MBWork* w, int block,
+                                      uint8_t boundary[13]) {
+  const int bx = block & 3;
+  const int by = block >> 2;
+  const int x0 = 4 * bx;
+  const int y0 = 4 * by;
+  uint8_t* const top = boundary + 5;
+  const uint8_t* const recon = w->yuv_out2 + kCudaYOffEnc;
+  for (int r = 0; r < 4; ++r) {
+    top[-2 - r] = (bx > 0) ? recon[(y0 + r) * kCudaBPS + x0 - 1]
+                            : w->y_left[1 + y0 + r];
+  }
+  if (bx > 0) {
+    top[-1] = (by > 0) ? recon[(y0 - 1) * kCudaBPS + x0 - 1]
+                        : w->y_top[x0 - 1];
+  } else {
+    top[-1] = (by > 0) ? w->y_left[y0] : w->y_left[0];
+  }
+  for (int c = 0; c < 8; ++c) {
+    if (by == 0) {
+      top[c] = w->y_top[x0 + c];
+    } else {
+      const int x = x0 + c;
+      top[c] = (x < 16) ? recon[(y0 - 1) * kCudaBPS + x] : w->y_top[x];
+    }
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Error diffusion (QuantizeSingle/CorrectDCValues ports).
 
@@ -1049,12 +1084,12 @@ __device__ void ApplySelectedModeTrellis(
       CudaIntra4PredMode(w->yuv_p,
                          w->i4_boundary + kTopLeftI4[block], mode);
       const uint8_t* const ref = w->yuv_p + kCudaVP8I4ModeOffsets[mode];
-      CudaFTransform(src, ref, w->i4_tmp[mode]);
+      CudaFTransform(src, ref, w->i4_tmp[0][mode]);
       const int nz = TrellisQuantizeBlockDev(
-          costs, w->i4_tmp[mode], w->rd.y_ac_levels[block], ctx, 3,
+          costs, w->i4_tmp[0][mode], w->rd.y_ac_levels[block], ctx, 3,
           &dqm->y1, dqm->lambda_trellis_i4);
       non_zero |= (uint32_t)nz << block;
-      CudaITransformOne(ref, w->i4_tmp[mode], dst);
+      CudaITransformOne(ref, w->i4_tmp[0][mode], dst);
     } while (RotateI4(w, &block, w->yuv_out + kCudaYOffEnc));
   }
 
@@ -1341,200 +1376,206 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
   __syncthreads();
   PHASE_TS(3);
 
-  // ---- Phase 3: intra4 search (PickBestIntra4), sub-blocks in sequence.
+  // ---- Phase 3: intra4 search on the exact x + 2y dependency diagonals.
   if (p.max_i4_header_bits > 0) {
-    __shared__ int i4_abort;
-    __shared__ int i4_index;
-    __shared__ NzContext i4_ctx;
-    __shared__ long long i4_best_score;   // running rd_best.score
+    __shared__ int i4_abort, i4_next_commit;
+    __shared__ long long i4_best_score;
     __shared__ long long i4_best_D, i4_best_SD, i4_best_H, i4_best_R;
     __shared__ uint32_t i4_best_nz;
     __shared__ int i4_header_bits;
     __shared__ int16_t i4_best_levels[16][16];
+    __shared__ uint8_t i4_boundary2[2][13];
+    __shared__ uint8_t i4_block_nz[16], i4_ready[16];
+    __shared__ long long i4_block_D[16], i4_block_SD[16];
+    __shared__ long long i4_block_H[16], i4_block_R[16];
+    __shared__ long long i4_block_score[16];
+    const int team = tid >> 7;
+    const int team_tid = tid & 127;
     if (tid == 0) {
       ModeScore rd_best;
       InitScoreDev(&rd_best);
       rd_best.H = 211;
       SetRDScoreDev(dqm->lambda_mode, &rd_best);
       i4_abort = 0;
-      i4_index = 0;
+      i4_next_commit = 0;
       i4_best_score = rd_best.score;
-      i4_best_D = 0;
-      i4_best_SD = 0;
+      i4_best_D = i4_best_SD = i4_best_R = 0;
       i4_best_H = 211;
-      i4_best_R = 0;
       i4_best_nz = 0;
       i4_header_bits = 0;
-      i4_ctx = w.nz_ctx;  // VP8IteratorStartI4 re-imports the context
-      StartI4Boundary(&w);
-      // best_blocks accumulate in yuv_out2 luma.
     }
+    if (tid < 16) i4_ready[tid] = 0;
     __syncthreads();
-    // Work inside a warp must stay divergence-free (divergent branches
-    // serialize), so parallelism beyond the 10 data-parallel mode lanes is
-    // spread across warps: predictions round-robin on the warp leaders, the
-    // transform chain on warp 0's lanes, and the three independent metrics
-    // (residual cost / SSE+flatness / texture distortion) each on their own
-    // warp. Block-wide barriers separate the stages.
-    for (int step = 0; step < 16; ++step) {
-      if (i4_abort) break;  // uniform: last written before a barrier
-      // The mode context is common to all candidates. Fetch its ten header
-      // costs in parallel while the four warp leaders generate predictions.
-      if (tid < kNumBModes) {
-        const int bx = i4_index & 3, by = i4_index >> 2;
+    for (int diagonal = 0; diagonal < 10; ++diagonal) {
+      const int block = kI4DiagonalBlocks[diagonal][team];
+      const int active = (block >= 0);
+      if (i4_abort) break;
+      if (active && team_tid == 0) {
+        BuildI4BoundaryDirect(&w, block, i4_boundary2[team]);
+      }
+      __syncthreads();
+      if (active && team_tid < kNumBModes) {
+        const int bx = block & 3, by = block >> 2;
         const int preds_w = 4 * (int)p.mb_w + 1;
         const uint8_t* const preds_base =
             v.preds + (size_t)(4 * y + by) * preds_w + (4 * x + bx);
-        const int left_mode = (bx == 0)
-                                  ? preds_base[-1]
-                                  : w.rd.modes_i4[i4_index - 1];
-        const int top_mode = (by == 0)
-                                 ? preds_base[-preds_w]
-                                 : w.rd.modes_i4[i4_index - 4];
-        w.i4_mode_cost[tid] =
-            v.tables->fixed_costs_i4[top_mode][left_mode][tid];
+        const int left_mode =
+            (bx == 0) ? preds_base[-1] : w.rd.modes_i4[block - 1];
+        const int top_mode =
+            (by == 0) ? preds_base[-preds_w] : w.rd.modes_i4[block - 4];
+        w.i4_mode_cost[team][team_tid] =
+            v.tables->fixed_costs_i4[top_mode][left_mode][team_tid];
       }
-      {
-        const int warp = tid >> 5, lane = tid & 31;
+      if (active) {
+        const int warp = team_tid >> 5, lane = team_tid & 31;
+        uint8_t* const pred = (team == 0) ? w.yuv_p : w.i4_yuv_p2;
         if (lane == 0 && warp < 4) {
           for (int m = warp; m < kNumBModes; m += 4) {
-            CudaIntra4PredMode(w.yuv_p, w.i4_boundary + kTopLeftI4[i4_index],
-                               m);
+            CudaIntra4PredMode(pred, i4_boundary2[team] + 5, m);
           }
         }
       }
       __syncthreads();
-      if (tid < 4 * kNumBModes) {
-        const int mode = tid >> 2;
-        const int mode_lane = tid & 3;
+      if (active && team_tid < 4 * kNumBModes) {
+        const int mode = team_tid >> 2;
+        const int mode_lane = team_tid & 3;
+        const int bx = block & 3, by = block >> 2;
+        const int ctx =
+            ((by == 0) ? w.nz_ctx.top_nz[bx] : i4_block_nz[block - 4]) +
+            ((bx == 0) ? w.nz_ctx.left_nz[by] : i4_block_nz[block - 1]);
         const unsigned int warp_mask = __activemask();
         const uint8_t* const src =
-            w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[i4_index];
-        const uint8_t* const ref = w.yuv_p + kCudaVP8I4ModeOffsets[mode];
+            w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
+        uint8_t* const pred = (team == 0) ? w.yuv_p : w.i4_yuv_p2;
+        const uint8_t* const ref = pred + kCudaVP8I4ModeOffsets[mode];
         int nz = 0;
-        I4FTransformCoop4(src, ref, w.i4_tmp[mode],
-                          w.i4_transform_tmp[mode], mode_lane, warp_mask);
+        I4FTransformCoop4(src, ref, w.i4_tmp[team][mode],
+                          w.i4_transform_tmp[team][mode], mode_lane,
+                          warp_mask);
         __syncwarp(warp_mask);
         if (p.rd_opt_level == kRDTrellisAll) {
           if (mode_lane == 0) {
-            const int bx = i4_index & 3, by = i4_index >> 2;
-            const int ctx = i4_ctx.top_nz[bx] + i4_ctx.left_nz[by];
             nz = TrellisQuantizeBlockDev(
-                &cc, w.i4_tmp[mode], w.i4_levels[mode], ctx, 3, &dqm->y1,
-                dqm->lambda_trellis_i4);
+                &cc, w.i4_tmp[team][mode], w.i4_levels[team][mode], ctx, 3,
+                &dqm->y1, dqm->lambda_trellis_i4);
           }
         } else {
-          nz = I4QuantizeBlockCoop4(w.i4_tmp[mode], w.i4_levels[mode],
-                                    &dqm->y1, mode_lane, warp_mask);
+          nz = I4QuantizeBlockCoop4(
+              w.i4_tmp[team][mode], w.i4_levels[team][mode], &dqm->y1,
+              mode_lane, warp_mask);
         }
-        if (mode_lane == 0) w.i4_nz[mode] = nz;
+        if (mode_lane == 0) w.i4_nz[team][mode] = nz;
         __syncwarp(warp_mask);
-        I4ITransformCoop4(ref, w.i4_tmp[mode], w.i4_out[mode],
-                          w.i4_transform_tmp[mode], mode_lane, warp_mask);
+        I4ITransformCoop4(ref, w.i4_tmp[team][mode], w.i4_out[team][mode],
+                          w.i4_transform_tmp[team][mode], mode_lane,
+                          warp_mask);
       }
       __syncthreads();
-      {
-        const int warp = tid >> 5, lane = tid & 31;
+      if (active) {
+        const int warp = team_tid >> 5, lane = team_tid & 31;
+        const int bx = block & 3, by = block >> 2;
+        const int ctx =
+            ((by == 0) ? w.nz_ctx.top_nz[bx] : i4_block_nz[block - 4]) +
+            ((bx == 0) ? w.nz_ctx.left_nz[by] : i4_block_nz[block - 1]);
         const uint8_t* const src =
-            w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[i4_index];
-        const int bx = i4_index & 3, by = i4_index >> 2;
+            w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
         if (warp == 0 && lane < kNumBModes) {
-          // Full residual cost precomputed for every mode: the CPU's
-          // early-out only skips this computation for modes it rejects
-          // anyway, so replaying its comparison order on complete values
-          // selects identically. Ten concurrent per-lane serial walks beat
-          // sequential cooperative walks here (measured).
-          w.i4_rcost[lane] = ResidualCostDev(
-              &cc, i4_ctx.top_nz[bx] + i4_ctx.left_nz[by], 0, 3,
-              w.i4_levels[lane]);
+          w.i4_rcost[team][lane] = ResidualCostDev(
+              &cc, ctx, 0, 3, w.i4_levels[team][lane]);
         } else if (warp == 2 && lane < kNumBModes) {
-          w.i4_sse[lane] = CudaSSE4x4(src, w.i4_out[lane]);
-          w.i4_flat[lane] =
-              (lane > 0) ? CudaIsFlat(w.i4_levels[lane], 1, kFlatnessLimitI4)
+          w.i4_sse[team][lane] =
+              CudaSSE4x4(src, w.i4_out[team][lane]);
+          w.i4_flat[team][lane] =
+              (lane > 0) ? CudaIsFlat(w.i4_levels[team][lane], 1,
+                                      kFlatnessLimitI4)
                          : 0;
         } else if (warp == 3 && lane < kNumBModes) {
-          w.i4_sd[lane] =
-              tlambda ? CudaDisto4x4(src, w.i4_out[lane], kWeightY) : 0;
+          w.i4_sd[team][lane] =
+              tlambda ? CudaDisto4x4(src, w.i4_out[team][lane], kWeightY) : 0;
         }
       }
       __syncthreads();
-      // Prepare both sides of the CPU early-out in parallel. Thread 0 below
-      // still replays the original mode order and exact >= / < tie behavior.
-      if (tid < kNumBModes) {
-        const long long D = w.i4_sse[tid];
+      if (active && team_tid < kNumBModes) {
+        const long long D = w.i4_sse[team][team_tid];
         const long long SD =
-            tlambda ? MULT_8B_DEV(tlambda, w.i4_sd[tid]) : 0;
-        const long long H = w.i4_mode_cost[tid];
-        const long long R = w.i4_flat[tid] ? kFlatnessPenalty : 0;
-        w.i4_base_score[tid] =
-            (R + H) * (long long)dqm->lambda_i4 +
-            kRDDistoMult * (D + SD);
-        w.i4_full_score[tid] =
-            (R + w.i4_rcost[tid] + H) * (long long)dqm->lambda_i4 +
+            tlambda ? MULT_8B_DEV(tlambda, w.i4_sd[team][team_tid]) : 0;
+        const long long H = w.i4_mode_cost[team][team_tid];
+        const long long R =
+            w.i4_flat[team][team_tid] ? kFlatnessPenalty : 0;
+        w.i4_base_score[team][team_tid] =
+            (R + H) * (long long)dqm->lambda_i4 + kRDDistoMult * (D + SD);
+        w.i4_full_score[team][team_tid] =
+            (R + w.i4_rcost[team][team_tid] + H) *
+                (long long)dqm->lambda_i4 +
             kRDDistoMult * (D + SD);
       }
-      if ((tid >> 5) == 0) __syncwarp();
-      if (tid == 0) {
-        const int bx = i4_index & 3, by = i4_index >> 2;
+      if (active && (team_tid >> 5) == 0) __syncwarp();
+      if (active && team_tid == 0) {
         ModeScore rd_i4;
         int best_mode = -1;
         InitScoreDev(&rd_i4);
         for (int mode = 0; mode < kNumBModes; ++mode) {
           ModeScore rd_tmp;
-          rd_tmp.D = w.i4_sse[mode];
-          rd_tmp.SD = tlambda ? MULT_8B_DEV(tlambda, w.i4_sd[mode]) : 0;
-          rd_tmp.H = w.i4_mode_cost[mode];
-          rd_tmp.nz = (uint32_t)w.i4_nz[mode] << i4_index;
-          rd_tmp.R = w.i4_flat[mode] ? kFlatnessPenalty : 0;
-          rd_tmp.score = w.i4_base_score[mode];
-          if (best_mode >= 0 && rd_tmp.score >= rd_i4.score) {
-            continue;
-          }
-          rd_tmp.R += w.i4_rcost[mode];
-          rd_tmp.score = w.i4_full_score[mode];
+          rd_tmp.D = w.i4_sse[team][mode];
+          rd_tmp.SD =
+              tlambda ? MULT_8B_DEV(tlambda, w.i4_sd[team][mode]) : 0;
+          rd_tmp.H = w.i4_mode_cost[team][mode];
+          rd_tmp.nz = (uint32_t)w.i4_nz[team][mode] << block;
+          rd_tmp.R = w.i4_flat[team][mode] ? kFlatnessPenalty : 0;
+          rd_tmp.score = w.i4_base_score[team][mode];
+          if (best_mode >= 0 && rd_tmp.score >= rd_i4.score) continue;
+          rd_tmp.R += w.i4_rcost[team][mode];
+          rd_tmp.score = w.i4_full_score[team][mode];
           if (best_mode < 0 || rd_tmp.score < rd_i4.score) {
             CopyScoreDev(&rd_i4, &rd_tmp);
             best_mode = mode;
           }
         }
-        // Intermediate leaders are never observable. Copy the final winner
-        // once instead of copying every transient best during the scan.
-        for (int k = 0; k < 16; ++k) {
-          i4_best_levels[i4_index][k] = w.i4_levels[best_mode][k];
-        }
         SetRDScoreDev(dqm->lambda_mode, &rd_i4);
-        i4_best_D += rd_i4.D;
-        i4_best_SD += rd_i4.SD;
-        i4_best_H += rd_i4.H;
-        i4_best_R += rd_i4.R;
-        i4_best_nz |= rd_i4.nz;
-        i4_best_score += rd_i4.score;
-        if (i4_best_score >= w.rd_score) {
-          i4_abort = 1;
-        } else {
-          i4_header_bits += (int)rd_i4.H;
+        for (int k = 0; k < 16; ++k) {
+          i4_best_levels[block][k] = w.i4_levels[team][best_mode][k];
+        }
+        uint8_t* const dst =
+            w.yuv_out2 + kCudaYOffEnc + kCudaVP8Scan[block];
+        for (int r = 0; r < 4; ++r) {
+          for (int c = 0; c < 4; ++c) {
+            dst[r * kCudaBPS + c] =
+                w.i4_out[team][best_mode][r * kCudaBPS + c];
+          }
+        }
+        w.rd.modes_i4[block] = (uint8_t)best_mode;
+        i4_block_nz[block] = rd_i4.nz ? 1 : 0;
+        i4_block_D[block] = rd_i4.D;
+        i4_block_SD[block] = rd_i4.SD;
+        i4_block_H[block] = rd_i4.H;
+        i4_block_R[block] = rd_i4.R;
+        i4_block_score[block] = rd_i4.score;
+        i4_ready[block] = 1;
+      }
+      __syncthreads();
+      if (tid == 0) {
+        while (i4_next_commit < 16 && i4_ready[i4_next_commit]) {
+          const int b = i4_next_commit++;
+          i4_best_D += i4_block_D[b];
+          i4_best_SD += i4_block_SD[b];
+          i4_best_H += i4_block_H[b];
+          i4_best_R += i4_block_R[b];
+          i4_best_nz |= (uint32_t)i4_block_nz[b] << b;
+          i4_best_score += i4_block_score[b];
+          if (i4_best_score >= w.rd_score) {
+            i4_abort = 1;
+            break;
+          }
+          i4_header_bits += (int)i4_block_H[b];
           if (i4_header_bits > p.max_i4_header_bits) {
             i4_abort = 1;
-          } else {
-            // Commit the chosen block into best_blocks and rotate.
-            uint8_t* const dst =
-                w.yuv_out2 + kCudaYOffEnc + kCudaVP8Scan[i4_index];
-            for (int r = 0; r < 4; ++r) {
-              for (int c = 0; c < 4; ++c) {
-                dst[r * kCudaBPS + c] = w.i4_out[best_mode][r * kCudaBPS + c];
-              }
-            }
-            w.rd.modes_i4[i4_index] = (uint8_t)best_mode;
-            i4_ctx.top_nz[bx] = i4_ctx.left_nz[by] =
-                (rd_i4.nz ? 1 : 0);
-            RotateI4(&w, &i4_index, w.yuv_out2 + kCudaYOffEnc);
+            break;
           }
         }
       }
       __syncthreads();
     }
     if (tid == 0 && !i4_abort) {
-      // Intra4 wins: adopt its score, levels, and reconstruction.
       w.rd.is_i4 = 1;
       w.rd.nz = i4_best_nz;
       w.rd_D = i4_best_D;
