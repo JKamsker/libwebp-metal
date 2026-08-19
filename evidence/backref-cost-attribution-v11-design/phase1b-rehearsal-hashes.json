@@ -1,0 +1,27 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v11-phase1b-hash-index-v1",
+  "source_commit": "e19eb84a61400af2d434004e8ff1e2fdf692a288",
+  "source_tree": "ae61de93df238c4cb1c47e01049b8586803dc420",
+  "artifacts": [
+    {
+      "path": "rehearsal-invocation.json",
+      "bytes": 3984,
+      "sha256": "a27a90f24fcfba3b0757b1dc8bed90b6fce79fe02f6526a62d4acceb98b967b3"
+    },
+    {
+      "path": "transfer-cleanup.json",
+      "bytes": 348,
+      "sha256": "2cb418546d7c67ae16d52be9bb0749b8ccc68b997859b262277be0b4ff5a0f2b"
+    },
+    {
+      "path": "return-protocol/framed-stdout.bin",
+      "bytes": 1941990,
+      "sha256": "f6cb02af4d445ac355bdf007f8cfc19daf19d98d3e45647e0689f89264f848f4"
+    },
+    {
+      "path": "return-protocol/transport-stderr.bin",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

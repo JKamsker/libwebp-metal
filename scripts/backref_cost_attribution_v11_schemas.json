@@ -1,0 +1,24 @@
+{
+  "protocol_version": 3,
+  "schemas": [
+    "libwebp-backref-cost-attribution-v11-archive-v1",
+    "libwebp-backref-cost-attribution-v11-archive-inventory-v1",
+    "libwebp-backref-cost-attribution-v11-authorization-v1",
+    "libwebp-backref-cost-attribution-v11-artifact-hashes-v1",
+    "libwebp-backref-cost-attribution-v11-cleanup-receipt-v1",
+    "libwebp-backref-cost-attribution-v11-control-plane-v1",
+    "libwebp-backref-cost-attribution-v11-counter-check-v1",
+    "libwebp-backref-cost-attribution-v11-lease-v1",
+    "libwebp-backref-cost-attribution-v11-lease-transfer-v1",
+    "libwebp-backref-cost-attribution-v11-frame-v1",
+    "libwebp-backref-cost-attribution-v11-integrity-footer-v1",
+    "libwebp-backref-cost-attribution-v11-operator-status-v1",
+    "libwebp-backref-cost-attribution-v11-phase1b-hash-index-v1",
+    "libwebp-backref-cost-attribution-v11-process-refusal-v1",
+    "libwebp-backref-cost-attribution-v11-refusal-v1",
+    "libwebp-backref-cost-attribution-v11-rehearsal-v1",
+    "libwebp-backref-cost-attribution-v11-source-admission-receipt-v1",
+    "libwebp-backref-cost-attribution-v11-timer-check-v1",
+    "libwebp-backref-cost-attribution-v11-transfer-cleanup-v1"
+  ]
+}

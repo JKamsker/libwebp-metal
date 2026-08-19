@@ -1,0 +1,10 @@
+{
+  "cleanup_footer_verified": false,
+  "direct_transport_child_timed_out": true,
+  "failure": "directly owned transport timed out",
+  "mode": "rehearse",
+  "post_run_remote_cleanup_operations": 0,
+  "remote_cleanup_state": "unknown-after-truncation",
+  "schema": "libwebp-backref-cost-attribution-v11-transfer-cleanup-v1",
+  "status": "refused"
+}
