@@ -593,3 +593,21 @@ fall-through, but the end-to-end result regressed:
 The focused trellis test passed and all 60 order-balanced outputs matched.
 The candidate was removed; raw evidence is
 `/tmp/libwebp-recordstats-hint-ab.XRmLrK.jsonl`.
+
+## Branchless token-probability selection
+
+The current whole-process profile attributed 58.2% of CPU samples to
+`VP8PutTokenPage`. A candidate unconditionally loaded the indexed probability
+and used a register conditional move for fixed-probability tokens, removing
+the token-type branch from the generated boolean-coder loop. Fixed tokens use
+only low indices 0--255, so the speculative indexed load remained in bounds.
+
+| Format | Parent | Branchless selection | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.521 ms/image | 40.400 ms/image | -0.121 ms |
+| JPEG lossy | 40.362 ms/image | 40.188 ms/image | -0.174 ms |
+
+The bit-writer and trellis tests passed and all 60 order-balanced outputs
+matched. Both gains are far below the 1.5 ms/image threshold, so the candidate
+was removed. Raw evidence is
+`/tmp/libwebp-tokenprob-branchless-ab.shxSHc.jsonl`.
