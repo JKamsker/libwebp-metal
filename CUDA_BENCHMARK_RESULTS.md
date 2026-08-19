@@ -1958,3 +1958,24 @@ shared bytes. Warp divergence outweighed the saved zero-level load, so the
 candidate was removed. Raw artifacts use the
 `libwebp-i4-residual-value-*` and `libwebp-i4-zero-level-cost-*` prefixes.
 Turing-only evidence; no Ampere+ claim.
+
+## Common-level I4 residual-cost rejection
+
+A follow-up native-sm_75 probe measured level 0--4 coverage at 91.18% for
+graphic-medium, 99.96% for photo-medium, and 82.27% for texture-medium. A
+pre-Ampere candidate therefore used the exact fixed-cost immediates (zero at
+level 0 and 256 at levels 1--4) while retaining the compact original lookup
+above level 4. Ampere+ remained unchanged.
+
+Candidate and restored source passed all seven CTests. All 24 order-reversed
+rows matched hashes and byte counts:
+
+| Format | Parent | Common-level path | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.810 ms/image | 40.553 ms/image | -0.743 ms/image |
+| JPEG lossy | 39.729 ms/image | 40.511 ms/image | -0.783 ms/image |
+
+The kernel moved from 103 to 102 registers with the 352-byte stack and 23,392
+shared bytes unchanged, but both formats regressed materially. The candidate
+was removed. Raw artifacts use the `libwebp-i4-residual-range-*` and
+`libwebp-i4-common-level-cost-*` prefixes. Turing-only evidence.

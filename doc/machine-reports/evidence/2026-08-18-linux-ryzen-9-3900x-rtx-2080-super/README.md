@@ -281,6 +281,12 @@ zero/one/2+ counter patch, raw output, and build log. The matching
 zero fast-path patch, 24 byte-exact rows, candidate build/resource output,
 and candidate/restored seven-test transcripts.
 
+The `libwebp-i4-residual-range-*` files preserve the temporary native-sm_75
+0--4 versus >4 counter patch, raw output, and build log. The matching
+`libwebp-i4-common-level-cost-*` files contain the exact rejected
+pre-Ampere common-range patch, 24 byte-exact rows, candidate build/resource
+output, and candidate/restored seven-test transcripts.
+
 Inspect the sampling archives with:
 
 ```sh

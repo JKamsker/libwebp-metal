@@ -1,0 +1,17 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index d5dd4a6e..35f8a14e 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -186,6 +186,12 @@ __device__ __forceinline__ int BitCostDev(const CostCache* c, int bit,
+ 
+ __device__ __forceinline__ int LevelCostDev(const CostCache* c,
+                                             const uint16_t* table, int level) {
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  // VP8LevelFixedCosts is 0 at level 0 and 256 at levels 1 through 4.
++  // Those five values cover the overwhelming majority of the profiled I4
++  // residual walk, so keep their fixed contribution immediate.
++  if (level <= 4) return table[level] + ((level != 0) ? 256 : 0);
++#endif
+   return c->level_fixed[level] +
+          table[(level > kMaxVariableLevel) ? kMaxVariableLevel : level];
+ }

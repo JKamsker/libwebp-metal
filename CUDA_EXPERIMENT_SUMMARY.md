@@ -654,3 +654,25 @@ The added divergent branch cost more than the avoided load, so the candidate
 was removed. Raw probe, exact patch, rows, builds/resources, and tests are
 archived under `libwebp-i4-residual-value-*` and
 `libwebp-i4-zero-level-cost-*`. RTX 2080 SUPER only.
+
+## Pre-Ampere common-level residual-cost rejection
+
+The zero-only branch regressed, but a follow-up counter found levels 0--4
+covered 91.18% of graphic, 99.96% of photo, and 82.27% of texture residual
+values. Because the fixed costs are exactly zero for level 0 and 256 for
+levels 1--4, a pre-Ampere candidate used those immediates and retained the
+original compact lookup above level 4. Ampere+ compiled the original path.
+
+Candidate and restored trees passed 7/7 CTests. All 24 order-reversed
+native-sm_75 rows were byte-exact:
+
+| Format | Parent | Common-level path | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.810 ms/image | 40.553 ms/image | -0.743 ms/image |
+| JPEG lossy | 39.729 ms/image | 40.511 ms/image | -0.783 ms/image |
+
+Registers fell from 103 to 102, but the remaining >4 divergence and larger
+control path outweighed the fixed-table loads. The candidate was removed.
+Raw range probe, exact patch, rows, builds/resources, and tests are archived
+under `libwebp-i4-residual-range-*` and
+`libwebp-i4-common-level-cost-*`. RTX 2080 SUPER only.

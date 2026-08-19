@@ -2086,3 +2086,26 @@ candidate was removed. Raw profile, exact patch, timings, builds/resources,
 and candidate/restored tests are archived under
 `libwebp-i4-residual-value-*` and `libwebp-i4-zero-level-cost-*`. RTX 2080
 SUPER only; no Ampere+ path changed.
+
+## Common-level I4 residual-cost specialization
+
+The range probe found that levels 0--4 account for 91.18% of
+graphic-medium, 99.96% of photo-medium, and 82.27% of texture-medium residual
+values. A pre-Ampere candidate replaced the corresponding fixed-table loads
+with the exact constants: zero for level 0 and 256 for levels 1--4. Values
+above 4 and all Ampere+ code retained the original compact two-table path.
+
+Both candidate and restored source passed all seven CTests. All 24
+order-reversed native-sm_75 rows were byte-exact:
+
+| Format | Parent | Common-level path | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.810 ms/image | 40.553 ms/image | -0.743 ms/image |
+| JPEG lossy | 39.729 ms/image | 40.511 ms/image | -0.783 ms/image |
+
+Registers fell from 103 to 102; stack and shared memory stayed at 352 and
+23,392 bytes. The candidate still regressed both formats, so it was removed.
+Raw range profile, exact patch, timings, builds/resources, and
+candidate/restored tests are archived under
+`libwebp-i4-residual-range-*` and `libwebp-i4-common-level-cost-*`. RTX
+2080 SUPER only; no Ampere+ path changed.
