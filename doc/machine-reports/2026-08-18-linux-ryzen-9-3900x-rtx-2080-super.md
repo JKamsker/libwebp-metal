@@ -723,3 +723,22 @@ CTA barrier. Trellis parity and all 24 screen outputs matched. PNG moved from
 40.774 to 40.233 ms/image and JPEG from 40.779 to 40.065 ms/image; both gains
 remain below 1.5 ms/image, so the candidate was removed. Raw evidence is
 `evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-boundary-pred-screen.jsonl`.
+
+## Static I4 prediction plus warp-parallel winner publication
+
+The static prediction schedule was combined with scalar-only score selection
+and a 16-lane winner copy. This attacks separate prediction and publication
+portions of the I4 dependency loop without increasing the CTA size. The full
+CUDA trellis parity test passed, and all 24 order-balanced screen outputs
+matched their baseline hash and byte count.
+
+| Format | Parent | Combined candidate | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.370 ms/image | 38.850 ms/image | -1.520 ms |
+| JPEG lossy | 40.441 ms/image | 39.103 ms/image | -1.338 ms |
+
+The PNG result barely crossed 1.5 ms/image, but JPEG did not, and an earlier
+screen put both gains near 1.36 ms/image. The improvement therefore did not
+robustly clear the retention threshold across the two target formats, so the
+candidate was removed. Raw evidence is
+`evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/i4-static-pred-warp-commit-screen.jsonl`.
