@@ -1,0 +1,80 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v6-phase3-local-validation-v1",
+  "status": "PASS_WITH_EXPECTED_FAIL_CLOSED_VALIDATE_REFUSAL",
+  "source_commit_before_phase3_files": "20359ce80173d72a8c2766926f3a29f23f177854",
+  "timed_workload_invoked": false,
+  "remote_command_invoked": false,
+  "benchmark_lease_acquisition_attempted": false,
+  "profiler_invocations": 0,
+  "cuda_invocations": 0,
+  "process_signals": 0,
+  "production_promotion_authorized": false,
+  "commands": [
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v6_protocol.py",
+      "status": "PASS",
+      "summary": "specialization identity, one selected DP body, disjoint modes, 24-command plan, three-state lease return, no-workload rehearsal, diagnostic-only policy"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v6_admission.py",
+      "status": "PASS",
+      "summary": "canonical paths, bundle verification, receipt fail-closure, mode/session table, malformed rejection, exact-child cleanup contract"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v6_archive.py",
+      "status": "PASS",
+      "summary": "indexed archive build/extract, normalized full inventory, hash verification, no partial extraction, malicious-member rejection"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v6_process_ownership.py",
+      "status": "PASS",
+      "summary": "only retained direct-child handles are signal-capable; discovered processes are refusal-only; cleanup is receipt-scoped"
+    },
+    {
+      "command": "python3 scripts/test_experiment_guards.py",
+      "status": "PASS",
+      "summary": "26 independent build/runtime guards, fail-closed leases, V1-V6 process ownership"
+    },
+    {
+      "command": "python3 scripts/test_backref_cost_attribution_v6_experiment.py",
+      "status": "PASS",
+      "summary": {
+        "correctness_encodes": 16,
+        "counter_cells": 4,
+        "sanitizer_configurations": 2,
+        "boundary_fixtures": 16,
+        "default_omission": true,
+        "public_api_abi_equal": true,
+        "exact_runtime_truth_table": {
+          "absent": false,
+          "": false,
+          "0": false,
+          "01": false,
+          "1": true,
+          "true": false
+        },
+        "timer_validation": {
+          "clock_reads": 4096,
+          "positive_deltas": 1463,
+          "elapsed_ns": 61000,
+          "mean_read_delta_ns": 14,
+          "minimum_positive_delta_ns": 41,
+          "maximum_delta_ns": 83,
+          "monotonic": true,
+          "performance_sample": false
+        }
+      }
+    },
+    {
+      "command": "env -u WEBP_BENCHMARK_SESSION EXPECTED_FREEZE_COMMIT=20359ce80173d72a8c2766926f3a29f23f177854 python3 scripts/execute_backref_cost_attribution_v6.py validate",
+      "status": "EXPECTED_REFUSAL",
+      "exit_code": 1,
+      "summary": "failed closed locally because rehearsal/transfer-cleanup.json is absent; no remote contact or timed binary invocation"
+    },
+    {
+      "command": "independent SHA-256, Git ancestry/tree/blob, Phase-1B diff-boundary, evidence inventory, and empty-row reconstruction",
+      "status": "PASS",
+      "summary": "linear two-commit ancestry; 27 immutable artifacts and zero mismatches; three allowed Phase-1B additions; four pre-evaluation V6 evidence files; no execution directory, JSONL, or raw timed rows"
+    }
+  ]
+}

@@ -1,0 +1,200 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v6-frozen-protocol-v1",
+  "protocol_version": 2,
+  "experiment_id": "backref_cost_attribution_v6",
+  "base_commit": "c9d21ac9c512c94f036fc2db7eb118da83b4f7f9",
+  "required_expected_commit_environment": "EXPECTED_FREEZE_COMMIT",
+  "phase_1_decision": {
+    "status": "PENDING_PHASE_1B_AUTHORIZATION",
+    "timed_execution_authorized": false,
+    "reason": "the frozen Phase-1A source cannot authorize itself; only an evidence-only direct-child Phase-1B envelope may authorize one later timed execution",
+    "authorization_condition": "HEAD is Phase 1B, its sole parent and all rehearsal source receipts identify Phase 1A, frozen hashes match, and the 1A..1B diff contains additions only under the predeclared evidence/envelope paths",
+    "phase_1_performance_samples": 0
+  },
+  "phase_1_identity_contract": {
+    "source_commit": "the exact Phase-1A commit recorded by the Phase-1B envelope",
+    "freeze_commit": "the exact Phase-1B HEAD passed dynamically as EXPECTED_FREEZE_COMMIT",
+    "authorization_envelope": "evidence/backref-cost-attribution-v6-design/phase1b-authorization.json",
+    "rehearsal_hash_index": "evidence/backref-cost-attribution-v6-design/phase1b-rehearsal-hashes.json",
+    "rehearsal_evidence_prefix": "evidence/backref-cost-attribution-v6-design/rehearsal/",
+    "phase_1b_parent_rule": "exactly one parent equal to source_commit",
+    "phase_1b_diff_rule": "additions only at the rehearsal evidence prefix, hash index, and authorization envelope; every source/protocol/manifest/schema/corpus/order/count/timeout artifact remains byte-identical to Phase 1A"
+  },
+  "execution_modes": {
+    "validate": "local, WEBP_BENCHMARK_SESSION absent, hashes and contracts only",
+    "rehearse": "remote, WEBP_BENCHMARK_SESSION absent, admission/build/command/refusal/archive/cleanup only; no encoder or profiler workload",
+    "run": "Phase 2 only, exact exclusive session, one lease and 24 serial directly spawned coarse-timer processes"
+  },
+  "return_contract": {
+    "lease_transfer_states": ["not-attempted", "unavailable-after-attempt", "verified"],
+    "not_attempted_rule": "when benchmark_lease_acquisition_attempted is false, no lease artifact is requested, copied, or awaited",
+    "attempted_rule": "an acquisition attempt requires an independently transferred and verified lease receipt",
+    "cleanup_rule": "every mode requires an independent exact-child cleanup receipt and exact-child absence proof regardless of archive or lease state",
+    "control_plane": ["operator-status", "source-admission", "archive-build", "lease-when-attempted", "cleanup-last"],
+    "data_plane": "predeclared tar+gzip hash, byte size, and complete safe member inventory; bulk extraction follows all verification only",
+    "maximum_expected_run_archive_bytes": 4194304,
+    "maximum_expected_run_archive_justification": "4 MiB conservatively covers the compressed archive of 120 raw runner rows, 120 raw stage rows, all 24 commands, process/resource records and build logs; 16 correctness products are decoded and byte-compared in-process then retained as compact byte-size/SHA-256/pixel-equivalence records with input/corpus hashes, not duplicate WebP payloads",
+    "timeouts": {"compact_control_seconds": 20, "bulk_chunk_seconds": 20, "bulk_total_seconds": 60, "archive_build_seconds": 180},
+    "transport_timeout_derivation": "V5 established the conservative finite 512 KiB/20-second chunk and 60-second total bounds. V6 freezes those bounds before rehearsal; the Phase-1B envelope records the one V6 representative transfer observation without changing them."
+  },
+  "frozen_phase_1_rehearsal_command": "env -u WEBP_BENCHMARK_SESSION EXPECTED_FREEZE_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_attribution_v6.py rehearse \"$PWD/evidence/backref-cost-attribution-v6-design/rehearsal\"",
+  "frozen_phase_2_command": "env WEBP_BENCHMARK_SESSION=exclusive EXPECTED_FREEZE_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_attribution_v6.py run \"$PWD/evidence/backref-cost-attribution-v6-execution-20260819\"",
+  "candidate": {
+    "build_flag": "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT",
+    "compile_macro": "WEBP_USE_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT",
+    "runtime_flag": "WEBP_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT",
+    "runtime_value": "1",
+    "source": "src/enc/backref_cost_attribution_v6_experiment_enc.c",
+    "runner": "tools/backref_cost_attribution_v6_experiment_runner.c",
+    "runner_target": "backref_cost_attribution_v6_experiment_runner",
+    "equivalence": {
+      "source_commit": "673bc3fa",
+      "algorithm": "exact always-specialized local-hint PushInterval implementation frozen at 673bc3fa; V6 caches its selector once and owns one closed baseline/candidate DP if/else outside the predecessor fallthrough chain",
+      "preserved": ["integer costs", "strict comparisons and ties", "interval ordering", "update order", "traceback", "reference order", "cache choice", "immutable inputs", "transactional allocation fallback"],
+      "baseline": "production PushInterval and merged V5-selected DP/timer body at exact main c9d21ac9c512c94f036fc2db7eb118da83b4f7f9",
+      "single_binary_identity": true
+    }
+  },
+  "forbidden_environment": [
+    "CUDA_VISIBLE_DEVICES", "MallocNanoZone", "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT",
+    "WEBP_BACKREF_COST_TRACEBACK_EXPERIMENT", "WEBP_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT", "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT", "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT", "WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT", "WEBP_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT", "WEBP_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT", "WEBP_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT"
+  ],
+  "remote_host": {
+    "ssh_alias": "pandocs-agent", "system": "Darwin", "architecture": "arm64",
+    "hardware_model": "Mac16,10", "cpu_brand": "Apple M4", "physical_memory_bytes": 25769803776,
+    "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+    "compiler_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "compiler_version_lines": [
+      "Apple clang version 17.0.0 (clang-1700.6.4.2)", "Target: arm64-apple-darwin25.2.0",
+      "Thread model: posix", "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+    ],
+    "sdk_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+    "sdk_version": "26.2",
+    "required_thermal_lines": ["No thermal warning level has been recorded", "No performance warning level has been recorded", "No CPU power status has been recorded"],
+    "safe_root_basename": ".libwebp-metal-backref-cost-attribution-v6",
+    "runner_policy": "Runner.Listener may remain; Runner.Worker fails closed",
+    "permission_rule": "the selected diagnostic uses no attach API, profiler, authentication UI, privacy prompt, or discovered-PID control"
+  },
+  "diagnostic": {
+    "primary": "coarse monotonic stage timers", "fallback": null,
+    "clock": "mach_continuous_time converted with mach_timebase_info", "external_profiler_invocations": 0,
+    "record_command_template": ["/usr/bin/env", "FROZEN_ENV...", "RUNNER", "profile", "INPUT", "CASE", "METHOD", "VARIANT", "1", "4"],
+    "executables": {
+      "clang": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang", "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a"},
+      "xcrun": {"path": "/usr/bin/xcrun", "sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152"},
+      "nm": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm", "sha256": "a42f25b6363f3d43b911733a276a46bdbed894f1ef8e764cb7461ebdb37a15e7"}
+    },
+    "selection": {
+      "sample": "rejected: PID attachment and task-port permission are unnecessary risks",
+      "xctrace": "rejected: v1 never established noninteractive launch permission and prompting cannot be rehearsed safely",
+      "coarse_timers": "selected: in-process, noninteractive, no attach rights, and availability can be validated without encoder execution"
+    }
+  },
+  "build": {
+    "system": "makefile.unix", "metal": false, "cflags": "-O3 -g -DNDEBUG -fno-omit-frame-pointer",
+    "ar": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+    "ranlib": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+    "identity_rule": "one optimized Mach-O serves baseline and candidate; exact private symbols and binary SHA-256 are recorded"
+  },
+  "corpus": [
+    {"case_id": "photo-large", "file": "photo-large.ppm", "category": "photo", "width": 3000, "height": 2000, "sha256": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612"},
+    {"case_id": "graphic-large", "file": "graphic-large.ppm", "category": "graphic", "width": 3000, "height": 2000, "sha256": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc"}
+  ],
+  "protocol": {
+    "purpose": "causal coarse-stage attribution only, never a promotion A/B", "methods": [4, 6],
+    "profile_repetitions": 3, "warmups_per_profile": 1, "retained_encodes_per_profile": 4,
+    "profile_processes": 24, "runner_output_records": 120, "stage_records": 120, "retained_stage_records": 96,
+    "variant_order": [["baseline", "candidate"], ["candidate", "baseline"], ["baseline", "candidate"]],
+    "case_order": ["photo-large", "graphic-large"],
+    "lifecycle": "one import, one excluded warmup, then four retained coarse-timer encodes per process",
+    "serial_rule": "one synchronous directly spawned runner at a time under one exclusive lease; no overlap or retry",
+    "correctness": "before timing, exactly two baseline and two candidate encodes per case/method (16 total); exact bitstreams, decoded RGB pixels, repeat determinism, exact runtime fallback, and immutable inputs must match",
+    "selected_dp_structure": "before timing, baseline and candidate counter checks for every case/method require one selector evaluation per actual DP body, no opposite body call, equal bytes, and zero counters after reset",
+    "perturbation": "monotonic clocks occur only at whole stages and DP setup/steady/trace/materialize boundaries; no per-PushInterval clock; no timed result may support production promotion"
+  },
+  "acceptance": {
+    "diagnostic_only": true,
+    "required_symbols": ["WebPEncode", "VP8LEncodeStream", "VP8LHashChainFill", "VP8LGetBackwardReferences", "VP8LBackwardReferencesTraceBackwards", "BackwardReferencesHashChainDistanceOnly", "BackwardReferencesHashChainDistanceOnlySpecialized", "PushInterval", "PushIntervalSpecialized", "InsertInterval", "CostManagerInit", "CostModelBuild", "TraceBackwards", "BackwardReferencesHashChainFollowChosenPath", "EncodeImageInternal", "GetHuffBitLengthsAndCodes", "StoreImageToBitMask"],
+    "required_timer_stages": ["lossless_analyze", "lossless_hash_chain", "lossless_backward_refs", "lossless_histogram", "lossless_huffman", "lossless_bitstream", "backref_cost_dp_total", "backref_cost_dp_setup", "backref_cost_dp_steady", "backref_cost_traceback", "backref_cost_materialize"],
+    "per_profile": "five runner output records, five stage records, four retained records, exact schemas, and zero stderr",
+    "repeatability": "for each case/method/variant, three retained-total medians have max/min <=1.25 and each major stage-share range <=0.10 absolute",
+    "timer_accounting": "on every successful encode selected_dp_calls == selector_evaluations == DP total.calls == DP setup.calls == DP steady.calls; baseline/candidate body identity exact; setup+steady <= DP total; DP total+traceback+materialize <= backward refs",
+    "timer_boundaries": "DP total is immediately around exactly one selected DP body including cleanup; setup starts before allocation and ends only after successful CostManagerInit; steady covers only initial literal plus pixel DP loop; traceback and materialization are separately timed; no per-pixel or PushInterval clock",
+    "maximum_mean_clock_read_delta_ns": 10000,
+    "build_identity": "single runner SHA-256, frozen clang/SDK/flags, and required private symbols",
+    "resources": "AC power, LPM off, no thermal warning, >=4 GiB free memory, >=8 GiB disk, output <=2 GiB, one directly owned child",
+    "correctness_required": true, "production_promotion_forbidden": true
+  },
+  "interpretation": {
+    "quantify": "report total and every timed stage share and baseline-to-candidate delta separately for each case/method",
+    "interval_materiality": "bound specialization effect within DP steady time; coarse timers do not claim PushInterval self time",
+    "layout_limit": "coarse timers cannot attribute code-layout, cache, or internal call-stack causes; label them unresolved",
+    "close_family": "close/reopen decisions require consistent DP and total deltas within frozen repeatability gates",
+    "next_stage": "rank only measured coarse stages separately for methods 4/6",
+    "follow_up": "a later evaluator may propose one new gated experiment but cannot implement it from this evidence",
+    "no_pooling": "no old samples, call-stack claims, relabeling, thresholds, graphic-only path, Metal, or CUDA"
+  },
+  "resources": {
+    "lease_path": "~/.libwebp-metal-backref-cost-attribution-v6.lock", "profile_timeout_seconds": 600,
+    "remote_timeout_seconds": 7200, "transfer_timeout_seconds": 60,
+    "archive_build_timeout_seconds": 180, "maximum_output_bytes": 2147483648,
+    "minimum_available_memory_bytes": 4294967296, "minimum_available_disk_bytes": 8589934592,
+    "parallel_profile_processes": 1
+  },
+  "schemas": {
+    "catalog": "scripts/backref_cost_attribution_v6_schemas.json",
+    "artifact_hashes": "libwebp-backref-cost-attribution-v6-artifact-hashes-v1",
+    "cleanup_receipt": "libwebp-backref-cost-attribution-v6-cleanup-receipt-v1",
+    "lease": "libwebp-backref-cost-attribution-v6-lease-v1",
+    "lease_transfer": "libwebp-backref-cost-attribution-v6-lease-transfer-v1",
+    "operator_status": "libwebp-backref-cost-attribution-v6-operator-status-v1",
+    "refusal": "libwebp-backref-cost-attribution-v6-refusal-v1",
+    "rehearsal": "libwebp-backref-cost-attribution-v6-rehearsal-v1",
+    "transfer_cleanup": "libwebp-backref-cost-attribution-v6-transfer-cleanup-v1"
+  },
+  "admission_identity_paths": [
+    "scripts/backref_cost_attribution_v6_manifest.json", "scripts/backref_cost_attribution_v6_schemas.json",
+    "scripts/backref_cost_attribution_v6_archive.py", "scripts/backref_cost_attribution_v6_admission.py",
+    "scripts/backref_cost_attribution_v6_paths.py", "scripts/run_backref_cost_attribution_v6_experiment.py",
+    "scripts/execute_backref_cost_attribution_v6.py", "doc/backref-cost-attribution-v6-protocol-20260819.md",
+    "scripts/test_backref_cost_attribution_v6_admission.py", "scripts/test_backref_cost_attribution_v6_archive.py",
+    "scripts/test_backref_cost_attribution_v6_experiment.py", "scripts/test_backref_cost_attribution_v6_process_ownership.py",
+    "scripts/test_backref_cost_attribution_v6_protocol.py", "scripts/test_experiment_guards.py",
+    "doc/experiment-guard-matrix.md", "evidence/backref-cost-attribution-v6-design/phase1-local-validation.json"
+  ],
+  "frozen_artifacts": [
+    {"path": "CMakeLists.txt", "sha256": "1e5ded05fa91c6b035a551a6e7d5f126726ad33300d1535bb39501e9722ec421"},
+    {"path": "makefile.unix", "sha256": "ca31a1d2818a7498c36a9d9aab2070eb4a289bb55b2bcbfb385bc230f35b08c9"},
+    {"path": "src/enc/backward_references_cost_enc.c", "sha256": "2221ed1a1831ba1625d56144dc7d08bd26678d9f267299977fa264af664c3822"},
+    {"path": "src/enc/backward_references_cost_distance_only_enc.inc", "sha256": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5"},
+    {"path": "src/enc/backward_references_enc.c", "sha256": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03"},
+    {"path": "src/enc/profile_enc.c", "sha256": "b21030b1e6ce463c678aec3317a3aac7a689464a5842c0091884a8a238d8334c"},
+    {"path": "src/enc/profile_enc.h", "sha256": "d3b0ed354ba13e906588c0f049ef61be15f003f6cc51cc3cf29a4251b7ed532e"},
+    {"path": "src/enc/vp8l_enc.c", "sha256": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0"},
+    {"path": "src/enc/backref_cost_attribution_v6_experiment_enc.c", "sha256": "017f65681368d18f4c18dc90c56b96db46aff5918367773f95f0154882b253d3"},
+    {"path": "src/enc/backref_cost_attribution_v6_experiment_enc.h", "sha256": "cc116257b345ab8f7dc6a84d2a838b789fa628c39d43112b39e0c583069cde8d"},
+    {"path": "tools/backref_cost_attribution_v6_experiment_runner.c", "sha256": "f99cc846ba1cd8fcc8a478fde119fca80d0f8c4cc716b75a75c9bb1b8d893691"},
+    {"path": "scripts/backref_cost_attribution_v6_paths.py", "sha256": "b69208e94dbc2384794642780be9155f45884370b83802c9447b47008e7ba695"},
+    {"path": "scripts/backref_cost_attribution_v6_admission.py", "sha256": "8faf984fb3019456975acd63cf42136f209f0a683fc30d0aad45df7c6230c483"},
+    {"path": "scripts/backref_cost_attribution_v6_archive.py", "sha256": "acf65c37c8fa0450011a7caf14b2ebf95cbc902a68d27917a916ed0da25207a1"},
+    {"path": "scripts/backref_cost_attribution_v6_schemas.json", "sha256": "5177ad4a5c144b50dd26a71672dbc5a59ced7577f0f709377c6f2837ce0da2ea"},
+    {"path": "scripts/run_backref_cost_attribution_v6_experiment.py", "sha256": "a9a0553507022130f8c2717c9a0bf6269c6b09ede387501eecd3aaeee38480da"},
+    {"path": "scripts/execute_backref_cost_attribution_v6.py", "sha256": "672348c592d6993f5e95e790f0bcdebfdab720a04056153d41e2734c2a2179d7"},
+    {"path": "scripts/test_backref_cost_attribution_v6_admission.py", "sha256": "275bc4b9ea40fdbd8b7c1520f0812060ecc1ba58c1c7dcc41fc6899f13cfa54f"},
+    {"path": "scripts/test_backref_cost_attribution_v6_archive.py", "sha256": "ead4ec7a8530d032db481b63846a8b12012af27172cb8ac42b989ffbc55b2896"},
+    {"path": "scripts/test_backref_cost_attribution_v6_experiment.py", "sha256": "d7e9ac13804727344614e5e0372bf3e599b32108fa9b822e46d567c5b250bfc3"},
+    {"path": "scripts/test_backref_cost_attribution_v6_process_ownership.py", "sha256": "ebde0acf531792fa69d899597f1e50083480fd49182fe74ea79953d1e6b876d5"},
+    {"path": "scripts/test_backref_cost_attribution_v6_protocol.py", "sha256": "a414d0d4e881277d73c1d8d6d46ea586fbad272abdb35b752e336a76810558d9"},
+    {"path": "scripts/test_experiment_guards.py", "sha256": "e5a3d2d5e1a6244c79a18af0c620d10f5a8d7ddb6b2ae7204bb69decb041af92"},
+    {"path": "doc/backref-cost-attribution-v6-protocol-20260819.md", "sha256": "84134ae5725615122b46022465b166ebe1a3d62d3cbd974af272e66b74e973e7"},
+    {"path": "doc/experiment-guard-matrix.md", "sha256": "37d331c4cec09606239ad22a1162b1182d07ce000bc37403c375afd31f3b2e71"},
+    {"path": "evidence/backref-cost-attribution-v6-design/phase1-local-validation.json", "sha256": "200e77e0b7fdd127f356849de90b143f6ea90cf49bb2b675342de7f843d05a24"}
+  ]
+}

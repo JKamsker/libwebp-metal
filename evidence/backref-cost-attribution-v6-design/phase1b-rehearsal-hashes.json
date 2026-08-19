@@ -1,0 +1,12 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v6-phase1b-hash-index-v1",
+  "source_commit": "f3e0aa9bf9ac1dfefaf2687743387838b7d204db",
+  "source_tree": "dfb525f81979cd1ff5992a1d1f4c4865807812d2",
+  "artifacts": [
+    {
+      "path": "rehearsal-invocation.json",
+      "bytes": 1772,
+      "sha256": "5c6a71df1947fc330592e851ba0a3b4bac324094f5e1e31f218fe6ab45ec2d99"
+    }
+  ]
+}

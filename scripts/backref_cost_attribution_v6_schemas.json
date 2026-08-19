@@ -1,0 +1,21 @@
+{
+  "protocol_version": 2,
+  "schemas": [
+    "libwebp-backref-cost-attribution-v6-archive-v1",
+    "libwebp-backref-cost-attribution-v6-archive-inventory-v1",
+    "libwebp-backref-cost-attribution-v6-authorization-v1",
+    "libwebp-backref-cost-attribution-v6-artifact-hashes-v1",
+    "libwebp-backref-cost-attribution-v6-cleanup-receipt-v1",
+    "libwebp-backref-cost-attribution-v6-control-plane-v1",
+    "libwebp-backref-cost-attribution-v6-counter-check-v1",
+    "libwebp-backref-cost-attribution-v6-lease-v1",
+    "libwebp-backref-cost-attribution-v6-lease-transfer-v1",
+    "libwebp-backref-cost-attribution-v6-operator-status-v1",
+    "libwebp-backref-cost-attribution-v6-phase1b-hash-index-v1",
+    "libwebp-backref-cost-attribution-v6-refusal-v1",
+    "libwebp-backref-cost-attribution-v6-rehearsal-v1",
+    "libwebp-backref-cost-attribution-v6-source-admission-receipt-v1",
+    "libwebp-backref-cost-attribution-v6-timer-check-v1",
+    "libwebp-backref-cost-attribution-v6-transfer-cleanup-v1"
+  ]
+}

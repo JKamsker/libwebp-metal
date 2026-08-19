@@ -1,0 +1,363 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v6-phase3-audit-v1",
+  "generated_at_utc": "2026-08-19T07:43:11Z",
+  "phase": 3,
+  "evaluator": "Sol/high",
+  "evaluation_status": "complete",
+  "evaluated_head": "20359ce80173d72a8c2766926f3a29f23f177854",
+  "decision": {
+    "interval_family": "unassessed",
+    "close_family": false,
+    "reopen_family": false,
+    "new_bounded_experiment_selected": false,
+    "new_bounded_experiment_implemented": false,
+    "new_bounded_experiment_run": false,
+    "next_cpu_stage_ranked": false,
+    "next_cpu_stage": null,
+    "production_promotion_authorized": false,
+    "production_disposition": "NO-GO",
+    "reason": "Phase 1B expressly refused timed execution and no V6 raw timed rows exist"
+  },
+  "blocked_reason": {
+    "authorization_status": "REFUSED",
+    "timed_execution_authorized": false,
+    "phase_2_authority": "NONE",
+    "exact_reason": "the sole no-retry rehearsal ended in SSH cleanup timeout without independent cleanup/absence proof; no timed Phase 2 execution is authorized",
+    "failed_operation": "exact canonical-child cleanup",
+    "ssh_error": "ssh: connect to host 100.85.234.14 port 22: Operation timed out",
+    "cleanup_target": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-attribution-v6/run.etNrsc",
+    "remote_operator_invoked": false,
+    "remote_cleanup_absence_proved": false,
+    "follow_up_remote_contact_forbidden": true,
+    "retry_count": 0,
+    "rerun_count": 0
+  },
+  "ancestry": {
+    "linear_from_frozen_main": true,
+    "commit_distance_from_main": 2,
+    "frozen_main": {
+      "commit": "c9d21ac9c512c94f036fc2db7eb118da83b4f7f9",
+      "tree": "0537b71b0915a5b3718c0155c351511e0cb60c64"
+    },
+    "phase_1a": {
+      "commit": "f3e0aa9bf9ac1dfefaf2687743387838b7d204db",
+      "parent": "c9d21ac9c512c94f036fc2db7eb118da83b4f7f9",
+      "tree": "dfb525f81979cd1ff5992a1d1f4c4865807812d2",
+      "changed_files": 24,
+      "insertions": 4669,
+      "deletions": 22
+    },
+    "phase_1b": {
+      "commit": "20359ce80173d72a8c2766926f3a29f23f177854",
+      "parent": "f3e0aa9bf9ac1dfefaf2687743387838b7d204db",
+      "tree": "b766e3ec274ab635e354d50f030b7e8d44354d6f",
+      "changed_files": 3,
+      "insertions": 78,
+      "deletions": 0,
+      "only_allowed_additions": true
+    },
+    "handoff_identifier_discrepancy": {
+      "supplied_phase_1a": "f3e0aa9bf9ac1dfefaf2687743387838b7d204db2",
+      "supplied_length": 41,
+      "supplied_resolves": false,
+      "repository_phase_1a": "f3e0aa9bf9ac1dfefaf2687743387838b7d204db",
+      "repository_and_envelope_consistent": true
+    }
+  },
+  "identity": {
+    "immutable_artifact_count": 27,
+    "manifest_enumerated_frozen_artifacts": 26,
+    "manifest_itself_is_separately_enveloped": true,
+    "phase_1a_to_phase_1b_byte_identical": 27,
+    "digest_mismatches": 0,
+    "core": {
+      "manifest": {
+        "path": "scripts/backref_cost_attribution_v6_manifest.json",
+        "bytes": 19468,
+        "sha256": "cb3dbeb9f6cb60b7c0100e8a25a5c5459da291edca1e87e90d41e98b65f022e9",
+        "git_blob": "5e21aca61e7a5ff897629dd0399841dcb41652af"
+      },
+      "protocol": {
+        "path": "doc/backref-cost-attribution-v6-protocol-20260819.md",
+        "bytes": 11076,
+        "sha256": "84134ae5725615122b46022465b166ebe1a3d62d3cbd974af272e66b74e973e7",
+        "git_blob": "b3c8dca082525e5cbd19ca0cbb8f5a10ef31d678"
+      },
+      "schema_catalog": {
+        "path": "scripts/backref_cost_attribution_v6_schemas.json",
+        "bytes": 1011,
+        "sha256": "5177ad4a5c144b50dd26a71672dbc5a59ced7577f0f709377c6f2837ce0da2ea",
+        "git_blob": "bbd41b54d19806dee624245167c445586b74c5b6",
+        "schema_count": 16
+      },
+      "phase1_local_validation": {
+        "path": "evidence/backref-cost-attribution-v6-design/phase1-local-validation.json",
+        "bytes": 2372,
+        "sha256": "200e77e0b7fdd127f356849de90b143f6ea90cf49bb2b675342de7f843d05a24",
+        "git_blob": "4b80a8541c493e9fee73db15ee71a21bf55f305c"
+      }
+    },
+    "phase_1b_diff": [
+      {"status": "A", "path": "evidence/backref-cost-attribution-v6-design/phase1b-authorization.json"},
+      {"status": "A", "path": "evidence/backref-cost-attribution-v6-design/phase1b-rehearsal-hashes.json"},
+      {"status": "A", "path": "evidence/backref-cost-attribution-v6-design/rehearsal/rehearsal-invocation.json"}
+    ]
+  },
+  "authorization": {
+    "effective_authorization_valid": false,
+    "benchmark_lease_acquisition_attempted": false,
+    "missing_required_rehearsal_receipts": [
+      "transfer-cleanup.json",
+      "rehearsal.json",
+      "return-protocol/source-admission-receipt.json",
+      "return-protocol/operator-status.json",
+      "return-protocol/cleanup-receipt.json"
+    ],
+    "observed_transport_calibration": {
+      "status": "NOT_OBSERVED",
+      "archive_bytes": 0,
+      "archive_sha256": null,
+      "chunk_count": 0,
+      "elapsed_ns": 0,
+      "throughput_bytes_per_second": 0
+    },
+    "phase_2_command_invoked": false,
+    "timed_pipeline_invocations": 0,
+    "remote_commands_in_phase_2": 0,
+    "fallback_invocations": 0,
+    "profiler_invocations": 0,
+    "cuda_invocations": 0
+  },
+  "evidence_inventory": {
+    "pre_evaluation_files": 4,
+    "pre_evaluation_bytes": 6468,
+    "files": [
+      {
+        "path": "evidence/backref-cost-attribution-v6-design/phase1-local-validation.json",
+        "bytes": 2372,
+        "sha256": "200e77e0b7fdd127f356849de90b143f6ea90cf49bb2b675342de7f843d05a24",
+        "git_blob": "4b80a8541c493e9fee73db15ee71a21bf55f305c"
+      },
+      {
+        "path": "evidence/backref-cost-attribution-v6-design/phase1b-authorization.json",
+        "bytes": 1943,
+        "sha256": "6769eddd63dc4c7c556d3189b196630c438667cc12ed26115b2cb1937292ee50",
+        "git_blob": "eb98f40cf399e9ed60c455819a91021a6f9d58c4"
+      },
+      {
+        "path": "evidence/backref-cost-attribution-v6-design/phase1b-rehearsal-hashes.json",
+        "bytes": 381,
+        "sha256": "ee221e70e43c8505118a7f83f572163e8d304120c3d710d2e686c65d8090a3cf",
+        "git_blob": "fd17df6242f4be7f381d4fd5775b998ab4a1654f"
+      },
+      {
+        "path": "evidence/backref-cost-attribution-v6-design/rehearsal/rehearsal-invocation.json",
+        "bytes": 1772,
+        "sha256": "5c6a71df1947fc330592e851ba0a3b4bac324094f5e1e31f218fe6ab45ec2d99",
+        "git_blob": "aad9ac45c1d506ccffe0757d9cb193f2b04b7939"
+      }
+    ],
+    "execution_directory": "evidence/backref-cost-attribution-v6-execution-20260819",
+    "execution_directory_exists": false,
+    "jsonl_files": 0
+  },
+  "frozen_plan_and_actual": {
+    "case_order": ["photo-large", "graphic-large"],
+    "method_order": [4, 6],
+    "repetition_variant_order": [
+      ["baseline", "candidate"],
+      ["candidate", "baseline"],
+      ["baseline", "candidate"]
+    ],
+    "planned": {
+      "remote_admissions": 1,
+      "exclusive_lease_attempts": 1,
+      "correctness_encodes": 16,
+      "counter_check_encodes": 8,
+      "serial_profile_processes": 24,
+      "profile_encodes_including_warmups": 120,
+      "all_encoder_encodes": 144,
+      "warmups": 24,
+      "retained_runner_rows": 96,
+      "total_runner_rows": 120,
+      "total_stage_rows": 120,
+      "timing_rows": 96
+    },
+    "actual_phase_2": {
+      "remote_admissions": 0,
+      "exclusive_lease_attempts": 0,
+      "correctness_encodes": 0,
+      "counter_check_encodes": 0,
+      "serial_profile_processes": 0,
+      "profile_encodes_including_warmups": 0,
+      "all_encoder_encodes": 0,
+      "warmups": 0,
+      "retained_runner_rows": 0,
+      "total_runner_rows": 0,
+      "total_stage_rows": 0,
+      "timing_rows": 0,
+      "performance_samples": 0,
+      "executed_profile_order": []
+    }
+  },
+  "implementation_audit": {
+    "build_gate": "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT",
+    "compile_gate": "WEBP_USE_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT",
+    "runtime_gate": "WEBP_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT=1",
+    "fresh_default_off_identity": true,
+    "predecessor_gate_isolation": true,
+    "ordinary_surface_omits_v6": true,
+    "public_api_abi_preserved_locally": true,
+    "specialized_push_interval_matches_673bc3fa": true,
+    "selector_once_before_dp_mutation": true,
+    "closed_baseline_candidate_if_else": true,
+    "predecessor_fallthrough_excluded": true,
+    "thread_local_body_counters": true,
+    "counter_reset_explicit": true,
+    "local_bitstream_and_pixel_correctness": true,
+    "timer_clock": "mach_continuous_time",
+    "timer_boundaries_match_frozen_contract": true,
+    "per_pixel_or_push_interval_clocks": 0,
+    "required_success_invariant": "selected_dp_calls == selector_evaluations == dp_total.calls == dp_setup.calls == dp_steady.calls; selected body only; setup+steady <= dp_total; dp_total+traceback+materialize <= lossless_backward_refs"
+  },
+  "source_toolchain_device_resources": {
+    "frozen_remote_target": {
+      "host_alias": "pandocs-agent",
+      "system": "Darwin",
+      "architecture": "arm64",
+      "hardware_model": "Mac16,10",
+      "cpu_brand": "Apple M4",
+      "physical_memory_bytes": 25769803776,
+      "compiler": "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+      "sdk_version": "26.2"
+    },
+    "observed_exact_source_admission": null,
+    "observed_remote_toolchain": null,
+    "observed_remote_build_identity": null,
+    "observed_remote_device": null,
+    "observed_remote_resources": null,
+    "observed_remote_correctness": null,
+    "observed_remote_process_order": null,
+    "reason_unobserved": "rehearsal refused before remote operator invocation and Phase 2 had no authority",
+    "frozen_resource_contract": {
+      "ac_power": true,
+      "low_power_mode_off": true,
+      "no_thermal_warning": true,
+      "minimum_available_memory_bytes": 4294967296,
+      "minimum_available_disk_bytes": 8589934592,
+      "parallel_profile_processes": 1
+    },
+    "local_validation_is_performance_evidence": false
+  },
+  "ownership": {
+    "rehearsal_cleanup_attempted_for_exact_validated_child": true,
+    "rehearsal_cleanup_receipt_returned": false,
+    "rehearsal_absence_proved": false,
+    "remote_operator_invoked": false,
+    "discovered_pid_signals": 0,
+    "phase_2_process_discovery_performed": false,
+    "phase_2_direct_workload_children_spawned": 0,
+    "phase_2_signals_sent": 0,
+    "local_contract_test_result": "PASS",
+    "remote_child_current_state": "UNKNOWN-no-absence-proof",
+    "remote_absence_claim_made": false
+  },
+  "return_protocol": {
+    "control_plane_receipts_obtained": 0,
+    "source_admission_receipts": 0,
+    "operator_status_receipts": 0,
+    "archive_build_receipts": 0,
+    "lease_receipts": 0,
+    "cleanup_receipts": 0,
+    "lease_state": "not-attempted-by-raw-refusal; not independently returned",
+    "bulk_archive": {
+      "build_receipts": 0,
+      "transfer_attempts_observed": 0,
+      "hash_verifications": 0,
+      "size_verifications": 0,
+      "inventory_verifications": 0,
+      "extraction_attempts": 0,
+      "status": "not-observed"
+    },
+    "cleanup": {
+      "attempts": 1,
+      "ssh_connections_completed": 0,
+      "receipts": 0,
+      "absence_proofs": 0,
+      "status": "UNKNOWN-SSH-timeout",
+      "follow_up_forbidden": true
+    },
+    "local_two_plane_and_archive_contract_tests": "PASS",
+    "local_contract_tests_are_remote_receipts": false
+  },
+  "raw_row_reconstruction": {
+    "raw_runner_rows": 0,
+    "raw_stage_rows": 0,
+    "retained_rows": 0,
+    "performance_samples": 0,
+    "accepted_statistics": 0,
+    "recomputation_result": "N/A-empty-raw-row-set",
+    "metrics": [
+      "whole_encode",
+      "lossless_analyze",
+      "lossless_hash_chain",
+      "lossless_backward_refs",
+      "backref_cost_dp_total",
+      "backref_cost_dp_setup",
+      "backref_cost_dp_steady",
+      "backref_cost_traceback",
+      "backref_cost_materialize",
+      "lossless_histogram",
+      "lossless_huffman",
+      "lossless_bitstream"
+    ],
+    "cells": [
+      {"case": "photo-large", "method": 4, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "photo-large", "method": 6, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "graphic-large", "method": 4, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null},
+      {"case": "graphic-large", "method": 6, "baseline_rows": 0, "candidate_rows": 0, "medians": null, "shares": null, "deltas": null, "repeatability": null}
+    ],
+    "limitations": [
+      "no raw V6 timed rows exist",
+      "no old samples may be pooled or relabeled",
+      "coarse timers cannot establish PushInterval self time, call-stack, code-layout, branch-predictor, or cache causality"
+    ]
+  },
+  "local_validation": {
+    "status": "PASS_WITH_EXPECTED_FAIL_CLOSED_VALIDATE_REFUSAL",
+    "timed_workload_invoked": false,
+    "remote_command_invoked": false,
+    "benchmark_lease_acquisition_attempted": false,
+    "profiler_invocations": 0,
+    "cuda_invocations": 0,
+    "process_signals": 0,
+    "correctness_encodes": 16,
+    "counter_cells": 4,
+    "sanitizer_configurations": 2,
+    "boundary_fixtures": 16,
+    "timer_validation": {
+      "clock_reads": 4096,
+      "positive_deltas": 1463,
+      "elapsed_ns": 61000,
+      "mean_read_delta_ns": 14,
+      "minimum_positive_delta_ns": 41,
+      "maximum_delta_ns": 83,
+      "monotonic": true,
+      "is_performance_sample": false
+    },
+    "executor_validate": {
+      "exit_code": 1,
+      "expected_fail_closed": true,
+      "error": "No such file or directory: evidence/backref-cost-attribution-v6-design/rehearsal/transfer-cleanup.json",
+      "remote_contact": false
+    }
+  },
+  "safety_and_authority_verdict": {
+    "phase_2_execution_safe_or_authorized": false,
+    "phase_3_remote_action_authorized": false,
+    "future_experiment_authorized": false,
+    "production_promotion_authorized": false,
+    "production_no_go": true,
+    "required_consequence": "retain default-off diagnostic status; make no performance or remote-cleanup claim"
+  }
+}
