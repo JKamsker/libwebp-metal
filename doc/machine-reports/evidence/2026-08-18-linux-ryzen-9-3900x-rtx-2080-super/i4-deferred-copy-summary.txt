@@ -1,0 +1,84 @@
+Experiment: pre-Ampere deferred basic-I4 reconstruction copy
+Date: 2026-08-19 UTC
+Machine: AMD Ryzen 9 3900X / NVIDIA GeForce RTX 2080 SUPER (compute 7.5)
+Branch parent: 3989ec42
+Build: build-cuda-sm75-gate, Release, WEBP_ENABLE_CUDA=ON,
+       CMAKE_CUDA_ARCHITECTURES=native
+
+Retained-head profile
+---------------------
+Command shape (one command per content kind):
+  WEBP_CUDA_DECIMATE_TIMING=2 \
+    build-cuda-sm75-gate/webp_cuda_batch_benchmark \
+    --variant cuda --mode lossy --batch-size 8 --method 4 --quality 75 \
+    --warmups 1 --samples 3 --force-cuda \
+    /tmp/libwebp-cuda-batch-corpus-20260818/ppm/<kind>-large.ppm
+
+Stable 3000x2000 phase shares:
+  photo:   I4 63.2%
+  texture: I4 64.8%
+  graphic: I4 34.9% (I16 selection 25.2%)
+
+Temporary abort-counter probe
+-----------------------------
+The probe counted I4-eligible macroblocks, cases where the fixed 211-bit I4
+entry cost already met/exceeded the selected I16 score, abort diagonal 0..9,
+and accepted I4 decisions. It did not alter decisions.
+
+The initial bound hit zero times. Representative method-4 results included:
+  photo-small:    total 1024, accepted 488, abort d8 20, d9 516
+  photo-medium:   total 7500, accepted 4101, abort d8 132, d9 3267
+  texture-small:  total 1024, accepted 1024
+  texture-medium: total 7500, accepted 7500
+  graphic-small:  total 1024, accepted 151; aborts spread across d0..d9
+  graphic-medium: total 7500, accepted 191; d1 1220, d3 4567 dominant
+
+Candidate and correctness correction
+------------------------------------
+The first candidate skipped the whole accepted-I4 publication loop. The loop
+also publishes winning coefficient levels, so the end-to-end parity screen
+caught changed hashes and byte counts:
+  PNG baseline 743146796a9addc7 / 1610422 bytes
+      candidate 244ef6f8a2e1645b / 1550038 bytes
+  JPEG baseline 8abe9f8c33699452 / 1600198 bytes
+       candidate 727442321fbf19a8 / 1529050 bytes
+
+Those invalid timings were not used for a performance decision. The corrected
+candidate always published the 256 coefficient levels and deferred only the
+256 reconstructed luma pixels. It was compile-time restricted to
+__CUDA_ARCH__ < 800. Method-5/6 trellis and the Ampere+ branch retained the
+parent path. All seven focused CTests passed.
+
+Corrected A/B protocol and result
+---------------------------------
+Each arm used a separate statically linked native-sm_75 executable. Two
+order-reversed pairs per format used the six small/medium corpus images, one
+warmup, and six measured persistent batches per process (48 JSON records):
+  --variant cuda --mode lossy --batch-size 6 --method 4 --quality 75
+  --warmups 1 --samples 6 --force-cuda <six PNG or JPEG inputs>
+
+Pooled medians (milliseconds/image):
+  PNG:  baseline 40.440180, candidate 40.360971, gain 0.079209
+  JPEG: baseline 40.287371, candidate 40.330468, gain -0.043097
+
+Every corrected PNG row used hash 743146796a9addc7 and 1610422 bytes. Every
+corrected JPEG row used hash 8abe9f8c33699452 and 1600198 bytes. Baseline and
+candidate CUDA resource reports were identical. The candidate was rejected
+and removed because it was neutral-to-negative and far below the strict
+1.5 ms/image retention threshold. No Ampere+ behavior or performance claim
+was changed.
+
+Raw files
+---------
+i4-deferred-copy-retained-phase-{photo,texture,graphic}.txt
+i4-deferred-copy-abort-profile.txt
+i4-deferred-copy-abort-probe.patch.gz
+i4-deferred-copy-invalid-v1-screen.jsonl
+i4-deferred-copy-invalid-v1.patch.gz
+i4-deferred-copy-corrected-screen.jsonl
+i4-deferred-copy-rejected.patch.gz
+i4-deferred-copy-{baseline,candidate}-resources.txt
+i4-deferred-copy-{baseline,candidate}-sass.txt.gz
+i4-deferred-copy-binary-sha256.txt
+i4-deferred-copy-native-cmake-cache.txt
+i4-deferred-copy-restored-ctest.txt

@@ -242,3 +242,33 @@ the four-column human-readable `report.md`.
   validation records, and computed medians.
 - `scripts/benchmark_cuda_end_to_end.py`: portable cross-system runner and
   report generator for the same PNG/JPEG lifecycle matrix.
+
+## Pre-Ampere deferred basic-I4 reconstruction-copy rejection
+
+A refreshed native-sm_75 device trace kept I4 at 63.2% of photo and 64.8% of
+texture block cycles. A temporary counter probe found the fixed 211-bit I4
+entry cost never rejected a macroblock before the first 4x4 block, but I4 was
+ultimately accepted for every representative texture macroblock and about
+half of photo macroblocks. The candidate therefore left accepted method-4
+luma pixels in the completed I4 scratch plane and selected that plane at the
+final reconstruction write, avoiding a redundant 256-byte shared-memory copy.
+It was compile-time restricted to pre-Ampere; trellis modes and Ampere+
+retained the parent path.
+
+The first prototype incorrectly skipped coefficient-level publication along
+with the pixels; the aggregate parity gate caught different hashes and byte
+counts, and those timings were discarded. The corrected candidate always
+published the exact winning levels. Seven CTests passed and all 48 corrected
+A/B rows were byte-exact:
+
+| Format | Parent | Deferred pixel copy | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.440 ms/image | 40.361 ms/image | 0.079 ms/image |
+| JPEG lossy | 40.287 ms/image | 40.330 ms/image | -0.043 ms/image |
+
+The candidate was removed because it is neutral-to-negative and far below the
+1.5 ms/image threshold. Raw phase traces, abort counters, the invalid and
+corrected screens, exact patch, native cache, resource/SASS reports, binary
+hashes, and restored-parent CTest log are stored under the
+`i4-deferred-copy-*` prefix in the RTX 2080 SUPER evidence directory. This is
+Turing-only performance evidence and makes no Ampere+ claim.

@@ -1,0 +1,67 @@
+decimate GPU wall: 48.16 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.3% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 47.41 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.3% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 47.36 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.3% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.89 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.93 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.2% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.97 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.88 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.2% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.98 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.93 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.2% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.92 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.91 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.95 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.97 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.2% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.88 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.97 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.90 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.92 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.97 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.88 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.2% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.96 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.97 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.88 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.97 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.2% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.90 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.97 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.2% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.94 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.94 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.2% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.99 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.95 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.2% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.95 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 39.01 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+decimate GPU wall: 38.93 ms (188x125 MBs)
+decimate phases (% of block cycles): import 4.1% i16-num 10.4% i16-sel 9.1% i4 63.2% uv-num 4.9% uv-sel 7.7% recon 0.5%
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":8,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":48000000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":801321411,"ns_per_image":100165176.375,"images_per_second":9.983510,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"be8e0162eb1601a3","output_bytes":5163888}
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":8,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":48000000,"method":4,"quality":75,"near_lossless":40,"sequence":1,"elapsed_ns":810900510,"ns_per_image":101362563.750,"images_per_second":9.865575,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"be8e0162eb1601a3","output_bytes":5163888}
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":8,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":48000000,"method":4,"quality":75,"near_lossless":40,"sequence":2,"elapsed_ns":800021122,"ns_per_image":100002640.250,"images_per_second":9.999736,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"be8e0162eb1601a3","output_bytes":5163888}

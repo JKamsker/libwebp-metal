@@ -1,0 +1,56 @@
+decimate GPU wall: 11.02 ms (32x32 MBs)
+decimate phases (% of block cycles): import 3.7% i16-num 9.0% i16-sel 9.5% i4 63.9% uv-num 5.0% uv-sel 8.3% recon 0.5%
+i4 counters: total 1024 initial-bound 0 abort-diag 0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:20 9:516 accepted 488
+decimate GPU wall: 26.62 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.8% i16-num 9.4% i16-sel 9.5% i4 63.8% uv-num 5.0% uv-sel 8.0% recon 0.5%
+i4 counters: total 7500 initial-bound 0 abort-diag 0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:132 9:3267 accepted 4101
+decimate GPU wall: 9.72 ms (32x32 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.5% i16-sel 8.6% i4 66.0% uv-num 5.8% uv-sel 5.7% recon 0.6%
+i4 counters: total 1024 initial-bound 0 abort-diag 0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:0 9:0 accepted 1024
+decimate GPU wall: 25.47 ms (100x75 MBs)
+decimate phases (% of block cycles): import 4.0% i16-num 9.9% i16-sel 8.4% i4 65.7% uv-num 5.8% uv-sel 5.6% recon 0.6%
+i4 counters: total 7500 initial-bound 0 abort-diag 0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:0 9:0 accepted 7500
+decimate GPU wall: 10.05 ms (32x32 MBs)
+decimate phases (% of block cycles): import 5.0% i16-num 11.6% i16-sel 22.0% i4 42.4% uv-num 7.0% uv-sel 11.2% recon 0.7%
+i4 counters: total 1024 initial-bound 0 abort-diag 0:70 1:202 2:41 3:282 4:29 5:105 6:43 7:73 8:13 9:15 accepted 151
+decimate GPU wall: 26.28 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.5% i16-num 12.8% i16-sel 25.0% i4 37.0% uv-num 7.3% uv-sel 11.6% recon 0.7%
+i4 counters: total 7500 initial-bound 0 abort-diag 0:181 1:1220 2:69 3:4567 4:68 5:454 6:191 7:315 8:150 9:94 accepted 191
+decimate GPU wall: 10.17 ms (32x32 MBs)
+decimate phases (% of block cycles): import 3.7% i16-num 9.0% i16-sel 9.6% i4 63.7% uv-num 5.1% uv-sel 8.4% recon 0.5%
+i4 counters: total 1024 initial-bound 0 abort-diag 0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:20 9:516 accepted 488
+decimate GPU wall: 22.25 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.4% i16-sel 9.5% i4 63.8% uv-num 5.0% uv-sel 8.0% recon 0.5%
+i4 counters: total 7500 initial-bound 0 abort-diag 0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:132 9:3267 accepted 4101
+decimate GPU wall: 7.98 ms (32x32 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.5% i16-sel 8.6% i4 65.9% uv-num 5.8% uv-sel 5.7% recon 0.6%
+i4 counters: total 1024 initial-bound 0 abort-diag 0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:0 9:0 accepted 1024
+decimate GPU wall: 20.91 ms (100x75 MBs)
+decimate phases (% of block cycles): import 4.0% i16-num 9.9% i16-sel 8.4% i4 65.7% uv-num 5.8% uv-sel 5.6% recon 0.6%
+i4 counters: total 7500 initial-bound 0 abort-diag 0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:0 9:0 accepted 7500
+decimate GPU wall: 8.26 ms (32x32 MBs)
+decimate phases (% of block cycles): import 5.1% i16-num 11.6% i16-sel 22.0% i4 42.4% uv-num 7.0% uv-sel 11.2% recon 0.7%
+i4 counters: total 1024 initial-bound 0 abort-diag 0:70 1:202 2:41 3:282 4:29 5:105 6:43 7:73 8:13 9:15 accepted 151
+decimate GPU wall: 21.60 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.5% i16-num 12.8% i16-sel 25.0% i4 37.0% uv-num 7.3% uv-sel 11.6% recon 0.7%
+i4 counters: total 7500 initial-bound 0 abort-diag 0:181 1:1220 2:69 3:4567 4:68 5:454 6:191 7:315 8:150 9:94 accepted 191
+decimate GPU wall: 8.37 ms (32x32 MBs)
+decimate phases (% of block cycles): import 3.7% i16-num 9.0% i16-sel 9.5% i4 63.8% uv-num 5.1% uv-sel 8.3% recon 0.5%
+i4 counters: total 1024 initial-bound 0 abort-diag 0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:20 9:516 accepted 488
+decimate GPU wall: 21.88 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.4% i16-sel 9.4% i4 63.8% uv-num 5.0% uv-sel 8.0% recon 0.5%
+i4 counters: total 7500 initial-bound 0 abort-diag 0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:132 9:3267 accepted 4101
+decimate GPU wall: 7.97 ms (32x32 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.5% i16-sel 8.6% i4 66.0% uv-num 5.8% uv-sel 5.7% recon 0.6%
+i4 counters: total 1024 initial-bound 0 abort-diag 0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:0 9:0 accepted 1024
+decimate GPU wall: 20.95 ms (100x75 MBs)
+decimate phases (% of block cycles): import 4.0% i16-num 9.9% i16-sel 8.4% i4 65.7% uv-num 5.8% uv-sel 5.6% recon 0.6%
+i4 counters: total 7500 initial-bound 0 abort-diag 0:0 1:0 2:0 3:0 4:0 5:0 6:0 7:0 8:0 9:0 accepted 7500
+decimate GPU wall: 8.26 ms (32x32 MBs)
+decimate phases (% of block cycles): import 5.1% i16-num 11.6% i16-sel 22.0% i4 42.4% uv-num 7.0% uv-sel 11.2% recon 0.7%
+i4 counters: total 1024 initial-bound 0 abort-diag 0:70 1:202 2:41 3:282 4:29 5:105 6:43 7:73 8:13 9:15 accepted 151
+decimate GPU wall: 21.60 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.5% i16-num 12.8% i16-sel 25.0% i4 37.0% uv-num 7.3% uv-sel 11.6% recon 0.7%
+i4 counters: total 7500 initial-bound 0 abort-diag 0:181 1:1220 2:69 3:4567 4:68 5:454 6:191 7:315 8:150 9:94 accepted 191
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":6,"input_count":6,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":6546432,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":196104440,"ns_per_image":32684073.333,"images_per_second":30.595942,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"743146796a9addc7","output_bytes":1610422}
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":6,"input_count":6,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":6546432,"method":4,"quality":75,"near_lossless":40,"sequence":1,"elapsed_ns":190602343,"ns_per_image":31767057.167,"images_per_second":31.479151,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"743146796a9addc7","output_bytes":1610422}

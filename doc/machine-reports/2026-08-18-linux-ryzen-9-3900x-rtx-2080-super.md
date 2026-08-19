@@ -1639,3 +1639,37 @@ coverage and `.gcda`/`.gcno` files are stored under `libwebp-token-page-gcov-*`;
 the exact patch, native caches, disassemblies, symbols, 7/7 CTest transcript,
 and 48 timing rows are under `libwebp-token-norun-flush-*`. This is RTX 2080
 SUPER-only evidence and makes no Ampere+ claim.
+
+## Deferred basic-I4 reconstruction-copy rejection
+
+A current-head native-sm_75 refresh measured I4 at 63.2% of photo and 64.8%
+of texture block cycles. A temporary counter probe showed that the fixed I4
+entry cost never provided a zero-work rejection, while I4 was accepted for
+all representative texture macroblocks and about half of photo macroblocks.
+This motivated a pre-Ampere-only method-4 candidate that kept accepted luma
+pixels in the completed I4 scratch plane and selected that plane at the final
+reconstruction write.
+
+The first prototype skipped a loop that also publishes coefficient levels.
+The aggregate parity screen caught the error: PNG changed from
+`743146796a9addc7` / 1,610,422 bytes to `244ef6f8a2e1645b` / 1,550,038, and
+JPEG changed from `8abe9f8c33699452` / 1,600,198 bytes to
+`727442321fbf19a8` / 1,529,050. Those timings were discarded. The corrected
+candidate always copied exact winning levels and deferred only the 256 luma
+pixels. Methods 5/6 and Ampere+ retained the parent path.
+
+All seven CTests passed. Two order-reversed pairs per format produced 48
+byte-exact timing rows:
+
+| Format | Parent | Deferred pixel copy | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.440 ms/image | 40.361 ms/image | 0.079 ms/image |
+| JPEG lossy | 40.287 ms/image | 40.330 ms/image | -0.043 ms/image |
+
+The candidate was removed because it is far below the 1.5 ms/image gate and
+slightly regresses JPEG. The full phase traces, abort histogram, invalid and
+corrected timing rows, exact rejected patch, native cache, baseline/candidate
+resource and SASS reports, binary hashes, restored-parent CTest transcript,
+and a command/result summary are stored under the `i4-deferred-copy-*` prefix
+in the adjacent evidence directory. These results characterize only the RTX
+2080 SUPER and do not alter or claim Ampere+ behavior.

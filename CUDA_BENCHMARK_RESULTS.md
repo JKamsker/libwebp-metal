@@ -1568,3 +1568,32 @@ Both formats were neutral-to-negative, so the candidate was removed. The
 retained compiler schedule already hides the almost-always-trivial capacity
 and run work. This is Ryzen 9 3900X / RTX 2080 SUPER evidence only; no Ampere+
 behavior or performance claim changes.
+
+## Turing deferred basic-I4 reconstruction-copy rejection
+
+Current-head native-sm_75 phase timing again put I4 on the device critical
+path: 63.2% of photo and 64.8% of texture block cycles. Temporary decision
+counters showed no opportunity to reject I4 from its fixed entry cost alone,
+while accepted I4 decisions covered all representative texture macroblocks
+and roughly half the photo macroblocks.
+
+A pre-Ampere-only candidate kept accepted method-4 luma pixels in the I4
+scratch plane and read them directly during the final reconstruction write.
+The first version also omitted the coefficient-level publication performed by
+the same loop. The end-to-end parity screen caught changed hashes and byte
+counts, so its timings were invalidated. The corrected version deferred only
+pixels and retained exact coefficient publication; methods 5/6 and Ampere+
+continued through the unchanged parent path.
+
+Seven CTests passed. Two order-reversed pairs per format, six measured samples
+per arm and 48 byte-exact aggregate rows, measured:
+
+| Format | Parent | Corrected candidate | Change |
+|---|---:|---:|---:|
+| PNG lossy | 40.440 ms/image | 40.361 ms/image | -0.079 ms/image |
+| JPEG lossy | 40.287 ms/image | 40.330 ms/image | +0.043 ms/image |
+
+The sub-threshold PNG change and slight JPEG regression reject the candidate.
+The source was restored. Raw evidence is archived under the
+`i4-deferred-copy-*` prefix with the RTX 2080 SUPER machine report; no Ampere+
+performance or behavior claim is made.
