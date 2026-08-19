@@ -1,0 +1,253 @@
+{
+  "schema": "libwebp-backref-cost-attribution-v13-phase3-evaluation-v1",
+  "status": "REFUSAL_CONFIRMED",
+  "evaluation_date": "2026-08-19",
+  "phase3_commit": "self: commit containing this report",
+  "branch": "codex/backref-cost-attribution-v13",
+  "identity": {
+    "base_commit": "7700d05060803afcac030aa5452849f93515b0d8",
+    "phase1a_commit": "258b217e3b277bc694ccf11f890e41c7c32efb78",
+    "phase1a_tree": "932483a6c9a1e419af0f67ed173ea5c73f87ef03",
+    "phase1b_commit": "10efe0c337ea0a82e6ba99c73a246671bb9c5554",
+    "linear_direct_children_verified": true,
+    "phase1b_added_path_count": 5,
+    "phase1b_modified_phase1a_paths": 0,
+    "frozen_artifact_count": 28,
+    "frozen_artifacts_all_match_phase1a": true,
+    "authority_hashes": {
+      "manifest_sha256": "d34f1bdef448c97fa2fbde768c863039bd310ef74e48512af33120b3c1d04eab",
+      "protocol_sha256": "37e12ad27925dd63c4e2e6ba6b4c02dec75fa9c6090f208b92f79d14186bfd11",
+      "schema_catalog_sha256": "3f7124eb61bf036645e550354d34e6698f681e8a3a2622453a147057efb6e733",
+      "transport_source_sha256": "cc0c56dbf828491e5c07cb1c12a007ae1dda39354b02384802dabd84407ad4df"
+    },
+    "authority_hashes_match_envelope": true,
+    "non_circular_authority_verified": true,
+    "authorization_validation_result": "Phase-1B did not authorize timed execution"
+  },
+  "raw_hash_index": {
+    "path": "evidence/backref-cost-attribution-v13-design/phase1b-rehearsal-hashes.json",
+    "bytes": 592,
+    "sha256": "52646b7196ce71f08170a9476388c13f920a74b728d2d11aaa61da22706d37a3",
+    "strict_lexical_unique_safe_order": true,
+    "membership_exact": true,
+    "artifacts": [
+      {
+        "path": "return-protocol/framed-stdout.bin",
+        "bytes": 1942116,
+        "sha256": "edaafe783c94d5cb9dcef376012bb64960730d1f6a92f493f3f60464be41109d",
+        "match": true
+      },
+      {
+        "path": "return-protocol/transport-stderr.bin",
+        "bytes": 0,
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "match": true
+      },
+      {
+        "path": "transfer-cleanup.json",
+        "bytes": 688,
+        "sha256": "5c2e994cd2b8c43d686dcd38286ef6b611d165911f1e1daf1f7ee6966f255708",
+        "match": true
+      }
+    ]
+  },
+  "raw_stream": {
+    "magic_bytes": 46,
+    "magic_exact": true,
+    "complete_frame_count": 8,
+    "complete_sequences": [0, 1, 2, 3, 4, 5, 6, 7],
+    "complete_kinds": [
+      "source-admission",
+      "operator-status",
+      "archive-build",
+      "lease-state",
+      "bulk-declaration",
+      "bulk-chunk",
+      "bulk-chunk",
+      "bulk-chunk"
+    ],
+    "all_complete_payload_hashes_match": true,
+    "complete_bulk_chunks": 3,
+    "partial_frame": {
+      "sequence": 8,
+      "kind": "bulk-chunk",
+      "chunk_index": 3,
+      "declared_payload_bytes": 524288,
+      "available_payload_bytes": 359772,
+      "declared_payload_sha256": "80fce27c72f7c86119e38c271b8c63a0ba0b5ff07e415018a96cc14283180195",
+      "available_payload_sha256": "203d9b2650a6ab623663c7c1981f65c98674a0c8486a00d9f9211db46f02c989"
+    },
+    "observed_archive_payload_bytes": 1932636,
+    "framing_and_control_bytes": 9480,
+    "integrity_footer_present": false,
+    "cleanup_footer_present": false,
+    "stream_finalizable": false,
+    "archive_materializable": false,
+    "safe_extraction_completed": false
+  },
+  "control_plane": {
+    "source_admission": {
+      "status": "verified",
+      "commit": "258b217e3b277bc694ccf11f890e41c7c32efb78",
+      "tree": "932483a6c9a1e419af0f67ed173ea5c73f87ef03",
+      "source_hashes_match_phase1a": true
+    },
+    "pre_operator_process_isolation": {
+      "reported_parsed_process_count": 744,
+      "reported_structural_self_to_pid1_chain": true,
+      "positive_ancestor_allowlist": false,
+      "argument_text_collected": false,
+      "filesystem_identity_operations": 0,
+      "exact_identity_conflicts": 0,
+      "discovered_pid_signals": 0,
+      "raw_snapshot_available_locally": false
+    },
+    "operator": {
+      "mode": "rehearse",
+      "status": "complete",
+      "exit_code": 0,
+      "lease_acquisition_attempted": false,
+      "production_promotion_authorized": false
+    },
+    "lease": {
+      "state": "not-attempted",
+      "receipt_required": false,
+      "receipt_available": false
+    },
+    "archive_builder": {
+      "status": "accepted",
+      "exit_code": 0
+    }
+  },
+  "transport_calculation": {
+    "representative_payload_bytes": 16777216,
+    "representative_payload_sha256": "d90bd85e521c276ce14b448ac05e57b6775fcf9dfcb37d9f90719a3d5b5d1904",
+    "representative_payload_hash_recomputed": true,
+    "maximum_expected_run_archive_bytes": 8388608,
+    "representative_payload_margin_ratio": 2.0,
+    "declared_archive_bytes": 16814059,
+    "declared_archive_sha256": "8c2cc3f909447473516153ed86fecb8592bef3ece3087477d713b7281cf19cfe",
+    "declared_chunk_bytes": 524288,
+    "declared_chunk_count": 33,
+    "declared_inventory_member_count": 12,
+    "archive_cap_bytes": 33554432,
+    "declared_archive_cap_margin_ratio": 1.9956175959653764,
+    "complete_archive_bytes": null,
+    "complete_archive_sha256": null,
+    "complete_chunk_count": null,
+    "transaction_elapsed_ns": null,
+    "complete_transport_calibration": false,
+    "deterministic_local_fixture": {
+      "build_count": 2,
+      "archive_bytes": 16782794,
+      "archive_sha256": "9d7ee691c01af8e968ff00d0cb98c51cedd76c8bce205e09ff3cc1cd00927ad8",
+      "byte_identical": true,
+      "cap_margin_ratio": 1.9993352715882706,
+      "remote_archive_proof": false
+    }
+  },
+  "refusal": {
+    "correctly_fail_closed": true,
+    "transport_state": "BULK_STREAM",
+    "deadline_kind": "bulk-progress",
+    "cleanup_state": "unknown-after-truncation",
+    "integrity_proof": false,
+    "cleanup_absence_proof": false,
+    "extraction_proof": false,
+    "resource_proof": false,
+    "timed_execution_authorized": false,
+    "production_promotion_authorized": false,
+    "rehearsal_invocation_count_persisted": 1,
+    "diagnostic_invocation_count_persisted": 0,
+    "post_session_remote_cleanup_operations": 0,
+    "follow_up_cleanup_permitted": false
+  },
+  "timing_evidence": {
+    "status": "UNAVAILABLE_UNASSESSED",
+    "reason": "No production diagnostic ran and no complete archive or timing rows were returned.",
+    "cells": [
+      {"case_id": "photo-large", "method": 4, "whole_encode": null, "backward_refs": null, "dp_total": null, "dp_setup": null, "dp_steady": null, "traceback": null, "materialize": null, "downstream": null, "shares": null, "deltas": null, "medians": null, "repeatability": null, "limits": null},
+      {"case_id": "photo-large", "method": 6, "whole_encode": null, "backward_refs": null, "dp_total": null, "dp_setup": null, "dp_steady": null, "traceback": null, "materialize": null, "downstream": null, "shares": null, "deltas": null, "medians": null, "repeatability": null, "limits": null},
+      {"case_id": "graphic-large", "method": 4, "whole_encode": null, "backward_refs": null, "dp_total": null, "dp_setup": null, "dp_steady": null, "traceback": null, "materialize": null, "downstream": null, "shares": null, "deltas": null, "medians": null, "repeatability": null, "limits": null},
+      {"case_id": "graphic-large", "method": 6, "whole_encode": null, "backward_refs": null, "dp_total": null, "dp_setup": null, "dp_steady": null, "traceback": null, "materialize": null, "downstream": null, "shares": null, "deltas": null, "medians": null, "repeatability": null, "limits": null}
+    ]
+  },
+  "decision": {
+    "interval_family": "unassessed",
+    "close_family": false,
+    "new_experiment_authorized": false,
+    "production_execution_authorized": false,
+    "future_execution_authorized": false,
+    "cpu_stage_ranking": null,
+    "cpu_stage_ranking_status": "unassessed"
+  },
+  "guarantees": {
+    "build_gate": "WEBP_BUILD_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT",
+    "compile_gate": "WEBP_USE_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT",
+    "runtime_gate": "WEBP_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT=1",
+    "default_off": true,
+    "isolated": true,
+    "ordinary_omission": true,
+    "public_api_abi_equal": true,
+    "correctness_equal": true,
+    "fallback_to_baseline_for_non_exact_runtime_value": true,
+    "selector_once": true,
+    "closed_baseline_candidate_dp": true,
+    "opposite_body_zero": true,
+    "no_overwrite": true,
+    "no_per_pixel_clock": true
+  },
+  "local_untimed_checks": [
+    {"name": "archive protocol and deterministic payload fixture", "status": "PASS", "invocations": 1},
+    {"name": "path, source admission, request frame, receipt, and mode contracts", "status": "PASS", "invocations": 1},
+    {"name": "structural process ownership and cleanup contract", "status": "PASS", "invocations": 1},
+    {"name": "baseline/V13 build omission and public API/ABI", "status": "PASS", "invocations": 1},
+    {"name": "exact runtime truth table", "status": "PASS", "invocations": 1},
+    {"name": "correctness encodes", "status": "PASS", "invocations": 1, "encodes": 16},
+    {"name": "selected DP counter cells", "status": "PASS", "invocations": 1, "cells": 4},
+    {"name": "sanitizer boundary validation", "status": "PASS", "invocations": 1, "configurations": 2, "fixtures": 16},
+    {"name": "semantic source and preprocessor structure", "status": "PASS", "invocations": 1},
+    {"name": "frozen case/method/variant plan and counts", "status": "PASS", "invocations": 1},
+    {"name": "Python syntax compilation", "status": "PASS", "invocations": 1}
+  ],
+  "forbidden_phase3_actions": {
+    "rehearsal_reruns": 0,
+    "diagnostic_runs": 0,
+    "timing_runs": 0,
+    "profiler_runs": 0,
+    "cuda_runs": 0,
+    "lease_attempts": 0,
+    "remote_cleanup_operations": 0,
+    "process_discovery_snapshots": 0,
+    "process_signals": 0,
+    "production_promotions": 0,
+    "future_experiments": 0,
+    "retries": 0,
+    "tuning_runs": 0,
+    "pooling_runs": 0
+  },
+  "discrepancies": [
+    {
+      "severity": "documentation-overstatement",
+      "summary": "Online transition validates inventory schema/status, not the full declared member inventory.",
+      "effect_on_refusal": "none; final archive equality and extraction remain unavailable and fail closed"
+    },
+    {
+      "severity": "inert-source-redundancy",
+      "summary": "remote_main assigns mode from metadata twice",
+      "effect_on_refusal": "none"
+    }
+  ],
+  "limitations": [
+    "Device/toolchain/power/thermal/memory/disk and runner-binary details were inside the incomplete archive and are unassessed.",
+    "The raw process snapshot was not returned; only the digest-checked classifier control object is available.",
+    "A historical negative about any unpersisted command cannot be proven from files alone; persisted evidence records one rehearsal and zero diagnostics with no contradictory execution artifacts.",
+    "Cleanup and exact-child absence remain unknown after truncation; no follow-up cleanup is permitted.",
+    "No complete remote archive hash, inventory equality, or extraction proof exists."
+  ],
+  "external_delivery": {
+    "push": "post-commit; see final handoff",
+    "pull_request": "post-commit; see final handoff",
+    "hosted_checks": "post-commit; see final handoff"
+  }
+}
