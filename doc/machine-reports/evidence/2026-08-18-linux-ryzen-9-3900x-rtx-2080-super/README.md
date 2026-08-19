@@ -74,6 +74,26 @@ from the 42-case byte-parity matrix. The associated CTest transcript, native
 CMake cache, CUDA build log, and clean non-CUDA configure/build logs are stored
 under the same prefix.
 
+The `libwebp-post-parcache-v1-*.jsonl` files are the first exploratory
+post-change stage pass on the 3000x2000 large cases. The
+`libwebp-post-parcache-v2-*.jsonl` files correct the dimensions to the
+historical 1600x1200 protocol; their run transcript is intentionally empty
+because `cwebp` was quiet. The `libwebp-post-parcache-v3-*.jsonl` files repeat
+the medium cases with `WEBP_CUDA_COLOR=1`, predictor, and hash explicitly
+enabled. Its verbose transcript proves CUDA dispatch, including the resident
+cross-color input handoff. Each pass has 21 rows per content case (one warmup
+and 20 measured encodes), for 189 raw rows total. The matching stage CMake
+cache records `CMAKE_CUDA_ARCHITECTURES=native` and the stage-profile build
+option.
+
+The 16 `libwebp-partrace-screen-*.txt` files are four order-balanced process
+pairs for PNG and JPEG lossless batches. `off` set
+`WEBP_CUDA_PARALLEL_TRACEBACK=0`; `candidate` set it to 1. Each transcript has
+one discarded warmup plus three measured rows and preserves the invoked
+command. Output hashes and byte counts match within each format. The tested
+method-4 path does not request a no-cache candidate, so the proposed overlap
+never dispatched and was removed.
+
 Inspect the sampling archives with:
 
 ```sh

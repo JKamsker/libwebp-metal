@@ -1124,3 +1124,22 @@ ms/image JPEG, giving current-machine CUDA speedups of **1.81x** and **5.47x**
 against the parallel default. These measurements are specific to the Ryzen 9
 3900X / RTX 2080 SUPER. Ampere+ defaults remain unchanged and no Ampere+
 performance claim is made.
+
+## Post-cache lossless profile and traceback-overlap rejection
+
+A native-sm_75 method-4/quality-75 stage-profile repeat at `2ec39084` measured
+the retained parallel cache search at 58.252 ms photo backrefs (previously
+83.312 ms) and 83.372 ms texture backrefs (previously 121.525 ms). The original
+profiling command had forced predictor/hash but omitted the separately required
+`WEBP_CUDA_COLOR=1` opt-in. With color, predictor, and hash all explicitly
+enabled, photo cross-color was 5.103 ms rather than the CPU path's 128.554 ms;
+the remaining leaders were backrefs at 66.441 ms photo / 83.343 ms texture,
+then hash and histogram.
+
+A cached/no-cache traceback-overlap candidate was screened in four
+order-balanced process pairs. PNG's paired median changed by -0.281 ms/image
+and JPEG's by +0.259 ms/image, with identical aggregate hashes and byte counts.
+Method 4 never sets `do_no_cache`, so the candidate did not dispatch and was
+removed. This result is limited to the RTX 2080 SUPER; no Ampere+ policy or
+performance conclusion follows. Raw profiles and transcripts are archived in
+the machine-specific evidence directory.

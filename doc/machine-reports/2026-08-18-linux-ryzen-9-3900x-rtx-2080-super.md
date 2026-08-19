@@ -1064,7 +1064,10 @@ was removed. This is RTX 2080 SUPER-only evidence. Raw records are
 A native-sm_75 lossless stage profile used the three 1600x1200 publication
 cases at quality 75 and method 4. Each cell contains 21 in-process encodes; the
 first encode was discarded and the table reports the median of the remaining
-20. CUDA rows forced the retained color, predictor, and hash stages.
+20. CUDA rows forced the retained predictor and hash stages. This original
+profile did not set the separate `WEBP_CUDA_COLOR=1` opt-in, so its photo
+cross-color boundary remained on the CPU; a corrected full-CUDA profile is
+recorded below.
 
 | Content | CPU total | CUDA total | CPU/CUDA backrefs | CPU/CUDA hash |
 |---|---:|---:|---:|---:|
@@ -1137,3 +1140,40 @@ The default remains off on Ampere-or-newer devices pending measurements there.
 same structural gate for matched A/B work on another architecture. Raw stage
 screens, final batch transcripts, parity hashes, build logs, CMake cache, and
 CTest transcript are in the adjacent evidence directory.
+
+## Post-cache profile and traceback-overlap rejection
+
+A fresh native-sm_75 profile at retained commit `2ec39084` first repeated the
+historical 1600x1200 protocol. It confirmed the intended CPU back-reference
+reduction: photo moved from 83.312 to 58.252 ms and texture from 121.525 to
+83.372 ms. The initially apparent 128.554 ms photo cross-color bottleneck was
+not a CUDA result: lowering `WEBP_CUDA_MIN_PIXELS` does not enable the stage;
+`WEBP_CUDA_COLOR=1` is a separate required opt-in.
+
+The corrected full-CUDA pass explicitly enabled color, predictor, and hash:
+
+| Content | Total | Cross-color | Predictor | Hash | Backrefs | Histogram |
+|---|---:|---:|---:|---:|---:|---:|
+| graphic | 50.184 ms | 0.000 ms | 0.000 ms | 16.994 ms | 26.547 ms | 1.630 ms |
+| photo | 154.480 ms | 5.103 ms | 14.216 ms | 26.661 ms | 66.441 ms | 23.013 ms |
+| texture | 149.897 ms | 0.000 ms | 0.000 ms | 18.902 ms | 83.343 ms | 18.616 ms |
+
+CPU backward references therefore remain the dominant lossless boundary. A
+candidate attempted to overlap cached and no-cache traceback passes while
+preserving their original descending reduction and strict comparisons. Four
+order-balanced batch-process pairs per format, with one warmup and three
+measured samples, retained the exact aggregate hashes and byte counts but
+measured only noise:
+
+| Format | Control | Candidate | Paired control - candidate |
+|---|---:|---:|---:|
+| PNG lossless | 76.399 ms/image | 76.876 ms/image | -0.281 ms/image |
+| JPEG lossless | 127.889 ms/image | 127.689 ms/image | +0.259 ms/image |
+
+Inspection explained the non-result: method 4 never requests the no-cache
+alternative, so the overlap did not dispatch. That option is selected only
+for method 5 at quality 75 or above, or method 6 at quality 100. The candidate
+was removed rather than retaining inactive code. These are RTX 2080 SUPER-only
+measurements and make no Ampere+ claim. All 189 raw stage rows, verbose CUDA
+dispatch output, native CMake cache, and 16 A/B transcripts are in the adjacent
+evidence directory.
