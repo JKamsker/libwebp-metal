@@ -1,0 +1,76 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index d5dd4a6e..df79e74f 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -162,7 +162,8 @@ struct DeviceView {
+   DeviceResult* results;
+   // Diagnostic (WEBP_CUDA_DECIMATE_TIMING=2): per-phase cycle accumulators
+   // [import, i16-numeric, i16-select, i4, uv-numeric, uv-select+assembly,
+-  // recon-write]. nullptr in normal operation.
++  // recon-write, i4-residual-warp, i4-sse-flat-warp, i4-disto-warp]. nullptr
++  // in normal operation.
+   unsigned long long* phase_cycles;
+ };
+ 
+@@ -1473,6 +1474,11 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+       __syncthreads();
+       if (active) {
+         const int warp = team_tid >> 5, lane = team_tid & 31;
++        unsigned long long metric_start = 0;
++        if (v.phase_cycles != nullptr && lane == 0 &&
++            (warp == 0 || warp == 2 || warp == 3)) {
++          metric_start = clock64();
++        }
+         const int bx = block & 3, by = block >> 2;
+         const int ctx =
+             ((by == 0) ? w.nz_ctx.top_nz[bx] : i4_block_nz[block - 4]) +
+@@ -1493,6 +1499,11 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+           w.i4_sd[team][lane] =
+               tlambda ? CudaDisto4x4(src, w.i4_out[team][lane], kWeightY) : 0;
+         }
++        if (v.phase_cycles != nullptr && lane == 0 &&
++            (warp == 0 || warp == 2 || warp == 3)) {
++          const int slot = (warp == 0) ? 7 : (warp == 2) ? 8 : 9;
++          atomicAdd(&v.phase_cycles[slot], clock64() - metric_start);
++        }
+       }
+       __syncthreads();
+       if (active && team_tid < kNumBModes) {
+@@ -2039,7 +2050,7 @@ bool DecimateInitialize(DecimateState* state) {
+     state->timing_level = (level != nullptr) ? atoi(level) : 1;
+     if (state->timing_level >= 2 &&
+         cudaMalloc((void**)&state->phase_cycles_dev,
+-                   7 * sizeof(unsigned long long)) != cudaSuccess) {
++                   10 * sizeof(unsigned long long)) != cudaSuccess) {
+       state->phase_cycles_dev = nullptr;
+       state->timing_level = 1;
+       (void)cudaGetLastError();
+@@ -2293,7 +2304,7 @@ void DecimateReportTiming(DecimateState* state, int mb_w, int mb_h) {
+             mb_h);
+   }
+   if (state->phase_cycles_dev != nullptr) {
+-    unsigned long long cycles[7] = {0};
++    unsigned long long cycles[10] = {0};
+     if (cudaMemcpy(cycles, state->phase_cycles_dev, sizeof(cycles),
+                    cudaMemcpyDeviceToHost) == cudaSuccess) {
+       static const char* const kPhaseNames[7] = {
+@@ -2307,6 +2318,10 @@ void DecimateReportTiming(DecimateState* state, int mb_w, int mb_h) {
+                 total ? 100.0 * (double)cycles[k] / (double)total : 0.0);
+       }
+       fprintf(stderr, "\n");
++      fprintf(stderr,
++              "decimate I4 metric warp cycles: residual %llu sse-flat %llu "
++              "disto %llu\n",
++              cycles[7], cycles[8], cycles[9]);
+     }
+   }
+ }
+@@ -2621,7 +2636,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
+     view.phase_cycles = state->phase_cycles_dev;
+     if (state->phase_cycles_dev != nullptr) {
+       (void)cudaMemsetAsync(state->phase_cycles_dev, 0,
+-                            7 * sizeof(unsigned long long), state->stream);
++                            10 * sizeof(unsigned long long), state->stream);
+     }
+ 
+     DecimateKernelParams params;

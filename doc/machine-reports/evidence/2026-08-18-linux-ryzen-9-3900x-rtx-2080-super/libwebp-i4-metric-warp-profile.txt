@@ -1,0 +1,24 @@
+CONTENT=graphic
+decimate GPU wall: 27.53 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.4% i16-num 12.8% i16-sel 24.7% i4 37.5% uv-num 7.2% uv-sel 11.5% recon 0.7%
+decimate I4 metric warp cycles: residual 84159703 sse-flat 85590443 disto 58757233
+decimate GPU wall: 26.70 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.4% i16-num 12.8% i16-sel 24.7% i4 37.5% uv-num 7.2% uv-sel 11.5% recon 0.7%
+decimate I4 metric warp cycles: residual 84196135 sse-flat 85674439 disto 58836309
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":52580278,"ns_per_image":52580278.000,"images_per_second":19.018538,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"89f47b56944cfe79","output_bytes":12648}
+CONTENT=photo
+decimate GPU wall: 28.24 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.7% i16-num 9.3% i16-sel 9.2% i4 64.7% uv-num 4.8% uv-sel 7.8% recon 0.5%
+decimate I4 metric warp cycles: residual 306767516 sse-flat 209032404 disto 139472899
+decimate GPU wall: 27.39 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.7% i16-num 9.3% i16-sel 9.2% i4 64.7% uv-num 4.8% uv-sel 7.8% recon 0.5%
+decimate I4 metric warp cycles: residual 305782797 sse-flat 209230531 disto 139593218
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":53022162,"ns_per_image":53022162.000,"images_per_second":18.860038,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"13085afa0c135d5c","output_bytes":206128}
+CONTENT=texture
+decimate GPU wall: 26.55 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.9% i16-sel 8.3% i4 65.9% uv-num 5.7% uv-sel 5.6% recon 0.5%
+decimate I4 metric warp cycles: residual 269143521 sse-flat 142540026 disto 138482696
+decimate GPU wall: 25.81 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.9% i16-sel 8.3% i4 66.0% uv-num 5.7% uv-sel 5.6% recon 0.5%
+decimate I4 metric warp cycles: residual 269885280 sse-flat 145464211 disto 139015771
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":108499701,"ns_per_image":108499701.000,"images_per_second":9.216615,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"48ed500df8ed450e","output_bytes":1193792}

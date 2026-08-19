@@ -533,3 +533,30 @@ idle. It also passed 7/7 CTests and all 24 rows matched, but PNG moved only
 (+0.138). That placement was removed too; neither existing I4 barrier hides
 this work. Raw follow-up artifacts use the
 `libwebp-i4-source-hadamard-pred-*` prefix.
+
+## Pre-Ampere four-lane I4 residual cooperation rejection
+
+A temporary native-sm_75 warp probe split the I4 metric interval into the
+residual, SSE/flatness, and distortion warps. Across two reported medium runs,
+the residual warp accumulated 84.2 million cycles on graphic content, about
+306 million on photo, and about 270 million on texture. It was the largest
+metric warp for the realistic photo and texture inputs, so the next candidate
+targeted that measured dependency chain.
+
+Four adjacent lanes cooperatively evaluated each I4 residual in four
+coefficient waves instead of one lane walking sixteen coefficients. Ten mode
+groups occupied 40 lanes; Ampere+ compiled the unchanged scalar path.
+Candidate and restored trees passed 7/7 CTests, and all 24 order-reversed
+native-sm_75 rows matched hashes and byte counts:
+
+| Format | Parent | Four-lane residual | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.168 ms/image | 40.085 ms/image | 0.083 ms/image |
+| JPEG lossy | 39.652 ms/image | 40.185 ms/image | -0.533 ms/image |
+
+Registers fell from 103 to 102 with the same 352-byte stack and 23,392-byte
+shared allocation, but shuffle, reduction, and table-lookup overhead erased
+the shorter serial chain. The candidate was removed. Raw probe patch/output,
+candidate patch, timing rows, build resources, and both test logs are archived
+under `libwebp-i4-metric-warp-*` and `libwebp-i4-residual-coop4-*`. RTX 2080
+SUPER only; Ampere+ behavior and performance claims are unchanged.

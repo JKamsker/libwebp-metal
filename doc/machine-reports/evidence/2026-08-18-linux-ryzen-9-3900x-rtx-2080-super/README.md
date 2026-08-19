@@ -254,6 +254,12 @@ The `libwebp-i4-source-hadamard-pred-*` files contain the exact patch, 24
 byte-exact rows, resource output, and candidate/restored tests for the also
 rejected prediction-stage placement.
 
+The `libwebp-i4-metric-warp-*` files preserve the temporary native-sm_75
+residual/SSE-flatness/distortion warp-cycle probe and its raw output. The
+`libwebp-i4-residual-coop4-*` files contain the exact pre-Ampere four-lane
+candidate patch, 24 byte-exact timing rows, candidate build/resource output,
+and candidate/restored seven-test transcripts. The candidate was removed.
+
 Inspect the sampling archives with:
 
 ```sh

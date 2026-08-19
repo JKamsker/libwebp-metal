@@ -1847,3 +1847,27 @@ all 24 rows were exact; PNG changed 39.715 to 39.629 ms/image (-0.086), while
 JPEG changed 39.619 to 39.758 (+0.138). The follow-up was removed and archived
 under `libwebp-i4-source-hadamard-pred-*`. Further movement of this transform
 between existing barriers has no measured Turing benefit.
+
+## Cooperative four-lane I4 residual rejection
+
+A temporary native-sm_75 metric-warp probe measured the scalar residual warp
+at roughly 306 million cycles for photo-medium and 270 million for
+texture-medium, versus about 209/145 million for SSE/flatness and 140/139
+million for distortion. This isolated residual scoring as the largest
+actionable metric dependency on the RTX 2080 SUPER.
+
+A pre-Ampere candidate assigned four adjacent lanes to each residual and
+processed four coefficient waves, preserving exact context, EOB, and tie
+behavior. Ampere+ compiled the original scalar walk. Candidate and restored
+source passed all seven CTests, and 24 order-reversed rows were byte-exact:
+
+| Format | Parent | Four-lane residual | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.168 ms/image | 40.085 ms/image | 0.083 ms/image |
+| JPEG lossy | 39.652 ms/image | 40.185 ms/image | -0.533 ms/image |
+
+Resource use changed from 103 to 102 registers; stack and shared memory stayed
+at 352 and 23,392 bytes. The candidate was removed because PNG was noise and
+JPEG regressed. Raw probe, exact patch, rows, build/resource transcript, and
+candidate/restored test logs are archived with the RTX 2080 SUPER report under
+`libwebp-i4-metric-warp-*` and `libwebp-i4-residual-coop4-*`. No Ampere+ claim.
