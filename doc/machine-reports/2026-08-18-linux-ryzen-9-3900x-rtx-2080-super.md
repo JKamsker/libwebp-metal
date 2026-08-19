@@ -1240,3 +1240,38 @@ counts. The candidate was removed: worker startup cost exceeds the independent
 phase, confirming that the remaining histogram boundary lies in later serial
 clustering/remapping. This is RTX 2080 SUPER-only evidence and makes no
 Ampere+ claim. All 16 raw transcripts are in the adjacent evidence directory.
+
+## Traceback command-append rejection
+
+`perf` sampling was unavailable because the host has `perf_event_paranoid=4`,
+so no system setting was changed. A successful `gprofng` user-space sample of
+the forced six-image PNG lossless workload collected 0.530 seconds of CPU time.
+It attributed 20.75% inclusive time to
+`VP8LBackwardReferencesTraceBackwards`, 11.32% exclusive time to
+`VP8LBackwardRefsCursorAdd`, and 7.55% to
+`GetCombinedEntropyUnrefined_C`. This directed the next screen at command
+append rather than another raw-histogram worker split.
+
+The candidate exposed the private command-block layout so the common append
+could store directly, while block transitions kept the original allocation and
+error path. The first unconditional CUDA screen appeared to gain 2.184
+ms/image PNG and 3.052 ms/image JPEG. A four-pair CPU-only control then showed
+PNG neutral at +0.334 ms/image but a consistent 10.782 ms/image JPEG
+regression, so the global form was rejected.
+
+Three subsequent forms selected a pre-Ampere fast path once or predictably and
+left Ampere+ on the original builder:
+
+| Form | PNG baseline | PNG candidate | Paired gain | JPEG baseline | JPEG candidate | Paired gain |
+|---|---:|---:|---:|---:|---:|---:|
+| Per-command gate | 78.257 ms | 76.356 ms | +1.859 ms | 127.963 ms | 130.331 ms | -2.463 ms |
+| Out-of-line fast builder | 77.645 ms | 75.828 ms | +1.859 ms | 127.482 ms | 129.759 ms | -2.528 ms |
+| Inlined fast builder | 77.868 ms | 76.201 ms | +1.630 ms | 128.953 ms | 131.448 ms | -2.658 ms |
+
+Every CUDA and CPU aggregate retained its format-specific hash and byte count.
+The candidate was removed because all architecture-safe forms regressed JPEG;
+the initial apparent win was not robust to isolation and repetition. This is
+Ryzen 9 3900X / RTX 2080 SUPER evidence only and makes no Ampere+ claim. The
+adjacent evidence directory contains both sampling reports, both native CMake
+caches, and all 84 process transcripts covering the unconditional, CPU-only,
+and three gated screens.

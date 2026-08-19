@@ -1170,3 +1170,30 @@ changed PNG by -0.143 ms/image and JPEG by -0.471 ms/image at paired medians.
 The candidate was removed: worker startup costs more than this initial phase,
 so future histogram work must address clustering/remapping rather than merely
 parallelizing raw tile costs. No Ampere+ conclusion follows.
+
+## Turing traceback command-append rejection
+
+With kernel `perf` events unavailable on this host, a successful `gprofng`
+user-space sample collected 0.530 seconds of CPU time across a forced six-image
+PNG lossless batch. `VP8LBackwardReferencesTraceBackwards` accounted for
+20.75% inclusive time, and `VP8LBackwardRefsCursorAdd` accounted for 11.32%
+exclusive time. This motivated an exact common-case inline append that retained
+the original allocator and error path at command-block boundaries.
+
+The unconditional prototype initially appeared positive, but a four-pair
+CPU-only control found a 10.782 ms/image JPEG regression. Three attempts then
+isolated the fast loop behind the pre-Ampere active-lossless gate: a predictable
+per-command selection, an out-of-line fast builder, and an inlined fast builder
+with the original path out of line. Their final paired results were:
+
+| Form | PNG baseline/candidate | PNG gain | JPEG baseline/candidate | JPEG gain |
+|---|---:|---:|---:|---:|
+| Per-command gate | 78.257 / 76.356 ms | +1.859 ms | 127.963 / 130.331 ms | -2.463 ms |
+| Out-of-line fast builder | 77.645 / 75.828 ms | +1.859 ms | 127.482 / 129.759 ms | -2.528 ms |
+| Inlined fast builder | 77.868 / 76.201 ms | +1.630 ms | 128.953 / 131.448 ms | -2.658 ms |
+
+All rows retained the exact PNG/JPEG aggregate hashes and byte counts. The
+candidate was removed because no architecture-safe form won both formats.
+These results are specific to the Ryzen 9 3900X / RTX 2080 SUPER and make no
+Ampere+ performance claim. The sampling reports, build caches, and all raw
+process transcripts are stored with the machine report.

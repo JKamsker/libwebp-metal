@@ -1,0 +1,89 @@
+Script started on 2026-08-19 14:22:53+00:00 [COMMAND="gprofng display text -functions -limit 200 /tmp/libwebp-histogram-followup-20260819b.er" <not executed on terminal>]
+Functions sorted by metric: Exclusive Total CPU Time
+
+Excl. Total   Incl. Total    Name
+CPU           CPU
+ sec.      %   sec.      %
+0.530 100.00  0.530 100.00   <Total>
+0.070  13.21  0.110  20.75   VP8LBackwardReferencesTraceBackwards
+0.060  11.32  0.090  16.98   <static>@0x396586 (<libcuda.so.595.84>)
+0.060  11.32  0.060  11.32   VP8LBackwardRefsCursorAdd
+0.060  11.32  0.060  11.32   inflate_fast
+0.040   7.55  0.040   7.55   GetCombinedEntropyUnrefined_C
+0.020   3.77  0.020   3.77   <static>@0x1881e1 (<libc.so.6>)
+0.020   3.77  0.060  11.32   VP8LHashChainFill
+0.020   3.77  0.020   3.77   ioctl
+0.020   3.77  0.520  98.11   main
+0.010   1.89  0.070  13.21   <static>@0x2067e0 (<libcuda.so.595.84>)
+0.010   1.89  0.030   5.66   BackwardReferencesLz77.constprop.0
+0.010   1.89  0.010   1.89   BackwardReferencesLz77Box.constprop.0
+0.010   1.89  0.010   1.89   PackRGB_C
+0.010   1.89  0.010   1.89   PushInterval
+0.010   1.89  0.020   3.77   StoreImageToBitMask
+0.010   1.89  0.010   1.89   VP8LAllocateHistogramSet
+0.010   1.89  0.390  73.58   VP8LEncodeStream
+0.010   1.89  0.210  39.62   VP8LGetBackwardReferences
+0.010   1.89  0.010   1.89   VP8LHistogramStoreRefs
+0.010   1.89  0.010   1.89   VP8LPutBitsFlushBits
+0.010   1.89  0.010   1.89   WebPReportProgress
+0.010   1.89  0.070  13.21   inflate
+0.010   1.89  0.010   1.89   png_read_filter_row_paeth_multibyte_pixel
+0.010   1.89  0.010   1.89   png_read_filter_row_sub
+0.010   1.89  0.010   1.89   pthread_mutex_lock
+0.      0.    0.020   3.77   (anonymous namespace)::CUDAColorTransform(void*, WebPAcceleratorColorTransformRequest const*)
+0.      0.    0.020   3.77   (anonymous namespace)::CUDAColorTransformLocked(void*, WebPAcceleratorColorTransformRequest const*)
+0.      0.    0.030   5.66   (anonymous namespace)::CUDAHashChain(void*, WebPAcceleratorHashChainRequest const*)
+0.      0.    0.030   5.66   (anonymous namespace)::CUDAHashChainLocked(void*, WebPAcceleratorHashChainRequest const*)
+0.      0.    0.040   7.55   (anonymous namespace)::CUDAHistogram(void*, WebPAcceleratorHistogramRequest const*)
+0.      0.    0.040   7.55   (anonymous namespace)::CUDAHistogramLocked(void*, WebPAcceleratorHistogramRequest const*)
+0.      0.    0.010   1.89   (anonymous namespace)::CUDAPredictor(void*, WebPAcceleratorPredictorRequest const*)
+0.      0.    0.010   1.89   (anonymous namespace)::CUDAPredictorLocked(void*, WebPAcceleratorPredictorRequest const*)
+0.      0.    0.020   3.77   (anonymous namespace)::Initialize((anonymous namespace)::CudaState*)
+0.      0.    0.070  13.21   <static>@0x1d0f96 (<libcuda.so.595.84>)
+0.      0.    0.100  18.87   <static>@0x21b7b (<libcudart.so.12.0.146>)
+0.      0.    0.070  13.21   <static>@0x223510 (<libcuda.so.595.84>)
+0.      0.    0.030   5.66   <static>@0x245ece (<libcuda.so.595.84>)
+0.      0.    0.520  98.11   <static>@0x2a145 (<libc.so.6>)
+0.      0.    0.020   3.77   <static>@0x317126 (<libcuda.so.595.84>)
+0.      0.    0.070  13.21   <static>@0x36ab16 (<libcuda.so.595.84>)
+0.      0.    0.010   1.89   <static>@0x723d8 (<libcudart.so.12.0.146>)
+0.      0.    0.010   1.89   <static>@0xa1eb6 (<libc.so.6>)
+0.      0.    0.090  16.98   <static>@0xf360 (<libcudart.so.12.0.146>)
+0.      0.    0.030   5.66   EncodeImageNoHuffman
+0.      0.    0.500  94.34   EncodeInput
+0.      0.    0.380  71.70   EncodeStreamHook
+0.      0.    0.380  71.70   Execute
+0.      0.    0.040   7.55   GetCombinedHistogramEntropy
+0.      0.    0.010   1.89   HistoQueuePush.constprop.0.isra.0
+0.      0.    0.020   3.77   HistogramCombineEntropyBin
+0.      0.    0.100  18.87   ReadPNG
+0.      0.    0.040   7.55   TryAcceleratedHistogramCreate
+0.      0.    0.020   3.77   VP8LColorSpaceTransform
+0.      0.    0.400  75.47   VP8LEncodeImage
+0.      0.    0.060  11.32   VP8LGetHistoImageSymbols
+0.      0.    0.040   7.55   VP8LHistogramCreate
+0.      0.    0.010   1.89   VP8LHistogramSetClear
+0.      0.    0.010   1.89   VP8LResidualImage
+0.      0.    0.020   3.77   WebPAccelerateColorTransform
+0.      0.    0.030   5.66   WebPAccelerateHashChain
+0.      0.    0.040   7.55   WebPAccelerateHistogram
+0.      0.    0.010   1.89   WebPAcceleratePredictor
+0.      0.    0.400  75.47   WebPEncode
+0.      0.    0.010   1.89   WebPMemoryWrite
+0.      0.    0.010   1.89   WebPPictureImportRGB
+0.      0.    0.520  98.11   __libc_start_main
+0.      0.    0.010   1.89   cuDevicePrimaryCtxRetain
+0.      0.    0.010   1.89   cuInit
+0.      0.    0.060  11.32   cuMemcpyDtoHAsync_v2
+0.      0.    0.010   1.89   cuMemcpyHtoDAsync_v2
+0.      0.    0.010   1.89   cudaGetDeviceCount
+0.      0.    0.070  13.21   cudaMemcpyAsync
+0.      0.    0.010   1.89   cudaMemsetAsync
+0.      0.    0.010   1.89   cudaSetDevice
+0.      0.    0.070  13.21   png_read_IDAT_data
+0.      0.    0.090  16.98   png_read_row
+0.      0.    0.090  16.98   png_read_rows
+
+Print limit set to 200
+
+Script done on 2026-08-19 14:22:53+00:00 [COMMAND_EXIT_CODE="0"]

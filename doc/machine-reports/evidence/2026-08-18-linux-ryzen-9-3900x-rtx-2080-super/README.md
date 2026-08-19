@@ -122,6 +122,20 @@ unchanged ordered compaction and clustering path. Each transcript contains one
 discarded warmup and three measured rows. All hashes and byte counts match;
 the candidate was removed after both format medians regressed.
 
+`libwebp-post-parcache-gprofng-functions.txt` and
+`libwebp-post-parcache-gprofng-calltree.txt` are the raw text reports from the
+successful user-space sampling run that identified traceback and command append
+as the next screen. The two `libwebp-cursor-inline-*-CMakeCache.txt` files
+record the clean-parent and candidate native-sm_75 builds.
+
+The 84 `libwebp-cursor-inline-*.txt` timing transcripts preserve five complete
+screens: the unconditional CUDA prototype (16), its CPU-only control (16), and
+three pre-Ampere isolation forms (16 each). Every CUDA transcript contains one
+discarded warmup and three measured six-image rows; CPU controls contain one
+warmup and two rows. Commands, hashes, byte counts, process order, and raw
+nanosecond timings are included. All forms were removed after the CPU control
+or architecture-safe JPEG cells regressed.
+
 Inspect the sampling archives with:
 
 ```sh
