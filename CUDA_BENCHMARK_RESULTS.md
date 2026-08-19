@@ -1775,3 +1775,24 @@ The compiler reduced register use from 103 to 92; shared memory grew from
 materially, confirming the original global segment loads were already
 cache-resident. The candidate was removed and raw evidence is archived with
 the RTX 2080 SUPER report. No Ampere+ claim is made.
+
+## Balanced-I4/chroma and shared-segment composition rejection
+
+The exact balanced four-warp I4/chroma candidate had previously measured a
+1.489 ms/image JPEG gain. It was composed with the independently exact shared
+segment-matrix staging candidate, whose standalone JPEG gain was 0.204
+ms/image. Both component experiments came from the retained decimation
+profile and had already passed correctness independently.
+
+Candidate and restored native-sm_75 trees passed all seven CTests. Two
+order-reversed processes produced 24 exact rows:
+
+| Format | Parent | Composition | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.699 ms/image | 37.664 ms/image | 2.035 ms/image |
+| JPEG lossy | 39.555 ms/image | 38.198 ms/image | 1.356 ms/image |
+
+The shared staging did not add to the balanced schedule's JPEG result; JPEG
+still missed the 1.5 ms/image gate by 0.144 ms/image. The candidate was
+removed and its exact patch, rows, and test logs were archived. This is RTX
+2080 SUPER-only evidence and makes no Ampere+ performance claim.

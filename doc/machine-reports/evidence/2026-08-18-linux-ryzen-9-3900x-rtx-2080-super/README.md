@@ -237,6 +237,10 @@ byte-exact timing rows, candidate/restored seven-test transcripts,
 parent/candidate resources, and binary hashes for the rejected shared
 quantization-matrix staging candidate.
 
+The `libwebp-i4-balanced-chroma-shared-*` files contain the exact composite
+patch, 24 byte-exact timing rows, and candidate/restored seven-test
+transcripts for the rejected balanced-I4/chroma plus shared-segment screen.
+
 Inspect the sampling archives with:
 
 ```sh

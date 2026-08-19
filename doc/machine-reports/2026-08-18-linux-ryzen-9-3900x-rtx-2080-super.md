@@ -1885,3 +1885,25 @@ already cache-resident, so the candidate was removed. The exact patch, raw
 rows, parent/candidate resources, binary hashes, and both CTest transcripts
 are archived under `libwebp-decimate-shared-segment-*`. This is Turing-only
 evidence; Ampere+ behavior was never changed.
+
+## Balanced-I4/chroma plus shared-segment composition
+
+The previously exact balanced four-warp I4/chroma candidate missed the JPEG
+retention gate by only 0.011 ms/image. It was therefore composed with the
+independently exact shared-segment staging candidate, whose standalone JPEG
+screen gained 0.204 ms/image. This remained a single local native-sm_75
+composition experiment based on the retained decimation profile.
+
+Candidate and restored source passed all seven CTests. All 24 order-reversed
+screen rows were byte-exact:
+
+| Format | Parent | Composition | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.699 ms/image | 37.664 ms/image | 2.035 ms/image |
+| JPEG lossy | 39.555 ms/image | 38.198 ms/image | 1.356 ms/image |
+
+JPEG remained 0.144 ms/image below the strict gate, so the composition was
+removed. The exact composite patch, raw rows, and both CTest transcripts are
+archived under `libwebp-i4-balanced-chroma-shared-*`. This is Turing-only
+evidence; the experimental scheduling code was never pushed and no Ampere+
+behavior or performance claim was changed.

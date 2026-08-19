@@ -457,3 +457,26 @@ data was already cache-resident, and quantization remains arithmetic-bound.
 Raw patch, rows, resources, binary hashes, and both CTest logs are archived
 under `libwebp-decimate-shared-segment-*`. RTX 2080 SUPER only; no Ampere+
 behavior or performance claim.
+
+## Balanced-I4/chroma plus shared-segment composition rejection
+
+The retained wall-stage profile still identified decimation as the dominant
+serial cost. The exact balanced four-warp I4/chroma schedule had previously
+missed the JPEG gate by 0.011 ms/image, so it was composed with the separately
+exact shared-segment candidate, whose prior JPEG screen gained 0.204
+ms/image. This tested whether the two validated schedules composed without
+introducing another unvalidated idea.
+
+The local native-sm_75 candidate and restored tree both passed 7/7 CTests,
+and all 24 order-reversed timing rows matched hashes and byte counts:
+
+| Format | Parent | Composition | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.699 ms/image | 37.664 ms/image | 2.035 ms/image |
+| JPEG lossy | 39.555 ms/image | 38.198 ms/image | 1.356 ms/image |
+
+JPEG remained below the strict 1.5 ms/image gate, demonstrating again that
+independent micro-gains do not add reliably. The composition was removed.
+Its exact patch, rows, and candidate/restored CTest logs are archived under
+`libwebp-i4-balanced-chroma-shared-*`. This was a Turing-only local screen;
+no Ampere+ code or performance claim was retained.
