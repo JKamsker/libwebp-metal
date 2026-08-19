@@ -1594,3 +1594,26 @@ coverage workload rows, exact patch, native caches, compressed disassemblies,
 7/7 CTest transcript, and 48 timing rows are stored under the
 `libwebp-token-gcov-*` and `libwebp-token-band-offset-*` prefixes. This is RTX
 2080 SUPER-only evidence and does not characterize or alter Ampere+.
+
+## Fixed-bit coefficient-token prefix rejection
+
+The branch-frequency profile showed zero and magnitude-one coefficients at
+68.9% of token-recorder iterations. A temporary branch-first tree specialized
+the first two packed token/statistics updates for constant zero and one. It
+preserved ordering and allocation-failure behavior and passed all seven CTests,
+but duplicated the inlined page/statistics paths: `VP8RecordCoeffTokens` grew
+from 4,976 to 5,344 bytes.
+
+Two order-reversed native-sm_75 processes per format retained every output
+hash and byte count:
+
+| Format | Parent | Fixed-bit prefix | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.260 ms/image | 40.920 ms/image | -0.660 ms/image |
+| JPEG lossy | 40.036 ms/image | 40.589 ms/image | -0.554 ms/image |
+
+Both formats regressed, so the candidate was removed. The exact patch, native
+caches, compressed parent/candidate disassembly, symbol sizes, 7/7 CTest
+transcript, and 48 raw timing rows are stored under the
+`libwebp-token-fixed-bit-*` prefix. This is RTX 2080 SUPER-only evidence and
+makes no Ampere+ claim.

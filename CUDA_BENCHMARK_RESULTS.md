@@ -1520,3 +1520,27 @@ cache-resident load does not produce a material two-format win and duplicating
 the canonical `VP8EncBands` mapping would add maintenance risk. The change was
 removed; this is Ryzen 9 3900X / RTX 2080 SUPER evidence only and makes no
 Ampere+ claim.
+
+## Fixed-bit coefficient-token prefix rejection
+
+The optimized coverage profile found that zero and magnitude-one coefficients
+made up 68.9% of all recorder-loop iterations. The retained assembly
+materialized each of those decision bits twice before using it for the packed
+token, statistics increment, and branch. A branch-first candidate instead
+passed constant zero or one to the first two `AddToken` operations. This
+removed the dynamic `setcc`, shift, and dependent add from each selected path
+without changing token order, statistics order, or allocation-failure behavior.
+
+Generated code exposed the tradeoff: the specialized branches duplicated the
+page and statistics paths, expanding `VP8RecordCoeffTokens` from 4,976 to 5,344
+bytes. Seven CTests passed and two order-reversed six-sample processes remained
+byte-exact, but both formats regressed:
+
+| Format | Parent | Fixed-bit prefix | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 40.260 ms/image | 40.920 ms/image | -0.660 ms/image |
+| JPEG lossy | 40.036 ms/image | 40.589 ms/image | -0.554 ms/image |
+
+The candidate was removed. Compact shared dynamic-bit code is faster than the
+larger fixed-path tree on this Ryzen 9 3900X / RTX 2080 SUPER workload. No
+Ampere+ behavior or performance claim changes.
