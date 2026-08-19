@@ -1,0 +1,268 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v3-phase2-refusal-audit-v1",
+  "status": "REFUSED_FAIL_CLOSED",
+  "audit_role": "Luna/max PHASE 2 EXECUTOR/AUDITOR",
+  "audit_scope": {
+    "branch": "codex/backref-cost-specialization-factorization-v3",
+    "phase1_artifacts_edited": false,
+    "phase1b_additions_only_verified": true,
+    "phase2_remote_execution_performed": false,
+    "phase3_interpretation_or_evaluation_performed": false,
+    "v1_v2_or_prior_timing_authority_samples_reused": false,
+    "v2_or_phase1_rehearsal_rerun": false,
+    "host_service_toolchain_power_permission_auth_mutation": false
+  },
+  "exact_linear_chain": {
+    "main": {
+      "commit": "96f5d1881619bd5b25404d869cbb2ac2d4b3329c",
+      "tree": "6a15e102beff58858eeaa0173001ac5b804d6cbd"
+    },
+    "phase1a": {
+      "commit": "4ddd74f86eefc1c9457cff49dd53a1f1d91728f9",
+      "parent": "96f5d1881619bd5b25404d869cbb2ac2d4b3329c",
+      "tree": "d959f1ad4ab5df283816edd7d0db1dc1fa6ee405"
+    },
+    "phase1b": {
+      "commit": "0f163c27fa01fd5b3fb93c87eb35feb161c51b24",
+      "sole_parent": "4ddd74f86eefc1c9457cff49dd53a1f1d91728f9",
+      "tree": "40ce83f65315ebe4d2f8b35649f1b85400073065"
+    },
+    "ancestry_and_head_resolution": "PASS",
+    "phase1b_diff": {
+      "entry_count": 7,
+      "all_statuses_added": true,
+      "paths_scoped_to_rehearsal_hash_index_authorization": true,
+      "phase1a_source_protocol_manifest_schema_corpus_order_count_timeout_bytes_modified": false
+    }
+  },
+  "hash_audit": {
+    "manifest_path": "scripts/backref_cost_specialization_factorization_v3_manifest.json",
+    "manifest_sha256": "7cc212d8616e19e01a527aad2da691808f5ef19ae2243cfad368169d9324df71",
+    "frozen_manifest_member_count": 40,
+    "all_frozen_manifest_member_hashes_recomputed": true,
+    "frozen_manifest_hash_mismatches": [],
+    "phase1b_hash_index": {
+      "path": "evidence/backref-cost-specialization-factorization-v3-design/phase1b-rehearsal-hashes.json",
+      "sha256": "17e57d101e5465775916eaef9df0815b50b951d6f0aed28ad306e333e5d08641",
+      "raw_artifact_count": 5,
+      "raw_total_bytes": 3824
+    },
+    "authorization_sha256": "5b999f67130995ff5215268f76e510a24b26b350439aaa7b61886b7a140ffce1"
+  },
+  "payload_audit": {
+    "status": "PASS",
+    "payload_bytes": 2097152,
+    "manifest_generator_independent_transport_fixture_sha256": "8fb97e16b8be09e7dc0c20b0b26387a0f8301d0aa738fa7ade4a6a97d15afeb8",
+    "agreement_receipt_sha256": "b37c2e02b139d93bcbf8ad49e6e6dde723e0a2f1cb400ba34143bb3d54bde2b9",
+    "fixture_sha256": "3ec485ec32d70a3213916470b30934547926dda36d7dc4a3f41a1d8bb18f077d",
+    "generator_file_sha256": "af80a11ecae2969f8560e4f236e821aa19df4a5a6f79a08aaac6b93a6573d8f5",
+    "stale_predecessor_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "negative_stale_predecessor_test": "PASS_REJECTED"
+  },
+  "toolchain_audit": {
+    "status": "PASS_LOCAL_NOT_REACHED_REMOTE",
+    "manifest_actual_fixture_agree": true,
+    "identity_canonical_sha256": "735eb9be26c9b7118819b502bf0e24b6d87e8da945d81858c22bebdf889ce077",
+    "agreement_receipt_sha256": "34179214e62bd7f7f3b45b46219aa63e6c1394c72d55d249ebb4a99c5325f930",
+    "fixture_sha256": "3da392cb5dcdb313c99ba474da148e36d524dbdf909e0b77be39f6afc4a812c0",
+    "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+    "xcode": {
+      "short_version": "26.3",
+      "bundle_version": "24587",
+      "product_build_version": "17C529",
+      "toolchain_identifier": "com.apple.dt.toolchain.XcodeDefault"
+    },
+    "sdk": {
+      "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+      "version": "26.2",
+      "canonical_name": "macosx26.2",
+      "display_name": "macOS 26.2"
+    },
+    "required_executables": {
+      "clang": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang", "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a", "version": "Apple clang version 17.0.0 (clang-1700.6.4.2)"},
+      "clang++": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++", "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a", "version": "Apple clang version 17.0.0 (clang-1700.6.4.2)"},
+      "nm": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm", "sha256": "a42f25b6363f3d43b911733a276a46bdbed894f1ef8e764cb7461ebdb37a15e7", "version": "Apple LLVM version 17.0.0"},
+      "ar": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar", "sha256": "e914ec3c1eb8ca99c7d5f2f9bd82ac3458d0ab14556a8a3441b28f37baaa77c9", "version_source": "Xcode bundle metadata"},
+      "ranlib": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib", "sha256": "779903653ff38059513ef4f34846ab8b53f71f9cb7c066b29a47e520527b6cfa", "version": "Apple Inc. version cctools-1030.6.3"},
+      "llvm-objdump": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump", "sha256": "fa24edaea7afab86d88b9706e1b952f32abc819bd62f8f9bf8dafb5ae01ba159", "version": "Apple LLVM version 17.0.0"}
+    },
+    "required_metadata": {
+      "xcode-version-plist": {"path": "/Applications/Xcode-26.3.0.app/Contents/version.plist", "bytes": 523, "sha256": "79504c54fc47124dbc5945b628d9c9071923a57c0cd109ff5afdd7884c1c889c"},
+      "toolchain-info-plist": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/ToolchainInfo.plist", "bytes": 95, "sha256": "b2e3b746c87ddfd6d2145656d87569054807e2196d6f46ef09dec3923ed31541"},
+      "sdk-settings-json": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.json", "bytes": 7627, "sha256": "95882a9cea02396e76f3e406a5728269b2a1a11bcd241430a84c9e63d09a6cd3"},
+      "sdk-settings-plist": {"path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.plist", "bytes": 5346, "sha256": "03cb7d21a91023f6dff9ea019a3710061e2eb570bdb260faf4daa74151abf15d"}
+    },
+    "required_executable_names": ["clang", "clang++", "nm", "ar", "ranlib", "llvm-objdump"],
+    "xcrun_required": false,
+    "xcrun_absent_from_required_lists_and_child_commands": true,
+    "stale_v2_xcrun_sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152",
+    "negative_stale_v2_xcrun_test": "PASS_REJECTED"
+  },
+  "local_gate_audit": {
+    "validation": "PASS",
+    "codegen": "PASS",
+    "correctness_sanitizer_abi_default_guards": "PASS",
+    "selector_once_one_selected_dp": "PASS",
+    "bitstream_pixel_determinism_input_fallback_integer_tie_update_order_traceback": "PASS_STATIC_AND_LOCAL",
+    "recorder_free_timing_separate_counter": "PASS",
+    "mutual_isolation_default_omission": "PASS",
+    "work_counter_boundary": "PASS",
+    "transport_archive_protocol_process_ownership": "PASS",
+    "frozen_corpus_order_inventory_statistics": "PASS_DECLARED_NOT_EXECUTED",
+    "remote_source_device_resource_process_lease_archive_extraction_cleanup_absence": "UNKNOWN_NOT_REACHED_REMOTE",
+    "authority": "NONE"
+  },
+  "codegen_and_work": {
+    "linker_flags": "-Wl,-no_deduplicate",
+    "timed_recorder_free": true,
+    "recorder_symbols_in_timed_binary": false,
+    "recorder_symbols_in_untimed_binary": true,
+    "all_six_symbol_addresses_distinct": true,
+    "baseline_layout_dp_mnemonics_equal": true,
+    "baseline_layout_push_interval_mnemonics_equal": true,
+    "layout_vs_specialized_push_interval_mnemonics_differ": true,
+    "frozen_runner_sha256": {
+      "timed": "df1813e7ae08b7503f4cca6f93740d7d14dc33ca81d34666610778840b4769ac",
+      "recorder": "75179cec2cdf9e0c801a22764473e415e5a972b9c1c0e738cf1b616bbc2846e4"
+    },
+    "symbol_facts": {
+      "BackwardReferencesHashChainDistanceOnly": {"size_bytes": 1292, "instruction_count": 323, "branch_count": 54, "load_count": 55, "store_count": 23, "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"},
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone": {"size_bytes": 1292, "instruction_count": 323, "branch_count": 54, "load_count": 55, "store_count": 23, "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"},
+      "BackwardReferencesHashChainDistanceOnlySpecialized": {"size_bytes": 1292, "instruction_count": 323, "branch_count": 54, "load_count": 55, "store_count": 23, "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"},
+      "PushInterval": {"size_bytes": 508, "instruction_count": 127, "branch_count": 30, "load_count": 25, "store_count": 11, "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8"},
+      "PushIntervalLayoutClone": {"size_bytes": 508, "instruction_count": 127, "branch_count": 30, "load_count": 25, "store_count": 11, "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8"},
+      "PushIntervalSpecialized": {"size_bytes": 732, "instruction_count": 183, "branch_count": 45, "load_count": 34, "store_count": 12, "mnemonics_sha256": "453c8695e2523dc281903d227f9896d68decf895d5676690c8bd67a59431f190"}
+    },
+    "work_counts": {
+      "fixture": "local.ppm 257x97 seed=7 method=4",
+      "selector_evaluations": {"B": 2, "L": 2, "H": 2},
+      "exact_activations": {"B": 2, "L": 2, "H": 2},
+      "dp_calls": {"B": 2, "L": 2, "H": 2},
+      "common": {"push_calls": 174, "short_push_calls": 153, "cache_segments": 207, "overlap_scans": 68, "disjoint_prefix_scans": 12, "insert_calls": 158, "null_hint_insert_calls": 157, "interval_updates": 0, "interval_pops": 158, "max_live_intervals": 21, "bitstream_bytes": 134, "bitstream_fnv1a64": "847636c89f55c705"},
+      "position": {"B": {"backward": 1, "forward": 723}, "L": {"backward": 1, "forward": 723}, "H": {"backward": 1, "forward": 0}},
+      "hint_and_pop": {
+        "B": {"branch_checks": 0, "loads": 0, "start_loads": 0, "update_checks": 0, "updates": 0, "pop_tail_branch_checks": 0, "pop_tail_updates": 0, "fast_paths": 0},
+        "L": {"branch_checks": 0, "loads": 0, "start_loads": 0, "update_checks": 0, "updates": 0, "pop_tail_branch_checks": 0, "pop_tail_updates": 0, "fast_paths": 0},
+        "H": {"branch_checks": 157, "loads": 157, "start_loads": 146, "update_checks": 12, "updates": 157, "pop_tail_branch_checks": 0, "pop_tail_updates": 0, "fast_paths": 146}
+      },
+      "B_L_exact_common_work": true,
+      "B_L_H_common_work": true,
+      "H_intended_hint_only_differences": true
+    }
+  },
+  "frozen_plan_and_transport": {
+    "corpus": [
+      {"case_id": "photo-large", "file": "photo-large.ppm", "width": 3000, "height": 2000, "sha256": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612"},
+      {"case_id": "graphic-large", "file": "graphic-large.ppm", "width": 3000, "height": 2000, "sha256": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc"}
+    ],
+    "methods": [4, 6],
+    "profile_repetitions": 3,
+    "warmups_per_profile": 1,
+    "retained_encodes_per_profile": 4,
+    "variant_order": [["B", "L", "H"], ["H", "L", "B"], ["L", "B", "H"]],
+    "case_order": ["photo-large", "graphic-large"],
+    "profile_processes": 36,
+    "warmups": 36,
+    "retained_timing_rows": 144,
+    "runner_rows": 180,
+    "stage_rows": 180,
+    "correctness_encodes": 24,
+    "untimed_work_rows": 12,
+    "pairwise_families": ["B_to_L", "L_to_H", "B_to_H"],
+    "primary_metrics": ["dp_total", "dp_steady", "whole_encode"],
+    "paired_rows_per_cell_metric": 12,
+    "bootstrap_resamples": 100000,
+    "bootstrap_seed": "0x424c4801",
+    "pairwise_results": "NOT_AVAILABLE_AUTHORITY_NONE",
+    "diagnostic_rule": "all source/build/toolchain/device/process/lease/order/count/schema/hash/correctness/work/codegen/timer/repeatability/archive/extraction/cleanup gates",
+    "promotion_rule": "H requires negative B_to_H DP steady and whole means in all four cells, all upper 95% bounds nonpositive, no paired regression above +0.50%, and correctness/work pass",
+    "transport_caps": {"archive_bytes": 786432, "response_bytes": 1048576, "control_bytes": 8192, "bulk_chunk_bytes": 262144, "local_archive_fixture_bytes": 7919, "local_archive_fixture_sha256": "5a371d02be444f784401c0b7274f0334644936de14403f3e464e95e3f81b792f", "local_response_direction_fixture_request_bytes": 2101248, "local_response_direction_fixture_response_bytes": 530893, "local_response_direction_fixture_archive_bytes": 528384}
+  },
+  "rehearsal_receipt_audit": {
+    "status": "REFUSED_FAIL_CLOSED",
+    "host": "pandocs-agent",
+    "attempts": 1,
+    "retry_count": 0,
+    "rerun_count": 0,
+    "connection_attempts": 1,
+    "remote_connection_established": false,
+    "remote_paths_created_or_reached": 0,
+    "benchmark_lease_acquisition_attempted": false,
+    "encoder_workloads": 0,
+    "work_counter_workloads": 0,
+    "profiler_workloads": 0,
+    "timed_binary_invoked": false,
+    "timing_samples": 0,
+    "framed_stdout_path": "evidence/backref-cost-specialization-factorization-v3-design/rehearsal/return-protocol/framed-stdout.bin",
+    "framed_stdout_bytes": 0,
+    "framed_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "transport_stderr_path": "evidence/backref-cost-specialization-factorization-v3-design/rehearsal/return-protocol/transport-stderr.bin",
+    "transport_stderr_bytes": 65,
+    "transport_stderr_sha256": "561ab6a0b87eb9dbd145fcb63a6dddd66c215f13680aa83763b3260d3e904eaa",
+    "transport_stderr_exact": "ssh: connect to host 100.85.234.14 port 22: Operation timed out\r\n",
+    "cleanup_path": "evidence/backref-cost-specialization-factorization-v3-design/rehearsal/transfer-cleanup.json",
+    "exact_local_child_reaped": true,
+    "remote_protocol_absence_proved": false,
+    "prior_cycle_paths_contacted": false,
+    "failed_gate": "ssh_connection",
+    "blocker": "ssh timed out before any remote protocol frame; source/device/resource/process/archive/integrity/extraction/cleanup/absence gates are unproven"
+  },
+  "gate_outcomes": {
+    "local_chain_and_additions_only": "PASS",
+    "local_hash_recomputation": "PASS",
+    "payload_agreement": "PASS",
+    "stale_payload_negative": "PASS_REJECTED",
+    "toolchain_agreement": "PASS",
+    "stale_xcrun_negative": "PASS_REJECTED",
+    "xcrun_absence": "PASS",
+    "source_guards_default_off_mutual_isolation": "PASS",
+    "selector_dp_body": "PASS",
+    "correctness_sanitizer_abi_determinism": "PASS",
+    "recorder_free_counter_separation": "PASS",
+    "work_codegen": "PASS",
+    "local_transport_archive_process": "PASS",
+    "frozen_plan": "PASS_DECLARED_NOT_RUN",
+    "phase1_rehearsal_connection": "FAIL_CLOSED_TIMEOUT",
+    "phase1_remote_source_device_resource_process_lease": "UNKNOWN_NOT_REACHED",
+    "phase1_remote_archive_integrity_extraction_cleanup_absence": "UNKNOWN_NOT_REACHED",
+    "phase2_host_contact": "PASS_ZERO",
+    "phase2_pipeline_lease_workload_timing": "PASS_ZERO",
+    "phase2_authority": "NONE",
+    "phase3_statistics_interpretation_consequence": "NOT_PERFORMED",
+    "production_promotion": "NOT_AUTHORIZED",
+    "source_whitespace": "PASS",
+    "raw_stderr_git_diff_check": "EXPECTED_EXCEPTION_RAW_CRLF"
+  },
+  "phase2_refusal": {
+    "host": "pandocs-agent",
+    "host_contact_made": false,
+    "ssh_invocations": 0,
+    "host_resolution_or_probe": 0,
+    "remote_workspace_created": false,
+    "remote_paths_created_or_reached": 0,
+    "lease_acquisition_attempted": 0,
+    "benchmark_invocations": 0,
+    "timing_samples": 0,
+    "raw_timing_rows": 0,
+    "raw_runner_rows": 0,
+    "raw_stage_rows": 0,
+    "remote_raw_artifact_files": 0,
+    "no_retry_rerun_tuning_pooling_alternate_timing": true,
+    "no_cuda_parallel_workload": true,
+    "no_host_side_mutation": true,
+    "authority": "NONE"
+  },
+  "phase3_boundary": {"evaluation_performed": false, "production_consequence_decided": false, "benchmark_rows_manufactured": false},
+  "evidence_set": [
+    "evidence/backref-cost-specialization-factorization-v3-design/phase1-local-validation.json",
+    "evidence/backref-cost-specialization-factorization-v3-design/phase1-local-codegen.json",
+    "evidence/backref-cost-specialization-factorization-v3-design/phase1b-authorization.json",
+    "evidence/backref-cost-specialization-factorization-v3-design/phase1b-rehearsal-hashes.json",
+    "evidence/backref-cost-specialization-factorization-v3-design/rehearsal/rehearsal.json",
+    "evidence/backref-cost-specialization-factorization-v3-design/rehearsal/transfer-cleanup.json",
+    "evidence/backref-cost-specialization-factorization-v3-design/rehearsal/return-protocol/framed-stdout.bin",
+    "evidence/backref-cost-specialization-factorization-v3-design/rehearsal/return-protocol/transport-stderr.bin"
+  ],
+  "local_receipt_path": "evidence/backref-cost-specialization-factorization-v3-phase2-refusal-audit-20260820/local-audit-receipt.json"
+}

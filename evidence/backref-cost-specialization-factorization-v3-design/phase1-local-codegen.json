@@ -1,0 +1,24 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v3-local-codegen-v1",
+  "status": "PASS",
+  "compiler": "Apple clang 17.0.0",
+  "flags": "-O3 -g -DNDEBUG -fno-omit-frame-pointer; -Wl,-no_deduplicate",
+  "timed_runner_sha256": "df1813e7ae08b7503f4cca6f93740d7d14dc33ca81d34666610778840b4769ac",
+  "recorder_runner_sha256": "75179cec2cdf9e0c801a22764473e415e5a972b9c1c0e738cf1b616bbc2846e4",
+  "timed_recorder_symbols_present": false,
+  "untimed_recorder_symbols_present": true,
+  "facts": {
+    "BackwardReferencesHashChainDistanceOnly": {"size_bytes": 1292, "instruction_count": 323, "branch_count": 54, "load_count": 55, "store_count": 23, "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"},
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": {"size_bytes": 1292, "instruction_count": 323, "branch_count": 54, "load_count": 55, "store_count": 23, "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"},
+    "BackwardReferencesHashChainDistanceOnlySpecialized": {"size_bytes": 1292, "instruction_count": 323, "branch_count": 54, "load_count": 55, "store_count": 23, "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"},
+    "PushInterval": {"size_bytes": 508, "instruction_count": 127, "branch_count": 30, "load_count": 25, "store_count": 11, "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8"},
+    "PushIntervalLayoutClone": {"size_bytes": 508, "instruction_count": 127, "branch_count": 30, "load_count": 25, "store_count": 11, "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8"},
+    "PushIntervalSpecialized": {"size_bytes": 732, "instruction_count": 183, "branch_count": 45, "load_count": 34, "store_count": 12, "mnemonics_sha256": "453c8695e2523dc281903d227f9896d68decf895d5676690c8bd67a59431f190"}
+  },
+  "baseline_layout_dp_mnemonics_equal": true,
+  "baseline_layout_push_interval_mnemonics_equal": true,
+  "all_six_symbol_addresses_distinct": true,
+  "linker_identical_code_deduplication_disabled": true,
+  "hint_push_interval_distinct": true,
+  "interpretation": "B and L are normalized instruction-equivalent baseline bodies. H retains the shared DP control body but calls the larger distinct append-hint PushInterval boundary."
+}

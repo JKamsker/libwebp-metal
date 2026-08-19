@@ -1,0 +1,558 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v3-phase3-evaluation-consequence-v1",
+  "status": "PASS_REFUSAL_EVALUATION",
+  "audit_role": "Sol/high PHASE 3 EVALUATOR + CONSEQUENCE",
+  "authority": "NONE",
+  "scope": {
+    "local_only": true,
+    "host_contact": false,
+    "ssh_invocations": 0,
+    "remote_path_contacts": 0,
+    "lease_attempts": 0,
+    "benchmark_workloads": 0,
+    "timing_runs": 0,
+    "cuda_invocations": 0,
+    "prior_timing_reused": false,
+    "implementation_modified": false
+  },
+  "linear_history": {
+    "status": "PASS",
+    "main": {
+      "commit": "96f5d1881619bd5b25404d869cbb2ac2d4b3329c",
+      "tree": "6a15e102beff58858eeaa0173001ac5b804d6cbd"
+    },
+    "phase1a": {
+      "commit": "4ddd74f86eefc1c9457cff49dd53a1f1d91728f9",
+      "parent": "96f5d1881619bd5b25404d869cbb2ac2d4b3329c",
+      "tree": "d959f1ad4ab5df283816edd7d0db1dc1fa6ee405",
+      "changed_paths": 38
+    },
+    "phase1b": {
+      "commit": "0f163c27fa01fd5b3fb93c87eb35feb161c51b24",
+      "parent": "4ddd74f86eefc1c9457cff49dd53a1f1d91728f9",
+      "tree": "40ce83f65315ebe4d2f8b35649f1b85400073065",
+      "changed_paths": 7,
+      "all_changes_additions": true
+    },
+    "phase2": {
+      "commit": "b03c5a3d92796b42172b15b68359176d32987005",
+      "parent": "0f163c27fa01fd5b3fb93c87eb35feb161c51b24",
+      "tree": "a68b267183b2b01661ae6fb76689d1c7621b959f",
+      "changed_paths": 2,
+      "all_changes_additions": true
+    }
+  },
+  "committed_hash_audit": {
+    "manifest": {
+      "path": "scripts/backref_cost_specialization_factorization_v3_manifest.json",
+      "sha256": "7cc212d8616e19e01a527aad2da691808f5ef19ae2243cfad368169d9324df71",
+      "frozen_member_count": 40,
+      "all_member_hashes_recomputed": true,
+      "mismatches": []
+    },
+    "phase1b_hash_index": {
+      "path": "evidence/backref-cost-specialization-factorization-v3-design/phase1b-rehearsal-hashes.json",
+      "sha256": "17e57d101e5465775916eaef9df0815b50b951d6f0aed28ad306e333e5d08641",
+      "indexed_files": 5,
+      "indexed_bytes": 3824,
+      "all_member_hashes_recomputed": true,
+      "mismatches": []
+    },
+    "authorization": {
+      "path": "evidence/backref-cost-specialization-factorization-v3-design/phase1b-authorization.json",
+      "sha256": "5b999f67130995ff5215268f76e510a24b26b350439aaa7b61886b7a140ffce1"
+    },
+    "phase2_audit": {
+      "path": "evidence/backref-cost-specialization-factorization-v3-phase2-refusal-audit-20260820/audit.json",
+      "sha256": "400f8de5d87878291cea808d1110f728cd9e9a8727340f0b1b5dca1a897d65e3"
+    },
+    "phase2_local_receipt": {
+      "path": "evidence/backref-cost-specialization-factorization-v3-phase2-refusal-audit-20260820/local-audit-receipt.json",
+      "sha256": "732f237822cdb906d28c32d5e9891ee712f26a7bb43a88d17f8319481913c4a1"
+    }
+  },
+  "payload_identity": {
+    "status": "PASS",
+    "payload_bytes": 2097152,
+    "manifest_generator_independent_transport_fixture_sha256": "8fb97e16b8be09e7dc0c20b0b26387a0f8301d0aa738fa7ade4a6a97d15afeb8",
+    "fixture_file_sha256": "3ec485ec32d70a3213916470b30934547926dda36d7dc4a3f41a1d8bb18f077d",
+    "generator_file_sha256": "af80a11ecae2969f8560e4f236e821aa19df4a5a6f79a08aaac6b93a6573d8f5",
+    "agreement_receipt_sha256": "b37c2e02b139d93bcbf8ad49e6e6dde723e0a2f1cb400ba34143bb3d54bde2b9",
+    "stale_v2_payload_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "negative_stale_test": "PASS_REJECTED"
+  },
+  "toolchain_identity": {
+    "status": "PASS_LOCAL_NOT_REACHED_REMOTE",
+    "manifest_actual_fixture_agree": true,
+    "identity_canonical_sha256": "735eb9be26c9b7118819b502bf0e24b6d87e8da945d81858c22bebdf889ce077",
+    "fixture_file_sha256": "3da392cb5dcdb313c99ba474da148e36d524dbdf909e0b77be39f6afc4a812c0",
+    "agreement_receipt_sha256": "34179214e62bd7f7f3b45b46219aa63e6c1394c72d55d249ebb4a99c5325f930",
+    "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+    "xcode": {
+      "short_version": "26.3",
+      "bundle_version": "24587",
+      "product_build_version": "17C529",
+      "toolchain_identifier": "com.apple.dt.toolchain.XcodeDefault"
+    },
+    "sdk": {
+      "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+      "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+      "version": "26.2",
+      "canonical_name": "macosx26.2",
+      "display_name": "macOS 26.2"
+    },
+    "executables": {
+      "clang": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+      "clang++": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+      "nm": "a42f25b6363f3d43b911733a276a46bdbed894f1ef8e764cb7461ebdb37a15e7",
+      "ar": "e914ec3c1eb8ca99c7d5f2f9bd82ac3458d0ab14556a8a3441b28f37baaa77c9",
+      "ranlib": "779903653ff38059513ef4f34846ab8b53f71f9cb7c066b29a47e520527b6cfa",
+      "llvm-objdump": "fa24edaea7afab86d88b9706e1b952f32abc819bd62f8f9bf8dafb5ae01ba159"
+    },
+    "metadata": {
+      "xcode-version-plist": {
+        "bytes": 523,
+        "sha256": "79504c54fc47124dbc5945b628d9c9071923a57c0cd109ff5afdd7884c1c889c"
+      },
+      "toolchain-info-plist": {
+        "bytes": 95,
+        "sha256": "b2e3b746c87ddfd6d2145656d87569054807e2196d6f46ef09dec3923ed31541"
+      },
+      "sdk-settings-json": {
+        "bytes": 7627,
+        "sha256": "95882a9cea02396e76f3e406a5728269b2a1a11bcd241430a84c9e63d09a6cd3"
+      },
+      "sdk-settings-plist": {
+        "bytes": 5346,
+        "sha256": "03cb7d21a91023f6dff9ea019a3710061e2eb570bdb260faf4daa74151abf15d"
+      }
+    },
+    "required_executables": 6,
+    "required_metadata": 4,
+    "xcrun_required": false,
+    "xcrun_absent_from_required_lists_and_child_commands": true,
+    "stale_v2_xcrun_sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152",
+    "negative_stale_test": "PASS_REJECTED"
+  },
+  "prior_receipt_discrepancy": {
+    "status": "RECORDED_NONAUTHORITATIVE_TRANSCRIPTION_ERROR",
+    "path": "evidence/backref-cost-specialization-factorization-v3-phase2-refusal-audit-20260820/local-audit-receipt.json",
+    "field": "toolchain_identity.canonical_sha256",
+    "recorded_value": "735eb9be26c9b7118819b502bf0e24b6d87e8da945d81858c22bebdfc889ce077",
+    "recorded_length": 65,
+    "correct_value": "735eb9be26c9b7118819b502bf0e24b6d87e8da945d81858c22bebdf889ce077",
+    "correct_length": 64,
+    "effect": "The Phase 2 summary receipt mistyped one digest. The committed toolchain agreement, manifest, actual local recomputation, independent fixture, and Phase 2 audit.json all contain and validate the correct digest. Prior evidence is preserved byte-for-byte."
+  },
+  "schema_audit": {
+    "schema_catalog_path": "scripts/backref_cost_specialization_factorization_v3_schemas.json",
+    "schema_catalog_sha256": "db3a4c7e57cb6e08dee9dad020a938ae3f1eb92ad7824c3dfdc475bf5fb93717",
+    "protocol_version": 8,
+    "catalog_entries": 27,
+    "committed_v3_json_receipts_parsed": 14,
+    "parse_failures": [],
+    "observed_remote_result_schemas": 0,
+    "note": "Design/refusal/audit metadata schemas are receipt-local; the catalog freezes transport and run-artifact schemas. No remote run artifacts exist to validate against those result schemas."
+  },
+  "local_gate_reexecution": {
+    "status": "PASS",
+    "commands": [
+      "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_payload_identity.py",
+      "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_toolchain_identity.py",
+      "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_protocol.py",
+      "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_admission.py",
+      "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_archive.py",
+      "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_process_ownership.py",
+      "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_streaming.py",
+      "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_experiment.py",
+      "PYTHONPATH=scripts python3 scripts/test_experiment_guards.py"
+    ],
+    "payload_toolchain_protocol_admission_archive_process_streaming": "PASS",
+    "correctness_sanitizer_abi_default_guard_codegen": "PASS",
+    "global_mutual_exclusion_guards": "PASS_39",
+    "local_correctness_encodes": 3,
+    "sanitizer_configurations": 2,
+    "sanitizer_boundary_encodes": 36,
+    "fresh_local_bitstream_sha256": "a3073eda31e5f94a3529661f8e11da82328a414b5b226722eab10256abab6c9a",
+    "fresh_timed_runner_sha256": "398d36c65ebdb10c5578c0031878a2a9789f830ba84d977ce8b7c309837f0c40",
+    "fresh_recorder_runner_sha256": "09dbe0be472273fec477f33a4baa44b20778e2af2159b5e3173f1cbc13b1cfcf",
+    "ephemeral_binary_note": "Phase 1's referenced runner binaries are not committed and therefore their embedded hashes cannot be actual-file recomputed. A fresh local rebuild has different complete Mach-O hashes but reproduces the frozen symbol/codegen/work facts exactly; no cross-build binary-identity claim is made."
+  },
+  "semantic_and_build_facts": {
+    "ordinary_build_default_omission": "PASS",
+    "public_api_abi_equal": "PASS",
+    "mutual_isolation": "PASS_39_GUARDS",
+    "runtime_truth_table": "PASS_ABSENT_B_EXACT_B_L_H_OTHER_INVALID",
+    "selector_once_before_mutation": "PASS",
+    "exactly_one_selected_dp_body": "PASS",
+    "one_shared_dp_source_body": "PASS",
+    "bitstream_pixel_determinism": "PASS_LOCAL",
+    "input_immutability": "PASS_LOCAL",
+    "allocation_fallback_integer_tie_update_order_traceback": "PASS_STATIC_AND_LOCAL_BOUNDARY_TESTS",
+    "timed_recorder_free": true,
+    "untimed_counter_binary_separate": true,
+    "timed_recorder_symbols_present": false,
+    "untimed_recorder_symbols_present": true,
+    "linker_flags": "-Wl,-no_deduplicate",
+    "all_six_private_symbol_addresses_distinct": true,
+    "phase1_timed_runner_sha256": "df1813e7ae08b7503f4cca6f93740d7d14dc33ca81d34666610778840b4769ac",
+    "phase1_recorder_runner_sha256": "75179cec2cdf9e0c801a22764473e415e5a972b9c1c0e738cf1b616bbc2846e4"
+  },
+  "codegen": {
+    "BackwardReferencesHashChainDistanceOnly": {
+      "size_bytes": 1292,
+      "instructions": 323,
+      "branches": 54,
+      "loads": 55,
+      "stores": 23,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"
+    },
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": {
+      "size_bytes": 1292,
+      "instructions": 323,
+      "branches": 54,
+      "loads": 55,
+      "stores": 23,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"
+    },
+    "BackwardReferencesHashChainDistanceOnlySpecialized": {
+      "size_bytes": 1292,
+      "instructions": 323,
+      "branches": 54,
+      "loads": 55,
+      "stores": 23,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f"
+    },
+    "PushInterval": {
+      "size_bytes": 508,
+      "instructions": 127,
+      "branches": 30,
+      "loads": 25,
+      "stores": 11,
+      "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8"
+    },
+    "PushIntervalLayoutClone": {
+      "size_bytes": 508,
+      "instructions": 127,
+      "branches": 30,
+      "loads": 25,
+      "stores": 11,
+      "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8"
+    },
+    "PushIntervalSpecialized": {
+      "size_bytes": 732,
+      "instructions": 183,
+      "branches": 45,
+      "loads": 34,
+      "stores": 12,
+      "mnemonics_sha256": "453c8695e2523dc281903d227f9896d68decf895d5676690c8bd67a59431f190"
+    },
+    "B_L_dp_instruction_and_mnemonic_equal": true,
+    "B_L_push_instruction_and_mnemonic_equal": true,
+    "H_intended_push_boundary_differs": true
+  },
+  "local_work_counts": {
+    "fixture": "local.ppm 257x97 seed=7 method=4",
+    "selector_evaluations": {
+      "B": 2,
+      "L": 2,
+      "H": 2
+    },
+    "exact_activations": {
+      "B": 2,
+      "L": 2,
+      "H": 2
+    },
+    "dp_calls": {
+      "B": 2,
+      "L": 2,
+      "H": 2
+    },
+    "common": {
+      "push_calls": 174,
+      "short_push_calls": 153,
+      "cache_segments": 207,
+      "overlap_scans": 68,
+      "disjoint_prefix_scans": 12,
+      "insert_calls": 158,
+      "null_hint_insert_calls": 157,
+      "interval_updates": 0,
+      "interval_pops": 158,
+      "max_live_intervals": 21,
+      "bitstream_bytes": 134,
+      "bitstream_fnv1a64": "847636c89f55c705"
+    },
+    "forward_position_steps": {
+      "B": 723,
+      "L": 723,
+      "H": 0
+    },
+    "backward_position_steps": {
+      "B": 1,
+      "L": 1,
+      "H": 1
+    },
+    "H_hint": {
+      "fast_paths": 146,
+      "branch_checks": 157,
+      "loads": 157,
+      "start_loads": 146,
+      "update_checks": 12,
+      "updates": 157
+    },
+    "B_L_hint_and_pop_tail_activity": 0,
+    "B_L_exact_work_equality": true,
+    "B_L_H_common_work_equality": true,
+    "H_intended_hint_only_difference": true
+  },
+  "frozen_plan": {
+    "status": "PASS_DECLARED_NOT_EXECUTED",
+    "corpus": [
+      {
+        "case_id": "photo-large",
+        "file": "photo-large.ppm",
+        "width": 3000,
+        "height": 2000,
+        "sha256": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612",
+        "actual_file_recomputed_in_phase3": false
+      },
+      {
+        "case_id": "graphic-large",
+        "file": "graphic-large.ppm",
+        "width": 3000,
+        "height": 2000,
+        "sha256": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc",
+        "actual_file_recomputed_in_phase3": false
+      }
+    ],
+    "corpus_note": "The descriptors and digests are frozen consistently in committed protocol/manifest receipts. The PPM corpus files are not committed in this worktree and no remote archive exists, so Phase 3 does not claim actual-file corpus recomputation.",
+    "case_order": [
+      "photo-large",
+      "graphic-large"
+    ],
+    "methods": [
+      4,
+      6
+    ],
+    "variants": [
+      "B",
+      "L",
+      "H"
+    ],
+    "repetitions": 3,
+    "variant_order": [
+      [
+        "B",
+        "L",
+        "H"
+      ],
+      [
+        "H",
+        "L",
+        "B"
+      ],
+      [
+        "L",
+        "B",
+        "H"
+      ]
+    ],
+    "profile_processes": 36,
+    "warmups": 36,
+    "retained_timing_rows": 144,
+    "runner_rows": 180,
+    "stage_rows": 180,
+    "correctness_encodes": 24,
+    "untimed_work_rows": 12,
+    "paired_rows_per_cell_metric": 12,
+    "pairwise_families": [
+      "B_to_L",
+      "L_to_H",
+      "B_to_H"
+    ],
+    "primary_metrics": [
+      "dp_total",
+      "dp_steady",
+      "whole_encode"
+    ],
+    "bootstrap_resamples_if_observed": 100000,
+    "bootstrap_seed_base_if_observed": "0x424c4801"
+  },
+  "transport": {
+    "local_contract_tests": "PASS",
+    "archive_cap_bytes": 786432,
+    "framed_response_cap_bytes": 1048576,
+    "control_cap_bytes": 8192,
+    "bulk_chunk_bytes": 262144,
+    "local_archive_fixture_bytes": 7919,
+    "local_archive_fixture_sha256": "5a371d02be444f784401c0b7274f0334644936de14403f3e464e95e3f81b792f",
+    "request_direction_fixture_bytes": 2101248,
+    "response_direction_fixture_bytes": 530893,
+    "response_direction_fixture_archive_bytes": 528384,
+    "remote_archive_bytes": 0,
+    "remote_archive_integrity": "UNKNOWN_NOT_REACHED",
+    "remote_extraction": "UNKNOWN_NOT_REACHED"
+  },
+  "authority_and_remote_gates": {
+    "phase1_rehearsal_connection": "FAIL_CLOSED_TIMEOUT",
+    "phase1_connection_attempts": 1,
+    "phase1_connections_established": 0,
+    "phase1_remote_paths_created_or_reached": 0,
+    "phase1_lease_attempts": 0,
+    "phase1_encoder_workloads": 0,
+    "phase1_work_counter_workloads": 0,
+    "phase1_profiler_workloads": 0,
+    "phase1_timing_samples": 0,
+    "phase2_host_contacts": 0,
+    "phase2_lease_attempts": 0,
+    "phase2_workloads": 0,
+    "phase2_timing_samples": 0,
+    "remote_source_admission": "UNKNOWN_NOT_REACHED",
+    "remote_toolchain_identity": "UNKNOWN_NOT_REACHED",
+    "device_identity": "UNKNOWN_NOT_REACHED",
+    "resource_admission": "UNKNOWN_NOT_REACHED",
+    "remote_process_isolation": "UNKNOWN_NOT_REACHED",
+    "exclusive_lease": "NOT_ATTEMPTED",
+    "archive_inventory_integrity": "UNKNOWN_NOT_REACHED",
+    "safe_extraction": "UNKNOWN_NOT_REACHED",
+    "remote_cleanup": "UNKNOWN_NOT_REACHED",
+    "remote_absence_proof": "UNKNOWN_NOT_REACHED",
+    "exact_local_child_reaped": true,
+    "discovered_pid_signals": 0,
+    "authority": "NONE"
+  },
+  "observed_evidence": {
+    "remote_raw_artifact_files": 0,
+    "profile_plan_files": 0,
+    "raw_stage_rows": 0,
+    "raw_runner_rows": 0,
+    "retained_timing_rows": 0,
+    "untimed_remote_work_rows": 0,
+    "remote_correctness_rows": 0,
+    "timing_observations": 0,
+    "declared_frozen_rows_are_not_observations": true
+  },
+  "statistics": {
+    "formula_if_observed": "100 * (Y - X) / X; negative is faster",
+    "unavailable_summary_fields": [
+      "paired_percentages",
+      "mean_percent",
+      "median_percent",
+      "sample_stddev_percent",
+      "minimum_percent",
+      "maximum_percent",
+      "negative_count",
+      "zero_count",
+      "positive_count",
+      "bootstrap_mean_ci95_percent"
+    ],
+    "unavailable_reason": "Authority is NONE and no retained timing rows exist. Frozen inventory counts are declarations, not samples; no missing-row inference, bootstrap, sign count, classification, or threshold comparison is permitted.",
+    "cells": {
+      "photo-m4": {
+        "dp_total": {
+          "B_to_L": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "L_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "B_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12}
+        },
+        "dp_steady": {
+          "B_to_L": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "L_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "B_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12}
+        },
+        "whole_encode": {
+          "B_to_L": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "L_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "B_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12}
+        }
+      },
+      "photo-m6": {
+        "dp_total": {
+          "B_to_L": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "L_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "B_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12}
+        },
+        "dp_steady": {
+          "B_to_L": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "L_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "B_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12}
+        },
+        "whole_encode": {
+          "B_to_L": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "L_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "B_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12}
+        }
+      },
+      "graphic-m4": {
+        "dp_total": {
+          "B_to_L": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "L_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "B_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12}
+        },
+        "dp_steady": {
+          "B_to_L": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "L_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "B_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12}
+        },
+        "whole_encode": {
+          "B_to_L": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "L_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "B_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12}
+        }
+      },
+      "graphic-m6": {
+        "dp_total": {
+          "B_to_L": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "L_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "B_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12}
+        },
+        "dp_steady": {
+          "B_to_L": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "L_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "B_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12}
+        },
+        "whole_encode": {
+          "B_to_L": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "L_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12},
+          "B_to_H": {"status": "UNAVAILABLE", "observations": 0, "frozen_required": 12}
+        }
+      }
+    }
+  },
+  "interpretation": {
+    "B_to_L_layout_control_effect": "NOT_ESTABLISHED_AS_PERFORMANCE_RESULT",
+    "L_to_H_hint_effect": "NOT_ESTABLISHED_AS_PERFORMANCE_RESULT",
+    "B_to_H_total_effect": "NOT_ESTABLISHED_AS_PERFORMANCE_RESULT",
+    "interaction": "NOT_CLASSIFIABLE",
+    "code_level_only": "B and L reproduce equal algorithm/work and normalized instruction facts under distinct addresses; H activates the intended append-hint boundary, removes forward positioning steps in the local fixture, and has the larger distinct PushInterval codegen. These facts establish experimental separation, not speed, layout cost, hint benefit, or interaction direction."
+  },
+  "production_consequence": {
+    "decision": "HOLD_PROMOTION_AND_ALL_PRODUCTION_PERFORMANCE_CLAIMS",
+    "production_promotion_authorized": false,
+    "thresholds_weakened": false,
+    "missing_rows_inferred": false,
+    "new_lead": null,
+    "reason": "No admissible B/L/H timing rows exist, so none of the frozen diagnostic or production thresholds can be evaluated."
+  },
+  "raw_evidence": {
+    "rehearsal-invocation.json": {
+      "bytes": 703,
+      "sha256": "de9b6abd56df419dc78a84e7a2dd3ed125a98423f65fe6c1c4d7f88bb0a6338e"
+    },
+    "rehearsal.json": {
+      "bytes": 1894,
+      "sha256": "471de512933126c77cbe7654c7e58a2d7f83609e7d7729317ddb5f986b112984"
+    },
+    "return-protocol/framed-stdout.bin": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "return-protocol/transport-stderr.bin": {
+      "bytes": 65,
+      "sha256": "561ab6a0b87eb9dbd145fcb63a6dddd66c215f13680aa83763b3260d3e904eaa"
+    },
+    "transfer-cleanup.json": {
+      "bytes": 1162,
+      "sha256": "62a9ed9a858a095cd71bae4ecc00dfbd9ad74151ca0f24b5d16ed10e8a0fc598"
+    }
+  }
+}

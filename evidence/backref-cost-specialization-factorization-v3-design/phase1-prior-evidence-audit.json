@@ -1,0 +1,66 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v3-prior-evidence-audit-v1",
+  "status": "PASS",
+  "base_commit": "96f5d1881619bd5b25404d869cbb2ac2d4b3329c",
+  "auditor": "Sol/high",
+  "v1": {
+    "status": "MERGED_DEFAULT_OFF_REFUSAL_NOT_RERUN",
+    "phase1b_authorization": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-design/phase1b-authorization.json",
+      "sha256": "2f761330d9045664637c4b7611927b331073444ee50d63e1d9dc0fd20b4af105",
+      "phase_2_authority": "NONE"
+    },
+    "phase3_consequence": {
+      "path": "evidence/backref-cost-specialization-factorization-v1-phase3-evaluation-consequence-20260819.json",
+      "sha256": "6fc1e5e3e4105e27f0e54f5edbfe8b12d25236b1cb629930eef8d6a0b98ff2c9"
+    },
+    "finding": "V1 froze a predecessor-domain representative payload digest; its sole rehearsal disagreed, so authority NONE was mandatory.",
+    "sample_policy": "No V1 timing, authority, workload, rehearsal, or remote path is reused or rerun."
+  },
+  "v2": {
+    "status": "MERGED_DEFAULT_OFF_REFUSAL_NOT_RERUN",
+    "payload_agreement": {
+      "path": "evidence/backref-cost-specialization-factorization-v2-design/representative-payload-agreement.json",
+      "sha256": "843056c2c86b68d6587507dea9faefced70768a966a1e7203e9c0005805ac17a",
+      "payload_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+      "status": "PASS"
+    },
+    "phase1b_authorization": {
+      "path": "evidence/backref-cost-specialization-factorization-v2-design/phase1b-authorization.json",
+      "sha256": "fc6072b821ebaf705ee6b4984afb35da1c742d0a4245445ddbf79f69b0c5ec9e",
+      "phase_2_authority": "NONE"
+    },
+    "phase2_refusal_audit": {
+      "path": "evidence/backref-cost-specialization-factorization-v2-phase2-refusal-audit-20260819/audit.json",
+      "sha256": "5da8a851f38e368ec3338b1f62ed79bb2fd5955dd163e76f242270d191370d35"
+    },
+    "phase3_consequence": {
+      "path": "evidence/backref-cost-specialization-factorization-v2-phase3-evaluation-consequence-20260819.json",
+      "sha256": "4bed6b5f73bc5cb6fe2cc244e9f7b2ab7227bee2bf2974cf0ebe2508f3b98016"
+    },
+    "finding": "V2 correctly repaired payload identity but froze stale /usr/bin/xcrun SHA-256 b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152. The actual orchestration-Mac xcrun is a439970aea2b4e435eac6518ff62c97fd1c57d8c731974027ad211b515c7a7b8 (version 72). Its sole rehearsal refused before build and had authority NONE.",
+    "sample_policy": "No V2 timing, authority, workload, rehearsal, or old remote path is reused or rerun."
+  },
+  "causal_boundary": {
+    "decision": "PRESERVE_B_L_H",
+    "B": "original merged baseline algorithm and work",
+    "L": "always-specialized matched-layout clone with B algorithm and work",
+    "H": "always-specialized append-hint algorithm",
+    "B_to_L": "layout/control",
+    "L_to_H": "hint within matched structure",
+    "B_to_H": "total",
+    "shared_dp_template_sha256": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5",
+    "v2_layout_clone_sha256": "30f144d46895f210cf1969cda8696a7ad21fd7cf708c94ad32703f6caa675a7b",
+    "v3_layout_clone_sha256": "30f144d46895f210cf1969cda8696a7ad21fd7cf708c94ad32703f6caa675a7b",
+    "finding": "V3 preserves the audited one-DP-template, three-private-body structure; namespace-only recorder/control changes do not alter B/L/H algorithm semantics."
+  },
+  "toolchain_repair": {
+    "decision": "ELIMINATE_XCRUN",
+    "reason": "Pinned clang/clang++/nm/ar/ranlib and llvm-objdump are directly executable, while SDK identity is available from pinned SDKSettings metadata.",
+    "required_executables": 6,
+    "required_metadata_files": 4,
+    "manifest_actual_fixture_agreement_required": true,
+    "stale_v2_xcrun_negative_required": true
+  },
+  "performance_samples_generated": 0
+}

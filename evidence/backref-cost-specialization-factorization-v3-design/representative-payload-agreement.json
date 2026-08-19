@@ -1,0 +1,13 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v3-payload-agreement-v1",
+  "status": "PASS",
+  "payload_bytes": 2097152,
+  "manifest_sha256_value": "8fb97e16b8be09e7dc0c20b0b26387a0f8301d0aa738fa7ade4a6a97d15afeb8",
+  "generator_recomputation_sha256": "8fb97e16b8be09e7dc0c20b0b26387a0f8301d0aa738fa7ade4a6a97d15afeb8",
+  "independent_fixture_sha256_value": "8fb97e16b8be09e7dc0c20b0b26387a0f8301d0aa738fa7ade4a6a97d15afeb8",
+  "generator_path": "scripts/backref_cost_specialization_factorization_v3_payload.py",
+  "generator_file_sha256": "af80a11ecae2969f8560e4f236e821aa19df4a5a6f79a08aaac6b93a6573d8f5",
+  "fixture_path": "evidence/backref-cost-specialization-factorization-v3-design/representative-payload-fixture.json",
+  "stale_predecessor_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+  "negative_stale_predecessor_test": "PASS_REJECTED"
+}

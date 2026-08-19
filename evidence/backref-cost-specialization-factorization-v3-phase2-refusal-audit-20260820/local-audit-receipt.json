@@ -1,0 +1,95 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v3-phase2-local-audit-receipt-v1",
+  "status": "PASS",
+  "audit_execution": {
+    "mode": "local-only",
+    "host_contact": false,
+    "remote_commands": 0,
+    "lease_attempts": 0,
+    "benchmark_invocations": 0,
+    "phase2_timing_samples": 0,
+    "phase2_raw_rows": 0,
+    "phase3_evaluation": false,
+    "phase1_rehearsal_rerun": false
+  },
+  "local_commands": [
+    {"command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_payload_identity.py", "status": "PASS", "result": "manifest_generator_fixture_agree=true; transport_generator_agrees=true; negative_stale_predecessor_test=PASS_REJECTED; payload_bytes=2097152; sha256=8fb97e16b8be09e7dc0c20b0b26387a0f8301d0aa738fa7ade4a6a97d15afeb8"},
+    {"command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_toolchain_identity.py", "status": "PASS", "result": "manifest_actual_fixture_agree=true; required_executables=6; required_metadata=4; stale_v2_xcrun_negative_test=PASS_REJECTED; xcrun_required=false"},
+    {"command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_protocol.py", "status": "PASS", "result": "frozen semantics, strict single-session frames, refusal fixtures, authority separation, and 36-command plan"},
+    {"command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_admission.py", "status": "PASS", "result": "canonical-only paths, repository-context source admission, strict request frames, receipt hashes, and disjoint modes"},
+    {"command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_archive.py", "status": "PASS", "result": "archive_bytes=7919; archive_sha256=5a371d02be444f784401c0b7274f0334644936de14403f3e464e95e3f81b792f; builds=2; archive_cap_bytes=786432; safe extraction and malicious rejection"},
+    {"command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_process_ownership.py", "status": "PASS", "result": "opaque ancestor identity guards, exact denied identities, discovered PIDs excluded from signal APIs, one in-session cleanup"},
+    {"command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_streaming.py", "status": "PASS", "result": "request_bytes=2101248; response_bytes=530893; response_archive_bytes=528384; response_cap_bytes=1048576; archive_cap_bytes=786432; bounded state transitions and retained-child timeout"},
+    {"command": "PYTHONPATH=scripts python3 scripts/test_backref_cost_specialization_factorization_v3_experiment.py", "status": "PASS", "result": "local_correctness_encodes=3; boundary_correctness_encodes=36; sanitizer_configurations=2; public_api_abi_equal=true; default_omission=true; timed_recorder_free=true; matched_layout_codegen=true; local_bitstream_sha256=a3073eda31e5f94a3529661f8e11da82328a414b5b226722eab10256abab6c9a"},
+    {"command": "PYTHONPATH=scripts python3 scripts/test_experiment_guards.py", "status": "PASS", "result": "39 independent build/runtime guards and v1-v16 plus V3 process-ownership guards"},
+    {"command": "independent local hash/index/receipt audit over main->Phase1A->Phase1B", "status": "PASS", "result": "exact ancestry/trees; 40 frozen manifest members; payload/toolchain identities; five rehearsal hash-index entries; authority and refusal counts recomputed"},
+    {"command": "git diff --check exact main..HEAD excluding preserved raw transport-stderr.bin", "status": "PASS", "result": "all source/protocol/JSON paths whitespace-clean"}
+  ],
+  "independent_chain": {
+    "main": "96f5d1881619bd5b25404d869cbb2ac2d4b3329c",
+    "phase1a": "4ddd74f86eefc1c9457cff49dd53a1f1d91728f9",
+    "phase1b": "0f163c27fa01fd5b3fb93c87eb35feb161c51b24",
+    "main_tree": "6a15e102beff58858eeaa0173001ac5b804d6cbd",
+    "phase1a_tree": "d959f1ad4ab5df283816edd7d0db1dc1fa6ee405",
+    "phase1b_tree": "40ce83f65315ebe4d2f8b35649f1b85400073065",
+    "phase1b_diff_entries": 7,
+    "phase1b_all_additions": true,
+    "phase1b_outside_scope_paths": [],
+    "worktree_clean_before_audit": true
+  },
+  "manifest_hash_audit": {"manifest_sha256": "7cc212d8616e19e01a527aad2da691808f5ef19ae2243cfad368169d9324df71", "frozen_member_count": 40, "recomputed": true, "mismatches": []},
+  "payload_identity": {"bytes": 2097152, "sha256": "8fb97e16b8be09e7dc0c20b0b26387a0f8301d0aa738fa7ade4a6a97d15afeb8", "agreement_receipt_sha256": "b37c2e02b139d93bcbf8ad49e6e6dde723e0a2f1cb400ba34143bb3d54bde2b9", "stale_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0", "negative_test": "PASS_REJECTED"},
+  "toolchain_identity": {"canonical_sha256": "735eb9be26c9b7118819b502bf0e24b6d87e8da945d81858c22bebdfc889ce077", "agreement_receipt_sha256": "34179214e62bd7f7f3b45b46219aa63e6c1394c72d55d249ebb4a99c5325f930", "fixture_sha256": "3da392cb5dcdb313c99ba474da148e36d524dbdf909e0b77be39f6afc4a812c0", "executables": ["clang","clang++","nm","ar","ranlib","llvm-objdump"], "metadata": ["xcode-version-plist","toolchain-info-plist","sdk-settings-json","sdk-settings-plist"], "xcrun_required": false, "stale_v2_xcrun_negative": "PASS_REJECTED"},
+  "codegen_work_facts": {
+    "timed_recorder_free": true,
+    "no_deduplicate": true,
+    "all_six_addresses_distinct": true,
+    "B_L_dp_mnemonic_equal": true,
+    "B_L_push_mnemonic_equal": true,
+    "H_push_mnemonic_differs": true,
+    "counts": {"B_forward_steps": 723, "L_forward_steps": 723, "H_forward_steps": 0, "push_calls": 174, "cache_segments": 207, "overlap_scans": 68, "interval_pops": 158, "max_live_intervals": 21, "H_hint_fast_paths": 146, "H_hint_branch_checks": 157, "H_hint_loads": 157, "H_hint_start_loads": 146, "H_hint_update_checks": 12, "H_hint_updates": 157, "B_L_hint_pop_activity": 0}
+  },
+  "frozen_inventory": {
+    "corpus": ["photo-large.ppm","graphic-large.ppm"],
+    "methods": [4,6],
+    "repetitions": 3,
+    "warmups": 36,
+    "retained_timing_rows": 144,
+    "runner_rows": 180,
+    "stage_rows": 180,
+    "correctness_encodes": 24,
+    "untimed_work_rows": 12,
+    "variant_orders": [["B","L","H"],["H","L","B"],["L","B","H"]],
+    "pairwise_families": ["B_to_L","L_to_H","B_to_H"],
+    "primary_metrics": ["dp_total","dp_steady","whole_encode"],
+    "pairwise_results": "NOT_AVAILABLE_AUTHORITY_NONE"
+  },
+  "rehearsal_raw_evidence": {
+    "hash_index_path": "evidence/backref-cost-specialization-factorization-v3-design/phase1b-rehearsal-hashes.json",
+    "hash_index_sha256": "17e57d101e5465775916eaef9df0815b50b951d6f0aed28ad306e333e5d08641",
+    "framed_stdout_path": "evidence/backref-cost-specialization-factorization-v3-design/rehearsal/return-protocol/framed-stdout.bin",
+    "framed_stdout_bytes": 0,
+    "framed_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "transport_stderr_path": "evidence/backref-cost-specialization-factorization-v3-design/rehearsal/return-protocol/transport-stderr.bin",
+    "transport_stderr_bytes": 65,
+    "transport_stderr_sha256": "561ab6a0b87eb9dbd145fcb63a6dddd66c215f13680aa83763b3260d3e904eaa",
+    "archive_bytes": 0,
+    "remote_absence_proved": false,
+    "exact_local_child_reaped": true
+  },
+  "phase2_refusal": {
+    "host_contact": false,
+    "ssh_invocations": 0,
+    "leases": 0,
+    "benchmark_workloads": 0,
+    "timing_samples": 0,
+    "raw_rows": 0,
+    "authority": "NONE"
+  },
+  "audit_notes": [
+    "All tests were local-only; no SSH, SCP, remote path, lease, timing pipeline, CUDA, or parallel workload was invoked by Phase 2.",
+    "The Phase 1 refusal rehearsal was not rerun.",
+    "The local timer check creates no Phase 2 timing authority.",
+    "The raw transport stderr is preserved byte-for-byte with CRLF; source/protocol/JSON whitespace checks pass, while git diff --check flags only that raw evidence line."
+  ]
+}
