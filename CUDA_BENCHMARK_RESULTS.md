@@ -462,3 +462,26 @@ register cost: warm photo/texture device wall rose from 39.89/38.38 to
 44.74/43.39 ms and I4's cycle share rose from 64.9/65.6% to 69.2/69.9%.
 Barrier removal on this Turing wavefront must therefore preserve the compact
 mode-lane packing as well as ten-way concurrency.
+
+The next profile moved to the second-largest phase rather than trying another
+I4 layout. Instrumenting thread 0 inside import/setup showed that the serial
+luma16 and chroma8 prediction generators consumed 92.8--92.9% of setup cycles;
+borders were 2.5--2.6%, the parallel source-copy tail 3.8%, and non-zero context
+setup 0.8%. The retained kernel computes the exact Y/U/V DC sums on thread 0,
+then fills every pixel of the four luma and eight chroma prediction planes over
+all 128 threads, preserving unavailable-border defaults and true-motion clips.
+
+Five alternating native-sm_75 processes, each with one warmup and three
+24-image samples, produced 15 samples per cell:
+
+| Format | Serial prediction median | Parallel prediction median | Change |
+|---|---:|---:|---:|
+| PNG lossy | 57.337 ms/image | 53.668 ms/image | **-3.669 ms (-6.4%)** |
+| JPEG lossy | 58.074 ms/image | 54.784 ms/image | **-3.290 ms (-5.7%)** |
+
+The complete portable suite then measured PNG lossy at 97.1 ms CPU / 53.0 ms
+CUDA (**1.83x**) and JPEG lossy at 97.0 / 53.3 ms (**1.82x**), improving the
+preceding same-machine official CUDA rows by 3.7 and 3.8 ms/image. All 180
+suite validation pairs passed. An additional 105-case byte-parity battery
+covered methods 2--6, qualities 25/75/98, tiny 17x13 and odd 257x255 inputs,
+and band-3 fault fallback across all methods and content classes.

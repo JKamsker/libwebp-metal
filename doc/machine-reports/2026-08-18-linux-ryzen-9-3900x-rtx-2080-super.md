@@ -136,3 +136,28 @@ On the three canonical 1600x1200 PNG content classes, method 5 measured
 435.3 ms CPU versus 125.3 ms CUDA (**3.47x**). A focused 513x517 RGBA test
 also covers quality 75/99, one/two-pass encodes, alpha, and transactional CPU
 fallback after a deliberately failed collect.
+
+## Parallel macroblock prediction follow-up
+
+A sub-profile attributed 92.8--92.9% of the decimator's thread-0 setup cycles
+to serial luma16/chroma8 prediction-plane generation. Filling those independent
+pixels across all 128 CTA threads, while retaining exact serial DC sums,
+improved five-round alternating-process method-4 medians from 57.337 to
+53.668 ms/image PNG and 58.074 to 54.784 ms/image JPEG. Output hashes and byte
+counts matched in every sample.
+
+The complete portable suite was repeated with label `win-2080super` and the
+candidate batch binary explicitly relinked:
+
+| Method | CPU time | CUDA time | CUDA speedup |
+|---|---:|---:|---:|
+| PNG lossy — batch | 97.1 ms | 53.0 ms | **1.83x** |
+| JPEG lossy — batch | 97.0 ms | 53.3 ms | **1.82x** |
+| PNG lossy — fresh process | 99.3 ms | 275.9 ms | **0.36x** |
+| JPEG lossy — fresh process | 100.4 ms | 274.1 ms | **0.37x** |
+
+All 180 official validation pairs passed. A separate 105-case exact-byte
+battery covered methods 2--6, qualities 25/75/98, 17x13 tiny and 257x255 odd
+inputs across three content classes, and forced band-3 fallback for every
+method/content pair. The focused trellis/fallback, concurrency, histogram, and
+near-lossless tests also passed.

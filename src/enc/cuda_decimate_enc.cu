@@ -527,6 +527,7 @@ struct MBWork {
   uint8_t uv_left[1 + 8 + 7 + 1 + 8];
   uint8_t y_top[16 + 4];
   uint8_t uv_top[16];
+  int pred_dc[3];  // Y, U, V DC prediction values
   uint8_t i4_boundary[37];
   // Intra16 per-mode scratch.
   int16_t i16_tmp[4][16][16];
@@ -689,6 +690,83 @@ __device__ void BuildBorders(const DeviceView* v,
   } else {
     for (i = 0; i < 20; ++i) w->y_top[i] = 127;
     for (i = 0; i < 16; ++i) w->uv_top[i] = 127;
+  }
+}
+
+__device__ int PredictionDC(const uint8_t* left, const uint8_t* top,
+                            int size, int round, int shift) {
+  int dc = 0;
+  if (top != nullptr) {
+    for (int i = 0; i < size; ++i) dc += top[i];
+    if (left != nullptr) {
+      for (int i = 0; i < size; ++i) dc += left[i];
+    } else {
+      dc += dc;
+    }
+    return (dc + round) >> shift;
+  }
+  if (left != nullptr) {
+    for (int i = 0; i < size; ++i) dc += left[i];
+    dc += dc;
+    return (dc + round) >> shift;
+  }
+  return 0x80;
+}
+
+__device__ void MakeIntraPredsParallel(MBWork* w, int x, int y, int tid,
+                                       int nthreads) {
+  const uint8_t* const y_left = (x > 0) ? w->y_left + 1 : nullptr;
+  const uint8_t* const y_top = (y > 0) ? w->y_top : nullptr;
+  const uint8_t* const uv_left = (x > 0) ? w->uv_left + 1 : nullptr;
+  const uint8_t* const uv_top = (y > 0) ? w->uv_top : nullptr;
+  for (int i = tid; i < 4 * 16 * 16 + 4 * 2 * 8 * 8; i += nthreads) {
+    if (i < 4 * 16 * 16) {
+      const int mode = i >> 8;
+      const int pixel = i & 255;
+      const int r = pixel >> 4, c = pixel & 15;
+      uint8_t value;
+      if (mode == 0) {
+        value = (uint8_t)w->pred_dc[0];
+      } else if (mode == 1) {
+        value = (y_left != nullptr)
+                    ? ((y_top != nullptr)
+                           ? CudaClip8b(y_top[c] + y_left[r] - y_left[-1])
+                           : y_left[r])
+                    : ((y_top != nullptr) ? y_top[c] : 129);
+      } else if (mode == 2) {
+        value = (y_top != nullptr) ? y_top[c] : 127;
+      } else {
+        value = (y_left != nullptr) ? y_left[r] : 129;
+      }
+      w->yuv_p[kCudaVP8I16ModeOffsets[mode] + r * kCudaBPS + c] = value;
+    } else {
+      const int index = i - 4 * 16 * 16;
+      const int mode = index >> 7;
+      const int channel_pixel = index & 127;
+      const int channel = channel_pixel >> 6;
+      const int pixel = channel_pixel & 63;
+      const int r = pixel >> 3, c = pixel & 7;
+      const uint8_t* const left =
+          (uv_left != nullptr) ? uv_left + channel * 16 : nullptr;
+      const uint8_t* const top =
+          (uv_top != nullptr) ? uv_top + channel * 8 : nullptr;
+      uint8_t value;
+      if (mode == 0) {
+        value = (uint8_t)w->pred_dc[1 + channel];
+      } else if (mode == 1) {
+        value = (left != nullptr)
+                    ? ((top != nullptr)
+                           ? CudaClip8b(top[c] + left[r] - left[-1])
+                           : left[r])
+                    : ((top != nullptr) ? top[c] : 129);
+      } else if (mode == 2) {
+        value = (top != nullptr) ? top[c] : 127;
+      } else {
+        value = (left != nullptr) ? left[r] : 129;
+      }
+      w->yuv_p[kCudaVP8UVModeOffsets[mode] + channel * 8 +
+               r * kCudaBPS + c] = value;
+    }
   }
 }
 
@@ -956,16 +1034,19 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
   ImportMBParallel(&v, &p, x, y, &w, tid, (int)blockDim.x);
   if (tid == 0) {
     BuildBorders(&v, &p, x, y, &w);
-    // VP8MakeLuma16Preds / VP8MakeChroma8Preds NULL conventions.
-    CudaIntra16Preds(w.yuv_p, (x > 0) ? w.y_left + 1 : NULL,
-                     (y > 0) ? w.y_top : NULL);
-    CudaIntraChromaPreds(w.yuv_p, (x > 0) ? w.uv_left + 1 : NULL,
-                         (y > 0) ? w.uv_top : NULL);
+    w.pred_dc[0] = PredictionDC((x > 0) ? w.y_left + 1 : nullptr,
+                                (y > 0) ? w.y_top : nullptr, 16, 16, 5);
+    w.pred_dc[1] = PredictionDC((x > 0) ? w.uv_left + 1 : nullptr,
+                                (y > 0) ? w.uv_top : nullptr, 8, 8, 4);
+    w.pred_dc[2] = PredictionDC((x > 0) ? w.uv_left + 17 : nullptr,
+                                (y > 0) ? w.uv_top + 8 : nullptr, 8, 8, 4);
     // Incoming non-zero context; left_nz[8] is carried separately.
     NzToBytes(LoadNzWord(&v, &p, x, y - 1), LoadNzWord(&v, &p, x - 1, y),
               &w.nz_ctx);
     w.nz_ctx.left_nz[8] = (x > 0) ? left_nz8[mb_index - 1] : 0;
   }
+  __syncthreads();
+  MakeIntraPredsParallel(&w, x, y, tid, (int)blockDim.x);
   __syncthreads();
   PHASE_TS(1);
 
