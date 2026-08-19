@@ -1936,3 +1936,25 @@ shared bytes unchanged. The result is noise: the scan is not a meaningful
 part of the residual critical path, and the quantizer-side shuffles consume
 its saving. The candidate was removed; raw artifacts are under
 `libwebp-i4-last-handoff-*`. Turing-only evidence; no Ampere+ change.
+
+## Zero-level I4 residual-cost rejection
+
+A temporary native-sm_75 value probe measured zero/one/2+ shares of
+45.38/24.52/30.09% on graphic-medium, 74.62/24.54/0.85% on photo-medium, and
+12.82/23.40/63.78% on texture-medium. Since the fixed level cost for zero is
+exactly zero, a pre-Ampere candidate returned `table[0]` directly rather
+than loading and adding `level_fixed[0]`. Ampere+ stayed unchanged.
+
+Candidate and restored source passed all seven CTests. All 24 order-reversed
+rows matched hashes and byte counts:
+
+| Format | Parent | Zero fast path | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.930 ms/image | 40.202 ms/image | -0.273 ms/image |
+| JPEG lossy | 39.810 ms/image | 40.066 ms/image | -0.256 ms/image |
+
+Resource use was unchanged at 103 registers, 352 stack bytes, and 23,392
+shared bytes. Warp divergence outweighed the saved zero-level load, so the
+candidate was removed. Raw artifacts use the
+`libwebp-i4-residual-value-*` and `libwebp-i4-zero-level-cost-*` prefixes.
+Turing-only evidence; no Ampere+ claim.

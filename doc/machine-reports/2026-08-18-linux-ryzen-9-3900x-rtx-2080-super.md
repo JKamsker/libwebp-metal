@@ -2058,3 +2058,31 @@ shared allocation stayed fixed. The quantizer reduction cost canceled the
 tiny scan saving, so the candidate was removed. Exact patch, raw rows,
 candidate build/resources, and candidate/restored tests are archived under
 `libwebp-i4-last-handoff-*`. RTX 2080 SUPER only; no Ampere+ path changed.
+
+## Zero-level I4 residual-cost specialization
+
+The native-sm_75 value probe measured the values consumed by residual
+scoring:
+
+| Content | Zero | One | 2+ |
+|---|---:|---:|---:|
+| Graphic-medium | 45.38% | 24.52% | 30.09% |
+| Photo-medium | 74.62% | 24.54% | 0.85% |
+| Texture-medium | 12.82% | 23.40% | 63.78% |
+
+`VP8LevelFixedCosts[0]` is exactly zero, so a pre-Ampere candidate returned
+the variable table's zero entry without loading the fixed table. Ampere+
+compiled the original implementation. Both candidate and restored source
+passed all seven CTests, and all 24 order-reversed rows were byte-exact:
+
+| Format | Parent | Zero fast path | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.930 ms/image | 40.202 ms/image | -0.273 ms/image |
+| JPEG lossy | 39.810 ms/image | 40.066 ms/image | -0.256 ms/image |
+
+Registers, stack, and shared memory remained 103, 352 bytes, and 23,392
+bytes. The value-dependent branch cost more than the avoided load, so the
+candidate was removed. Raw profile, exact patch, timings, builds/resources,
+and candidate/restored tests are archived under
+`libwebp-i4-residual-value-*` and `libwebp-i4-zero-level-cost-*`. RTX 2080
+SUPER only; no Ampere+ path changed.

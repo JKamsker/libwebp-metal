@@ -1,0 +1,9 @@
+[1/3] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(520): warning #177-D: function "<unnamed>::AddScoreDev" was declared but never referenced
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(705): warning #177-D: function "<unnamed>::ImportMB" was declared but never referenced
+
+[2/3] Linking CUDA static library libwebp.a
+[3/3] Linking CUDA executable webp_cuda_batch_benchmark

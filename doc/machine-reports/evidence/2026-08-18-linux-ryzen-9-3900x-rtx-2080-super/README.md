@@ -275,6 +275,12 @@ pre-Ampere patch, 24 byte-exact timing rows, candidate build and explicit
 resource output, plus candidate/restored seven-test transcripts. The
 last-nonzero scratch handoff was removed.
 
+The `libwebp-i4-residual-value-*` files preserve the temporary native-sm_75
+zero/one/2+ counter patch, raw output, and build log. The matching
+`libwebp-i4-zero-level-cost-*` files contain the exact rejected pre-Ampere
+zero fast-path patch, 24 byte-exact rows, candidate build/resource output,
+and candidate/restored seven-test transcripts.
+
 Inspect the sampling archives with:
 
 ```sh
