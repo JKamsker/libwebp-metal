@@ -668,3 +668,24 @@ reference hashes and byte counts. Five order-balanced process medians were:
 Both gains are well below the retention threshold, so the candidate was
 removed. Raw timing evidence is retained locally in
 `/tmp/libwebp-i4-balanced-ab.zRywWw.json`.
+
+## Combined residual-cost lookup rejection
+
+The I4 metric interval remained limited by its ten scalar residual-cost walks.
+Each coefficient cost loaded both a probability-dependent `uint16_t` and a
+fixed level cost. An exact candidate built a per-image `uint32_t` table with
+the fixed cost folded into the 68 hot entries, retaining the original fixed
+table for levels above 67. This removed one dependent load on the common path,
+but doubled the probability-dependent table from 13 to 26 KiB and increased
+`DecimateKernel` register use from 93 to 109.
+
+All seven focused CTests passed and all 60 timed outputs retained their
+reference hashes and byte counts. Five order-balanced process medians were:
+
+| Format | Baseline | Combined level costs | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.854 ms/image | 43.433 ms/image | +1.579 ms |
+| JPEG lossy | 41.727 ms/image | 42.939 ms/image | +1.213 ms |
+
+The candidate was removed. Raw timing evidence is retained locally in
+`/tmp/libwebp-combined-level-cost-ab.Xn4ND3.json`.

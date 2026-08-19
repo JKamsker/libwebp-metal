@@ -348,3 +348,24 @@ processes, each with one warmup and three retained 24-image samples, measured:
 All 60 outputs retained their reference hash and byte count. Both gains were
 far below the retention threshold, so the code change was removed. The local
 raw timing summary is `/tmp/libwebp-i4-balanced-ab.zRywWw.json`.
+
+## Combined residual-cost table
+
+An exact candidate folded the fixed coefficient-level costs into the 68 hot
+entries of each probability-dependent table. This reduced the common residual
+cost from two dependent loads to one, while levels above 67 retained the
+original fixed-cost fallback. The probability-dependent table grew from 13 to
+26 KiB and `DecimateKernel` register use rose from 93 to 109.
+
+All seven focused CTests passed. Five order-balanced processes per variant,
+with one warmup and three retained 24-image samples, measured:
+
+| Format | Baseline | Combined level costs | Change |
+|---|---:|---:|---:|
+| PNG lossy | 41.854 ms/image | 43.433 ms/image | +1.579 ms |
+| JPEG lossy | 41.727 ms/image | 42.939 ms/image | +1.213 ms |
+
+All 60 outputs retained their reference hash and byte count. The larger table
+and wider addressing outweighed the saved load, so the candidate was removed.
+The local raw summary is
+`/tmp/libwebp-combined-level-cost-ab.Xn4ND3.json`.
