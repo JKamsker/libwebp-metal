@@ -1,0 +1,507 @@
+{
+  "alignment_boundary_bytes": 16384,
+  "base_commit": "92c3b59b2d178c5a03ec20b897252b358f07de81",
+  "boundary_correctness_encodes": 24,
+  "codegen_facts": {
+    "BackwardReferencesHashChainDistanceOnly": {
+      "branch_count": 54,
+      "canonical_instructions_sha256": "1b60e5c8e811ca09374e23e65e08d766242137d1ae73125628eafbc298402efc",
+      "instruction_count": 323,
+      "instruction_words_sha256": "9165f610f8936727ed6888db7e0f1ebe7a3a34eaae59a9a541558de91c10ee93",
+      "load_count": 55,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+      "size_bytes": 1292,
+      "store_count": 23
+    },
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": {
+      "branch_count": 54,
+      "canonical_instructions_sha256": "1b60e5c8e811ca09374e23e65e08d766242137d1ae73125628eafbc298402efc",
+      "instruction_count": 323,
+      "instruction_words_sha256": "a97ec8f4c288a37ca7f6520995e95ddb256cbe7af110c0a5ae96b2ab3dc31f86",
+      "load_count": 55,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+      "size_bytes": 1292,
+      "store_count": 23
+    },
+    "PushInterval": {
+      "branch_count": 30,
+      "canonical_instructions_sha256": "b639260e4c9c1a64c8e33b333da6112d2520e1ab02d111d7de96cdc8d97967ab",
+      "instruction_count": 127,
+      "instruction_words_sha256": "fe242531aaa01f152c2fc3df9aa11f0c62b8b3a274e32d36200153f01b85f48d",
+      "load_count": 25,
+      "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8",
+      "size_bytes": 508,
+      "store_count": 11
+    },
+    "PushIntervalLayoutClone": {
+      "branch_count": 30,
+      "canonical_instructions_sha256": "b639260e4c9c1a64c8e33b333da6112d2520e1ab02d111d7de96cdc8d97967ab",
+      "instruction_count": 127,
+      "instruction_words_sha256": "11b8f81fa59c92aca5d20068d15ec6c66eb268e7047401ae09545322ef2c386d",
+      "load_count": 25,
+      "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8",
+      "size_bytes": 508,
+      "store_count": 11
+    }
+  },
+  "default_omission": true,
+  "inter_entry_padding_bytes": 46844,
+  "ledger_fixture_rows": [
+    {
+      "clock_reads": 2,
+      "fixture": "early-return",
+      "stage_calls": {}
+    },
+    {
+      "clock_reads": 4,
+      "fixture": "allocation-failure",
+      "stage_calls": {
+        "lossless_prepare": 1
+      }
+    },
+    {
+      "clock_reads": 4,
+      "fixture": "empty-input",
+      "stage_calls": {
+        "lossless_container_setup": 1
+      }
+    },
+    {
+      "clock_reads": 6,
+      "fixture": "tiny-skip",
+      "stage_calls": {
+        "lossless_prepare": 1,
+        "lossless_stream_finalize": 1
+      }
+    },
+    {
+      "clock_reads": 6,
+      "fixture": "repeated-stage",
+      "stage_calls": {
+        "lossless_prepare": 2
+      }
+    }
+  ],
+  "linker_map_extract_sha256": "c03ddb8450a8c29d122aeda275cca60bec2dc86eab7c7ed0446b49a5fa34494b",
+  "linker_map_sha256": "cb7969b484a94b88781ed7fc74dad8caf0c8bbc559d8a35376b2e4ec3663e849",
+  "local_bitstream_sha256": "a3073eda31e5f94a3529661f8e11da82328a414b5b226722eab10256abab6c9a",
+  "local_correctness_encodes": 2,
+  "local_work": {
+    "B": {
+      "append_hint_branch_checks": 0,
+      "append_hint_fast_paths": 0,
+      "append_hint_loads": 0,
+      "append_hint_start_loads": 0,
+      "append_hint_update_checks": 0,
+      "append_hint_updates": 0,
+      "baseline_dp_calls": 2,
+      "bitstream_bytes": 134,
+      "bitstream_fnv1a64": "847636c89f55c705",
+      "cache_segments": 207,
+      "case_id": "local",
+      "disjoint_prefix_scans": 12,
+      "exact_activations": 2,
+      "insert_calls": 158,
+      "interval_pops": 158,
+      "interval_updates": 0,
+      "layout_clone_dp_calls": 0,
+      "max_live_intervals": 21,
+      "method": 4,
+      "null_hint_insert_calls": 157,
+      "overlap_scans": 68,
+      "pop_tail_branch_checks": 0,
+      "pop_tail_updates": 0,
+      "position_backward_steps": 1,
+      "position_forward_steps": 723,
+      "push_calls": 174,
+      "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-work-v1",
+      "selector_evaluations": 2,
+      "short_push_calls": 153,
+      "variant": "B"
+    },
+    "L": {
+      "append_hint_branch_checks": 0,
+      "append_hint_fast_paths": 0,
+      "append_hint_loads": 0,
+      "append_hint_start_loads": 0,
+      "append_hint_update_checks": 0,
+      "append_hint_updates": 0,
+      "baseline_dp_calls": 0,
+      "bitstream_bytes": 134,
+      "bitstream_fnv1a64": "847636c89f55c705",
+      "cache_segments": 207,
+      "case_id": "local",
+      "disjoint_prefix_scans": 12,
+      "exact_activations": 2,
+      "insert_calls": 158,
+      "interval_pops": 158,
+      "interval_updates": 0,
+      "layout_clone_dp_calls": 2,
+      "max_live_intervals": 21,
+      "method": 4,
+      "null_hint_insert_calls": 157,
+      "overlap_scans": 68,
+      "pop_tail_branch_checks": 0,
+      "pop_tail_updates": 0,
+      "position_backward_steps": 1,
+      "position_forward_steps": 723,
+      "push_calls": 174,
+      "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-work-v1",
+      "selector_evaluations": 2,
+      "short_push_calls": 153,
+      "variant": "L"
+    }
+  },
+  "matched_layout_codegen": true,
+  "normalized_semantic_sha256": "8a434e0b87a4bfb63eaa95eb615d3ed2113b2a4f2949f7dc806b35ccaf57599b",
+  "normalized_work_b_l_equal": true,
+  "normalized_work_sha256": "2191c66b70ce05335fe5138bf3ef938409ef0837b1c38934eb5e17ccf68eebb0",
+  "public_api_abi_equal": true,
+  "recorder_runner_sha256": "f099aa3b6168062532723aedaf3d01aa7ab91544dc56448451cc2557e6988a31",
+  "sanitizer_configurations": 2,
+  "section_flags": "0x80000400",
+  "section_size_bytes": 50444,
+  "status": "PASS",
+  "symbol_addresses": {
+    "BackwardReferencesHashChainDistanceOnly": "000000010006c000",
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": "0000000100070000",
+    "PushInterval": "0000000100064000",
+    "PushIntervalLayoutClone": "0000000100068000"
+  },
+  "timed_recorder_free": true,
+  "timed_runner_bytes": 648400,
+  "timed_runner_sha256": "43ed71a962f500814851f530ff921a1fbedd878c6d7fc606dc4c809b06515f3e",
+  "timer_accounting_validation_rows": [
+    {
+      "output": {
+        "baseline_dp_calls": 2,
+        "case_id": "local",
+        "exact_activations": 2,
+        "layout_clone_dp_calls": 0,
+        "method": 4,
+        "per_pixel_clock_calls": 0,
+        "reset_scope": "one-encode",
+        "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-timer-accounting-output-v1",
+        "selected_dp_calls": 2,
+        "selector_evaluations": 2,
+        "variant": "B"
+      },
+      "stage": {
+        "backend": "B",
+        "case_id": "local",
+        "clock_correction": "none-raw-with-bounded-overhead",
+        "clock_reads": 68,
+        "encode_index": 0,
+        "error_code": 0,
+        "exact": true,
+        "expected_clock_reads": 68,
+        "height": 97,
+        "ledger_sum_ns": 1911708,
+        "ledger_valid": true,
+        "lossless": true,
+        "metal_cross_color": false,
+        "metal_hash": false,
+        "method": 4,
+        "nested_timers_additive": false,
+        "ok": true,
+        "output_bytes": 134,
+        "pid": 32991,
+        "pixels": 24929,
+        "quality": 75.0,
+        "reconciliation_delta_ns": 0,
+        "record_type": "encode",
+        "run_id": "local-timer-B",
+        "sample_role": "timer-validation",
+        "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-stage-ledger-v1",
+        "stages": {
+          "backref_cost_dp_setup": {
+            "calls": 2,
+            "ns": 53625
+          },
+          "backref_cost_dp_steady": {
+            "calls": 2,
+            "ns": 291166
+          },
+          "backref_cost_dp_total": {
+            "calls": 2,
+            "ns": 370542
+          },
+          "backref_cost_materialize": {
+            "calls": 2,
+            "ns": 1833
+          },
+          "backref_cost_traceback": {
+            "calls": 2,
+            "ns": 1167
+          },
+          "lossless_analyze": {
+            "calls": 1,
+            "ns": 21167
+          },
+          "lossless_backward_refs": {
+            "calls": 3,
+            "ns": 1168833
+          },
+          "lossless_bitstream": {
+            "calls": 3,
+            "ns": 5834
+          },
+          "lossless_container_setup": {
+            "calls": 1,
+            "ns": 23209
+          },
+          "lossless_encoder_init": {
+            "calls": 1,
+            "ns": 250
+          },
+          "lossless_hash_chain": {
+            "calls": 2,
+            "ns": 268500
+          },
+          "lossless_histogram": {
+            "calls": 3,
+            "ns": 189250
+          },
+          "lossless_huffman": {
+            "calls": 5,
+            "ns": 73958
+          },
+          "lossless_palette": {
+            "calls": 1,
+            "ns": 291875
+          },
+          "lossless_prepare": {
+            "calls": 1,
+            "ns": 42
+          },
+          "lossless_riff_write": {
+            "calls": 1,
+            "ns": 916
+          },
+          "lossless_stream_finalize": {
+            "calls": 1,
+            "ns": 4500
+          }
+        },
+        "thread_level": 0,
+        "top_level_ledger": {
+          "allocation_cleanup_orchestration": {
+            "calls": 1,
+            "ns": 99916
+          },
+          "analysis_transforms": {
+            "calls": 1,
+            "ns": 21167
+          },
+          "backward_reference_generation": {
+            "calls": 1,
+            "ns": 1437333
+          },
+          "bitstream_serialization": {
+            "calls": 1,
+            "ns": 5834
+          },
+          "container_output_finalization": {
+            "calls": 1,
+            "ns": 5416
+          },
+          "entropy_huffman_preparation": {
+            "calls": 1,
+            "ns": 73958
+          },
+          "histogram_construction": {
+            "calls": 1,
+            "ns": 189250
+          },
+          "pre_lossless_setup_input": {
+            "calls": 1,
+            "ns": 78834
+          },
+          "residual_unattributed": {
+            "calls": 1,
+            "ns": 0
+          }
+        },
+        "total_ns": 1911708,
+        "width": 257
+      }
+    },
+    {
+      "output": {
+        "baseline_dp_calls": 0,
+        "case_id": "local",
+        "exact_activations": 2,
+        "layout_clone_dp_calls": 2,
+        "method": 4,
+        "per_pixel_clock_calls": 0,
+        "reset_scope": "one-encode",
+        "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-timer-accounting-output-v1",
+        "selected_dp_calls": 2,
+        "selector_evaluations": 2,
+        "variant": "L"
+      },
+      "stage": {
+        "backend": "L",
+        "case_id": "local",
+        "clock_correction": "none-raw-with-bounded-overhead",
+        "clock_reads": 68,
+        "encode_index": 0,
+        "error_code": 0,
+        "exact": true,
+        "expected_clock_reads": 68,
+        "height": 97,
+        "ledger_sum_ns": 1214334,
+        "ledger_valid": true,
+        "lossless": true,
+        "metal_cross_color": false,
+        "metal_hash": false,
+        "method": 4,
+        "nested_timers_additive": false,
+        "ok": true,
+        "output_bytes": 134,
+        "pid": 32992,
+        "pixels": 24929,
+        "quality": 75.0,
+        "reconciliation_delta_ns": 0,
+        "record_type": "encode",
+        "run_id": "local-timer-L",
+        "sample_role": "timer-validation",
+        "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-stage-ledger-v1",
+        "stages": {
+          "backref_cost_dp_setup": {
+            "calls": 2,
+            "ns": 31709
+          },
+          "backref_cost_dp_steady": {
+            "calls": 2,
+            "ns": 209001
+          },
+          "backref_cost_dp_total": {
+            "calls": 2,
+            "ns": 245249
+          },
+          "backref_cost_materialize": {
+            "calls": 2,
+            "ns": 2499
+          },
+          "backref_cost_traceback": {
+            "calls": 2,
+            "ns": 1458
+          },
+          "lossless_analyze": {
+            "calls": 1,
+            "ns": 22209
+          },
+          "lossless_backward_refs": {
+            "calls": 3,
+            "ns": 667125
+          },
+          "lossless_bitstream": {
+            "calls": 3,
+            "ns": 5708
+          },
+          "lossless_container_setup": {
+            "calls": 1,
+            "ns": 21417
+          },
+          "lossless_encoder_init": {
+            "calls": 1,
+            "ns": 208
+          },
+          "lossless_hash_chain": {
+            "calls": 2,
+            "ns": 172583
+          },
+          "lossless_histogram": {
+            "calls": 3,
+            "ns": 189082
+          },
+          "lossless_huffman": {
+            "calls": 5,
+            "ns": 75292
+          },
+          "lossless_palette": {
+            "calls": 1,
+            "ns": 183291
+          },
+          "lossless_prepare": {
+            "calls": 1,
+            "ns": 167
+          },
+          "lossless_riff_write": {
+            "calls": 1,
+            "ns": 709
+          },
+          "lossless_stream_finalize": {
+            "calls": 1,
+            "ns": 1000
+          }
+        },
+        "thread_level": 0,
+        "top_level_ledger": {
+          "allocation_cleanup_orchestration": {
+            "calls": 1,
+            "ns": 17584
+          },
+          "analysis_transforms": {
+            "calls": 1,
+            "ns": 22209
+          },
+          "backward_reference_generation": {
+            "calls": 1,
+            "ns": 839708
+          },
+          "bitstream_serialization": {
+            "calls": 1,
+            "ns": 5708
+          },
+          "container_output_finalization": {
+            "calls": 1,
+            "ns": 1709
+          },
+          "entropy_huffman_preparation": {
+            "calls": 1,
+            "ns": 75292
+          },
+          "histogram_construction": {
+            "calls": 1,
+            "ns": 189082
+          },
+          "pre_lossless_setup_input": {
+            "calls": 1,
+            "ns": 63042
+          },
+          "residual_unattributed": {
+            "calls": 1,
+            "ns": 0
+          }
+        },
+        "total_ns": 1214334,
+        "width": 257
+      }
+    }
+  ],
+  "timer_validation": {
+    "clock_reads": 4096,
+    "elapsed_ns": 55292,
+    "maximum_delta_ns": 83,
+    "mean_read_delta_ns": 13,
+    "minimum_positive_delta_ns": 41,
+    "monotonic": true,
+    "p50_read_delta_ns": 0,
+    "p95_read_delta_ns": 42,
+    "p99_read_delta_ns": 42,
+    "positive_deltas": 1324,
+    "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-timer-check-v1"
+  },
+  "truth_table": {
+    "": -1,
+    "0": -1,
+    "B": 0,
+    "H": -1,
+    "HL": -1,
+    "L": 1,
+    "absent": 0,
+    "b": -1
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "absence_proved": true,
+  "elapsed_transaction_ns": 28852194375,
+  "removed_exact_validated_child": true,
+  "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-aligned-null-stage-attribution-v3/run.1oi8xx_v",
+  "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-aligned-null-stage-attribution-v3",
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-cleanup-receipt-v1",
+  "source_commit": "3b81544df3305601e8c0817e554833f0824ad634",
+  "source_tree": "5e51c6925729f994dcc9987c583a9f1d02acb721",
+  "status": "complete"
+}

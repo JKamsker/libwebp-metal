@@ -1,0 +1,30 @@
+{
+  "bootstrap_sha256": "5e42bf84f5229ad9e2c3f6bcb762a17a8a500701e927e31e54edf03064e1f121",
+  "components": [
+    {
+      "bytes": 87283,
+      "name": "transport-source",
+      "offset": 0,
+      "sha256": "68f401540130cea715e4cd58c901592c0ddcda919d08dc53181cdf53bafdf1a1"
+    },
+    {
+      "bytes": 3228,
+      "name": "payload-source",
+      "offset": 87283,
+      "sha256": "448e6bd791ca2feb15be5451d7bfeb74a653b8e06c94331228f69bbda340fa94"
+    },
+    {
+      "bytes": 23779465,
+      "name": "business-request",
+      "offset": 90511,
+      "sha256": "5e6484f9850c587880ecd14a73e0ad1d890c6bbcb0bc10890b0f1176e86161b5"
+    }
+  ],
+  "protocol_version": 1,
+  "request_bytes": 23869976,
+  "request_chunk_bytes": 65536,
+  "request_chunk_count": 365,
+  "request_sha256": "d13eb1ea2b9609485990848025aea4195d064a2a6c2a0e26945a9c1b2126855a",
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-request-declaration-v1",
+  "transaction_nonce": "d5c781eeb2b0225224adf5ecd392368f00b59b7fc1e257372cd634aacc6b1737"
+}

@@ -1,0 +1,540 @@
+{
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-phase3-evaluation-v1",
+  "record_kind": "phase3_independent_evaluation_and_research_only_consequence",
+  "experiment_id": "BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V3",
+  "phase": "3",
+  "role": "Sol/high independent evaluator and consequence owner",
+  "evaluation_date": "2026-08-20",
+  "branch": "codex/backref-cost-aligned-null-stage-attribution-v3",
+  "scope": {
+    "current_worktree_only": true,
+    "agents_spawned_or_delegated": 0,
+    "phase1_or_phase2_work_performed": false,
+    "remote_or_host_contacts": 0,
+    "ssh_invocations": 0,
+    "benchmark_or_runner_invocations": 0,
+    "lease_attempts": 0,
+    "device_profiler_or_cuda_invocations": 0,
+    "encode_or_timing_invocations": 0,
+    "cleanup_or_remote_mutations": 0,
+    "code_protocol_threshold_or_manifest_edits": 0,
+    "prior_phase_files_modified": 0,
+    "untimed_local_fixture_suites_run": 8,
+    "untimed_local_fixture_suites_passed": 8,
+    "method": "Read-only Git, SHA-256, JSON, source, raw frame, ACK-chain, response archive, extracted-file, and frozen-receipt audit plus eight local synthetic fixture suites. No remote, benchmark, encode, timing, lease, profiler, CUDA, or prior-cycle timing action was performed."
+  },
+  "ancestry_and_handoff_audit": {
+    "status": "PASS_EXACT_LINEAR_CHAIN_AND_ADDITIONS_ONLY_HANDOFFS",
+    "main_commit": "92c3b59b2d178c5a03ec20b897252b358f07de81",
+    "main_tree": "6bf2a478b733d5e80ac2656448fe48c8c0964d9a",
+    "phase1a_commit": "3b81544df3305601e8c0817e554833f0824ad634",
+    "phase1a_parent": "92c3b59b2d178c5a03ec20b897252b358f07de81",
+    "phase1a_tree": "5e51c6925729f994dcc9987c583a9f1d02acb721",
+    "phase1b_commit": "b2bca487bdab0d996e03ee9def8dce1d11e7cd0e",
+    "phase1b_parent": "3b81544df3305601e8c0817e554833f0824ad634",
+    "phase1b_tree": "bd96b57638cfd2ae3fa4ae741aa9c5f5ca3bd4a9",
+    "phase2_commit": "989ef333e4019807f3b8fd4f954078e681448f38",
+    "phase2_parent": "b2bca487bdab0d996e03ee9def8dce1d11e7cd0e",
+    "phase2_tree": "8729d4d63ebf964bc678c950fdbb2b4bc9425ba8",
+    "audited_head_before_phase3": "989ef333e4019807f3b8fd4f954078e681448f38",
+    "all_handoffs_single_parent_and_exact": true,
+    "phase1a_delta": {
+      "paths": 52,
+      "added": 45,
+      "modified": 7
+    },
+    "phase1b_delta": {
+      "paths": 30,
+      "added": 30,
+      "modified_deleted_or_renamed": 0
+    },
+    "phase2_delta": {
+      "paths": 2,
+      "added": 2,
+      "modified_deleted_or_renamed": 0
+    },
+    "phase1b_additions_only": true,
+    "phase2_additions_only": true,
+    "tracked_worktree_status_before_phase3": "CLEAN"
+  },
+  "frozen_hash_schema_order_and_count_audit": {
+    "status": "PASS",
+    "hashes": {
+      "manifest_sha256": "c3067e6506fb642f6afac48f1ce1549875066ad7dbfdf4302fa55b620bcaf426",
+      "protocol_sha256": "e21257f4aa4f9e4f9f0a8bee35aafdacf0c8f6402a18a4565232d9368747fa6b",
+      "schema_catalog_sha256": "0e2263476886040acfd4cabbfd8d85ebc104720205dd65f46c8b472ef7c2588a",
+      "transport_source_sha256": "68f401540130cea715e4cd58c901592c0ddcda919d08dc53181cdf53bafdf1a1",
+      "phase1_local_codegen_sha256": "94587998a468cf2fb897a42f260bb0b8fd5dbb6062ac6c1f3d33bc886fc94c1e",
+      "phase1_local_untimed_sha256": "64dda7ad36f5a10e296864e60dce1062b2bd223ddeba46a2e8bcb75a52409684",
+      "phase1_local_validation_sha256": "26aabf8659d1094ea230a07ebfeaeaf532278f50b38dcbbf3a46e2bfa5e69b7c",
+      "transport_comparison_sha256": "07be38b90396db2ee5a927eba78df8c2f1dc0f87c2df9a38792e00432ac92825",
+      "phase1b_authorization_sha256": "c769d839a484467959555785753b0d81d97351328e188974abb3c51ad10139b7",
+      "phase1b_hash_index_sha256": "cbbba015577acdc361880988a4fcc4238a90300dc358cd5b883b8a9f7494fb4d",
+      "phase2_machine_audit_sha256": "64b82dc40560defb40680dd63159000b05a065a7d14923d255a13327aaea4e0c",
+      "phase2_human_audit_sha256": "e6577a7ed4e03ec38629fa60d2a622105ce9fc229d0f1bc2ace7a2c57df5dba4"
+    },
+    "manifest_frozen_artifacts_declared_and_verified": 71,
+    "manifest_frozen_artifact_hash_mismatches": 0,
+    "source_admission_map_entries": 72,
+    "source_admission_map_hash": "f62396024aaf3b7449212b3dc2dbdb0356eca6966f11d9bb6cbc6bbbda166e15",
+    "source_admission_current_file_hash_mismatches": 0,
+    "schema_protocol_version": 1,
+    "schema_catalog_entries": 49,
+    "schema_catalog_unique_entries": 49,
+    "manifest_schema_ids": 19,
+    "manifest_schema_ids_all_in_catalog": true,
+    "phase1b_indexed_files": 28,
+    "phase1b_indexed_bytes": 644419,
+    "phase1b_index_hash_or_size_mismatches": 0,
+    "frozen_case_order": [
+      "photo-large",
+      "graphic-large"
+    ],
+    "frozen_method_order": [
+      4,
+      6
+    ],
+    "frozen_variant_order_by_repetition": [
+      [
+        "B",
+        "L"
+      ],
+      [
+        "L",
+        "B"
+      ],
+      [
+        "B",
+        "L"
+      ],
+      [
+        "L",
+        "B"
+      ]
+    ],
+    "h_is_not_a_candidate": true
+  },
+  "transport_comparison_and_frozen_consequence": {
+    "status": "PASS_NO_DETERMINISTIC_V2_TRANSPORT_REGRESSION_FOUND",
+    "frozen_consequence": "fresh-bounded-requalification",
+    "adaptive_remote_decision_permitted": false,
+    "protocol_limit_changes": [],
+    "request_chunk_bytes": 65536,
+    "request_progress_timeout_seconds": 15,
+    "historical_transfers": {
+      "alignment_v3": {
+        "request_bytes": 23193668,
+        "acknowledged_chunks": 354,
+        "planned_chunks": 354
+      },
+      "alignment_v4": {
+        "request_bytes": 23342945,
+        "acknowledged_chunks": 357,
+        "planned_chunks": 357
+      },
+      "aligned_null_v2": {
+        "request_bytes_acknowledged": 327680,
+        "request_bytes_planned": 23820500,
+        "acknowledged_chunks": 5,
+        "planned_chunks": 364
+      }
+    },
+    "absent_data_inference_used": false,
+    "rationale": "V2 shared the ACK-gated pump, scheduling, draining, keepalive, deadline and cleanup structure with successful 23+ MB transfers. Its real five-ACK stop did not identify a deterministic source or frozen-configuration regression, so V3 preserved the limits and performed one fresh bounded requalification."
+  },
+  "sole_rehearsal_transport_chain_audit": {
+    "status": "PASS_COMPLETE_INDEPENDENT_RAW_FRAME_AND_ACK_CHAIN_RECONSTRUCTION",
+    "rehearsal_attempts": 1,
+    "remote_contacts": 1,
+    "ssh_sessions": 1,
+    "connection_attempts": 1,
+    "retries": 0,
+    "reruns": 0,
+    "transaction_nonce": "d5c781eeb2b0225224adf5ecd392368f00b59b7fc1e257372cd634aacc6b1737",
+    "request_declarations": 1,
+    "request_payload_bytes": 23869976,
+    "request_payload_sha256": "d13eb1ea2b9609485990848025aea4195d064a2a6c2a0e26945a9c1b2126855a",
+    "request_channel_wire_bytes": 23934714,
+    "request_channel_wire_sha256": "c8cdcc013225beae21ed6e85309b1cea545d9a6c7e1395280369011af6dd0aa7",
+    "request_chunk_bytes": 65536,
+    "request_chunks_planned": 365,
+    "request_chunks_written": 365,
+    "request_chunks_acknowledged": 365,
+    "request_bytes_acknowledged": 23869976,
+    "last_fully_acknowledged_chunk": 365,
+    "progress_chain": {
+      "rows_recorded": 365,
+      "row_cap": 512,
+      "raw_channel_frames": 371,
+      "ready_frames": 1,
+      "declaration_ack_frames": 1,
+      "chunk_ack_frames": 365,
+      "request_complete_frames": 1,
+      "response_declaration_frames": 1,
+      "response_chunk_frames": 1,
+      "response_complete_frames": 1,
+      "frame_sequence_failures": 0,
+      "frame_payload_hash_failures": 0,
+      "ack_digest_recomputation_failures": 0,
+      "ack_chain_link_failures": 0,
+      "range_order_or_cumulative_failures": 0,
+      "timestamp_order_or_latency_failures": 0,
+      "first_prior_ack_digest": "8481cabccb2c27abd5143a1ceff7ed124755cfa359fd5a04fc4fb91f0b2d23b1",
+      "last_ack_digest": "16a26c38b9ee1efd367726a4f34f3eb8ef93b1e01813f3d20f058c91a8d46766",
+      "minimum_ack_latency_ns": 46666542,
+      "maximum_ack_latency_ns": 154921833,
+      "transport_timestamps_used_in_performance_statistics": false
+    },
+    "raw_channels": {
+      "channel_stdout_bytes": 214981,
+      "channel_stdout_sha256": "f8cb61198e22dbedd6d4703ca8c9f7b22ff53fe09ff4bad82e14833a73a007bf",
+      "transport_stderr_bytes": 0,
+      "transport_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "response_and_archive": {
+      "framed_response_bytes": 18659,
+      "framed_response_sha256": "261d534f32ee280e0713246c0b784dcef29f4b341cd9000bd4213e2b531e174b",
+      "framed_response_frames": 8,
+      "response_chunk_bytes": 262144,
+      "response_chunks": 1,
+      "archive_bytes": 14265,
+      "archive_sha256": "9033f14cc8350fbcdc81eccdaf072b295f99d79189539812ede9553e6a2510ac",
+      "archive_members": 10,
+      "archive_files_byte_equal_to_extracted_evidence": 10,
+      "archive_file_mismatches": 0,
+      "integrity_footer_complete": true,
+      "cleanup_footer_final": true
+    }
+  },
+  "rehearsal_admission_and_cleanup_audit": {
+    "status": "PASS_INDIVIDUAL_ZERO_WORKLOAD_RECEIPTS_EXCEPT_FROZEN_BUILD_IDENTITY",
+    "source": {
+      "source_commit": "3b81544df3305601e8c0817e554833f0824ad634",
+      "source_tree": "5e51c6925729f994dcc9987c583a9f1d02acb721",
+      "source_bundle_sha256": "394bb7e363c2ebebc6f4ee3211ba565656dbb66b5075c9750b4f3b7f1c32bef6",
+      "source_map_entries": 72,
+      "repository_context_bundle_verified": true,
+      "source_receipt_status": "verified"
+    },
+    "toolchain": {
+      "xcode": "26.3",
+      "sdk": "macosx26.2",
+      "required_executables": 8,
+      "required_metadata": 4,
+      "xcrun_required": false,
+      "identity_canonical_sha256": "5a64994e69486825c949aba78c4c688e546279f27137bd329d204c824a840adb",
+      "manifest_fixture_agreement": true
+    },
+    "device_and_resources": {
+      "hardware_model": "Mac16,10",
+      "cpu_brand": "Apple M4",
+      "physical_memory_bytes": 25769803776,
+      "available_memory_bytes": 10764828672,
+      "available_disk_bytes": 18921299968,
+      "power_source": "AC Power",
+      "low_power_mode": false,
+      "thermal_warning": false,
+      "settings_changed": false,
+      "metal_enabled": false,
+      "cuda_workloads": 0
+    },
+    "process_and_lease": {
+      "remote_process_isolation_status": "verified",
+      "discovered_pid_signals": 0,
+      "exact_identity_conflicts": 0,
+      "argument_text_collected": false,
+      "resolved_path_api_used": false,
+      "lease_acquisition_attempted": false,
+      "lease_state": "not-attempted",
+      "runner_children": 0,
+      "direct_child_receipts": 0
+    },
+    "cleanup": {
+      "operator_exit_code": 0,
+      "integrity_status": "complete",
+      "removed_exact_validated_child": true,
+      "exact_child_absence_proved": true,
+      "post_run_remote_cleanup_operations": 0
+    },
+    "zero_workload_counts": {
+      "encoder_workloads": 0,
+      "correctness_encodes": 0,
+      "untimed_counter_workloads": 0,
+      "profiler_workloads": 0,
+      "runner_children": 0,
+      "timer_validation_children": 0,
+      "performance_samples": 0,
+      "timed_binary_invoked": false
+    }
+  },
+  "canonical_four_body_semantic_work_codegen_and_alignment_audit": {
+    "status": "PASS_FROZEN_LOCAL_IDENTITY_AND_REHEARSAL_GEOMETRY_BUT_NOT_CROSS_BUILD_IDENTITY",
+    "entry_count": 4,
+    "ordered_entries": [
+      "PushInterval/B",
+      "PushIntervalLayoutClone/L",
+      "BackwardReferencesHashChainDistanceOnly/B",
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone/L"
+    ],
+    "domain_sha256": "9a73edd37188799e4e7d9b6a532e13daf90d9195874d208308fcdcbff954f14e",
+    "expected_receipt_sha256": "4f9462508d4f02b4e141d55d5944a2ba9778f3a98740520b4b4e8bb52c9a4951",
+    "actual_receipt_sha256": "4f9462508d4f02b4e141d55d5944a2ba9778f3a98740520b4b4e8bb52c9a4951",
+    "expected_actual_receipt_byte_equal": true,
+    "symbol_addresses": {
+      "PushInterval": "0000000100064000",
+      "PushIntervalLayoutClone": "0000000100068000",
+      "BackwardReferencesHashChainDistanceOnly": "000000010006c000",
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone": "0000000100070000"
+    },
+    "all_addresses_distinct": true,
+    "all_entry_modulo_16384": 0,
+    "inter_entry_spacing_bytes": 16384,
+    "dp_to_corresponding_push_displacement_bytes": 32768,
+    "section": "__TEXT,__br_null_v3",
+    "section_size_bytes": 50444,
+    "body_bytes": 3600,
+    "padding_bytes": 46844,
+    "push_body_bytes_each": 508,
+    "dp_body_bytes_each": 1292,
+    "linker_no_deduplicate": true,
+    "b_l_canonical_instruction_identity": true,
+    "b_l_instruction_branch_load_store_and_size_identity": true,
+    "normalized_semantic_sha256": "8a434e0b87a4bfb63eaa95eb615d3ed2113b2a4f2949f7dc806b35ccaf57599b",
+    "normalized_work_sha256": "2191c66b70ce05335fe5138bf3ef938409ef0837b1c38934eb5e17ccf68eebb0",
+    "normalized_work_b_l_equal": true,
+    "local_bitstream_sha256": "a3073eda31e5f94a3529661f8e11da82328a414b5b226722eab10256abab6c9a",
+    "append_hint_and_pop_tail_counters_zero": true,
+    "h_candidate_present": false,
+    "production_promotion_authorized": false,
+    "negative_fixture_results": {
+      "domain_mutations_rejected": 6,
+      "receipt_mutations_rejected": 13,
+      "stale_six_body_rejected": true,
+      "payload_predecessor_identities_rejected": 6,
+      "toolchain_predecessor_or_xcrun_identities_rejected": 6,
+      "streaming_failure_cases_passed": 27,
+      "archive_and_extraction_malicious_cases_rejected": true,
+      "source_admission_and_authority_separation_refused_fail_closed": true
+    }
+  },
+  "frozen_local_correctness_dynamic_gate_and_ledger_audit": {
+    "status": "PASS_LOCAL_FROZEN_EVIDENCE_DYNAMIC_PHASE2_GATES_NOT_RUN",
+    "local_correctness_fallback_determinism_immutability": {
+      "status": "PASS_FROZEN_PHASE1_EVIDENCE",
+      "local_correctness_encodes": 2,
+      "sanitizer_boundary_encodes": 24,
+      "sanitizer_configurations": 2,
+      "public_api_abi_equal": true,
+      "ordinary_build_default_omission": true,
+      "timed_runner_recorder_free": true,
+      "selector_once_before_mutation": true,
+      "runtime_truth_table": {
+        "absent": 0,
+        "B": 0,
+        "L": 1,
+        "H": -1,
+        "other_invalid": true
+      },
+      "transactional_fallback_and_input_immutability": true,
+      "deterministic_bitstream_and_decoded_pixels": true
+    },
+    "ledger": {
+      "top_level_bucket_count": 9,
+      "measured_disjoint_buckets": 8,
+      "explicit_residual_bucket": "residual_unattributed",
+      "nested_descriptive_non_additive_timers": 7,
+      "clock": "mach_continuous_time",
+      "clock_overhead_reads": 4096,
+      "timer_accounting_rows": 2,
+      "timer_accounting_rows_reconciled": 2,
+      "reconciliation_delta_ns": [
+        0,
+        0
+      ],
+      "residual_ns": [
+        0,
+        0
+      ],
+      "clock_reads": [
+        68,
+        68
+      ],
+      "expected_clock_reads": [
+        68,
+        68
+      ],
+      "clock_count_formula": "2 + 2 * sum(all emitted stage calls)",
+      "early_fault_skip_repeat_fixture_rows": 5,
+      "nested_causality_inferred": false
+    },
+    "phase2_dynamic_gates": {
+      "status": "NOT_RUN_AUTHORITY_NONE",
+      "correctness_before_timing": "NOT_RUN",
+      "timer_accounting_and_reconciliation_before_timing": "NOT_RUN",
+      "online_direct_serial_child_ownership": "NOT_RUN",
+      "exclusive_lease": "NOT_ATTEMPTED",
+      "timed_pipeline": "NOT_RUN",
+      "local_fixtures_substitute_for_dynamic_gates": false,
+      "zero_samples_on_gate_failure": true
+    }
+  },
+  "alignment_build_authority_blocker": {
+    "status": "FAIL_ALIGNMENT_BUILD_FROZEN",
+    "authority": "NONE",
+    "stage_result": "REFUSED",
+    "phase1b_gate_count": 15,
+    "phase1b_passed_gate_count": 14,
+    "sole_failed_gate": "alignment build frozen",
+    "frozen_phase1a": {
+      "timed_runner_bytes": 643024,
+      "timed_runner_sha256": "262f23ba84c979fbb62d868f534feca20c428063aaab4804990f01311e04ae42",
+      "linker_map_bytes": 69697,
+      "linker_map_sha256": "cb7969b484a94b88781ed7fc74dad8caf0c8bbc559d8a35376b2e4ec3663e849",
+      "linker_map_extract_sha256": "c03ddb8450a8c29d122aeda275cca60bec2dc86eab7c7ed0446b49a5fa34494b"
+    },
+    "rehearsal": {
+      "timed_runner_bytes": 653712,
+      "timed_runner_sha256": "1ca731d0411a15eb2626e02adb7bca789a628f4d0d9c6c57e3fa4352a958a920",
+      "linker_map_bytes": 69803,
+      "linker_map_sha256": "a057f30e69ddf0d0e9336142275b36c86952a89b1589d2007d5c4f422c4814b8",
+      "linker_map_extract_sha256": "22c341b93a3a2f32b8f0b3ea2b2bfff2a1cc6fb70c2fe8dc714e9f7cff52c791"
+    },
+    "timed_runner_byte_delta": 10688,
+    "instruction_word_and_dp_canonical_hashes_cross_build_match": false,
+    "matching_geometry": true,
+    "authority_override_permitted": false
+  },
+  "phase2_zero_contact_and_benchmark_audit": {
+    "status": "PASS_FAIL_CLOSED_REFUSAL_RECORD",
+    "phase2_request_sessions": 0,
+    "phase2_request_declarations": 0,
+    "phase2_request_chunks": 0,
+    "phase2_request_bytes": 0,
+    "phase2_ssh_sessions": 0,
+    "phase2_lease_attempts": 0,
+    "phase2_correctness_encodes": 0,
+    "phase2_timer_validation_children": 0,
+    "phase2_untimed_work_rows": 0,
+    "phase2_runner_children": 0,
+    "phase2_timed_workloads": 0,
+    "phase2_runner_rows": 0,
+    "phase2_stage_rows": 0,
+    "phase2_timing_rows": 0,
+    "phase2_performance_samples": 0,
+    "phase2_profiler_invocations": 0,
+    "phase2_cuda_workloads": 0,
+    "phase2_retries_or_reruns": 0,
+    "phase2_code_protocol_threshold_or_manifest_edits": 0
+  },
+  "frozen_inventory_versus_observed": {
+    "planned": {
+      "direct_runner_children": 59,
+      "correctness_encodes": 16,
+      "clock_children": 1,
+      "clock_reads": 4096,
+      "timer_accounting_children": 2,
+      "timer_accounting_rows": 2,
+      "untimed_work_rows": 8,
+      "profile_processes": 32,
+      "warmups": 32,
+      "retained_timing_rows": 128,
+      "runner_rows": 160,
+      "stage_rows": 160,
+      "retained_stage_rows": 128,
+      "fresh_pairs_per_cell_metric": 16,
+      "bootstrap_resamples_per_statistic": 100000,
+      "bootstrap_seed": "0x4e554c33"
+    },
+    "observed_phase2": {
+      "direct_runner_children": 0,
+      "correctness_encodes": 0,
+      "clock_children": 0,
+      "clock_reads": 0,
+      "timer_accounting_children": 0,
+      "timer_accounting_rows": 0,
+      "untimed_work_rows": 0,
+      "profile_processes": 0,
+      "warmups": 0,
+      "retained_timing_rows": 0,
+      "runner_rows": 0,
+      "stage_rows": 0,
+      "retained_stage_rows": 0,
+      "fresh_pairs_per_cell_metric": 0,
+      "bootstrap_resamples_executed": 0
+    }
+  },
+  "paired_v3_statistics_recomputation": {
+    "status": "ZERO_ADMISSIBLE_ROWS_NO_STATISTICS_COMPUTABLE",
+    "v3_timing_rows_ingested": 0,
+    "v3_stage_rows_ingested": 0,
+    "v3_work_rows_ingested": 0,
+    "v3_correctness_rows_ingested": 0,
+    "prior_cycle_timing_or_stage_rows_ingested": 0,
+    "samples_pooled_reused_or_relabelled": 0,
+    "fresh_pairs_by_cell": {
+      "photo-m4": 0,
+      "photo-m6": 0,
+      "graphic-m4": 0,
+      "graphic-m6": 0
+    },
+    "planned_paired_metrics_per_cell": 17,
+    "planned_cells": 4,
+    "planned_paired_statistics": 68,
+    "computed_paired_statistics": 0,
+    "computed_bootstrap_confidence_intervals": 0,
+    "statistics_fabricated": false
+  },
+  "frozen_decision_tree_and_consequence": {
+    "primary_cell": "graphic-m4",
+    "primary_metric": "whole_encode",
+    "fresh_valid_pairs_required": 16,
+    "fresh_valid_pairs_observed": 0,
+    "primary_reproduction_test_applied": false,
+    "primary_reproduction_result": "INCONCLUSIVE_REFUSED_AUTHORITY_NO_FRESH_REPRODUCTION",
+    "fresh_non_replication_claim": false,
+    "reproduction_claim": false,
+    "attribution_branch_entered": false,
+    "stage_attribution": "NONE_NO_FRESH_SAMPLE",
+    "classification": "unaccounted/inconclusive",
+    "decision": "INCONCLUSIVE_REFUSED_AUTHORITY_NO_FRESH_REPRODUCTION_NO_STAGE_ATTRIBUTION",
+    "nested_overlap_causality_inferred": false,
+    "thresholds_changed_or_reinterpreted": false,
+    "h_interpreted": false,
+    "production_promotion": "FORBIDDEN"
+  },
+  "blocker": "The sole Phase-1B rehearsal fully requalified request transport and returned complete source/archive/integrity/cleanup evidence, but its Unix-make timed binary, linker map, linker extract and instruction/codegen hashes did not exactly match the frozen Phase-1A receipt. The immutable alignment-build gate therefore failed, authority remained NONE, and Phase 2 correctly produced zero benchmark evidence.",
+  "one_next_lead": {
+    "count": 1,
+    "lead": "A future independently gated Phase 1 must freeze a newly generated Unix-make timed-binary/codegen identity and obtain exactly one fresh fully hashed zero-workload rehearsal that matches that identity byte-for-byte before any later Phase 2 authority is reconsidered.",
+    "run_in_phase3": false
+  },
+  "pr_ci": {
+    "branch": "codex/backref-cost-aligned-null-stage-attribution-v3",
+    "origin_branch_present_in_local_refs": false,
+    "push_performed_by_phase3": false,
+    "pr_opened_by_phase3": false,
+    "ci_run_by_phase3": false,
+    "status": "NOT_PUSHED_NO_PR_NO_CI_KNOWN"
+  },
+  "evidence_paths": [
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/transport-comparison.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/four-body-expected-receipt.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/four-body-actual-receipt.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/phase1-local-codegen.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/phase1-local-untimed-experiment.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/phase1-local-validation.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/phase1b-authorization.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/phase1b-rehearsal-hashes.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/rehearsal/return-protocol/channel-stdout.bin",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/rehearsal/return-protocol/request-progress-chain.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/rehearsal/return-protocol/framed-response.bin",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/rehearsal/return-protocol/cleanup-footer.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/rehearsal/source-admission-details.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/rehearsal/resource-admission-admission.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/rehearsal/remote-admission-process-isolation.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/rehearsal/build-identity.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-design/rehearsal/codegen.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-execution-20260820/phase2-refusal-audit.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v3-execution-20260820/phase2-refusal-audit.md"
+  ]
+}

@@ -25,16 +25,19 @@
 #include "src/webp/format_constants.h"
 #include "src/webp/types.h"
 
-#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT) && \
-    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_EXPERIMENT)
-#error "aligned-null stage-attribution V1 and V2 are mutually exclusive"
+#if (defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT) + \
+     defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_EXPERIMENT) + \
+     defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V3_EXPERIMENT)) > 1
+#error "aligned-null stage-attribution V1/V2/V3 are mutually exclusive"
 #endif
 #if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V3_EXPERIMENT)
 #define WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT 1
 #endif
 #if defined(WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_RECORDER) || \
-    defined(WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_RECORDER)
+    defined(WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_RECORDER) || \
+    defined(WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V3_RECORDER)
 #define WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_RECORDER 1
 #endif
 
@@ -307,12 +310,18 @@
   VP8LBackrefCostAlignedNullStageAttributionV1Variant
 #define WEBP_FACTORIZATION_GET_VARIANT \
   VP8LBackrefCostAlignedNullStageAttributionV1GetVariant
-#else
+#elif defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_EXPERIMENT)
 #include "src/enc/backref_cost_aligned_null_stage_attribution_v2_experiment_enc.h"
 #define WEBP_FACTORIZATION_VARIANT_TYPE \
   VP8LBackrefCostAlignedNullStageAttributionV2Variant
 #define WEBP_FACTORIZATION_GET_VARIANT \
   VP8LBackrefCostAlignedNullStageAttributionV2GetVariant
+#elif defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V3_EXPERIMENT)
+#include "src/enc/backref_cost_aligned_null_stage_attribution_v3_experiment_enc.h"
+#define WEBP_FACTORIZATION_VARIANT_TYPE \
+  VP8LBackrefCostAlignedNullStageAttributionV3Variant
+#define WEBP_FACTORIZATION_GET_VARIANT \
+  VP8LBackrefCostAlignedNullStageAttributionV3GetVariant
 #endif
 #define WEBP_USE_BACKREF_COST_INTERVAL_SPECIALIZATION_LOCAL 1
 #define VP8LBackrefCostIntervalSpecializationV1ExperimentInjectFallback() 0
@@ -385,6 +394,9 @@
 #elif defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_EXPERIMENT)
 #define WEBP_BACKREF_ALIGNMENT_ENTRY \
   WEBP_BACKREF_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_ENTRY
+#elif defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V3_EXPERIMENT)
+#define WEBP_BACKREF_ALIGNMENT_ENTRY \
+  WEBP_BACKREF_ALIGNED_NULL_STAGE_ATTRIBUTION_V3_ENTRY
 #else
 #define WEBP_BACKREF_ALIGNMENT_ENTRY
 #endif
@@ -1334,6 +1346,8 @@ PushInterval(
 #include "src/enc/backref_cost_aligned_null_stage_attribution_v1_layout_clone_enc.inc"
 #elif defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_EXPERIMENT)
 #include "src/enc/backref_cost_aligned_null_stage_attribution_v2_layout_clone_enc.inc"
+#elif defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V3_EXPERIMENT)
+#include "src/enc/backref_cost_aligned_null_stage_attribution_v3_layout_clone_enc.inc"
 #endif
 // The production-shaped candidate is deliberately a separate always-on hot
 // path. Its append hint is the exact v3 PushInterval-local algorithm, with the
