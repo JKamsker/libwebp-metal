@@ -3084,3 +3084,48 @@ and timings use `libwebp-i4-fused-sse-*` in the adjacent evidence directory.
 This is RTX 2080 SUPER-only evidence; the 784/12,544 pre-Ampere and 64/4,000
 Ampere+ thresholds, architecture split, frozen corpus, and generator are
 unchanged.
+
+
+## Pre-Ampere packed-pair I4 flatness rejection
+
+At clean parent `51bcb5c081c32fedb91884c30a7e0997dba54f39`, the native
+Release refresh measured exact PNG/JPEG batch medians of 29.846/27.615
+ms/image. Excluding the first warmup batch, stage records assigned
+18.912/18.751 ms/image to decimate/collect/replay and 3.017/3.013 to token
+emission. Photo/texture retained 63--65% I4 shares.
+
+Because the known residual-score variants are exhausted, root Nsight Compute
+source correlation selected the distinct scalar I4 flatness walk. The
+retained call site accounted for 306,400 executed instructions and 221
+samples on a representative 50-CTA launch. The non-root attempt was denied by
+the host's `RmProfilingAdminOnly=1` policy and its raw transcript is retained
+alongside the root report.
+
+The Turing-only candidate read the aligned 16-level row as eight 32-bit pairs
+and counted the two exact nonzero 16-bit halves, retaining DC omission and the
+same early `score > 3` threshold. Ampere+ used the original scalar path.
+Registers fell from 103 to 102; the 352-byte stack and 23,392-byte shared
+allocation stayed fixed. The representative kernel nevertheless moved from
+122.11 to 122.56 us, `No Eligible` from 89.79% to 89.88%, and achieved
+occupancy remained 26.04%.
+
+Five order-balanced full-corpus process pairs per format produced:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 29.499 ms/image | 29.768 ms/image | -0.288 ms/image |
+| JPEG | 27.770 ms/image | 27.561 ms/image | +0.234 ms/image |
+
+All 60 timing rows retained exact aggregate hashes and byte counts. The
+candidate passed 7/7 focused tests, the methods 2--6 / qualities 25/75/98
+graphic/photo/texture tiny/odd matrix, and 20 PNG/JPEG fallback cells spanning
+bands 0/1/3/5/7 with token recording inline and pipelined.
+
+PNG regressed and JPEG's gain is far below 1.5 ms/image, so the candidate was
+removed. Every focused static executable was relinked before the restored 7/7
+test run, and the retained source blob was reproduced exactly. Raw profiles,
+compressed Nsight reports/source correlation, resources, patch,
+exactness/fallback matrices, tests, and timings use
+`libwebp-i4-packed-flatness-*` in the adjacent evidence directory. This is
+RTX 2080 SUPER-only evidence; the 784/12,544 pre-Ampere and 64/4,000 Ampere+
+thresholds, architecture split, frozen corpus, and generator are unchanged.

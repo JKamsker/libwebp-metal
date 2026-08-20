@@ -130,6 +130,7 @@ that hardware and workload.
 | Coefficient-token zero-pair feasibility | A fresh whole-thread profile again selected `VP8RecordCoeffTokens`: 0.520 seconds PNG and 0.460 JPEG over 72 full-corpus encodes (7.222/6.389 ms/image). A counter-only probe found disjoint zero pairs covered 29.366%/28.794% of coefficient iterations, permitting at most one fewer store per pair, or 14.683%/14.397% of coefficient iterations. On the critical texture-medium path the maximum fell to 4.138%/4.124%. | Rejected before a representation candidate. Even pretending pair packing deletes the same fraction of the entire recorder—not merely one store while preserving statistics—bounds the full-corpus benefit at 1.060 ms/image PNG and 0.920 JPEG, below the two-format gate. The probe was removed and restored source passed 7/7 tests. Do not retry zero-pair token packing without a different representation/profile that removes additional work. RTX 2080 SUPER only; no architecture policy changed. |
 | Pre-Ampere full-warp-paired I16 residual costs | A fresh native profile measured 18.756/18.665 ms/image in decimate/collect/replay and put I16 selection at 25.2% of graphic-medium block cycles. Unlike the earlier half-warp mapping, one pre-Ampere candidate used all eight existing CTA warps as two full residual-cost warps per I16 mode. Exact contexts came from the completed non-zero bitmap. Registers fell 103 to 100; shared memory rose 23,392 to 23,456 bytes. A medium phase screen cut graphic/photo device wall by about 5 ms. All 60 full-corpus timing rows, the methods 2--6 / qualities 25/75/98 tiny/odd matrix, and 20 PNG/JPEG fallback cells were exact; candidate and restored builds passed 7/7 tests. | Rejected and removed. Five order-balanced full-corpus pairs yielded paired-median gains of only 0.322 ms/image PNG and 0.340 JPEG; pooled PNG regressed 29.019 to 29.176 ms/image. The local I16 phase gain is hidden by the end-to-end GPU/host schedule. Do not retry full-warp I16 block pairing without a new critical-path profile. RTX 2080 SUPER only; Ampere+ and architecture thresholds/defaults are unchanged. |
 | Pre-Ampere inverse-transform/SSE fusion | A fresh native profile measured 18.859/18.581 ms/image in decimate/collect/replay and retained 63--65% I4 shares on photo/texture. The distinct SSE/flatness metric warp had measured 209.0 million photo cycles. One Turing candidate calculated row SSE in the four existing inverse-transform lanes and reduced each mode with two subgroup shuffles, removing the later scalar 16-pixel SSE walk; Ampere+ retained that original path. The candidate rose from 103 to 104 registers and passed 7/7 tests. All 60 timing rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 PNG/JPEG fallback cells were exact. | Rejected and removed. Pooled medians regressed from 29.469 to 29.824 ms/image PNG and 27.704 to 28.113 JPEG; paired-median gains were -0.223/-0.274 ms. Moving SSE onto the inverse-transform critical path plus shuffle overhead is worse than the concurrent metric warp. Do not retry this fusion without a different schedule that keeps inverse transform off the added dependency. RTX 2080 SUPER only; Ampere+, thresholds, and frozen files are unchanged. |
+| Pre-Ampere packed-pair I4 flatness scan | A fresh native profile put decimate/collect/replay at 18.912/18.751 ms/image PNG/JPEG. Root Nsight Compute source correlation selected the distinct scalar I4 flatness walk at 306,400 executed instructions and 221 samples on a representative launch. One Turing candidate tested two adjacent 16-bit levels per 32-bit shared load while retaining the exact DC omission, nonzero count, and early threshold; Ampere+ kept the scalar path. Registers fell 103 to 102, but the measured kernel moved 122.11 to 122.56 us with unchanged 26.04% occupancy. All 60 timing rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 PNG/JPEG fallback cells were exact; candidate/restored builds passed 7/7 tests. | Rejected and removed. PNG pooled median regressed 29.499 to 29.768 ms/image and paired change was -0.288 ms; JPEG gained only 0.234 ms paired (27.770 to 27.561 pooled), far below 1.5 ms/image. Pair extraction and counting do not shorten the dependency-bound flatness walk. Do not retry packed-pair I4 flatness without a new critical-path profile. RTX 2080 SUPER only; Ampere+, thresholds, architecture split, and frozen files are unchanged. |
 
 All original and follow-up benchmark rows produced stable expected checksums.
 The historical color rows remain raw evidence, but their ratios are not matched
@@ -1410,6 +1411,43 @@ was opened. The retained source passed all seven registered focused tests.
 Evidence uses `libwebp-i4-first-feasibility-*`. Architecture
 thresholds/defaults, Ampere+ behavior, and the frozen corpus/generator are
 unchanged.
+
+
+## Pre-Ampere packed-pair I4 flatness rejection
+
+At clean parent `51bcb5c081c32fedb91884c30a7e0997dba54f39`, the fresh native
+file-I/O batch profile measured exact PNG/JPEG medians of 29.846/27.615
+ms/image. After the warmup batch, decimate/collect/replay averaged
+18.912/18.751 ms/image and token emission 3.017/3.013. Photo/texture retained
+63--65% I4 shares.
+
+Because the residual scoring avenues are exhausted, a root Nsight Compute
+source profile selected its distinct flatness peer: the scalar I4
+`CudaIsFlat` call correlated with 306,400 executed instructions and 221
+samples on the representative 50-CTA launch. One pre-Ampere candidate read
+the aligned 16-level row as eight 32-bit pairs and counted the two exact
+nonzero 16-bit halves while preserving DC omission and the `score > 3` early
+decision. Ampere+ retained the scalar implementation. Native registers fell
+from 103 to 102; stack/shared stayed 352/23,392 bytes. Nevertheless the
+representative kernel regressed from 122.11 to 122.56 us, with 26.04%
+achieved occupancy unchanged.
+
+Five order-balanced process pairs per format produced 30 exact rows per
+format:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 29.499 ms/image | 29.768 ms/image | -0.288 ms/image |
+| JPEG | 27.770 ms/image | 27.561 ms/image | +0.234 ms/image |
+
+The candidate passed 7/7 focused tests. CPU/CUDA hashes and byte counts were
+exact for methods 2--6 and qualities 25/75/98 over the six tiny/odd fixtures,
+and for 20 PNG/JPEG forced-fallback cells spanning bands 0/1/3/5/7 with token
+recording inline and pipelined. PNG regressed and JPEG's small gain is far
+below 1.5 ms/image, so the candidate was removed. Every static focused test
+was relinked; restored source matched the parent blob and passed 7/7 tests.
+Raw evidence uses `libwebp-i4-packed-flatness-*`; architecture thresholds,
+the pre-Ampere/Ampere+ split, and frozen corpus/generator are unchanged.
 
 
 ## Coefficient-token zero-pair feasibility rejection

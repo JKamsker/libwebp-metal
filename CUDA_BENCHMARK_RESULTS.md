@@ -2641,3 +2641,35 @@ and 20 PNG/JPEG fallback cells were byte-exact. Candidate and restored builds
 passed 7/7 tests. Both formats regressed, so the source was restored. Evidence
 uses `libwebp-i4-fused-sse-*`; architecture thresholds/defaults, Ampere+
 behavior, and the frozen corpus/generator are unchanged.
+
+
+## Pre-Ampere packed-pair I4 flatness screen
+
+The clean native build at `51bcb5c081c32fedb91884c30a7e0997dba54f39`
+measured exact file-I/O batch medians of 29.846 ms/image PNG and 27.615 JPEG.
+After the first 24-image warmup batch, decimate/collect/replay averaged
+18.912/18.751 ms/image and token emission 3.017/3.013. Realistic
+photo/texture I4 shares remained 63--65%.
+
+With residual micro-specializations exhausted, root Nsight Compute source
+correlation selected the distinct scalar I4 flatness walk. Its call site
+accounted for 306,400 executed instructions and 221 samples on a
+representative 50-CTA launch. A pre-Ampere candidate checked two adjacent
+16-bit levels per 32-bit shared load, preserving the exact DC omission,
+nonzero score, early threshold, and Ampere+ scalar path. Native registers fell
+from 103 to 102, but the representative kernel moved from 122.11 to 122.56
+us; achieved occupancy stayed 26.04%.
+
+Five order-balanced full-corpus process pairs measured:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 29.499 ms/image | 29.768 ms/image | -0.288 ms/image |
+| JPEG | 27.770 ms/image | 27.561 ms/image | +0.234 ms/image |
+
+All 60 timing rows, the methods 2--6 / qualities 25/75/98 tiny/odd matrix,
+and 20 PNG/JPEG fallback cells were byte-exact. Candidate and restored builds
+passed 7/7 tests. PNG regressed and JPEG's 0.234 ms/image gain is noise, so
+the candidate was removed. Evidence uses `libwebp-i4-packed-flatness-*`;
+architecture thresholds/defaults, the pre-Ampere/Ampere+ split, and the
+frozen publication corpus/generator are unchanged.
