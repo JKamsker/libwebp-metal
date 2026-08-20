@@ -1,0 +1,123 @@
+{
+  "alignment_boundary_bytes": 16384,
+  "all_entry_modulos": {
+    "BackwardReferencesHashChainDistanceOnly": 0,
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": 0,
+    "PushInterval": 0,
+    "PushIntervalLayoutClone": 0
+  },
+  "all_four_symbol_addresses_distinct": true,
+  "baseline_layout_canonical_instructions_equal": true,
+  "body_bytes": 3600,
+  "compiler": "Apple clang 17.0.0",
+  "dp_to_push_displacement_bytes": 32768,
+  "entry_order": [
+    "PushInterval",
+    "PushIntervalLayoutClone",
+    "BackwardReferencesHashChainDistanceOnly",
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone"
+  ],
+  "facts": {
+    "BackwardReferencesHashChainDistanceOnly": {
+      "branch_count": 54,
+      "canonical_instructions_sha256": "1b60e5c8e811ca09374e23e65e08d766242137d1ae73125628eafbc298402efc",
+      "instruction_count": 323,
+      "instruction_words_sha256": "9165f610f8936727ed6888db7e0f1ebe7a3a34eaae59a9a541558de91c10ee93",
+      "load_count": 55,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+      "size_bytes": 1292,
+      "store_count": 23
+    },
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": {
+      "branch_count": 54,
+      "canonical_instructions_sha256": "1b60e5c8e811ca09374e23e65e08d766242137d1ae73125628eafbc298402efc",
+      "instruction_count": 323,
+      "instruction_words_sha256": "a97ec8f4c288a37ca7f6520995e95ddb256cbe7af110c0a5ae96b2ab3dc31f86",
+      "load_count": 55,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+      "size_bytes": 1292,
+      "store_count": 23
+    },
+    "PushInterval": {
+      "branch_count": 30,
+      "canonical_instructions_sha256": "b639260e4c9c1a64c8e33b333da6112d2520e1ab02d111d7de96cdc8d97967ab",
+      "instruction_count": 127,
+      "instruction_words_sha256": "fe242531aaa01f152c2fc3df9aa11f0c62b8b3a274e32d36200153f01b85f48d",
+      "load_count": 25,
+      "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8",
+      "size_bytes": 508,
+      "store_count": 11
+    },
+    "PushIntervalLayoutClone": {
+      "branch_count": 30,
+      "canonical_instructions_sha256": "b639260e4c9c1a64c8e33b333da6112d2520e1ab02d111d7de96cdc8d97967ab",
+      "instruction_count": 127,
+      "instruction_words_sha256": "11b8f81fa59c92aca5d20068d15ec6c66eb268e7047401ae09545322ef2c386d",
+      "load_count": 25,
+      "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8",
+      "size_bytes": 508,
+      "store_count": 11
+    }
+  },
+  "flags": "-O3 -g -DNDEBUG -fno-omit-frame-pointer; -Wl,-no_deduplicate",
+  "four_body_identity": {
+    "domain_sha256": "7a0fca915408074524f833c4e8b196e9deac09ba145eaf724f067d47daad6bd0",
+    "entries": [
+      {
+        "ordinal": 0,
+        "pair_ordinal": 0,
+        "role": "push_interval",
+        "symbol": "PushInterval",
+        "variant": "B"
+      },
+      {
+        "ordinal": 1,
+        "pair_ordinal": 0,
+        "role": "push_interval",
+        "symbol": "PushIntervalLayoutClone",
+        "variant": "L"
+      },
+      {
+        "ordinal": 2,
+        "pair_ordinal": 1,
+        "role": "dp",
+        "symbol": "BackwardReferencesHashChainDistanceOnly",
+        "variant": "B"
+      },
+      {
+        "ordinal": 3,
+        "pair_ordinal": 1,
+        "role": "dp",
+        "symbol": "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+        "variant": "L"
+      }
+    ],
+    "entry_count": 4,
+    "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v2-four-body-domain-v1"
+  },
+  "inter_entry_padding_bytes": 46844,
+  "inter_entry_spacing_bytes": 16384,
+  "linker_identical_code_deduplication_disabled": true,
+  "linker_map_bytes": 69697,
+  "linker_map_extract_sha256": "b4251eef96244344cc9969097763c945e28044004dcb979f256f792505856cb8",
+  "linker_map_sha256": "7b5765fcd01505e56a5075fa96fc4779000a656275722565c9be534472d2b142",
+  "no_h_body_in_candidate_scope": true,
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v2-local-codegen-v1",
+  "section_address": "0x0000000100064000",
+  "section_alignment_power": 14,
+  "section_executable_pure_instructions": true,
+  "section_file_offset": 409600,
+  "section_flags": "0x80000400",
+  "section_name": "__br_null_v2",
+  "section_segment": "__TEXT",
+  "section_size_bytes": 50444,
+  "status": "PASS",
+  "symbol_addresses": {
+    "BackwardReferencesHashChainDistanceOnly": "000000010006c000",
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": "0000000100070000",
+    "PushInterval": "0000000100064000",
+    "PushIntervalLayoutClone": "0000000100068000"
+  },
+  "timed_runner_bytes": 643488,
+  "timed_runner_sha256": "edb1601a77cc3312687fc66fce3d3c65eb9f22fecba359e49a58f4ed45828cb4"
+}

@@ -1,0 +1,17 @@
+{
+  "fixture_path": "evidence/backref-cost-aligned-null-stage-attribution-v2-design/representative-payload-fixture.json",
+  "generator_file_sha256": "3e55c419cba7a2dcd67d4896ae08595722d5281348fe0ea98f9b480210fa747f",
+  "generator_path": "scripts/backref_cost_aligned_null_stage_attribution_v2_payload.py",
+  "generator_recomputation_sha256": "e3d8f83b9263ef7eb266198a46e0d4506959b69b299edbe52a1647074399c295",
+  "independent_fixture_sha256_value": "e3d8f83b9263ef7eb266198a46e0d4506959b69b299edbe52a1647074399c295",
+  "manifest_sha256_value": "e3d8f83b9263ef7eb266198a46e0d4506959b69b299edbe52a1647074399c295",
+  "negative_stale_alignment_v1_test": "PASS_REJECTED",
+  "negative_stale_alignment_v2_test": "PASS_REJECTED",
+  "negative_stale_alignment_v3_test": "PASS_REJECTED",
+  "negative_stale_v2_test": "PASS_REJECTED",
+  "negative_stale_v3_test": "PASS_REJECTED",
+  "negative_stale_v4_test": "PASS_REJECTED",
+  "payload_bytes": 2097152,
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v2-payload-agreement-v1",
+  "status": "PASS"
+}
