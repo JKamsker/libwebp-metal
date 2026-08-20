@@ -1378,7 +1378,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
 
   // ---- Phase 3: intra4 search on the exact x + 2y dependency diagonals.
   if (p.max_i4_header_bits > 0) {
-    __shared__ int i4_abort, i4_next_commit;
+    __shared__ int i4_abort;
     __shared__ long long i4_best_score;
     __shared__ long long i4_best_D, i4_best_SD, i4_best_H, i4_best_R;
     __shared__ uint32_t i4_best_nz;
@@ -1391,13 +1391,13 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
     __shared__ long long i4_block_score[16];
     const int team = tid >> 7;
     const int team_tid = tid & 127;
+    int i4_next_commit = 0;  // Private to the thread-0 commit loop.
     if (tid == 0) {
       ModeScore rd_best;
       InitScoreDev(&rd_best);
       rd_best.H = 211;
       SetRDScoreDev(dqm->lambda_mode, &rd_best);
       i4_abort = 0;
-      i4_next_commit = 0;
       i4_best_score = rd_best.score;
       i4_best_D = i4_best_SD = i4_best_R = 0;
       i4_best_H = 211;
