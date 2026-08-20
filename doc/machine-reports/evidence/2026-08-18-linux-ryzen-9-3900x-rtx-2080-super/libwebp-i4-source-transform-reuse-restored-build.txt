@@ -1,0 +1,61 @@
+[100%] Built target bit_writer_utils_test
+[100%] Built target accelerator_enc_test
+[  9%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 26%] Built target webpencode
+[ 53%] Built target webpdspdecode
+[ 91%] Built target webpdsp
+[ 97%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Linking CUDA executable cuda_concurrency_test
+[100%] Built target cuda_concurrency_test
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 26%] Built target webpencode
+[ 53%] Built target webpdspdecode
+[ 91%] Built target webpdsp
+[ 97%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Linking CUDA executable cuda_histogram_test
+[100%] Built target cuda_histogram_test
+[ 11%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 27%] Built target webpencode
+[ 54%] Built target webpdspdecode
+[ 92%] Built target webpdsp
+[ 98%] Built target webpdecode
+[100%] Built target webp
+[100%] Linking CUDA executable cuda_trellis_test
+[100%] Built target cuda_trellis_test
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 26%] Built target webpencode
+[ 53%] Built target webpdspdecode
+[ 91%] Built target webpdsp
+[ 97%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Linking CUDA executable cuda_near_lossless_test
+[100%] Built target cuda_near_lossless_test
+[  7%] Built target sharpyuv
+[ 10%] Built target webputils
+[ 27%] Built target webpencode
+[ 50%] Built target webpdspdecode
+[ 85%] Built target webpdsp
+[ 90%] Built target webpdecode
+[ 92%] Built target webp
+[ 93%] Built target webpdemux
+[ 94%] Built target imageioutil
+[100%] Built target imagedec
+[100%] Built target webp_cuda_batch_benchmark
+[  3%] Built target sharpyuv
+[ 10%] Built target webputils
+[ 24%] Built target webpencode
+[ 48%] Built target webpdspdecode
+[ 83%] Built target webpdsp
+[ 88%] Built target webpdecode
+[ 89%] Built target webp
+[ 91%] Built target imageioutil
+[ 92%] Built target webpdemux
+[ 93%] Built target exampleutil
+[ 98%] Built target imagedec
+[100%] Built target cwebp

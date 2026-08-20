@@ -1,0 +1,24 @@
+[
+  {
+    "format": "jpeg",
+    "n": 11,
+    "hashes": [
+      "94860a033e68b88e"
+    ],
+    "bytes": [
+      3343166
+    ],
+    "exact": true
+  },
+  {
+    "format": "png",
+    "n": 11,
+    "hashes": [
+      "9b2eee976f8f13e0"
+    ],
+    "bytes": [
+      3281332
+    ],
+    "exact": true
+  }
+]

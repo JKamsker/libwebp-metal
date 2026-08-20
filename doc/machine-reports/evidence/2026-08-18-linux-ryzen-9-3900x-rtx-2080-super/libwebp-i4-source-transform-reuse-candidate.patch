@@ -1,0 +1,98 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index 7809e965..8a124009 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -551,6 +551,9 @@ struct MBWork {
+   int16_t i4_levels[2][kNumBModes][16];
+   uint8_t i4_out[2][kNumBModes][4 * kCudaBPS];
+   int i4_transform_tmp[2][kNumBModes][16];
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  int i4_source_tmp[2][16];
++#endif
+   int i4_nz[2][kNumBModes];
+   long long i4_sse[2][kNumBModes];
+   long long i4_sd[2][kNumBModes];
+@@ -606,6 +609,52 @@ __device__ __forceinline__ void I4FTransformCoop4(
+   out[12 + lane] = (int16_t)((b3 * 2217 - b2 * 5352 + 51000) >> 16);
+ }
+
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++// All ten I4 modes transform the same source block. Build the source half of
++// the exact horizontal transform once while otherwise-idle prediction lanes
++// are available; per-mode lanes subtract the reference half before applying
++// the original rounding constants.
++__device__ __forceinline__ void I4FTransformSourceRow(
++    const uint8_t* src, int* source_tmp, int row) {
++  const uint8_t* const s = src + row * kCudaBPS;
++  const int a0 = s[0] + s[3];
++  const int a1 = s[1] + s[2];
++  const int a2 = s[1] - s[2];
++  const int a3 = s[0] - s[3];
++  source_tmp[0 + row * 4] = (a0 + a1) * 8;
++  source_tmp[1 + row * 4] = a2 * 2217 + a3 * 5352;
++  source_tmp[2 + row * 4] = (a0 - a1) * 8;
++  source_tmp[3 + row * 4] = a3 * 2217 - a2 * 5352;
++}
++
++__device__ __forceinline__ void I4FTransformCoop4SourceReuse(
++    const uint8_t* ref, const int* source_tmp, int16_t* out, int* tmp,
++    int lane, unsigned int warp_mask) {
++  const uint8_t* const r = ref + lane * kCudaBPS;
++  const int a0 = r[0] + r[3];
++  const int a1 = r[1] + r[2];
++  const int a2 = r[1] - r[2];
++  const int a3 = r[0] - r[3];
++  tmp[0 + lane * 4] = source_tmp[0 + lane * 4] - (a0 + a1) * 8;
++  tmp[1 + lane * 4] =
++      (source_tmp[1 + lane * 4] - (a2 * 2217 + a3 * 5352) + 1812) >> 9;
++  tmp[2 + lane * 4] = source_tmp[2 + lane * 4] - (a0 - a1) * 8;
++  tmp[3 + lane * 4] =
++      (source_tmp[3 + lane * 4] - (a3 * 2217 - a2 * 5352) + 937) >> 9;
++  __syncwarp(warp_mask);
++
++  const int b0 = tmp[0 + lane] + tmp[12 + lane];
++  const int b1 = tmp[4 + lane] + tmp[8 + lane];
++  const int b2 = tmp[4 + lane] - tmp[8 + lane];
++  const int b3 = tmp[0 + lane] - tmp[12 + lane];
++  out[0 + lane] = (int16_t)((b0 + b1 + 7) >> 4);
++  out[4 + lane] =
++      (int16_t)(((b2 * 2217 + b3 * 5352 + 12000) >> 16) + (b3 != 0));
++  out[8 + lane] = (int16_t)((b0 - b1 + 7) >> 4);
++  out[12 + lane] = (int16_t)((b3 * 2217 - b2 * 5352 + 51000) >> 16);
++}
++#endif
++
+ __device__ __forceinline__ int I4QuantizeBlockCoop4(
+     int16_t* in, int16_t* out, const CudaVP8Matrix* mtx, int lane,
+     unsigned int warp_mask) {
+@@ -1434,6 +1483,14 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+             CudaIntra4PredMode(pred, i4_boundary2[team] + 5, m);
+           }
+         }
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++        if (team_tid >= 124) {
++          const int row = team_tid - 124;
++          const uint8_t* const src =
++              w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
++          I4FTransformSourceRow(src, w.i4_source_tmp[team], row);
++        }
++#endif
+       }
+       __syncthreads();
+       if (active && team_tid < 4 * kNumBModes) {
+@@ -1449,9 +1506,15 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+         uint8_t* const pred = (team == 0) ? w.yuv_p : w.i4_yuv_p2;
+         const uint8_t* const ref = pred + kCudaVP8I4ModeOffsets[mode];
+         int nz = 0;
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++        I4FTransformCoop4SourceReuse(
++            ref, w.i4_source_tmp[team], w.i4_tmp[team][mode],
++            w.i4_transform_tmp[team][mode], mode_lane, warp_mask);
++#else
+         I4FTransformCoop4(src, ref, w.i4_tmp[team][mode],
+                           w.i4_transform_tmp[team][mode], mode_lane,
+                           warp_mask);
++#endif
+         __syncwarp(warp_mask);
+         if (p.rd_opt_level == kRDTrellisAll) {
+           if (mode_lane == 0) {

@@ -131,6 +131,7 @@ that hardware and workload.
 | Pre-Ampere full-warp-paired I16 residual costs | A fresh native profile measured 18.756/18.665 ms/image in decimate/collect/replay and put I16 selection at 25.2% of graphic-medium block cycles. Unlike the earlier half-warp mapping, one pre-Ampere candidate used all eight existing CTA warps as two full residual-cost warps per I16 mode. Exact contexts came from the completed non-zero bitmap. Registers fell 103 to 100; shared memory rose 23,392 to 23,456 bytes. A medium phase screen cut graphic/photo device wall by about 5 ms. All 60 full-corpus timing rows, the methods 2--6 / qualities 25/75/98 tiny/odd matrix, and 20 PNG/JPEG fallback cells were exact; candidate and restored builds passed 7/7 tests. | Rejected and removed. Five order-balanced full-corpus pairs yielded paired-median gains of only 0.322 ms/image PNG and 0.340 JPEG; pooled PNG regressed 29.019 to 29.176 ms/image. The local I16 phase gain is hidden by the end-to-end GPU/host schedule. Do not retry full-warp I16 block pairing without a new critical-path profile. RTX 2080 SUPER only; Ampere+ and architecture thresholds/defaults are unchanged. |
 | Pre-Ampere inverse-transform/SSE fusion | A fresh native profile measured 18.859/18.581 ms/image in decimate/collect/replay and retained 63--65% I4 shares on photo/texture. The distinct SSE/flatness metric warp had measured 209.0 million photo cycles. One Turing candidate calculated row SSE in the four existing inverse-transform lanes and reduced each mode with two subgroup shuffles, removing the later scalar 16-pixel SSE walk; Ampere+ retained that original path. The candidate rose from 103 to 104 registers and passed 7/7 tests. All 60 timing rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 PNG/JPEG fallback cells were exact. | Rejected and removed. Pooled medians regressed from 29.469 to 29.824 ms/image PNG and 27.704 to 28.113 JPEG; paired-median gains were -0.223/-0.274 ms. Moving SSE onto the inverse-transform critical path plus shuffle overhead is worse than the concurrent metric warp. Do not retry this fusion without a different schedule that keeps inverse transform off the added dependency. RTX 2080 SUPER only; Ampere+, thresholds, and frozen files are unchanged. |
 | Pre-Ampere packed-pair I4 flatness scan | A fresh native profile put decimate/collect/replay at 18.912/18.751 ms/image PNG/JPEG. Root Nsight Compute source correlation selected the distinct scalar I4 flatness walk at 306,400 executed instructions and 221 samples on a representative launch. One Turing candidate tested two adjacent 16-bit levels per 32-bit shared load while retaining the exact DC omission, nonzero count, and early threshold; Ampere+ kept the scalar path. Registers fell 103 to 102, but the measured kernel moved 122.11 to 122.56 us with unchanged 26.04% occupancy. All 60 timing rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 PNG/JPEG fallback cells were exact; candidate/restored builds passed 7/7 tests. | Rejected and removed. PNG pooled median regressed 29.499 to 29.768 ms/image and paired change was -0.288 ms; JPEG gained only 0.234 ms paired (27.770 to 27.561 pooled), far below 1.5 ms/image. Pair extraction and counting do not shorten the dependency-bound flatness walk. Do not retry packed-pair I4 flatness without a new critical-path profile. RTX 2080 SUPER only; Ampere+, thresholds, architecture split, and frozen files are unchanged. |
+| Pre-Ampere I4 source-transform reuse | A fresh native profile measured a 121.89 us representative decimate launch and correlated 140,800 instructions with the four-lane I4 forward-transform body. One Turing candidate computed the exact source-side horizontal numerators once per block in idle prediction lanes, then let all ten modes subtract their reference terms before the unchanged rounding/vertical pass; Ampere+ compiled the retained path. All 60 timing rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 PNG/JPEG fallback cells were exact; candidate/restored builds passed 7/7 tests. | Rejected and removed. The candidate added 128 shared bytes, increased launch instructions from 3,879,409 to 3,896,209, and regressed the kernel to 123.39 us. Pooled PNG/JPEG medians regressed 29.209 to 29.490 and 27.619 to 27.902 ms/image; paired changes were -0.244/-0.381 ms. Shared publication/address arithmetic costs more than repeated source-row work. Do not retry without a register-only handoff. RTX 2080 SUPER only; Ampere+, thresholds, architecture split, and frozen files are unchanged. |
 
 All original and follow-up benchmark rows produced stable expected checksums.
 The historical color rows remain raw evidence, but their ratios are not matched
@@ -1447,6 +1448,40 @@ recording inline and pipelined. PNG regressed and JPEG's small gain is far
 below 1.5 ms/image, so the candidate was removed. Every static focused test
 was relinked; restored source matched the parent blob and passed 7/7 tests.
 Raw evidence uses `libwebp-i4-packed-flatness-*`; architecture thresholds,
+the pre-Ampere/Ampere+ split, and frozen corpus/generator are unchanged.
+
+
+## Pre-Ampere I4 source-transform reuse rejection
+
+At clean parent `86c64e2fb9c6862f8a69f496b20fecab3329dbe1`, fresh native
+file-I/O batch medians were exact at 29.536 ms/image PNG and 27.559 JPEG. A
+root Nsight Compute profile captured the representative 50-CTA photo launch
+at 121.89 us, 3,879,409 executed instructions, 89.79% scheduler cycles with
+no eligible warp, and 26.04% achieved occupancy. Source correlation assigned
+140,800 instructions to the four-lane I4 forward-transform body.
+
+All ten modes transform the same source pixels. The single pre-Ampere
+candidate therefore calculated the exact source-side horizontal numerators
+once per block in otherwise-idle prediction lanes. Each mode subtracted its
+reference-side terms before the retained rounding and vertical pass. Ampere+
+compiled the original transform. Native registers remained 103 and stack 352
+bytes, but shared memory rose 23,392 to 23,520 bytes. The shared handoff and
+addressing increased instructions by 16,800 and regressed the matched launch
+to 123.39 us; occupancy remained 26.04%.
+
+Five order-balanced full-corpus pairs per format produced:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 29.209 ms/image | 29.490 ms/image | -0.244 ms/image |
+| JPEG | 27.619 ms/image | 27.902 ms/image | -0.381 ms/image |
+
+All 60 timing rows were exact. The candidate also passed 7/7 focused tests,
+the methods 2--6 / qualities 25/75/98 tiny/odd matrix, and 20 PNG/JPEG
+fallback cells spanning bands 0/1/3/5/7 with token recording inline and
+pipelined. Both formats regressed, so the candidate was removed. The restored
+source and native resources match the parent exactly and 7/7 tests pass. Raw
+evidence uses `libwebp-i4-source-transform-reuse-*`; architecture thresholds,
 the pre-Ampere/Ampere+ split, and frozen corpus/generator are unchanged.
 
 

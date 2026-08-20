@@ -2673,3 +2673,34 @@ passed 7/7 tests. PNG regressed and JPEG's 0.234 ms/image gain is noise, so
 the candidate was removed. Evidence uses `libwebp-i4-packed-flatness-*`;
 architecture thresholds/defaults, the pre-Ampere/Ampere+ split, and the
 frozen publication corpus/generator are unchanged.
+
+
+## Pre-Ampere I4 source-transform reuse screen
+
+At clean parent `86c64e2fb9c6862f8a69f496b20fecab3329dbe1`, the native
+file-I/O batch refresh measured exact PNG/JPEG medians of 29.536/27.559
+ms/image. Root Nsight Compute measured the representative 50-CTA photo launch
+at 121.89 us and correlated 140,800 instructions with the four-lane I4
+forward transform.
+
+One Turing-only candidate used idle prediction lanes to compute the common
+source-side horizontal numerators once per block. The ten mode groups then
+subtracted their reference terms before applying the unchanged transform
+rounding and vertical pass. Ampere+ compiled the retained path. Registers and
+stack stayed at 103/352 bytes, while shared scratch rose 23,392 to 23,520
+bytes. The candidate increased launch instructions from 3,879,409 to
+3,896,209 and regressed duration to 123.39 us.
+
+Five order-balanced full-corpus process pairs measured:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 29.209 ms/image | 29.490 ms/image | -0.244 ms/image |
+| JPEG | 27.619 ms/image | 27.902 ms/image | -0.381 ms/image |
+
+All 60 timing rows, the methods 2--6 / qualities 25/75/98 tiny/odd matrix,
+and 20 PNG/JPEG fallback cells were byte-exact. Candidate and restored builds
+passed 7/7 tests. Both formats regressed, so the candidate was removed.
+Evidence uses `libwebp-i4-source-transform-reuse-*`; architecture
+thresholds/defaults, the pre-Ampere/Ampere+ split, and the frozen publication
+corpus/generator are unchanged.

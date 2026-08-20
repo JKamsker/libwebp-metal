@@ -2970,6 +2970,47 @@ RTX 2080 SUPER-only evidence; the 784/12,544 pre-Ampere and 64/4,000 Ampere+
 thresholds, architecture split, frozen corpus, and generator are unchanged.
 
 
+## Pre-Ampere I4 source-transform reuse rejection
+
+At clean parent `86c64e2fb9c6862f8a69f496b20fecab3329dbe1`, the native
+Release refresh measured exact PNG/JPEG file-I/O medians of 29.536/27.559
+ms/image. The retained root Nsight Compute report captured a representative
+50-CTA photo launch at 121.89 us with 3,879,409 executed instructions, 89.79%
+of scheduler cycles reporting no eligible warp, and 26.04% achieved
+occupancy. Source correlation assigned 140,800 instructions to the four-lane
+I4 forward-transform body.
+
+The pre-Ampere candidate computed the common source-side horizontal
+numerators once per block in otherwise-idle prediction lanes. Each of the ten
+mode groups subtracted its reference terms before the unchanged rounding and
+vertical transform. Ampere+ compiled the retained path. Native registers and
+stack stayed at 103 and 352 bytes; shared memory rose from 23,392 to 23,520
+bytes. The shared publication/address work increased executed instructions by
+16,800 and regressed duration to 123.39 us. `No Eligible` moved to 89.86%;
+occupancy remained 26.04%.
+
+Five order-balanced full-corpus process pairs per format produced:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 29.209 ms/image | 29.490 ms/image | -0.244 ms/image |
+| JPEG | 27.619 ms/image | 27.902 ms/image | -0.381 ms/image |
+
+All 60 timing rows retained exact aggregate hashes and byte counts. The
+candidate passed 7/7 focused tests, the methods 2--6 / qualities 25/75/98
+graphic/photo/texture tiny/odd matrix, and 20 PNG/JPEG fallback cells spanning
+bands 0/1/3/5/7 with token recording inline and pipelined.
+
+Both formats regressed, so the candidate was removed and every focused static
+executable was relinked. Restored source and resources match the parent, and
+7/7 tests pass. Raw profiles, compressed Nsight reports/source correlation,
+resources, exact patch, parity matrices, and timings use
+`libwebp-i4-source-transform-reuse-*` in the adjacent evidence directory.
+This is RTX 2080 SUPER-only evidence; the 784/12,544 pre-Ampere and 64/4,000
+Ampere+ thresholds, architecture split, frozen corpus, and generator are
+unchanged.
+
+
 ## Coefficient-token zero-pair feasibility rejection
 
 At clean parent `792e2592cdbda92f19a22ad3f2c6a4cfd50619bc`, the native Release
