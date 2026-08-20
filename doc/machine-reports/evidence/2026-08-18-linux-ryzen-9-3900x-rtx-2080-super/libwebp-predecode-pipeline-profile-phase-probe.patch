@@ -1,0 +1,110 @@
+diff --git a/tools/cuda_batch_benchmark.c b/tools/cuda_batch_benchmark.c
+index 3ade7125..03f05d0a 100644
+--- a/tools/cuda_batch_benchmark.c
++++ b/tools/cuda_batch_benchmark.c
+@@ -321,6 +321,11 @@ static int InitConfig(const Options* const options, WebPConfig* const config) {
+   return WebPValidateConfig(config);
+ }
+ 
++static uint64_t profile_init_ns;
++static uint64_t profile_decode_ns;
++static uint64_t profile_webp_encode_ns;
++static uint64_t profile_picture_free_ns;
++
+ static int EncodeInput(const Options* const options, const Input* const input,
+                        WebPMemoryWriter* const writer) {
+   const uint8_t* data = input->data;
+@@ -328,14 +333,17 @@ static int EncodeInput(const Options* const options, const Input* const input,
+   int owns_data = 0;
+   WebPConfig config;
+   WebPPicture picture;
++  uint64_t phase_begin = WebPBenchmarkNowNanoseconds();
+   int ok = 0;
+   if (options->include_file_io) {
+     if (!ImgIoUtilReadFile(input->filename, &data, &data_size)) return 0;
+     owns_data = 1;
+   }
+   if (!InitConfig(options, &config) || !WebPPictureInit(&picture)) goto end;
++  profile_init_ns += WebPBenchmarkNowNanoseconds() - phase_begin;
+   picture.use_argb = config.lossless ||
+                      (options->force_cuda && options->mode == MODE_LOSSY);
++  phase_begin = WebPBenchmarkNowNanoseconds();
+   if (!DecodeInput(input, data, data_size,
+                    options->include_file_io || options->verify, &picture)) {
+     WFPRINTF(stderr, "failed to decode %s\n",
+@@ -344,18 +352,23 @@ static int EncodeInput(const Options* const options, const Input* const input,
+             WebPGetEnabledInputFileFormats());
+     goto free_picture;
+   }
++  profile_decode_ns += WebPBenchmarkNowNanoseconds() - phase_begin;
+   WebPMemoryWriterInit(writer);
+   picture.writer = WebPMemoryWrite;
+   picture.custom_ptr = writer;
++  phase_begin = WebPBenchmarkNowNanoseconds();
+   if (!WebPEncode(&config, &picture)) {
+     WFPRINTF(stderr, "failed to encode %s: error %d\n",
+              (const W_CHAR*)input->filename, picture.error_code);
+     WebPMemoryWriterClear(writer);
+     goto free_picture;
+   }
++  profile_webp_encode_ns += WebPBenchmarkNowNanoseconds() - phase_begin;
+   ok = 1;
+ free_picture:
++  phase_begin = WebPBenchmarkNowNanoseconds();
+   WebPPictureFree(&picture);
++  profile_picture_free_ns += WebPBenchmarkNowNanoseconds() - phase_begin;
+ end:
+   if (owns_data) WebPFree((void*)data);
+   return ok;
+@@ -443,20 +456,51 @@ static int RunBatch(const Options* const options, uint64_t* const elapsed_ns,
+                     uint64_t* const output_hash,
+                     uint64_t* const output_bytes) {
+   uint64_t begin, end;
++  uint64_t encode_ns = 0;
++  uint64_t hash_ns = 0;
++  uint64_t clear_ns = 0;
+   uint64_t hash = UINT64_C(1469598103934665603);
+   uint64_t bytes = 0;
++  const int profile_phases =
++      getenv("WEBP_CUDA_BATCH_PHASE_PROFILE") != NULL &&
++      !strcmp(getenv("WEBP_CUDA_BATCH_PHASE_PROFILE"), "1");
+   int i;
++  profile_init_ns = 0;
++  profile_decode_ns = 0;
++  profile_webp_encode_ns = 0;
++  profile_picture_free_ns = 0;
+   begin = WebPBenchmarkNowNanoseconds();
+   for (i = 0; i < options->batch_size; ++i) {
+     const Input* const input = &options->inputs[i % options->input_count];
+     WebPMemoryWriter writer;
++    uint64_t phase_begin = WebPBenchmarkNowNanoseconds();
+     if (!EncodeInput(options, input, &writer)) return 0;
++    encode_ns += WebPBenchmarkNowNanoseconds() - phase_begin;
++    phase_begin = WebPBenchmarkNowNanoseconds();
+     hash = HashBytes(hash, writer.mem, writer.size);
+     hash = HashBytes(hash, (const uint8_t*)&writer.size, sizeof(writer.size));
+     bytes += writer.size;
++    hash_ns += WebPBenchmarkNowNanoseconds() - phase_begin;
++    phase_begin = WebPBenchmarkNowNanoseconds();
+     WebPMemoryWriterClear(&writer);
++    clear_ns += WebPBenchmarkNowNanoseconds() - phase_begin;
+   }
+   end = WebPBenchmarkNowNanoseconds();
++  if (profile_phases) {
++    fprintf(stderr,
++            "batch phases: encode-input %.3f init %.3f decode %.3f "
++            "webp-encode %.3f picture-free %.3f hash %.3f clear %.3f "
++            "other %.3f ms/image\n",
++            (double)encode_ns / options->batch_size / 1e6,
++            (double)profile_init_ns / options->batch_size / 1e6,
++            (double)profile_decode_ns / options->batch_size / 1e6,
++            (double)profile_webp_encode_ns / options->batch_size / 1e6,
++            (double)profile_picture_free_ns / options->batch_size / 1e6,
++            (double)hash_ns / options->batch_size / 1e6,
++            (double)clear_ns / options->batch_size / 1e6,
++            (double)((end - begin) - encode_ns - hash_ns - clear_ns) /
++                options->batch_size / 1e6);
++  }
+   if (begin == 0 || end <= begin) return 0;
+   *elapsed_ns = end - begin;
+   *output_hash = hash;

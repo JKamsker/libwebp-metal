@@ -1,0 +1,13 @@
+CMAKE_BUILD_TYPE=Release
+CMAKE_CUDA_ARCHITECTURES=native
+WEBP_ENABLE_CUDA=ON
+source_parent=2512d724fd47004716b1863e5afce65a40c4160c
+candidate=bounded two-slot compressed-input predecode pipeline
+default_scope=pre-Ampere CUDA lossy batches with batch_size > 1
+restore=WEBP_CUDA_BATCH_PREDECODE=0
+explicit_enable=WEBP_CUDA_BATCH_PREDECODE=1
+timing=method 4, quality 75, batch 24, one warmup, five samples per order-reversed process
+exactness=methods 2..6, qualities 25/75/98, PNG/JPEG content classes, tiny/odd geometry, file-I/O on/off
+fallback=WEBP_CUDA_DECIMATE_FAIL_COLLECT bands 0/1/3/5/7, predecode on/off
+official_suite=scripts/benchmark_cuda_end_to_end.py, batch 24, file I/O included, 180/180 validation pairs
+architecture_policy=Ampere+ remains serial by default pending direct measurement

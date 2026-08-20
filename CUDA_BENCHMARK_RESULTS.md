@@ -2320,3 +2320,31 @@ macroblock on the Turing candidate. PNG regressed 0.104 ms/image and JPEG
 improved only 0.118 ms/image; both were exact and far below 1.5 ms/image.
 Source was restored. Evidence uses `libwebp-uv-warp-reduce-*`; Ampere+ was
 unchanged.
+
+
+## Pre-Ampere compressed-input predecode pipeline
+
+Fresh native-sm_75 profiling found 11.71 ms/image PNG and 12.30 ms/image JPEG
+in compressed-input decode/import outside `WebPEncode`. A bounded two-slot
+pipeline now decodes image N+1 on one portable worker while image N is encoded;
+all `WebPEncode` and CUDA work remains serialized.
+
+Matched order-reversed batch-24 results without file I/O:
+
+| Format | Serial decode | Pipelined decode | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 39.271 ms/image | 29.351 ms/image | 9.919 ms/image |
+| JPEG lossy | 39.557 ms/image | 28.128 ms/image | 11.429 ms/image |
+
+The complete official suite, which includes file I/O, measured:
+
+| Format | Restore | Retained | Gain | CPU / retained speedup |
+|---|---:|---:|---:|---:|
+| PNG lossy batch | 39.615 ms/image | 28.257 ms/image | 11.358 ms/image | 91.608 / 28.257 = 3.24x |
+| JPEG lossy batch | 39.630 ms/image | 29.429 ms/image | 10.200 ms/image | 89.334 / 29.429 = 3.04x |
+
+All 180 official validation pairs passed. The separate exactness matrices,
+fault-injected fallbacks, and deterministic repeats were also exact. This is
+an RTX 2080 SUPER result: pre-Ampere defaults on, Ampere+ stays off pending
+measurement, and `WEBP_CUDA_BATCH_PREDECODE=0` restores serial decode. Raw
+evidence uses `libwebp-predecode-pipeline-*`.

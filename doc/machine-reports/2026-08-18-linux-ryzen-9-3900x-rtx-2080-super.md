@@ -2623,3 +2623,37 @@ The shared atomics were not critical, so source was restored and the restored
 focused tests passed. Raw profiles, rows, patch, resources, identities, and
 tests use `libwebp-uv-warp-reduce-*`. No Ampere+ behavior or threshold
 changed.
+
+
+## Pre-Ampere compressed-input predecode pipeline retention
+
+A native retained refresh measured 39.74 ms/image PNG and 39.67 JPEG. The
+encoder stage profiler accounted for 27.18/26.47 ms; a temporary batch phase
+probe localized the common outer gap to compressed-input decode/import at
+11.71/12.30 ms/image. Output hashing was only about 0.25 ms/image. The device
+profile still placed realistic I4 at 63--65%, but its measured subdivisions
+and residual specializations are exhausted, so the decode wall was the
+largest distinct addressable cost.
+
+The retained internal batch-tool path keeps two decoded-picture slots. A
+portable worker reads and decodes N+1 while the main thread serially encodes
+N. There is no concurrent `WebPEncode`, CUDA work remains serialized, results
+stay ordered, memory is bounded to one lookahead picture, and worker setup
+failure uses the old serial loop. The default is restricted to pre-Ampere;
+Ampere+ remains unchanged. `WEBP_CUDA_BATCH_PREDECODE=0` restores serial
+decode, while `=1` is the explicit measurement override.
+
+| Measurement | Format | Restore | Retained | Gain |
+|---|---|---:|---:|---:|
+| Reversed-order batch, no file I/O | PNG lossy | 39.271 | 29.351 | 9.919 ms/image |
+| Reversed-order batch, no file I/O | JPEG lossy | 39.557 | 28.128 | 11.429 ms/image |
+| Official suite, file I/O included | PNG lossy | 39.615 | 28.257 | 11.358 ms/image |
+| Official suite, file I/O included | JPEG lossy | 39.630 | 29.429 | 10.200 ms/image |
+
+The retained official rows are 3.24x PNG and 3.04x JPEG versus CPU. All
+180/180 official validation pairs passed. Two 75-cell file-I/O-off/on
+matrices were exact across methods 2--6, qualities 25/75/98, content classes,
+and tiny/odd inputs; 30 injected fallback cells and 20 deterministic rows
+were exact. Trellis/fallback, concurrent-encoder, and near-lossless focused
+tests passed. Evidence uses `libwebp-predecode-pipeline-*`; the publication
+corpus/generator and architecture-specific decimate thresholds are untouched.

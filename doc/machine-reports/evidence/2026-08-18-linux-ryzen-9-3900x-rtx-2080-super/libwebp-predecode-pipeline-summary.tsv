@@ -1,0 +1,6 @@
+measurement	format	parent_ms_per_image	candidate_ms_per_image	gain_ms_per_image	hash	bytes	result
+order_reversed_no_file_io	PNG lossy	39.270553	29.351485	9.919067	ace64e860de89b43	6441688	retain
+order_reversed_no_file_io	JPEG lossy	39.556926	28.127720	11.429206	1cbb84d2ab926db3	6400792	retain
+official_suite_file_io	PNG lossy	39.614808	28.256812	11.357996	byte_exact	268403.667_per_image	retain
+official_suite_file_io	JPEG lossy	39.629806	29.429418	10.200388	byte_exact	266699.667_per_image	retain
+validation	all	150_exact_matrix_cells	30_fallback_cells	20_deterministic_rows	CPU_CUDA_exact	180_of_180_official	pass

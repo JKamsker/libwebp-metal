@@ -4352,6 +4352,29 @@ extern "C" uint64_t WebPCUDAGetResidentLosslessHandoffCount(void) {
   return count;
 }
 
+extern "C" int WebPCUDAIsPreAmpereDevice(void) {
+  int major = 0;
+  LockCudaMutex(&g_cuda_mutex);
+  if (g_cuda_state.available) {
+    major = g_cuda_state.compute_capability_major;
+  } else {
+    int device_count = 0;
+    const int device = EnvironmentDevice();
+    const cudaError_t count_error = cudaGetDeviceCount(&device_count);
+    if (count_error == cudaSuccess && device >= 0 && device < device_count) {
+      if (cudaDeviceGetAttribute(&major, cudaDevAttrComputeCapabilityMajor,
+                                 device) != cudaSuccess) {
+        major = 0;
+        (void)cudaGetLastError();
+      }
+    } else if (count_error != cudaSuccess) {
+      (void)cudaGetLastError();
+    }
+  }
+  UnlockCudaMutex(&g_cuda_mutex);
+  return major > 0 && major < 8;
+}
+
 extern "C" int WebPCUDAParallelCacheSearchEnabled(void) {
   const char* const override_value =
       getenv("WEBP_CUDA_PARALLEL_CACHE_SEARCH");

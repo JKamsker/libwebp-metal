@@ -1102,3 +1102,43 @@ The shared atomics were not critical, so source was restored and the restored
 focused tests passed. Raw profiles, rows, patch, resources, identities, and
 tests use `libwebp-uv-warp-reduce-*`. No Ampere+ behavior or threshold
 changed.
+
+
+## Pre-Ampere compressed-input predecode pipeline retention
+
+A fresh native-sm_75 profile separated the repeated end-to-end wall from the
+encoder wall. PNG/JPEG batch medians were 39.74/39.67 ms/image, while the
+stage profiler measured only 27.18/26.47 ms inside `WebPEncode`. An
+environment-gated phase probe attributed 11.71 ms/image PNG and 12.30
+ms/image JPEG to compressed-input decode/import. Gprofng confirmed that
+output hashing was not the gap; the retained device phase profile still put
+realistic I4 at 63--65%, whose measured subdivisions are already exhausted.
+
+The retained batch-tool pipeline owns two bounded picture slots. One portable
+worker reads and decodes image N+1 while the main thread performs the only
+`WebPEncode` call for image N. Encodes and CUDA passes remain strictly
+serialized, output order is unchanged, only one decoded lookahead is live,
+and worker-creation failure restores the serial loop. It is default-on only
+after a pre-Ampere CUDA capability check; Ampere+ remains serial pending a
+direct measurement. `WEBP_CUDA_BATCH_PREDECODE=0` restores the old path and
+`=1` explicitly enables the measured path.
+
+Two reversed-order five-sample process pairs were exact:
+
+| Format | Serial decode | Predecode pipeline | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 39.271 ms/image | 29.351 ms/image | 9.919 ms/image | `ace64e860de89b43` / 6,441,688 |
+| JPEG lossy | 39.557 ms/image | 28.128 ms/image | 11.429 ms/image | `1cbb84d2ab926db3` / 6,400,792 |
+
+The official file-I/O suite moved CUDA PNG lossy batch from 39.615 to 28.257
+ms/image and JPEG from 39.630 to 29.429, gains of 11.358 and 10.200
+ms/image. Its final 180/180 validation pairs passed, including 60 lossy
+bitstream-exact and 120 encoded-exact pairs. An additional 150 cells covered
+methods 2--6, qualities 25/75/98, PNG/JPEG classes, tiny/odd geometry, and
+file-I/O on/off; 30 band-failure cells and 20 repeated rows were exact. The
+focused trellis/fallback, concurrency, and near-lossless suites also passed.
+
+Raw profiles, phase probe, matrices, order-reversed rows, official restore and
+candidate suites, patch, build identity, resources, and tests use
+`libwebp-predecode-pipeline-*`. Frozen corpus sources and all decimate
+thresholds remain unchanged.

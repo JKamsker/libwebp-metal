@@ -59,6 +59,9 @@ WEBP_EXTERN uint64_t WebPCUDAGetLastDecimateResultTransferNanoseconds(void);
 void WebPCUDAResetSuccessfulStages(void);
 uint32_t WebPCUDAGetSuccessfulStages(void);
 uint64_t WebPCUDAGetResidentLosslessHandoffCount(void);
+// True when the selected CUDA device predates Ampere. Tool-only scheduling
+// policy uses this query without creating backend streams.
+int WebPCUDAIsPreAmpereDevice(void);
 // True when the current encode may use the CPU worker-parallel lossless color
 // cache search. The default is limited to pre-Ampere CUDA devices with an
 // already-successful lossless stage; the environment override is intended for

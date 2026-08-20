@@ -18,6 +18,7 @@
 #include "imageio/imageio_util.h"
 #include "imageio/wicdec.h"
 #include "src/enc/cuda_enc.h"
+#include "src/utils/thread_utils.h"
 #include "tools/benchmark_platform.h"
 #include "webp/decode.h"
 #include "webp/encode.h"
@@ -361,6 +362,110 @@ end:
   return ok;
 }
 
+typedef struct {
+  const Options* options;
+  const Input* input;
+  WebPPicture picture;
+  int picture_initialized;
+} PredecodeJob;
+
+static int PredecodeInput(void* data1, void* data2) {
+  PredecodeJob* const job = (PredecodeJob*)data1;
+  const uint8_t* data = job->input->data;
+  size_t data_size = job->input->data_size;
+  int owns_data = 0;
+  int ok;
+  (void)data2;
+  if (job->options->include_file_io) {
+    if (!ImgIoUtilReadFile(job->input->filename, &data, &data_size)) return 0;
+    owns_data = 1;
+  }
+  if (!WebPPictureInit(&job->picture)) {
+    if (owns_data) WebPFree((void*)data);
+    return 0;
+  }
+  job->picture_initialized = 1;
+  job->picture.use_argb =
+      job->options->mode != MODE_LOSSY ||
+      (job->options->force_cuda && job->options->mode == MODE_LOSSY);
+  ok = DecodeInput(job->input, data, data_size,
+                   job->options->include_file_io || job->options->verify,
+                   &job->picture);
+  if (owns_data) WebPFree((void*)data);
+  return ok;
+}
+
+static int EncodePredecodedInput(const Options* const options,
+                                 WebPPicture* const picture,
+                                 WebPMemoryWriter* const writer) {
+  WebPConfig config;
+  if (!InitConfig(options, &config)) return 0;
+  WebPMemoryWriterInit(writer);
+  picture->writer = WebPMemoryWrite;
+  picture->custom_ptr = writer;
+  if (!WebPEncode(&config, picture)) {
+    WebPMemoryWriterClear(writer);
+    return 0;
+  }
+  return 1;
+}
+
+static int RunPredecodeBatch(const Options* const options,
+                             uint64_t* const elapsed_ns,
+                             uint64_t* const output_hash,
+                             uint64_t* const output_bytes) {
+  const WebPWorkerInterface* const worker_interface =
+      WebPGetWorkerInterface();
+  WebPWorker worker;
+  PredecodeJob jobs[2];
+  uint64_t hash = UINT64_C(1469598103934665603);
+  uint64_t bytes = 0;
+  uint64_t begin, end;
+  int ok = 0;
+  int i;
+  memset(jobs, 0, sizeof(jobs));
+  worker_interface->Init(&worker);
+  if (!worker_interface->Reset(&worker)) return -1;
+  worker.hook = PredecodeInput;
+  begin = WebPBenchmarkNowNanoseconds();
+  jobs[0].options = options;
+  jobs[0].input = &options->inputs[0];
+  worker.data1 = &jobs[0];
+  worker.data2 = NULL;
+  worker_interface->Launch(&worker);
+  for (i = 0; i < options->batch_size; ++i) {
+    PredecodeJob* const current = &jobs[i & 1];
+    WebPMemoryWriter writer;
+    if (!worker_interface->Sync(&worker)) goto end;
+    if (i + 1 < options->batch_size) {
+      PredecodeJob* const next = &jobs[(i + 1) & 1];
+      next->options = options;
+      next->input = &options->inputs[(i + 1) % options->input_count];
+      worker.data1 = next;
+      worker_interface->Launch(&worker);
+    }
+    if (!EncodePredecodedInput(options, &current->picture, &writer)) goto end;
+    hash = HashBytes(hash, writer.mem, writer.size);
+    hash = HashBytes(hash, (const uint8_t*)&writer.size, sizeof(writer.size));
+    bytes += writer.size;
+    WebPMemoryWriterClear(&writer);
+    WebPPictureFree(&current->picture);
+    current->picture_initialized = 0;
+  }
+  end = WebPBenchmarkNowNanoseconds();
+  if (begin == 0 || end <= begin) goto end;
+  *elapsed_ns = end - begin;
+  *output_hash = hash;
+  *output_bytes = bytes;
+  ok = 1;
+end:
+  worker_interface->End(&worker);
+  for (i = 0; i < 2; ++i) {
+    if (jobs[i].picture_initialized) WebPPictureFree(&jobs[i].picture);
+  }
+  return ok;
+}
+
 static int DecodedOutputsEqual(const WebPMemoryWriter* const left,
                                const WebPMemoryWriter* const right) {
   int left_width, left_height, right_width, right_height;
@@ -442,10 +547,24 @@ static int Verify(const Options* const options) {
 static int RunBatch(const Options* const options, uint64_t* const elapsed_ns,
                     uint64_t* const output_hash,
                     uint64_t* const output_bytes) {
+  const char* const predecode_env = getenv("WEBP_CUDA_BATCH_PREDECODE");
+  const int use_predecode =
+      predecode_env != NULL && predecode_env[0] != '\0'
+          ? strcmp(predecode_env, "0") != 0
+          : WebPCUDAIsPreAmpereDevice();
   uint64_t begin, end;
   uint64_t hash = UINT64_C(1469598103934665603);
   uint64_t bytes = 0;
   int i;
+  // Turing measurements show enough decode/import wall time to hide behind
+  // the serialized lossy encode. Keep Ampere+ unchanged until measured there;
+  // WEBP_CUDA_BATCH_PREDECODE=0 restores the serial batch on every device.
+  if (use_predecode && !strcmp(options->variant, "cuda") &&
+      options->mode == MODE_LOSSY && options->batch_size > 1) {
+    const int predecode_ok =
+        RunPredecodeBatch(options, elapsed_ns, output_hash, output_bytes);
+    if (predecode_ok >= 0) return predecode_ok;
+  }
   begin = WebPBenchmarkNowNanoseconds();
   for (i = 0; i < options->batch_size; ++i) {
     const Input* const input = &options->inputs[i % options->input_count];
