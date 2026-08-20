@@ -1,0 +1,499 @@
+{
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v1-phase3-evaluation-v1",
+  "record_kind": "phase3_independent_evaluation_and_research_only_consequence",
+  "experiment_id": "BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1",
+  "phase": "3",
+  "role": "Sol/high independent evaluator and research-only consequence owner",
+  "branch": "codex/backref-cost-aligned-null-stage-attribution-v1",
+  "evaluation_date": "2026-08-20",
+  "scope": {
+    "current_assigned_worktree_only": true,
+    "agents_spawned": 0,
+    "phase1_work_performed": false,
+    "phase2_work_performed": false,
+    "prior_phase_files_modified": false,
+    "new_benchmark_or_encoder_workloads": 0,
+    "ssh_or_remote_host_contacts": 0,
+    "lease_attempts": 0,
+    "retries_or_reruns": 0,
+    "alternate_or_local_timing_runs": 0,
+    "profiler_invocations": 0,
+    "cuda_invocations": 0,
+    "authority_overrides": 0,
+    "v4_timing_rows_loaded": 0,
+    "v4_rows_pooled_reused_relabelled_or_ingested": false
+  },
+  "ancestry": {
+    "main_commit": "5de7b3848adfdb5d1058a061979535f05f976e5b",
+    "main_tree": "a5b2e958b3e89d3e1bf5fd5ecd6f92b2bc9622e6",
+    "phase1a_commit": "c674c815c65d0424f75f8391e09064da4364d04e",
+    "phase1a_parent": "5de7b3848adfdb5d1058a061979535f05f976e5b",
+    "phase1a_tree": "0974b8310e69ce1e1a9a0bfa1ed8eecc1b037239",
+    "phase1b_commit": "75ba4d7f001307becee11828f321f9f041ad64a6",
+    "phase1b_parent": "c674c815c65d0424f75f8391e09064da4364d04e",
+    "phase1b_tree": "a782f65b147073f45596b485c9c2ca5bfff904d0",
+    "phase2_commit": "1bc8222e0fadcce6e446c3579762f895c6e49f85",
+    "phase2_parent": "75ba4d7f001307becee11828f321f9f041ad64a6",
+    "phase2_tree": "0b322e31c5720898b22ad5a7cc01dfd4a8693af3",
+    "audited_head_before_phase3": "1bc8222e0fadcce6e446c3579762f895c6e49f85",
+    "exact_linear_parent_chain_verified": true,
+    "all_required_commits_are_ancestors_of_phase2": true,
+    "phase1a_delta_files": 46,
+    "phase1a_delta_status_counts": {
+      "added": 39,
+      "modified": 7
+    },
+    "phase1b_delta_files": 29,
+    "phase1b_delta_status_counts": {
+      "added": 29,
+      "modified_or_deleted_or_renamed": 0
+    },
+    "phase2_delta_files": 2,
+    "phase2_delta_status_counts": {
+      "added": 2,
+      "modified_or_deleted_or_renamed": 0
+    },
+    "phase1b_additions_only_verified": true,
+    "phase2_additions_only_verified": true
+  },
+  "frozen_identity_and_hash_audit": {
+    "status": "PASS",
+    "manifest": {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_manifest.json",
+      "sha256": "b38602331821dc2e6f17d1aa82e974891697109e9d9011c724173bf55ae26439"
+    },
+    "protocol": {
+      "path": "doc/backref-cost-aligned-null-stage-attribution-v1-protocol-20260820.md",
+      "sha256": "4dc75a93005fba3a85ccb8eb353ad9c944d379d9603d9c0a75b05fde4033196d"
+    },
+    "schema_catalog": {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_schemas.json",
+      "sha256": "e32aea4c674690431b470944476efe9abce959fe89d3d5e02f618246a10b7156",
+      "protocol_version": 1,
+      "entries": 45,
+      "unique_entries": 45
+    },
+    "phase1b_authorization": {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1b-authorization.json",
+      "sha256": "83c2bd6a30921090448bf20e8e77b3b2b04c0b3367cf475e17cdabcf5c9669df"
+    },
+    "phase2_machine_audit": {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-execution-20260820/phase2-refusal-audit.json",
+      "sha256": "4e40a51313d44ae6eb6323777d23e367b019f8723934b361f3bb33dab3d47005"
+    },
+    "phase2_human_audit": {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-execution-20260820/phase2-refusal-audit.md",
+      "sha256": "a16bb30d900b5402c583235807f383949ec8598e5b18e08b250b657e9d2d61fa"
+    },
+    "manifest_frozen_artifacts": {
+      "declared": 65,
+      "verified": 65,
+      "hash_mismatches": 0
+    },
+    "phase1b_rehearsal_hash_index": {
+      "declared": 27,
+      "verified": 27,
+      "hash_or_size_mismatches": 0,
+      "total_bytes": 364350
+    },
+    "nested_hash_indexes": {
+      "artifact_hashes_declared_and_verified": 9,
+      "returned_evidence_hashes_declared_and_verified": 25,
+      "hash_or_size_mismatches": 0
+    },
+    "source_admission": {
+      "declared_and_verified_paths": 66,
+      "hash_mismatches": 0,
+      "source_map_sha256": "80be33814cf18cb5a93ef9bfe959032ac3be9de4236cf78206df1202accf21d3",
+      "source_bundle_sha256": "ecdcfce34e29775ba22d319bc9f6e2b03d29a32b891746d05b435aa7c3811ab6",
+      "source_commit": "c674c815c65d0424f75f8391e09064da4364d04e",
+      "source_tree": "0974b8310e69ce1e1a9a0bfa1ed8eecc1b037239"
+    }
+  },
+  "prior_v4_premise_only": {
+    "status": "PASS_ALIGNMENT_V4_PREMISE_RECONSTRUCTION_ONLY",
+    "audited_merge": "5de7b3848adfdb5d1058a061979535f05f976e5b",
+    "domains_passing": 11,
+    "domains_total": 12,
+    "sole_failure": {
+      "cell": "graphic-m4",
+      "metric": "whole_encode",
+      "mean_percent": -0.6199563389094708,
+      "paired_bootstrap_ci95_percent": [
+        -1.0795343104954225,
+        -0.21412171812593112
+      ]
+    },
+    "graphic_m4_dp_total_null_passed": true,
+    "graphic_m4_dp_steady_null_passed": true,
+    "v4_attribution_suitable_timers": [],
+    "v4_timers_are_incomplete_nested_or_overlapping": true,
+    "v4_timing_rows_loaded_into_v1_statistics": 0,
+    "v4_samples_pooled_reused_or_relabelled": false
+  },
+  "candidate_and_static_gate_audit": {
+    "status": "PASS_STATIC_AND_FIXTURE_EVIDENCE_ONLY",
+    "candidate_scope": "B/L only",
+    "h_body_present": false,
+    "semantic_algorithm_and_integer_tie_contract_equal": true,
+    "static_codegen_equal": true,
+    "corresponding_canonical_instruction_identity": true,
+    "corresponding_branch_load_store_counts_equal": true,
+    "private_symbol_count": 4,
+    "all_private_addresses_distinct": true,
+    "entry_modulo_16384": {
+      "PushInterval": 0,
+      "PushIntervalLayoutClone": 0,
+      "BackwardReferencesHashChainDistanceOnly": 0,
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone": 0
+    },
+    "section": "__TEXT,__br_null_v1",
+    "section_size_bytes": 50444,
+    "body_bytes": 3600,
+    "padding_bytes": 46844,
+    "inter_entry_spacing_bytes": 16384,
+    "dp_to_corresponding_push_displacement_bytes": 32768,
+    "linker_deduplication_disabled": true,
+    "timed_binary_recorder_free": true,
+    "recorder_binary_distinct": true,
+    "ordinary_build_default_omission": "PASS_PHASE1_FROZEN_VALIDATION",
+    "public_api_abi_equal": "PASS_PHASE1_FROZEN_VALIDATION",
+    "cmake_integration": "PASS_PHASE1_FROZEN_VALIDATION",
+    "unix_make_integration": "PASS_PHASE1_FROZEN_VALIDATION",
+    "experiment_isolation": "PASS_45_GUARDS",
+    "runtime_truth_table": "PASS_ABSENT_B_EXACT_B_L_OTHER_INVALID_H_INVALID",
+    "selector_once_before_mutation": "PASS_PHASE1_FROZEN_VALIDATION",
+    "correctness_fallback_determinism_immutability": "PASS_PHASE1_FROZEN_VALIDATION",
+    "phase1_local_correctness_encodes": 2,
+    "phase1_sanitizer_boundary_encodes": 24,
+    "phase1_timer_accounting_fixture_rows": 2,
+    "phase1_early_fault_skip_repeat_fixtures": 5,
+    "dynamic_work_rows": 0,
+    "dynamic_correctness_rows": 0,
+    "dynamic_b_l_bitstream_and_pixel_comparisons": 0,
+    "dynamic_b_l_semantic_and_work_equality": "UNAVAILABLE_PHASE2_NOT_AUTHORIZED"
+  },
+  "frozen_order_and_inventory": {
+    "cases": [
+      "photo-large",
+      "graphic-large"
+    ],
+    "methods": [
+      4,
+      6
+    ],
+    "variants": [
+      "B",
+      "L"
+    ],
+    "profile_repetitions": 4,
+    "variant_order": [
+      [
+        "B",
+        "L"
+      ],
+      [
+        "L",
+        "B"
+      ],
+      [
+        "B",
+        "L"
+      ],
+      [
+        "L",
+        "B"
+      ]
+    ],
+    "rehearsal_profile_plan_rows_verified": 32,
+    "rehearsal_profile_plan_ordinals": "0..31 contiguous",
+    "rehearsal_profile_plan_matches_frozen_order": true,
+    "planned": {
+      "direct_runner_children": 59,
+      "direct_child_breakdown": {
+        "correctness": 16,
+        "clock": 1,
+        "timer_accounting": 2,
+        "work": 8,
+        "profile": 32
+      },
+      "correctness_encodes": 16,
+      "clock_overhead_children": 1,
+      "clock_overhead_reads": 4096,
+      "timer_accounting_children": 2,
+      "timer_accounting_rows": 2,
+      "untimed_work_rows": 8,
+      "profile_processes": 32,
+      "warmups": 32,
+      "retained_timing_rows": 128,
+      "runner_rows_total": 160,
+      "stage_rows_total": 160,
+      "retained_stage_rows": 128,
+      "paired_rows_per_cell_per_metric": 16,
+      "cells": 4,
+      "bootstrap_resamples_per_statistic": 100000,
+      "bootstrap_seed": "0x4e554c31",
+      "adaptive_stopping": false
+    },
+    "observed_phase2": {
+      "direct_runner_children": 0,
+      "direct_child_receipts": 0,
+      "correctness_encodes": 0,
+      "clock_overhead_children": 0,
+      "clock_overhead_reads": 0,
+      "timer_accounting_children": 0,
+      "timer_accounting_rows": 0,
+      "untimed_work_rows": 0,
+      "profile_processes": 0,
+      "warmups": 0,
+      "retained_timing_rows": 0,
+      "runner_rows_total": 0,
+      "stage_rows_total": 0,
+      "retained_stage_rows": 0,
+      "paired_rows_per_cell_per_metric": 0,
+      "bootstrap_resamples_executed": 0
+    }
+  },
+  "stage_ledger_schema_audit": {
+    "static_boundary_and_fixture_status": "PASS_PHASE1_FROZEN_VALIDATION",
+    "outer_interval": "WebPProfileBeginSession at WebPEncodeInternal start through WebPProfileEndSession on every instrumented exit",
+    "clock": "mach_continuous_time converted with mach_timebase_info",
+    "top_level_partition_is_mutually_exclusive": true,
+    "nested_timers_are_descriptive_and_non_additive": true,
+    "residual_rule": "whole_ns minus the eight measured top-level bucket sums",
+    "successful_retained_residual_required_ns": 0,
+    "clock_reads_formula": "2 + 2 * sum(all emitted stage calls)",
+    "clock_overhead_method": "independent untimed 4096-read distribution; raw timing plus p99-derived bound; no post-hoc correction or fit",
+    "fail_closed_on": [
+      "negative residual",
+      "ledger sum exceeding whole",
+      "non-LIFO transition or stack overflow/underflow",
+      "missing close or backward clock",
+      "missing or duplicate required successful-path timer",
+      "inconsistent DP parent/child totals",
+      "unexpected clock count"
+    ],
+    "dynamic_ledger_rows": 0,
+    "dynamic_reconciliation_checks": 0,
+    "dynamic_clock_count_checks": 0,
+    "dynamic_status": "UNAVAILABLE_PHASE2_NOT_AUTHORIZED"
+  },
+  "frozen_gate_audit": {
+    "phase1b_rehearsal_gates": {
+      "total": 14,
+      "passed": 13,
+      "failed": 1,
+      "failed_gate": "alignment build frozen",
+      "authorization_status": "REFUSED",
+      "phase2_authority": "NONE",
+      "pipeline_invocation_authorized": false,
+      "timed_execution_authorized": false
+    },
+    "dynamic_gate_a_correctness": {
+      "required_before_timing": true,
+      "planned_encodes": 16,
+      "observed_encodes": 0,
+      "status": "NOT_RUN_UNAVAILABLE_NO_AUTHORITY"
+    },
+    "dynamic_gate_b_timer_accounting_reconciliation": {
+      "required_before_timing": true,
+      "planned_clock_children": 1,
+      "planned_accounting_children": 2,
+      "observed_children": 0,
+      "observed_rows": 0,
+      "status": "NOT_RUN_UNAVAILABLE_NO_AUTHORITY"
+    },
+    "dynamic_gate_c_direct_serial_child_ownership": {
+      "required_before_and_during_work": true,
+      "planned_children": 59,
+      "observed_children": 0,
+      "observed_receipts": 0,
+      "serial_overlap_checks": 0,
+      "status": "NOT_RUN_UNAVAILABLE_NO_AUTHORITY"
+    },
+    "zero_samples_on_gate_failure": "PASS",
+    "no_dynamic_gate_is_claimed_from_static_fixtures_or_rehearsal": true
+  },
+  "device_resource_process_transport_lease_archive_cleanup_audit": {
+    "phase1_rehearsal_reference_only": {
+      "single_ssh_session": 1,
+      "rehearsal_attempts": 1,
+      "exit_code": 0,
+      "request_payload_bytes": 23673635,
+      "request_chunks_written": 362,
+      "request_chunks_acknowledged": 362,
+      "framed_response_bytes": 18240,
+      "archive_bytes": 13846,
+      "transport_stderr_bytes": 0,
+      "device": "Apple M4 / Mac16,10",
+      "ac_power": true,
+      "low_power_mode": false,
+      "thermal_warning": false,
+      "available_memory_bytes": 10699292672,
+      "available_disk_bytes": 18937614336,
+      "process_isolation_verified": true,
+      "discovered_pid_signals": 0,
+      "exact_identity_conflicts": 0,
+      "source_admission_verified": true,
+      "archive_status": "accepted",
+      "integrity_status": "complete",
+      "indexed_extracted_artifacts_verified": 25,
+      "cleanup_status": "complete",
+      "exact_transaction_child_removed": true,
+      "absence_proved": true,
+      "lease_attempts": 0,
+      "runner_children": 0,
+      "encoder_workloads": 0,
+      "timing_rows": 0,
+      "performance_samples": 0,
+      "qualification": "transport and static rehearsal evidence only; not proof of Phase2 dynamic run state"
+    },
+    "phase2_observed": {
+      "remote_or_external_host_command_invocations": 0,
+      "ssh_invocations": 0,
+      "ready_requests": 0,
+      "lease_acquisition_attempts": 0,
+      "leases_acquired": 0,
+      "leases_released": 0,
+      "remote_transaction_invocations": 0,
+      "remote_children_created": 0,
+      "runner_children_created": 0,
+      "device_checks": 0,
+      "resource_checks": 0,
+      "process_isolation_snapshots": 0,
+      "archives_created": 0,
+      "archives_extracted": 0,
+      "archive_integrity_checks": 0,
+      "remote_cleanup_operations": 0,
+      "cleanup_absence_proofs": 0,
+      "status": "UNAVAILABLE_BY_CORRECT_FAIL_CLOSED_REFUSAL"
+    }
+  },
+  "raw_v1_evidence_and_statistical_reconstruction": {
+    "phase2_raw_v1_timing_files": 0,
+    "phase2_raw_v1_timing_rows": 0,
+    "phase2_raw_v1_stage_rows": 0,
+    "phase2_raw_v1_work_rows": 0,
+    "phase2_raw_v1_correctness_rows": 0,
+    "phase2_raw_v1_direct_child_receipts": 0,
+    "fresh_v1_pairs_total": 0,
+    "fresh_v1_pairs_graphic_m4_whole": 0,
+    "paired_statistics_recomputed": 0,
+    "bootstrap_resamples_executed": 0,
+    "statistics_status": "UNAVAILABLE_NO_RAW_V1_RETAINED_ROWS",
+    "unavailable_reason": "Phase2 correctly made zero host contact and created zero workload or timing evidence because frozen Phase1B authority was NONE.",
+    "v4_data_substitution_forbidden_and_not_performed": true,
+    "whole_encode": {
+      "status": "UNAVAILABLE_INCONCLUSIVE",
+      "pair_count": 0,
+      "paired_percentages": [],
+      "paired_deltas_ns": [],
+      "mean_percent": null,
+      "median_percent": null,
+      "sample_stddev_percent": null,
+      "minimum_percent": null,
+      "maximum_percent": null,
+      "negative_count": null,
+      "zero_count": null,
+      "positive_count": null,
+      "mean_delta_ns": null,
+      "bootstrap_ci95_percent": null,
+      "repeatability": null,
+      "stage_share": null,
+      "reason": "zero fresh V1 retained rows"
+    },
+    "top_level_buckets": {
+      "pre_lossless_setup_input": {"status": "UNAVAILABLE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "stage_share": null, "repeatability": null, "reason": "zero fresh V1 retained rows"},
+      "analysis_transforms": {"status": "UNAVAILABLE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "stage_share": null, "repeatability": null, "reason": "zero fresh V1 retained rows"},
+      "backward_reference_generation": {"status": "UNAVAILABLE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "stage_share": null, "repeatability": null, "reason": "zero fresh V1 retained rows"},
+      "histogram_construction": {"status": "UNAVAILABLE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "stage_share": null, "repeatability": null, "reason": "zero fresh V1 retained rows"},
+      "entropy_huffman_preparation": {"status": "UNAVAILABLE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "stage_share": null, "repeatability": null, "reason": "zero fresh V1 retained rows"},
+      "bitstream_serialization": {"status": "UNAVAILABLE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "stage_share": null, "repeatability": null, "reason": "zero fresh V1 retained rows"},
+      "container_output_finalization": {"status": "UNAVAILABLE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "stage_share": null, "repeatability": null, "reason": "zero fresh V1 retained rows"},
+      "allocation_cleanup_orchestration": {"status": "UNAVAILABLE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "stage_share": null, "repeatability": null, "reason": "zero fresh V1 retained rows"},
+      "residual_unattributed": {"status": "UNAVAILABLE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "stage_share": null, "repeatability": null, "reason": "zero fresh V1 retained rows"}
+    },
+    "nested_descriptive_stages": {
+      "lossless_analyze": {"status": "UNAVAILABLE_NON_ADDITIVE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "reason": "zero fresh V1 retained rows"},
+      "lossless_hash_chain": {"status": "UNAVAILABLE_NON_ADDITIVE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "reason": "zero fresh V1 retained rows"},
+      "lossless_backward_refs": {"status": "UNAVAILABLE_NON_ADDITIVE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "reason": "zero fresh V1 retained rows"},
+      "lossless_histogram": {"status": "UNAVAILABLE_NON_ADDITIVE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "reason": "zero fresh V1 retained rows"},
+      "lossless_huffman": {"status": "UNAVAILABLE_NON_ADDITIVE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "reason": "zero fresh V1 retained rows"},
+      "lossless_bitstream": {"status": "UNAVAILABLE_NON_ADDITIVE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "reason": "zero fresh V1 retained rows"},
+      "backref_cost_dp_total": {"status": "UNAVAILABLE_NON_ADDITIVE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "reason": "zero fresh V1 retained rows"},
+      "backref_cost_dp_setup": {"status": "UNAVAILABLE_NON_ADDITIVE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "reason": "zero fresh V1 retained rows"},
+      "backref_cost_dp_steady": {"status": "UNAVAILABLE_NON_ADDITIVE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "reason": "zero fresh V1 retained rows"},
+      "backref_cost_traceback": {"status": "UNAVAILABLE_NON_ADDITIVE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "reason": "zero fresh V1 retained rows"},
+      "backref_cost_materialize": {"status": "UNAVAILABLE_NON_ADDITIVE", "pair_count": 0, "mean_percent": null, "mean_delta_ns": null, "bootstrap_ci_percent": null, "reason": "zero fresh V1 retained rows"}
+    }
+  },
+  "frozen_decision_tree_application": {
+    "primary_test_applied_first": true,
+    "primary_cell": "graphic-m4",
+    "primary_metric": "whole_encode",
+    "frozen_null_bounds": {
+      "absolute_mean_percent_max": 0.75,
+      "ci95_must_include_zero": true,
+      "ci95_endpoint_absolute_percent_max": 1.5,
+      "every_pair_absolute_percent_max": 3.0
+    },
+    "fresh_primary_pair_count": 0,
+    "primary_reproduction_test": "UNAVAILABLE_INCONCLUSIVE",
+    "primary_classification_is_not_non_replication": true,
+    "reason": "The frozen test requires 16 fresh paired V1 rows; zero exist.",
+    "attribution_tree_entered": false,
+    "attribution_multiplicity_applied": false,
+    "attribution_direction_test_applied": false,
+    "accounting_and_repeatability_gate_status": "UNAVAILABLE",
+    "causal_stage_attribution": "NONE",
+    "overlapping_nested_timer_causal_inference": false,
+    "thresholds_weakened_or_refit": false,
+    "h_interpretation": false,
+    "production_promotion": "FORBIDDEN",
+    "cycle_outcome": "UNACCOUNTED_INCONCLUSIVE_WITHOUT_EXECUTION"
+  },
+  "blocker": {
+    "status": "BLOCKED_BY_FROZEN_PHASE1B_REFUSAL",
+    "failed_gate": "alignment build frozen",
+    "exact_description": "The alignment-build-frozen gate retained predecessor six-body expectations despite a valid V1 four-body receipt, so authority was fail-closed NONE.",
+    "stale_gate_expectations": {
+      "private_address_count": 6,
+      "all_six_private_addresses_distinct": true,
+      "section_size_bytes": 83212,
+      "body_bytes": 5624,
+      "padding_bytes": 77588
+    },
+    "valid_v1_receipt": {
+      "private_address_count": 4,
+      "all_four_private_addresses_distinct": true,
+      "section_size_bytes": 50444,
+      "body_bytes": 3600,
+      "padding_bytes": 46844,
+      "alignment_boundary_bytes": 16384,
+      "dp_to_push_displacement_bytes": 32768
+    },
+    "phase2_consequence": "zero host contact, zero dynamic gates, zero workloads, zero accepted performance evidence"
+  },
+  "research_only_consequence": {
+    "decision": "No fresh V1 result exists: reproduction is unavailable/inconclusive and no stage localization can be made.",
+    "production_change_authorized": false,
+    "next_lead_count": 1,
+    "next_lead": "Run a fresh, independently gated Phase 1 refreeze that corrects the frozen alignment-build identity/expectation mismatch before any timing execution.",
+    "next_lead_executed": false
+  },
+  "evidence_references": [
+    "doc/backref-cost-aligned-null-stage-attribution-v1-protocol-20260820.md",
+    "scripts/backref_cost_aligned_null_stage_attribution_v1_manifest.json",
+    "scripts/backref_cost_aligned_null_stage_attribution_v1_schemas.json",
+    "scripts/record_backref_cost_aligned_null_stage_attribution_v1_phase1b.py",
+    "scripts/evaluate_backref_cost_aligned_null_stage_attribution_v1.py",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1-prior-evidence-audit.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1-local-codegen.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1-local-validation.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1b-authorization.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1b-rehearsal-hashes.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-design/rehearsal/",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-execution-20260820/phase2-refusal-audit.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-execution-20260820/phase2-refusal-audit.md"
+  ]
+}
