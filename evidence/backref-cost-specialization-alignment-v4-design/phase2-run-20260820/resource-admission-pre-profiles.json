@@ -1,0 +1,110 @@
+{
+  "available_disk_bytes": 18759675904,
+  "available_memory_bytes": 10726948864,
+  "cpu_brand": "Apple M4",
+  "hardware_model": "Mac16,10",
+  "label": "pre-profiles",
+  "physical_memory_bytes": 25769803776,
+  "pmset_batt": "Now drawing from 'AC Power'\n",
+  "pmset_custom": "AC Power:\n Sleep On Power Button 1\n lowpowermode         0\n standby              0\n ttyskeepawake        1\n powernap             1\n displaysleep         0\n womp                 1\n networkoversleep     0\n sleep                0\n tcpkeepalive         1\n autorestart          1\n disksleep            0\n",
+  "pmset_thermal": "Note: No thermal warning level has been recorded\nNote: No performance warning level has been recorded\nNote: No CPU power status has been recorded\n",
+  "process_isolation": {
+    "ancestor_identity_policy": "structural self-to-PID1 proof; no positive identity allowlist",
+    "argument_text_collected": false,
+    "discovered_pid_signals": 0,
+    "exact_identity_conflicts": [],
+    "external_process_classes": [
+      "ssh",
+      "runner",
+      "profiler",
+      "editor",
+      "user-shell",
+      "service"
+    ],
+    "external_process_policy": "observe-only; exact-identity refusal; never signal",
+    "filesystem_identity_operations": [],
+    "identity_fields": [
+      "pid",
+      "ppid",
+      "comm"
+    ],
+    "label": "resources-pre-profiles",
+    "lexical_basename_semantics": "exact final slash component; string operation only",
+    "parsed_process_count": 744,
+    "process_snapshot_sha256": "21e9d22516375331ac45e8d6794fe19e88ce541645265c99fd4220cf2abf456f",
+    "raw_comm_semantics": "complete exact opaque process-table string; never a path",
+    "resolved_path_api_used": false,
+    "snapshot_bytes": 68588,
+    "snapshot_retention": "SHA-256/count/structural ancestor receipt; redundant raw process table omitted from the response archive",
+    "verified_ancestor_chain": [
+      {
+        "lexical_basename": "Python",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 38775,
+        "ppid": 38763,
+        "raw_comm": "/Applications/Xcode-26.3.0.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "Python",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 38763,
+        "ppid": 38762,
+        "raw_comm": "/Applications/Xcode-26.3.0.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "sshd-session: pandocs-agent-001@notty",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 38762,
+        "ppid": 38759,
+        "raw_comm": "sshd-session: pandocs-agent-001@notty",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "sshd-session: pandocs-agent-001 [priv]",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 38759,
+        "ppid": 1,
+        "raw_comm": "sshd-session: pandocs-agent-001 [priv]",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "launchd",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 1,
+        "ppid": 0,
+        "raw_comm": "/sbin/launchd",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      }
+    ]
+  },
+  "settings_changed": false,
+  "system_profiler_power": {
+    "SPPowerDataType": [
+      {
+        "AC Power": {
+          "Automatic Restart On Power Loss": "Yes",
+          "Current Power Source": "TRUE",
+          "Disk Sleep Timer": 0,
+          "Display Sleep Timer": 0,
+          "LowPowerMode": "No",
+          "PrioritizeNetworkReachabilityOverSleep": "No",
+          "Sleep On Power Button": "Yes",
+          "System Sleep Timer": 0,
+          "Wake On LAN": "Yes"
+        },
+        "_name": "sppower_information"
+      },
+      {
+        "_name": "sppower_hwconfig_information",
+        "sppower_ups_installed": "FALSE"
+      },
+      {
+        "_name": "sppower_ac_charger_information",
+        "sppower_ac_charger_family": "0x0000"
+      }
+    ]
+  },
+  "vm_stat": "Mach Virtual Memory Statistics: (page size of 16384 bytes)\nPages free:                               21459.\nPages active:                            617918.\nPages inactive:                          633022.\nPages speculative:                          240.\nPages throttled:                              0.\nPages wired down:                        119230.\nPages purgeable:                          14716.\n\"Translation faults\":                2583454167.\nPages copy-on-write:                  174366463.\nPages zero filled:                    889038742.\nPages reactivated:                      5004930.\nPages purged:                           8632335.\nFile-backed pages:                       659703.\nAnonymous pages:                         591477.\nPages stored in compressor:              287899.\nPages occupied by compressor:            146269.\nDecompressions:                         2343020.\nCompressions:                           4081017.\nPageins:                               73703222.\nPageouts:                                124703.\nSwapins:                                      0.\nSwapouts:                                     4.\n"
+}

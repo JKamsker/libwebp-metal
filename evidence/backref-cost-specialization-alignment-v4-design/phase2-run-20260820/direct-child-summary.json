@@ -1,0 +1,11 @@
+{
+  "all_direct_parent_edges_verified_online": true,
+  "all_exited_and_reaped_before_successor": true,
+  "discovered_pid_signals": 0,
+  "maximum_live_children": 1,
+  "ordinals_contiguous": true,
+  "receipts": 76,
+  "schema": "libwebp-backref-cost-specialization-alignment-v4-child-summary-v1",
+  "shell_wrapper_grandchild_launches": 0,
+  "status": "PASS"
+}
