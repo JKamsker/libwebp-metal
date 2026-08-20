@@ -125,6 +125,7 @@ that hardware and workload.
 | No-run token-byte fast flush | Coverage of 441.5 million coded tokens observed 36.43 million real byte flushes; 99.62% had no pending `0xff` run, and only 768 needed buffer growth. A direct `run == 0 && pos < max_pos` arm skipped pending-capacity arithmetic and the later run branch while preserving the existing run/resize path. It shrank `VP8PutTokenPage` from 764 to 719 bytes; 7/7 CTests and all 48 outputs were exact. PNG moved 40.144 to 40.213 ms/image and JPEG 40.027 to 40.105. | Rejected and removed. Despite the skew and smaller code, PNG/JPEG regressed 0.069/0.078 ms/image. The compiler already overlaps the pending-capacity work effectively. RTX 2080 SUPER only; no Ampere+ claim. Raw coverage, exact patch, disassemblies, caches, tests, and timings are archived. |
 | Dense boolean-coder transition table | A retained native profile put `VP8PutTokenPage` at 35.41% of sampled cycles across all eight emit workers. Coverage counted 292.2 million tokens: dynamic probability 82.20%, bit one 54.89%, and normalization 53.65%, ruling out another dominant branch. One exact 65,536-entry table packed value increment, shift, and next range, replacing the split multiply, bit/range decision, and both normalization lookups. The function shrank 764 to 708 bytes but added 256 KiB BSS; the focused bit-writer test and all 24 timing hashes/byte counts were exact. PNG moved 35.380 to 35.117 ms/image and JPEG 34.541 to 35.848. | Rejected and removed. PNG's 0.263 ms/image gain is noise and JPEG regressed 1.308 ms/image. The L2-resident random transition load is worse than the compact arithmetic chain on Zen 2. Restored source passed 7/7 CTests. Do not retry a dense whole-transition table without a materially different cache/data-layout profile. RTX 2080 SUPER only; no architecture policy changed. |
 | Eight-partition AVX2 lockstep boolean coder | The retained eight-partition profile left boolean coding as the largest distinct CPU chain: `VP8PutTokenPage` held 35.41% of zero-loss whole-process samples, while fresh partition controls showed that eight independent emit workers remained best. One coarse candidate replaced those eight OS workers with a single AVX2 routine that advanced all eight arithmetic coders in lockstep. The 2,758-byte SIMD routine gathered exact range/shift transitions and retained scalar per-lane byte flushes. All 12 timing outputs were exact and the corrected candidate build passed 7/7 focused CTests. PNG moved 36.791 to 48.201 ms/image; JPEG moved 35.072 to 51.666. | Rejected and removed. Giving up eight Zen 2 cores for one SIMD thread regressed PNG/JPEG by 11.410/16.594 ms/image. Cross-partition SIMD cannot hide scalar token/probability loads, unequal partition lengths, or independent byte flushing. Do not retry this one-core/eight-lane mapping without a fundamentally different profile. RTX 2080 SUPER only; no architecture policy changed. |
+| Pre-Ampere pinned decimate-result staging | A refreshed native profile kept decimation first at 18.927/18.666 ms/image PNG/JPEG. Streaming conformance isolated 1.534--1.536 ms per 1600x1200 image in four pageable result/Y/U/V downloads per band. One Turing-only candidate used page-locked staging with ordinary-allocation fallback; Ampere+ stayed unchanged. It cut transfer-event time to about 0.733 ms, but callback wall by only 0.05--0.08 ms because copies already overlap later diagonals and encoder-owned outputs still require a host copy. All 12 timing outputs and 48 conformance outputs were exact; candidate/restored builds passed 7/7 CTests. PNG moved 35.695 to 35.976 ms/image and JPEG 36.239 to 35.385. | Rejected and removed. PNG regressed 0.281 ms/image and JPEG gained only 0.854, below the two-format 1.5 ms/image gate. Do not infer end-to-end gain from CUDA event transfer time when existing stream overlap and host commit remain. RTX 2080 SUPER only; no Ampere+ or threshold change. |
 
 All original and follow-up benchmark rows produced stable expected checksums.
 The historical color rows remain raw evidence, but their ratios are not matched
@@ -1284,3 +1285,37 @@ eight Ryzen workers with one SIMD thread caused severe regressions in both
 formats. Raw exact patch, cache, build/test logs, symbol/disassembly reports,
 and timing rows use `libwebp-token-simd8-*`. Architecture thresholds/defaults,
 Ampere+ behavior, and the frozen publication corpus/generator are unchanged.
+
+
+## Pre-Ampere pinned decimate-staging rejection
+
+The refreshed native stage profile selected decimation at 18.927 ms/image PNG
+and 18.666 JPEG, versus token emission at 3.934/3.806, write at 2.185/1.831,
+and import at 1.372/1.367. I4 still held about 63--65% of photo/texture block
+cycles, but its leading residual, schedule, barrier, and layout paths were
+already exhausted. The streaming transfer boundary was distinct: each band
+downloaded results plus three reconstruction planes to pageable staging, then
+copied them into encoder-owned outputs.
+
+Seven warm method-4/quality-75 conformance iterations per medium content class
+measured 1.534--1.536 ms of result transfer against 20.778--21.686 ms of GPU
+execution. The one pre-Ampere candidate switched staging to `cudaHostAlloc`,
+with exact ordinary-allocation fallback; Ampere+ kept the existing allocator.
+Pinned staging reduced event-timed transfer to 0.732--0.733 ms, but callback
+wall by only about 0.05--0.08 ms because downloads already overlap later
+diagonals and host commit remains.
+
+One warmup and three measured batch-24 file-I/O samples per variant and format
+produced 12 exact rows:
+
+| Format | Pageable parent | Pinned candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 35.695 ms/image | 35.976 ms/image | -0.281 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 36.239 ms/image | 35.385 ms/image | 0.854 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+Candidate and restored native builds passed all seven focused CTests. The
+candidate was removed because PNG regressed and JPEG was below the 1.5
+ms/image gate. Raw stage/phase profiles, syscall control, compressed exact
+fixtures, pageable/pinned transfer rows, patch, builds, tests, and timings use
+`libwebp-pinned-staging-*`. Architecture thresholds, Ampere+ behavior, and
+the frozen publication corpus/generator are unchanged.

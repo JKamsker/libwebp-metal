@@ -2833,3 +2833,40 @@ patch, cache, builds, tests, symbols, disassembly, and timings use
 `libwebp-token-simd8-*`. This is Ryzen 9 3900X / RTX 2080 SUPER evidence only;
 Ampere+ behavior, the 784/12,544 pre-Ampere and 64/4,000 Ampere+ thresholds,
 frozen corpus, and generator are unchanged.
+
+
+## Pre-Ampere pinned decimate-result staging rejection
+
+At parent `98518b71c31218bd2041c820dac6da9f50b59bca`, a refreshed native
+stage profile measured decimation at 18.927 ms/image PNG and 18.666 JPEG. The
+remaining 3.934/3.806 ms token boundary had just exhausted a coarse AVX2
+mapping, while device timing kept I4 at about 63--65% of photo/texture block
+cycles with its leading residual, scheduling, barrier, and layout avenues
+already exhausted.
+
+The next distinct profile measured the streaming result path. Seven warm
+method-4/quality-75 conformance repetitions per content class reported
+1.534--1.536 ms of transfer against 20.778--21.686 ms GPU execution. Each of
+eight bands used four device-to-pageable-host copies and then committed the
+same result/Y/U/V bytes to encoder-owned output.
+
+One pre-Ampere-only candidate allocated staging with `cudaHostAlloc`, falling
+back safely to ordinary host memory; Ampere+ stayed byte-for-byte unchanged.
+Pinned staging reduced event-timed transfer to 0.732--0.733 ms but callback
+wall by only about 0.05--0.08 ms, confirming that existing stream overlap and
+the host commit hide most of the apparent transfer bound.
+
+One warmup and three measured native batch-24 file-I/O rows per variant and
+format produced:
+
+| Format | Pageable parent | Pinned candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 35.695 ms/image | 35.976 ms/image | -0.281 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 36.239 ms/image | 35.385 ms/image | 0.854 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+All 12 timing and 48 conformance rows were exact. Candidate and restored
+builds passed 7/7 focused CTests. Source was restored because PNG regressed
+and JPEG missed the 1.5 ms/image gate. Raw evidence uses
+`libwebp-pinned-staging-*`. This is Ryzen 9 3900X / RTX 2080 SUPER evidence
+only; the 784/12,544 pre-Ampere and 64/4,000 Ampere+ thresholds, Ampere+
+behavior, frozen corpus, and generator remain unchanged.

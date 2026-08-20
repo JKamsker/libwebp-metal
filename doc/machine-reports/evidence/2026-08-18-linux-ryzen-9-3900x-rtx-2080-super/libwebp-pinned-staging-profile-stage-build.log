@@ -1,0 +1,40 @@
+[  0%] Building C object CMakeFiles/webputils.dir/src/utils/bit_writer_utils.c.o
+[  3%] Built target sharpyuv
+[ 28%] Built target webpdspdecode
+[ 30%] Building C object CMakeFiles/webpencode.dir/src/enc/alpha_enc.c.o
+[ 30%] Building C object CMakeFiles/webpencode.dir/src/enc/analysis_enc.c.o
+[ 30%] Building C object CMakeFiles/webpdsp.dir/src/dsp/cost_sse2.c.o
+[ 30%] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc.c.o
+[ 30%] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc_sse41.c.o
+[ 31%] Building C object CMakeFiles/webpdsp.dir/src/dsp/cost.c.o
+[ 31%] Building C object CMakeFiles/webpencode.dir/src/enc/filter_enc.c.o
+[ 31%] Building C object CMakeFiles/webpencode.dir/src/enc/backward_references_enc.c.o
+[ 32%] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc_sse2.c.o
+[ 34%] Building C object CMakeFiles/webpencode.dir/src/enc/cost_enc.c.o
+[ 35%] Building C object CMakeFiles/webpencode.dir/src/enc/frame_enc.c.o
+[ 35%] Building C object CMakeFiles/webpencode.dir/src/enc/histogram_enc.c.o
+[ 36%] Building C object CMakeFiles/webpencode.dir/src/enc/iterator_enc.c.o
+[ 42%] Built target webpdecode
+[ 42%] Building C object CMakeFiles/webpencode.dir/src/enc/near_lossless_enc.c.o
+[ 42%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_enc.c.o
+[ 43%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_csp_enc.c.o
+[ 50%] Built target webputils
+[ 50%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_psnr_enc.c.o
+[ 51%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_rescale_enc.c.o
+[ 51%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_tools_enc.c.o
+[ 52%] Building C object CMakeFiles/webpencode.dir/src/enc/predictor_enc.c.o
+[ 52%] Building C object CMakeFiles/webpencode.dir/src/enc/quant_enc.c.o
+[ 53%] Building C object CMakeFiles/webpencode.dir/src/enc/syntax_enc.c.o
+[ 53%] Building C object CMakeFiles/webpencode.dir/src/enc/token_enc.c.o
+[ 55%] Building C object CMakeFiles/webpencode.dir/src/enc/tree_enc.c.o
+[ 55%] Building C object CMakeFiles/webpencode.dir/src/enc/vp8l_enc.c.o
+[ 55%] Building C object CMakeFiles/webpencode.dir/src/enc/webp_enc.c.o
+[ 88%] Built target webpdsp
+[ 90%] Built target webpencode
+[ 92%] Linking CUDA static library libwebp.a
+[ 92%] Built target webp
+[ 93%] Built target imageioutil
+[ 94%] Built target webpdemux
+[100%] Built target imagedec
+[100%] Linking CUDA executable webp_cuda_batch_benchmark
+[100%] Built target webp_cuda_batch_benchmark

@@ -1,0 +1,37 @@
+{
+  "fixtures": [
+    {
+      "encoded_bytes": 12648,
+      "encoded_sha256": "4fd205d0a570c93e80be44b89e0154945d458faa4c88e0ebf9d4db0af38dd24c",
+      "fixture": "graphic-medium-m4-q75.wpd",
+      "fixture_sha256": "05f961a901f88fe904f2f69ace7557eb8299d52110894530732903cc7ec4adf7",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-medium.png",
+      "input_sha256": "9368583a1139b26f8f3241505dbb630a2bc5f4348462086b16266547757a0305",
+      "method": 4,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 206128,
+      "encoded_sha256": "33a12dd7db111a5d8c1ec8b872a9e951bf7edb643d54cbf702f92d5acc924480",
+      "fixture": "photo-medium-m4-q75.wpd",
+      "fixture_sha256": "dda66a5dfd6a57e1b1d20c6be2381b43d886af74082328d5c2610d92553f9c86",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-medium.png",
+      "input_sha256": "79455e1b75ff38705bfd8f2487657465c7d8facab2debdcc985ef9f5ed39e48c",
+      "method": 4,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 1193792,
+      "encoded_sha256": "dd24e6ee4827441bb542dbc7fa04dfb8465e8c0cde440f737f7270190a5b6f50",
+      "fixture": "texture-medium-m4-q75.wpd",
+      "fixture_sha256": "ef15c755a954848d3723850e6dd654cfa55fbea6f14f919907ca3e326a50a1a2",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-medium.png",
+      "input_sha256": "69787a34058cce61efbb08ebe4697f089452e9b47e2eb7fea0e4dc6579b7d663",
+      "method": 4,
+      "quality": 75
+    }
+  ],
+  "generator": "generate_lossy_decimate_fixtures.py",
+  "schema": "webp-lossy-decimate-fixture-manifest",
+  "version": 1
+}

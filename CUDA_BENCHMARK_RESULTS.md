@@ -2459,3 +2459,27 @@ replace eight Zen 2 worker cores, and regressed both formats far beyond the
 1.5 ms/image gate. Raw evidence uses `libwebp-token-simd8-*`. No CUDA
 architecture threshold, Ampere+ behavior, frozen corpus input, or generator
 changed.
+
+
+## Pre-Ampere pinned decimate-staging screen
+
+A fresh native stage profile kept accelerated decimation at 18.927 ms/image
+PNG and 18.666 JPEG. Exact streaming conformance then measured 1.534--1.536
+ms per medium image in the pageable result-transfer events. The candidate used
+page-locked host staging only before Ampere and retained ordinary allocation
+as a failure fallback; Ampere+ was unchanged.
+
+Pinned staging cut the transfer event to 0.732--0.733 ms, but the full callback
+by only about 0.05--0.08 ms because the existing copy stream already overlaps
+later diagonals and the outputs still need their host commit. Native Release
+batch-24 file-I/O medians were:
+
+| Format | Pageable parent | Pinned candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 35.695 ms/image | 35.976 ms/image | -0.281 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 36.239 ms/image | 35.385 ms/image | 0.854 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+All 12 timing rows and 48 conformance rows were exact; candidate and restored
+builds passed 7/7 focused CTests. The candidate was rejected and removed.
+Evidence uses `libwebp-pinned-staging-*`. No architecture threshold, Ampere+
+behavior, frozen corpus input, or generator changed.
