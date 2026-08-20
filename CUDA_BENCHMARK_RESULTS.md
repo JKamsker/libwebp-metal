@@ -2209,3 +2209,21 @@ retained 24-image samples, measured:
 All 24 retained rows were exact between control and IPO. Neither format
 reached 1.5 ms/image, so no build-system or source change was retained. Raw
 artifacts use `libwebp-token-ipo-*`; this is an RTX 2080 SUPER result only.
+
+## Packed coefficient-token pair rejection
+
+The current annotated token profile motivated a packed update for the two
+adaptive decisions emitted by every nonzero coefficient. Generated code used
+one 32-bit token store and one 64-bit adjacent-statistics load/store, but the
+page-boundary fallback expanded `VP8RecordCoeffTokens` by 370 bytes.
+
+Two order-reversed process pairs per format remained exact:
+
+| Format | Parent | Packed pair | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 41.012 ms/image | 43.978 ms/image | -2.966 ms/image | `ace64e860de89b43` / 6,441,688 |
+| JPEG lossy | 40.519 ms/image | 41.443 ms/image | -0.924 ms/image | `1cbb84d2ab926db3` / 6,400,792 |
+
+Three focused tests passed, but both formats regressed. The source was
+restored; raw artifacts use `libwebp-token-pair-*`. This is a native-sm_75
+result and changes no Ampere+ setting or claim.

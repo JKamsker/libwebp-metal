@@ -379,3 +379,9 @@ profiles, the mixed-GCC LTO feasibility failure, paired GCC 12 native-sm_75
 build identities, all 24 exact order-reversed timing rows, and the computed
 decision. Whole-program optimization gained only 0.294 ms/image on PNG and
 0.456 ms/image on JPEG, so no source or build-system change was retained.
+
+The `libwebp-token-pair-*` files preserve the exact rejected packed
+coefficient-token/statistics patch, all 24 byte-exact order-reversed timing
+rows, focused test status, generated-code sizes and identities, and decision.
+The wider common path regressed PNG by 2.966 ms/image and JPEG by 0.924, so
+the candidate was removed.

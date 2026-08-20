@@ -938,3 +938,25 @@ requires unavailable RTX 5070 Ti measurements. #17 likewise requires a
 Blackwell hardware nvJPEG backend, and #18 still requires per-encode CUDA
 sessions/tickets plus measurements on both GPUs. Current sm_75 capability and
 the concrete blockers were posted on #16--#18; none was falsely closed.
+
+## Packed adaptive token/stat pair rejection
+
+The annotated current-source token profile and existing coverage selected the
+two always-adjacent adaptive decisions for each nonzero coefficient. A
+candidate emitted their packed representations with one 32-bit store and
+updated both adjacent statistics through one 64-bit load/store, retaining the
+original scalar path at page boundaries.
+
+The intended wide operations appeared in x86-64 output, but the fallback and
+altered zero path grew `VP8RecordCoeffTokens` from 4,976 to 5,346 bytes. Three
+focused CUDA tests passed, and all 24 order-reversed timing rows were exact:
+
+| Format | Parent | Packed pair | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 41.012 ms/image | 43.978 ms/image | -2.966 ms/image | `ace64e860de89b43` / 6,441,688 |
+| JPEG lossy | 40.519 ms/image | 41.443 ms/image | -0.924 ms/image | `1cbb84d2ab926db3` / 6,400,792 |
+
+The larger common-path body overwhelmed the reduced stores, so the candidate
+was removed immediately. The exact patch, raw rows, build identities, tests,
+and decision are archived under `libwebp-token-pair-*`. RTX 2080 SUPER only;
+no architecture policy or Ampere+ behavior changed.

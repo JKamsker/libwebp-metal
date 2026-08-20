@@ -2448,3 +2448,33 @@ measurements, #17 remains blocked on Blackwell implementation/validation, and
 #18 remains blocked on per-encode accelerator sessions/tickets and dual-GPU
 benchmarking. Those measured capability and safety blockers were posted to
 the three open issues rather than closing unmet acceptance criteria.
+
+## Packed adjacent coefficient-token rejection
+
+The current annotated gprofng view localized the dominant token recorder to
+packed-token stores and adaptive-statistics read/modify/write operations.
+Existing optimized coverage provided the branch population: 117.4 million
+coefficient iterations were 60.0% nonzero, while only 4,596 of 362.7 million
+statistics events renormalized. The next candidate therefore paired the
+`v != 0` and `v > 1` token/stat updates that every nonzero coefficient emits.
+
+On the common in-page path, generated x86-64 used one 32-bit token store and
+one 64-bit load/store for the adjacent statistics. The page-boundary path
+retained the original scalar allocation/failure semantics. That fallback and
+the explicit zero branch nevertheless grew `VP8RecordCoeffTokens` from 4,976
+to 5,346 bytes.
+
+The native candidate passed concurrency, trellis, and near-lossless focused
+tests. Two order-reversed processes per format, one warmup and three retained
+batch-24 samples per process, produced exact aggregate output in all 24 rows:
+
+| Format | Parent | Packed pair | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 41.012 ms/image | 43.978 ms/image | -2.966 ms/image | `ace64e860de89b43` / 6,441,688 |
+| JPEG lossy | 40.519 ms/image | 41.443 ms/image | -0.924 ms/image | `1cbb84d2ab926db3` / 6,400,792 |
+
+Both formats regressed, so source was restored immediately. Exact patch, raw
+screen, executable hashes, tests, and decision are under
+`libwebp-token-pair-*`; the selecting raw profiles are the preceding
+`libwebp-token-ipo-profile-*` archives. This result is RTX 2080 SUPER-only and
+does not change the Turing/Ampere+ architecture split.
