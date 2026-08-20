@@ -1,0 +1,2 @@
+[1/2] Building C object CMakeFiles/webp_cuda_batch_benchmark.dir/tools/cuda_batch_benchmark.c.o
+[2/2] Linking CUDA executable webp_cuda_batch_benchmark

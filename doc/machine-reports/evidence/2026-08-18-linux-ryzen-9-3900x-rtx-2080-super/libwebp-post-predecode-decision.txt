@@ -1,0 +1,32 @@
+Retained-source profile and rejected in-process scheduler, 2026-08-20
+
+Build: build-cuda, CMAKE_CUDA_ARCHITECTURES=native, RTX 2080 SUPER (sm_75).
+Workload: forced-CUDA lossy method 4 quality 75, frozen six-image PNG/JPEG
+sets, batch 24, file I/O included unless the raw artifact states otherwise.
+
+The current retained medians were 29.422 ms/image PNG and 27.537 JPEG. Device
+phase records kept realistic photo/texture I4 at 63.0--65.2% of block cycles.
+The stage profiler put accelerated decimation at 19.146/18.631 ms/image and
+token emission at 3.011/2.992. Temporary probes then bounded two tempting
+fixed costs: the retained predecode worker waited only 1.534 ms/image PNG and
+0.551 JPEG, while token-worker setup/sync/end totaled 0.747/0.764. Neither can
+clear the 1.5 ms/image two-format gate, so no source candidate was opened for
+those boundaries.
+
+Two independent encoder processes demonstrated real cross-image capacity:
+steady aggregate medians moved from 29.211 to 19.308 ms/image PNG and 27.785
+to 18.167 JPEG. Every child retained the exact aggregate hash and byte count.
+That is capacity evidence, not a safe in-process scheduler result.
+
+The source candidate gave concurrent WebPEncode workers separate CUDA main
+and decimate states, tried same-context two-stream execution, then the design's
+single-GPU-slot pass gate. The official method-4/quality-75 aggregate remained
+deterministic and exact in all recorded rows, but the final one-slot version
+regressed PNG 28.917 to 30.320 ms/image and JPEG 27.295 to 30.170. It therefore
+failed the performance gate before the broad correctness matrix. The full
+candidate was removed. Do not retry raw concurrent WebPEncode, two same-context
+decimate streams, or a pass mutex around the existing synchronous API without
+first refactoring the lossy encoder into explicit prepare/GPU/finalize phases.
+
+No Ampere+ default, pre-Ampere/Ampere threshold, frozen corpus file, or corpus
+generator changed.

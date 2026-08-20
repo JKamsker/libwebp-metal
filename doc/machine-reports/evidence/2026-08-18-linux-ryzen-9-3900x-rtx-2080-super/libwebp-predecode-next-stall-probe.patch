@@ -1,0 +1,61 @@
+diff --git a/tools/cuda_batch_benchmark.c b/tools/cuda_batch_benchmark.c
+index 72c068fc..3b159219 100644
+--- a/tools/cuda_batch_benchmark.c
++++ b/tools/cuda_batch_benchmark.c
+@@ -420,7 +420,12 @@ static int RunPredecodeBatch(const Options* const options,
+   PredecodeJob jobs[2];
+   uint64_t hash = UINT64_C(1469598103934665603);
+   uint64_t bytes = 0;
++  uint64_t sync_wait_ns = 0;
++  uint64_t encode_ns = 0;
++  uint64_t finish_ns = 0;
+   uint64_t begin, end;
++  const int profile = getenv("WEBP_CUDA_PREDECODE_PROFILE") != NULL &&
++                      !strcmp(getenv("WEBP_CUDA_PREDECODE_PROFILE"), "1");
+   int ok = 0;
+   int i;
+   memset(jobs, 0, sizeof(jobs));
+@@ -436,7 +441,9 @@ static int RunPredecodeBatch(const Options* const options,
+   for (i = 0; i < options->batch_size; ++i) {
+     PredecodeJob* const current = &jobs[i & 1];
+     WebPMemoryWriter writer;
++    uint64_t phase_begin = WebPBenchmarkNowNanoseconds();
+     if (!worker_interface->Sync(&worker)) goto end;
++    sync_wait_ns += WebPBenchmarkNowNanoseconds() - phase_begin;
+     if (i + 1 < options->batch_size) {
+       PredecodeJob* const next = &jobs[(i + 1) & 1];
+       next->options = options;
+@@ -444,19 +451,33 @@ static int RunPredecodeBatch(const Options* const options,
+       worker.data1 = next;
+       worker_interface->Launch(&worker);
+     }
++    phase_begin = WebPBenchmarkNowNanoseconds();
+     if (!EncodePredecodedInput(options, &current->picture, &writer)) goto end;
++    encode_ns += WebPBenchmarkNowNanoseconds() - phase_begin;
++    phase_begin = WebPBenchmarkNowNanoseconds();
+     hash = HashBytes(hash, writer.mem, writer.size);
+     hash = HashBytes(hash, (const uint8_t*)&writer.size, sizeof(writer.size));
+     bytes += writer.size;
+     WebPMemoryWriterClear(&writer);
+     WebPPictureFree(&current->picture);
+     current->picture_initialized = 0;
++    finish_ns += WebPBenchmarkNowNanoseconds() - phase_begin;
+   }
+   end = WebPBenchmarkNowNanoseconds();
+   if (begin == 0 || end <= begin) goto end;
+   *elapsed_ns = end - begin;
+   *output_hash = hash;
+   *output_bytes = bytes;
++  if (profile) {
++    fprintf(stderr,
++            "predecode phases: wait %.3f encode %.3f finish %.3f "
++            "other %.3f ms/image\n",
++            (double)sync_wait_ns / options->batch_size / 1e6,
++            (double)encode_ns / options->batch_size / 1e6,
++            (double)finish_ns / options->batch_size / 1e6,
++            (double)((end - begin) - sync_wait_ns - encode_ns - finish_ns) /
++                options->batch_size / 1e6);
++  }
+   ok = 1;
+ end:
+   worker_interface->End(&worker);

@@ -1,0 +1,5 @@
+decimate GPU wall: 22.08 ms (100x75 MBs)
+decimate phases (% of block cycles): import 4.0% i16-num 9.7% i16-sel 9.4% i4 63.0% uv-num 5.3% uv-sel 8.1% recon 0.5%
+decimate GPU wall: 21.50 ms (100x75 MBs)
+decimate phases (% of block cycles): import 4.0% i16-num 9.7% i16-sel 9.4% i4 63.0% uv-num 5.3% uv-sel 8.2% recon 0.5%
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":true,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":49361663,"ns_per_image":49361663.000,"images_per_second":20.258637,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"6434bad02bda2ff2","output_bytes":195908}

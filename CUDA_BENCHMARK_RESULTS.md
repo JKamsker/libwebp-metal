@@ -2348,3 +2348,31 @@ fault-injected fallbacks, and deterministic repeats were also exact. This is
 an RTX 2080 SUPER result: pre-Ampere defaults on, Ampere+ stays off pending
 measurement, and `WEBP_CUDA_BATCH_PREDECODE=0` restores serial decode. Raw
 evidence uses `libwebp-predecode-pipeline-*`.
+
+
+## Post-predecode multi-image capacity and rejection
+
+The current retained native-sm_75 file-I/O medians were 29.422 ms/image PNG
+and 27.537 JPEG. A safe two-process capacity profile compared two batch-24
+encoders sequentially and concurrently across four repetitions. Using each
+pair's reported measured batch interval, aggregate medians were:
+
+| Format | Sequential processes | Concurrent processes | Capacity gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 29.211 ms/image | 19.308 ms/image | 9.904 ms/image | `ace64e860de89b43` / 6,441,688 |
+| JPEG lossy | 27.785 ms/image | 18.167 ms/image | 9.618 ms/image | `1cbb84d2ab926db3` / 6,400,792 |
+
+This is a capacity bound from isolated CUDA contexts, not a retained library
+speedup. The selected in-process candidate tried two owned accelerator slots,
+same-context streams, and a final-band one-GPU-slot handoff. Its final
+method-4/quality-75 medians were exact but slower:
+
+| Format | Retained path | One-slot candidate | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 28.917 ms/image | 30.320 ms/image | -1.403 ms/image |
+| JPEG lossy | 27.295 ms/image | 30.170 ms/image | -2.875 ms/image |
+
+Source was restored. Evidence uses `libwebp-cross-image-capacity-*`,
+`libwebp-two-slot-*`, `libwebp-one-slot-*`, and
+`libwebp-inprocess-two-worker-*`. This is RTX 2080 SUPER-only; Ampere+ remains
+unchanged and no cross-hardware win is claimed.

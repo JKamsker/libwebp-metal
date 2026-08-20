@@ -1142,3 +1142,43 @@ Raw profiles, phase probe, matrices, order-reversed rows, official restore and
 candidate suites, patch, build identity, resources, and tests use
 `libwebp-predecode-pipeline-*`. Frozen corpus sources and all decimate
 thresholds remain unchanged.
+
+
+## Post-predecode bounds and in-process scheduler rejection
+
+The retained native-sm_75 refresh measured 29.422 ms/image PNG and 27.537
+JPEG with exact aggregate hashes/bytes. Stage records still put accelerated
+decimation at 19.146/18.631 ms/image and token emission at 3.011/2.992;
+realistic photo/texture I4 remained 63.0--65.2% of device block cycles. Two
+removable probes closed smaller fixed-cost boundaries: predecode wait was only
+1.534 ms/image PNG and 0.551 JPEG, while token-worker setup/sync/end totaled
+0.747/0.764. Neither can pass the two-format 1.5 ms/image gate.
+
+Two independent CUDA processes did expose cross-image capacity. Four paired
+runs produced steady aggregate medians of 29.211→19.308 ms/image PNG and
+27.785→18.167 JPEG, with every process retaining `ace64e860de89b43` /
+6,441,688 and `1cbb84d2ab926db3` / 6,400,792 respectively. This selected a
+distinct multi-image ownership experiment rather than another residual
+specialization.
+
+The in-process candidate assigned two workers separate CUDA main/decimate
+states, evaluated two same-context streams, and then serialized GPU passes at
+the final-band boundary so CPU token/write work could overlap the next image.
+All recorded method-4/quality-75 rows were deterministic and exact, but the
+final one-slot form regressed both formats:
+
+| Format | Retained | Candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 28.917 ms/image | 30.320 ms/image | -1.403 ms/image | `ace64e860de89b43` / 6,441,688 |
+| JPEG lossy | 27.295 ms/image | 30.170 ms/image | -2.875 ms/image | `1cbb84d2ab926db3` / 6,400,792 |
+
+The candidate was removed before the broad correctness gate. Raw profiles,
+temporary diagnostic patches, capacity rows, every candidate iteration, and
+the rejected patch use `libwebp-predecode-next-*`,
+`libwebp-token-worker-next-*`, `libwebp-cross-image-capacity-*`,
+`libwebp-two-slot-*`, `libwebp-one-slot-*`, and
+`libwebp-inprocess-two-worker-*`. A future attempt must first introduce the
+explicit prepare/GPU/finalize ownership boundary described in the async design;
+raw concurrent `WebPEncode` and same-context stream duplication should not be
+retried. Source is restored. Architecture thresholds/defaults and frozen
+corpus inputs are unchanged.

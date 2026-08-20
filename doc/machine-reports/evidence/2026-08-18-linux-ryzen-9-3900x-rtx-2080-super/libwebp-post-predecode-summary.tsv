@@ -1,0 +1,7 @@
+measurement	format	parent_ms_per_image	candidate_ms_per_image	delta_ms_per_image	hash	bytes	decision
+retained_refresh	PNG	29.422	29.422	0.000	ace64e860de89b43	6441688	profile
+retained_refresh	JPEG	27.537	27.537	0.000	1cbb84d2ab926db3	6400792	profile
+independent_process_capacity	PNG	29.211	19.308	9.904	ace64e860de89b43	6441688	capacity_only
+independent_process_capacity	JPEG	27.785	18.167	9.618	1cbb84d2ab926db3	6400792	capacity_only
+inprocess_one_slot_pipeline	PNG	28.917	30.320	-1.403	ace64e860de89b43	6441688	reject_restore
+inprocess_one_slot_pipeline	JPEG	27.295	30.170	-2.875	1cbb84d2ab926db3	6400792	reject_restore

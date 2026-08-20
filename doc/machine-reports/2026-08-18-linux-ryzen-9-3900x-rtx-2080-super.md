@@ -2657,3 +2657,49 @@ and tiny/odd inputs; 30 injected fallback cells and 20 deterministic rows
 were exact. Trellis/fallback, concurrent-encoder, and near-lossless focused
 tests passed. Evidence uses `libwebp-predecode-pipeline-*`; the publication
 corpus/generator and architecture-specific decimate thresholds are untouched.
+
+
+## Post-predecode residual profile and scheduler rejection
+
+The retained branch refresh measured 29.422 ms/image PNG and 27.537 JPEG at
+method 4 / quality 75 with file I/O. Exact aggregates remained
+`ace64e860de89b43` / 6,441,688 and `1cbb84d2ab926db3` / 6,400,792. The stage
+profiler measured 19.146/18.631 ms/image in accelerated decimation,
+3.011/2.992 in token emission, 1.648/1.336 in output writing, and
+1.326/1.332 in import. Device phase traces kept I4 at 63.0--65.2% on realistic
+photo/texture inputs.
+
+Two removable timing probes ruled out shallow extensions of the retained
+pipeline. Across retained samples, the compressed-input worker wait median was
+1.534 ms/image PNG but only 0.551 JPEG. Token-worker lifecycle
+setup/synchronization/teardown totaled 0.747/0.764 ms/image. Both have a
+two-format upper bound below the retention gate.
+
+A two-process profile then showed that the machine has cross-image capacity:
+
+| Format | Sequential aggregate | Concurrent aggregate | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 29.211 ms/image | 19.308 ms/image | 9.904 ms/image |
+| JPEG lossy | 27.785 ms/image | 18.167 ms/image | 9.618 ms/image |
+
+Every child process retained the exact expected hash and byte count. The
+profile therefore selected multi-image ownership, but isolated CUDA contexts
+are only a capacity bound.
+
+The in-process candidate gave two workers separate persistent CUDA and
+decimate state, first with two streams and then with the design's one-GPU-slot
+final-band gate. Same-context concurrent kernels were neutral; the one-slot
+form regressed PNG 28.917→30.320 ms/image and JPEG 27.295→30.170. All recorded
+method-4/quality-75 rows were deterministic and exact, but the candidate failed
+performance before the broad methods/qualities/tiny/fallback matrix and was
+fully removed. The result confirms that raw concurrent `WebPEncode` cannot
+substitute for the explicit prepare/GPU/finalize refactor and ticketed session
+ownership in `doc/async-multi-image-encoder-design-20260819.md`.
+
+Raw retained profiles and fixed-cost probes use `libwebp-predecode-next-*` and
+`libwebp-token-worker-next-*`; process capacity uses
+`libwebp-cross-image-capacity-*`; candidate iterations and the removed patch
+use `libwebp-two-slot-*`, `libwebp-one-slot-*`, and
+`libwebp-inprocess-two-worker-*`. This is Turing-only evidence. Ampere+
+defaults, the 64/4,000 vs 784/12,544 macroblock split, frozen publication
+corpus, and generator are unchanged.

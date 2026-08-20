@@ -1,0 +1,15 @@
+[ 10%] Built target webputils
+[  7%] Built target sharpyuv
+[ 35%] Built target webpdspdecode
+[ 71%] Built target webpdsp
+[ 72%] Building C object CMakeFiles/webpencode.dir/src/enc/frame_enc.c.o
+[ 77%] Built target webpdecode
+[ 90%] Built target webpencode
+[ 92%] Linking CUDA static library libwebp.a
+[ 92%] Built target webp
+[ 93%] Built target webpdemux
+[ 94%] Built target imageioutil
+[100%] Built target imagedec
+[100%] Building C object CMakeFiles/webp_cuda_batch_benchmark.dir/tools/cuda_batch_benchmark.c.o
+[100%] Linking CUDA executable webp_cuda_batch_benchmark
+[100%] Built target webp_cuda_batch_benchmark
