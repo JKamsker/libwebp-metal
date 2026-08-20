@@ -1,0 +1,10 @@
+{
+  "clock_reads": 4096,
+  "elapsed_ns": 157250,
+  "maximum_delta_ns": 250,
+  "mean_read_delta_ns": 38,
+  "minimum_positive_delta_ns": 41,
+  "monotonic": true,
+  "positive_deltas": 3758,
+  "schema": "libwebp-backref-cost-specialization-alignment-v3-timer-check-v1"
+}

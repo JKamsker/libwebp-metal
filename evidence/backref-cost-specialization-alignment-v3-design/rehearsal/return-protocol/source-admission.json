@@ -1,0 +1,13 @@
+{
+  "bundle_verified_in_repository_context": true,
+  "clean_status": true,
+  "receipt_version": 1,
+  "schema": "libwebp-backref-cost-specialization-alignment-v3-source-admission-receipt-v1",
+  "source_bundle_sha256": "65fb19802bf2503870befcb9348f3961ebb1802ec1e7c36bfd83dc97f48ba5d8",
+  "source_commit": "f6735570eb2a81faa60544b289fb0207b8cde873",
+  "source_map_entry_count": 66,
+  "source_map_sha256": "3f67633b725b012cd5a52a4010cfd82e79c467edf1c0e304b0d0a497f1100d88",
+  "source_tree": "3f40974572234b4a08da1bbb426b52c3ab6fb216",
+  "status": "verified",
+  "verification_repository_removed": true
+}
