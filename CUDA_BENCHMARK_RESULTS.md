@@ -2704,3 +2704,33 @@ passed 7/7 tests. Both formats regressed, so the candidate was removed.
 Evidence uses `libwebp-i4-source-transform-reuse-*`; architecture
 thresholds/defaults, the pre-Ampere/Ampere+ split, and the frozen publication
 corpus/generator are unchanged.
+
+
+## Pre-Ampere packed whole-macroblock prediction-fill screen
+
+At clean parent `68c4406994d4a6f126d9882e8e1b7f41ba9c4710`, root Nsight Compute
+measured the retained 50-CTA photo launch at 121.79 us and 3,879,409
+instructions. The parallel I16/UV prediction-plane fill correlated with
+136,965 instructions and 186 barrier-stall samples, making it a distinct
+non-residual setup target.
+
+The pre-Ampere candidate computed four adjacent prediction pixels per lane
+and used aligned `uchar4` shared stores. Ampere+ retained the scalar-per-pixel
+loop. Registers, stack, and shared memory remained 103 / 352 / 23,392 bytes.
+Instructions fell to 3,837,339, but duration stayed flat at 121.86 us and
+`No Eligible` moved from 89.78% to 89.90%.
+
+Five order-balanced full-corpus process pairs measured:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 35.470 ms/image | 35.190 ms/image | +0.544 ms/image |
+| JPEG | 35.602 ms/image | 36.193 ms/image | -0.080 ms/image |
+
+All 60 timing rows were exact at `455f70a1e139f043` / 6,441,688 bytes PNG
+and `0c4b078d5c4d3173` / 6,400,792 JPEG. The methods 2--6 / qualities
+25/75/98 tiny/odd matrix and 20 PNG/JPEG fallback cells were also exact.
+Candidate and restored builds passed 7/7 tests. PNG missed 1.5 ms/image and
+JPEG regressed, so the source was restored. Evidence uses
+`libwebp-packed-prediction-fill-*`; the pre-Ampere/Ampere+ threshold split
+and frozen publication files are unchanged.

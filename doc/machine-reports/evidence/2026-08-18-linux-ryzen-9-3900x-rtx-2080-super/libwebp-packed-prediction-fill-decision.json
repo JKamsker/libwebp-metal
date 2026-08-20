@@ -1,0 +1,345 @@
+{
+  "decision": "reject_and_restore",
+  "reason": "paired PNG gain is below 1.5 ms/image and JPEG regresses",
+  "retained_profile": {
+    "duration_us": 121.79,
+    "instructions": 3879409,
+    "no_eligible_percent": 89.78,
+    "registers": 103,
+    "stack_bytes": 352,
+    "shared_bytes": 23392
+  },
+  "candidate_profile": {
+    "duration_us": 121.86,
+    "instructions": 3837339,
+    "no_eligible_percent": 89.90,
+    "registers": 103,
+    "stack_bytes": 352,
+    "shared_bytes": 23392
+  },
+  "timing": {
+    "pooled": [
+      {
+        "format": "png",
+        "arm": "control",
+        "n": 15,
+        "median_ms": 35.470192292,
+        "hashes": [
+          "455f70a1e139f043"
+        ],
+        "bytes": [
+          6441688
+        ]
+      },
+      {
+        "format": "png",
+        "arm": "candidate",
+        "n": 15,
+        "median_ms": 35.18988375,
+        "hashes": [
+          "455f70a1e139f043"
+        ],
+        "bytes": [
+          6441688
+        ]
+      },
+      {
+        "format": "jpeg",
+        "arm": "control",
+        "n": 15,
+        "median_ms": 35.601719125,
+        "hashes": [
+          "0c4b078d5c4d3173"
+        ],
+        "bytes": [
+          6400792
+        ]
+      },
+      {
+        "format": "jpeg",
+        "arm": "candidate",
+        "n": 15,
+        "median_ms": 36.192522958,
+        "hashes": [
+          "0c4b078d5c4d3173"
+        ],
+        "bytes": [
+          6400792
+        ]
+      }
+    ],
+    "pairs": [
+      {
+        "format": "png",
+        "pair": 0,
+        "control_ms": 35.554553833,
+        "candidate_ms": 34.749218958,
+        "gain_ms": 0.8053348749999998
+      },
+      {
+        "format": "png",
+        "pair": 1,
+        "control_ms": 35.018208917,
+        "candidate_ms": 35.245018,
+        "gain_ms": -0.22680908299999913
+      },
+      {
+        "format": "png",
+        "pair": 2,
+        "control_ms": 35.470192292,
+        "candidate_ms": 35.292057542,
+        "gain_ms": 0.17813474999999812
+      },
+      {
+        "format": "png",
+        "pair": 3,
+        "control_ms": 35.612186625,
+        "candidate_ms": 35.068536125,
+        "gain_ms": 0.5436504999999983
+      },
+      {
+        "format": "png",
+        "pair": 4,
+        "control_ms": 35.61604875,
+        "candidate_ms": 34.950018832999994,
+        "gain_ms": 0.666029917000003
+      },
+      {
+        "format": "jpeg",
+        "pair": 0,
+        "control_ms": 35.841953917000005,
+        "candidate_ms": 35.043519875,
+        "gain_ms": 0.7984340420000038
+      },
+      {
+        "format": "jpeg",
+        "pair": 1,
+        "control_ms": 34.618062333,
+        "candidate_ms": 36.513734875,
+        "gain_ms": -1.8956725419999998
+      },
+      {
+        "format": "jpeg",
+        "pair": 2,
+        "control_ms": 35.725058625,
+        "candidate_ms": 35.707731625,
+        "gain_ms": 0.017327000000001647
+      },
+      {
+        "format": "jpeg",
+        "pair": 3,
+        "control_ms": 35.601719125,
+        "candidate_ms": 38.439003332999995,
+        "gain_ms": -2.8372842079999927
+      },
+      {
+        "format": "jpeg",
+        "pair": 4,
+        "control_ms": 35.720975042000006,
+        "candidate_ms": 35.801301833,
+        "gain_ms": -0.0803267909999903
+      }
+    ],
+    "paired_medians": [
+      {
+        "format": "png",
+        "median_gain_ms": 0.5436504999999983
+      },
+      {
+        "format": "jpeg",
+        "median_gain_ms": -0.0803267909999903
+      }
+    ]
+  },
+  "exact_matrix": [
+    {
+      "method": 2,
+      "quality": 25,
+      "hashes": [
+        "162dbc1dc392e008"
+      ],
+      "bytes": [
+        5154
+      ],
+      "exact": true
+    },
+    {
+      "method": 2,
+      "quality": 75,
+      "hashes": [
+        "bc91d346d4f45456"
+      ],
+      "bytes": [
+        13262
+      ],
+      "exact": true
+    },
+    {
+      "method": 2,
+      "quality": 98,
+      "hashes": [
+        "6c8914298bd62820"
+      ],
+      "bytes": [
+        52226
+      ],
+      "exact": true
+    },
+    {
+      "method": 3,
+      "quality": 25,
+      "hashes": [
+        "752e9a24c5e4585d"
+      ],
+      "bytes": [
+        5072
+      ],
+      "exact": true
+    },
+    {
+      "method": 3,
+      "quality": 75,
+      "hashes": [
+        "e335883abee09135"
+      ],
+      "bytes": [
+        13326
+      ],
+      "exact": true
+    },
+    {
+      "method": 3,
+      "quality": 98,
+      "hashes": [
+        "eaa8b07e7c84dae4"
+      ],
+      "bytes": [
+        51758
+      ],
+      "exact": true
+    },
+    {
+      "method": 4,
+      "quality": 25,
+      "hashes": [
+        "1e97fd068d1d3be1"
+      ],
+      "bytes": [
+        5064
+      ],
+      "exact": true
+    },
+    {
+      "method": 4,
+      "quality": 75,
+      "hashes": [
+        "db6d00cbcc6deda2"
+      ],
+      "bytes": [
+        13376
+      ],
+      "exact": true
+    },
+    {
+      "method": 4,
+      "quality": 98,
+      "hashes": [
+        "2377d2f0ccffa583"
+      ],
+      "bytes": [
+        51780
+      ],
+      "exact": true
+    },
+    {
+      "method": 5,
+      "quality": 25,
+      "hashes": [
+        "391d577367f6ba14"
+      ],
+      "bytes": [
+        4930
+      ],
+      "exact": true
+    },
+    {
+      "method": 5,
+      "quality": 75,
+      "hashes": [
+        "fbdbef4a301c378e"
+      ],
+      "bytes": [
+        12270
+      ],
+      "exact": true
+    },
+    {
+      "method": 5,
+      "quality": 98,
+      "hashes": [
+        "63a31040aa9cd96d"
+      ],
+      "bytes": [
+        51106
+      ],
+      "exact": true
+    },
+    {
+      "method": 6,
+      "quality": 25,
+      "hashes": [
+        "e0d8448639e3e17d"
+      ],
+      "bytes": [
+        4800
+      ],
+      "exact": true
+    },
+    {
+      "method": 6,
+      "quality": 75,
+      "hashes": [
+        "08219eaae5b41a07"
+      ],
+      "bytes": [
+        11968
+      ],
+      "exact": true
+    },
+    {
+      "method": 6,
+      "quality": 98,
+      "hashes": [
+        "6028ab2384dc1d5e"
+      ],
+      "bytes": [
+        49702
+      ],
+      "exact": true
+    }
+  ],
+  "fallback_matrix": [
+    {
+      "format": "jpeg",
+      "n": 11,
+      "hashes": [
+        "0133801cfd46cbe6"
+      ],
+      "bytes": [
+        3343166
+      ],
+      "exact": true
+    },
+    {
+      "format": "png",
+      "n": 11,
+      "hashes": [
+        "f1941b87f9b95d60"
+      ],
+      "bytes": [
+        3281332
+      ],
+      "exact": true
+    }
+  ]
+}

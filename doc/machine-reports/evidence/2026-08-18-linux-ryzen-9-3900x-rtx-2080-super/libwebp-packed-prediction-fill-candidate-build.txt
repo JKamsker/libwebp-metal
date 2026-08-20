@@ -1,0 +1,91 @@
+[  1%] Built target bit_writer_utils_test
+[  4%] Built target sharpyuv
+[  5%] Built target accelerator_enc_test
+[ 10%] Built target webputilsdecode
+[ 15%] Built target webputils
+[ 15%] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+[ 34%] Built target webpdspdecode
+[ 61%] Built target webpdsp
+[ 65%] Built target webpdecode
+[ 66%] Built target webpdecoder
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(502): warning #177-D: function "<unnamed>::AddScoreDev" was declared but never referenced
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(687): warning #177-D: function "<unnamed>::ImportMB" was declared but never referenced
+
+[ 77%] Built target webpencode
+[ 78%] Linking CUDA static library libwebp.a
+[ 78%] Built target webp
+[ 80%] Linking CUDA executable cuda_trellis_test
+[ 80%] Linking CUDA executable webp_cuda_benchmark
+[ 80%] Built target webpdemux
+[ 80%] Built target imageioutil
+[ 81%] Linking CUDA executable cuda_near_lossless_test
+[ 83%] Building C object CMakeFiles/extras.dir/extras/extras.c.o
+[ 83%] Linking CUDA executable cuda_concurrency_test
+[ 83%] Linking CUDA executable cuda_histogram_test
+[ 86%] Built target libwebpmux
+[ 86%] Building C object CMakeFiles/extras.dir/extras/quality_estimate.c.o
+In file included from /home/jonas/priv/repos/libwebp-metal/extras/extras.c:13:
+/home/jonas/priv/repos/libwebp-metal/extras/./extras.h:22:10: fatal error: sharpyuv/sharpyuv.h: No such file or directory
+   22 | #include "sharpyuv/sharpyuv.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+gmake[2]: *** [CMakeFiles/extras.dir/build.make:76: CMakeFiles/extras.dir/extras/extras.c.o] Error 1
+gmake[2]: *** Waiting for unfinished jobs....
+In file included from /home/jonas/priv/repos/libwebp-metal/extras/quality_estimate.c:17:
+/home/jonas/priv/repos/libwebp-metal/extras/./extras.h:22:10: fatal error: sharpyuv/sharpyuv.h: No such file or directory
+   22 | #include "sharpyuv/sharpyuv.h"
+      |          ^~~~~~~~~~~~~~~~~~~~~
+compilation terminated.
+[ 87%] Built target exampleutil
+[ 88%] Built target imageenc
+gmake[2]: *** [CMakeFiles/extras.dir/build.make:90: CMakeFiles/extras.dir/extras/quality_estimate.c.o] Error 1
+[ 92%] Built target imagedec
+gmake[1]: *** [CMakeFiles/Makefile2:1678: CMakeFiles/extras.dir/all] Error 2
+gmake[1]: *** Waiting for unfinished jobs....
+[ 93%] Linking CUDA executable webpmux
+[ 93%] Linking CUDA executable webpinfo
+[ 93%] Built target cuda_histogram_test
+[ 94%] Built target webpinfo
+[ 94%] Built target cuda_near_lossless_test
+[ 94%] Built target webpmux
+[ 95%] Built target webp_cuda_benchmark
+[ 95%] Built target cuda_concurrency_test
+[ 95%] Built target cuda_trellis_test
+gmake: *** [Makefile:146: all] Error 2
+[100%] Built target bit_writer_utils_test
+[100%] Built target accelerator_enc_test
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 38%] Built target webpdspdecode
+[ 85%] Built target webpencode
+[ 91%] Built target webpdsp
+[ 97%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Built target cuda_concurrency_test
+[  7%] Built target webputils
+[ 11%] Built target sharpyuv
+[ 26%] Built target webpencode
+[ 53%] Built target webpdspdecode
+[ 91%] Built target webpdsp
+[ 97%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Built target cuda_histogram_test
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 27%] Built target webpencode
+[ 54%] Built target webpdspdecode
+[ 92%] Built target webpdsp
+[ 98%] Built target webpdecode
+[100%] Built target webp
+[100%] Built target cuda_trellis_test
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 26%] Built target webpencode
+[ 53%] Built target webpdspdecode
+[ 91%] Built target webpdsp
+[ 97%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Built target cuda_near_lossless_test

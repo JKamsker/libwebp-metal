@@ -1,0 +1,2 @@
+a824960c90fff1cb8fc2105540258cd5485da96b511e50e0d82d5958be0cf6a7  /tmp/libwebp-i4-next-profile/webp_cuda_batch_benchmark.control
+d0de09be91f7552da9df194b8cf4b997dd94cd761efbd4422c7fbee168989270  /tmp/libwebp-i4-next-profile/webp_cuda_batch_benchmark.candidate

@@ -1,0 +1,2 @@
+33a12dd7db111a5d8c1ec8b872a9e951bf7edb643d54cbf702f92d5acc924480  /tmp/libwebp-i4-next-profile/retained-photo.webp
+33a12dd7db111a5d8c1ec8b872a9e951bf7edb643d54cbf702f92d5acc924480  /tmp/libwebp-i4-next-profile/candidate-photo.webp

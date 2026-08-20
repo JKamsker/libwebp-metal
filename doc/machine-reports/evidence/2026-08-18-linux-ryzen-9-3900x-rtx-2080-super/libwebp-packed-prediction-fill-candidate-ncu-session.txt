@@ -1,0 +1,47 @@
+Launch Settings
+--------------------- ------------------------------------------------------------------------------------------------------------------------
+Launch Attribute      Value
+--------------------- ------------------------------------------------------------------------------------------------------------------------
+Profiler Command Line /usr/lib/nsight-compute/target/linux-desktop-glibc_2_11_3-x64/ncu --target-processes all --kernel-name regex:DecimateKer
+                      nel --launch-skip 99 --launch-count 1 --set full --export /tmp/libwebp-i4-next-profile/candidate-decimate --force-overwr
+                      ite build-cuda-ncu/cwebp -m 4 -q 75 -o /tmp/libwebp-i4-next-profile/candidate-photo.webp /tmp/libwebp-cuda-batch-corpus-
+                      20260818/png/photo-medium.png
+
+Session Info
+---------------------- ------------------------------------------------------------------------------------------------------------------------
+Session Attribute      Value
+---------------------- ------------------------------------------------------------------------------------------------------------------------
+Created                2026-Aug-20 09:57:37
+Host Name              dev-build-server
+Host OS                Linux - #137-Ubuntu SMP PREEMPT_DYNAMIC Fri Jul 17 20:28:23 UTC 2026
+Host Architecture      x86_64
+Host Processor         AMD Ryzen 9 3900X 12-Core Processor
+Target Name            dev-build-server
+Target IP Addresses    192.168.123.229, 10.121.15.120, 172.18.0.1, 172.17.0.1, fe80::264b:feff:fe78:ae52%enp9s0, fd9a:d07d:109:3a69:e399:939e:7
+                       27:72f9, fe80::e0f7:3dff:fe2e:7384%zttpmuo2hk, fe80::f4ee:efff:fe0b:eb7e%br-471a7b73e5d3, fe80::c50:1dff:fe44:be1b%docke
+                       r0, fe80::c8f0:faff:fe43:35cc%veth871c532, fe80::ca5:1ff:fe8e:738%vethf2b737f, fe80::cc58:ebff:fe45:78ca%veth070975b, fe
+                       80::3c54:1bff:feaa:a3a8%veth9f00bd0, fe80::408a:f0ff:fefa:2fb9%vetha4801dd, fe80::385e:44ff:fe08:740f%veth35e557c, fe80:
+                       :6047:31e7:528b:cc0a%tailscale0
+Target OS              Linux - #137-Ubuntu SMP PREEMPT_DYNAMIC Fri Jul 17 20:28:23 UTC 2026
+Target Architecture    x86_64
+Target Processor       AMD Ryzen 9 3900X 12-Core Processor
+CUDA Version           13.2
+Display Driver Version 595.84
+PerfWorks              0.1.0
+Nsight Compute Target  2022.4.1.0 (build 32308335) (public-release)
+
+Processes
+---------- ---------------------------------------------------------
+Process Id Process Name
+---------- ---------------------------------------------------------
+2523066    /home/jonas/priv/repos/libwebp-metal/build-cuda-ncu/cwebp
+
+Device Attributes
+------------------------ -----------------------------
+Device Attribute         Device 0
+------------------------ -----------------------------
+multiprocessor_count     48
+display_name             NVIDIA GeForce RTX 2080 SUPER
+compute_capability_major 7
+compute_capability_minor 5
+total_memory             8164474880

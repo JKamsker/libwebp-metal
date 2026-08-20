@@ -1,0 +1,46 @@
+[100%] Built target bit_writer_utils_test
+[100%] Built target accelerator_enc_test
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 11%] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+[ 38%] Built target webpdspdecode
+[ 76%] Built target webpdsp
+[ 81%] Built target webpdecode
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(502): warning #177-D: function "<unnamed>::AddScoreDev" was declared but never referenced
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(687): warning #177-D: function "<unnamed>::ImportMB" was declared but never referenced
+
+[ 97%] Built target webpencode
+[ 98%] Linking CUDA static library libwebp.a
+[ 98%] Built target webp
+[100%] Linking CUDA executable cuda_concurrency_test
+[100%] Built target cuda_concurrency_test
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 38%] Built target webpdspdecode
+[ 76%] Built target webpdsp
+[ 91%] Built target webpencode
+[ 97%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Linking CUDA executable cuda_histogram_test
+[100%] Built target cuda_histogram_test
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 27%] Built target webpencode
+[ 54%] Built target webpdspdecode
+[ 92%] Built target webpdsp
+[ 98%] Built target webpdecode
+[100%] Built target webp
+[100%] Linking CUDA executable cuda_trellis_test
+[100%] Built target cuda_trellis_test
+[ 11%] Built target webputils
+[  8%] Built target sharpyuv
+[ 26%] Built target webpencode
+[ 53%] Built target webpdspdecode
+[ 91%] Built target webpdsp
+[ 97%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Linking CUDA executable cuda_near_lossless_test
+[100%] Built target cuda_near_lossless_test

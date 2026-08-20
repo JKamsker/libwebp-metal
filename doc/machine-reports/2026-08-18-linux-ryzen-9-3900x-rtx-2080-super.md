@@ -3170,3 +3170,46 @@ exactness/fallback matrices, tests, and timings use
 `libwebp-i4-packed-flatness-*` in the adjacent evidence directory. This is
 RTX 2080 SUPER-only evidence; the 784/12,544 pre-Ampere and 64/4,000 Ampere+
 thresholds, architecture split, frozen corpus, and generator are unchanged.
+
+
+## Pre-Ampere packed whole-macroblock prediction-fill rejection
+
+At clean parent `68c4406994d4a6f126d9882e8e1b7f41ba9c4710`, the native Release
+build used `-DCMAKE_CUDA_ARCHITECTURES=native`. A fresh root Nsight Compute
+capture reproduced the representative 50-CTA method-4/quality-75 photo
+launch at 121.79 us, 3,879,409 executed instructions, 89.78% scheduler cycles
+with no eligible warp, and 26.04% achieved occupancy.
+
+Line-resolved source correlation assigned 136,965 instructions and 186
+barrier-stall samples to the retained whole-macroblock I16/UV prediction-plane
+fill. This was a distinct setup target, not another I4 residual
+micro-specialization. The Turing-only candidate generated four adjacent DC,
+true-motion, vertical, or horizontal pixels per lane and stored the aligned
+group as `uchar4`; Ampere+ compiled the retained scalar-per-pixel loop.
+
+Registers, stack, and shared allocation were unchanged at 103 / 352 / 23,392
+bytes. The candidate removed 42,070 instructions, reaching 3,837,339, but the
+matched launch stayed flat at 121.86 us and `No Eligible` worsened to 89.90%.
+The profiled output SHA-256 remained
+`33a12dd7db111a5d8c1ec8b872a9e951bf7edb643d54cbf702f92d5acc924480`.
+
+Five order-balanced full-corpus process pairs per format produced:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 35.470 ms/image | 35.190 ms/image | +0.544 ms/image |
+| JPEG | 35.602 ms/image | 36.193 ms/image | -0.080 ms/image |
+
+All 60 timing rows retained exact aggregate hashes and byte counts. The
+candidate passed 7/7 focused tests, the methods 2--6 / qualities 25/75/98
+graphic/photo/texture tiny/odd matrix, and 20 PNG/JPEG fallback cells spanning
+bands 0/1/3/5/7 with token recording inline and pipelined.
+
+PNG's gain is below 1.5 ms/image and JPEG regressed, so the candidate was
+removed. Every focused static executable was relinked; restored source matched
+the parent blob and the retained 103 / 352 / 23,392-byte resources, then
+passed 7/7 tests. Raw reports, compressed source/SASS correlation, patch,
+matrices, tests, and timings use `libwebp-packed-prediction-fill-*` in the
+adjacent evidence directory. This is RTX 2080 SUPER-only evidence; the
+784/12,544 pre-Ampere and 64/4,000 Ampere+ thresholds, architecture split,
+frozen corpus, and generator are unchanged.
