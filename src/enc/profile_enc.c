@@ -29,7 +29,8 @@
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_EXPERIMENT) && \
     !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT) && \
     !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT) && \
-    !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT)
+    !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT) && \
+    !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT)
 #define WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT 1
 #endif
 #include "src/enc/profile_enc.h"
@@ -168,6 +169,20 @@
   "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_CASE_ID"
 #define WEBP_FACTORIZATION_SAMPLE_SET_ENV \
   "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_SAMPLE_SET"
+#elif defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT)
+#include "src/enc/backref_cost_specialization_alignment_v4_experiment_enc.h"
+#define WEBP_FACTORIZATION_VARIANT_ENV \
+  "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_VARIANT"
+#define WEBP_FACTORIZATION_TIMERS_ENV \
+  "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_TIMERS"
+#define WEBP_FACTORIZATION_STAGE_OUTPUT_ENV \
+  "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_STAGE_OUTPUT"
+#define WEBP_FACTORIZATION_RUN_ID_ENV \
+  "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_RUN_ID"
+#define WEBP_FACTORIZATION_CASE_ID_ENV \
+  "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_CASE_ID"
+#define WEBP_FACTORIZATION_SAMPLE_SET_ENV \
+  "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_SAMPLE_SET"
 #endif
 
 #include <stdio.h>
@@ -296,7 +311,8 @@ static uint64_t ProfileNowNs(void) {
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT)
 uint64_t WebPProfileClockNowForValidation(void) { return ProfileNowNs(); }
 #endif
 
@@ -461,7 +477,8 @@ void WebPProfileBeginSession(const WebPConfig* config,
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT)
   {
     const char* const variant = getenv(WEBP_FACTORIZATION_VARIANT_ENV);
     if (variant == NULL ||
@@ -683,7 +700,8 @@ void WebPProfileEndSession(int ok, int error_code) {
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT)
   const char* const output_path = getenv(WEBP_FACTORIZATION_STAGE_OUTPUT_ENV);
   const char* const run_id = getenv(WEBP_FACTORIZATION_RUN_ID_ENV);
   const char* const case_id = getenv(WEBP_FACTORIZATION_CASE_ID_ENV);
@@ -699,6 +717,7 @@ void WebPProfileEndSession(int ok, int error_code) {
   const uint64_t total_ns =
       ctx->active ? ProfileNowNs() - ctx->total_start_ns : 0;
   const char* sample_role;
+  const char* record_schema = "libwebp-encoder-stage-v1";
 #if defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
   const VP8LBackrefCostAttributionV3Counters attribution_counters =
       VP8LBackrefCostAttributionV3GetCounters();
@@ -788,6 +807,13 @@ void WebPProfileEndSession(int ok, int error_code) {
   int i;
   if (!ctx->active) return;
   ctx->active = 0;
+#if defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT)
+  if (sample_set != NULL && strcmp(sample_set, "timer-validation") == 0) {
+    sample_role = "timer-validation";
+    record_schema =
+        "libwebp-backref-cost-specialization-alignment-v4-timer-accounting-stage-v1";
+  } else
+#endif
   if (sample_set != NULL && (strcmp(sample_set, "warm") == 0 ||
                              strcmp(sample_set, "warm-dominant") == 0)) {
     sample_role = (ctx->encode_index == 0) ? "warmup" : "warm";
@@ -798,8 +824,9 @@ void WebPProfileEndSession(int ok, int error_code) {
             ? stderr
             : fopen(output_path, "a");
   if (out == NULL) return;
-  fputs("{\"schema\":\"libwebp-encoder-stage-v1\",\"record_type\":\"encode\",",
-        out);
+  fputs("{\"schema\":", out);
+  PrintJsonString(out, record_schema);
+  fputs(",\"record_type\":\"encode\",", out);
   fputs("\"run_id\":", out);
   PrintJsonString(out, run_id);
   fputs(",\"case_id\":", out);

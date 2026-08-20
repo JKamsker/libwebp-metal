@@ -1,0 +1,114 @@
+{
+  "alignment_boundary_bytes": 16384,
+  "all_entry_modulos": {
+    "BackwardReferencesHashChainDistanceOnly": 0,
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": 0,
+    "BackwardReferencesHashChainDistanceOnlySpecialized": 0,
+    "PushInterval": 0,
+    "PushIntervalLayoutClone": 0,
+    "PushIntervalSpecialized": 0
+  },
+  "all_six_symbol_addresses_distinct": true,
+  "baseline_layout_canonical_instructions_equal": true,
+  "body_bytes": 5624,
+  "compiler": "Apple clang 17.0.0",
+  "dp_to_push_displacement_bytes": 49152,
+  "entry_order": [
+    "PushInterval",
+    "PushIntervalLayoutClone",
+    "PushIntervalSpecialized",
+    "BackwardReferencesHashChainDistanceOnly",
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+    "BackwardReferencesHashChainDistanceOnlySpecialized"
+  ],
+  "facts": {
+    "BackwardReferencesHashChainDistanceOnly": {
+      "branch_count": 54,
+      "canonical_instructions_sha256": "352760c15d0ad307cc2e852f6408b31d40cddf930b0096a3a5f5b2dcfa992a8d",
+      "instruction_count": 323,
+      "instruction_words_sha256": "f556a1d070860ea16eeb39e6c63a864253f5917c3a00c0271ffb941e1ce6668f",
+      "load_count": 55,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+      "size_bytes": 1292,
+      "store_count": 23
+    },
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": {
+      "branch_count": 54,
+      "canonical_instructions_sha256": "352760c15d0ad307cc2e852f6408b31d40cddf930b0096a3a5f5b2dcfa992a8d",
+      "instruction_count": 323,
+      "instruction_words_sha256": "49f4f12df81145a5f5a1dd69e95a8fa53406bc5e7cd714a3fe82c69b5fb46b02",
+      "load_count": 55,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+      "size_bytes": 1292,
+      "store_count": 23
+    },
+    "BackwardReferencesHashChainDistanceOnlySpecialized": {
+      "branch_count": 54,
+      "canonical_instructions_sha256": "79dd9d952e1ce7217f54ec8d75a5e181be6b19e6585c73d5c4e99ede52bdd4c3",
+      "instruction_count": 323,
+      "instruction_words_sha256": "079883d710c58ad8ee340e931ad51fb926cf341a13173bef1c91e92bcf31e8ae",
+      "load_count": 55,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+      "size_bytes": 1292,
+      "store_count": 23
+    },
+    "PushInterval": {
+      "branch_count": 30,
+      "canonical_instructions_sha256": "b639260e4c9c1a64c8e33b333da6112d2520e1ab02d111d7de96cdc8d97967ab",
+      "instruction_count": 127,
+      "instruction_words_sha256": "90d88aa900d2922a0757b85020337ce6fa526ccac5a03d7be3dcd60d415b7a7b",
+      "load_count": 25,
+      "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8",
+      "size_bytes": 508,
+      "store_count": 11
+    },
+    "PushIntervalLayoutClone": {
+      "branch_count": 30,
+      "canonical_instructions_sha256": "b639260e4c9c1a64c8e33b333da6112d2520e1ab02d111d7de96cdc8d97967ab",
+      "instruction_count": 127,
+      "instruction_words_sha256": "b59fb03a2afba8e4e711a724d0654377fd0e978563d916f38451e56246ff1e44",
+      "load_count": 25,
+      "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8",
+      "size_bytes": 508,
+      "store_count": 11
+    },
+    "PushIntervalSpecialized": {
+      "branch_count": 45,
+      "canonical_instructions_sha256": "9946b2e32e123b18080c5c6caf0261c44a60bae9e4e5cefccbda4c406d17e026",
+      "instruction_count": 183,
+      "instruction_words_sha256": "89a6d8600f21c62d76c33d0f861a0bb53f965373742ce2a63c15769325a8d760",
+      "load_count": 34,
+      "mnemonics_sha256": "453c8695e2523dc281903d227f9896d68decf895d5676690c8bd67a59431f190",
+      "size_bytes": 732,
+      "store_count": 12
+    }
+  },
+  "flags": "-O3 -g -DNDEBUG -fno-omit-frame-pointer; -Wl,-no_deduplicate",
+  "hint_push_interval_distinct": true,
+  "inter_entry_padding_bytes": 77588,
+  "inter_entry_spacing_bytes": 16384,
+  "linker_identical_code_deduplication_disabled": true,
+  "linker_map_bytes": 68049,
+  "linker_map_extract_sha256": "5b3270a9d4fa61b008447a59485626d32a64111ce9a2e8732f9b933a2ffce802",
+  "linker_map_sha256": "ae960d4fbf6ab9bb88502ea10e14d703bd8dc883d216ab1e69d3c81030a6d1ee",
+  "schema": "libwebp-backref-cost-specialization-alignment-v4-local-codegen-v1",
+  "section_address": "0x0000000100064000",
+  "section_alignment_power": 14,
+  "section_executable_pure_instructions": true,
+  "section_file_offset": 409600,
+  "section_flags": "0x80000400",
+  "section_name": "__br_align_v4",
+  "section_segment": "__TEXT",
+  "section_size_bytes": 83212,
+  "status": "PASS",
+  "symbol_addresses": {
+    "BackwardReferencesHashChainDistanceOnly": "0000000100070000",
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": "0000000100074000",
+    "BackwardReferencesHashChainDistanceOnlySpecialized": "0000000100078000",
+    "PushInterval": "0000000100064000",
+    "PushIntervalLayoutClone": "0000000100068000",
+    "PushIntervalSpecialized": "000000010006c000"
+  },
+  "timed_runner_bytes": 676760,
+  "timed_runner_sha256": "70d16e4adf2db6ab55e85901627bba90dde5f3e3f547094991f8490722c2971e"
+}
