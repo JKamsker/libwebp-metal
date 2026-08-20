@@ -1,0 +1,24 @@
+{
+  "artifacts": [
+    {
+      "bytes": 0,
+      "path": "return-protocol/framed-stdout.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/transport-stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 699,
+      "path": "transfer-cleanup.json",
+      "sha256": "cfb2305963c78f968d0265ace712b64e71c690ef1dc4d9c92a3773293edbab65"
+    }
+  ],
+  "file_count": 3,
+  "schema": "libwebp-backref-cost-specialization-alignment-v2-phase1b-hash-index-v1",
+  "source_commit": "e2816e632075779b299adfc2cf8ab7d87d7c0d6f",
+  "source_tree": "2bda2d64fe60a8ca3d46911135363fcfae394503",
+  "total_bytes": 699
+}
