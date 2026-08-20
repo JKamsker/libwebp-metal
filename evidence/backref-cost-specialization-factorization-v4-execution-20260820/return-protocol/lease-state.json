@@ -1,0 +1,15 @@
+{
+  "acquisition_attempted": true,
+  "receipt": {
+    "acquired": true,
+    "acquisition_attempted": true,
+    "path": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-specialization-factorization-v4.lock",
+    "released": true,
+    "schema": "libwebp-backref-cost-specialization-factorization-v4-lease-v1"
+  },
+  "receipt_available": true,
+  "receipt_required": true,
+  "schema": "libwebp-backref-cost-specialization-factorization-v4-lease-transfer-v1",
+  "state": "verified",
+  "status": "verified"
+}

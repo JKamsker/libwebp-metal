@@ -1,0 +1,11 @@
+{
+  "absence_proved": true,
+  "elapsed_transaction_ns": 161861436792,
+  "removed_exact_validated_child": true,
+  "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-specialization-factorization-v4/run.6_27jn4z",
+  "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-specialization-factorization-v4",
+  "schema": "libwebp-backref-cost-specialization-factorization-v4-cleanup-receipt-v1",
+  "source_commit": "1f60c324142d3dafaeece95b060114261fff86ac",
+  "source_tree": "c9c3ca54aa3f7bc85b410cda4ec7233dded66075",
+  "status": "complete"
+}

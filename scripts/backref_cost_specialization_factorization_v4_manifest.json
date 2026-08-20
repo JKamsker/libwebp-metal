@@ -1,0 +1,1106 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v4-frozen-protocol-v1",
+  "protocol_version": 8,
+  "experiment_id": "backref_cost_specialization_factorization_v4",
+  "base_commit": "f289499b37875d8166792ed104f2b26e23cf4ffd",
+  "required_expected_commit_environment": "EXPECTED_FREEZE_COMMIT",
+  "phase_1_decision": {
+    "status": "PENDING_PHASE_1B_AUTHORIZATION",
+    "timed_execution_authorized": false,
+    "phase_2_authority": "NONE",
+    "reason": "Phase 1A freezes local gates and exactly one mandatory synchronous remote untimed zero-workload zero-lease rehearsal; Phase 2 remains forbidden until an additions-only Phase 1B envelope records complete live receipts",
+    "phase_1_performance_samples": 0
+  },
+  "phase_1_identity_contract": {
+    "source_commit": "the exact Phase-1A commit recorded by the Phase-1B envelope",
+    "freeze_commit": "the exact Phase-1B HEAD passed dynamically as EXPECTED_FREEZE_COMMIT",
+    "authorization_envelope": "evidence/backref-cost-specialization-factorization-v4-design/phase1b-authorization.json",
+    "rehearsal_hash_index": "evidence/backref-cost-specialization-factorization-v4-design/phase1b-rehearsal-hashes.json",
+    "rehearsal_evidence_prefix": "evidence/backref-cost-specialization-factorization-v4-design/rehearsal/",
+    "phase_1b_parent_rule": "exactly one parent equal to source_commit",
+    "phase_1b_diff_rule": "additions only at the rehearsal evidence prefix, hash index, and authorization envelope; every source/protocol/manifest/schema/corpus/order/count/timeout artifact remains byte-identical to Phase 1A"
+  },
+  "payload_identity_gate": {
+    "status": "PASS_BEFORE_PHASE_1A",
+    "generator": "scripts/backref_cost_specialization_factorization_v4_payload.py",
+    "fixture": "evidence/backref-cost-specialization-factorization-v4-design/representative-payload-fixture.json",
+    "agreement_receipt": "evidence/backref-cost-specialization-factorization-v4-design/representative-payload-agreement.json",
+    "payload_bytes": 2097152,
+    "sha256": "d34b944ec0b8eead809367d456785cf37d325459bca34506bec74af5efba4db0",
+    "negative_test": "PASS_REJECTED_V2_AND_V3",
+    "negative_stale_v2_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "negative_stale_v3_sha256": "8fb97e16b8be09e7dc0c20b0b26387a0f8301d0aa738fa7ade4a6a97d15afeb8"
+  },
+  "execution_modes": {
+    "validate": "local, WEBP_BENCHMARK_SESSION absent, hashes and contracts only",
+    "rehearse": "exactly one synchronous remote pandocs-agent transaction, WEBP_BENCHMARK_SESSION absent, source/toolchain/device/resource/process/build/plan/archive/integrity/extraction/cleanup/absence gates only; zero encoder workload, timing samples, and lease attempts",
+    "run": "Phase 2 only, exact exclusive session, one lease and 36 serial directly spawned coarse-timer processes"
+  },
+  "return_contract": {
+    "single_remote_session": true,
+    "remote_interactions_per_transaction": 1,
+    "post_run_ssh_cleanup_operations": 0,
+    "lease_transfer_states": [
+      "not-attempted",
+      "unavailable-after-attempt",
+      "verified"
+    ],
+    "not_attempted_rule": "when benchmark_lease_acquisition_attempted is false, no lease artifact is requested, copied, or awaited",
+    "attempted_rule": "an acquisition attempt requires an independently transferred and verified lease receipt",
+    "cleanup_rule": "the same single remote transaction validates and removes only its exact factorization-v4 child before response emission, proves absence, and places the mandatory cleanup receipt in the preflighted final frame; no follow-up SSH/SCP cleanup exists",
+    "control_plane": [
+      "source-admission",
+      "operator-status",
+      "archive-build",
+      "lease-state",
+      "integrity-footer",
+      "cleanup-footer-last"
+    ],
+    "data_plane": "one framed stdout stream returns a compact deterministic tar+gzip archive with full artifact hash index; the declaration carries archive hash/size/count plus member-count and full-inventory digest before ordered chunks",
+    "maximum_expected_run_archive_bytes": 524288,
+    "maximum_expected_run_archive_justification": "Factorization V4 compaction retains raw runner/stage JSONL, correctness/resource/counter records and cryptographic indexes, while omitting the redundant representative request payload, repeated raw process tables, full nm output, build text, and duplicated command stdout/stderr; the 512 KiB expected bound must be proven by deterministic local archive fixtures and the sole rehearsal",
+    "representative_rehearsal_payload_bytes": 2097152,
+    "representative_rehearsal_payload_sha256": "d34b944ec0b8eead809367d456785cf37d325459bca34506bec74af5efba4db0",
+    "representative_payload_margin_ratio": 4.0,
+    "maximum_response_archive_bytes": 786432,
+    "frame_header_maximum_bytes": 65536,
+    "bulk_chunk_bytes": 262144,
+    "timeouts": {
+      "ssh_connect_seconds": 30,
+      "server_alive_interval_seconds": 15,
+      "server_alive_count_max": 3,
+      "absolute_transaction_seconds": 1800,
+      "silent_operator_seconds": 900,
+      "request_and_bulk_progress_seconds": 15,
+      "footer_progress_seconds": 15,
+      "ssh_connect_justification": "overlay first-session admission only"
+    },
+    "transport_timeout_derivation": "the 900-second silent operator bound covers two serial builds, 24 untimed correctness encodes, 12 untimed work encodes, and the exact 36-process/180-encode timing inventory using prior approximately 0.94-1.22 second representative evidence plus margin; the 15-second progress bound is over 7x the prior approximately 0.51 second 256 KiB cadence; the 1,800-second absolute bound covers request, operator, stream, and finally",
+    "incremental_pump": "one retained directly-owned SSH Popen uses nonblocking selectors to write framed request chunks while concurrently draining stdout/stderr; REQUEST_WRITE retains request-progress plus absolute bounds until stdin half-close; SILENT_OPERATOR covers the remote build and complete-response preflight; BULK_STREAM starts only after a complete schema-valid size-valid declaration arrives and resets 15 seconds per received byte; FOOTERS separately bounds integrity plus cleanup for 15 seconds; only deadline expiry may stop that retained creation identity",
+    "online_validation": "the remote encodes and checks every frame, control payload, archive byte, footer, and cleanup receipt before writing its first response byte; reject archive above 786432 bytes, any control above 8192 bytes, or total framed stdout greater than or equal to 1048576 bytes; then verify ordered frames/chunks, archive digest, compact full-inventory digest, integrity footer, cleanup-last receipt, raw stream hashes/counts, and exact-child absence before extraction",
+    "state_machine_fixture_set": [
+      "magic-then-long-bounded-silence",
+      "partial-control-then-silence",
+      "complete-controls-then-silence",
+      "partial-bulk-declaration-then-silence",
+      "complete-valid-declaration-then-15-second-stall",
+      "chunks-with-progress-reset",
+      "chunks-done-then-footer-stall",
+      "refusal-before-bulk",
+      "cleanup-footer-last",
+      "retained-child-only-timeout"
+    ],
+    "maximum_framed_response_bytes": 1048576,
+    "maximum_control_payload_bytes": 8192,
+    "request_direction_validation": "a 2097152-byte deterministic payload is streamed only client-to-remote; remote admission checks exact size/SHA-256 and returns only its compact receipt, so request capacity and capped response capacity are independently exercised without performance evidence",
+    "compaction": {
+      "preserved_raw": [
+        "stages/*.jsonl",
+        "runner/*.jsonl",
+        "runner/*.stderr",
+        "commands.jsonl",
+        "correctness.json",
+        "work-metrics.jsonl",
+        "work-metric-summary.json",
+        "codegen.json",
+        "resource-admission-*.json",
+        "artifact-hashes.json"
+      ],
+      "digest_only": [
+        "representative request payload",
+        "process snapshots",
+        "build stdout/stderr",
+        "nm output",
+        "duplicated command stdout/stderr"
+      ],
+      "archive_cap_bytes": 786432,
+      "framed_response_cap_bytes": 1048576
+    }
+  },
+  "process_isolation": {
+    "snapshot_command": [
+      "/bin/ps",
+      "-axo",
+      "pid=,ppid=,comm="
+    ],
+    "frozen_fields": [
+      "pid",
+      "ppid",
+      "comm"
+    ],
+    "argument_text_collected": false,
+    "raw_comm_semantics": "the complete remaining comm field is a nonempty exact opaque process-table string; slashless, slash-bearing, space-bearing, and path-like strings are valid and never filesystem-canonicalized",
+    "lexical_basename_semantics": "derived only as raw_comm.rsplit('/', 1)[-1], recorded separately, and never resolved, normalized, statted, or checked against the filesystem",
+    "resolved_path_api": null,
+    "v9_live_shape_fixture": "/sbin/launchd",
+    "conflict_rule": "exact frozen raw_comm and/or exact lexical_basename deny-set membership; no substring, prefix, suffix, argv, source, payload, filesystem, or symlink matching",
+    "ancestor_rule": "the self PID must exist and exact PPID edges must form a complete acyclic chain ending at PID 1; every ancestor requires a well-formed nonempty opaque raw_comm and lexical_basename, but no positive ancestor identity allowlist or filesystem identity match exists",
+    "scope_rule": "every process row is checked for exact denied raw_comm or lexical_basename membership; arbitrary well-formed non-denied ancestors and nonancestors pass, including slash, spaces, path-like values, and benign lexical collisions",
+    "malformed_rule": "invalid UTF-8, truncation, malformed PID/PPID/remaining-comm structure, control-bearing or empty raw_comm or lexical basename, duplicate PIDs, self-parent edges, missing ancestor parents, ancestor cycles, non-PID1 ppid0, and absent self PID fail closed",
+    "discovery_policy": "read-only observation/refusal; raw snapshots are classified in memory and retained as exact SHA-256/byte-count/structural receipts; discovered PIDs never enter signal APIs",
+    "denied_identity_sets_source": "DENIED_RAW_COMM_IDENTITIES and DENIED_LEXICAL_BASENAMES in scripts/backref_cost_specialization_factorization_v4_transport.py",
+    "positive_ancestor_identity_sets": null,
+    "refusal_diagnostic": "bounded libwebp-backref-cost-specialization-factorization-v4-process-refusal-v1 object in the integrity footer with failure_code, PID, PPID, raw_comm, lexical_basename, is_ancestor, is_conflict, and SHA-256; no argv, environment, source, payload, command, or filesystem identity"
+  },
+  "frozen_phase_1_rehearsal_command": "env -u WEBP_BENCHMARK_SESSION EXPECTED_FREEZE_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_specialization_factorization_v4.py rehearse \"$PWD/evidence/backref-cost-specialization-factorization-v4-design/rehearsal\"",
+  "frozen_phase_2_command": "env WEBP_BENCHMARK_SESSION=exclusive EXPECTED_FREEZE_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_specialization_factorization_v4.py run \"$PWD/evidence/backref-cost-specialization-factorization-v4-execution-20260820\"",
+  "candidate": {
+    "build_flag": "WEBP_BUILD_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_EXPERIMENT",
+    "compile_macro": "WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_EXPERIMENT",
+    "runtime_flag": "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_VARIANT",
+    "runtime_values": [
+      "B",
+      "L",
+      "H"
+    ],
+    "source": "src/enc/backref_cost_specialization_factorization_v4_experiment_enc.c",
+    "runner": "tools/backref_cost_specialization_factorization_v4_experiment_runner.c",
+    "runner_target": "backref_cost_specialization_factorization_v4_experiment_runner",
+    "equivalence": {
+      "source_commit": "f289499b37875d8166792ed104f2b26e23cf4ffd",
+      "algorithm": "B is the merged original baseline; L is a separately named noinline clone of B's DP template and PushInterval algorithm; H is the merged always-specialized append-hint body. One exact B/L/H selector is cached before mutation and one closed switch owns exactly one selected DP body.",
+      "preserved": [
+        "integer costs",
+        "strict comparisons and ties",
+        "interval ordering",
+        "update order",
+        "traceback",
+        "reference order",
+        "cache choice",
+        "immutable inputs",
+        "transactional allocation fallback"
+      ],
+      "baseline": "production PushInterval at exact merged V3 main f289499b37875d8166792ed104f2b26e23cf4ffd",
+      "single_binary_identity": true
+    }
+  },
+  "forbidden_environment": [
+    "CUDA_VISIBLE_DEVICES",
+    "MallocNanoZone",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V10_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V11_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V12_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V14_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V15_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V9_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT",
+    "WEBP_BACKREF_COST_TRACEBACK_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT",
+    "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT",
+    "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_VARIANT",
+    "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_VARIANT"
+  ],
+  "remote_host": {
+    "ssh_alias": "pandocs-agent",
+    "system": "Darwin",
+    "architecture": "arm64",
+    "hardware_model": "Mac16,10",
+    "cpu_brand": "Apple M4",
+    "physical_memory_bytes": 25769803776,
+    "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+    "compiler_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "compiler_version_lines": [
+      "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+      "Thread model: posix",
+      "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+    ],
+    "sdk_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+    "sdk_version": "26.2",
+    "required_thermal_lines": [
+      "No thermal warning level has been recorded",
+      "No performance warning level has been recorded",
+      "No CPU power status has been recorded"
+    ],
+    "safe_root_basename": ".libwebp-metal-backref-cost-specialization-factorization-v4",
+    "runner_policy": "Runner.Listener may remain; exact Runner.Worker and frozen runner/benchmark/profiler/CUDA executable basenames fail closed",
+    "permission_rule": "the selected diagnostic uses no attach API, profiler, authentication UI, privacy prompt, or discovered-PID control"
+  },
+  "diagnostic": {
+    "primary": "coarse monotonic stage timers",
+    "fallback": null,
+    "clock": "mach_continuous_time converted with mach_timebase_info",
+    "external_profiler_invocations": 0,
+    "record_command_template": [
+      "/usr/bin/env",
+      "FROZEN_ENV...",
+      "RUNNER",
+      "profile",
+      "INPUT",
+      "CASE",
+      "METHOD",
+      "VARIANT",
+      "1",
+      "4"
+    ],
+    "selection": {
+      "sample": "rejected: PID attachment and task-port permission are unnecessary risks",
+      "xctrace": "rejected: v1 never established noninteractive launch permission and prompting cannot be rehearsed safely",
+      "coarse_timers": "selected: in-process, noninteractive, no attach rights, and availability can be validated without encoder execution"
+    },
+    "toolchain_identity": {
+      "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+      "executables": {
+        "ar": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+          "sha256": "e914ec3c1eb8ca99c7d5f2f9bd82ac3458d0ab14556a8a3441b28f37baaa77c9",
+          "version": {
+            "arguments": [],
+            "output_lines": [],
+            "output_sha256": null,
+            "returncode": null,
+            "version_source": "Xcode bundle metadata; ar has no standalone version query"
+          }
+        },
+        "clang": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+              "Thread model: posix",
+              "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+            ],
+            "output_sha256": "6245580a5236b07a40ed12d781b8de4fd917816b89b392e680687166f647a901",
+            "returncode": 0
+          }
+        },
+        "clang++": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+          "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+              "Thread model: posix",
+              "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+            ],
+            "output_sha256": "6245580a5236b07a40ed12d781b8de4fd917816b89b392e680687166f647a901",
+            "returncode": 0
+          }
+        },
+        "llvm-objdump": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump",
+          "sha256": "fa24edaea7afab86d88b9706e1b952f32abc819bd62f8f9bf8dafb5ae01ba159",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "Apple LLVM version 17.0.0",
+              "  Optimized build.",
+              "",
+              "",
+              "  Registered Targets:",
+              "    aarch64    - AArch64 (little endian)",
+              "    aarch64_32 - AArch64 (little endian ILP32)",
+              "    aarch64_be - AArch64 (big endian)",
+              "    arm        - ARM",
+              "    arm64      - ARM64 (little endian)",
+              "    arm64_32   - ARM64 (little endian ILP32)",
+              "    armeb      - ARM (big endian)",
+              "    thumb      - Thumb",
+              "    thumbeb    - Thumb (big endian)",
+              "    x86        - 32-bit X86: Pentium-Pro and above",
+              "    x86-64     - 64-bit X86: EM64T and AMD64"
+            ],
+            "output_sha256": "ae22f35526e555c21ee08130898b7515d118f32ca500c9580ba132c327eb60cd",
+            "returncode": 0
+          }
+        },
+        "nm": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-nm",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm",
+          "sha256": "a42f25b6363f3d43b911733a276a46bdbed894f1ef8e764cb7461ebdb37a15e7",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "llvm-nm, compatible with GNU nm",
+              "Apple LLVM version 17.0.0",
+              "  Optimized build."
+            ],
+            "output_sha256": "20384fe0739a6ed54aac86eaeed689fb86e8d58cdb6824550305171821fbbb4d",
+            "returncode": 0
+          }
+        },
+        "ranlib": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+          "sha256": "779903653ff38059513ef4f34846ab8b53f71f9cb7c066b29a47e520527b6cfa",
+          "version": {
+            "arguments": [
+              "-V"
+            ],
+            "output_lines": [
+              "Apple Inc. version cctools-1030.6.3",
+              "error: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: no archives specified",
+              "Usage: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib [-sactfqLT] [-] archive [...]"
+            ],
+            "output_sha256": "d498dee5d1ba26aace88be9c733100c05e4f1b29b0d3967446e7798576dcf459",
+            "returncode": 1
+          }
+        }
+      },
+      "metadata": {
+        "sdk-settings-json": {
+          "bytes": 7627,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.json",
+          "sha256": "95882a9cea02396e76f3e406a5728269b2a1a11bcd241430a84c9e63d09a6cd3"
+        },
+        "sdk-settings-plist": {
+          "bytes": 5346,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.plist",
+          "sha256": "03cb7d21a91023f6dff9ea019a3710061e2eb570bdb260faf4daa74151abf15d"
+        },
+        "toolchain-info-plist": {
+          "bytes": 95,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/ToolchainInfo.plist",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/ToolchainInfo.plist",
+          "sha256": "b2e3b746c87ddfd6d2145656d87569054807e2196d6f46ef09dec3923ed31541"
+        },
+        "xcode-version-plist": {
+          "bytes": 523,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/version.plist",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/version.plist",
+          "sha256": "79504c54fc47124dbc5945b628d9c9071923a57c0cd109ff5afdd7884c1c889c"
+        }
+      },
+      "required_executable_names": [
+        "clang",
+        "clang++",
+        "nm",
+        "ar",
+        "ranlib",
+        "llvm-objdump"
+      ],
+      "required_metadata_names": [
+        "xcode-version-plist",
+        "toolchain-info-plist",
+        "sdk-settings-json",
+        "sdk-settings-plist"
+      ],
+      "schema": "libwebp-backref-cost-specialization-factorization-v4-toolchain-identity-v1",
+      "sdk": {
+        "canonical_name": "macosx26.2",
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+        "display_name": "macOS 26.2",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "version": "26.2"
+      },
+      "stale_v2_xcrun_rejected": true,
+      "stale_v2_xcrun_sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152",
+      "stale_v3_identity_canonical_sha256": "735eb9be26c9b7118819b502bf0e24b6d87e8da945d81858c22bebdf889ce077",
+      "xcode": {
+        "bundle_version": "24587",
+        "product_build_version": "17C529",
+        "short_version": "26.3",
+        "toolchain_identifier": "com.apple.dt.toolchain.XcodeDefault"
+      },
+      "xcrun_required": false
+    },
+    "toolchain_gate": "manifest == actual-file recomputation == independent fixture; no xcrun or xcode-select discovery"
+  },
+  "build": {
+    "system": "makefile.unix",
+    "metal": false,
+    "cflags": "-O3 -g -DNDEBUG -fno-omit-frame-pointer",
+    "ldflags": "-Wl,-no_deduplicate",
+    "ar": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+    "ranlib": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+    "identity_rule": "one optimized recorder-free Mach-O serves B/L/H timing and one separately hashed recorder Mach-O serves untimed work; Apple ld identical-code deduplication is disabled so all six private symbols have distinct addresses; exact private symbols and codegen facts are recorded",
+    "cxx": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+    "nm": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm",
+    "llvm_objdump": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump",
+    "sdk": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk"
+  },
+  "corpus": [
+    {
+      "case_id": "photo-large",
+      "file": "photo-large.ppm",
+      "category": "photo",
+      "width": 3000,
+      "height": 2000,
+      "sha256": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612"
+    },
+    {
+      "case_id": "graphic-large",
+      "file": "graphic-large.ppm",
+      "category": "graphic",
+      "width": 3000,
+      "height": 2000,
+      "sha256": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc"
+    }
+  ],
+  "protocol": {
+    "purpose": "fresh simultaneous B/L/H causal factorization; never a V16 rerun and never pooled with V16 samples",
+    "methods": [
+      4,
+      6
+    ],
+    "profile_repetitions": 3,
+    "warmups_per_profile": 1,
+    "retained_encodes_per_profile": 4,
+    "profile_processes": 36,
+    "runner_output_records": 180,
+    "stage_records": 180,
+    "retained_stage_records": 144,
+    "variant_order": [
+      [
+        "B",
+        "L",
+        "H"
+      ],
+      [
+        "H",
+        "L",
+        "B"
+      ],
+      [
+        "L",
+        "B",
+        "H"
+      ]
+    ],
+    "case_order": [
+      "photo-large",
+      "graphic-large"
+    ],
+    "lifecycle": "one import, one excluded warmup, then four retained coarse-timer encodes per process",
+    "serial_rule": "one synchronous directly spawned runner at a time under one exclusive lease; no overlap or retry",
+    "correctness": "before timing, exactly two B, two L and two H encodes per case/method (24 total); exact bitstreams, decoded RGB pixels, repeat determinism, immutable inputs, integer costs, ties, update order and traceback must match",
+    "selected_dp_structure": "a separate recorder build emits exactly 12 untimed work rows, one per case/method/variant; one selector evaluation per selected DP, no opposite body, B/L exact work equality, common B/L/H algorithm work equality, and H-only append-hint activations are mandatory",
+    "pairing": "within each case/method/repetition, retained ordinal 0..3 aligns B, L and H; compute B->L, L->H and B->H as 100*(Y-X)/X for each of 12 paired retained rows per cell and metric",
+    "statistics": "for DP total, DP steady and whole encode in every cell/pair report all 12 paired percentages, arithmetic mean, median, sample standard deviation, min/max, sign counts, and deterministic 100000-resample paired bootstrap 95% percentile CI for the mean with seed 0x424c4801; setup is retained and reported but not causal-decision primary",
+    "perturbation": "monotonic clocks occur only at whole stages and DP setup/steady/trace/materialize boundaries; no per-PushInterval clock; timed binaries contain no recorder symbols or work counters"
+  },
+  "acceptance": {
+    "diagnostic_only": true,
+    "required_symbols": [
+      "WebPEncode",
+      "VP8LEncodeStream",
+      "VP8LHashChainFill",
+      "VP8LGetBackwardReferences",
+      "VP8LBackwardReferencesTraceBackwards",
+      "BackwardReferencesHashChainDistanceOnly",
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+      "BackwardReferencesHashChainDistanceOnlySpecialized",
+      "PushInterval",
+      "PushIntervalLayoutClone",
+      "PushIntervalSpecialized",
+      "InsertInterval",
+      "CostManagerInit",
+      "CostModelBuild",
+      "TraceBackwards",
+      "BackwardReferencesHashChainFollowChosenPath",
+      "EncodeImageInternal",
+      "GetHuffBitLengthsAndCodes",
+      "StoreImageToBitMask"
+    ],
+    "codegen_symbols": [
+      "BackwardReferencesHashChainDistanceOnly",
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+      "BackwardReferencesHashChainDistanceOnlySpecialized",
+      "PushInterval",
+      "PushIntervalLayoutClone",
+      "PushIntervalSpecialized"
+    ],
+    "required_timer_stages": [
+      "lossless_analyze",
+      "lossless_hash_chain",
+      "lossless_backward_refs",
+      "lossless_histogram",
+      "lossless_huffman",
+      "lossless_bitstream",
+      "backref_cost_dp_total",
+      "backref_cost_dp_setup",
+      "backref_cost_dp_steady",
+      "backref_cost_traceback",
+      "backref_cost_materialize"
+    ],
+    "per_profile": "five runner output records, five stage records, four retained records, exact schemas, and zero stderr",
+    "work_counters": {
+      "rows": 12,
+      "cell_keys": [
+        "case_id",
+        "method",
+        "variant"
+      ],
+      "fields": [
+        "selector_evaluations",
+        "baseline_dp_calls",
+        "layout_clone_dp_calls",
+        "hint_dp_calls",
+        "exact_activations",
+        "push_calls",
+        "short_push_calls",
+        "cache_segments",
+        "overlap_scans",
+        "disjoint_prefix_scans",
+        "insert_calls",
+        "null_hint_insert_calls",
+        "position_backward_steps",
+        "position_forward_steps",
+        "append_hint_fast_paths",
+        "append_hint_branch_checks",
+        "append_hint_loads",
+        "append_hint_start_loads",
+        "append_hint_update_checks",
+        "append_hint_updates",
+        "pop_tail_branch_checks",
+        "pop_tail_updates",
+        "interval_updates",
+        "interval_pops",
+        "max_live_intervals",
+        "bitstream_bytes",
+        "bitstream_fnv1a64"
+      ],
+      "rules": "B and L are exactly equal for all work and have zero hint/pop activity; B/L/H common push/cache/overlap/disjoint/insert/backward/update/pop/live/bitstream work is equal; H differs only in intended append-hint/pop-tail positioning fields, has exact activation, positive hint activity, and zero forward positioning in every active cell"
+    },
+    "repeatability": "for each case/method/variant, three retained-total medians have max/min <=2.0 and each major stage-share range <=0.10 absolute",
+    "timer_accounting": "on every successful timed encode DP total.calls == DP setup.calls == DP steady.calls > 0, backend equals the frozen B/L/H launch, setup+steady <= DP total, and DP total+traceback+materialize <= backward refs",
+    "timer_boundaries": "DP total is immediately around exactly one selected DP body including cleanup; setup starts before allocation and ends only after successful CostManagerInit; steady covers only initial literal plus pixel DP loop; traceback and materialization are separately timed; no per-pixel or PushInterval clock",
+    "maximum_mean_clock_read_delta_ns": 10000,
+    "build_identity": "one recorder-free timed runner serves B/L/H; a distinct recorder runner serves untimed work only; frozen clang/SDK/flags and all six private DP/PushInterval symbols are mandatory",
+    "resources": "AC power, LPM off, no thermal warning, >=4 GiB free memory, >=8 GiB disk, output <=2 GiB, one directly owned child",
+    "correctness_required": true,
+    "diagnostic_success": "all correctness, schema, count, order, hash, resource, work, codegen, repeatability and transport gates pass; this can pass even when production promotion fails",
+    "production_promotion": "H may be proposed only if B->H DP steady and whole-encode mean are negative in all four required cells, each upper 95% bootstrap CI is <=0, no paired row regresses by more than +0.50%, and correctness/work gates pass; otherwise retain diagnostic only",
+    "repeatability_max_ratio": 2.0,
+    "maximum_material_regression_percent": 0.5
+  },
+  "interpretation": {
+    "quantify": "report B->L, L->H and B->H for DP total, DP steady and whole encode separately in every photo/graphic method-4/method-6 cell",
+    "layout_limit": "B->L estimates duplication/code-placement/control-layout cost; L->H estimates the append-hint algorithm within matched always-specialized structure; B->H is the simultaneous total boundary. Coarse timers plus work/codegen may still leave interaction unresolved.",
+    "classification": "per cell and metric, classify layout-dominant when abs(B->L) >= 0.60*abs(B->H) and abs(L->H) < 0.60*abs(B->H); hint-dominant uses the symmetric rule; opposite-signed components or neither rule are interaction/mixed; abs(B->H)<0.10% is indeterminate-small",
+    "close_family": "diagnostic validity and production promotion are separate decisions; do not weaken thresholds after results",
+    "next_stage": "Phase 3 alone decides consequence or one independently gated next lead",
+    "follow_up": "a later evaluator may propose one new gated experiment but cannot implement it from this evidence",
+    "no_pooling": "no old samples, call-stack claims, relabeling, thresholds, graphic-only path, Metal, or CUDA"
+  },
+  "resources": {
+    "lease_path": "~/.libwebp-metal-backref-cost-specialization-factorization-v4.lock",
+    "profile_timeout_seconds": 600,
+    "remote_timeout_seconds": 1800,
+    "single_session_transaction_timeout_seconds": 1800,
+    "silent_operator_timeout_seconds": 900,
+    "stream_progress_timeout_seconds": 15,
+    "footer_progress_timeout_seconds": 15,
+    "maximum_response_archive_bytes": 786432,
+    "maximum_output_bytes": 2147483648,
+    "minimum_available_memory_bytes": 4294967296,
+    "minimum_available_disk_bytes": 8589934592,
+    "parallel_profile_processes": 1,
+    "maximum_framed_response_bytes": 1048576,
+    "maximum_control_payload_bytes": 8192
+  },
+  "schemas": {
+    "catalog": "scripts/backref_cost_specialization_factorization_v4_schemas.json",
+    "artifact_hashes": "libwebp-backref-cost-specialization-factorization-v4-artifact-hashes-v1",
+    "cleanup_receipt": "libwebp-backref-cost-specialization-factorization-v4-cleanup-receipt-v1",
+    "frame": "libwebp-backref-cost-specialization-factorization-v4-frame-v1",
+    "integrity_footer": "libwebp-backref-cost-specialization-factorization-v4-integrity-footer-v1",
+    "lease": "libwebp-backref-cost-specialization-factorization-v4-lease-v1",
+    "lease_transfer": "libwebp-backref-cost-specialization-factorization-v4-lease-transfer-v1",
+    "operator_status": "libwebp-backref-cost-specialization-factorization-v4-operator-status-v1",
+    "process_refusal": "libwebp-backref-cost-specialization-factorization-v4-process-refusal-v1",
+    "refusal": "libwebp-backref-cost-specialization-factorization-v4-refusal-v1",
+    "rehearsal": "libwebp-backref-cost-specialization-factorization-v4-rehearsal-v1",
+    "transfer_cleanup": "libwebp-backref-cost-specialization-factorization-v4-transfer-cleanup-v1"
+  },
+  "admission_identity_paths": [
+    "scripts/backref_cost_specialization_factorization_v4_manifest.json",
+    "scripts/backref_cost_specialization_factorization_v4_schemas.json",
+    "scripts/backref_cost_specialization_factorization_v4_archive.py",
+    "scripts/backref_cost_specialization_factorization_v4_admission.py",
+    "scripts/backref_cost_specialization_factorization_v4_transport.py",
+    "scripts/backref_cost_specialization_factorization_v4_payload.py",
+    "scripts/backref_cost_specialization_factorization_v4_paths.py",
+    "scripts/run_backref_cost_specialization_factorization_v4_experiment.py",
+    "scripts/execute_backref_cost_specialization_factorization_v4.py",
+    "scripts/evaluate_backref_cost_specialization_factorization_v4.py",
+    "doc/backref-cost-specialization-factorization-v4-protocol-20260820.md",
+    "scripts/test_backref_cost_specialization_factorization_v4_admission.py",
+    "scripts/test_backref_cost_specialization_factorization_v4_archive.py",
+    "scripts/test_backref_cost_specialization_factorization_v4_experiment.py",
+    "scripts/test_backref_cost_specialization_factorization_v4_process_ownership.py",
+    "scripts/test_backref_cost_specialization_factorization_v4_protocol.py",
+    "scripts/test_backref_cost_specialization_factorization_v4_streaming.py",
+    "scripts/test_backref_cost_specialization_factorization_v4_payload_identity.py",
+    "scripts/test_experiment_guards.py",
+    "doc/experiment-guard-matrix.md",
+    "evidence/backref-cost-specialization-factorization-v4-design/phase1-prior-evidence-audit.json",
+    "evidence/backref-cost-specialization-factorization-v4-design/phase1-local-codegen.json",
+    "evidence/backref-cost-specialization-factorization-v4-design/phase1-local-validation.json",
+    "evidence/backref-cost-specialization-factorization-v4-design/representative-payload-fixture.json",
+    "evidence/backref-cost-specialization-factorization-v4-design/representative-payload-agreement.json",
+    "scripts/backref_cost_specialization_factorization_v4_toolchain.py",
+    "scripts/test_backref_cost_specialization_factorization_v4_toolchain_identity.py",
+    "evidence/backref-cost-specialization-factorization-v4-design/toolchain-identity-fixture.json",
+    "evidence/backref-cost-specialization-factorization-v4-design/toolchain-identity-agreement.json"
+  ],
+  "frozen_artifact_set": {
+    "self_manifest": "scripts/backref_cost_specialization_factorization_v4_manifest.json",
+    "hashed_members_field": "frozen_artifacts",
+    "identity_rule": "admission identity paths equal self_manifest plus every frozen_artifacts path",
+    "payload_identity_required_members": [
+      "scripts/backref_cost_specialization_factorization_v4_payload.py",
+      "scripts/backref_cost_specialization_factorization_v4_manifest.json",
+      "evidence/backref-cost-specialization-factorization-v4-design/representative-payload-fixture.json",
+      "evidence/backref-cost-specialization-factorization-v4-design/representative-payload-agreement.json"
+    ],
+    "toolchain_identity_required_members": [
+      "scripts/backref_cost_specialization_factorization_v4_toolchain.py",
+      "scripts/test_backref_cost_specialization_factorization_v4_toolchain_identity.py",
+      "evidence/backref-cost-specialization-factorization-v4-design/toolchain-identity-fixture.json",
+      "evidence/backref-cost-specialization-factorization-v4-design/toolchain-identity-agreement.json"
+    ]
+  },
+  "frozen_artifacts": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "700fc5531b8253d7bf259f63a4c9e7cfc8f13a4f300364c680be6000c65ca203"
+    },
+    {
+      "path": "makefile.unix",
+      "sha256": "93af6608cb2667b7adb24414619f5078a546a70fb6a277ae1cee9f6e88844a5f"
+    },
+    {
+      "path": "src/enc/backward_references_cost_enc.c",
+      "sha256": "3a577b72e4e9594fb72fe0cf91df48b88cf6d860ad463fca5a01102dd966111f"
+    },
+    {
+      "path": "src/enc/backward_references_cost_distance_only_enc.inc",
+      "sha256": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5"
+    },
+    {
+      "path": "src/enc/backward_references_enc.c",
+      "sha256": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03"
+    },
+    {
+      "path": "src/enc/profile_enc.c",
+      "sha256": "4a43449a37f1fc8d1bf135a2c8af760027bf6e6098ac5c80f382d6b7f995e60f"
+    },
+    {
+      "path": "src/enc/profile_enc.h",
+      "sha256": "ecf98363a1e660027d9a6c2947682e927db57ac6840baeb517e6d5b7af40673e"
+    },
+    {
+      "path": "src/enc/vp8l_enc.c",
+      "sha256": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0"
+    },
+    {
+      "path": "src/enc/backref_cost_specialization_factorization_v4_experiment_enc.c",
+      "sha256": "d93acf0321df6bf7b7790abdb62d184b1cc928c23aa88c06ad876839e57a2ef4"
+    },
+    {
+      "path": "src/enc/backref_cost_specialization_factorization_v4_experiment_enc.h",
+      "sha256": "96ac9ddfc00dd10a37a8ce3264f2ae00134fd734d377cb4f182dc4b29c1a0965"
+    },
+    {
+      "path": "src/enc/backref_cost_factorization_v4_layout_clone_enc.inc",
+      "sha256": "30f144d46895f210cf1969cda8696a7ad21fd7cf708c94ad32703f6caa675a7b"
+    },
+    {
+      "path": "tools/backref_cost_specialization_factorization_v4_experiment_runner.c",
+      "sha256": "836de71d355b9f1203005f8ad16d0be9213e1e0e6fff5ce53b1b25bd9a8400ad"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v4_paths.py",
+      "sha256": "67ade73264ef8794b024dbd9140315bd50e95ed785720663e1731327f1ef511b"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v4_admission.py",
+      "sha256": "ca6caf4b3218f6bf746c643496fbb8b7392dcf9484e75a91a0ab7bff82065514"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v4_transport.py",
+      "sha256": "b2a0b73938fa38b0a7ce17dc074c51a225fe2c372f15a174860a02f2cb1c045d"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v4_payload.py",
+      "sha256": "ebb55ee5d8f93f8b732759fa3245c699bf87ef6a93a69602d52336498b487f0e"
+    },
+    {
+      "path": "scripts/execute_backref_cost_specialization_factorization_v4.py",
+      "sha256": "9556d8f3c9c032dd41d0e0f7dd08179b140c4407f91aa5bc542fa961bee7fb3f"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v4_schemas.json",
+      "sha256": "11124fba8627d750d61fdbfd4d41c4d765e4a3da8182572122f1d9a4f5d759f2"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v4_archive.py",
+      "sha256": "e655b043f9b5d8dd292522380fa1dc1e9d45796438724ca3824d2c3ad723ed6b"
+    },
+    {
+      "path": "scripts/run_backref_cost_specialization_factorization_v4_experiment.py",
+      "sha256": "db3eb5a67303fb5fc3f4628a607176a4b88498f5543b93a9cc71b21ccd136d8c"
+    },
+    {
+      "path": "scripts/evaluate_backref_cost_specialization_factorization_v4.py",
+      "sha256": "b7edccf21729d632d87d2c6935a3232f8fcf06b656aabead856358d8276b6ca2"
+    },
+    {
+      "path": "doc/backref-cost-specialization-factorization-v4-protocol-20260820.md",
+      "sha256": "b758ad8a9da3010f14b4c76777c2ce36cbc6ef07141a21996170e10e3fee0b3e"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v4_admission.py",
+      "sha256": "0c76543a5783cd89aaa7f457341e450cd4af2f9af565172dc520264eff144991"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v4_archive.py",
+      "sha256": "6e3de52918c34c7a3bff0ab309d10d28c9e9d14754715a28894ac4c0c4ad3e74"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v4_experiment.py",
+      "sha256": "7e9387ea31fe92e79d2697052eb298ceac0a4d2df7ec53a4ee9dc8c841dcb63d"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v4_process_ownership.py",
+      "sha256": "a05ff81a63b8bff4607d4f3f01bef6773bde222d24493260cfb89f002f653e77"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v4_protocol.py",
+      "sha256": "a3848185953d6b1f34985e5607f11fbd5f978f159cd9eaf091868a0c6a3da7d7"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v4_streaming.py",
+      "sha256": "3a9a9a78f9bf557dfc76cde36bc56e0b023fa8aaca3d188585248a310f4577b1"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v4_payload_identity.py",
+      "sha256": "b6b437d51ffd1ce06aaa004c68ad33d36588056f0f65bbcecb0e6e1b81e7f56d"
+    },
+    {
+      "path": "scripts/test_experiment_guards.py",
+      "sha256": "49598bcd1814eb064d5c25f2c861ba0b77491ca90cb8683985afabd839a17150"
+    },
+    {
+      "path": "doc/experiment-guard-matrix.md",
+      "sha256": "0bd9b7995b7b5b4d585054b00d160b6b4ee2cd5c44f5ad700a6761684c3cc17a"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-factorization-v4-design/phase1-prior-evidence-audit.json",
+      "sha256": "857b69262964671999b96b27895c85b9b7fd8a4b2fe64aceece8459699b0c9ce"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-factorization-v4-design/phase1-local-codegen.json",
+      "sha256": "959f0f8dda1eb1807bd6f318fe7f9d0952c7ec9030c6f6bbab9a71bdfc3afd4a"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-factorization-v4-design/phase1-local-validation.json",
+      "sha256": "02ee66a71ca4cfc78ae08319f64e0ab1a6d6d9acdf1a771542366194207d7cca"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-factorization-v4-design/representative-payload-fixture.json",
+      "sha256": "45fd40d9d6c48363e91faaf70f6bbceb122ec7f71d6ab478ce8a213fc0221df8"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-factorization-v4-design/representative-payload-agreement.json",
+      "sha256": "f234038c60f2eb180af8de1f6d385a0d7a6f1c86bbdfa97e386ab93fdb51d84f"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_factorization_v4_toolchain.py",
+      "sha256": "819c354206a6f4977b6eb5f3175a847ac365a08204aedada1549ab12f84a6e71"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_factorization_v4_toolchain_identity.py",
+      "sha256": "2fcedf071f2e1c51a85b6c4542870dac5c7d82fe922bd573fe249f0ae9263150"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-factorization-v4-design/toolchain-identity-fixture.json",
+      "sha256": "7626a5436a7ad4d76dd51bf6c63fb91f4f0a3a8a7bbbd23be166b698077eaaf2"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-factorization-v4-design/toolchain-identity-agreement.json",
+      "sha256": "71253109efd653c14d738112b9117d1f2a0d2998b029b86c58e8bc283d3f4f1a"
+    }
+  ],
+  "transport_repair_audit": {
+    "decision": "retain V15's evidence-supported compact capped stdout response, corrected V14 inventory comparison, and complete-response preflight; use fresh Factorization V4 identities and one 30-second overlay first-session connect admission, separate from unchanged ServerAlive and transaction/progress deadlines, with no retry or alternate data plane",
+    "v11_raw": {
+      "path": "evidence/backref-cost-attribution-v11-design/rehearsal/return-protocol/framed-stdout.bin",
+      "bytes": 1941990,
+      "sha256": "f6cb02af4d445ac355bdf007f8cfc19daf19d98d3e45647e0689f89264f848f4"
+    },
+    "v13_raw": {
+      "path": "evidence/backref-cost-attribution-v13-design/rehearsal/return-protocol/framed-stdout.bin",
+      "bytes": 1942116,
+      "sha256": "edaafe783c94d5cb9dcef376012bb64960730d1f6a92f493f3f60464be41109d"
+    },
+    "shared_boundary": {
+      "complete_chunks": 3,
+      "chunk_bytes": 524288,
+      "partial_fourth_chunk_bytes": 359772
+    },
+    "v14_local_groundwork": {
+      "authority": "NONE",
+      "remote_observations": 0,
+      "independent_local_gate_status": "REEXECUTED_PASS",
+      "audit_finding": "the compact archive boundary is complete and auditable, but execute_backref_cost_attribution_v14.py contains an invalid unary-plus inventory digest comparison that would reject a complete response; merged V15 corrected it and added an end-to-end fixture"
+    },
+    "v15_exact_refusal": {
+      "authority": "NONE",
+      "timed_execution_authorized": false,
+      "framed_stdout_path": "evidence/backref-cost-attribution-v15-design/rehearsal/return-protocol/framed-stdout.bin",
+      "framed_stdout_bytes": 0,
+      "framed_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "transport_stderr_path": "evidence/backref-cost-attribution-v15-design/rehearsal/return-protocol/transport-stderr.bin",
+      "transport_stderr_bytes": 65,
+      "transport_stderr_sha256": "561ab6a0b87eb9dbd145fcb63a6dddd66c215f13680aa83763b3260d3e904eaa",
+      "transport_stderr_exact": "ssh: connect to host 100.85.234.14 port 22: Operation timed out\r\n",
+      "remote_connection_established": false,
+      "required_success_receipts_present": false,
+      "prior_cycle_remote_paths_contacted": false
+    },
+    "post_v15_reachability_context": "transient read-only ICMP/TCP context only; not Factorization V4 authority, evidence, source admission, or retry authority",
+    "inference": "V13 full-duplex draining and deadline transitions did not move the V11 effective channel-window boundary; V14's 768 KiB archive, 1 MiB-exclusive response, 8 KiB control, 256 KiB chunk, and 2 MiB request-direction boundaries remain the smallest credible evidence-supported repair after the comparison and preflight fixes",
+    "prior_remote_paths_contacted": false
+  },
+  "toolchain_identity_gate": {
+    "status": "PASS_BEFORE_PHASE_1A",
+    "generator": "scripts/backref_cost_specialization_factorization_v4_toolchain.py",
+    "fixture": "evidence/backref-cost-specialization-factorization-v4-design/toolchain-identity-fixture.json",
+    "agreement_receipt": "evidence/backref-cost-specialization-factorization-v4-design/toolchain-identity-agreement.json",
+    "negative_test": "PASS_REJECTED_V2_XCRUN_AND_V3_ENVELOPE",
+    "xcrun_eliminated": true,
+    "identity": {
+      "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+      "executables": {
+        "ar": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+          "sha256": "e914ec3c1eb8ca99c7d5f2f9bd82ac3458d0ab14556a8a3441b28f37baaa77c9",
+          "version": {
+            "arguments": [],
+            "output_lines": [],
+            "output_sha256": null,
+            "returncode": null,
+            "version_source": "Xcode bundle metadata; ar has no standalone version query"
+          }
+        },
+        "clang": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+              "Thread model: posix",
+              "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+            ],
+            "output_sha256": "6245580a5236b07a40ed12d781b8de4fd917816b89b392e680687166f647a901",
+            "returncode": 0
+          }
+        },
+        "clang++": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+          "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+              "Thread model: posix",
+              "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+            ],
+            "output_sha256": "6245580a5236b07a40ed12d781b8de4fd917816b89b392e680687166f647a901",
+            "returncode": 0
+          }
+        },
+        "llvm-objdump": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump",
+          "sha256": "fa24edaea7afab86d88b9706e1b952f32abc819bd62f8f9bf8dafb5ae01ba159",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "Apple LLVM version 17.0.0",
+              "  Optimized build.",
+              "",
+              "",
+              "  Registered Targets:",
+              "    aarch64    - AArch64 (little endian)",
+              "    aarch64_32 - AArch64 (little endian ILP32)",
+              "    aarch64_be - AArch64 (big endian)",
+              "    arm        - ARM",
+              "    arm64      - ARM64 (little endian)",
+              "    arm64_32   - ARM64 (little endian ILP32)",
+              "    armeb      - ARM (big endian)",
+              "    thumb      - Thumb",
+              "    thumbeb    - Thumb (big endian)",
+              "    x86        - 32-bit X86: Pentium-Pro and above",
+              "    x86-64     - 64-bit X86: EM64T and AMD64"
+            ],
+            "output_sha256": "ae22f35526e555c21ee08130898b7515d118f32ca500c9580ba132c327eb60cd",
+            "returncode": 0
+          }
+        },
+        "nm": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-nm",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm",
+          "sha256": "a42f25b6363f3d43b911733a276a46bdbed894f1ef8e764cb7461ebdb37a15e7",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "llvm-nm, compatible with GNU nm",
+              "Apple LLVM version 17.0.0",
+              "  Optimized build."
+            ],
+            "output_sha256": "20384fe0739a6ed54aac86eaeed689fb86e8d58cdb6824550305171821fbbb4d",
+            "returncode": 0
+          }
+        },
+        "ranlib": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+          "sha256": "779903653ff38059513ef4f34846ab8b53f71f9cb7c066b29a47e520527b6cfa",
+          "version": {
+            "arguments": [
+              "-V"
+            ],
+            "output_lines": [
+              "Apple Inc. version cctools-1030.6.3",
+              "error: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: no archives specified",
+              "Usage: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib [-sactfqLT] [-] archive [...]"
+            ],
+            "output_sha256": "d498dee5d1ba26aace88be9c733100c05e4f1b29b0d3967446e7798576dcf459",
+            "returncode": 1
+          }
+        }
+      },
+      "metadata": {
+        "sdk-settings-json": {
+          "bytes": 7627,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.json",
+          "sha256": "95882a9cea02396e76f3e406a5728269b2a1a11bcd241430a84c9e63d09a6cd3"
+        },
+        "sdk-settings-plist": {
+          "bytes": 5346,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.plist",
+          "sha256": "03cb7d21a91023f6dff9ea019a3710061e2eb570bdb260faf4daa74151abf15d"
+        },
+        "toolchain-info-plist": {
+          "bytes": 95,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/ToolchainInfo.plist",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/ToolchainInfo.plist",
+          "sha256": "b2e3b746c87ddfd6d2145656d87569054807e2196d6f46ef09dec3923ed31541"
+        },
+        "xcode-version-plist": {
+          "bytes": 523,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/version.plist",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/version.plist",
+          "sha256": "79504c54fc47124dbc5945b628d9c9071923a57c0cd109ff5afdd7884c1c889c"
+        }
+      },
+      "required_executable_names": [
+        "clang",
+        "clang++",
+        "nm",
+        "ar",
+        "ranlib",
+        "llvm-objdump"
+      ],
+      "required_metadata_names": [
+        "xcode-version-plist",
+        "toolchain-info-plist",
+        "sdk-settings-json",
+        "sdk-settings-plist"
+      ],
+      "schema": "libwebp-backref-cost-specialization-factorization-v4-toolchain-identity-v1",
+      "sdk": {
+        "canonical_name": "macosx26.2",
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+        "display_name": "macOS 26.2",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "version": "26.2"
+      },
+      "stale_v2_xcrun_rejected": true,
+      "stale_v2_xcrun_sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152",
+      "stale_v3_identity_canonical_sha256": "735eb9be26c9b7118819b502bf0e24b6d87e8da945d81858c22bebdf889ce077",
+      "xcode": {
+        "bundle_version": "24587",
+        "product_build_version": "17C529",
+        "short_version": "26.3",
+        "toolchain_identifier": "com.apple.dt.toolchain.XcodeDefault"
+      },
+      "xcrun_required": false
+    }
+  },
+  "required_child_commands": {
+    "build": [
+      "/usr/bin/make",
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib"
+    ],
+    "codegen": [
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm",
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump"
+    ],
+    "sdk_identity": [
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.json",
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.plist"
+    ],
+    "timed": [
+      "/usr/bin/env",
+      "RUNNER",
+      "profile",
+      "INPUT",
+      "CASE",
+      "METHOD",
+      "VARIANT",
+      "1",
+      "4"
+    ],
+    "transport": [
+      "/usr/bin/ssh",
+      "pandocs-agent",
+      "python3",
+      "-c",
+      "FROZEN_V4_OPERATOR"
+    ]
+  }
+}

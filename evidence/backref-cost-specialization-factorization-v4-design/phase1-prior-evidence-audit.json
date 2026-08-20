@@ -1,0 +1,65 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v4-prior-evidence-audit-v1",
+  "status": "PASS",
+  "base_commit": "f289499b37875d8166792ed104f2b26e23cf4ffd",
+  "auditor": "Sol/high",
+  "v3": {
+    "status": "MERGED_DEFAULT_OFF_REFUSAL_NOT_RERUN",
+    "payload_agreement": {
+      "path": "evidence/backref-cost-specialization-factorization-v3-design/representative-payload-agreement.json",
+      "file_sha256": "b37c2e02b139d93bcbf8ad49e6e6dde723e0a2f1cb400ba34143bb3d54bde2b9",
+      "payload_sha256": "8fb97e16b8be09e7dc0c20b0b26387a0f8301d0aa738fa7ade4a6a97d15afeb8",
+      "status": "PASS"
+    },
+    "toolchain_agreement": {
+      "path": "evidence/backref-cost-specialization-factorization-v3-design/toolchain-identity-agreement.json",
+      "file_sha256": "34179214e62bd7f7f3b45b46219aa63e6c1394c72d55d249ebb4a99c5325f930",
+      "identity_canonical_sha256": "735eb9be26c9b7118819b502bf0e24b6d87e8da945d81858c22bebdf889ce077",
+      "status": "PASS"
+    },
+    "codegen": {
+      "path": "evidence/backref-cost-specialization-factorization-v3-design/phase1-local-codegen.json",
+      "file_sha256": "8d081e86683baa9802322f2f37890fda4814e1f3c91da00670dd9beed63f8402",
+      "b_l_dp_mnemonics_equal": true,
+      "b_l_push_mnemonics_equal": true,
+      "six_distinct_addresses": true
+    },
+    "authorization": {
+      "path": "evidence/backref-cost-specialization-factorization-v3-design/phase1b-authorization.json",
+      "file_sha256": "5b999f67130995ff5215268f76e510a24b26b350439aaa7b61886b7a140ffce1",
+      "phase_2_authority": "NONE",
+      "remote_connection_established": false,
+      "performance_samples": 0
+    },
+    "phase2_refusal": {
+      "path": "evidence/backref-cost-specialization-factorization-v3-phase2-refusal-audit-20260820/audit.json",
+      "file_sha256": "400f8de5d87878291cea808d1110f728cd9e9a8727340f0b1b5dca1a897d65e3"
+    },
+    "phase3_consequence": {
+      "path": "evidence/backref-cost-specialization-factorization-v3-evaluation-20260820/evaluation-consequence.json",
+      "file_sha256": "a992c660fbe106a92a91904f759648d8d5b9d9e97934b7a1c853c209725fa99f"
+    },
+    "finding": "V3 passed local payload, toolchain, B/L work and normalized-codegen gates; its sole SSH encountered one ConnectTimeout before connection/frame admission, so authority NONE and zero performance samples were mandatory.",
+    "sample_policy": "No V3 timing, workload, rehearsal, remote path, endpoint state, or authority is reused or rerun."
+  },
+  "causal_boundary": {
+    "decision": "PRESERVE_B_L_H",
+    "B": "original merged baseline algorithm and work",
+    "L": "always-specialized matched-layout baseline clone with identical B algorithm and work",
+    "H": "append-hint specialization",
+    "B_to_L": "layout/control",
+    "L_to_H": "hint within matched structure",
+    "B_to_H": "total",
+    "shared_dp_template_sha256": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5",
+    "v4_layout_clone_sha256": "30f144d46895f210cf1969cda8696a7ad21fd7cf708c94ad32703f6caa675a7b",
+    "finding": "V4 preserves one shared DP template and separately emitted B/L/H bodies; namespace and V4-domain changes do not alter the causal interpretation."
+  },
+  "negative_identity_policy": {
+    "stale_v2_payload_rejected": true,
+    "stale_v3_payload_rejected": true,
+    "stale_v2_xcrun_rejected": true,
+    "stale_v3_toolchain_envelope_rejected": true
+  },
+  "performance_samples_generated": 0,
+  "remote_contacts": 0
+}
