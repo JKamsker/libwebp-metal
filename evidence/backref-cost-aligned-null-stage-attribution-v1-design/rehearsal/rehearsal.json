@@ -1,0 +1,33 @@
+{
+  "benchmark_lease_attempted": false,
+  "correctness_encodes": 0,
+  "direct_child_receipts": 0,
+  "encoder_workloads": 0,
+  "performance_samples": 0,
+  "phase_2_fail_closed_prerequisites": [
+    "bitstream/pixel correctness before first profile",
+    "coarse monotonic timer records pass schema/count/accounting",
+    "all timed children remain serial and directly owned"
+  ],
+  "profile_commands_constructed": 32,
+  "profiler_invocations": 0,
+  "profiler_workloads": 0,
+  "representative_payload": {
+    "bytes": 2097152,
+    "compaction": "request bytes represented by exact size/SHA-256 only",
+    "finite_margin_ratio": 4.0,
+    "framed_stdin": true,
+    "generator": "client sha256(domain || uint64_be_counter) blocks",
+    "minimum_expected_run_archive_bytes": 524288,
+    "returned_path": null,
+    "returned_payload_bytes": 0,
+    "sha256": "bb4dcf19e6e6bd255aed0e16428e4cbc944b99b4ce78df08968cbe3ab5684386"
+  },
+  "runner_children": 0,
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v1-rehearsal-v1",
+  "source_commit": "c674c815c65d0424f75f8391e09064da4364d04e",
+  "source_tree": "0974b8310e69ce1e1a9a0bfa1ed8eecc1b037239",
+  "status": "PASS",
+  "timer_accounting_validation": "not-run-in-rehearsal",
+  "timer_validation": "not-run-in-zero-workload-rehearsal"
+}

@@ -1,0 +1,10 @@
+{
+  "response_bytes": 18240,
+  "response_chunk_bytes": 262144,
+  "response_chunk_count": 1,
+  "response_sha256": "1cd3819f6a34b8c18dbad737eba78f35beb230c885d93ff4080d0bab21659ffd",
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v1-response-declaration-v1",
+  "status": "started",
+  "transaction_exit_code": 0,
+  "transaction_nonce": "a104ebddf259bb3ad98e1dda9568987c846cd9478d5f1f384d72a1abc6fd18f3"
+}

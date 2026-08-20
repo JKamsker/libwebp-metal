@@ -1,0 +1,13 @@
+{
+  "bundle_verified_in_repository_context": true,
+  "clean_status": true,
+  "receipt_version": 1,
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v1-source-admission-receipt-v1",
+  "source_bundle_sha256": "ecdcfce34e29775ba22d319bc9f6e2b03d29a32b891746d05b435aa7c3811ab6",
+  "source_commit": "c674c815c65d0424f75f8391e09064da4364d04e",
+  "source_map_entry_count": 66,
+  "source_map_sha256": "80be33814cf18cb5a93ef9bfe959032ac3be9de4236cf78206df1202accf21d3",
+  "source_tree": "0974b8310e69ce1e1a9a0bfa1ed8eecc1b037239",
+  "status": "verified",
+  "verification_repository_removed": true
+}
