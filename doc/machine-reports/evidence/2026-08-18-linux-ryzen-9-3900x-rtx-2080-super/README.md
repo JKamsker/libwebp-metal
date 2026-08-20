@@ -346,14 +346,15 @@ are not duplicated as 74 MB of repository artifacts.
 The `libwebp-lossy-analysis-default-*` files preserve the refreshed isolated
 CPU/device stage profile, exact rejected pre-Ampere policy patch, 60 raw
 order-balanced PNG/JPEG timing rows, candidate/restored executable hashes and
-focused tests, and decision summary. The candidate was removed after PNG
-gained only 0.200 ms/image and JPEG regressed 0.039 ms/image; exact lossy
-analysis remains opt-in.
+focused tests, and corrected decision summary. Code inspection found that the
+forced benchmark overwrote every labeled cell with analysis and fusion on, so
+the rows are repeatability evidence rather than an A/B. Exact lossy analysis
+remains opt-in outside that benchmark.
 
 The `libwebp-fused-lossy-analysis-screen-*` files preserve 24 raw
 order-reversed PNG/JPEG rows and the decision summary for the existing fused
-RGB/analysis path. It remained opt-in after a neutral PNG result and only a
-0.146 ms/image JPEG gain.
+RGB/analysis path. This screen had the same forced-control override; the raw
+rows are preserved but its numerical gain claim is withdrawn.
 
 Inspect the sampling archives with:
 

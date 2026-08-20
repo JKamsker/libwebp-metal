@@ -2382,45 +2382,26 @@ report makes no Blackwell or cross-hardware claim. Existing warm/cold
 decimation thresholds remain pre-Ampere 784/12,544 and Ampere+ 64/4,000
 macroblocks; the architecture split was not changed.
 
-## Automatic exact lossy-analysis rejection
+## Lossy-analysis benchmark-control correction
 
 At retained base `eb38392bb014f701f75b1666a1d9e7daf359ddef`, an isolated
-native-sm_75 refresh measured medium-input CPU lossy analysis at
-11.644 ms graphic, 9.721 ms photo, and 9.662 ms texture. The existing exact
-CUDA analysis stage reduced those intervals to 1.043, 1.002, and 1.008 ms,
-respectively. Device phase timing still put realistic I4 at 63.2--65.1% of
-block cycles, so this selected a distinct host-stage policy candidate rather
-than another exhausted residual specialization.
+native-sm_75 `cwebp` refresh validly measured CPU lossy analysis at
+11.644 ms graphic, 9.721 ms photo, and 9.662 ms texture. Explicit CUDA
+analysis reduced those intervals to 1.043, 1.002, and 1.008 ms. The subsequent
+batch policy measurements, however, did not exercise their labeled controls.
 
-The candidate made analysis automatic only for pre-Ampere devices, preserved
-explicit environment overrides, and applied 784-warm / 12,544-cold
-macroblock guards. Five order-balanced fresh process pairs per format each
-discarded one warmup and retained three 24-image samples. Median results were:
+`webp_cuda_batch_benchmark --force-cuda` calls `ConfigureDispatch()` after
+startup and unconditionally writes both `WEBP_CUDA_LOSSY_ANALYSIS=1` and
+`WEBP_CUDA_FUSED_LOSSY_ANALYSIS=1`. This overwrote every attempted baseline
+and candidate environment setting in the 60-row automatic-policy gate and the
+24-row fused screen. All archived rows are exact repeated measurements of the
+same already-forced fused path, not valid A/B cells. Their prior gain tables
+are withdrawn.
 
-| Format | Baseline | Candidate | Gain | Exact hash / bytes |
-|---|---:|---:|---:|---|
-| PNG | 39.783707 ms/image | 39.583742 ms/image | 0.199965 ms/image | `455f70a1e139f043` / 6,441,688 |
-| JPEG | 39.770548 ms/image | 39.809526 ms/image | -0.038978 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
-
-All 60 rows matched hashes and byte counts. Candidate and restored
-concurrency, trellis/padded-stride/band/fallback, and near-lossless focused
-tests passed. The source was restored because the end-to-end effect is noise:
-the large isolated stage reduction overlaps work already hidden by the
-persistent pipeline. Analysis remains opt-in. Artifacts use
-`libwebp-lossy-analysis-default-*`; Ampere+ behavior and the existing
+The temporary pre-Ampere automatic-default source was restored; the fused
+screen changed no source. Both remain opt-in in production, and neither is a
+candidate for the required forced-CUDA benchmark because that benchmark
+already activates them. Corrected summaries accompany the unchanged raw rows
+under `libwebp-lossy-analysis-default-*` and
+`libwebp-fused-lossy-analysis-screen-*`. Ampere+ behavior and the existing
 Turing/Ampere+ decimation threshold split are unchanged.
-
-## Fused lossy-analysis policy screen
-
-After ordinary automatic analysis proved neutral, the existing fused
-RGB/import plus exact-analysis path was screened without changing source. Two
-order-reversed processes per format retained six post-warmup 24-image rows per
-cell. PNG moved from 39.568166 ms/image to 39.569219 (0.001053 ms regression),
-and JPEG moved from 39.549203 to 39.403428 (0.145775 ms gain). All rows matched
-`455f70a1e139f043` / 6,441,688 bytes for PNG and
-`0c4b078d5c4d3173` / 6,400,792 bytes for JPEG.
-
-The fused completion boundary does not expose a hidden end-to-end win on this
-Turing pipeline. Both exact analysis paths remain opt-in; no source or
-architecture policy changed. Raw artifacts use
-`libwebp-fused-lossy-analysis-screen-*`.

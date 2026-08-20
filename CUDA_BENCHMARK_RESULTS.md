@@ -2170,38 +2170,21 @@ the candidate was removed. Raw artifacts use the
 `libwebp-i4-vector-rowio-*` prefix. This is Turing-only evidence; Ampere+
 behavior and thresholds remain unchanged.
 
-## Automatic exact lossy-analysis rejection
+## Lossy-analysis benchmark-control correction
 
-The refreshed native-sm_75 stage profile put CPU lossy analysis at
-9.662--11.644 ms for medium inputs; forced CUDA analysis reduced the isolated
-stage to 1.002--1.043 ms. A pre-Ampere-only automatic dispatch candidate was
-then measured in five order-balanced process pairs per format (15 retained
-24-image samples per cell):
+The direct stage profile is valid: CPU lossy analysis measured
+9.662--11.644 ms on medium inputs and forced CUDA analysis measured
+1.002--1.043 ms. The recorded batch off/on comparisons are not valid A/Bs.
+For every `--force-cuda` run, the benchmark's `ConfigureDispatch()` replaces
+the inherited environment with both ordinary and fused lossy analysis set to
+`1`. Thus all 84 archived rows ran the same already-forced fused path; their
+exact PNG/JPEG hashes and byte counts establish repeatability only, not a
+policy gain.
 
-| Format | Parent | Candidate | Gain | Hash / bytes |
-|---|---:|---:|---:|---|
-| PNG lossy | 39.783707 ms/image | 39.583742 ms/image | 0.199965 ms/image | `455f70a1e139f043` / 6,441,688 |
-| JPEG lossy | 39.770548 ms/image | 39.809526 ms/image | -0.038978 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
-
-All 60 rows were exact, and candidate/restored concurrency,
-trellis/fallback, and near-lossless focused tests passed. End-to-end overlap
-hides the isolated stage reduction, so the source was restored and analysis
-remains opt-in. The result is below the 1.5 ms/image gate in both formats and
-makes no Ampere+ claim or threshold change. Raw artifacts use the
-`libwebp-lossy-analysis-default-*` prefix.
-
-## Fused lossy-analysis screen rejection
-
-The already-integrated fused RGB/analysis path was compared with retained
-defaults in two order-reversed fresh processes per format, six post-warmup
-24-image samples per cell:
-
-| Format | Default | Fused analysis | Gain | Hash / bytes |
-|---|---:|---:|---:|---|
-| PNG lossy | 39.568166 ms/image | 39.569219 ms/image | -0.001053 ms/image | `455f70a1e139f043` / 6,441,688 |
-| JPEG lossy | 39.549203 ms/image | 39.403428 ms/image | 0.145775 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
-
-All 24 rows were exact. No source was changed; the fused path remains opt-in
-because neither format approaches the 1.5 ms/image gate. This screen makes no
-Ampere+ claim and changes no architecture threshold. Raw artifacts use the
-`libwebp-fused-lossy-analysis-screen-*` prefix.
+The proposed pre-Ampere automatic-default source was restored, and the later
+fused screen changed no source. Neither is eligible for retention because the
+mandatory benchmark already enables both explicitly. The earlier numerical
+gain tables are withdrawn. Corrected summaries accompany the unchanged raw
+rows under `libwebp-lossy-analysis-default-*` and
+`libwebp-fused-lossy-analysis-screen-*`. No Ampere+ claim or architecture
+threshold changes.

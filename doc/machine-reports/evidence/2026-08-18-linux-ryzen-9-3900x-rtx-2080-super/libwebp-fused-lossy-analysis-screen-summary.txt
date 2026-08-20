@@ -10,17 +10,14 @@ Profile basis:
 - The distinct fused path queues RGB conversion and exact analysis on one
   stream with one completion boundary and consumes identity-matched results.
 
-Protocol:
-- No source change: compare the retained default-off path with the existing
-  WEBP_CUDA_LOSSY_ANALYSIS=1 + WEBP_CUDA_FUSED_LOSSY_ANALYSIS=1 path.
-- Two order-reversed fresh processes per cell, one discarded warmup and three
-  retained 24-image samples per process (six rows/cell).
-- Frozen six-input medium/small PNG and JPEG corpus, method 4, quality 75.
-
-Results (even-sample median):
-  format  baseline     fused        gain       hash              bytes
-  PNG     39.568166    39.569219   -0.001053   455f70a1e139f043  6441688
-  JPEG    39.549203    39.403428    0.145775   0c4b078d5c4d3173  6400792
+Protocol correction:
+- Two order-reversed fresh processes per labeled cell were recorded, with one
+  warmup and three retained 24-image samples per process.
+- Every command used --force-cuda. ConfigureDispatch() overwrote both labeled
+  cells with WEBP_CUDA_LOSSY_ANALYSIS=1 and
+  WEBP_CUDA_FUSED_LOSSY_ANALYSIS=1 after process startup.
+- All 24 rows therefore exercised the same retained fused path. They are
+  repeatability evidence, not a valid default/fused comparison.
 
 Every one of the 24 rows retained the exact format hash and byte count. The
 integrated fused implementation's prior correctness gate covers methods
@@ -28,7 +25,8 @@ integrated fused implementation's prior correctness gate covers methods
 fallback; this screen changed no source or output arithmetic.
 
 Decision:
-Rejected with no source change. PNG was exactly neutral and JPEG gained only
-0.146 ms/image, both far below the 1.5 ms/image retention threshold. Keep
-ordinary and fused lossy analysis opt-in. No Turing/Ampere+ decimation
-threshold, Ampere+ behavior, or cross-hardware claim changed.
+Rejected with no source change because fused analysis is already mandatory in
+the forced-CUDA benchmark. The previously reported -0.001/0.146 ms deltas are
+withdrawn. Keep ordinary and fused lossy analysis opt-in outside the benchmark.
+No Turing/Ampere+ decimation threshold, Ampere+ behavior, or cross-hardware
+claim changed.
