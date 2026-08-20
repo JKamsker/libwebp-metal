@@ -1,0 +1,11 @@
+25fed25a5779678fe029de58be3e32a8122cf66d
+## codex/cuda-encoder-acceleration...origin/codex/cuda-encoder-acceleration
+ M src/enc/frame_enc.c
+ M src/enc/token_enc.c
+ M src/enc/vp8i_enc.h
+efd7a286bcc673528854f73d9c3dcb05ed263acde9e4eecc4d101cec07454f14  /tmp/libwebp-issue16-profile.EfoCMR/webp_cuda_batch_benchmark
+9c243d82e810380dcef65690b8f3804798c50f8173266d5d05f26618c88c59f5  /tmp/libwebp-token-stats-split-candidate-20260820/webp_cuda_batch_benchmark
+dd0ee5d727d5b88b145ea49857dd28cd294d616fced77854af72491aeb608043  /tmp/libwebp-token-stats-split-candidate-20260820/cwebp
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_CUDA_ARCHITECTURES:UNINITIALIZED=native
+NVIDIA GeForce RTX 2080 SUPER, 7.5, 595.84

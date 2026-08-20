@@ -1,0 +1,1 @@
+CPU/CUDA trellis mismatch (method=3 quality=99 pass=1 fail_band=-1 fail_download=-1 size=513x517 bytes=288526/287096)

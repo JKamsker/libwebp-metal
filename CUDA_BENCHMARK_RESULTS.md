@@ -2227,3 +2227,24 @@ Two order-reversed process pairs per format remained exact:
 Three focused tests passed, but both formats regressed. The source was
 restored; raw artifacts use `libwebp-token-pair-*`. This is a native-sm_75
 result and changes no Ampere+ setting or claim.
+
+## Token generation/statistics split rejection
+
+The refreshed stage and whole-process profiles selected token recording as a
+coarse CPU bottleneck rather than another residual specialization. The
+candidate overlapped packed-token generation on the existing recorder worker
+with exact-order adaptive-statistics recording on the main thread.
+
+Two order-reversed process pairs per format, one warmup and five retained
+batch-24 samples per process, produced:
+
+| Format | Parent | Split candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 40.451 ms/image | 39.507 ms/image | 0.944 ms/image | `99f33682e7cc9063` / 6,441,688 |
+| JPEG lossy | 39.620 ms/image | 38.728 ms/image | 0.891 ms/image | `1b9eceb1d93cad23` / 6,400,792 |
+
+All 40 timing rows were exact between parent and candidate. Trellis including
+transactional fallbacks, concurrency, and near-lossless focused tests passed
+for both candidate and restored source. Both gains are below 1.5 ms/image, so
+the source was restored; raw artifacts use `libwebp-token-stats-split-*`.
+This is a native-sm_75 result and changes no Ampere+ setting or claim.

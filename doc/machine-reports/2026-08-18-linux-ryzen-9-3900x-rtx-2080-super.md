@@ -2478,3 +2478,34 @@ screen, executable hashes, tests, and decision are under
 `libwebp-token-pair-*`; the selecting raw profiles are the preceding
 `libwebp-token-ipo-profile-*` archives. This result is RTX 2080 SUPER-only and
 does not change the Turing/Ampere+ architecture split.
+
+## Token generation/statistics split rejection
+
+The current native-sm_75 stage refresh continued to show a sizeable CPU token
+boundary on realistic inputs, consistent with the whole-process profiles that
+attribute 56.92% of PNG and 57.79% of JPEG exclusive CPU samples to
+`VP8RecordCoeffTokens`. This selected a coarse overlap experiment after the
+scalar token and residual specializations were exhausted.
+
+The candidate emitted the identical token stream on the existing recorder
+worker and recorded adaptive statistics on the main thread in exact
+macroblock raster order. The first feasibility version used generic
+`VP8RecordCoeffs`; method 3 / quality 99 correctly exposed that its event
+ordering differs when a counter renormalizes. The timed version used an
+exact-order statistics mirror and passed the focused trellis/fallback,
+concurrency, and near-lossless tests.
+
+Two order-reversed process pairs per input format, each with one warmup and
+five retained batch-24 samples, measured:
+
+| Format | Parent | Split candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 40.451 ms/image | 39.507 ms/image | 0.944 ms/image | `99f33682e7cc9063` / 6,441,688 |
+| JPEG lossy | 39.620 ms/image | 38.728 ms/image | 0.891 ms/image | `1b9eceb1d93cad23` / 6,400,792 |
+
+All 40 timing rows matched their format's exact aggregate hash and byte count,
+but neither gain reached 1.5 ms/image. Source was restored and the restored
+focused tests passed. Raw profile, patch, build identity, rows, tests, and
+decision use the `libwebp-token-stats-split-*` prefix. This measurement is
+RTX 2080 SUPER-only and leaves the pre-Ampere 784/12,544 and Ampere+ 64/4,000
+warm/cold macroblock thresholds unchanged.

@@ -385,3 +385,10 @@ coefficient-token/statistics patch, all 24 byte-exact order-reversed timing
 rows, focused test status, generated-code sizes and identities, and decision.
 The wider common path regressed PNG by 2.966 ms/image and JPEG by 0.924, so
 the candidate was removed.
+
+The `libwebp-token-stats-split-*` files preserve the refreshed stage profile,
+the exact rejected token-generation/adaptive-statistics overlap patch, native
+build identities, all 40 exact order-reversed timing rows, candidate/restored
+focused tests, the initial generic-statistics q99 failure, and the computed
+decision. The split gained 0.944 ms/image on PNG and 0.891 ms/image on JPEG,
+below the 1.5 ms/image retention threshold, so the candidate was removed.

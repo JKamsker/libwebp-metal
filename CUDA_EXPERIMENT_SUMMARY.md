@@ -960,3 +960,33 @@ The larger common-path body overwhelmed the reduced stores, so the candidate
 was removed immediately. The exact patch, raw rows, build identities, tests,
 and decision are archived under `libwebp-token-pair-*`. RTX 2080 SUPER only;
 no architecture policy or Ampere+ behavior changed.
+
+## Token generation/statistics overlap rejection
+
+A refreshed native-sm_75 stage profile selected a distinct coarse boundary
+after the scalar token micro-specializations were exhausted. On realistic
+texture inputs the accelerated encode loop remained about 75--79 ms/process,
+with decimation around 52--54 ms and token emission around 15--22 ms. The
+existing whole-process profiles likewise placed 56.92% of PNG and 57.79% of
+JPEG exclusive CPU samples in `VP8RecordCoeffTokens`.
+
+The candidate moved token generation to the existing recorder worker while
+the main thread replayed only adaptive-statistics events in exact macroblock
+raster order, using independent non-zero contexts. An initial generic
+statistics replay exposed its different counter-renormalization event order
+at method 3 / quality 99; the measured candidate used an exact-order mirror
+and passed trellis/fallback, concurrency, and near-lossless focused tests.
+
+Two order-reversed process pairs per format, each with one warmup and five
+retained batch-24 samples, were exact across all 40 timing rows:
+
+| Format | Parent | Split candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 40.451 ms/image | 39.507 ms/image | 0.944 ms/image | `99f33682e7cc9063` / 6,441,688 |
+| JPEG lossy | 39.620 ms/image | 38.728 ms/image | 0.891 ms/image | `1b9eceb1d93cad23` / 6,400,792 |
+
+Both improvements are below 1.5 ms/image, so the complete source candidate
+was restored. The profile, exact patch, native build identities, raw rows,
+candidate/restored tests, and decision are archived under
+`libwebp-token-stats-split-*`. This is RTX 2080 SUPER-only evidence; no
+Ampere+ behavior, architecture threshold, or cross-hardware claim changed.
