@@ -3046,3 +3046,41 @@ patch, exactness/fallback matrices, tests, and timings use
 `libwebp-i16-full-warp-pair-*` in the adjacent evidence directory. This is
 RTX 2080 SUPER-only evidence; the 784/12,544 pre-Ampere and 64/4,000 Ampere+
 thresholds, architecture split, frozen corpus, and generator are unchanged.
+
+
+## Pre-Ampere inverse-transform/SSE fusion rejection
+
+At clean parent `2b889a5b12608fe38ae27f5c0e412e6e792d95ac`, the native
+Release refresh measured exact PNG/JPEG batch medians of 29.574/27.554
+ms/image. Excluding the first 24-image warmup batch, stage records assigned
+18.859/18.581 ms/image to decimate/collect/replay and 3.052/3.040 to token
+emission. Device timing retained 63--65% realistic I4 shares. Prior retained
+counters put the distinct SSE/flatness metric warp at 209.0 million photo
+cycles after the larger residual walk's known avenues had been exhausted.
+
+The Turing-only candidate computed four row SSE values in the existing
+inverse-transform lanes and reduced each mode with two width-four shuffles.
+The later metric warp retained only flatness testing; Ampere+ took the
+original scalar SSE path. Resources moved from 103 to 104 registers while
+the 352-byte stack and 23,392-byte shared allocation stayed fixed. Steady
+medium device wall regressed in every tested content/format cell.
+
+Five order-balanced full-corpus process pairs per format produced:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 29.469 ms/image | 29.824 ms/image | -0.223 ms/image |
+| JPEG | 27.704 ms/image | 28.113 ms/image | -0.274 ms/image |
+
+All 60 timing rows retained exact aggregate hashes and byte counts. The
+candidate also passed 7/7 focused tests, the methods 2--6 / qualities
+25/75/98 graphic/photo/texture tiny/odd matrix, and 20 PNG/JPEG fallback
+cells spanning bands 0/1/3/5/7 with token recording inline and pipelined.
+
+Both formats regressed, so the candidate was removed and every retained
+static executable was relinked before the restored 7/7 test run. Raw
+profiles, phase traces, resources, patch, exactness/fallback matrices, tests,
+and timings use `libwebp-i4-fused-sse-*` in the adjacent evidence directory.
+This is RTX 2080 SUPER-only evidence; the 784/12,544 pre-Ampere and 64/4,000
+Ampere+ thresholds, architecture split, frozen corpus, and generator are
+unchanged.

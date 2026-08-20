@@ -129,6 +129,7 @@ that hardware and workload.
 | I4-first / I16-pruning feasibility | A fresh native-sm_75 trace kept I4 at 63--65% of photo/texture block cycles. Exact medium-fixture outcomes were 191/7,500 I4 for graphic, 4,101/7,500 for photo, and 7,500/7,500 for texture. This screened reversing the luma order so final I4 winners could avoid I16. | Rejected before source change. I4's exact raster search consumes the completed I16 score as its per-block abort threshold; reversing it forces extra work on the 97.45%-I16 graphic case. Final-mode coverage cannot certify an I16 skip, and the request exposes neither an exact content discriminator nor a strong pre-quantization I16 lower bound. Do not replace exact proof with a segment/content heuristic. RTX 2080 SUPER only; no architecture policy changed. |
 | Coefficient-token zero-pair feasibility | A fresh whole-thread profile again selected `VP8RecordCoeffTokens`: 0.520 seconds PNG and 0.460 JPEG over 72 full-corpus encodes (7.222/6.389 ms/image). A counter-only probe found disjoint zero pairs covered 29.366%/28.794% of coefficient iterations, permitting at most one fewer store per pair, or 14.683%/14.397% of coefficient iterations. On the critical texture-medium path the maximum fell to 4.138%/4.124%. | Rejected before a representation candidate. Even pretending pair packing deletes the same fraction of the entire recorder—not merely one store while preserving statistics—bounds the full-corpus benefit at 1.060 ms/image PNG and 0.920 JPEG, below the two-format gate. The probe was removed and restored source passed 7/7 tests. Do not retry zero-pair token packing without a different representation/profile that removes additional work. RTX 2080 SUPER only; no architecture policy changed. |
 | Pre-Ampere full-warp-paired I16 residual costs | A fresh native profile measured 18.756/18.665 ms/image in decimate/collect/replay and put I16 selection at 25.2% of graphic-medium block cycles. Unlike the earlier half-warp mapping, one pre-Ampere candidate used all eight existing CTA warps as two full residual-cost warps per I16 mode. Exact contexts came from the completed non-zero bitmap. Registers fell 103 to 100; shared memory rose 23,392 to 23,456 bytes. A medium phase screen cut graphic/photo device wall by about 5 ms. All 60 full-corpus timing rows, the methods 2--6 / qualities 25/75/98 tiny/odd matrix, and 20 PNG/JPEG fallback cells were exact; candidate and restored builds passed 7/7 tests. | Rejected and removed. Five order-balanced full-corpus pairs yielded paired-median gains of only 0.322 ms/image PNG and 0.340 JPEG; pooled PNG regressed 29.019 to 29.176 ms/image. The local I16 phase gain is hidden by the end-to-end GPU/host schedule. Do not retry full-warp I16 block pairing without a new critical-path profile. RTX 2080 SUPER only; Ampere+ and architecture thresholds/defaults are unchanged. |
+| Pre-Ampere inverse-transform/SSE fusion | A fresh native profile measured 18.859/18.581 ms/image in decimate/collect/replay and retained 63--65% I4 shares on photo/texture. The distinct SSE/flatness metric warp had measured 209.0 million photo cycles. One Turing candidate calculated row SSE in the four existing inverse-transform lanes and reduced each mode with two subgroup shuffles, removing the later scalar 16-pixel SSE walk; Ampere+ retained that original path. The candidate rose from 103 to 104 registers and passed 7/7 tests. All 60 timing rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 PNG/JPEG fallback cells were exact. | Rejected and removed. Pooled medians regressed from 29.469 to 29.824 ms/image PNG and 27.704 to 28.113 JPEG; paired-median gains were -0.223/-0.274 ms. Moving SSE onto the inverse-transform critical path plus shuffle overhead is worse than the concurrent metric warp. Do not retry this fusion without a different schedule that keeps inverse transform off the added dependency. RTX 2080 SUPER only; Ampere+, thresholds, and frozen files are unchanged. |
 
 All original and follow-up benchmark rows produced stable expected checksums.
 The historical color rows remain raw evidence, but their ratios are not matched
@@ -1474,3 +1475,40 @@ miss the 1.5 ms/image gate. The restored native kernel returned to 103
 registers / 23,392 shared bytes and passed 7/7 tests. Evidence uses
 `libwebp-i16-full-warp-pair-*`; architecture thresholds/defaults, Ampere+
 behavior, and the frozen corpus/generator are unchanged.
+
+
+## Pre-Ampere inverse-transform/SSE fusion rejection
+
+At clean parent `2b889a5b12608fe38ae27f5c0e412e6e792d95ac`, a fresh native
+file-I/O batch profile measured exact PNG/JPEG medians of 29.574/27.554
+ms/image. After the first 24-image warmup batch, decimate/collect/replay
+averaged 18.859/18.581 ms/image and token emission 3.052/3.040. Device timing
+kept realistic I4 at 63--65% of block cycles. The retained metric probe had
+assigned 209.0 million photo cycles to the SSE/flatness warp, a distinct
+target after the larger residual walk's known avenues were exhausted.
+
+The pre-Ampere candidate computed one row's SSE in each of the four lanes
+already performing inverse transform, then used two width-four shuffles to
+publish the exact per-mode sum. The later metric warp performed only the
+flatness test. Ampere+ retained the original scalar SSE walk. The change
+raised native registers from 103 to 104, with the 352-byte stack and 23,392
+shared bytes unchanged. Medium device wall regressed in every PNG/JPEG
+content cell.
+
+Five order-balanced full-corpus process pairs per format produced 30 exact
+rows per format:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 29.469 ms/image | 29.824 ms/image | -0.223 ms/image |
+| JPEG | 27.704 ms/image | 28.113 ms/image | -0.274 ms/image |
+
+The candidate passed 7/7 focused tests. CPU/CUDA hashes and byte counts were
+exact for methods 2--6 and qualities 25/75/98 over six
+graphic/photo/texture 17x13 and 257x255 fixtures. Twenty forced-fallback
+cells covered both formats, bands 0/1/3/5/7, and inline/pipelined token
+recording. The candidate was removed because both formats regressed; the
+restored build passed 7/7 tests after every static test executable was
+relinked. Raw evidence uses `libwebp-i4-fused-sse-*`; architecture
+thresholds/defaults, Ampere+ behavior, and the frozen corpus/generator are
+unchanged.

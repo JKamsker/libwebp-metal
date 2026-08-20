@@ -2614,3 +2614,30 @@ updates or adding pair/page handling, so no representation candidate followed.
 The probe was restored and 7/7 focused tests passed. Evidence uses
 `libwebp-token-zero-pair-*`; architecture thresholds/defaults, Ampere+
 behavior, and the frozen corpus/generator are unchanged.
+
+
+## Pre-Ampere inverse-transform/SSE fusion screen
+
+The clean native build at `2b889a5b12608fe38ae27f5c0e412e6e792d95ac`
+measured exact file-I/O batch medians of 29.574 ms/image PNG and 27.554 JPEG.
+The measured stage profile put decimate/collect/replay at 18.859/18.581
+ms/image, while realistic photo/texture retained 63--65% I4 shares. After the
+larger residual metric warp's avenues were exhausted, its distinct
+SSE/flatness peer remained a 209.0-million-cycle photo interval.
+
+A pre-Ampere candidate calculated SSE in the four inverse-transform lanes and
+reduced each mode with width-four shuffles, replacing the later scalar
+16-pixel SSE walk. Ampere+ retained the original route. Native registers rose
+from 103 to 104; stack/shared usage stayed 352/23,392 bytes. Five
+order-balanced full-corpus process pairs measured:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 29.469 ms/image | 29.824 ms/image | -0.223 ms/image |
+| JPEG | 27.704 ms/image | 28.113 ms/image | -0.274 ms/image |
+
+All 60 timing rows, the methods 2--6 / qualities 25/75/98 tiny/odd matrix,
+and 20 PNG/JPEG fallback cells were byte-exact. Candidate and restored builds
+passed 7/7 tests. Both formats regressed, so the source was restored. Evidence
+uses `libwebp-i4-fused-sse-*`; architecture thresholds/defaults, Ampere+
+behavior, and the frozen corpus/generator are unchanged.

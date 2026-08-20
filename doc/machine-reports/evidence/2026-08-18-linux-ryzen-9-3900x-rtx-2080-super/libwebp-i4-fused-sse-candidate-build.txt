@@ -1,0 +1,615 @@
+Change Dir: '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+
+Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile -j12 webp_cuda_batch_benchmark cwebp bit_writer_utils_test accelerator_enc_test cuda_concurrency_test cuda_histogram_test cuda_trellis_test cuda_near_lossless_test
+/usr/bin/cmake -S/home/jonas/priv/repos/libwebp-metal -B/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/gmake  -f CMakeFiles/Makefile2 webp_cuda_batch_benchmark
+gmake[1]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -S/home/jonas/priv/repos/libwebp-metal -B/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 76
+/usr/bin/gmake  -f CMakeFiles/Makefile2 CMakeFiles/webp_cuda_batch_benchmark.dir/all
+gmake[2]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webputils.dir/build.make CMakeFiles/webputils.dir/depend
+/usr/bin/gmake  -f CMakeFiles/sharpyuv.dir/build.make CMakeFiles/sharpyuv.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdspdecode.dir/build.make CMakeFiles/webpdspdecode.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpencode.dir/build.make CMakeFiles/webpencode.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdsp.dir/build.make CMakeFiles/webpdsp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/sharpyuv.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webputils.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpencode.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdspdecode.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdsp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/sharpyuv.dir/build.make CMakeFiles/sharpyuv.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webputils.dir/build.make CMakeFiles/webputils.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/sharpyuv.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdspdecode.dir/build.make CMakeFiles/webpdspdecode.dir/build
+/usr/bin/gmake  -f CMakeFiles/webpencode.dir/build.make CMakeFiles/webpencode.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webputils.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdsp.dir/build.make CMakeFiles/webpdsp.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdspdecode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[  3%] Built target sharpyuv
+[ 10%] Built target webputils
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdsp.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 10%] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+/usr/bin/nvcc -forward-unknown-to-host-compiler -DHAVE_CONFIG_H -DWEBP_CUDA_ENABLE_ASYNC_COPIES=1 -DWEBP_CUDA_ENABLE_COLOR_SHARED_TILE=1 -DWEBP_CUDA_ENABLE_COLOR_TRANSFORM=1 -DWEBP_CUDA_ENABLE_FUSED_LOSSY_ANALYSIS=1 -DWEBP_CUDA_ENABLE_HASH_CHAIN=1 -DWEBP_CUDA_ENABLE_HASH_MATCH4=1 -DWEBP_CUDA_ENABLE_HISTOGRAM=1 -DWEBP_CUDA_ENABLE_LOSSY_ANALYSIS=1 -DWEBP_CUDA_ENABLE_LOSSY_DECIMATE=1 -DWEBP_CUDA_ENABLE_NEAR_LOSSLESS=1 -DWEBP_CUDA_ENABLE_PERSISTENT_BUFFERS=1 -DWEBP_CUDA_ENABLE_PREDICTOR=1 -DWEBP_CUDA_ENABLE_READ_ONLY_CACHE=1 -DWEBP_CUDA_ENABLE_RESTRICT_POINTERS=1 -DWEBP_CUDA_ENABLE_RGB_256_THREAD_BLOCKS=1 -DWEBP_CUDA_ENABLE_RGB_PACKED4_LOADS=1 -DWEBP_CUDA_ENABLE_RGB_TO_YUV=1 -DWEBP_USE_CUDA=1 -DWEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT=1 --options-file CMakeFiles/webpencode.dir/includes_CUDA.rsp -O3 -DNDEBUG -std=c++11 -arch=native -Xcompiler=-fPIC -Xcompiler=-fvisibility=hidden -Wall -MD -MT CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o -MF CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o.d -x cu -c /home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu -o CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+[ 35%] Built target webpdspdecode
+/usr/bin/gmake  -f CMakeFiles/webpdecode.dir/build.make CMakeFiles/webpdecode.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdecode.dir/DependInfo.cmake "--color="
+[ 71%] Built target webpdsp
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdecode.dir/build.make CMakeFiles/webpdecode.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdecode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 76%] Built target webpdecode
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(503): warning #177-D: function "<unnamed>::AddScoreDev" was declared but never referenced
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(688): warning #177-D: function "<unnamed>::ImportMB" was declared but never referenced
+
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 90%] Built target webpencode
+/usr/bin/gmake  -f CMakeFiles/webp.dir/build.make CMakeFiles/webp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webp.dir/build.make CMakeFiles/webp.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 92%] Linking CUDA static library libwebp.a
+/usr/bin/cmake -P CMakeFiles/webp.dir/cmake_clean_target.cmake
+/usr/bin/cmake -E cmake_link_script CMakeFiles/webp.dir/link.txt --verbose=1
+/usr/bin/ar qc libwebp.a CMakeFiles/webpdecode.dir/src/dec/alpha_dec.c.o CMakeFiles/webpdecode.dir/src/dec/buffer_dec.c.o CMakeFiles/webpdecode.dir/src/dec/frame_dec.c.o CMakeFiles/webpdecode.dir/src/dec/idec_dec.c.o CMakeFiles/webpdecode.dir/src/dec/io_dec.c.o CMakeFiles/webpdecode.dir/src/dec/quant_dec.c.o CMakeFiles/webpdecode.dir/src/dec/tree_dec.c.o CMakeFiles/webpdecode.dir/src/dec/vp8_dec.c.o CMakeFiles/webpdecode.dir/src/dec/vp8l_dec.c.o CMakeFiles/webpdecode.dir/src/dec/webp_dec.c.o CMakeFiles/webpdsp.dir/src/dsp/alpha_processing.c.o CMakeFiles/webpdsp.dir/src/dsp/cpu.c.o CMakeFiles/webpdsp.dir/src/dsp/dec.c.o CMakeFiles/webpdsp.dir/src/dsp/dec_clip_tables.c.o CMakeFiles/webpdsp.dir/src/dsp/filters.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless.c.o CMakeFiles/webpdsp.dir/src/dsp/rescaler.c.o CMakeFiles/webpdsp.dir/src/dsp/upsampling.c.o CMakeFiles/webpdsp.dir/src/dsp/yuv.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_avx2.c.o CMakeFiles/webpdsp.dir/src/dsp/alpha_processing_sse41.c.o CMakeFiles/webpdsp.dir/src/dsp/dec_sse41.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_sse41.c.o CMakeFiles/webpdsp.dir/src/dsp/upsampling_sse41.c.o CMakeFiles/webpdsp.dir/src/dsp/yuv_sse41.c.o CMakeFiles/webpdsp.dir/src/dsp/alpha_processing_sse2.c.o CMakeFiles/webpdsp.dir/src/dsp/dec_sse2.c.o CMakeFiles/webpdsp.dir/src/dsp/filters_sse2.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_sse2.c.o CMakeFiles/webpdsp.dir/src/dsp/rescaler_sse2.c.o CMakeFiles/webpdsp.dir/src/dsp/upsampling_sse2.c.o CMakeFiles/webpdsp.dir/src/dsp/yuv_sse2.c.o CMakeFiles/webpdsp.dir/src/dsp/alpha_processing_neon.c.o CMakeFiles/webpdsp.dir/src/dsp/dec_neon.c.o CMakeFiles/webpdsp.dir/src/dsp/filters_neon.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_neon.c.o CMakeFiles/webpdsp.dir/src/dsp/rescaler_neon.c.o CMakeFiles/webpdsp.dir/src/dsp/upsampling_neon.c.o CMakeFiles/webpdsp.dir/src/dsp/yuv_neon.c.o CMakeFiles/webpdsp.dir/src/dsp/dec_msa.c.o CMakeFiles/webpdsp.dir/src/dsp/filters_msa.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_msa.c.o CMakeFiles/webpdsp.dir/src/dsp/rescaler_msa.c.o CMakeFiles/webpdsp.dir/src/dsp/upsampling_msa.c.o CMakeFiles/webpdsp.dir/src/dsp/dec_mips32.c.o CMakeFiles/webpdsp.dir/src/dsp/rescaler_mips32.c.o CMakeFiles/webpdsp.dir/src/dsp/yuv_mips32.c.o CMakeFiles/webpdsp.dir/src/dsp/alpha_processing_mips_dsp_r2.c.o CMakeFiles/webpdsp.dir/src/dsp/dec_mips_dsp_r2.c.o CMakeFiles/webpdsp.dir/src/dsp/filters_mips_dsp_r2.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_mips_dsp_r2.c.o CMakeFiles/webpdsp.dir/src/dsp/rescaler_mips_dsp_r2.c.o CMakeFiles/webpdsp.dir/src/dsp/upsampling_mips_dsp_r2.c.o CMakeFiles/webpdsp.dir/src/dsp/yuv_mips_dsp_r2.c.o CMakeFiles/webpdsp.dir/src/dsp/cost.c.o CMakeFiles/webpdsp.dir/src/dsp/enc.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_enc.c.o CMakeFiles/webpdsp.dir/src/dsp/ssim.c.o CMakeFiles/webpdsp.dir/src/dsp/cost_sse2.c.o CMakeFiles/webpdsp.dir/src/dsp/enc_sse2.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_sse2.c.o CMakeFiles/webpdsp.dir/src/dsp/ssim_sse2.c.o CMakeFiles/webpdsp.dir/src/dsp/enc_sse41.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_sse41.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_avx2.c.o CMakeFiles/webpdsp.dir/src/dsp/cost_neon.c.o CMakeFiles/webpdsp.dir/src/dsp/enc_neon.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_neon.c.o CMakeFiles/webpdsp.dir/src/dsp/enc_msa.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_msa.c.o CMakeFiles/webpdsp.dir/src/dsp/cost_mips32.c.o CMakeFiles/webpdsp.dir/src/dsp/enc_mips32.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_mips32.c.o CMakeFiles/webpdsp.dir/src/dsp/cost_mips_dsp_r2.c.o CMakeFiles/webpdsp.dir/src/dsp/enc_mips_dsp_r2.c.o CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_mips_dsp_r2.c.o CMakeFiles/webpencode.dir/src/enc/accelerator_enc.c.o CMakeFiles/webpencode.dir/src/enc/alpha_enc.c.o CMakeFiles/webpencode.dir/src/enc/analysis_enc.c.o CMakeFiles/webpencode.dir/src/enc/backward_references_cost_enc.c.o CMakeFiles/webpencode.dir/src/enc/backward_references_enc.c.o CMakeFiles/webpencode.dir/src/enc/config_enc.c.o CMakeFiles/webpencode.dir/src/enc/cost_enc.c.o CMakeFiles/webpencode.dir/src/enc/filter_enc.c.o CMakeFiles/webpencode.dir/src/enc/frame_enc.c.o CMakeFiles/webpencode.dir/src/enc/histogram_enc.c.o CMakeFiles/webpencode.dir/src/enc/iterator_enc.c.o CMakeFiles/webpencode.dir/src/enc/near_lossless_enc.c.o CMakeFiles/webpencode.dir/src/enc/picture_enc.c.o CMakeFiles/webpencode.dir/src/enc/picture_csp_enc.c.o CMakeFiles/webpencode.dir/src/enc/picture_psnr_enc.c.o CMakeFiles/webpencode.dir/src/enc/picture_rescale_enc.c.o CMakeFiles/webpencode.dir/src/enc/picture_tools_enc.c.o CMakeFiles/webpencode.dir/src/enc/profile_enc.c.o CMakeFiles/webpencode.dir/src/enc/predictor_enc.c.o CMakeFiles/webpencode.dir/src/enc/quant_enc.c.o CMakeFiles/webpencode.dir/src/enc/syntax_enc.c.o CMakeFiles/webpencode.dir/src/enc/token_enc.c.o CMakeFiles/webpencode.dir/src/enc/tree_enc.c.o CMakeFiles/webpencode.dir/src/enc/vp8l_enc.c.o CMakeFiles/webpencode.dir/src/enc/webp_enc.c.o CMakeFiles/webpencode.dir/src/enc/cuda_enc.cu.o CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o CMakeFiles/webputils.dir/src/utils/bit_reader_utils.c.o CMakeFiles/webputils.dir/src/utils/color_cache_utils.c.o CMakeFiles/webputils.dir/src/utils/filters_utils.c.o CMakeFiles/webputils.dir/src/utils/huffman_utils.c.o CMakeFiles/webputils.dir/src/utils/palette.c.o CMakeFiles/webputils.dir/src/utils/quant_levels_dec_utils.c.o CMakeFiles/webputils.dir/src/utils/rescaler_utils.c.o CMakeFiles/webputils.dir/src/utils/random_utils.c.o CMakeFiles/webputils.dir/src/utils/thread_utils.c.o CMakeFiles/webputils.dir/src/utils/utils.c.o CMakeFiles/webputils.dir/src/utils/bit_writer_utils.c.o CMakeFiles/webputils.dir/src/utils/huffman_encode_utils.c.o CMakeFiles/webputils.dir/src/utils/quant_levels_utils.c.o
+/usr/bin/ranlib libwebp.a
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 92%] Built target webp
+/usr/bin/gmake  -f CMakeFiles/imageioutil.dir/build.make CMakeFiles/imageioutil.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdemux.dir/build.make CMakeFiles/webpdemux.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/imageioutil.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdemux.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdemux.dir/build.make CMakeFiles/webpdemux.dir/build
+/usr/bin/gmake  -f CMakeFiles/imageioutil.dir/build.make CMakeFiles/imageioutil.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdemux.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/imageioutil.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 94%] Built target imageioutil
+[ 94%] Built target webpdemux
+/usr/bin/gmake  -f CMakeFiles/imagedec.dir/build.make CMakeFiles/imagedec.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/imagedec.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/imagedec.dir/build.make CMakeFiles/imagedec.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/imagedec.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Built target imagedec
+/usr/bin/gmake  -f CMakeFiles/webp_cuda_batch_benchmark.dir/build.make CMakeFiles/webp_cuda_batch_benchmark.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webp_cuda_batch_benchmark.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webp_cuda_batch_benchmark.dir/build.make CMakeFiles/webp_cuda_batch_benchmark.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Linking CUDA executable webp_cuda_batch_benchmark
+/usr/bin/cmake -E cmake_link_script CMakeFiles/webp_cuda_batch_benchmark.dir/link.txt --verbose=1
+/usr/lib/nvidia-cuda-toolkit/bin/g++ @CMakeFiles/webp_cuda_batch_benchmark.dir/objects1.rsp -o webp_cuda_batch_benchmark @CMakeFiles/webp_cuda_batch_benchmark.dir/linkLibs.rsp -L"/usr/lib/x86_64-linux-gnu/stubs" -L"/usr/lib/x86_64-linux-gnu"
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Built target webp_cuda_batch_benchmark
+gmake[2]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 0
+gmake[1]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/Makefile2 cwebp
+gmake[1]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -S/home/jonas/priv/repos/libwebp-metal -B/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 78
+/usr/bin/gmake  -f CMakeFiles/Makefile2 CMakeFiles/cwebp.dir/all
+gmake[2]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webputils.dir/build.make CMakeFiles/webputils.dir/depend
+/usr/bin/gmake  -f CMakeFiles/sharpyuv.dir/build.make CMakeFiles/sharpyuv.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdspdecode.dir/build.make CMakeFiles/webpdspdecode.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpencode.dir/build.make CMakeFiles/webpencode.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdsp.dir/build.make CMakeFiles/webpdsp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/sharpyuv.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webputils.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdspdecode.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpencode.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdsp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webputils.dir/build.make CMakeFiles/webputils.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/sharpyuv.dir/build.make CMakeFiles/sharpyuv.dir/build
+Dependencies file "CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o.d" is newer than depends file "/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpencode.dir/compiler_depend.internal".
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webputils.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/sharpyuv.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdspdecode.dir/build.make CMakeFiles/webpdspdecode.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdsp.dir/build.make CMakeFiles/webpdsp.dir/build
+Consolidate compiler generated dependencies of target webpencode
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdspdecode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[  6%] Built target webputils
+[ 10%] Built target sharpyuv
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpencode.dir/build.make CMakeFiles/webpencode.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdsp.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpencode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 34%] Built target webpdspdecode
+/usr/bin/gmake  -f CMakeFiles/webpdecode.dir/build.make CMakeFiles/webpdecode.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdecode.dir/DependInfo.cmake "--color="
+[ 69%] Built target webpdsp
+[ 83%] Built target webpencode
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdecode.dir/build.make CMakeFiles/webpdecode.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdecode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 88%] Built target webpdecode
+/usr/bin/gmake  -f CMakeFiles/webp.dir/build.make CMakeFiles/webp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webp.dir/build.make CMakeFiles/webp.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webp.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 89%] Built target webp
+/usr/bin/gmake  -f CMakeFiles/imageioutil.dir/build.make CMakeFiles/imageioutil.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdemux.dir/build.make CMakeFiles/webpdemux.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/imageioutil.dir/DependInfo.cmake "--color="
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdemux.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/imageioutil.dir/build.make CMakeFiles/imageioutil.dir/build
+/usr/bin/gmake  -f CMakeFiles/webpdemux.dir/build.make CMakeFiles/webpdemux.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/imageioutil.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdemux.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 91%] Built target imageioutil
+[ 92%] Built target webpdemux
+/usr/bin/gmake  -f CMakeFiles/exampleutil.dir/build.make CMakeFiles/exampleutil.dir/depend
+/usr/bin/gmake  -f CMakeFiles/imagedec.dir/build.make CMakeFiles/imagedec.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/exampleutil.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/imagedec.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/exampleutil.dir/build.make CMakeFiles/exampleutil.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/imagedec.dir/build.make CMakeFiles/imagedec.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/exampleutil.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/imagedec.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 93%] Built target exampleutil
+[ 98%] Built target imagedec
+/usr/bin/gmake  -f CMakeFiles/cwebp.dir/build.make CMakeFiles/cwebp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/cwebp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/cwebp.dir/build.make CMakeFiles/cwebp.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 98%] Linking CUDA executable cwebp
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cwebp.dir/link.txt --verbose=1
+/usr/lib/nvidia-cuda-toolkit/bin/g++ @CMakeFiles/cwebp.dir/objects1.rsp -o cwebp @CMakeFiles/cwebp.dir/linkLibs.rsp -L"/usr/lib/x86_64-linux-gnu/stubs" -L"/usr/lib/x86_64-linux-gnu"
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Built target cwebp
+gmake[2]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 0
+gmake[1]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/Makefile2 bit_writer_utils_test
+gmake[1]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -S/home/jonas/priv/repos/libwebp-metal -B/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 1
+/usr/bin/gmake  -f CMakeFiles/Makefile2 CMakeFiles/bit_writer_utils_test.dir/all
+gmake[2]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/bit_writer_utils_test.dir/build.make CMakeFiles/bit_writer_utils_test.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/bit_writer_utils_test.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/bit_writer_utils_test.dir/build.make CMakeFiles/bit_writer_utils_test.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/bit_writer_utils_test.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Built target bit_writer_utils_test
+gmake[2]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 0
+gmake[1]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/Makefile2 accelerator_enc_test
+gmake[1]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -S/home/jonas/priv/repos/libwebp-metal -B/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 1
+/usr/bin/gmake  -f CMakeFiles/Makefile2 CMakeFiles/accelerator_enc_test.dir/all
+gmake[2]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/accelerator_enc_test.dir/build.make CMakeFiles/accelerator_enc_test.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/accelerator_enc_test.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/accelerator_enc_test.dir/build.make CMakeFiles/accelerator_enc_test.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/accelerator_enc_test.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Built target accelerator_enc_test
+gmake[2]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 0
+gmake[1]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/Makefile2 cuda_concurrency_test
+gmake[1]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -S/home/jonas/priv/repos/libwebp-metal -B/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 71
+/usr/bin/gmake  -f CMakeFiles/Makefile2 CMakeFiles/cuda_concurrency_test.dir/all
+gmake[2]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webputils.dir/build.make CMakeFiles/webputils.dir/depend
+/usr/bin/gmake  -f CMakeFiles/sharpyuv.dir/build.make CMakeFiles/sharpyuv.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdspdecode.dir/build.make CMakeFiles/webpdspdecode.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpencode.dir/build.make CMakeFiles/webpencode.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdsp.dir/build.make CMakeFiles/webpdsp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/sharpyuv.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webputils.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpencode.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdspdecode.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdsp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/sharpyuv.dir/build.make CMakeFiles/sharpyuv.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webputils.dir/build.make CMakeFiles/webputils.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/sharpyuv.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webputils.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpencode.dir/build.make CMakeFiles/webpencode.dir/build
+/usr/bin/gmake  -f CMakeFiles/webpdspdecode.dir/build.make CMakeFiles/webpdspdecode.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdsp.dir/build.make CMakeFiles/webpdsp.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpencode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdspdecode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdsp.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 26%] Built target webpencode
+[ 53%] Built target webpdspdecode
+/usr/bin/gmake  -f CMakeFiles/webpdecode.dir/build.make CMakeFiles/webpdecode.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdecode.dir/DependInfo.cmake "--color="
+[ 91%] Built target webpdsp
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdecode.dir/build.make CMakeFiles/webpdecode.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdecode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 97%] Built target webpdecode
+/usr/bin/gmake  -f CMakeFiles/webp.dir/build.make CMakeFiles/webp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webp.dir/build.make CMakeFiles/webp.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webp.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 98%] Built target webp
+/usr/bin/gmake  -f CMakeFiles/cuda_concurrency_test.dir/build.make CMakeFiles/cuda_concurrency_test.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/cuda_concurrency_test.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/cuda_concurrency_test.dir/build.make CMakeFiles/cuda_concurrency_test.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Linking CUDA executable cuda_concurrency_test
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cuda_concurrency_test.dir/link.txt --verbose=1
+/usr/lib/nvidia-cuda-toolkit/bin/g++ @CMakeFiles/cuda_concurrency_test.dir/objects1.rsp -o cuda_concurrency_test @CMakeFiles/cuda_concurrency_test.dir/linkLibs.rsp -L"/usr/lib/x86_64-linux-gnu/stubs" -L"/usr/lib/x86_64-linux-gnu"
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Built target cuda_concurrency_test
+gmake[2]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 0
+gmake[1]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/Makefile2 cuda_histogram_test
+gmake[1]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -S/home/jonas/priv/repos/libwebp-metal -B/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 71
+/usr/bin/gmake  -f CMakeFiles/Makefile2 CMakeFiles/cuda_histogram_test.dir/all
+gmake[2]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webputils.dir/build.make CMakeFiles/webputils.dir/depend
+/usr/bin/gmake  -f CMakeFiles/sharpyuv.dir/build.make CMakeFiles/sharpyuv.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdspdecode.dir/build.make CMakeFiles/webpdspdecode.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpencode.dir/build.make CMakeFiles/webpencode.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdsp.dir/build.make CMakeFiles/webpdsp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/sharpyuv.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webputils.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdspdecode.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpencode.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdsp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/sharpyuv.dir/build.make CMakeFiles/sharpyuv.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/sharpyuv.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdspdecode.dir/build.make CMakeFiles/webpdspdecode.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webputils.dir/build.make CMakeFiles/webputils.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdsp.dir/build.make CMakeFiles/webpdsp.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpencode.dir/build.make CMakeFiles/webpencode.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webputils.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdspdecode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpencode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[  4%] Built target sharpyuv
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdsp.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 11%] Built target webputils
+[ 38%] Built target webpdspdecode
+/usr/bin/gmake  -f CMakeFiles/webpdecode.dir/build.make CMakeFiles/webpdecode.dir/depend
+[ 53%] Built target webpencode
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdecode.dir/DependInfo.cmake "--color="
+[ 91%] Built target webpdsp
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdecode.dir/build.make CMakeFiles/webpdecode.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdecode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 97%] Built target webpdecode
+/usr/bin/gmake  -f CMakeFiles/webp.dir/build.make CMakeFiles/webp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webp.dir/build.make CMakeFiles/webp.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webp.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 98%] Built target webp
+/usr/bin/gmake  -f CMakeFiles/cuda_histogram_test.dir/build.make CMakeFiles/cuda_histogram_test.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/cuda_histogram_test.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/cuda_histogram_test.dir/build.make CMakeFiles/cuda_histogram_test.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Linking CUDA executable cuda_histogram_test
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cuda_histogram_test.dir/link.txt --verbose=1
+/usr/lib/nvidia-cuda-toolkit/bin/g++ @CMakeFiles/cuda_histogram_test.dir/objects1.rsp -o cuda_histogram_test @CMakeFiles/cuda_histogram_test.dir/linkLibs.rsp -L"/usr/lib/x86_64-linux-gnu/stubs" -L"/usr/lib/x86_64-linux-gnu"
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Built target cuda_histogram_test
+gmake[2]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 0
+gmake[1]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/Makefile2 cuda_trellis_test
+gmake[1]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -S/home/jonas/priv/repos/libwebp-metal -B/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 70
+/usr/bin/gmake  -f CMakeFiles/Makefile2 CMakeFiles/cuda_trellis_test.dir/all
+gmake[2]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webputils.dir/build.make CMakeFiles/webputils.dir/depend
+/usr/bin/gmake  -f CMakeFiles/sharpyuv.dir/build.make CMakeFiles/sharpyuv.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdspdecode.dir/build.make CMakeFiles/webpdspdecode.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpencode.dir/build.make CMakeFiles/webpencode.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdsp.dir/build.make CMakeFiles/webpdsp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webputils.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/sharpyuv.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpencode.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdspdecode.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdsp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webputils.dir/build.make CMakeFiles/webputils.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/sharpyuv.dir/build.make CMakeFiles/sharpyuv.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpencode.dir/build.make CMakeFiles/webpencode.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webputils.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/sharpyuv.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdspdecode.dir/build.make CMakeFiles/webpdspdecode.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdsp.dir/build.make CMakeFiles/webpdsp.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpencode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdspdecode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[  7%] Built target webputils
+[ 11%] Built target sharpyuv
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdsp.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 27%] Built target webpencode
+[ 54%] Built target webpdspdecode
+/usr/bin/gmake  -f CMakeFiles/webpdecode.dir/build.make CMakeFiles/webpdecode.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdecode.dir/DependInfo.cmake "--color="
+[ 92%] Built target webpdsp
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdecode.dir/build.make CMakeFiles/webpdecode.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdecode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 98%] Built target webpdecode
+/usr/bin/gmake  -f CMakeFiles/webp.dir/build.make CMakeFiles/webp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webp.dir/build.make CMakeFiles/webp.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webp.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Built target webp
+/usr/bin/gmake  -f CMakeFiles/cuda_trellis_test.dir/build.make CMakeFiles/cuda_trellis_test.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/cuda_trellis_test.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/cuda_trellis_test.dir/build.make CMakeFiles/cuda_trellis_test.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Linking CUDA executable cuda_trellis_test
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cuda_trellis_test.dir/link.txt --verbose=1
+/usr/lib/nvidia-cuda-toolkit/bin/g++ @CMakeFiles/cuda_trellis_test.dir/objects1.rsp -o cuda_trellis_test @CMakeFiles/cuda_trellis_test.dir/linkLibs.rsp -L"/usr/lib/x86_64-linux-gnu/stubs" -L"/usr/lib/x86_64-linux-gnu"
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Built target cuda_trellis_test
+gmake[2]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 0
+gmake[1]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/Makefile2 cuda_near_lossless_test
+gmake[1]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -S/home/jonas/priv/repos/libwebp-metal -B/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current --check-build-system CMakeFiles/Makefile.cmake 0
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 71
+/usr/bin/gmake  -f CMakeFiles/Makefile2 CMakeFiles/cuda_near_lossless_test.dir/all
+gmake[2]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webputils.dir/build.make CMakeFiles/webputils.dir/depend
+/usr/bin/gmake  -f CMakeFiles/sharpyuv.dir/build.make CMakeFiles/sharpyuv.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdspdecode.dir/build.make CMakeFiles/webpdspdecode.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpencode.dir/build.make CMakeFiles/webpencode.dir/depend
+/usr/bin/gmake  -f CMakeFiles/webpdsp.dir/build.make CMakeFiles/webpdsp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/sharpyuv.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webputils.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpencode.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdspdecode.dir/DependInfo.cmake "--color="
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdsp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webputils.dir/build.make CMakeFiles/webputils.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/sharpyuv.dir/build.make CMakeFiles/sharpyuv.dir/build
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpencode.dir/build.make CMakeFiles/webpencode.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webputils.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdspdecode.dir/build.make CMakeFiles/webpdspdecode.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/sharpyuv.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdsp.dir/build.make CMakeFiles/webpdsp.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpencode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdspdecode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[  7%] Built target webputils
+[ 11%] Built target sharpyuv
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdsp.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 26%] Built target webpencode
+[ 53%] Built target webpdspdecode
+/usr/bin/gmake  -f CMakeFiles/webpdecode.dir/build.make CMakeFiles/webpdecode.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webpdecode.dir/DependInfo.cmake "--color="
+[ 91%] Built target webpdsp
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webpdecode.dir/build.make CMakeFiles/webpdecode.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webpdecode.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 97%] Built target webpdecode
+/usr/bin/gmake  -f CMakeFiles/webp.dir/build.make CMakeFiles/webp.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/webp.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/webp.dir/build.make CMakeFiles/webp.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+gmake[3]: Nothing to be done for 'CMakeFiles/webp.dir/build'.
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[ 98%] Built target webp
+/usr/bin/gmake  -f CMakeFiles/cuda_near_lossless_test.dir/build.make CMakeFiles/cuda_near_lossless_test.dir/depend
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+cd /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current && /usr/bin/cmake -E cmake_depends "Unix Makefiles" /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles/cuda_near_lossless_test.dir/DependInfo.cmake "--color="
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/gmake  -f CMakeFiles/cuda_near_lossless_test.dir/build.make CMakeFiles/cuda_near_lossless_test.dir/build
+gmake[3]: Entering directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Linking CUDA executable cuda_near_lossless_test
+/usr/bin/cmake -E cmake_link_script CMakeFiles/cuda_near_lossless_test.dir/link.txt --verbose=1
+/usr/lib/nvidia-cuda-toolkit/bin/g++ @CMakeFiles/cuda_near_lossless_test.dir/objects1.rsp -o cuda_near_lossless_test @CMakeFiles/cuda_near_lossless_test.dir/linkLibs.rsp -L"/usr/lib/x86_64-linux-gnu/stubs" -L"/usr/lib/x86_64-linux-gnu"
+gmake[3]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+[100%] Built target cuda_near_lossless_test
+gmake[2]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+/usr/bin/cmake -E cmake_progress_start /home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current/CMakeFiles 0
+gmake[1]: Leaving directory '/home/jonas/priv/repos/libwebp-metal/build-cuda-stage-current'
+
