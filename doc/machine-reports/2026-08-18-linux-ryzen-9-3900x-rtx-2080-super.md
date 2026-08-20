@@ -2405,3 +2405,46 @@ already activates them. Corrected summaries accompany the unchanged raw rows
 under `libwebp-lossy-analysis-default-*` and
 `libwebp-fused-lossy-analysis-screen-*`. Ampere+ behavior and the existing
 Turing/Ampere+ decimation threshold split are unchanged.
+
+## Whole-program token-recording screen
+
+The current-source whole-process profiles used the frozen six-image PNG and
+JPEG sets, forced CUDA lossy encoding, method 4, quality 75, batch 24, one
+warmup, and eight retained samples. PNG accumulated 2.602 seconds of CPU
+samples, of which `VP8RecordCoeffTokens` held 1.481 seconds (56.92%
+exclusive) and `VP8PutTokenPage` held 0.230 seconds. `ReadPNG` was 0.250
+seconds inclusive. JPEG accumulated 2.632 seconds: token recording held 1.521
+seconds (57.79%), page allocation 0.240 seconds, and `ReadJPEG` 0.230 seconds
+inclusive. The decode totals correspond to only about 1.2--1.3 ms/image and
+do not support a gate-sized decode-ahead candidate on this workload.
+
+The selected candidate enabled whole-program interprocedural optimization to
+cross the `frame_enc.c` / `token_enc.c` call boundary. The initial GCC 13
+build exposed a real CUDA toolchain constraint: the CUDA link driver invokes
+GCC 12, whose LTO plugin cannot read GCC 13 bytecode. The measured A/B
+therefore used paired GCC 12.4 builds. Both were Release and configured with
+exactly `-DCMAKE_CUDA_ARCHITECTURES=native`; only the candidate set
+`-DCMAKE_INTERPROCEDURAL_OPTIMIZATION=ON`.
+
+Two order-reversed process pairs per input format yielded six control and six
+IPO samples each:
+
+| Format | Control | IPO | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 39.575 ms/image | 39.281 ms/image | 0.294 ms/image | `ace64e860de89b43` / 6,441,688 |
+| JPEG lossy | 39.630 ms/image | 39.174 ms/image | 0.456 ms/image | `1cbb84d2ab926db3` / 6,400,792 |
+
+The 24 timing rows were exact, but both gains are noise under 1.5 ms/image.
+IPO was rejected without changing repository source. Full gprofng archives,
+raw timing rows, build hashes, configuration, and the toolchain feasibility
+failure are under `libwebp-token-ipo-*`. The Turing/Ampere+ threshold split
+and all architecture defaults remain unchanged.
+
+The same clean boundary was used to load all GitHub issues. This machine
+reports RTX 2080 SUPER, compute capability 7.5; it has CUDA 12 nvJPEG headers
+and library but cannot exercise Blackwell's hardware decoder. #19 was already
+closed. #16's implementation remains open for its required RTX 5070 Ti
+measurements, #17 remains blocked on Blackwell implementation/validation, and
+#18 remains blocked on per-encode accelerator sessions/tickets and dual-GPU
+benchmarking. Those measured capability and safety blockers were posted to
+the three open issues rather than closing unmet acceptance criteria.

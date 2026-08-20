@@ -373,3 +373,9 @@ Verify the copied artifacts from this directory with:
 ```sh
 sha256sum -c SHA256SUMS
 ```
+
+The `libwebp-token-ipo-*` files preserve the refreshed whole-process PNG/JPEG
+profiles, the mixed-GCC LTO feasibility failure, paired GCC 12 native-sm_75
+build identities, all 24 exact order-reversed timing rows, and the computed
+decision. Whole-program optimization gained only 0.294 ms/image on PNG and
+0.456 ms/image on JPEG, so no source or build-system change was retained.

@@ -906,3 +906,35 @@ the benchmark. Raw artifacts and corrected summaries use
 `libwebp-lossy-analysis-default-*` and
 `libwebp-fused-lossy-analysis-screen-*`. No Ampere+ behavior, architecture
 threshold, or cross-hardware claim changed.
+
+## Whole-program token-recording optimization rejection
+
+A refreshed whole-process native-sm_75 profile selected a distinct CPU-side
+boundary after the residual avenues were exhausted. `VP8RecordCoeffTokens`
+accounted for 56.92% of PNG and 57.79% of JPEG exclusive CPU samples, while
+input decode was only about 1.2--1.3 ms/image. The candidate enabled CMake
+interprocedural optimization to expose the `frame_enc.c` to `token_enc.c`
+boundary without changing token arithmetic.
+
+The machine-default GCC 13 / CUDA-link-driver GCC 12 combination cannot link
+GCC 13 LTO bytecode, so the valid A/B used paired GCC 12.4 control and IPO
+builds, both Release and exactly `-DCMAKE_CUDA_ARCHITECTURES=native`. Two
+order-reversed process pairs per format remained exact across all 24 rows:
+
+| Format | Control | IPO | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 39.575 ms/image | 39.281 ms/image | 0.294 ms/image | `ace64e860de89b43` / 6,441,688 |
+| JPEG lossy | 39.630 ms/image | 39.174 ms/image | 0.456 ms/image | `1cbb84d2ab926db3` / 6,400,792 |
+
+Both gains are below 1.5 ms/image, so IPO was rejected without a repository
+source change. Raw rows, build identities, the failed mixed-toolchain
+feasibility result, and complete gprofng experiments are archived under
+`libwebp-token-ipo-*`. This is Turing-only evidence; no Ampere+ setting,
+threshold, or claim changed.
+
+The adjacent GitHub sweep loaded all four issues. #19 was already closed with
+its conformance evidence. #16 remains open only because its acceptance text
+requires unavailable RTX 5070 Ti measurements. #17 likewise requires a
+Blackwell hardware nvJPEG backend, and #18 still requires per-encode CUDA
+sessions/tickets plus measurements on both GPUs. Current sm_75 capability and
+the concrete blockers were posted on #16--#18; none was falsely closed.

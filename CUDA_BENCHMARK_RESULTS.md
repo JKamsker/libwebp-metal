@@ -2188,3 +2188,24 @@ gain tables are withdrawn. Corrected summaries accompany the unchanged raw
 rows under `libwebp-lossy-analysis-default-*` and
 `libwebp-fused-lossy-analysis-screen-*`. No Ampere+ claim or architecture
 threshold changes.
+
+## Token-recording IPO rejection
+
+Whole-process gprofng sampling preceded the candidate: token recording held
+56.92% of PNG and 57.79% of JPEG exclusive CPU samples, whereas image decode
+was only about 1.2--1.3 ms/image. A whole-program optimization screen then
+used paired GCC 12.4 control/IPO builds because GCC 13 LTO objects are not
+compatible with the CUDA link driver's GCC 12 plugin. Both builds were
+Release, native-sm_75, and otherwise identically configured.
+
+Two order-reversed process pairs per format, each with one warmup and three
+retained 24-image samples, measured:
+
+| Format | Control | IPO | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 39.575 ms/image | 39.281 ms/image | 0.294 ms/image | `ace64e860de89b43` / 6,441,688 |
+| JPEG lossy | 39.630 ms/image | 39.174 ms/image | 0.456 ms/image | `1cbb84d2ab926db3` / 6,400,792 |
+
+All 24 retained rows were exact between control and IPO. Neither format
+reached 1.5 ms/image, so no build-system or source change was retained. Raw
+artifacts use `libwebp-token-ipo-*`; this is an RTX 2080 SUPER result only.
