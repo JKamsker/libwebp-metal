@@ -1,0 +1,412 @@
+{
+  "schema": "libwebp-backref-cost-specialization-alignment-v2-phase3-evaluation-consequence-v1",
+  "cycle": "BACKREF COST SPECIALIZATION ALIGNMENT V2",
+  "phase": "3",
+  "evaluated_at_utc": "2026-08-20T02:46:44Z",
+  "mode": "INDEPENDENT_LOCAL_EVALUATION_NO_EXPERIMENT",
+  "result": "REFUSED_NOT_EVALUABLE",
+  "authority": "NONE",
+  "timed_workload_run": false,
+  "benchmark_host_contacted_by_phase3": false,
+  "pairwise_effect_estimate": null,
+  "causal_claim": null,
+  "production_consequence": "RETAIN_DEFAULT_OFF_NO_PRODUCTION_CHANGE",
+  "next_experiment": {
+    "count": 1,
+    "lead": "SEPARATELY_AUTHORIZED_FRESH_CYCLE_SSH_REQUEST_CHANNEL_REACHABILITY",
+    "scope": "Investigate SSH/request-channel reachability under fresh future authority and fresh gates.",
+    "run_now": false,
+    "protocol_change": false,
+    "transport_cap_change": false,
+    "statistical_threshold_change": false,
+    "sample_reuse_or_pooling": false
+  },
+  "lineage": {
+    "branch": "codex/backref-cost-specialization-alignment-v2",
+    "baseline": "b96909b28b3d64f000d0f98ffa76137305010808",
+    "phase1a": "e2816e632075779b299adfc2cf8ab7d87d7c0d6f",
+    "phase1b": "d653a00a642fd1b2707016848a900f94ed51cfcf",
+    "phase2": "9c1d562db0e7fc79829a920762e81e16a5c80de8",
+    "baseline_tree": "cab7f4e8d03d59fcae3c0ae89ef5033931955d56",
+    "phase1a_tree": "2bda2d64fe60a8ca3d46911135363fcfae394503",
+    "phase1b_tree": "2afa8006f5b4f670c1bf1273bb5e8e19ea1eb8f0",
+    "phase2_tree": "11228053812f02f98411c91c59fa22d7c9c3ef17",
+    "exact_first_parent_chain": true,
+    "objects_verified": true,
+    "phase1b_additions_only": true,
+    "phase1b_added_file_count": 5,
+    "phase1b_non_additions": [],
+    "phase2_additions_only": true,
+    "phase2_added_file_count": 2,
+    "phase2_non_additions": [],
+    "phase3_additions_only_required": true
+  },
+  "immutable_evidence_hashes": [
+    {
+      "path": "doc/backref-cost-specialization-alignment-v2-protocol-20260820.md",
+      "sha256": "0150581bae129d9c45ad41cb6db8f15c15fffddc5c1e5a5142c912dbf1e077a1"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_manifest.json",
+      "sha256": "42afa14d09de7d696eacf2a60bf46d0171cf7d0288aec72e35d673b950f9d89c"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_schemas.json",
+      "sha256": "a18798767a7c7cccc0f782ea4fe055709b14e146393b62bbd022ef702ed457f6"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_transport.py",
+      "sha256": "fe4884df1a74b0b676fb01dfe7b9cbcf3a9232f5493e731da28d5b5da6dc98ab"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_payload.py",
+      "sha256": "9a07da91902c11b37aff01eb9ef66dc2c1d02a4aad43f2d5ac2da9382ec20a14"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_toolchain.py",
+      "sha256": "ad7d4d9e9d3f59896c2542135b301a01701732cfa1e574c8f46c04ea826117ae"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1-local-validation.json",
+      "sha256": "dbb5bd2e96eb4493c837938ec3587927a1741311e3e6fb0abed72d2e4d8fb6fb"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1-local-codegen.json",
+      "sha256": "8fea9afc0bf61f83c168db0991a6e0662b400a6fe640fd94232bd4107a171993"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1-prior-evidence-audit.json",
+      "sha256": "88c50c58af14bb11b837310cb2ee27785d672f77d9b8bdf46c1e0fb10b369dd2"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/source-admission-control-freeze.json",
+      "sha256": "c7f68fbbc325e9aecc62b578b212b5559985702c4f2ba429767fc2fb46248981"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1b-authorization.json",
+      "sha256": "b613a867c4c6e75be4676577e2041efdcdf16bc994bdcf1c15dd2727b61281a3"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1b-rehearsal-hashes.json",
+      "sha256": "30cd9be45e89f062e98b21f05966aa84f37db6c9ca40bb3dc91cfaeae924a0cf"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/rehearsal/transfer-cleanup.json",
+      "sha256": "cfb2305963c78f968d0265ace712b64e71c690ef1dc4d9c92a3773293edbab65"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase2-refusal-audit.json",
+      "sha256": "ab2d6f5ded26e99be59d694f5b0e9c55c3c2e145a3486d501bd202ed98d5d512"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase2-refusal-audit.md",
+      "sha256": "f39ce263f58d5e407a2fc36c1ca9b6cade33a267db79fb275ce4524635188f28"
+    }
+  ],
+  "frozen_identity_verification": {
+    "manifest_frozen_artifacts": 65,
+    "manifest_frozen_artifacts_present": 65,
+    "manifest_frozen_hash_mismatches": 0,
+    "admission_identity_paths": 66,
+    "admission_identity_paths_unique": true,
+    "admission_identity_rule_exact": true,
+    "source_map_entry_count": 66,
+    "source_map_sha256": "ae76c436608f9008573e2724ff4a072c89bfa4bbefe6b1ea791f9e3493e235ba",
+    "protocol_version": 9,
+    "schema_catalog_entries": 30,
+    "payload": {
+      "bytes": 2097152,
+      "sha256": "2e2ea6d7479bc385057e7a55154e220e67d28e7861c8b54fae5ea8549bbca607",
+      "manifest_generator_fixture_agree": true,
+      "stale_alignment_v1_v2_v3_v4_rejected": true
+    },
+    "toolchain": {
+      "canonical_sha256": "7a4940524373f4b2e261a9fbb302eabe6136351a0c11b8021d037f0eae4e184b",
+      "required_executables": 8,
+      "required_metadata": 4,
+      "xcode": "26.3",
+      "sdk": "macosx26.2",
+      "xcrun_required": false,
+      "manifest_fixture_local_recomputation_agree": true,
+      "scope": "LOCAL_HOST_ONLY"
+    }
+  },
+  "source_admission_equivalence_and_size": {
+    "canonical_map": "strictly sorted canonical JSON [{path,sha256},...]",
+    "source_map_entry_count": 66,
+    "source_map_sha256": "ae76c436608f9008573e2724ff4a072c89bfa4bbefe6b1ea791f9e3493e235ba",
+    "compact_control_count_digest_equal_requested_map": true,
+    "full_detail_count_digest_map_equal_requested_map": true,
+    "compact_and_full_detail_commitments_equal": true,
+    "remote_compact_receipt_observed": false,
+    "remote_full_detail_observed": false,
+    "compact_control_payload_bytes": 554,
+    "compact_encoded_frame_bytes": 710,
+    "control_payload_cap_bytes_exclusive": 8192,
+    "compact_margin_bytes": 7638,
+    "alignment_v1_full_map_control_payload_bytes": 9285,
+    "alignment_v1_full_map_overflow_bytes": 1093,
+    "compact_fits": true,
+    "alignment_v1_full_map_exceeds": true
+  },
+  "transport_freeze": {
+    "request_payload_cap_bytes": 67108864,
+    "archive_cap_bytes": 786432,
+    "framed_response_cap_bytes_exclusive": 1048576,
+    "control_payload_cap_bytes": 8192,
+    "chunk_bytes": 262144,
+    "compact_archive_fixture_bytes": 7903,
+    "compact_archive_fixture_sha256": "818eb8d8d7dbd45ac64acc25058dfa6488aef5a9e2c78f0b0c46aac4fb24161f",
+    "response_direction_fixture_archive_bytes": 528384,
+    "response_direction_fixture_framed_bytes": 531414,
+    "response_order": [
+      "source-admission",
+      "operator-status",
+      "archive-build",
+      "lease-state",
+      "bulk-declaration",
+      "bulk-chunk",
+      "integrity-footer",
+      "cleanup-footer"
+    ],
+    "local_fixture_status": "PASS",
+    "remote_cap_receipts": "MISSING"
+  },
+  "raw_inventory": {
+    "alignment_v2_design_files_before_phase3": 18,
+    "phase1b_raw_files": 3,
+    "phase1b_raw_total_bytes": 699,
+    "phase1b_framed_stdout_bytes": 0,
+    "phase1b_transport_stderr_bytes": 0,
+    "phase1b_transfer_cleanup_bytes": 699,
+    "phase1b_hash_index_rows": 3,
+    "phase1b_hash_index_order": [
+      "return-protocol/framed-stdout.bin",
+      "return-protocol/transport-stderr.bin",
+      "transfer-cleanup.json"
+    ],
+    "phase1b_hash_mismatches": 0,
+    "observed_response_frames": 0,
+    "execution_directories": 0,
+    "artifact_hash_indexes_for_alignment_v2_execution": 0,
+    "returned_hash_indexes_for_alignment_v2_execution": 0,
+    "remote_receipts": 0,
+    "device_receipts": 0,
+    "resource_receipts": 0,
+    "process_isolation_receipts": 0,
+    "lease_receipts": 0,
+    "archive_files": 0,
+    "archive_build_receipts": 0,
+    "integrity_footers": 0,
+    "cleanup_footers": 0,
+    "extracted_remote_artifacts": 0,
+    "correctness_rows": 0,
+    "work_rows": 0,
+    "runner_rows": 0,
+    "stage_rows": 0,
+    "retained_timing_rows": 0,
+    "eligible_exact_b_l_h_triples": 0,
+    "prior_v4_rows_eligible_for_alignment_v2_statistics": 0
+  },
+  "prior_v4_integrity_not_pooled": {
+    "artifact_index_rows": 123,
+    "artifact_index_sorted_unique": true,
+    "artifact_index_mismatches": 0,
+    "artifact_index_sha256": "a979120ca9e9210176fd6ec090d690bc69f8737daef771b3e73e7d2b7b59459a",
+    "returned_index_rows": 133,
+    "returned_index_sorted_unique": true,
+    "returned_index_mismatches": 0,
+    "returned_index_sha256": "6ef2b10b17576a23384a0e644043196007743df73c1b8ba40ac2deb729d89ee9",
+    "samples_loaded": 0,
+    "samples_pooled": 0
+  },
+  "rehearsal_and_authority": {
+    "connection_attempts": 1,
+    "remote_connection_established": false,
+    "remote_contacts_established": 0,
+    "direct_transport_child_timed_out": true,
+    "timeout_phase": "REQUEST_WRITE",
+    "timeout_deadline_kind": "request-progress",
+    "remote_cleanup_state": "unknown-after-truncation",
+    "post_run_remote_cleanup_operations": 0,
+    "benchmark_lease_acquisition_attempted": false,
+    "encoder_workloads": 0,
+    "timed_workloads": 0,
+    "profiler_workloads": 0,
+    "performance_samples": 0,
+    "retry_count": 0,
+    "rerun_count": 0,
+    "required_receipts_missing": 19,
+    "refusal_reasons_total": 20,
+    "authorization_status": "REFUSED",
+    "phase2_authority": "NONE"
+  },
+  "correctness_determinism_fallback_abi": {
+    "fresh_local_test_status": "PASS",
+    "local_correctness_encodes": 3,
+    "sanitizer_boundary_correctness_encodes": 36,
+    "sanitizer_configurations": 2,
+    "bitstream_determinism": "PASS",
+    "input_immutability": "PASS_AS_FROZEN_AND_TESTED",
+    "fallback_integer_tie_update_order_traceback": "PASS_AS_FROZEN_RECEIPT",
+    "runtime_truth_table": "PASS_ABSENT_B_EXACT_B_L_H_OTHER_INVALID",
+    "public_api_abi_equal": true,
+    "default_omission": true,
+    "ordinary_cmake_build": "PASS",
+    "timed_recorder_free": true,
+    "work_boundary": "PASS_B_L_EXACT_COMMON_B_L_H_EQUAL_H_ONLY_HINT",
+    "remote_correctness": "MISSING"
+  },
+  "codegen_alignment_linker_map": {
+    "fresh_local_test_status": "PASS",
+    "required_private_symbols": 6,
+    "all_addresses_distinct": true,
+    "entry_order": [
+      "PushInterval",
+      "PushIntervalLayoutClone",
+      "PushIntervalSpecialized",
+      "BackwardReferencesHashChainDistanceOnly",
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+      "BackwardReferencesHashChainDistanceOnlySpecialized"
+    ],
+    "entry_modulo_16384": [0, 0, 0, 0, 0, 0],
+    "adjacent_spacing_bytes": [16384, 16384, 16384, 16384, 16384],
+    "dp_to_corresponding_push_displacement_bytes": [49152, 49152, 49152],
+    "body_bytes": 5624,
+    "inter_entry_padding_bytes": 77588,
+    "section_size_bytes": 83212,
+    "section": "__TEXT,__br_align_v2",
+    "section_flags": "0x80000400",
+    "b_l_push_canonical_instruction_identity": true,
+    "b_l_dp_canonical_instruction_identity": true,
+    "h_push_canonical_difference": true,
+    "h_dp_canonical_difference": true,
+    "linker_map_sha256": "f27167b3f8a0fbc1cbd58ea3493e5a21f597666a3b53b2d45f04be5ebd55d55d",
+    "linker_map_extract_sha256": "2e80a8abcf8f07be42836d3e40965b01040df1296c4534cb3ef498e7b6699305",
+    "fresh_temp_build_runner_bytes": 681672,
+    "fresh_temp_build_runner_sha256": "cf929de3828949fe99c23b70e5948945ce2313f2dc80aef663b2cb59371f8253",
+    "frozen_reference_runner_bytes": 676520,
+    "frozen_reference_runner_sha256": "b8d9deb749f0e1bbb8f78fabfa4429844ed5d500f0cdf2b9eecc2616f8e97d2d",
+    "runner_binary_difference_interpretation": "NON_GATE_BUILD_ROOT_DEPENDENT_DEBUG_PATHS; FROZEN CODEGEN AND LINKER MAP FACTS MATCH",
+    "remote_codegen": "MISSING"
+  },
+  "frozen_protocol_inventory": {
+    "cases": 2,
+    "methods": 2,
+    "variants": 3,
+    "profile_repetitions": 3,
+    "profile_processes": 36,
+    "warmups": 36,
+    "retained_rows": 144,
+    "runner_rows": 180,
+    "stage_rows": 180,
+    "correctness_encodes": 24,
+    "untimed_work_rows": 12,
+    "paired_rows_per_cell_metric": 12,
+    "bootstrap_resamples": 100000,
+    "bootstrap_seed": "0x424c4801",
+    "observed_timed_inventory": 0
+  },
+  "statistics": {
+    "application_order": [
+      "B_to_L_null_control",
+      "L_to_H_only_if_null_passes",
+      "B_to_H_only_if_null_passes"
+    ],
+    "mandatory_b_to_l_null": {
+      "status": "NOT_EVALUABLE_REFUSED",
+      "passes": null,
+      "fails": null,
+      "required_cells": 4,
+      "cells_with_exact_rows": 0,
+      "effect_estimate": null,
+      "bootstrap_interval": null,
+      "reason": "No timed workload ran and no Alignment V2 retained samples exist."
+    },
+    "l_to_h": {
+      "status": "FORBIDDEN_UNINTERPRETED",
+      "effect_estimate": null
+    },
+    "b_to_h": {
+      "status": "FORBIDDEN_UNINTERPRETED",
+      "effect_estimate": null
+    },
+    "imputed_cells": 0,
+    "pooled_prior_samples": 0,
+    "causal_claim": null,
+    "frozen_thresholds": {
+      "b_to_l_absolute_mean_percent_max": 0.75,
+      "b_to_l_ci_must_include_zero": true,
+      "b_to_l_ci_endpoint_absolute_percent_max": 1.5,
+      "b_to_l_paired_row_absolute_percent_max": 3.0,
+      "effect_floor_percent": 0.1,
+      "repeatability_ratio_max": 2.0,
+      "stage_share_range_exclusive_max": 0.1,
+      "historical_production_paired_regression_percent_max": 0.5
+    }
+  },
+  "local_phase3_validation": {
+    "python_compile": "PASS",
+    "payload_identity": "PASS",
+    "toolchain_identity": "PASS",
+    "process_ownership": "PASS",
+    "archive_fixture": "PASS",
+    "streaming_fixture": "PASS",
+    "admission_fixture": "PASS",
+    "protocol": "PASS",
+    "experiment_guards": "PASS_42_GUARDS",
+    "untimed_correctness_sanitizers_abi_codegen": "PASS",
+    "cmake_configurations_exercised_by_correctness_test": 5,
+    "autotools_local_run": "NOT_RUN_DEFERRED_TO_PR_CI",
+    "diff_check": "EXPECTED_RAW_LINKER_MAP_TRAILING_WHITESPACE_ONLY"
+  },
+  "missing_remote_evidence": [
+    "complete framed response",
+    "source-admission receipt and full detail",
+    "operator-status receipt",
+    "archive-build receipt",
+    "lease-state receipt",
+    "bulk declaration and chunks",
+    "integrity footer",
+    "cleanup footer and exact-child absence proof",
+    "artifact and returned-evidence hash indexes",
+    "device/build/toolchain receipts",
+    "resource-admission receipt",
+    "process-isolation receipt",
+    "lease acquisition/release receipt",
+    "remote correctness and determinism rows",
+    "remote work metrics",
+    "remote codegen and linker map",
+    "runner/stage/timing rows"
+  ],
+  "discrepancies_and_limits": [
+    {
+      "severity": "BLOCKING",
+      "finding": "The sole rehearsal timed out while writing the request, before an established remote connection or any response byte; cleanup state is unknown after truncation."
+    },
+    {
+      "severity": "EVIDENCE_LIMIT",
+      "finding": "Local fixtures and receipts do not substitute for missing remote gate receipts or timed rows."
+    },
+    {
+      "severity": "EXPECTED_RAW_FORMAT",
+      "finding": "git diff --check reports preserved trailing spaces in four raw linker-map literal rows only."
+    },
+    {
+      "severity": "NON_GATE_REBUILD_VARIANCE",
+      "finding": "The fresh temporary runner binary size/hash differs from the Phase 1 reference because debug paths are build-root dependent; symbol codegen, alignment, section, and linker-map gates match exactly."
+    }
+  ],
+  "prohibitions_observed_by_phase3": {
+    "new_experiment": false,
+    "benchmark_host_contact": false,
+    "timed_workload": false,
+    "lease_attempt": false,
+    "statistical_imputation": false,
+    "prior_sample_pooling": false,
+    "protocol_or_cap_change": false,
+    "threshold_change": false,
+    "production_source_change": false,
+    "merge": false
+  }
+}
