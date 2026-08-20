@@ -1,0 +1,9 @@
+{
+  "accepted_performance_rows": 144,
+  "partial_promotion_forbidden": true,
+  "profile_children": 36,
+  "runner_rows": 180,
+  "schema": "libwebp-backref-cost-specialization-alignment-v4-performance-evidence-status-v1",
+  "stage_rows": 180,
+  "status": "COMPLETE_ADMITTED_RAW_EVIDENCE"
+}

@@ -1,0 +1,1356 @@
+# Path: backref_cost_specialization_factorization_v4_experiment_runner
+# Arch: arm64
+# Object files:
+[  0] linker synthesized
+[  1] CMakeFiles/backref_cost_specialization_factorization_v4_experiment_runner.dir/tools/backref_cost_specialization_factorization_v4_experiment_runner.c.o
+[  2] libwebp.a(alpha_dec.c.o)
+[  3] libwebp.a(buffer_dec.c.o)
+[  4] libwebp.a(frame_dec.c.o)
+[  5] libwebp.a(io_dec.c.o)
+[  6] libwebp.a(quant_dec.c.o)
+[  7] libwebp.a(tree_dec.c.o)
+[  8] libwebp.a(vp8_dec.c.o)
+[  9] libwebp.a(vp8l_dec.c.o)
+[ 10] libwebp.a(webp_dec.c.o)
+[ 11] libwebp.a(alpha_processing.c.o)
+[ 12] libwebp.a(cpu.c.o)
+[ 13] libwebp.a(dec.c.o)
+[ 14] libwebp.a(dec_clip_tables.c.o)
+[ 15] libwebp.a(filters.c.o)
+[ 16] libwebp.a(lossless.c.o)
+[ 17] libwebp.a(rescaler.c.o)
+[ 18] libwebp.a(upsampling.c.o)
+[ 19] libwebp.a(yuv.c.o)
+[ 20] libwebp.a(alpha_processing_neon.c.o)
+[ 21] libwebp.a(dec_neon.c.o)
+[ 22] libwebp.a(filters_neon.c.o)
+[ 23] libwebp.a(lossless_neon.c.o)
+[ 24] libwebp.a(rescaler_neon.c.o)
+[ 25] libwebp.a(upsampling_neon.c.o)
+[ 26] libwebp.a(yuv_neon.c.o)
+[ 27] libwebp.a(cost.c.o)
+[ 28] libwebp.a(enc.c.o)
+[ 29] libwebp.a(lossless_enc.c.o)
+[ 30] libwebp.a(ssim.c.o)
+[ 31] libwebp.a(cost_neon.c.o)
+[ 32] libwebp.a(enc_neon.c.o)
+[ 33] libwebp.a(lossless_enc_neon.c.o)
+[ 34] libwebp.a(accelerator_enc.c.o)
+[ 35] libwebp.a(alpha_enc.c.o)
+[ 36] libwebp.a(analysis_enc.c.o)
+[ 37] libwebp.a(backward_references_cost_enc.c.o)
+[ 38] libwebp.a(backward_references_enc.c.o)
+[ 39] libwebp.a(config_enc.c.o)
+[ 40] libwebp.a(cost_enc.c.o)
+[ 41] libwebp.a(filter_enc.c.o)
+[ 42] libwebp.a(frame_enc.c.o)
+[ 43] libwebp.a(histogram_enc.c.o)
+[ 44] libwebp.a(iterator_enc.c.o)
+[ 45] libwebp.a(near_lossless_enc.c.o)
+[ 46] libwebp.a(picture_enc.c.o)
+[ 47] libwebp.a(picture_csp_enc.c.o)
+[ 48] libwebp.a(picture_rescale_enc.c.o)
+[ 49] libwebp.a(picture_tools_enc.c.o)
+[ 50] libwebp.a(predictor_enc.c.o)
+[ 51] libwebp.a(quant_enc.c.o)
+[ 52] libwebp.a(syntax_enc.c.o)
+[ 53] libwebp.a(token_enc.c.o)
+[ 54] libwebp.a(tree_enc.c.o)
+[ 55] libwebp.a(vp8l_enc.c.o)
+[ 56] libwebp.a(webp_enc.c.o)
+[ 57] libwebp.a(backref_cost_specialization_factorization_v4_experiment_enc.c.o)
+[ 58] libwebp.a(profile_enc.c.o)
+[ 59] libwebp.a(bit_reader_utils.c.o)
+[ 60] libwebp.a(color_cache_utils.c.o)
+[ 61] libwebp.a(filters_utils.c.o)
+[ 62] libwebp.a(huffman_utils.c.o)
+[ 63] libwebp.a(palette.c.o)
+[ 64] libwebp.a(quant_levels_dec_utils.c.o)
+[ 65] libwebp.a(rescaler_utils.c.o)
+[ 66] libwebp.a(random_utils.c.o)
+[ 67] libwebp.a(thread_utils.c.o)
+[ 68] libwebp.a(utils.c.o)
+[ 69] libwebp.a(bit_writer_utils.c.o)
+[ 70] libwebp.a(huffman_encode_utils.c.o)
+[ 71] libwebp.a(quant_levels_utils.c.o)
+[ 72] libsharpyuv.a(sharpyuv_neon.c.o)
+[ 73] libsharpyuv.a(sharpyuv_cpu.c.o)
+[ 74] libsharpyuv.a(sharpyuv_csp.c.o)
+[ 75] libsharpyuv.a(sharpyuv_dsp.c.o)
+[ 76] libsharpyuv.a(sharpyuv_gamma.c.o)
+[ 77] libsharpyuv.a(sharpyuv.c.o)
+[ 78] /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/usr/lib/libSystem.tbd
+[ 79] /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/usr/lib/system/libcompiler_rt.tbd
+[ 80] /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/usr/lib/system/libdyld.tbd
+[ 81] /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/usr/lib/system/libsystem_c.tbd
+[ 82] /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/usr/lib/system/libsystem_kernel.tbd
+[ 83] /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/usr/lib/system/libsystem_m.tbd
+[ 84] /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/usr/lib/system/libsystem_malloc.tbd
+[ 85] /Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/usr/lib/system/libsystem_pthread.tbd
+# Sections:
+# Address	Size    	Segment	Section
+0x100000B08	0x0006379C	__TEXT	__text
+0x1000642A4	0x00000210	__TEXT	__stubs
+0x1000644B4	0x00000B3E	__TEXT	__cstring
+0x100065000	0x000078F0	__TEXT	__const
+0x10006C8F0	0x00000638	__TEXT	__unwind_info
+0x10006CF28	0x00000360	__TEXT	__eh_frame
+0x100070000	0x00000180	__DATA_CONST	__got
+0x100070180	0x00000170	__DATA_CONST	__const
+0x100074000	0x000004C0	__DATA	__data
+0x1000744C0	0x00000030	__DATA	__thread_vars
+0x1000744F0	0x000001C8	__DATA	__thread_bss
+0x1000746C0	0x00001DC4	__DATA	__bss
+0x100076488	0x000008F0	__DATA	__common
+# Symbols:
+# Address	Size    	File  Name
+0x100000000	0x00000000	[  0] __mh_execute_header
+0x100000B08	0x0000070C	[  1] _main
+0x100001214	0x00000190	[  1] _ReadPPM
+0x1000013A4	0x00000114	[  1] _PreparePicture
+0x1000014B8	0x00000124	[  1] _ReadToken
+0x1000015DC	0x0000004C	[  2] _WebPDeallocateAlphaMemory
+0x100001628	0x000003D0	[  2] _VP8DecompressAlphaRows
+0x1000019F8	0x0000000C	[  3] _IsValidColorspace
+0x100001A04	0x000000A0	[  3] _WebPFlipBuffer
+0x100001AA4	0x00000288	[  3] _WebPAllocateDecBuffer
+0x100001D2C	0x00000038	[  3] _WebPInitDecBufferInternal
+0x100001D64	0x00000040	[  3] _WebPFreeDecBuffer
+0x100001DA4	0x00000048	[  3] _WebPCopyDecBuffer
+0x100001DEC	0x00000048	[  3] _WebPGrabDecBuffer
+0x100001E34	0x00000144	[  3] _WebPCopyDecBufferPixels
+0x100001F78	0x0000013C	[  3] _CheckDecBuffer
+0x1000020B4	0x00000040	[  3] _WebPAvoidSlowMemory
+0x1000020F4	0x00000190	[  4] _VP8InitDithering
+0x100002284	0x00000160	[  4] _VP8ProcessRow
+0x1000023E4	0x00000804	[  4] _ReconstructRow
+0x100002BE8	0x0000080C	[  4] _FinishRow
+0x1000033F4	0x0000112C	[  4] _VP8EnterCritical
+0x100004520	0x0000007C	[  4] _VP8ExitCritical
+0x10000459C	0x00000020	[  4] _VP8GetThreadMethod
+0x1000045BC	0x00000308	[  4] _VP8InitFrame
+0x1000048C4	0x00000024	[  5] _WebPInitCustomIo
+0x1000048E8	0x00000078	[  5] _CustomPut
+0x100004960	0x00000514	[  5] _CustomSetup
+0x100004E74	0x00000028	[  5] _CustomTeardown
+0x100004E9C	0x0000006C	[  5] _EmitSampledRGB
+0x100004F08	0x000001F4	[  5] _EmitFancyRGB
+0x1000050FC	0x000000BC	[  5] _EmitYUV
+0x1000051B8	0x00000108	[  5] _EmitAlphaRGBA4444
+0x1000052C0	0x00000104	[  5] _EmitAlphaRGB
+0x1000053C4	0x000000B8	[  5] _EmitAlphaYUV
+0x10000547C	0x000001C0	[  5] _EmitRescaledRGB
+0x10000563C	0x0000009C	[  5] _EmitRescaledAlphaRGB
+0x1000056D8	0x00000160	[  5] _ExportAlphaRGBA4444
+0x100005838	0x00000178	[  5] _ExportAlpha
+0x1000059B0	0x00000180	[  5] _EmitRescaledYUV
+0x100005B30	0x00000120	[  5] _EmitRescaledAlphaYUV
+0x100005C50	0x0000046C	[  6] _VP8ParseQuant
+0x1000060BC	0x00000010	[  7] _VP8ResetProba
+0x1000060CC	0x00000E84	[  7] _VP8ParseIntraModeRow
+0x100006F50	0x000003FC	[  7] _VP8ParseProba
+0x10000734C	0x0000000C	[  8] _WebPGetDecoderVersion
+0x100007358	0x00000038	[  8] _VP8InitIoInternal
+0x100007390	0x000000D4	[  8] _VP8New
+0x100007464	0x00000014	[  8] _VP8Status
+0x100007478	0x00000028	[  8] _VP8StatusMessage
+0x1000074A0	0x00000060	[  8] _VP8Delete
+0x100007500	0x00000058	[  8] _VP8Clear
+0x100007558	0x00000020	[  8] _VP8SetError
+0x100007578	0x00000038	[  8] _VP8CheckSignature
+0x1000075B0	0x000000B4	[  8] _VP8GetInfo
+0x100007664	0x0000055C	[  8] _VP8GetHeaders
+0x100007BC0	0x00000198	[  8] _ParseFilterHeader
+0x100007D58	0x00000104	[  8] _ParsePartitions
+0x100007E5C	0x000007C4	[  8] _VP8DecodeMB
+0x100008620	0x00000014	[  8] _VP8InitScanline
+0x100008634	0x00000228	[  8] _VP8Decode
+0x10000885C	0x0000043C	[  8] _GetCoeffsAlt
+0x100008C98	0x00000394	[  8] _GetCoeffsFast
+0x10000902C	0x000007A8	[  8] _GetLargeValue
+0x1000097D4	0x0000002C	[  9] _VP8LCheckSignature
+0x100009800	0x00000108	[  9] _VP8LGetInfo
+0x100009908	0x00000C3C	[  9] _ReadHuffmanCodesHelper
+0x10000A544	0x0000038C	[  9] _ReadHuffmanCode
+0x10000A8D0	0x00000040	[  9] _VP8LNew
+0x10000A910	0x0000002C	[  9] _VP8LDelete
+0x10000A93C	0x000000BC	[  9] _VP8LClear
+0x10000A9F8	0x00000230	[  9] _VP8LDecodeAlphaHeader
+0x10000AC28	0x00000850	[  9] _DecodeImageStream
+0x10000B478	0x000009C8	[  9] _VP8LDecodeAlphaImageStream
+0x10000BE40	0x00000A64	[  9] _DecodeImageData
+0x10000C8A4	0x000001E4	[  9] _ExtractAlphaRows
+0x10000CA88	0x00000118	[  9] _VP8LDecodeHeader
+0x10000CBA0	0x00000244	[  9] _VP8LDecodeImage
+0x10000CDE4	0x00000730	[  9] _ProcessRows
+0x10000D514	0x00000078	[ 10] _WebPParseHeaders
+0x10000D58C	0x00000478	[ 10] _ParseHeadersInternal
+0x10000DA04	0x00000020	[ 10] _WebPResetDecParams
+0x10000DA24	0x000000CC	[ 10] _WebPDecodeRGBInto
+0x10000DAF0	0x000000CC	[ 10] _WebPDecodeRGBAInto
+0x10000DBBC	0x000000D0	[ 10] _WebPDecodeARGBInto
+0x10000DC8C	0x000000D0	[ 10] _WebPDecodeBGRInto
+0x10000DD5C	0x000000D0	[ 10] _WebPDecodeBGRAInto
+0x10000DE2C	0x000000F8	[ 10] _WebPDecodeYUVInto
+0x10000DF24	0x00000250	[ 10] _DecodeInto
+0x10000E174	0x00000104	[ 10] _WebPDecodeRGB
+0x10000E278	0x00000108	[ 10] _WebPDecodeRGBA
+0x10000E380	0x00000108	[ 10] _WebPDecodeARGB
+0x10000E488	0x00000108	[ 10] _WebPDecodeBGR
+0x10000E590	0x00000108	[ 10] _WebPDecodeBGRA
+0x10000E698	0x00000150	[ 10] _WebPDecodeYUV
+0x10000E7E8	0x00000080	[ 10] _WebPGetInfo
+0x10000E868	0x00000064	[ 10] _WebPInitDecoderConfigInternal
+0x10000E8CC	0x00000144	[ 10] _WebPValidateDecoderConfig
+0x10000EA10	0x00000044	[ 10] _WebPCheckCropDimensions
+0x10000EA54	0x00000044	[ 10] _WebPGetFeaturesInternal
+0x10000EA98	0x0000017C	[ 10] _WebPDecode
+0x10000EC14	0x0000021C	[ 10] _WebPIoInitFromOptions
+0x10000EE30	0x00000130	[ 10] _ParseOptionalChunks
+0x10000EF60	0x000003E8	[ 11] _WebPMultARGBRow_C
+0x10000F348	0x000000A0	[ 11] _WebPMultRow_C
+0x10000F3E8	0x00000068	[ 11] _WebPMultARGBRows
+0x10000F450	0x00000080	[ 11] _WebPMultRows
+0x10000F4D0	0x000000D4	[ 11] _WebPInitAlphaProcessing
+0x10000F5A4	0x00000560	[ 11] _ApplyAlphaMultiply_16b_C
+0x10000FB04	0x000001C0	[ 11] _PackRGB_C
+0x10000FCC4	0x00000024	[ 11] _HasAlpha8b_C
+0x10000FCE8	0x00000034	[ 11] _HasAlpha32b_C
+0x10000FD1C	0x000002A4	[ 11] _AlphaReplace_C
+0x10000FFC0	0x0000000C	[ 12] _armCPUInfo
+0x10000FFCC	0x000000D8	[ 13] _VP8DspInit
+0x1000100A4	0x00000048	[ 13] _TransformUV_C
+0x1000100EC	0x00000098	[ 13] _TransformDCUV_C
+0x100010184	0x00000074	[ 13] _HE4_C
+0x1000101F8	0x000000EC	[ 13] _VR4_C
+0x1000102E4	0x000000EC	[ 13] _VL4_C
+0x1000103D0	0x000000EC	[ 13] _HD4_C
+0x1000104BC	0x0000009C	[ 13] _HU4_C
+0x100010558	0x00000508	[ 13] _DitherCombine8x8_C
+0x100010A60	0x00000004	[ 14] _VP8InitClipTables
+0x100010A64	0x0000008C	[ 15] _VP8FiltersInit
+0x100010AF0	0x0000001C	[ 15] _NoneUnfilter_C
+0x100010B0C	0x00000074	[ 15] _GradientUnfilter_C
+0x100010B80	0x00000008	[ 16] _VP8LPredictor2_C
+0x100010B88	0x00000008	[ 16] _VP8LPredictor3_C
+0x100010B90	0x00000008	[ 16] _VP8LPredictor4_C
+0x100010B98	0x00000034	[ 16] _VP8LPredictor5_C
+0x100010BCC	0x00000020	[ 16] _VP8LPredictor6_C
+0x100010BEC	0x00000020	[ 16] _VP8LPredictor7_C
+0x100010C0C	0x0000001C	[ 16] _VP8LPredictor8_C
+0x100010C28	0x0000001C	[ 16] _VP8LPredictor9_C
+0x100010C44	0x0000004C	[ 16] _VP8LPredictor10_C
+0x100010C90	0x000000B0	[ 16] _VP8LPredictor11_C
+0x100010D40	0x000000B0	[ 16] _VP8LPredictor12_C
+0x100010DF0	0x000000D8	[ 16] _VP8LPredictor13_C
+0x100010EC8	0x00000194	[ 16] _VP8LAddGreenToBlueAndRed_C
+0x10001105C	0x00000104	[ 16] _VP8LTransformColorInverse_C
+0x100011160	0x000002C8	[ 16] _VP8LColorIndexInverseTransformAlpha
+0x100011428	0x00000564	[ 16] _VP8LInverseTransform
+0x10001198C	0x000002BC	[ 16] _ColorIndexInverseTransform_C
+0x100011C48	0x00000180	[ 16] _VP8LConvertBGRAToRGB_C
+0x100011DC8	0x0000018C	[ 16] _VP8LConvertBGRAToRGBA_C
+0x100011F54	0x000001E0	[ 16] _VP8LConvertBGRAToRGBA4444_C
+0x100012134	0x00000238	[ 16] _VP8LConvertBGRAToRGB565_C
+0x10001236C	0x00000194	[ 16] _VP8LConvertBGRAToBGR_C
+0x100012500	0x00000254	[ 16] _VP8LConvertFromBGRA
+0x100012754	0x000001FC	[ 16] _VP8LDspInit
+0x100012950	0x000000DC	[ 16] _PredictorAdd0_C
+0x100012A2C	0x00000050	[ 16] _PredictorAdd1_C
+0x100012A7C	0x000001BC	[ 16] _PredictorAdd2_C
+0x100012C38	0x00000008	[ 16] _VP8LPredictor0_C
+0x100012C40	0x00000008	[ 16] _VP8LPredictor1_C
+0x100012C48	0x000001C4	[ 16] _PredictorAdd3_C
+0x100012E0C	0x000001C4	[ 16] _PredictorAdd4_C
+0x100012FD0	0x00000080	[ 16] _PredictorAdd5_C
+0x100013050	0x0000006C	[ 16] _PredictorAdd6_C
+0x1000130BC	0x00000068	[ 16] _PredictorAdd7_C
+0x100013124	0x00000100	[ 16] _PredictorAdd8_C
+0x100013224	0x00000104	[ 16] _PredictorAdd9_C
+0x100013328	0x0000008C	[ 16] _PredictorAdd10_C
+0x1000133B4	0x000000FC	[ 16] _PredictorAdd11_C
+0x1000134B0	0x000000FC	[ 16] _PredictorAdd12_C
+0x1000135AC	0x00000124	[ 16] _PredictorAdd13_C
+0x1000136D0	0x000000FC	[ 16] _MapARGB_C
+0x1000137CC	0x0000003C	[ 16] _MapAlpha_C
+0x100013808	0x0000015C	[ 17] _WebPRescalerImportRowExpand_C
+0x100013964	0x000000B0	[ 17] _WebPRescalerImportRowShrink_C
+0x100013A14	0x000006B4	[ 17] _WebPRescalerExportRowExpand_C
+0x1000140C8	0x000005D8	[ 17] _WebPRescalerExportRowShrink_C
+0x1000146A0	0x00000024	[ 17] _WebPRescalerImportRow
+0x1000146C4	0x000000D0	[ 17] _WebPRescalerExportRow
+0x100014794	0x00000084	[ 17] _WebPRescalerDspInit
+0x100014818	0x0000007C	[ 18] _WebPGetLinePairConverter
+0x100014894	0x00000064	[ 18] _WebPInitUpsamplers
+0x1000148F8	0x00000718	[ 18] _WebPYuv444ToRgba_C
+0x100015010	0x00000714	[ 18] _WebPYuv444ToBgra_C
+0x100015724	0x000006DC	[ 18] _WebPYuv444ToRgb_C
+0x100015E00	0x000006D8	[ 18] _WebPYuv444ToBgr_C
+0x1000164D8	0x00000724	[ 18] _WebPYuv444ToArgb_C
+0x100016BFC	0x00000694	[ 18] _WebPYuv444ToRgba4444_C
+0x100017290	0x000006EC	[ 18] _WebPYuv444ToRgb565_C
+0x10001797C	0x000000A8	[ 18] _WebPInitYUV444Converters
+0x100017A24	0x000000BC	[ 19] _WebPSamplerProcessPlane
+0x100017AE0	0x000000A8	[ 19] _WebPInitSamplers
+0x100017B88	0x00000994	[ 19] _WebPConvertARGBToUV_C
+0x10001851C	0x0000033C	[ 19] _WebPConvertRGBA32ToUV_C
+0x100018858	0x000002B0	[ 19] _WebPInitGammaTables
+0x100018B08	0x000004D4	[ 19] _WebPAccumulateRGBA
+0x100018FDC	0x00000290	[ 19] _WebPAccumulateRGB
+0x10001926C	0x000000D4	[ 19] _WebPInitConvertARGBToYUV
+0x100019340	0x000009EC	[ 19] _YuvToRgbRow
+0x100019D2C	0x00000BF0	[ 19] _YuvToRgbaRow
+0x10001A91C	0x000009E4	[ 19] _YuvToBgrRow
+0x10001B300	0x00000BF8	[ 19] _YuvToBgraRow
+0x10001BEF8	0x00000B04	[ 19] _YuvToArgbRow
+0x10001C9FC	0x00000958	[ 19] _YuvToRgba4444Row
+0x10001D354	0x00000A34	[ 19] _YuvToRgb565Row
+0x10001DD88	0x00000238	[ 19] _ConvertARGBToY_C
+0x10001DFC0	0x00000054	[ 19] _ConvertRGBToY_C
+0x10001E014	0x00000054	[ 19] _ConvertBGRToY_C
+0x10001E068	0x00000578	[ 19] _ImportYUVAFromRGBA_C
+0x10001E5E0	0x00000140	[ 19] _ImportYUVAFromRGBALastLine_C
+0x10001E720	0x00000068	[ 20] _WebPInitAlphaProcessingNEON
+0x10001E788	0x00000448	[ 20] _ApplyAlphaMultiply_NEON
+0x10001EBD0	0x00000314	[ 20] _DispatchAlpha_NEON
+0x10001EEE4	0x0000038C	[ 20] _DispatchAlphaToGreen_NEON
+0x10001F270	0x00000300	[ 20] _ExtractAlpha_NEON
+0x10001F570	0x00000194	[ 20] _ExtractGreen_NEON
+0x10001F704	0x00000224	[ 21] _VP8DspInitNEON
+0x10001F928	0x00000200	[ 21] _TransformTwo_NEON
+0x10001FB28	0x000000B8	[ 21] _TransformAC3_NEON
+0x10001FBE0	0x00000048	[ 21] _TransformDC_NEON
+0x10001FC28	0x000000F4	[ 21] _TransformWHT_NEON
+0x10001FD1C	0x0000018C	[ 21] _VFilter16_NEON
+0x10001FEA8	0x00000374	[ 21] _VFilter16i_NEON
+0x10002021C	0x0000043C	[ 21] _HFilter16_NEON
+0x100020658	0x00000420	[ 21] _HFilter16i_NEON
+0x100020A78	0x00000228	[ 21] _VFilter8_NEON
+0x100020CA0	0x000001C4	[ 21] _VFilter8i_NEON
+0x100020E64	0x000002F4	[ 21] _HFilter8_NEON
+0x100021158	0x00000268	[ 21] _HFilter8i_NEON
+0x1000213C0	0x0000009C	[ 21] _SimpleVFilter16_NEON
+0x10002145C	0x000001C8	[ 21] _SimpleHFilter16_NEON
+0x100021624	0x000001B0	[ 21] _SimpleVFilter16i_NEON
+0x1000217D4	0x000004E8	[ 21] _SimpleHFilter16i_NEON
+0x100021CBC	0x00000048	[ 21] _DC4_NEON
+0x100021D04	0x00000064	[ 21] _TM4_NEON
+0x100021D68	0x00000028	[ 21] _VE4_NEON
+0x100021D90	0x00000064	[ 21] _RD4_NEON
+0x100021DF4	0x00000038	[ 21] _LD4_NEON
+0x100021E2C	0x000000D8	[ 21] _DC16TopLeft_NEON
+0x100021F04	0x000001DC	[ 21] _TM16_NEON
+0x1000220E0	0x00000048	[ 21] _VE16_NEON
+0x100022128	0x000000C4	[ 21] _HE16_NEON
+0x1000221EC	0x000000CC	[ 21] _DC16NoTop_NEON
+0x1000222B8	0x00000054	[ 21] _DC16NoLeft_NEON
+0x10002230C	0x00000048	[ 21] _DC16NoTopLeft_NEON
+0x100022354	0x00000074	[ 21] _DC8uv_NEON
+0x1000223C8	0x000000B4	[ 21] _TM8uv_NEON
+0x10002247C	0x00000028	[ 21] _VE8uv_NEON
+0x1000224A4	0x00000064	[ 21] _HE8uv_NEON
+0x100022508	0x00000068	[ 21] _DC8uvNoTop_NEON
+0x100022570	0x00000034	[ 21] _DC8uvNoLeft_NEON
+0x1000225A4	0x00000028	[ 21] _DC8uvNoTopLeft_NEON
+0x1000225CC	0x00000048	[ 22] _VP8FiltersInitNEON
+0x100022614	0x000000E4	[ 22] _HorizontalUnfilter_NEON
+0x1000226F8	0x00000218	[ 22] _VerticalUnfilter_NEON
+0x100022910	0x000003F0	[ 22] _HorizontalFilter_NEON
+0x100022D00	0x00000420	[ 22] _VerticalFilter_NEON
+0x100023120	0x00000648	[ 22] _GradientFilter_NEON
+0x100023768	0x00000130	[ 23] _VP8LDspInitNEON
+0x100023898	0x0000001C	[ 23] _Predictor5_NEON
+0x1000238B4	0x00000018	[ 23] _Predictor6_NEON
+0x1000238CC	0x00000014	[ 23] _Predictor7_NEON
+0x1000238E0	0x00000034	[ 23] _Predictor13_NEON
+0x100023914	0x00000064	[ 23] _PredictorAdd0_NEON
+0x100023978	0x0000007C	[ 23] _PredictorAdd1_NEON
+0x1000239F4	0x00000068	[ 23] _PredictorAdd2_NEON
+0x100023A5C	0x00000068	[ 23] _PredictorAdd3_NEON
+0x100023AC4	0x00000068	[ 23] _PredictorAdd4_NEON
+0x100023B2C	0x000000BC	[ 23] _PredictorAdd5_NEON
+0x100023BE8	0x000000A8	[ 23] _PredictorAdd6_NEON
+0x100023C90	0x000000A8	[ 23] _PredictorAdd7_NEON
+0x100023D38	0x00000070	[ 23] _PredictorAdd8_NEON
+0x100023DA8	0x00000074	[ 23] _PredictorAdd9_NEON
+0x100023E1C	0x000000C8	[ 23] _PredictorAdd10_NEON
+0x100023EE4	0x00000100	[ 23] _PredictorAdd11_NEON
+0x100023FE4	0x000000DC	[ 23] _PredictorAdd12_NEON
+0x1000240C0	0x00000128	[ 23] _PredictorAdd13_NEON
+0x1000241E8	0x00000038	[ 23] _ConvertBGRAToRGBA_NEON
+0x100024220	0x00000028	[ 23] _ConvertBGRAToBGR_NEON
+0x100024248	0x00000034	[ 23] _ConvertBGRAToRGB_NEON
+0x10002427C	0x0000004C	[ 23] _AddGreenToBlueAndRed_NEON
+0x1000242C8	0x000000EC	[ 23] _TransformColorInverse_NEON
+0x1000243B4	0x0000002C	[ 24] _WebPRescalerDspInitNEON
+0x1000243E0	0x0000074C	[ 24] _RescalerExportRowExpand_NEON
+0x100024B2C	0x0000063C	[ 24] _RescalerExportRowShrink_NEON
+0x100025168	0x0000005C	[ 25] _WebPInitUpsamplersNEON
+0x1000251C4	0x00001510	[ 25] _UpsampleRgbaLinePair_NEON
+0x1000266D4	0x00001514	[ 25] _UpsampleBgraLinePair_NEON
+0x100027BE8	0x00001480	[ 25] _UpsampleRgbLinePair_NEON
+0x100029068	0x00001480	[ 25] _UpsampleBgrLinePair_NEON
+0x10002A4E8	0x0000154C	[ 25] _UpsampleArgbLinePair_NEON
+0x10002BA34	0x000014E0	[ 25] _UpsampleRgb565LinePair_NEON
+0x10002CF14	0x00001408	[ 25] _UpsampleRgba4444LinePair_NEON
+0x10002E31C	0x00000068	[ 26] _WebPInitConvertARGBToYUVNEON
+0x10002E384	0x0000016C	[ 26] _ConvertRGBToY_NEON
+0x10002E4F0	0x0000016C	[ 26] _ConvertBGRToY_NEON
+0x10002E65C	0x000002DC	[ 26] _ConvertARGBToY_NEON
+0x10002E938	0x000000F0	[ 26] _ConvertARGBToUV_NEON
+0x10002EA28	0x00000454	[ 26] _ConvertRGBA32ToUV_NEON
+0x10002EE7C	0x00000094	[ 27] _VP8EncDspCostInit
+0x10002EF10	0x00000154	[ 27] _GetResidualCost_C
+0x10002F064	0x00000110	[ 27] _SetResidualCoeffs_C
+0x10002F174	0x00000338	[ 28] _VP8SetHistogramData
+0x10002F4AC	0x0000016C	[ 28] _VP8EncDspInit
+0x10002F618	0x00000048	[ 28] _FTransform2_C
+0x10002F660	0x00000370	[ 28] _IntraChromaPreds_C
+0x10002F9D0	0x000001FC	[ 28] _Mean16x4_C
+0x10002FBCC	0x00000024	[ 28] _Copy4x4_C
+0x10002FBF0	0x00000044	[ 28] _Copy16x8_C
+0x10002FC34	0x0000035C	[ 28] _TrueMotion
+0x10002FF90	0x00000010	[ 29] _VP8LBitEntropyInit
+0x10002FFA0	0x00000118	[ 29] _VP8LBitsEntropyUnrefined
+0x1000300B8	0x00000184	[ 29] _VP8LSubtractGreenFromBlueAndRed_C
+0x10003023C	0x000000F8	[ 29] _VP8LTransformColor_C
+0x100030334	0x0000006C	[ 29] _VP8LCollectColorRedTransforms_C
+0x1000303A0	0x0000007C	[ 29] _VP8LCollectColorBlueTransforms_C
+0x10003041C	0x00000178	[ 29] _VP8LBundleColorMap_C
+0x100030594	0x000001F8	[ 29] _VP8LEncDspInit
+0x10003078C	0x00000094	[ 29] _FastLog2Slow_C
+0x100030820	0x00000094	[ 29] _FastSLog2Slow_C
+0x1000308B4	0x0000017C	[ 29] _ExtraCost_C
+0x100030A30	0x00000158	[ 29] _CombinedShannonEntropy_C
+0x100030B88	0x000000B8	[ 29] _ShannonEntropy_C
+0x100030C40	0x00000288	[ 29] _GetEntropyUnrefined_C
+0x100030EC8	0x000002A0	[ 29] _GetCombinedEntropyUnrefined_C
+0x100031168	0x000000EC	[ 29] _AddVector_C
+0x100031254	0x000000E0	[ 29] _AddVectorEq_C
+0x100031334	0x00000040	[ 29] _VectorMismatch_C
+0x100031374	0x000000DC	[ 29] _PredictorSub0_C
+0x100031450	0x000001C0	[ 29] _PredictorSub1_C
+0x100031610	0x0000008C	[ 29] _PredictorSub2_C
+0x10003169C	0x0000008C	[ 29] _PredictorSub3_C
+0x100031728	0x0000008C	[ 29] _PredictorSub4_C
+0x1000317B4	0x0000008C	[ 29] _PredictorSub5_C
+0x100031840	0x0000008C	[ 29] _PredictorSub6_C
+0x1000318CC	0x0000008C	[ 29] _PredictorSub7_C
+0x100031958	0x0000008C	[ 29] _PredictorSub8_C
+0x1000319E4	0x0000008C	[ 29] _PredictorSub9_C
+0x100031A70	0x0000008C	[ 29] _PredictorSub10_C
+0x100031AFC	0x0000008C	[ 29] _PredictorSub11_C
+0x100031B88	0x0000008C	[ 29] _PredictorSub12_C
+0x100031C14	0x0000008C	[ 29] _PredictorSub13_C
+0x100031CA0	0x00000074	[ 30] _VP8SSIMFromStats
+0x100031D14	0x00000084	[ 30] _VP8SSIMFromStatsClipped
+0x100031D98	0x00000080	[ 30] _VP8SSIMDspInit
+0x100031E18	0x00000478	[ 30] _SSIMGetClipped_C
+0x100032290	0x000001C0	[ 30] _SSIMGet_C
+0x100032450	0x00000164	[ 30] _AccumulateSSE_C
+0x1000325B4	0x0000002C	[ 31] _VP8EncDspCostInitNEON
+0x1000325E0	0x00000038	[ 31] _SetResidualCoeffs_NEON
+0x100032618	0x000001B4	[ 31] _GetResidualCost_NEON
+0x1000327CC	0x00000128	[ 32] _VP8EncDspInitNEON
+0x1000328F4	0x00000210	[ 32] _ITransform_NEON
+0x100032B04	0x00000148	[ 32] _FTransform_NEON
+0x100032C4C	0x000000EC	[ 32] _FTransformWHT_NEON
+0x100032D38	0x000000E4	[ 32] _Disto4x4_NEON
+0x100032E1C	0x00000124	[ 32] _Disto16x16_NEON
+0x100032F40	0x000002FC	[ 32] _CollectHistogram_NEON
+0x10003323C	0x0000003C	[ 32] _SSE16x16_NEON
+0x100033278	0x000000EC	[ 32] _SSE16x8_NEON
+0x100033364	0x000000AC	[ 32] _SSE8x8_NEON
+0x100033410	0x00000058	[ 32] _SSE4x4_NEON
+0x100033468	0x000000F0	[ 32] _Intra4Preds_NEON
+0x100033558	0x0000042C	[ 32] _Intra16Preds_NEON
+0x100033984	0x000000D4	[ 32] _QuantizeBlock_NEON
+0x100033A58	0x00000180	[ 32] _Quantize2Blocks_NEON
+0x100033BD8	0x0000002C	[ 33] _VP8LEncDspInitNEON
+0x100033C04	0x0000004C	[ 33] _SubtractGreenFromBlueAndRed_NEON
+0x100033C50	0x000000D0	[ 33] _TransformColor_NEON
+0x100033D20	0x00000008	[ 34] _WebPAccelerateColorTransform
+0x100033D28	0x00000008	[ 34] _WebPAccelerateHashChain
+0x100033D30	0x00000008	[ 34] _WebPAccelerateRGBToYUV
+0x100033D38	0x00000068	[ 35] _VP8EncInitAlpha
+0x100033DA0	0x00000A24	[ 35] _CompressAlphaJob
+0x1000347C4	0x00000080	[ 35] _VP8EncStartAlpha
+0x100034844	0x00000064	[ 35] _VP8EncFinishAlpha
+0x1000348A8	0x00000070	[ 35] _VP8EncDeleteAlpha
+0x100034918	0x0000027C	[ 35] _EncodeAlphaInternal
+0x100034B94	0x00001028	[ 36] _VP8EncAnalyze
+0x100035BBC	0x00000444	[ 36] _DoSegmentsJob
+0x100036000	0x000001C0	[ 37] _VP8LBackwardReferencesTraceBackwards
+0x1000361C0	0x0000050C	[ 37] _BackwardReferencesHashChainDistanceOnly
+0x1000366CC	0x0000050C	[ 37] _BackwardReferencesHashChainDistanceOnlyLayoutClone
+0x100036BD8	0x0000050C	[ 37] _BackwardReferencesHashChainDistanceOnlySpecialized
+0x1000370E4	0x0000003C	[ 37] _TraceBackwards
+0x100037120	0x000002E4	[ 37] _BackwardReferencesHashChainFollowChosenPath
+0x100037404	0x00000854	[ 37] _CostModelBuild
+0x100037C58	0x00000588	[ 37] _CostManagerInit
+0x1000381E0	0x000001FC	[ 37] _PushInterval
+0x1000383DC	0x000000EC	[ 37] _UpdateCostAtIndex
+0x1000384C8	0x0000014C	[ 37] _CostManagerClear
+0x100038614	0x00000178	[ 37] _InsertInterval
+0x10003878C	0x0000005C	[ 37] _PopInterval
+0x1000387E8	0x00000054	[ 37] _UpdateCostPerInterval
+0x10003883C	0x000001FC	[ 37] _PushIntervalLayoutClone
+0x100038A38	0x000002DC	[ 37] _PushIntervalSpecialized
+0x100038D14	0x0000006C	[ 38] _VP8LDistanceToPlaneCode
+0x100038D80	0x00000020	[ 38] _VP8LClearBackwardRefs
+0x100038DA0	0x00000054	[ 38] _VP8LBackwardRefsClear
+0x100038DF4	0x00000028	[ 38] _VP8LBackwardRefsInit
+0x100038E1C	0x00000034	[ 38] _VP8LRefsCursorInit
+0x100038E50	0x00000038	[ 38] _VP8LRefsCursorNextBlock
+0x100038E88	0x000000BC	[ 38] _VP8LBackwardRefsCursorAdd
+0x100038F44	0x0000003C	[ 38] _VP8LHashChainInit
+0x100038F80	0x0000002C	[ 38] _VP8LHashChainClear
+0x100038FAC	0x00000764	[ 38] _VP8LHashChainFill
+0x100039710	0x00000160	[ 38] _VP8LGetBackwardReferences
+0x100039870	0x00001CCC	[ 38] _GetBackwardReferences
+0x10003B53C	0x00000270	[ 38] _BackwardReferencesLz77
+0x10003B7AC	0x000000DC	[ 38] _BackwardRefsClone
+0x10003B888	0x00000110	[ 39] _WebPConfigInitInternal
+0x10003B998	0x00000174	[ 39] _WebPValidateConfig
+0x10003BB0C	0x00000040	[ 39] _WebPConfigLosslessPreset
+0x10003BB4C	0x000004E0	[ 40] _VP8CalculateLevelCosts
+0x10003C02C	0x00000040	[ 40] _VP8InitResidual
+0x10003C06C	0x000000A0	[ 40] _VP8GetCostLuma4
+0x10003C10C	0x000004B8	[ 40] _VP8GetCostLuma16
+0x10003C5C4	0x0000027C	[ 40] _VP8GetCostUV
+0x10003C840	0x000001F8	[ 40] _VP8RecordCoeffs
+0x10003CA38	0x00000024	[ 41] _VP8FilterStrengthFromDelta
+0x10003CA5C	0x00000024	[ 41] _VP8InitFilter
+0x10003CA80	0x00000254	[ 41] _VP8StoreFilterStats
+0x10003CCD4	0x00000428	[ 41] _GetMBSSIM
+0x10003D0FC	0x00000238	[ 41] _VP8AdjustFilterStrength
+0x10003D334	0x00001168	[ 42] _VP8EncLoop
+0x10003E49C	0x000001E8	[ 42] _StoreSideInfo
+0x10003E684	0x00000168	[ 42] _PostLoopFinalize
+0x10003E7EC	0x00000AD0	[ 42] _VP8EncTokenLoop
+0x10003F2BC	0x00000270	[ 42] _SetLoopParams
+0x10003F52C	0x00000394	[ 42] _FinalizeTokenProbas
+0x10003F8C0	0x0000030C	[ 42] _PutCoeffs
+0x10003FBCC	0x00000004	[ 43] _VP8LFreeHistogram
+0x10003FBD0	0x00000004	[ 43] _VP8LFreeHistogramSet
+0x10003FBD4	0x000000EC	[ 43] _VP8LHistogramCreate
+0x10003FCC0	0x00000080	[ 43] _VP8LHistogramStoreRefs
+0x10003FD40	0x00000094	[ 43] _VP8LHistogramInit
+0x10003FDD4	0x00000080	[ 43] _VP8LAllocateHistogram
+0x10003FE54	0x00000100	[ 43] _VP8LAllocateHistogramSet
+0x10003FF54	0x00000108	[ 43] _VP8LHistogramSetClear
+0x10004005C	0x000001A0	[ 43] _HistogramAddSinglePixOrCopy
+0x1000401FC	0x00000110	[ 43] _VP8LBitsEntropy
+0x10004030C	0x000000F4	[ 43] _VP8LHistogramEstimateBits
+0x100040400	0x000001A0	[ 43] _PopulationCost
+0x1000405A0	0x00001ED8	[ 43] _VP8LGetHistoImageSymbols
+0x100042478	0x00000594	[ 43] _HistogramAdd
+0x100042A0C	0x00000300	[ 43] _GetCombinedHistogramEntropy
+0x100042D0C	0x000000AC	[ 44] _VP8IteratorSetRow
+0x100042DB8	0x0000000C	[ 44] _VP8IteratorSetCountDown
+0x100042DC4	0x00000010	[ 44] _VP8IteratorIsDone
+0x100042DD4	0x00000138	[ 44] _VP8IteratorInit
+0x100042F0C	0x00000058	[ 44] _VP8IteratorProgress
+0x100042F64	0x00000A44	[ 44] _VP8IteratorImport
+0x1000439A8	0x00000180	[ 44] _VP8IteratorExport
+0x100043B28	0x0000007C	[ 44] _VP8IteratorNzToBytes
+0x100043BA4	0x00000068	[ 44] _VP8IteratorBytesToNz
+0x100043C0C	0x0000020C	[ 44] _VP8IteratorSaveBoundary
+0x100043E18	0x00000120	[ 44] _VP8IteratorNext
+0x100043F38	0x00000058	[ 44] _VP8SetIntra16Mode
+0x100043F90	0x00000058	[ 44] _VP8SetIntra4Mode
+0x100043FE8	0x0000001C	[ 44] _VP8SetIntraUVMode
+0x100044004	0x0000001C	[ 44] _VP8SetSkip
+0x100044020	0x0000001C	[ 44] _VP8SetSegment
+0x10004403C	0x000001E0	[ 44] _VP8IteratorStartI4
+0x10004421C	0x000000B8	[ 44] _VP8IteratorRotateI4
+0x1000442D4	0x00000124	[ 45] _VP8ApplyNearLossless
+0x1000443F8	0x0000046C	[ 45] _NearLossless
+0x100044864	0x0000006C	[ 46] _WebPPictureInitInternal
+0x1000448D0	0x00000008	[ 46] _DummyWriter
+0x1000448D8	0x0000005C	[ 46] _WebPValidatePicture
+0x100044934	0x0000001C	[ 46] _WebPPictureResetBuffers
+0x100044950	0x000000E0	[ 46] _WebPPictureAllocARGB
+0x100044A30	0x00000188	[ 46] _WebPPictureAllocYUVA
+0x100044BB8	0x00000074	[ 46] _WebPPictureAlloc
+0x100044C2C	0x0000004C	[ 46] _WebPPictureFree
+0x100044C78	0x0000000C	[ 46] _WebPMemoryWriterInit
+0x100044C84	0x000000C0	[ 46] _WebPMemoryWrite
+0x100044D44	0x00000034	[ 46] _WebPMemoryWriterClear
+0x100044D78	0x0000016C	[ 46] _WebPEncodeRGB
+0x100044EE4	0x0000016C	[ 46] _WebPEncodeRGBA
+0x100045050	0x0000016C	[ 46] _WebPEncodeBGR
+0x1000451BC	0x0000016C	[ 46] _WebPEncodeBGRA
+0x100045328	0x00000178	[ 46] _WebPEncodeLosslessRGB
+0x1000454A0	0x00000178	[ 46] _WebPEncodeLosslessRGBA
+0x100045618	0x00000178	[ 46] _WebPEncodeLosslessBGR
+0x100045790	0x00000178	[ 46] _WebPEncodeLosslessBGRA
+0x100045908	0x000000E8	[ 47] _WebPPictureHasTransparency
+0x1000459F0	0x00000058	[ 47] _WebPPictureARGBToYUVADithered
+0x100045A48	0x0000005C	[ 47] _WebPPictureARGBToYUVA
+0x100045AA4	0x00000048	[ 47] _WebPPictureSharpARGBToYUVA
+0x100045AEC	0x00000048	[ 47] _WebPPictureSmartARGBToYUVA
+0x100045B34	0x000004A8	[ 47] _WebPPictureYUVAToARGB
+0x100045FDC	0x00000128	[ 47] _WebPPictureImportBGR
+0x100046104	0x000001C8	[ 47] _Import
+0x1000462CC	0x00000020	[ 47] _WebPPictureImportBGRA
+0x1000462EC	0x00000128	[ 47] _WebPPictureImportBGRX
+0x100046414	0x00000128	[ 47] _WebPPictureImportRGB
+0x10004653C	0x00000118	[ 47] _WebPPictureImportRGBA
+0x100046654	0x00000128	[ 47] _WebPPictureImportRGBX
+0x10004677C	0x00000AE4	[ 47] _ImportYUVAFromRGBA
+0x100047260	0x00000158	[ 48] _WebPPictureCopy
+0x1000473B8	0x00000028	[ 48] _WebPPictureIsView
+0x1000473E0	0x000001B4	[ 48] _WebPPictureView
+0x100047594	0x00000284	[ 48] _WebPPictureCrop
+0x100047818	0x00000410	[ 48] _WebPPictureRescale
+0x100047C28	0x00000098	[ 48] _RescalePlane
+0x100047CC0	0x00000084	[ 49] _WebPReplaceTransparentPixels
+0x100047D44	0x0000348C	[ 49] _WebPCleanupTransparentArea
+0x10004B1D0	0x00000694	[ 49] _WebPBlendAlpha
+0x10004B864	0x000002F8	[ 50] _VP8LOptimizeSampling
+0x10004BB5C	0x000016FC	[ 50] _VP8LResidualImage
+0x10004D258	0x00000B04	[ 50] _VP8LColorSpaceTransform
+0x10004DD5C	0x000001D0	[ 50] _MaxDiffsForRow
+0x10004DF2C	0x0000061C	[ 50] _GetResidual
+0x10004E548	0x00000988	[ 51] _VP8SetSegmentParams
+0x10004EED0	0x00000050	[ 51] _VP8MakeLuma16Preds
+0x10004EF20	0x00000050	[ 51] _VP8MakeChroma8Preds
+0x10004EF70	0x00001970	[ 51] _VP8Decimate
+0x1000508E0	0x000001D8	[ 51] _ExpandMatrix
+0x100050AB8	0x00000724	[ 51] _ReconstructIntra16
+0x1000511DC	0x00000600	[ 51] _TrellisQuantizeBlock
+0x1000517DC	0x00000558	[ 51] _ReconstructUV
+0x100051D34	0x0000005C	[ 52] _VP8EncFreeBitWriters
+0x100051D90	0x000008AC	[ 52] _VP8EncWrite
+0x10005263C	0x00000020	[ 53] _VP8TBufferInit
+0x10005265C	0x00000058	[ 53] _VP8TBufferClear
+0x1000526B4	0x00000FA8	[ 53] _VP8RecordCoeffTokens
+0x10005365C	0x0000017C	[ 53] _VP8EmitTokens
+0x1000537D8	0x000000B8	[ 53] _VP8EstimateTokenSize
+0x100053890	0x00000048	[ 54] _VP8DefaultProbas
+0x1000538D8	0x000002E4	[ 54] _VP8CodeIntraModes
+0x100053BBC	0x0000032C	[ 54] _VP8WriteProbas
+0x100053EE8	0x0000064C	[ 55] _VP8LEncodeStream
+0x100054534	0x00000D08	[ 55] _EncoderAnalyze
+0x10005523C	0x00001E80	[ 55] _EncodeStreamHook
+0x1000570BC	0x0000031C	[ 55] _VP8LEncodeImage
+0x1000573D8	0x0000019C	[ 55] _WriteImage
+0x100057574	0x0000010C	[ 55] _AllocateTransformBuffer
+0x100057680	0x00000B3C	[ 55] _EncodeImageInternal
+0x1000581BC	0x00000554	[ 55] _EncodeImageNoHuffman
+0x100058710	0x00000284	[ 55] _GetHuffBitLengthsAndCodes
+0x100058994	0x00000820	[ 55] _StoreHuffmanCode
+0x1000591B4	0x000004E4	[ 55] _StoreImageToBitMask
+0x100059698	0x0000000C	[ 56] _WebPGetEncoderVersion
+0x1000596A4	0x0000001C	[ 56] _WebPEncodingSetError
+0x1000596C0	0x00000088	[ 56] _WebPReportProgress
+0x100059748	0x000003A0	[ 56] _WebPEncode
+0x100059AE8	0x0000039C	[ 56] _InitVP8Encoder
+0x100059E84	0x00000278	[ 56] _StoreStats
+0x10005A0FC	0x00000038	[ 56] _DeleteVP8Encoder
+0x10005A134	0x00000068	[ 57] _VP8LBackrefCostSpecializationFactorizationV4GetVariant
+0x10005A19C	0x00000054	[ 58] _WebPProfileClockNowForValidation
+0x10005A1F0	0x000001E8	[ 58] _WebPProfileBeginSession
+0x10005A3D8	0x00000370	[ 58] _WebPProfileEndSession
+0x10005A748	0x00000118	[ 58] _PrintJsonString
+0x10005A860	0x0000007C	[ 58] _WebPProfileStageBegin
+0x10005A8DC	0x000000B8	[ 58] _WebPProfileStageEnd
+0x10005A994	0x00000030	[ 58] _WebPProfileSetOutputSize
+0x10005A9C4	0x00000030	[ 58] _WebPProfileMarkMetalCrossColor
+0x10005A9F4	0x00000030	[ 58] _WebPProfileMarkMetalHash
+0x10005AA24	0x0000001C	[ 59] _VP8BitReaderSetBuffer
+0x10005AA40	0x00000078	[ 59] _VP8InitBitReader
+0x10005AAB8	0x00000024	[ 59] _VP8RemapBitReader
+0x10005AADC	0x00000068	[ 59] _VP8LoadFinalBytes
+0x10005AB44	0x00000148	[ 59] _VP8GetValue
+0x10005AC8C	0x00000260	[ 59] _VP8GetSignedValue
+0x10005AEEC	0x000000B4	[ 59] _VP8LInitBitReader
+0x10005AFA0	0x00000054	[ 59] _VP8LBitReaderSetBuffer
+0x10005AFF4	0x000000E4	[ 59] _VP8LDoFillBitWindow
+0x10005B0D8	0x000000C0	[ 59] _VP8LReadBits
+0x10005B198	0x00000068	[ 60] _VP8LColorCacheInit
+0x10005B200	0x00000030	[ 60] _VP8LColorCacheClear
+0x10005B230	0x00000020	[ 60] _VP8LColorCacheCopy
+0x10005B250	0x00000398	[ 61] _WebPEstimateBestFilter
+0x10005B5E8	0x0000000C	[ 62] _VP8LHtreeGroupsNew
+0x10005B5F4	0x0000000C	[ 62] _VP8LHtreeGroupsFree
+0x10005B600	0x00000174	[ 62] _VP8LBuildHuffmanTable
+0x10005B774	0x000007B0	[ 62] _BuildHuffmanTable
+0x10005BF24	0x00000068	[ 62] _VP8LHuffmanTablesAllocate
+0x10005BF8C	0x0000005C	[ 62] _VP8LHuffmanTablesDeallocate
+0x10005BFE8	0x0000003C	[ 63] _SearchColorNoIdx
+0x10005C024	0x000000CC	[ 63] _PrepareMapToPalette
+0x10005C0F0	0x00000018	[ 63] _PaletteCompareColorsForQsort
+0x10005C108	0x000001C8	[ 63] _GetColorPalette
+0x10005C2D0	0x00000C80	[ 63] _PaletteSort
+0x10005CF50	0x000009EC	[ 64] _WebPDequantizeLevels
+0x10005D93C	0x00000110	[ 65] _WebPRescalerInit
+0x10005DA4C	0x00000094	[ 65] _WebPRescalerGetScaledDimensions
+0x10005DAE0	0x00000020	[ 65] _WebPRescaleNeededLines
+0x10005DB00	0x00000124	[ 65] _WebPRescalerImport
+0x10005DC24	0x00000070	[ 65] _WebPRescalerExport
+0x10005DC94	0x00000090	[ 66] _VP8InitRandom
+0x10005DD24	0x0000005C	[ 67] _WebPSetWorkerInterface
+0x10005DD80	0x0000000C	[ 67] _WebPGetWorkerInterface
+0x10005DD8C	0x00000014	[ 67] _Init
+0x10005DDA0	0x00000140	[ 67] _Reset
+0x10005DEE0	0x00000064	[ 67] _Sync
+0x10005DF44	0x00000084	[ 67] _Launch
+0x10005DFC8	0x00000044	[ 67] _Execute
+0x10005E00C	0x0000009C	[ 67] _End
+0x10005E0A8	0x000000B4	[ 67] _ThreadLoop
+0x10005E15C	0x00000024	[ 68] _WebPSafeMalloc
+0x10005E180	0x00000020	[ 68] _WebPSafeCalloc
+0x10005E1A0	0x00000004	[ 68] _WebPSafeFree
+0x10005E1A4	0x00000018	[ 68] _WebPMalloc
+0x10005E1BC	0x00000004	[ 68] _WebPFree
+0x10005E1C0	0x0000006C	[ 68] _WebPCopyPlane
+0x10005E22C	0x0000007C	[ 68] _WebPCopyPixels
+0x10005E2A8	0x00000004	[ 68] _WebPGetColorPalette
+0x10005E2AC	0x0000008C	[ 69] _VP8PutBit
+0x10005E338	0x00000168	[ 69] _Flush
+0x10005E4A0	0x00000078	[ 69] _VP8PutBitUniform
+0x10005E518	0x000000AC	[ 69] _VP8PutBits
+0x10005E5C4	0x000001A0	[ 69] _VP8PutSignedBits
+0x10005E764	0x000000B0	[ 69] _VP8BitWriterInit
+0x10005E814	0x000000A4	[ 69] _VP8BitWriterFinish
+0x10005E8B8	0x000000F0	[ 69] _VP8BitWriterAppend
+0x10005E9A8	0x00000038	[ 69] _VP8BitWriterWipeOut
+0x10005E9E0	0x000000DC	[ 69] _VP8LBitWriterInit
+0x10005EABC	0x0000010C	[ 69] _VP8LBitWriterClone
+0x10005EBC8	0x00000038	[ 69] _VP8LBitWriterWipeOut
+0x10005EC00	0x00000030	[ 69] _VP8LBitWriterReset
+0x10005EC30	0x0000002C	[ 69] _VP8LBitWriterSwap
+0x10005EC5C	0x00000108	[ 69] _VP8LPutBitsFlushBits
+0x10005ED64	0x00000108	[ 69] _VP8LBitWriterFinish
+0x10005EE6C	0x000001FC	[ 70] _VP8LCreateCompressedHuffmanTree
+0x10005F068	0x00000E74	[ 70] _VP8LCreateHuffmanTree
+0x10005FEDC	0x0000003C	[ 70] _CompareHuffmanTrees
+0x10005FF18	0x00000068	[ 70] _SetBitDepths
+0x10005FF80	0x0000061C	[ 71] _QuantizeLevels
+0x10006059C	0x00000040	[ 72] _InitSharpYuvNEON
+0x1000605DC	0x00000308	[ 72] _SharpYuvUpdateY_NEON
+0x1000608E4	0x000001C0	[ 72] _SharpYuvUpdateRGB_NEON
+0x100060AA4	0x000005E0	[ 72] _SharpYuvFilterRow_NEON
+0x100061084	0x0000000C	[ 73] _armCPUInfo
+0x100061090	0x00000118	[ 74] _SharpYuvComputeConversionMatrix
+0x1000611A8	0x00000020	[ 74] _SharpYuvGetConversionMatrix
+0x1000611C8	0x00000004	[ 75] _SharpYuvInitDsp
+0x1000611CC	0x000001C4	[ 76] _SharpYuvInitGammaTables
+0x100061390	0x00000390	[ 76] _SharpYuvGammaToLinear
+0x100061720	0x000003D0	[ 76] _SharpYuvLinearToGamma
+0x100061AF0	0x0000000C	[ 77] _SharpYuvGetVersion
+0x100061AFC	0x00000098	[ 77] _SharpYuvInit
+0x100061B94	0x00000054	[ 77] _SharpYuvConvert
+0x100061BE8	0x0000030C	[ 77] _SharpYuvConvertWithOptions
+0x100061EF4	0x00000030	[ 77] _SharpYuvOptionsInitInternal
+0x100061F24	0x000019F0	[ 77] _DoSharpArgbToYuv
+0x100063914	0x00000708	[ 77] _ImportOneRow
+0x10006401C	0x00000288	[ 77] _UpdateChroma
+0x1000642A4	0x0000000C	[ 83] ___exp10.stub
+0x1000642B0	0x0000000C	[ 81] ___maskrune.stub
+0x1000642BC	0x0000000C	[ 81] ___memcpy_chk.stub
+0x1000642C8	0x0000000C	[ 81] ___stack_chk_fail.stub
+0x1000642D4	0x0000000C	[ 81] _atoi.stub
+0x1000642E0	0x0000000C	[ 81] _bzero.stub
+0x1000642EC	0x0000000C	[ 84] _calloc.stub
+0x1000642F8	0x0000000C	[ 83] _expf.stub
+0x100064304	0x0000000C	[ 81] _fclose.stub
+0x100064310	0x0000000C	[ 81] _fgetc.stub
+0x10006431C	0x0000000C	[ 81] _fopen.stub
+0x100064328	0x0000000C	[ 81] _fprintf.stub
+0x100064334	0x0000000C	[ 81] _fputc.stub
+0x100064340	0x0000000C	[ 81] _fputs.stub
+0x10006434C	0x0000000C	[ 81] _fread.stub
+0x100064358	0x0000000C	[ 84] _free.stub
+0x100064364	0x0000000C	[ 81] _fwrite.stub
+0x100064370	0x0000000C	[ 81] _getenv.stub
+0x10006437C	0x0000000C	[ 82] _getpid.stub
+0x100064388	0x0000000C	[ 83] _log.stub
+0x100064394	0x0000000C	[ 83] _log10.stub
+0x1000643A0	0x0000000C	[ 83] _logf.stub
+0x1000643AC	0x0000000C	[ 82] _mach_continuous_time.stub
+0x1000643B8	0x0000000C	[ 82] _mach_timebase_info.stub
+0x1000643C4	0x0000000C	[ 84] _malloc.stub
+0x1000643D0	0x0000000C	[ 81] _memcmp.stub
+0x1000643DC	0x0000000C	[ 81] _memcpy.stub
+0x1000643E8	0x0000000C	[ 81] _memmove.stub
+0x1000643F4	0x0000000C	[ 81] _memset.stub
+0x100064400	0x0000000C	[ 81] _memset_pattern16.stub
+0x10006440C	0x0000000C	[ 83] _pow.stub
+0x100064418	0x0000000C	[ 81] _printf.stub
+0x100064424	0x0000000C	[ 85] _pthread_cond_destroy.stub
+0x100064430	0x0000000C	[ 85] _pthread_cond_init.stub
+0x10006443C	0x0000000C	[ 85] _pthread_cond_signal.stub
+0x100064448	0x0000000C	[ 85] _pthread_cond_wait.stub
+0x100064454	0x0000000C	[ 85] _pthread_create.stub
+0x100064460	0x0000000C	[ 85] _pthread_join.stub
+0x10006446C	0x0000000C	[ 85] _pthread_mutex_destroy.stub
+0x100064478	0x0000000C	[ 85] _pthread_mutex_init.stub
+0x100064484	0x0000000C	[ 85] _pthread_mutex_lock.stub
+0x100064490	0x0000000C	[ 85] _pthread_mutex_unlock.stub
+0x10006449C	0x0000000C	[ 81] _qsort.stub
+0x1000644A8	0x0000000C	[ 81] _strcmp.stub
+0x1000644B4	0x00000006	[  1] literal string: guard
+0x1000644BA	0x00000010	[  1] literal string: {\"variant\":%d}\n
+0x1000644CA	0x0000000C	[  1] literal string: timer-check
+0x1000644D6	0x0000000C	[  1] literal string: correctness
+0x1000644E2	0x00000008	[  1] literal string: profile
+0x1000644EA	0x00000047	[  1] literal string: invalid backref-cost specialization factorization v4 runner arguments\n
+0x100064531	0x000000EE	[  1] literal string: {\"schema\":\"libwebp-backref-cost-specialization-factorization-v4-timer-check-v1\",\"clock_reads\":%u,\"positive_deltas\":%u,\"elapsed_ns\":%llu,\"mean_read_delta_ns\":%llu,\"minimum_positive_delta_ns\":%llu,\"maximum_delta_ns\":%llu,\"monotonic\":true}\n
+0x10006461F	0x00000003	[  1] literal string: wb
+0x100064622	0x0000003A	[  1] literal string: WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_VARIANT
+0x10006465C	0x00000003	[  1] literal string: rb
+0x10006465F	0x00000003	[  1] literal string: P6
+0x100064662	0x00000017	[  1] literal string: WEBP_BENCHMARK_SESSION
+0x100064679	0x00000039	[  1] literal string: WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_TIMERS
+0x1000646B2	0x0000000A	[  1] literal string: exclusive
+0x1000646BC	0x000000CE	[  1] literal string: {\"schema\":\"libwebp-backref-cost-specialization-factorization-v4-output-v1\",\"case_id\":\"%s\",\"method\":%d,\"variant\":\"%s\",\"iteration\":%d,\"sample_role\":\"%s\",\"bitstream_bytes\":%llu,\"bitstream_fnv1a64\":\"%016llx\"}\n
+0x10006478A	0x00000007	[  1] literal string: warmup
+0x100064791	0x00000009	[  1] literal string: retained
+0x10006479A	0x00000025	[  2] literal string: Alpha decoder initialization failed.
+0x1000647BF	0x0000001F	[  2] literal string: no memory for alpha dithering.
+0x1000647DE	0x0000001D	[  2] literal string: Could not decode alpha data.
+0x1000647FB	0x00000013	[  4] literal string: Frame setup failed
+0x10006480E	0x00000010	[  4] literal string: Output aborted.
+0x10006481E	0x0000001E	[  4] literal string: thread initialization failed.
+0x10006483C	0x00000027	[  4] literal string: no memory during frame initialization.
+0x100064863	0x0000000A	[  8] literal string: no object
+0x10006486D	0x00000003	[  8] literal string: OK
+0x100064870	0x00000025	[  8] literal string: null VP8Io passed to VP8GetHeaders()
+0x100064895	0x00000012	[  8] literal string: Truncated header.
+0x1000648A7	0x0000001F	[  8] literal string: Incorrect keyframe parameters.
+0x1000648C6	0x00000017	[  8] literal string: Frame not displayable.
+0x1000648DD	0x0000001C	[  8] literal string: cannot parse picture header
+0x1000648F9	0x0000000E	[  8] literal string: Bad code word
+0x100064907	0x00000015	[  8] literal string: bad partition length
+0x10006491C	0x0000001C	[  8] literal string: cannot parse segment header
+0x100064938	0x0000001B	[  8] literal string: cannot parse filter header
+0x100064953	0x00000018	[  8] literal string: cannot parse partitions
+0x10006496B	0x00000011	[  8] literal string: Not a key frame.
+0x10006497C	0x00000025	[  8] literal string: NULL VP8Io parameter in VP8Decode().
+0x1000649A1	0x00000029	[  8] literal string: Premature end-of-partition0 encountered.
+0x1000649CA	0x00000023	[  8] literal string: Premature end-of-file encountered.
+0x1000649ED	0x00000005	[ 10] literal string: ALPH
+0x1000649F2	0x00000005	[ 10] literal string: RIFF
+0x1000649F7	0x00000005	[ 10] literal string: WEBP
+0x1000649FC	0x00000005	[ 10] literal string: VP8X
+0x100064A01	0x00000005	[ 10] literal string: VP8 
+0x100064A06	0x00000005	[ 10] literal string: VP8L
+0x100064A0B	0x00000043	[ 58] literal string: encoder stage profiling requires WEBP_BENCHMARK_SESSION=exclusive\n
+0x100064A4E	0x0000003F	[ 58] literal string: WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_STAGE_OUTPUT
+0x100064A8D	0x00000039	[ 58] literal string: WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_RUN_ID
+0x100064AC6	0x0000003A	[ 58] literal string: WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_CASE_ID
+0x100064B00	0x0000003D	[ 58] literal string: WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_SAMPLE_SET
+0x100064B3D	0x00000005	[ 58] literal string: warm
+0x100064B42	0x0000000E	[ 58] literal string: warm-dominant
+0x100064B50	0x00000005	[ 58] literal string: cold
+0x100064B55	0x00000002	[ 58] literal string: a
+0x100064B57	0x0000003D	[ 58] literal string: {\"schema\":\"libwebp-encoder-stage-v1\",\"record_type\":\"encode\",
+0x100064B94	0x0000000A	[ 58] literal string: \"run_id\":
+0x100064B9E	0x0000000C	[ 58] literal string: ,\"case_id\":
+0x100064BAA	0x0000000C	[ 58] literal string: ,\"backend\":
+0x100064BB6	0x00000109	[ 58] literal string: ,\"pid\":%ld,\"encode_index\":%d,\"sample_role\":\"%s\",\"method\":%d,\"quality\":%.3f,\"lossless\":%s,\"exact\":%s,\"thread_level\":%d,\"width\":%d,\"height\":%d,\"pixels\":%llu,\"ok\":%s,\"error_code\":%d,\"output_bytes\":%llu,\"metal_cross_color\":%s,\"metal_hash\":%s,\"total_ns\":%llu,\"stages\":{
+0x100064CBF	0x00000005	[ 58] literal string: true
+0x100064CC4	0x00000006	[ 58] literal string: false
+0x100064CCA	0x0000001E	[ 58] literal string: %s\"%s\":{\"ns\":%llu,\"calls\":%u}
+0x100064CE8	0x00000001	[ 58] literal string: 
+0x100064CE9	0x00000002	[ 58] literal string: ,
+0x100064CEB	0x00000004	[ 58] literal string: }}\n
+0x100064CEF	0x00000003	[ 58] literal string: \n
+0x100064CF2	0x00000003	[ 58] literal string: \r
+0x100064CF5	0x00000003	[ 58] literal string: \t
+0x100064CF8	0x00000007	[ 58] literal string: \u%04x
+0x100064CFF	0x00000011	[ 58] literal string: lossless_prepare
+0x100064D10	0x00000019	[ 58] literal string: lossless_container_setup
+0x100064D29	0x00000011	[ 58] literal string: lossless_analyze
+0x100064D3A	0x00000016	[ 58] literal string: lossless_encoder_init
+0x100064D50	0x00000011	[ 58] literal string: lossless_palette
+0x100064D61	0x00000014	[ 58] literal string: lossless_input_copy
+0x100064D75	0x00000018	[ 58] literal string: lossless_subtract_green
+0x100064D8D	0x00000013	[ 58] literal string: lossless_predictor
+0x100064DA0	0x00000015	[ 58] literal string: lossless_cross_color
+0x100064DB5	0x00000014	[ 58] literal string: lossless_hash_chain
+0x100064DC9	0x00000017	[ 58] literal string: lossless_backward_refs
+0x100064DE0	0x00000013	[ 58] literal string: lossless_histogram
+0x100064DF3	0x00000011	[ 58] literal string: lossless_huffman
+0x100064E04	0x00000013	[ 58] literal string: lossless_bitstream
+0x100064E17	0x00000019	[ 58] literal string: lossless_stream_finalize
+0x100064E30	0x00000014	[ 58] literal string: lossless_riff_write
+0x100064E44	0x00000016	[ 58] literal string: backref_cost_dp_total
+0x100064E5A	0x00000016	[ 58] literal string: backref_cost_dp_setup
+0x100064E70	0x00000017	[ 58] literal string: backref_cost_dp_steady
+0x100064E87	0x00000017	[ 58] literal string: backref_cost_traceback
+0x100064E9E	0x00000019	[ 58] literal string: backref_cost_materialize
+0x100064EB7	0x0000000B	[ 58] literal string: metal_init
+0x100064EC2	0x0000001B	[ 58] literal string: metal_cross_color_dispatch
+0x100064EDD	0x00000019	[ 58] literal string: metal_hash_pipeline_init
+0x100064EF6	0x00000014	[ 58] literal string: metal_hash_dispatch
+0x100064F0A	0x0000000D	[ 58] literal string: lossy_import
+0x100064F17	0x00000013	[ 58] literal string: lossy_encoder_init
+0x100064F2A	0x0000000E	[ 58] literal string: lossy_analyze
+0x100064F38	0x00000010	[ 58] literal string: lossy_stat_loop
+0x100064F48	0x00000012	[ 58] literal string: lossy_encode_loop
+0x100064F5A	0x0000000C	[ 58] literal string: lossy_alpha
+0x100064F66	0x0000000C	[ 58] literal string: lossy_write
+0x100064F72	0x00000080	[ 69] literal string: 
+0x100065000	0x0000000D	[  3] _kModeBpp
+0x10006500E	0x0000000C	[  4] _kQuantToDitherAmp
+0x10006501A	0x00000004	[  4] _kFilterExtraRows
+0x10006501E	0x00000020	[  4] _kScan
+0x10006503E	0x00000080	[  6] _kDcTable
+0x1000650BE	0x00000100	[  6] _kAcTable
+0x1000651BE	0x00000420	[  7] _CoeffsUpdateProba
+0x1000655DE	0x00000420	[  7] _CoeffsProba0
+0x1000659FE	0x00000384	[  7] _kBModesProba
+0x100065D90	0x00000010	[  8] 16-byte-literal
+0x100065DA0	0x00000010	[  8] _kZigzag
+0x100065DB0	0x00000004	[  8] _kCat3
+0x100065DB4	0x00000005	[  8] _kCat4
+0x100065DB9	0x00000006	[  8] _kCat5
+0x100065DBF	0x0000000C	[  8] _kCat6
+0x100065DD0	0x00000008	[  9] 8-byte-literal
+0x100065DD8	0x00000008	[  9] 8-byte-literal
+0x100065DE0	0x00000018	[  9] _kTableSize
+0x100065DF8	0x00000013	[  9] _kCodeLengthCodeOrder
+0x100065E0B	0x00000003	[  9] _kCodeLengthExtraBits
+0x100065E0E	0x00000003	[  9] _kCodeLengthRepeatOffsets
+0x100065E11	0x00000078	[  9] _kCodeToPlane
+0x100065E90	0x00000008	[ 11] 8-byte-literal
+0x100065E98	0x00000008	[ 11] 8-byte-literal
+0x100065EA0	0x00000010	[ 11] 16-byte-literal
+0x100065EB0	0x00000010	[ 11] 16-byte-literal
+0x100065EC0	0x00000010	[ 11] 16-byte-literal
+0x100065ED0	0x00000010	[ 11] 16-byte-literal
+0x100065EE0	0x00000010	[ 11] 16-byte-literal
+0x100065EF0	0x00000010	[ 11] 16-byte-literal
+0x100065F00	0x000006FA	[ 14] _sclip1
+0x1000665FA	0x000000E1	[ 14] _sclip2
+0x1000666DB	0x000002FF	[ 14] _clip1
+0x1000669DA	0x000001FF	[ 14] _abs0
+0x100066BE0	0x00000008	[ 16] 8-byte-literal
+0x100066BF0	0x00000010	[ 17] 16-byte-literal
+0x100066C00	0x00000010	[ 19] 16-byte-literal
+0x100066C10	0x00000010	[ 19] 16-byte-literal
+0x100066C20	0x00000010	[ 19] 16-byte-literal
+0x100066C30	0x00000010	[ 19] 16-byte-literal
+0x100066C40	0x00000010	[ 19] 16-byte-literal
+0x100066C50	0x00000010	[ 19] 16-byte-literal
+0x100066C60	0x00000010	[ 19] 16-byte-literal
+0x100066C70	0x00000010	[ 19] 16-byte-literal
+0x100066C80	0x00000010	[ 19] 16-byte-literal
+0x100066C90	0x00000010	[ 19] 16-byte-literal
+0x100066CA0	0x00000010	[ 19] 16-byte-literal
+0x100066CB0	0x00000010	[ 19] 16-byte-literal
+0x100066CC0	0x00000010	[ 19] 16-byte-literal
+0x100066CD0	0x00000010	[ 19] 16-byte-literal
+0x100066CE0	0x00000010	[ 19] 16-byte-literal
+0x100066CF0	0x00000010	[ 19] 16-byte-literal
+0x100066D00	0x00000010	[ 19] 16-byte-literal
+0x100066D10	0x00000010	[ 19] 16-byte-literal
+0x100066D20	0x00000010	[ 19] 16-byte-literal
+0x100066D30	0x00000010	[ 19] 16-byte-literal
+0x100066D40	0x00000010	[ 19] 16-byte-literal
+0x100066D50	0x00000010	[ 19] 16-byte-literal
+0x100066D60	0x00000010	[ 19] 16-byte-literal
+0x100066D70	0x00000010	[ 19] 16-byte-literal
+0x100066D80	0x00000010	[ 19] 16-byte-literal
+0x100066D90	0x00000010	[ 19] 16-byte-literal
+0x100066DA0	0x00000010	[ 19] 16-byte-literal
+0x100066DB0	0x00000010	[ 19] 16-byte-literal
+0x100066DC0	0x00000010	[ 19] 16-byte-literal
+0x100066DD0	0x00000010	[ 19] 16-byte-literal
+0x100066DE0	0x00000010	[ 19] 16-byte-literal
+0x100066DF0	0x00000010	[ 19] 16-byte-literal
+0x100066E00	0x00000010	[ 19] 16-byte-literal
+0x100066E10	0x00000010	[ 19] 16-byte-literal
+0x100066E20	0x00000010	[ 19] 16-byte-literal
+0x100066E30	0x00000010	[ 19] 16-byte-literal
+0x100066E40	0x00000010	[ 19] 16-byte-literal
+0x100066E50	0x00000010	[ 19] 16-byte-literal
+0x100066E60	0x00000010	[ 19] 16-byte-literal
+0x100066E70	0x00000010	[ 19] 16-byte-literal
+0x100066E80	0x00000010	[ 19] 16-byte-literal
+0x100066E90	0x00000010	[ 19] 16-byte-literal
+0x100066EA0	0x00000010	[ 19] 16-byte-literal
+0x100066EB0	0x00000010	[ 19] 16-byte-literal
+0x100066EC0	0x00000010	[ 19] 16-byte-literal
+0x100066ED0	0x00000010	[ 19] 16-byte-literal
+0x100066EE0	0x00000010	[ 19] 16-byte-literal
+0x100066EF0	0x00000010	[ 19] 16-byte-literal
+0x100066F00	0x00000010	[ 19] 16-byte-literal
+0x100066F10	0x00000010	[ 19] 16-byte-literal
+0x100066F20	0x00000010	[ 19] 16-byte-literal
+0x100066F30	0x00000010	[ 19] 16-byte-literal
+0x100066F40	0x00000010	[ 19] 16-byte-literal
+0x100066F50	0x00000010	[ 19] 16-byte-literal
+0x100066F60	0x00000010	[ 19] 16-byte-literal
+0x100066F70	0x00000010	[ 19] 16-byte-literal
+0x100066F80	0x00000010	[ 19] 16-byte-literal
+0x100066F90	0x00000010	[ 19] 16-byte-literal
+0x100066FA0	0x00000010	[ 19] 16-byte-literal
+0x100066FB0	0x00000010	[ 19] 16-byte-literal
+0x100066FC0	0x00000010	[ 19] 16-byte-literal
+0x100066FD0	0x00000010	[ 19] 16-byte-literal
+0x100066FE0	0x00000010	[ 19] 16-byte-literal
+0x100066FF0	0x00000010	[ 19] 16-byte-literal
+0x100067000	0x00000010	[ 19] 16-byte-literal
+0x100067010	0x00000010	[ 19] 16-byte-literal
+0x100067020	0x00000010	[ 19] 16-byte-literal
+0x100067030	0x00000010	[ 19] 16-byte-literal
+0x100067040	0x00000010	[ 19] 16-byte-literal
+0x100067050	0x00000010	[ 19] 16-byte-literal
+0x100067060	0x00000010	[ 19] 16-byte-literal
+0x100067070	0x00000010	[ 19] 16-byte-literal
+0x100067080	0x00000010	[ 19] 16-byte-literal
+0x100067090	0x00000010	[ 19] 16-byte-literal
+0x1000670A0	0x00000010	[ 19] 16-byte-literal
+0x1000670B0	0x00000010	[ 19] 16-byte-literal
+0x1000670C0	0x00000010	[ 19] 16-byte-literal
+0x1000670D0	0x00000010	[ 19] 16-byte-literal
+0x1000670E0	0x00000010	[ 19] 16-byte-literal
+0x1000670F0	0x00000010	[ 19] 16-byte-literal
+0x100067100	0x00000010	[ 19] 16-byte-literal
+0x100067110	0x00000010	[ 19] 16-byte-literal
+0x100067120	0x00000010	[ 19] 16-byte-literal
+0x100067130	0x00000010	[ 19] 16-byte-literal
+0x100067140	0x00000010	[ 19] 16-byte-literal
+0x100067150	0x00000010	[ 19] 16-byte-literal
+0x100067160	0x00000010	[ 19] 16-byte-literal
+0x100067170	0x00000010	[ 19] 16-byte-literal
+0x100067180	0x00000010	[ 19] 16-byte-literal
+0x100067190	0x00000010	[ 19] 16-byte-literal
+0x1000671A0	0x00000010	[ 19] 16-byte-literal
+0x1000671B0	0x00000010	[ 19] 16-byte-literal
+0x1000671C0	0x00000010	[ 19] 16-byte-literal
+0x1000671D0	0x00000010	[ 19] 16-byte-literal
+0x1000671E0	0x00000010	[ 19] 16-byte-literal
+0x1000671F0	0x00000010	[ 19] 16-byte-literal
+0x100067200	0x00000010	[ 19] 16-byte-literal
+0x100067210	0x00000010	[ 19] 16-byte-literal
+0x100067220	0x00000FF4	[ 19] _kInvAlpha
+0x100068218	0x00000008	[ 23] 8-byte-literal
+0x100068220	0x00000008	[ 23] 8-byte-literal
+0x100068230	0x00000010	[ 23] 16-byte-literal
+0x100068240	0x00000008	[ 25] 8-byte-literal
+0x100068248	0x00000200	[ 27] _VP8EntropyCost
+0x100068448	0x00001000	[ 27] _VP8LevelFixedCosts
+0x100069448	0x00000011	[ 27] _VP8EncBands
+0x100069460	0x00000010	[ 28] 16-byte-literal
+0x100069470	0x00000010	[ 28] 16-byte-literal
+0x100069480	0x00000010	[ 28] 16-byte-literal
+0x100069490	0x00000010	[ 28] 16-byte-literal
+0x1000694A0	0x00000060	[ 28] _VP8DspScan
+0x100069500	0x00000010	[ 29] 16-byte-literal
+0x100069510	0x00000400	[ 29] _kLog2Table
+0x100069910	0x00000800	[ 29] _kSLog2Table
+0x10006A110	0x00000400	[ 29] _kPrefixEncodeCode
+0x10006A510	0x00000200	[ 29] _kPrefixEncodeExtraBitsValue
+0x10006A710	0x0000001C	[ 30] _kWeight
+0x10006A730	0x00000010	[ 31] 16-byte-literal
+0x10006A740	0x00000008	[ 32] 8-byte-literal
+0x10006A748	0x00000008	[ 32] 8-byte-literal
+0x10006A750	0x00000008	[ 32] 8-byte-literal
+0x10006A758	0x00000008	[ 32] 8-byte-literal
+0x10006A760	0x00000040	[ 32] _Intra4Preds_NEON.kLookupTbl1
+0x10006A7A0	0x00000040	[ 32] _Intra4Preds_NEON.kLookupTbl2
+0x10006A7E0	0x00000040	[ 32] _Intra4Preds_NEON.kLookupTbl3
+0x10006A820	0x00000010	[ 36] 16-byte-literal
+0x10006A830	0x00000010	[ 36] 16-byte-literal
+0x10006A840	0x00000008	[ 36] 8-byte-literal
+0x10006A850	0x00000010	[ 37] 16-byte-literal
+0x10006A860	0x00000010	[ 37] 16-byte-literal
+0x10006A870	0x00000010	[ 37] 16-byte-literal
+0x10006A880	0x00000010	[ 37] 16-byte-literal
+0x10006A890	0x00000080	[ 38] _plane_to_code_lut
+0x10006A910	0x00000010	[ 39] 16-byte-literal
+0x10006A920	0x00000010	[ 39] 16-byte-literal
+0x10006A930	0x00000010	[ 39] 16-byte-literal
+0x10006A940	0x00000008	[ 39] 8-byte-literal
+0x10006A948	0x00000008	[ 39] 8-byte-literal
+0x10006A950	0x00000008	[ 39] 8-byte-literal
+0x10006A958	0x00000008	[ 39] 8-byte-literal
+0x10006A960	0x00000008	[ 39] 8-byte-literal
+0x10006A968	0x00000008	[ 39] 8-byte-literal
+0x10006A970	0x00000014	[ 39] _kLosslessPresets
+0x10006A984	0x00000008	[ 40] _VP8FixedCostsUV
+0x10006A98C	0x00000008	[ 40] _VP8FixedCostsI16
+0x10006A994	0x000007D0	[ 40] _VP8FixedCostsI4
+0x10006B164	0x0000010C	[ 40] _VP8LevelCodes
+0x10006B270	0x00000200	[ 41] _kLevelsFromDelta
+0x10006B470	0x00000003	[ 42] _VP8Cat3
+0x10006B473	0x00000004	[ 42] _VP8Cat4
+0x10006B477	0x00000005	[ 42] _VP8Cat5
+0x10006B47C	0x0000000B	[ 42] _VP8Cat6
+0x10006B487	0x00000008	[ 42] _kAverageBytesPerMB
+0x10006B490	0x00000010	[ 43] 16-byte-literal
+0x10006B4A0	0x00000010	[ 44] 16-byte-literal
+0x10006B4B0	0x00000010	[ 44] 16-byte-literal
+0x10006B4C0	0x00000010	[ 44] 16-byte-literal
+0x10006B4D0	0x00000010	[ 44] 16-byte-literal
+0x10006B4E0	0x00000010	[ 44] 16-byte-literal
+0x10006B4F0	0x00000010	[ 44] 16-byte-literal
+0x10006B500	0x00000010	[ 44] 16-byte-literal
+0x10006B510	0x00000010	[ 44] _VP8TopLeftI4
+0x10006B520	0x00000010	[ 50] 16-byte-literal
+0x10006B530	0x00000010	[ 50] 16-byte-literal
+0x10006B540	0x00000007	[ 50] l___const.GetBestGreenRedToBlue.delta_lut
+0x10006B548	0x00000008	[ 51] _VP8I16ModeOffsets
+0x10006B550	0x00000008	[ 51] _VP8UVModeOffsets
+0x10006B558	0x00000020	[ 51] _VP8Scan
+0x10006B578	0x00000100	[ 51] _kAcTable
+0x10006B678	0x00000080	[ 51] _kDcTable
+0x10006B6F8	0x00000100	[ 51] _kAcTable2
+0x10006B7F8	0x00000006	[ 51] _kBiasMatrices
+0x10006B7FE	0x00000020	[ 51] _kWeightY
+0x10006B81E	0x00000010	[ 51] _kZigzag
+0x10006B82E	0x00000020	[ 51] _kWeightTrellis
+0x10006B84E	0x00000014	[ 51] _VP8I4ModeOffsets
+0x10006B868	0x00000008	[ 52] 8-byte-literal
+0x10006B870	0x0000000C	[ 52] l___const.PutRIFFHeader.riff
+0x10006B87C	0x00000420	[ 54] _VP8CoeffsProba0
+0x10006BC9C	0x00000384	[ 54] _kBModesProba
+0x10006C020	0x00000420	[ 54] _VP8CoeffsUpdateProba
+0x10006C440	0x00000008	[ 55] 8-byte-literal
+0x10006C448	0x0000000A	[ 55] _AnalyzeEntropy.kHistoPairs
+0x10006C452	0x00000013	[ 55] _StoreHuffmanTreeOfHuffmanTreeToBitMask.kStorageOrder
+0x10006C465	0x00000015	[ 55] l___const.WriteRiffHeader.riff
+0x10006C480	0x00000010	[ 56] 16-byte-literal
+0x10006C490	0x00000080	[ 59] _kVP8Log2Range
+0x10006C510	0x00000080	[ 59] _kVP8NewRange
+0x10006C590	0x00000064	[ 59] _kBitMask
+0x10006C600	0x00000010	[ 61] 16-byte-literal
+0x10006C610	0x00000010	[ 61] 16-byte-literal
+0x10006C620	0x00000010	[ 61] 16-byte-literal
+0x10006C630	0x00000008	[ 66] 8-byte-literal
+0x10006C638	0x000000DC	[ 66] _kRandomTable
+0x10006C720	0x00000010	[ 69] 16-byte-literal
+0x10006C730	0x00000080	[ 69] _kNewRange
+0x10006C7B0	0x00000010	[ 70] _kReversedBits
+0x10006C7C0	0x00000030	[ 74] _kWebpMatrix
+0x10006C7F0	0x00000030	[ 74] _kRec601LimitedMatrix
+0x10006C820	0x00000030	[ 74] _kRec601FullMatrix
+0x10006C850	0x00000030	[ 74] _kRec709LimitedMatrix
+0x10006C880	0x00000030	[ 74] _kRec709FullMatrix
+0x10006C8B0	0x00000012	[ 76] lJTI1_0
+0x10006C8C2	0x00000012	[ 76] lJTI2_0
+0x10006C8E0	0x00000010	[ 77] 16-byte-literal
+0x10006C8F0	0x00000638	[  0] compact unwind info
+0x10006CF28	0x00000014	[ 19] CFI
+0x10006CF3C	0x00000034	[ 19] FDE for: _WebPAccumulateRGBA
+0x10006CF70	0x00000050	[ 19] FDE for: _YuvToRgbaRow
+0x10006CFC0	0x00000050	[ 19] FDE for: _YuvToBgraRow
+0x10006D010	0x00000050	[ 19] FDE for: _YuvToRgba4444Row
+0x10006D060	0x00000050	[ 19] FDE for: _YuvToRgb565Row
+0x10006D0B0	0x00000014	[ 21] CFI
+0x10006D0C4	0x00000044	[ 21] FDE for: _HFilter16i_NEON
+0x10006D108	0x00000014	[ 22] CFI
+0x10006D11C	0x00000034	[ 22] FDE for: _GradientFilter_NEON
+0x10006D150	0x00000014	[ 30] CFI
+0x10006D164	0x00000034	[ 30] FDE for: _SSIMGetClipped_C
+0x10006D198	0x00000014	[ 40] CFI
+0x10006D1AC	0x0000003C	[ 40] FDE for: _VP8CalculateLevelCosts
+0x10006D1E8	0x00000014	[ 42] CFI
+0x10006D1FC	0x0000003C	[ 42] FDE for: _FinalizeTokenProbas
+0x10006D238	0x00000014	[ 49] CFI
+0x10006D24C	0x0000003C	[ 49] FDE for: _WebPCleanupTransparentArea
+0x100070000	0x00000008	[ 81] __DefaultRuneLocale.got
+0x100070008	0x00000008	[ 79] ___chkstk_darwin.got
+0x100070010	0x00000008	[ 83] ___exp10.got
+0x100070018	0x00000008	[ 81] ___maskrune.got
+0x100070020	0x00000008	[ 81] ___memcpy_chk.got
+0x100070028	0x00000008	[ 81] ___stack_chk_fail.got
+0x100070030	0x00000008	[ 81] ___stack_chk_guard.got
+0x100070038	0x00000008	[ 81] ___stderrp.got
+0x100070040	0x00000008	[ 81] _atoi.got
+0x100070048	0x00000008	[ 81] _bzero.got
+0x100070050	0x00000008	[ 84] _calloc.got
+0x100070058	0x00000008	[ 83] _expf.got
+0x100070060	0x00000008	[ 81] _fclose.got
+0x100070068	0x00000008	[ 81] _fgetc.got
+0x100070070	0x00000008	[ 81] _fopen.got
+0x100070078	0x00000008	[ 81] _fprintf.got
+0x100070080	0x00000008	[ 81] _fputc.got
+0x100070088	0x00000008	[ 81] _fputs.got
+0x100070090	0x00000008	[ 81] _fread.got
+0x100070098	0x00000008	[ 84] _free.got
+0x1000700A0	0x00000008	[ 81] _fwrite.got
+0x1000700A8	0x00000008	[ 81] _getenv.got
+0x1000700B0	0x00000008	[ 82] _getpid.got
+0x1000700B8	0x00000008	[ 83] _log.got
+0x1000700C0	0x00000008	[ 83] _log10.got
+0x1000700C8	0x00000008	[ 83] _logf.got
+0x1000700D0	0x00000008	[ 82] _mach_continuous_time.got
+0x1000700D8	0x00000008	[ 82] _mach_timebase_info.got
+0x1000700E0	0x00000008	[ 84] _malloc.got
+0x1000700E8	0x00000008	[ 81] _memcmp.got
+0x1000700F0	0x00000008	[ 81] _memcpy.got
+0x1000700F8	0x00000008	[ 81] _memmove.got
+0x100070100	0x00000008	[ 81] _memset.got
+0x100070108	0x00000008	[ 81] _memset_pattern16.got
+0x100070110	0x00000008	[ 83] _pow.got
+0x100070118	0x00000008	[ 81] _printf.got
+0x100070120	0x00000008	[ 85] _pthread_cond_destroy.got
+0x100070128	0x00000008	[ 85] _pthread_cond_init.got
+0x100070130	0x00000008	[ 85] _pthread_cond_signal.got
+0x100070138	0x00000008	[ 85] _pthread_cond_wait.got
+0x100070140	0x00000008	[ 85] _pthread_create.got
+0x100070148	0x00000008	[ 85] _pthread_join.got
+0x100070150	0x00000008	[ 85] _pthread_mutex_destroy.got
+0x100070158	0x00000008	[ 85] _pthread_mutex_init.got
+0x100070160	0x00000008	[ 85] _pthread_mutex_lock.got
+0x100070168	0x00000008	[ 85] _pthread_mutex_unlock.got
+0x100070170	0x00000008	[ 81] _qsort.got
+0x100070178	0x00000008	[ 81] _strcmp.got
+0x100070180	0x00000020	[  8] _kCat3456
+0x1000701A0	0x00000008	[ 14] _VP8ksclip1
+0x1000701A8	0x00000008	[ 14] _VP8ksclip2
+0x1000701B0	0x00000008	[ 14] _VP8kclip1
+0x1000701B8	0x00000008	[ 14] _VP8kabs0
+0x1000701C0	0x00000100	[ 58] _kStageNames
+0x1000702C0	0x00000030	[ 74] l_switch.table.SharpYuvGetConversionMatrix
+0x100074000	0x00000048	[  8] __MergedGlobals
+0x100074048	0x00000048	[ 11] __MergedGlobals
+0x100074090	0x00000008	[ 12] _VP8GetCPUInfo
+0x100074098	0x00000048	[ 13] __MergedGlobals
+0x1000740E0	0x00000048	[ 15] __MergedGlobals
+0x100074128	0x00000048	[ 16] __MergedGlobals
+0x100074170	0x00000048	[ 17] __MergedGlobals
+0x1000741B8	0x00000090	[ 18] __MergedGlobals
+0x100074248	0x000000D8	[ 19] __MergedGlobals
+0x100074320	0x00000048	[ 27] __MergedGlobals
+0x100074368	0x00000048	[ 28] __MergedGlobals
+0x1000743B0	0x00000048	[ 29] __MergedGlobals
+0x1000743F8	0x00000048	[ 30] __MergedGlobals
+0x100074440	0x00000030	[ 67] _g_worker_interface
+0x100074470	0x00000008	[ 73] _SharpYuvGetCPUInfo
+0x100074478	0x00000048	[ 77] __MergedGlobals
+0x1000744C0	0x00000018	[  0] _profile_context
+0x1000744D8	0x00000018	[  0] _process_encode_index
+0x1000744F0	0x00000004	[ 58] _process_encode_index$tlv$init
+0x1000744F8	0x000001C0	[ 58] _profile_context$tlv$init
+0x1000746C0	0x00000008	[  8] _GetCoeffs
+0x1000746D0	0x00000294	[ 19] __MergedGlobals.1
+0x100074964	0x00000302	[ 28] __MergedGlobals.1
+0x100074C68	0x00000008	[ 58] _ProfileNowNs.timebase
+0x100074C70	0x00001008	[ 76] _kGammaToLinearTabS
+0x100075C78	0x0000080C	[ 76] __MergedGlobals
+0x100076488	0x00000008	[ 11] _WebPAlphaReplace
+0x100076490	0x00000008	[ 11] _WebPApplyAlphaMultiply
+0x100076498	0x00000008	[ 11] _WebPApplyAlphaMultiply4444
+0x1000764A0	0x00000008	[ 11] _WebPDispatchAlpha
+0x1000764A8	0x00000008	[ 11] _WebPDispatchAlphaToGreen
+0x1000764B0	0x00000008	[ 11] _WebPExtractAlpha
+0x1000764B8	0x00000008	[ 11] _WebPExtractGreen
+0x1000764C0	0x00000008	[ 11] _WebPHasAlpha32b
+0x1000764C8	0x00000008	[ 11] _WebPHasAlpha8b
+0x1000764D0	0x00000008	[ 11] _WebPMultARGBRow
+0x1000764D8	0x00000008	[ 11] _WebPMultRow
+0x1000764E0	0x00000008	[ 11] _WebPPackRGB
+0x1000764E8	0x00000008	[ 13] _VP8DitherCombine8x8
+0x1000764F0	0x00000008	[ 13] _VP8HFilter16
+0x1000764F8	0x00000008	[ 13] _VP8HFilter16i
+0x100076500	0x00000008	[ 13] _VP8HFilter8
+0x100076508	0x00000008	[ 13] _VP8HFilter8i
+0x100076510	0x00000038	[ 13] _VP8PredChroma8
+0x100076548	0x00000038	[ 13] _VP8PredLuma16
+0x100076580	0x00000050	[ 13] _VP8PredLuma4
+0x1000765D0	0x00000008	[ 13] _VP8SimpleHFilter16
+0x1000765D8	0x00000008	[ 13] _VP8SimpleHFilter16i
+0x1000765E0	0x00000008	[ 13] _VP8SimpleVFilter16
+0x1000765E8	0x00000008	[ 13] _VP8SimpleVFilter16i
+0x1000765F0	0x00000008	[ 13] _VP8Transform
+0x1000765F8	0x00000008	[ 13] _VP8TransformAC3
+0x100076600	0x00000008	[ 13] _VP8TransformDC
+0x100076608	0x00000008	[ 13] _VP8TransformDCUV
+0x100076610	0x00000008	[ 13] _VP8TransformUV
+0x100076618	0x00000008	[ 13] _VP8TransformWHT
+0x100076620	0x00000008	[ 13] _VP8VFilter16
+0x100076628	0x00000008	[ 13] _VP8VFilter16i
+0x100076630	0x00000008	[ 13] _VP8VFilter8
+0x100076638	0x00000008	[ 13] _VP8VFilter8i
+0x100076640	0x00000020	[ 15] _WebPFilters
+0x100076660	0x00000020	[ 15] _WebPUnfilters
+0x100076680	0x00000008	[ 16] _VP8LAddGreenToBlueAndRed
+0x100076688	0x00000008	[ 16] _VP8LAddGreenToBlueAndRed_SSE
+0x100076690	0x00000008	[ 16] _VP8LConvertBGRAToBGR
+0x100076698	0x00000008	[ 16] _VP8LConvertBGRAToRGB
+0x1000766A0	0x00000008	[ 16] _VP8LConvertBGRAToRGB565
+0x1000766A8	0x00000008	[ 16] _VP8LConvertBGRAToRGBA
+0x1000766B0	0x00000008	[ 16] _VP8LConvertBGRAToRGBA4444
+0x1000766B8	0x00000008	[ 16] _VP8LConvertBGRAToRGBA_SSE
+0x1000766C0	0x00000008	[ 16] _VP8LConvertBGRAToRGB_SSE
+0x1000766C8	0x00000008	[ 16] _VP8LMapColor32b
+0x1000766D0	0x00000008	[ 16] _VP8LMapColor8b
+0x1000766D8	0x00000080	[ 16] _VP8LPredictors
+0x100076758	0x00000080	[ 16] _VP8LPredictorsAdd
+0x1000767D8	0x00000080	[ 16] _VP8LPredictorsAdd_C
+0x100076858	0x00000080	[ 16] _VP8LPredictorsAdd_SSE
+0x1000768D8	0x00000008	[ 16] _VP8LTransformColorInverse
+0x1000768E0	0x00000008	[ 16] _VP8LTransformColorInverse_SSE
+0x1000768E8	0x00000008	[ 17] _WebPRescalerExportRowExpand
+0x1000768F0	0x00000008	[ 17] _WebPRescalerExportRowShrink
+0x1000768F8	0x00000008	[ 17] _WebPRescalerImportRowExpand
+0x100076900	0x00000008	[ 17] _WebPRescalerImportRowShrink
+0x100076908	0x00000068	[ 18] _WebPUpsamplers
+0x100076970	0x00000068	[ 18] _WebPYUV444Converters
+0x1000769D8	0x00000008	[ 19] _WebPConvertARGBToUV
+0x1000769E0	0x00000008	[ 19] _WebPConvertARGBToY
+0x1000769E8	0x00000008	[ 19] _WebPConvertBGRToY
+0x1000769F0	0x00000008	[ 19] _WebPConvertRGBA32ToUV
+0x1000769F8	0x00000008	[ 19] _WebPConvertRGBToY
+0x100076A00	0x00000008	[ 19] _WebPImportYUVAFromRGBA
+0x100076A08	0x00000008	[ 19] _WebPImportYUVAFromRGBALastLine
+0x100076A10	0x00000068	[ 19] _WebPSamplers
+0x100076A78	0x00000008	[ 27] _VP8GetResidualCost
+0x100076A80	0x00000008	[ 27] _VP8SetResidualCoeffs
+0x100076A88	0x00000008	[ 28] _VP8CollectHistogram
+0x100076A90	0x00000008	[ 28] _VP8Copy16x8
+0x100076A98	0x00000008	[ 28] _VP8Copy4x4
+0x100076AA0	0x00000008	[ 28] _VP8EncPredChroma8
+0x100076AA8	0x00000008	[ 28] _VP8EncPredLuma16
+0x100076AB0	0x00000008	[ 28] _VP8EncPredLuma4
+0x100076AB8	0x00000008	[ 28] _VP8EncQuantize2Blocks
+0x100076AC0	0x00000008	[ 28] _VP8EncQuantizeBlock
+0x100076AC8	0x00000008	[ 28] _VP8EncQuantizeBlockWHT
+0x100076AD0	0x00000008	[ 28] _VP8FTransform
+0x100076AD8	0x00000008	[ 28] _VP8FTransform2
+0x100076AE0	0x00000008	[ 28] _VP8FTransformWHT
+0x100076AE8	0x00000008	[ 28] _VP8ITransform
+0x100076AF0	0x00000008	[ 28] _VP8Mean16x4
+0x100076AF8	0x00000008	[ 28] _VP8SSE16x16
+0x100076B00	0x00000008	[ 28] _VP8SSE16x8
+0x100076B08	0x00000008	[ 28] _VP8SSE4x4
+0x100076B10	0x00000008	[ 28] _VP8SSE8x8
+0x100076B18	0x00000008	[ 28] _VP8TDisto16x16
+0x100076B20	0x00000008	[ 28] _VP8TDisto4x4
+0x100076B28	0x00000008	[ 29] _VP8LAddVector
+0x100076B30	0x00000008	[ 29] _VP8LAddVectorEq
+0x100076B38	0x00000008	[ 29] _VP8LBundleColorMap
+0x100076B40	0x00000008	[ 29] _VP8LBundleColorMap_SSE
+0x100076B48	0x00000008	[ 29] _VP8LCollectColorBlueTransforms
+0x100076B50	0x00000008	[ 29] _VP8LCollectColorBlueTransforms_SSE
+0x100076B58	0x00000008	[ 29] _VP8LCollectColorRedTransforms
+0x100076B60	0x00000008	[ 29] _VP8LCollectColorRedTransforms_SSE
+0x100076B68	0x00000008	[ 29] _VP8LCombinedShannonEntropy
+0x100076B70	0x00000008	[ 29] _VP8LExtraCost
+0x100076B78	0x00000008	[ 29] _VP8LFastLog2Slow
+0x100076B80	0x00000008	[ 29] _VP8LFastSLog2Slow
+0x100076B88	0x00000008	[ 29] _VP8LGetCombinedEntropyUnrefined
+0x100076B90	0x00000008	[ 29] _VP8LGetEntropyUnrefined
+0x100076B98	0x00000080	[ 29] _VP8LPredictorsSub
+0x100076C18	0x00000080	[ 29] _VP8LPredictorsSub_C
+0x100076C98	0x00000080	[ 29] _VP8LPredictorsSub_SSE
+0x100076D18	0x00000008	[ 29] _VP8LShannonEntropy
+0x100076D20	0x00000008	[ 29] _VP8LSubtractGreenFromBlueAndRed
+0x100076D28	0x00000008	[ 29] _VP8LSubtractGreenFromBlueAndRed_SSE
+0x100076D30	0x00000008	[ 29] _VP8LTransformColor
+0x100076D38	0x00000008	[ 29] _VP8LTransformColor_SSE
+0x100076D40	0x00000008	[ 29] _VP8LVectorMismatch
+0x100076D48	0x00000008	[ 30] _VP8AccumulateSSE
+0x100076D50	0x00000008	[ 30] _VP8SSIMGet
+0x100076D58	0x00000008	[ 30] _VP8SSIMGetClipped
+0x100076D60	0x00000008	[ 75] _SharpYuvFilterRow
+0x100076D68	0x00000008	[ 75] _SharpYuvUpdateRGB
+0x100076D70	0x00000008	[ 75] _SharpYuvUpdateY

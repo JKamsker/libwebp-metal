@@ -1,0 +1,97 @@
+{
+  "alignment_boundary_bytes": 16384,
+  "all_six_private_addresses_distinct": true,
+  "baseline_layout_canonical_instructions_equal": true,
+  "baseline_layout_mnemonics_equal": true,
+  "disassembly_sha256": "59c22067c326958355bde16fef640f4fec7760ed16fb5135b12db97cf99aeed7",
+  "dp_to_push_displacement_bytes": 49152,
+  "facts": {
+    "BackwardReferencesHashChainDistanceOnly": {
+      "branch_count": 54,
+      "canonical_instructions_sha256": "63f9955a502caee3c064ea3bd05f4798d953f004724eacffc5c285ad915586f2",
+      "instruction_count": 323,
+      "instruction_words_sha256": "f58f8e3ac3e3af1e02759c9ce3d6fff0121131cb32b605d0be5e4e741d87a1ed",
+      "load_count": 55,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+      "size_bytes": 1292,
+      "store_count": 23
+    },
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": {
+      "branch_count": 54,
+      "canonical_instructions_sha256": "63f9955a502caee3c064ea3bd05f4798d953f004724eacffc5c285ad915586f2",
+      "instruction_count": 323,
+      "instruction_words_sha256": "7ff0614ce0cfca23ad2e7658d2c40e456c869689fecdaf35c5ffff540bae4456",
+      "load_count": 55,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+      "size_bytes": 1292,
+      "store_count": 23
+    },
+    "BackwardReferencesHashChainDistanceOnlySpecialized": {
+      "branch_count": 54,
+      "canonical_instructions_sha256": "1f745463820df0e2d8633602cd3ccb92d66edecd83c17434118b8687335550f5",
+      "instruction_count": 323,
+      "instruction_words_sha256": "7c3532b285a011ffc178d37a811c992c6858dd758d1fc590d7b75763ed51c3e8",
+      "load_count": 55,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+      "size_bytes": 1292,
+      "store_count": 23
+    },
+    "PushInterval": {
+      "branch_count": 30,
+      "canonical_instructions_sha256": "b639260e4c9c1a64c8e33b333da6112d2520e1ab02d111d7de96cdc8d97967ab",
+      "instruction_count": 127,
+      "instruction_words_sha256": "9bacfba8b884fe4a19e5ef6ae914dd6c50154c41eba63b4da575493c2b038471",
+      "load_count": 25,
+      "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8",
+      "size_bytes": 508,
+      "store_count": 11
+    },
+    "PushIntervalLayoutClone": {
+      "branch_count": 30,
+      "canonical_instructions_sha256": "b639260e4c9c1a64c8e33b333da6112d2520e1ab02d111d7de96cdc8d97967ab",
+      "instruction_count": 127,
+      "instruction_words_sha256": "4cdf093b2984e6175658ec282e49a4293463e5d6b2b933f30416ec7dba0b2c89",
+      "load_count": 25,
+      "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8",
+      "size_bytes": 508,
+      "store_count": 11
+    },
+    "PushIntervalSpecialized": {
+      "branch_count": 45,
+      "canonical_instructions_sha256": "9946b2e32e123b18080c5c6caf0261c44a60bae9e4e5cefccbda4c406d17e026",
+      "instruction_count": 183,
+      "instruction_words_sha256": "da1d8392669d64b81cc2d39d602b7d3e55f8f2be7931595fda65507d83b76ddf",
+      "load_count": 34,
+      "mnemonics_sha256": "453c8695e2523dc281903d227f9896d68decf895d5676690c8bd67a59431f190",
+      "size_bytes": 732,
+      "store_count": 12
+    }
+  },
+  "hint_body_distinct": true,
+  "inter_entry_padding_bytes": 77588,
+  "linker_map_bytes": 68593,
+  "linker_map_extract_sha256": "59c6a6359b9a2c1cc7264ced18d8748efc7f33b5377c6f469640e90573789f72",
+  "linker_map_sha256": "a76dc7fdfb6a5d3d10580ca424c9cd61e67a41244a0699ae0db0acb11a79372a",
+  "recorder_symbols_in_timed_binary": false,
+  "schema": "libwebp-backref-cost-specialization-alignment-v4-codegen-v1",
+  "section": {
+    "address": "0x0000000100064000",
+    "alignment_power": 14,
+    "executable_pure_instructions": true,
+    "file_offset": 409600,
+    "flags": "0x80000400",
+    "name": "__br_align_v4",
+    "segment": "__TEXT",
+    "size_bytes": 83212
+  },
+  "symbol_addresses": {
+    "BackwardReferencesHashChainDistanceOnly": "0000000100070000",
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": "0000000100074000",
+    "BackwardReferencesHashChainDistanceOnlySpecialized": "0000000100078000",
+    "PushInterval": "0000000100064000",
+    "PushIntervalLayoutClone": "0000000100068000",
+    "PushIntervalSpecialized": "000000010006c000"
+  },
+  "timed_runner_bytes": 687768,
+  "timed_runner_sha256": "44edc581bc72c56890de5413d6d37df025c6b3669a0be205e24bc55a7f098a80"
+}

@@ -1,0 +1,13 @@
+{
+  "conditional_authority_consumed_by_this_pipeline": true,
+  "gate_a_aggregate_cells": 4,
+  "gate_a_correctness_encodes": 24,
+  "gate_b_clock_children": 1,
+  "gate_b_timer_accounting_children": 3,
+  "gate_b_timer_accounting_rows": 3,
+  "gate_c_direct_children_so_far": 28,
+  "gate_c_online_invariant_continues_for_every_future_child": true,
+  "performance_rows_before_admission": 0,
+  "schema": "libwebp-backref-cost-specialization-alignment-v4-dynamic-admission-v1",
+  "status": "PASS_BEFORE_FIRST_PERFORMANCE_SAMPLE"
+}

@@ -1,0 +1,1661 @@
+{
+  "classifications": {
+    "graphic-m4": {
+      "dp_steady": "invalid-b-to-l-null-control",
+      "dp_total": "invalid-b-to-l-null-control",
+      "whole_encode": "invalid-b-to-l-null-control"
+    },
+    "graphic-m6": {
+      "dp_steady": "invalid-b-to-l-null-control",
+      "dp_total": "invalid-b-to-l-null-control",
+      "whole_encode": "invalid-b-to-l-null-control"
+    },
+    "photo-m4": {
+      "dp_steady": "invalid-b-to-l-null-control",
+      "dp_total": "invalid-b-to-l-null-control",
+      "whole_encode": "invalid-b-to-l-null-control"
+    },
+    "photo-m6": {
+      "dp_steady": "invalid-b-to-l-null-control",
+      "dp_total": "invalid-b-to-l-null-control",
+      "whole_encode": "invalid-b-to-l-null-control"
+    }
+  },
+  "external_profiler_invocations": 0,
+  "integrity": {
+    "index_sha256": "dd41359e33b72b522d7da68292bd279e5cf085ddc3d894867a3c4beed3a56b6f",
+    "indexed_artifacts": 136
+  },
+  "mandatory_b_to_l_null_control": {
+    "checks": [
+      {
+        "bounds": {
+          "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+          "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+          "metrics": [
+            "backref_cost_dp_total",
+            "backref_cost_dp_steady",
+            "whole_encode"
+          ],
+          "per_cell_absolute_mean_percent_max": 0.75,
+          "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+          "per_cell_bootstrap_95_ci_must_include_zero": true,
+          "per_paired_row_absolute_percent_max": 3.0
+        },
+        "cell": "photo-m4",
+        "checks": {
+          "absolute_mean_within_bound": true,
+          "all_paired_rows_within_bound": true,
+          "bootstrap_ci_contains_zero": true,
+          "bootstrap_ci_endpoints_within_bound": true
+        },
+        "metric": "dp_total",
+        "passes": true
+      },
+      {
+        "bounds": {
+          "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+          "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+          "metrics": [
+            "backref_cost_dp_total",
+            "backref_cost_dp_steady",
+            "whole_encode"
+          ],
+          "per_cell_absolute_mean_percent_max": 0.75,
+          "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+          "per_cell_bootstrap_95_ci_must_include_zero": true,
+          "per_paired_row_absolute_percent_max": 3.0
+        },
+        "cell": "photo-m4",
+        "checks": {
+          "absolute_mean_within_bound": true,
+          "all_paired_rows_within_bound": true,
+          "bootstrap_ci_contains_zero": true,
+          "bootstrap_ci_endpoints_within_bound": true
+        },
+        "metric": "dp_steady",
+        "passes": true
+      },
+      {
+        "bounds": {
+          "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+          "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+          "metrics": [
+            "backref_cost_dp_total",
+            "backref_cost_dp_steady",
+            "whole_encode"
+          ],
+          "per_cell_absolute_mean_percent_max": 0.75,
+          "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+          "per_cell_bootstrap_95_ci_must_include_zero": true,
+          "per_paired_row_absolute_percent_max": 3.0
+        },
+        "cell": "photo-m4",
+        "checks": {
+          "absolute_mean_within_bound": true,
+          "all_paired_rows_within_bound": true,
+          "bootstrap_ci_contains_zero": true,
+          "bootstrap_ci_endpoints_within_bound": true
+        },
+        "metric": "whole_encode",
+        "passes": true
+      },
+      {
+        "bounds": {
+          "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+          "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+          "metrics": [
+            "backref_cost_dp_total",
+            "backref_cost_dp_steady",
+            "whole_encode"
+          ],
+          "per_cell_absolute_mean_percent_max": 0.75,
+          "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+          "per_cell_bootstrap_95_ci_must_include_zero": true,
+          "per_paired_row_absolute_percent_max": 3.0
+        },
+        "cell": "photo-m6",
+        "checks": {
+          "absolute_mean_within_bound": true,
+          "all_paired_rows_within_bound": true,
+          "bootstrap_ci_contains_zero": true,
+          "bootstrap_ci_endpoints_within_bound": true
+        },
+        "metric": "dp_total",
+        "passes": true
+      },
+      {
+        "bounds": {
+          "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+          "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+          "metrics": [
+            "backref_cost_dp_total",
+            "backref_cost_dp_steady",
+            "whole_encode"
+          ],
+          "per_cell_absolute_mean_percent_max": 0.75,
+          "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+          "per_cell_bootstrap_95_ci_must_include_zero": true,
+          "per_paired_row_absolute_percent_max": 3.0
+        },
+        "cell": "photo-m6",
+        "checks": {
+          "absolute_mean_within_bound": true,
+          "all_paired_rows_within_bound": true,
+          "bootstrap_ci_contains_zero": true,
+          "bootstrap_ci_endpoints_within_bound": true
+        },
+        "metric": "dp_steady",
+        "passes": true
+      },
+      {
+        "bounds": {
+          "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+          "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+          "metrics": [
+            "backref_cost_dp_total",
+            "backref_cost_dp_steady",
+            "whole_encode"
+          ],
+          "per_cell_absolute_mean_percent_max": 0.75,
+          "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+          "per_cell_bootstrap_95_ci_must_include_zero": true,
+          "per_paired_row_absolute_percent_max": 3.0
+        },
+        "cell": "photo-m6",
+        "checks": {
+          "absolute_mean_within_bound": true,
+          "all_paired_rows_within_bound": true,
+          "bootstrap_ci_contains_zero": true,
+          "bootstrap_ci_endpoints_within_bound": true
+        },
+        "metric": "whole_encode",
+        "passes": true
+      },
+      {
+        "bounds": {
+          "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+          "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+          "metrics": [
+            "backref_cost_dp_total",
+            "backref_cost_dp_steady",
+            "whole_encode"
+          ],
+          "per_cell_absolute_mean_percent_max": 0.75,
+          "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+          "per_cell_bootstrap_95_ci_must_include_zero": true,
+          "per_paired_row_absolute_percent_max": 3.0
+        },
+        "cell": "graphic-m4",
+        "checks": {
+          "absolute_mean_within_bound": true,
+          "all_paired_rows_within_bound": true,
+          "bootstrap_ci_contains_zero": true,
+          "bootstrap_ci_endpoints_within_bound": true
+        },
+        "metric": "dp_total",
+        "passes": true
+      },
+      {
+        "bounds": {
+          "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+          "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+          "metrics": [
+            "backref_cost_dp_total",
+            "backref_cost_dp_steady",
+            "whole_encode"
+          ],
+          "per_cell_absolute_mean_percent_max": 0.75,
+          "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+          "per_cell_bootstrap_95_ci_must_include_zero": true,
+          "per_paired_row_absolute_percent_max": 3.0
+        },
+        "cell": "graphic-m4",
+        "checks": {
+          "absolute_mean_within_bound": true,
+          "all_paired_rows_within_bound": true,
+          "bootstrap_ci_contains_zero": true,
+          "bootstrap_ci_endpoints_within_bound": true
+        },
+        "metric": "dp_steady",
+        "passes": true
+      },
+      {
+        "bounds": {
+          "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+          "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+          "metrics": [
+            "backref_cost_dp_total",
+            "backref_cost_dp_steady",
+            "whole_encode"
+          ],
+          "per_cell_absolute_mean_percent_max": 0.75,
+          "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+          "per_cell_bootstrap_95_ci_must_include_zero": true,
+          "per_paired_row_absolute_percent_max": 3.0
+        },
+        "cell": "graphic-m4",
+        "checks": {
+          "absolute_mean_within_bound": true,
+          "all_paired_rows_within_bound": true,
+          "bootstrap_ci_contains_zero": false,
+          "bootstrap_ci_endpoints_within_bound": true
+        },
+        "metric": "whole_encode",
+        "passes": false
+      },
+      {
+        "bounds": {
+          "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+          "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+          "metrics": [
+            "backref_cost_dp_total",
+            "backref_cost_dp_steady",
+            "whole_encode"
+          ],
+          "per_cell_absolute_mean_percent_max": 0.75,
+          "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+          "per_cell_bootstrap_95_ci_must_include_zero": true,
+          "per_paired_row_absolute_percent_max": 3.0
+        },
+        "cell": "graphic-m6",
+        "checks": {
+          "absolute_mean_within_bound": true,
+          "all_paired_rows_within_bound": true,
+          "bootstrap_ci_contains_zero": true,
+          "bootstrap_ci_endpoints_within_bound": true
+        },
+        "metric": "dp_total",
+        "passes": true
+      },
+      {
+        "bounds": {
+          "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+          "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+          "metrics": [
+            "backref_cost_dp_total",
+            "backref_cost_dp_steady",
+            "whole_encode"
+          ],
+          "per_cell_absolute_mean_percent_max": 0.75,
+          "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+          "per_cell_bootstrap_95_ci_must_include_zero": true,
+          "per_paired_row_absolute_percent_max": 3.0
+        },
+        "cell": "graphic-m6",
+        "checks": {
+          "absolute_mean_within_bound": true,
+          "all_paired_rows_within_bound": true,
+          "bootstrap_ci_contains_zero": true,
+          "bootstrap_ci_endpoints_within_bound": true
+        },
+        "metric": "dp_steady",
+        "passes": true
+      },
+      {
+        "bounds": {
+          "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+          "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+          "metrics": [
+            "backref_cost_dp_total",
+            "backref_cost_dp_steady",
+            "whole_encode"
+          ],
+          "per_cell_absolute_mean_percent_max": 0.75,
+          "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+          "per_cell_bootstrap_95_ci_must_include_zero": true,
+          "per_paired_row_absolute_percent_max": 3.0
+        },
+        "cell": "graphic-m6",
+        "checks": {
+          "absolute_mean_within_bound": true,
+          "all_paired_rows_within_bound": true,
+          "bootstrap_ci_contains_zero": true,
+          "bootstrap_ci_endpoints_within_bound": true
+        },
+        "metric": "whole_encode",
+        "passes": true
+      }
+    ],
+    "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+    "passes": false
+  },
+  "no_v16_samples_loaded": true,
+  "production_promotion": {
+    "checks": [],
+    "consequence": "NO_PRODUCTION_PROMOTION",
+    "passes": false
+  },
+  "raw_counts": {
+    "correctness_cells": 4,
+    "profile_processes": 36,
+    "retained_stage_records": 144,
+    "runner_records": 180,
+    "stage_records": 180,
+    "work_rows": 12
+  },
+  "repeatability_ratios": {
+    "graphic-large/4/B": 1.0116697053550778,
+    "graphic-large/4/H": 1.0079213630077155,
+    "graphic-large/4/L": 1.0035138550564309,
+    "graphic-large/6/B": 1.0036704300660644,
+    "graphic-large/6/H": 1.013790336740853,
+    "graphic-large/6/L": 1.0061645714401695,
+    "photo-large/4/B": 1.006218839357109,
+    "photo-large/4/H": 1.0126467881635886,
+    "photo-large/4/L": 1.006929174086275,
+    "photo-large/6/B": 1.0043221118688375,
+    "photo-large/6/H": 1.005601959176077,
+    "photo-large/6/L": 1.0022679528279104
+  },
+  "repeatability_required_stage_share_ranges": {
+    "graphic-large/4/B": {
+      "backref_cost_dp_setup": 0.00011787463172233982,
+      "backref_cost_dp_steady": 0.003691208362775533,
+      "backref_cost_dp_total": 0.0036633079380939404,
+      "backref_cost_materialize": 0.00015658389418894345,
+      "backref_cost_traceback": 2.365740946468726e-05,
+      "lossless_analyze": 0.001153098034182981,
+      "lossless_backward_refs": 0.001994668278157974,
+      "lossless_bitstream": 1.4871505753821297e-05,
+      "lossless_hash_chain": 0.0002207068508355975,
+      "lossless_histogram": 0.00011172823651311309,
+      "lossless_huffman": 4.2928958548031984e-05
+    },
+    "graphic-large/4/H": {
+      "backref_cost_dp_setup": 0.00021646238817536224,
+      "backref_cost_dp_steady": 0.001454066643469587,
+      "backref_cost_dp_total": 0.0016928901579271738,
+      "backref_cost_materialize": 5.7444369521925456e-05,
+      "backref_cost_traceback": 3.0506864611274878e-05,
+      "lossless_analyze": 0.0010940839767498642,
+      "lossless_backward_refs": 0.003990177145821394,
+      "lossless_bitstream": 7.720348207056194e-06,
+      "lossless_hash_chain": 0.0007953174456910017,
+      "lossless_histogram": 0.0004707287636963389,
+      "lossless_huffman": 2.3470860491223676e-05
+    },
+    "graphic-large/4/L": {
+      "backref_cost_dp_setup": 0.00010611618064872673,
+      "backref_cost_dp_steady": 0.0003092097475935751,
+      "backref_cost_dp_total": 0.0003934792922490882,
+      "backref_cost_materialize": 5.6929792939709387e-05,
+      "backref_cost_traceback": 1.1597601901667902e-05,
+      "lossless_analyze": 0.0006190709717184689,
+      "lossless_backward_refs": 0.0006299680045689371,
+      "lossless_bitstream": 1.5227916151093555e-05,
+      "lossless_hash_chain": 0.0003481758452205941,
+      "lossless_histogram": 0.00020641806109822358,
+      "lossless_huffman": 8.67250023886951e-05
+    },
+    "graphic-large/6/B": {
+      "backref_cost_dp_setup": 0.00010944061756483318,
+      "backref_cost_dp_steady": 0.0010898391508707972,
+      "backref_cost_dp_total": 0.0011707918298747844,
+      "backref_cost_materialize": 6.197201581430861e-05,
+      "backref_cost_traceback": 9.958960393515056e-06,
+      "lossless_analyze": 0.0008589252366503417,
+      "lossless_backward_refs": 0.0015451921245930311,
+      "lossless_bitstream": 7.741206234004855e-06,
+      "lossless_hash_chain": 0.0003014056104688745,
+      "lossless_histogram": 9.837977107653856e-05,
+      "lossless_huffman": 9.919846393970587e-06
+    },
+    "graphic-large/6/H": {
+      "backref_cost_dp_setup": 9.337576938863411e-05,
+      "backref_cost_dp_steady": 0.0054331575566021195,
+      "backref_cost_dp_total": 0.00544974867631981,
+      "backref_cost_materialize": 0.00015778521770400296,
+      "backref_cost_traceback": 3.143486568229169e-06,
+      "lossless_analyze": 0.0007660883040015859,
+      "lossless_backward_refs": 0.003548794055339588,
+      "lossless_bitstream": 3.7007946722675196e-05,
+      "lossless_hash_chain": 0.0002668711775246496,
+      "lossless_histogram": 0.0001739996926263844,
+      "lossless_huffman": 0.00016343137031142336
+    },
+    "graphic-large/6/L": {
+      "backref_cost_dp_setup": 6.039078172238345e-05,
+      "backref_cost_dp_steady": 0.0009836614562416246,
+      "backref_cost_dp_total": 0.0009799940332467783,
+      "backref_cost_materialize": 0.00010485121522666764,
+      "backref_cost_traceback": 3.893644886692287e-05,
+      "lossless_analyze": 0.0004914399492640456,
+      "lossless_backward_refs": 0.0016202740515791625,
+      "lossless_bitstream": 1.4663784584699908e-05,
+      "lossless_hash_chain": 9.639313811740657e-05,
+      "lossless_histogram": 0.00015072535542946103,
+      "lossless_huffman": 0.0001528338006342617
+    },
+    "photo-large/4/B": {
+      "backref_cost_dp_setup": 8.314546802039562e-06,
+      "backref_cost_dp_steady": 0.0003139662728882178,
+      "backref_cost_dp_total": 0.0003302391859404119,
+      "backref_cost_materialize": 1.508891582334285e-05,
+      "backref_cost_traceback": 1.3227447996579707e-05,
+      "lossless_analyze": 0.0005709041835208414,
+      "lossless_backward_refs": 0.0012789978591629392,
+      "lossless_bitstream": 4.018941851724445e-05,
+      "lossless_hash_chain": 0.001927774855904514,
+      "lossless_histogram": 0.00015125860946650638,
+      "lossless_huffman": 4.126354389307201e-06
+    },
+    "photo-large/4/H": {
+      "backref_cost_dp_setup": 1.9712589221942143e-05,
+      "backref_cost_dp_steady": 0.00024056904776066645,
+      "backref_cost_dp_total": 0.00026623028061736886,
+      "backref_cost_materialize": 3.5057125596638355e-05,
+      "backref_cost_traceback": 1.5322892500376135e-05,
+      "lossless_analyze": 0.000711033944247718,
+      "lossless_backward_refs": 0.0081188998953923,
+      "lossless_bitstream": 3.7793544872907585e-05,
+      "lossless_hash_chain": 0.0017509784919510843,
+      "lossless_histogram": 0.0002636207417870025,
+      "lossless_huffman": 1.7394646406159505e-05
+    },
+    "photo-large/4/L": {
+      "backref_cost_dp_setup": 2.5620763006843758e-05,
+      "backref_cost_dp_steady": 0.00018727508943895688,
+      "backref_cost_dp_total": 0.00016608609133666324,
+      "backref_cost_materialize": 1.215070354525314e-05,
+      "backref_cost_traceback": 7.135617963766982e-06,
+      "lossless_analyze": 0.0006382221851643465,
+      "lossless_backward_refs": 0.0018156936297764326,
+      "lossless_bitstream": 2.0240676918241874e-05,
+      "lossless_hash_chain": 0.002460413163249152,
+      "lossless_histogram": 8.081773843829354e-06,
+      "lossless_huffman": 2.4284125853580012e-05
+    },
+    "photo-large/6/B": {
+      "backref_cost_dp_setup": 1.0312467148108776e-05,
+      "backref_cost_dp_steady": 0.000176225254573361,
+      "backref_cost_dp_total": 0.00018037570350301624,
+      "backref_cost_materialize": 1.5673051868428942e-05,
+      "backref_cost_traceback": 1.3169237468254637e-05,
+      "lossless_analyze": 0.0005758747860082208,
+      "lossless_backward_refs": 0.004350071336692449,
+      "lossless_bitstream": 2.8419739805091116e-05,
+      "lossless_hash_chain": 0.00227570819951807,
+      "lossless_histogram": 0.00014518168977564923,
+      "lossless_huffman": 7.0890576873706675e-06
+    },
+    "photo-large/6/H": {
+      "backref_cost_dp_setup": 2.012732546024295e-06,
+      "backref_cost_dp_steady": 4.7870065996356154e-05,
+      "backref_cost_dp_total": 5.1404089711642315e-05,
+      "backref_cost_materialize": 4.759302695627691e-06,
+      "backref_cost_traceback": 3.114754664689705e-06,
+      "lossless_analyze": 2.8038736668276054e-05,
+      "lossless_backward_refs": 0.0019496915735229825,
+      "lossless_bitstream": 1.633125350382369e-05,
+      "lossless_hash_chain": 0.0008298523819320336,
+      "lossless_histogram": 3.4618184982460054e-05,
+      "lossless_huffman": 8.932081346025309e-06
+    },
+    "photo-large/6/L": {
+      "backref_cost_dp_setup": 5.117847973834175e-06,
+      "backref_cost_dp_steady": 0.00019426825655877167,
+      "backref_cost_dp_total": 0.00018786727039722326,
+      "backref_cost_materialize": 1.4968809061475553e-05,
+      "backref_cost_traceback": 7.832644933042777e-06,
+      "lossless_analyze": 6.011482301007329e-05,
+      "lossless_backward_refs": 0.002151858084681685,
+      "lossless_bitstream": 2.7339708453701875e-05,
+      "lossless_hash_chain": 0.0011845244534180455,
+      "lossless_histogram": 0.00011405102916227546,
+      "lossless_huffman": 1.2529934305842384e-05
+    }
+  },
+  "schema": "libwebp-backref-cost-specialization-alignment-v4-evaluation-v1",
+  "statistics": {
+    "graphic-m4": {
+      "dp_steady": {
+        "B_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -1.231344020851701,
+            -0.6476603665131737
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295637,
+          "count": 12,
+          "maximum_percent": 0.3345790542902817,
+          "mean_percent": -0.9595361694834671,
+          "median_percent": -0.9033047983236552,
+          "minimum_percent": -1.663735554572941,
+          "negative_count": 11,
+          "paired_percentages": [
+            -0.8017011154560034,
+            -0.9831238735408847,
+            -0.5798799170984994,
+            -0.6469988789597237,
+            -1.400196872877993,
+            -1.397355747401478,
+            -1.537059319887688,
+            -1.663735554572941,
+            -1.1943552794021501,
+            -0.8211208057880992,
+            -0.8234857231064256,
+            0.3345790542902817
+          ],
+          "positive_count": 1,
+          "sample_stddev_percent": 0.5435679331296672,
+          "zero_count": 0
+        },
+        "B_to_L": {
+          "bootstrap_mean_ci95_percent": [
+            -0.3168809078248977,
+            0.21050021137331046
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295635,
+          "count": 12,
+          "maximum_percent": 1.3060749628386086,
+          "mean_percent": -0.09301206840802462,
+          "median_percent": -0.1512687841960889,
+          "minimum_percent": -0.6333879082663098,
+          "negative_count": 9,
+          "paired_percentages": [
+            0.09771322509145297,
+            -0.1369590015069281,
+            -0.1583849825777961,
+            -0.5221614317203503,
+            -0.012586750197440863,
+            0.06725005929461819,
+            -0.23633259297611398,
+            -0.6333879082663098,
+            -0.4450350943000585,
+            -0.14415258581438173,
+            -0.2981827207615957,
+            1.3060749628386086
+          ],
+          "positive_count": 3,
+          "sample_stddev_percent": 0.49520650860077253,
+          "zero_count": 0
+        },
+        "L_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -1.0816407870485818,
+            -0.6481763632555637
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295636,
+          "count": 12,
+          "maximum_percent": -0.1254927218323984,
+          "mean_percent": -0.8668423440733442,
+          "median_percent": -0.8729308560433247,
+          "minimum_percent": -1.463621520355808,
+          "negative_count": 12,
+          "paired_percentages": [
+            -0.8985363516995917,
+            -0.8473253603870576,
+            -0.4221635782305335,
+            -0.1254927218323984,
+            -1.3877847996865669,
+            -1.463621520355808,
+            -1.3038080502842422,
+            -1.0369153427062914,
+            -0.7526698299897545,
+            -0.6779454959365221,
+            -0.5268740497212756,
+            -0.9589710280500887
+          ],
+          "positive_count": 0,
+          "sample_stddev_percent": 0.4010098262587882,
+          "zero_count": 0
+        }
+      },
+      "dp_total": {
+        "B_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -1.2171200937744697,
+            -0.6533400104677771
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295627,
+          "count": 12,
+          "maximum_percent": 0.27164301306696154,
+          "mean_percent": -0.9505798646508069,
+          "median_percent": -0.9010848333594326,
+          "minimum_percent": -1.6359451522614241,
+          "negative_count": 11,
+          "paired_percentages": [
+            -0.7495326340801481,
+            -0.9844877410844981,
+            -0.6034025490508901,
+            -0.6276873561775784,
+            -1.3054269247503865,
+            -1.4341111981205952,
+            -1.5201352328669369,
+            -1.6359451522614241,
+            -1.1961444442627653,
+            -0.8040462305870543,
+            -0.817681925634367,
+            0.27164301306696154
+          ],
+          "positive_count": 1,
+          "sample_stddev_percent": 0.523403544002392,
+          "zero_count": 0
+        },
+        "B_to_L": {
+          "bootstrap_mean_ci95_percent": [
+            -0.3269444151885643,
+            0.19313983030375964
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295625,
+          "count": 12,
+          "maximum_percent": 1.2813636278294005,
+          "mean_percent": -0.10469717299024589,
+          "median_percent": -0.17268785017276062,
+          "minimum_percent": -0.6547637341270784,
+          "negative_count": 9,
+          "paired_percentages": [
+            0.12210568002469323,
+            -0.14831853009617765,
+            -0.19705717024934358,
+            -0.541759925798326,
+            0.007546760522839941,
+            -0.06574204588300124,
+            -0.22025510663214404,
+            -0.6547637341270784,
+            -0.4275584292227126,
+            -0.1392407932517645,
+            -0.2726864089993362,
+            1.2813636278294005
+          ],
+          "positive_count": 3,
+          "sample_stddev_percent": 0.4896898105038972,
+          "zero_count": 0
+        },
+        "L_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -1.050071233963767,
+            -0.6332125170401585
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295626,
+          "count": 12,
+          "maximum_percent": -0.08639548650282323,
+          "mean_percent": -0.8462601539894621,
+          "median_percent": -0.8539932696324677,
+          "minimum_percent": -1.369269337913987,
+          "negative_count": 12,
+          "paired_percentages": [
+            -0.8705752922241441,
+            -0.8374112470407914,
+            -0.4071476925231681,
+            -0.08639548650282323,
+            -1.3128746057707636,
+            -1.369269337913987,
+            -1.3027494985319341,
+            -0.9876481802393188,
+            -0.7718862798937521,
+            -0.6657324084217102,
+            -0.5464857088902983,
+            -0.996946109920853
+          ],
+          "positive_count": 0,
+          "sample_stddev_percent": 0.3862661658701845,
+          "zero_count": 0
+        }
+      },
+      "whole_encode": {
+        "B_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -1.5540737967691987,
+            -0.32022370643076054
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295647,
+          "count": 12,
+          "maximum_percent": 0.4794074706007533,
+          "mean_percent": -0.8986680510360409,
+          "median_percent": -0.5879334310869617,
+          "minimum_percent": -3.437196856898299,
+          "negative_count": 9,
+          "paired_percentages": [
+            0.2127320842145537,
+            -0.6077086069393168,
+            -0.11310087423987784,
+            0.013791823040301299,
+            -3.437196856898299,
+            -1.8295547908349017,
+            -1.943778513450781,
+            -1.920677948314312,
+            -0.6296649910990748,
+            -0.5681582552346067,
+            -0.44010715327692757,
+            0.4794074706007533
+          ],
+          "positive_count": 3,
+          "sample_stddev_percent": 1.1484366769568515,
+          "zero_count": 0
+        },
+        "B_to_L": {
+          "bootstrap_mean_ci95_percent": [
+            -1.0795343104954225,
+            -0.21412171812593112
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295645,
+          "count": 12,
+          "maximum_percent": 0.6932719761235405,
+          "mean_percent": -0.6199563389094708,
+          "median_percent": -0.6044859037908173,
+          "minimum_percent": -2.5938194656142124,
+          "negative_count": 10,
+          "paired_percentages": [
+            0.04446026803269106,
+            -0.050862822026383064,
+            -0.33453327042057884,
+            -0.7778227485511955,
+            -2.5938194656142124,
+            -0.7651581370564905,
+            -1.0824589882944002,
+            -1.000479601206874,
+            -0.2360229153341804,
+            -0.44381367052514425,
+            -0.8922366920404212,
+            0.6932719761235405
+          ],
+          "positive_count": 2,
+          "sample_stddev_percent": 0.8048019044976966,
+          "zero_count": 0
+        },
+        "L_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.6004653885065014,
+            0.05228344811742346
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295646,
+          "count": 12,
+          "maximum_percent": 0.7978201985886557,
+          "mean_percent": -0.2819402336917132,
+          "median_percent": -0.3034827051323402,
+          "minimum_percent": -1.0726037687937109,
+          "negative_count": 8,
+          "paired_percentages": [
+            0.16819703532913224,
+            -0.5571291565242737,
+            0.22217564764083195,
+            0.7978201985886557,
+            -0.8658356037134238,
+            -1.0726037687937109,
+            -0.8707449824844056,
+            -0.9294977828182043,
+            -0.3945733593106714,
+            -0.1248989031158264,
+            0.45619992185534675,
+            -0.2123920509540091
+          ],
+          "positive_count": 4,
+          "sample_stddev_percent": 0.6043409932310547,
+          "zero_count": 0
+        }
+      }
+    },
+    "graphic-m6": {
+      "dp_steady": {
+        "B_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.6878432517948299,
+            -0.22401795094567573
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295737,
+          "count": 12,
+          "maximum_percent": 0.5215527896077916,
+          "mean_percent": -0.4692850575504093,
+          "median_percent": -0.4742240301602255,
+          "minimum_percent": -1.0956001436896843,
+          "negative_count": 11,
+          "paired_percentages": [
+            -0.348459932111151,
+            -0.2636654610699214,
+            -0.10520910097180915,
+            0.5215527896077916,
+            -0.6473270686190757,
+            -0.7763700091985258,
+            -0.449112301691648,
+            -0.9345113544785923,
+            -1.0956001436896843,
+            -0.7544405661235305,
+            -0.4993357586288031,
+            -0.2789417836299619
+          ],
+          "positive_count": 1,
+          "sample_stddev_percent": 0.42903162643941856,
+          "zero_count": 0
+        },
+        "B_to_L": {
+          "bootstrap_mean_ci95_percent": [
+            -0.03247890424850498,
+            0.5777341175809363
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295735,
+          "count": 12,
+          "maximum_percent": 1.5126724771857358,
+          "mean_percent": 0.2508259347282178,
+          "median_percent": 0.11846889215356285,
+          "minimum_percent": -0.3003394419269836,
+          "negative_count": 6,
+          "paired_percentages": [
+            0.35390318341252797,
+            -0.22042191204062297,
+            1.0005434360385845,
+            1.5126724771857358,
+            -0.22259388047310225,
+            -0.22766171068532023,
+            -0.06673146779263954,
+            -0.3003394419269836,
+            -0.10932220043170451,
+            0.30366925209976525,
+            0.6594197390092487,
+            0.3267737423431245
+          ],
+          "positive_count": 6,
+          "sample_stddev_percent": 0.5680870025516987,
+          "zero_count": 0
+        },
+        "L_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.8958870612086425,
+            -0.5273220715161682
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295736,
+          "count": 12,
+          "maximum_percent": -0.04333907785336357,
+          "mean_percent": -0.7171587518388011,
+          "median_percent": -0.6679842573166932,
+          "minimum_percent": -1.1511644917509802,
+          "negative_count": 12,
+          "paired_percentages": [
+            -0.699886195995785,
+            -0.04333907785336357,
+            -1.0947986014655875,
+            -0.9763506992692873,
+            -0.4256807273955093,
+            -0.5499603476487537,
+            -0.38263617263331223,
+            -0.6360823186376012,
+            -0.9873573440326001,
+            -1.054906391872743,
+            -1.1511644917509802,
+            -0.6037426535100898
+          ],
+          "positive_count": 0,
+          "sample_stddev_percent": 0.3416300559216011,
+          "zero_count": 0
+        }
+      },
+      "dp_total": {
+        "B_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.6648829311809165,
+            -0.20768224914313244
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295727,
+          "count": 12,
+          "maximum_percent": 0.5049986117386149,
+          "mean_percent": -0.4469197592988243,
+          "median_percent": -0.42703954554982104,
+          "minimum_percent": -1.0831500233522784,
+          "negative_count": 11,
+          "paired_percentages": [
+            -0.3227116417914364,
+            -0.28003267874746945,
+            -0.030112859166939506,
+            0.5049986117386149,
+            -0.5823430844098816,
+            -0.7518474732019553,
+            -0.43018393465460847,
+            -0.887004277637536,
+            -1.0831500233522784,
+            -0.7640613933883231,
+            -0.42389515644503367,
+            -0.31269320052904503
+          ],
+          "positive_count": 1,
+          "sample_stddev_percent": 0.4212907715807679,
+          "zero_count": 0
+        },
+        "B_to_L": {
+          "bootstrap_mean_ci95_percent": [
+            -0.02948943216517638,
+            0.5889777954856149
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295725,
+          "count": 12,
+          "maximum_percent": 1.5212652509303046,
+          "mean_percent": 0.25832000320689597,
+          "median_percent": 0.10272981441364576,
+          "minimum_percent": -0.2926251668570013,
+          "negative_count": 6,
+          "paired_percentages": [
+            0.34770393068167993,
+            -0.20592702919558536,
+            1.0443160206839726,
+            1.5212652509303046,
+            -0.18530243556343345,
+            -0.24815331964995307,
+            -0.08490920315874546,
+            -0.2926251668570013,
+            -0.10167771970518408,
+            0.29036883198603697,
+            0.7055852181610335,
+            0.30919566016962696
+          ],
+          "positive_count": 6,
+          "sample_stddev_percent": 0.5755833553246787,
+          "zero_count": 0
+        },
+        "L_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.8824074561868067,
+            -0.5155584202173866
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295726,
+          "count": 12,
+          "maximum_percent": -0.07425856801492037,
+          "mean_percent": -0.7022098066044885,
+          "median_percent": -0.6440322613331761,
+          "minimum_percent": -1.1215667652983154,
+          "negative_count": 12,
+          "paired_percentages": [
+            -0.6680925882830632,
+            -0.07425856801492037,
+            -1.063324412657684,
+            -1.0010381930128447,
+            -0.3977777406880723,
+            -0.5049471967832994,
+            -0.3455681506589579,
+            -0.596123518220401,
+            -0.9824712580190069,
+            -1.0513773532340087,
+            -1.1215667652983154,
+            -0.6199719343832892
+          ],
+          "positive_count": 0,
+          "sample_stddev_percent": 0.33956063595495706,
+          "zero_count": 0
+        }
+      },
+      "whole_encode": {
+        "B_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.3221026024883418,
+            0.47346561905759826
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295747,
+          "count": 12,
+          "maximum_percent": 1.1767266036721349,
+          "mean_percent": 0.08764171116155149,
+          "median_percent": 0.17208210321772352,
+          "minimum_percent": -1.4139752947850124,
+          "negative_count": 5,
+          "paired_percentages": [
+            -0.21389909158254491,
+            0.148610945008922,
+            0.19555326142652504,
+            0.4292927759931044,
+            1.1767266036721349,
+            0.6308514972679007,
+            0.8017245535323395,
+            -1.4139752947850124,
+            -0.5498926558306668,
+            -0.5730520629695377,
+            -0.3531744943257488,
+            0.7729344965312019
+          ],
+          "positive_count": 7,
+          "sample_stddev_percent": 0.7370627597603538,
+          "zero_count": 0
+        },
+        "B_to_L": {
+          "bootstrap_mean_ci95_percent": [
+            -0.10969968128498833,
+            0.6101831815586819
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295745,
+          "count": 12,
+          "maximum_percent": 1.6037927342251637,
+          "mean_percent": 0.24046379111912053,
+          "median_percent": 0.1741140556960976,
+          "minimum_percent": -0.9600543679638184,
+          "negative_count": 4,
+          "paired_percentages": [
+            0.1709253522963322,
+            -0.060636265523647814,
+            1.078036793393284,
+            1.6037927342251637,
+            0.17730275909586302,
+            -0.331615148989306,
+            -0.23593244660111373,
+            -0.9600543679638184,
+            0.38503719996882596,
+            0.15297843364633648,
+            0.6785567552891508,
+            0.2271736945923761
+          ],
+          "positive_count": 8,
+          "sample_stddev_percent": 0.6657742768834597,
+          "zero_count": 0
+        },
+        "L_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.5963774894013845,
+            0.3193178129841182
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295746,
+          "count": 12,
+          "maximum_percent": 1.0401109593672548,
+          "mean_percent": -0.14960259810596677,
+          "median_percent": -0.4212444309331663,
+          "minimum_percent": -1.1559607438123023,
+          "negative_count": 7,
+          "paired_percentages": [
+            -0.3841678037069819,
+            0.2093741672085363,
+            -0.8730714999645107,
+            -1.1559607438123023,
+            0.9976549747797303,
+            0.9656689507871028,
+            1.0401109593672548,
+            -0.45832105815935076,
+            -0.9313438355729206,
+            -0.7249215230247857,
+            -1.0247775523070335,
+            0.5445237871336599
+          ],
+          "positive_count": 5,
+          "sample_stddev_percent": 0.8517713624452515,
+          "zero_count": 0
+        }
+      }
+    },
+    "photo-m4": {
+      "dp_steady": {
+        "B_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -1.2337950803444946,
+            0.13993569184466878
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295437,
+          "count": 12,
+          "maximum_percent": 1.3612728593262142,
+          "mean_percent": -0.5405298544919345,
+          "median_percent": -0.2919379072099466,
+          "minimum_percent": -2.4891138743104624,
+          "negative_count": 8,
+          "paired_percentages": [
+            -0.18745598683906817,
+            1.0020983268257675,
+            -1.722409572445951,
+            -0.20900891038871144,
+            -2.4891138743104624,
+            0.6803618095608158,
+            -0.7596139755027924,
+            -1.9648151258121935,
+            0.16731745178976748,
+            1.3612728593262142,
+            -1.9901243520754188,
+            -0.3748669040311818
+          ],
+          "positive_count": 4,
+          "sample_stddev_percent": 1.265698548829698,
+          "zero_count": 0
+        },
+        "B_to_L": {
+          "bootstrap_mean_ci95_percent": [
+            -0.2894398666235271,
+            0.8070787746164517
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295435,
+          "count": 12,
+          "maximum_percent": 1.9976028457475015,
+          "mean_percent": 0.2516147345874041,
+          "median_percent": 0.36738260093151187,
+          "minimum_percent": -1.1781456789919982,
+          "negative_count": 4,
+          "paired_percentages": [
+            0.2887313717837343,
+            0.6224372761399178,
+            0.6447009932047546,
+            0.4460338300792894,
+            -1.0381769437812596,
+            0.005280414032555005,
+            -0.2654420099627734,
+            -0.97798943528703,
+            1.9976028457475015,
+            0.7225362149873601,
+            -1.1781456789919982,
+            1.7518079370967976
+          ],
+          "positive_count": 8,
+          "sample_stddev_percent": 1.018008566954675,
+          "zero_count": 0
+        },
+        "L_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -1.338162583151233,
+            -0.23778456337989934
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295436,
+          "count": 12,
+          "maximum_percent": 0.6750457503177348,
+          "mean_percent": -0.788063513343749,
+          "median_percent": -0.7368965077223693,
+          "minimum_percent": -2.3519475365230864,
+          "negative_count": 9,
+          "paired_percentages": [
+            -0.47481641467525626,
+            0.3773125169329175,
+            -2.3519475365230864,
+            -0.6521340022007356,
+            -1.4661582474131938,
+            0.6750457503177348,
+            -0.49548719671408503,
+            -0.9965720599868575,
+            -1.794439617101298,
+            0.6341546473527054,
+            -0.821659013244003,
+            -2.09006098686983
+          ],
+          "positive_count": 3,
+          "sample_stddev_percent": 1.0172081419746286,
+          "zero_count": 0
+        }
+      },
+      "dp_total": {
+        "B_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -1.188289472779682,
+            0.14675179759323836
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295427,
+          "count": 12,
+          "maximum_percent": 1.3466719104911269,
+          "mean_percent": -0.515813155129211,
+          "median_percent": -0.28818630446416427,
+          "minimum_percent": -2.417748788272673,
+          "negative_count": 8,
+          "paired_percentages": [
+            -0.20898482141419994,
+            1.0867687925751952,
+            -1.7737310464413611,
+            -0.14611178320832324,
+            -2.417748788272673,
+            0.5934926773751438,
+            -0.7486860016334898,
+            -1.7993819367306025,
+            0.1735061004805383,
+            1.3466719104911269,
+            -1.9281651772577582,
+            -0.36738778751412865
+          ],
+          "positive_count": 4,
+          "sample_stddev_percent": 1.239205250939888,
+          "zero_count": 0
+        },
+        "B_to_L": {
+          "bootstrap_mean_ci95_percent": [
+            -0.2938157600556804,
+            0.77932054979331
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295425,
+          "count": 12,
+          "maximum_percent": 1.9372859551736408,
+          "mean_percent": 0.23468309760810746,
+          "median_percent": 0.3701289035134438,
+          "minimum_percent": -1.196700885699666,
+          "negative_count": 5,
+          "paired_percentages": [
+            0.18725191945530928,
+            0.666144545645215,
+            0.5544136112966834,
+            0.5530058875715783,
+            -0.95216594217925,
+            -0.07508562443500932,
+            -0.22394183495347758,
+            -0.9873880170762823,
+            1.9372859551736408,
+            0.6894558997038309,
+            -1.196700885699666,
+            1.6639216567947168
+          ],
+          "positive_count": 7,
+          "sample_stddev_percent": 0.9907566162540329,
+          "zero_count": 0
+        },
+        "L_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -1.2880340203329501,
+            -0.20414405058839738
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295426,
+          "count": 12,
+          "maximum_percent": 0.6690806852206251,
+          "mean_percent": -0.746730979320831,
+          "median_percent": -0.7177982619400536,
+          "minimum_percent": -2.3153082735261377,
+          "negative_count": 9,
+          "paired_percentages": [
+            -0.3954961667059801,
+            0.41784082307757003,
+            -2.3153082735261377,
+            -0.6952727714192709,
+            -1.4796717768082297,
+            0.6690806852206251,
+            -0.5259219258912757,
+            -0.8200914039055565,
+            -1.730259775082412,
+            0.6527158230370665,
+            -0.7403237524608361,
+            -1.998063237385534
+          ],
+          "positive_count": 3,
+          "sample_stddev_percent": 1.0013714704883072,
+          "zero_count": 0
+        }
+      },
+      "whole_encode": {
+        "B_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.5257959168856229,
+            0.552325568564438
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295447,
+          "count": 12,
+          "maximum_percent": 1.708836551014932,
+          "mean_percent": 0.01069503212488173,
+          "median_percent": -0.08780572552615029,
+          "minimum_percent": -1.7223915552814533,
+          "negative_count": 6,
+          "paired_percentages": [
+            1.708836551014932,
+            -0.23982665415243742,
+            0.20623169476019818,
+            1.0248762581613036,
+            -0.40385652865940824,
+            0.06421520310013684,
+            -1.7223915552814533,
+            -0.5131004710760896,
+            1.1648502584215568,
+            -0.4858086140179341,
+            -1.2671130163178022,
+            0.5914272595455783
+          ],
+          "positive_count": 6,
+          "sample_stddev_percent": 1.0006609460603746,
+          "zero_count": 0
+        },
+        "B_to_L": {
+          "bootstrap_mean_ci95_percent": [
+            -0.380419511036635,
+            0.6896482773287395
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295445,
+          "count": 12,
+          "maximum_percent": 1.3742465873694285,
+          "mean_percent": 0.1927140853100022,
+          "median_percent": 0.699915551362591,
+          "minimum_percent": -2.0251814350140784,
+          "negative_count": 5,
+          "paired_percentages": [
+            0.7402156824086467,
+            0.8358755370796934,
+            -0.13660064858056606,
+            0.6596154203165352,
+            -0.9129548470084015,
+            0.8301050398152694,
+            -0.7761545931699158,
+            0.9830893584606729,
+            1.3742465873694285,
+            -2.0251814350140784,
+            -0.059097435889163004,
+            0.7994103579319051
+          ],
+          "positive_count": 7,
+          "sample_stddev_percent": 0.9990267677595674,
+          "zero_count": 0
+        },
+        "L_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.6822255648734193,
+            0.3474571345424315
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295446,
+          "count": 12,
+          "maximum_percent": 1.571192316089966,
+          "mean_percent": -0.17755001654900357,
+          "median_percent": -0.20644568121318663,
+          "minimum_percent": -1.4816241402812729,
+          "negative_count": 7,
+          "paired_percentages": [
+            0.9615036676712485,
+            -1.0667851947559777,
+            0.34330129513650615,
+            0.36286730911853493,
+            0.5137889797429516,
+            -0.7595844876018942,
+            -0.9536386724701594,
+            -1.4816241402812729,
+            -0.20655771657686606,
+            1.571192316089966,
+            -1.2087299088115724,
+            -0.2063336458495072
+          ],
+          "positive_count": 5,
+          "sample_stddev_percent": 0.9484081298266878,
+          "zero_count": 0
+        }
+      }
+    },
+    "photo-m6": {
+      "dp_steady": {
+        "B_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.9448728826776323,
+            -0.47644823501264516
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295537,
+          "count": 12,
+          "maximum_percent": 0.18818620938000571,
+          "mean_percent": -0.7235001553408509,
+          "median_percent": -0.8667451095369721,
+          "minimum_percent": -1.280463044040547,
+          "negative_count": 11,
+          "paired_percentages": [
+            -0.8670166545981173,
+            -0.9271736230849593,
+            -0.866473564475827,
+            -0.5959588225474524,
+            -1.2202446215384282,
+            -0.8822047807512973,
+            -1.033425135794553,
+            -0.42360590228823414,
+            0.18818620938000571,
+            -0.09258424292200328,
+            -0.6810376814287981,
+            -1.280463044040547
+          ],
+          "positive_count": 1,
+          "sample_stddev_percent": 0.43671896214851585,
+          "zero_count": 0
+        },
+        "B_to_L": {
+          "bootstrap_mean_ci95_percent": [
+            -0.9290525163905221,
+            0.07744841536710702
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295535,
+          "count": 12,
+          "maximum_percent": 1.318735119353115,
+          "mean_percent": -0.4178727546080516,
+          "median_percent": -0.27901803124554514,
+          "minimum_percent": -2.30221669146575,
+          "negative_count": 9,
+          "paired_percentages": [
+            -1.1849088275952866,
+            -0.6149094238477967,
+            -1.4652561090322929,
+            0.22067352602907975,
+            -2.30221669146575,
+            -0.14542066725835082,
+            -0.2870614309735758,
+            -0.03469237739243149,
+            -0.27097463151751455,
+            1.318735119353115,
+            0.2966974875636086,
+            -0.5451390291594244
+          ],
+          "positive_count": 3,
+          "sample_stddev_percent": 0.9285881437666463,
+          "zero_count": 0
+        },
+        "L_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.6957298737836535,
+            0.12076896771145507
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295536,
+          "count": 12,
+          "maximum_percent": 1.107468392103025,
+          "mean_percent": -0.30119402004192114,
+          "median_percent": -0.5634528026470008,
+          "minimum_percent": -1.392950040890847,
+          "negative_count": 8,
+          "paired_percentages": [
+            0.3217040729563629,
+            -0.31419622141199866,
+            0.6076867112163407,
+            -0.8148342251605785,
+            1.107468392103025,
+            -0.7378571102260504,
+            -0.7485123952136923,
+            -0.3890484950679512,
+            0.4604084309467538,
+            -1.392950040890847,
+            -0.9748428347938793,
+            -0.7393545249605388
+          ],
+          "positive_count": 4,
+          "sample_stddev_percent": 0.7555031420929146,
+          "zero_count": 0
+        }
+      },
+      "dp_total": {
+        "B_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.9360673161466299,
+            -0.4825711683387701
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295527,
+          "count": 12,
+          "maximum_percent": 0.16967515320904614,
+          "mean_percent": -0.7197612403716677,
+          "median_percent": -0.8498264664813437,
+          "minimum_percent": -1.2951334059039548,
+          "negative_count": 11,
+          "paired_percentages": [
+            -0.859369261331816,
+            -0.8902781700937047,
+            -0.8402836716308715,
+            -0.5689739478266427,
+            -1.2577235792280559,
+            -0.8665505254198188,
+            -0.9414875822407723,
+            -0.4107783001980954,
+            0.16967515320904614,
+            -0.1896198663197103,
+            -0.6866117274756159,
+            -1.2951334059039548
+          ],
+          "positive_count": 1,
+          "sample_stddev_percent": 0.42057444275438693,
+          "zero_count": 0
+        },
+        "B_to_L": {
+          "bootstrap_mean_ci95_percent": [
+            -0.9065507551523948,
+            0.06099566815564448
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295525,
+          "count": 12,
+          "maximum_percent": 1.1833731330182982,
+          "mean_percent": -0.4076103336745791,
+          "median_percent": -0.2507709174068202,
+          "minimum_percent": -2.2453916770546245,
+          "negative_count": 9,
+          "paired_percentages": [
+            -1.2009568976063854,
+            -0.6277079411534747,
+            -1.3771023311702755,
+            0.2383863585549345,
+            -2.2453916770546245,
+            -0.09718317701994289,
+            -0.19408344351871026,
+            -0.008353421322704599,
+            -0.30745839129493024,
+            1.1833731330182982,
+            0.3131240285475008,
+            -0.5679702440746344
+          ],
+          "positive_count": 3,
+          "sample_stddev_percent": 0.8944427118221067,
+          "zero_count": 0
+        },
+        "L_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.6920675076634676,
+            0.10171462106996042
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295526,
+          "count": 12,
+          "maximum_percent": 1.0103545139925019,
+          "mean_percent": -0.3080795323101461,
+          "median_percent": -0.5668876608538325,
+          "minimum_percent": -1.3569353904944799,
+          "negative_count": 8,
+          "paired_percentages": [
+            0.34573982252090635,
+            -0.26422881418971444,
+            0.5443144261913817,
+            -0.8054402467071162,
+            1.0103545139925019,
+            -0.7701157713732281,
+            -0.748857547236789,
+            -0.4024584979293719,
+            0.478605055909532,
+            -1.3569353904944799,
+            -0.9966151146270831,
+            -0.731316823778293
+          ],
+          "positive_count": 4,
+          "sample_stddev_percent": 0.7342569867680137,
+          "zero_count": 0
+        }
+      },
+      "whole_encode": {
+        "B_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.34387484248209266,
+            0.23482254096029237
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295547,
+          "count": 12,
+          "maximum_percent": 0.4560802502390569,
+          "mean_percent": -0.026731237378099206,
+          "median_percent": 0.09754105668831203,
+          "minimum_percent": -1.3178470194016478,
+          "negative_count": 5,
+          "paired_percentages": [
+            -0.6968639643298381,
+            0.12327534906551639,
+            0.4474190244965569,
+            -0.016997436241529884,
+            -0.3957889592044831,
+            0.4560802502390569,
+            -1.3178470194016478,
+            -0.014469770659363895,
+            0.07180676431110768,
+            0.4477574690093776,
+            0.24684560588963095,
+            0.32800783828842595
+          ],
+          "positive_count": 7,
+          "sample_stddev_percent": 0.5366958913272443,
+          "zero_count": 0
+        },
+        "B_to_L": {
+          "bootstrap_mean_ci95_percent": [
+            -0.035127210409419796,
+            0.500717251262621
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295545,
+          "count": 12,
+          "maximum_percent": 0.9308518809795167,
+          "mean_percent": 0.2599468562455741,
+          "median_percent": 0.3417384562979333,
+          "minimum_percent": -1.0196658394862181,
+          "negative_count": 2,
+          "paired_percentages": [
+            -0.2674510715453242,
+            0.462717062772957,
+            0.6038628544282977,
+            0.6287041539055972,
+            0.20647277054100094,
+            0.9308518809795167,
+            -1.0196658394862181,
+            0.41980667319328874,
+            0.44681903319230176,
+            0.2636702394025779,
+            0.19929481845348732,
+            0.24427969910940645
+          ],
+          "positive_count": 10,
+          "sample_stddev_percent": 0.49802523987559394,
+          "zero_count": 0
+        },
+        "L_to_H": {
+          "bootstrap_mean_ci95_percent": [
+            -0.4252450570227914,
+            -0.13441123717085407
+          ],
+          "bootstrap_resamples": 100000,
+          "bootstrap_seed": 1112295546,
+          "count": 12,
+          "maximum_percent": 0.1836031228133272,
+          "mean_percent": -0.2857919365746446,
+          "median_percent": -0.35561119479630565,
+          "minimum_percent": -0.6416674005456385,
+          "negative_count": 9,
+          "paired_percentages": [
+            -0.4305644419983316,
+            -0.33787829319342855,
+            -0.1555047942424554,
+            -0.6416674005456385,
+            -0.6010207854781799,
+            -0.47039296894107635,
+            -0.3012529533714013,
+            -0.4324609439509917,
+            -0.3733440963991827,
+            0.1836031228133272,
+            0.04745620966923841,
+            0.0835241067423854
+          ],
+          "positive_count": 3,
+          "sample_stddev_percent": 0.2693320914911876,
+          "zero_count": 0
+        }
+      }
+    }
+  },
+  "status": "FAIL_B_TO_L_NULL_CONTROL"
+}

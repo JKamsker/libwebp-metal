@@ -1,0 +1,9 @@
+{
+  "benchmark_lease_acquisition_attempted": true,
+  "mode": "run",
+  "production_promotion_authorized": false,
+  "schema": "libwebp-backref-cost-specialization-alignment-v4-operator-status-v1",
+  "source_commit": "f1e1b1afd4c12921b326276ae7f07f4d27137548",
+  "source_tree": "4ec54223425a9ae3c08f720181bc34162e3db1bb",
+  "status": "complete"
+}

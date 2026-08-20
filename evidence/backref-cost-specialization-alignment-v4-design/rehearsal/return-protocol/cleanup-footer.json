@@ -1,0 +1,11 @@
+{
+  "absence_proved": true,
+  "elapsed_transaction_ns": 28706276959,
+  "removed_exact_validated_child": true,
+  "run_directory": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-specialization-alignment-v4/run.bve7no1b",
+  "safe_root": "/Users/pandocs-agent-001/.libwebp-metal-backref-cost-specialization-alignment-v4",
+  "schema": "libwebp-backref-cost-specialization-alignment-v4-cleanup-receipt-v1",
+  "source_commit": "f1e1b1afd4c12921b326276ae7f07f4d27137548",
+  "source_tree": "4ec54223425a9ae3c08f720181bc34162e3db1bb",
+  "status": "complete"
+}

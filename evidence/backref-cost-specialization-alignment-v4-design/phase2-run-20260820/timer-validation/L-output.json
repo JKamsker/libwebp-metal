@@ -1,0 +1,14 @@
+{
+  "baseline_dp_calls": 0,
+  "case_id": "photo-large",
+  "exact_activations": 3,
+  "hint_dp_calls": 0,
+  "layout_clone_dp_calls": 3,
+  "method": 4,
+  "per_pixel_clock_calls": 0,
+  "reset_scope": "one-encode",
+  "schema": "libwebp-backref-cost-specialization-alignment-v4-timer-accounting-output-v1",
+  "selected_dp_calls": 3,
+  "selector_evaluations": 3,
+  "variant": "L"
+}

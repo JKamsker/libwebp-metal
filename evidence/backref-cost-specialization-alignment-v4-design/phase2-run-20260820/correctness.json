@@ -1,0 +1,50 @@
+[
+  {
+    "all_variants_equal": true,
+    "bitstream_bytes": 283992,
+    "bitstream_sha256": "d21aa8d0755b8c6bc377afcf1142499c66a42d2de1d00561fdd65a126a7ce83c",
+    "case_id": "photo-large",
+    "decoded_rgb_equal": true,
+    "input_immutable": true,
+    "input_sha256_after": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612",
+    "input_sha256_before": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612",
+    "method": 4,
+    "repeat_deterministic": true
+  },
+  {
+    "all_variants_equal": true,
+    "bitstream_bytes": 286706,
+    "bitstream_sha256": "7c72ce50697d343dafe98a21b39e9255a669b7b84c1ca820b2fcd7206579a521",
+    "case_id": "photo-large",
+    "decoded_rgb_equal": true,
+    "input_immutable": true,
+    "input_sha256_after": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612",
+    "input_sha256_before": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612",
+    "method": 6,
+    "repeat_deterministic": true
+  },
+  {
+    "all_variants_equal": true,
+    "bitstream_bytes": 1274,
+    "bitstream_sha256": "f4bd94160601ce53fad92579816fce9866267fdc00eebee62dd2d2ef9f71074a",
+    "case_id": "graphic-large",
+    "decoded_rgb_equal": true,
+    "input_immutable": true,
+    "input_sha256_after": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc",
+    "input_sha256_before": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc",
+    "method": 4,
+    "repeat_deterministic": true
+  },
+  {
+    "all_variants_equal": true,
+    "bitstream_bytes": 1274,
+    "bitstream_sha256": "f4bd94160601ce53fad92579816fce9866267fdc00eebee62dd2d2ef9f71074a",
+    "case_id": "graphic-large",
+    "decoded_rgb_equal": true,
+    "input_immutable": true,
+    "input_sha256_after": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc",
+    "input_sha256_before": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc",
+    "method": 6,
+    "repeat_deterministic": true
+  }
+]

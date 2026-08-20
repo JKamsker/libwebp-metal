@@ -1,0 +1,394 @@
+{
+  "accounting_children": 3,
+  "accounting_rows": 3,
+  "clock": {
+    "clock_reads": 4096,
+    "elapsed_ns": 33500,
+    "maximum_delta_ns": 83,
+    "mean_read_delta_ns": 8,
+    "minimum_positive_delta_ns": 41,
+    "monotonic": true,
+    "positive_deltas": 803,
+    "schema": "libwebp-backref-cost-specialization-alignment-v4-timer-check-v1"
+  },
+  "clock_children": 1,
+  "counter_reset_scope": "one-encode",
+  "one_selected_dp_body_per_encode": true,
+  "per_pixel_clock_calls": 0,
+  "performance_rows": 0,
+  "rows": [
+    {
+      "output": {
+        "baseline_dp_calls": 3,
+        "case_id": "photo-large",
+        "exact_activations": 3,
+        "hint_dp_calls": 0,
+        "layout_clone_dp_calls": 0,
+        "method": 4,
+        "per_pixel_clock_calls": 0,
+        "reset_scope": "one-encode",
+        "schema": "libwebp-backref-cost-specialization-alignment-v4-timer-accounting-output-v1",
+        "selected_dp_calls": 3,
+        "selector_evaluations": 3,
+        "variant": "B"
+      },
+      "stage": {
+        "backend": "B",
+        "case_id": "photo-large",
+        "encode_index": 0,
+        "error_code": 0,
+        "exact": true,
+        "height": 2000,
+        "lossless": true,
+        "metal_cross_color": false,
+        "metal_hash": false,
+        "method": 4,
+        "ok": true,
+        "output_bytes": 283992,
+        "pid": 39350,
+        "pixels": 6000000,
+        "quality": 75.0,
+        "record_type": "encode",
+        "run_id": "timer-validation-B",
+        "sample_role": "timer-validation",
+        "schema": "libwebp-backref-cost-specialization-alignment-v4-timer-accounting-stage-v1",
+        "stages": {
+          "backref_cost_dp_setup": {
+            "calls": 3,
+            "ns": 3039501
+          },
+          "backref_cost_dp_steady": {
+            "calls": 3,
+            "ns": 35452209
+          },
+          "backref_cost_dp_total": {
+            "calls": 3,
+            "ns": 38515000
+          },
+          "backref_cost_materialize": {
+            "calls": 3,
+            "ns": 2234000
+          },
+          "backref_cost_traceback": {
+            "calls": 3,
+            "ns": 808792
+          },
+          "lossless_analyze": {
+            "calls": 1,
+            "ns": 28442292
+          },
+          "lossless_backward_refs": {
+            "calls": 4,
+            "ns": 143648542
+          },
+          "lossless_bitstream": {
+            "calls": 4,
+            "ns": 1277083
+          },
+          "lossless_container_setup": {
+            "calls": 1,
+            "ns": 2949000
+          },
+          "lossless_cross_color": {
+            "calls": 1,
+            "ns": 451178000
+          },
+          "lossless_encoder_init": {
+            "calls": 1,
+            "ns": 6500
+          },
+          "lossless_hash_chain": {
+            "calls": 4,
+            "ns": 56186957
+          },
+          "lossless_histogram": {
+            "calls": 4,
+            "ns": 14610124
+          },
+          "lossless_huffman": {
+            "calls": 5,
+            "ns": 658668
+          },
+          "lossless_input_copy": {
+            "calls": 1,
+            "ns": 2224208
+          },
+          "lossless_predictor": {
+            "calls": 1,
+            "ns": 248615667
+          },
+          "lossless_prepare": {
+            "calls": 1,
+            "ns": 42
+          },
+          "lossless_riff_write": {
+            "calls": 1,
+            "ns": 5000
+          },
+          "lossless_stream_finalize": {
+            "calls": 1,
+            "ns": 7083
+          },
+          "lossless_subtract_green": {
+            "calls": 1,
+            "ns": 1005375
+          }
+        },
+        "thread_level": 0,
+        "total_ns": 951083459,
+        "width": 3000
+      },
+      "variant": "B"
+    },
+    {
+      "output": {
+        "baseline_dp_calls": 0,
+        "case_id": "photo-large",
+        "exact_activations": 3,
+        "hint_dp_calls": 0,
+        "layout_clone_dp_calls": 3,
+        "method": 4,
+        "per_pixel_clock_calls": 0,
+        "reset_scope": "one-encode",
+        "schema": "libwebp-backref-cost-specialization-alignment-v4-timer-accounting-output-v1",
+        "selected_dp_calls": 3,
+        "selector_evaluations": 3,
+        "variant": "L"
+      },
+      "stage": {
+        "backend": "L",
+        "case_id": "photo-large",
+        "encode_index": 0,
+        "error_code": 0,
+        "exact": true,
+        "height": 2000,
+        "lossless": true,
+        "metal_cross_color": false,
+        "metal_hash": false,
+        "method": 4,
+        "ok": true,
+        "output_bytes": 283992,
+        "pid": 39351,
+        "pixels": 6000000,
+        "quality": 75.0,
+        "record_type": "encode",
+        "run_id": "timer-validation-L",
+        "sample_role": "timer-validation",
+        "schema": "libwebp-backref-cost-specialization-alignment-v4-timer-accounting-stage-v1",
+        "stages": {
+          "backref_cost_dp_setup": {
+            "calls": 3,
+            "ns": 3105624
+          },
+          "backref_cost_dp_steady": {
+            "calls": 3,
+            "ns": 36255834
+          },
+          "backref_cost_dp_total": {
+            "calls": 3,
+            "ns": 39384498
+          },
+          "backref_cost_materialize": {
+            "calls": 3,
+            "ns": 2293042
+          },
+          "backref_cost_traceback": {
+            "calls": 3,
+            "ns": 802126
+          },
+          "lossless_analyze": {
+            "calls": 1,
+            "ns": 13103000
+          },
+          "lossless_backward_refs": {
+            "calls": 4,
+            "ns": 146702458
+          },
+          "lossless_bitstream": {
+            "calls": 4,
+            "ns": 1308833
+          },
+          "lossless_container_setup": {
+            "calls": 1,
+            "ns": 1406583
+          },
+          "lossless_cross_color": {
+            "calls": 1,
+            "ns": 450186167
+          },
+          "lossless_encoder_init": {
+            "calls": 1,
+            "ns": 2334
+          },
+          "lossless_hash_chain": {
+            "calls": 4,
+            "ns": 56041126
+          },
+          "lossless_histogram": {
+            "calls": 4,
+            "ns": 14897958
+          },
+          "lossless_huffman": {
+            "calls": 5,
+            "ns": 681083
+          },
+          "lossless_input_copy": {
+            "calls": 1,
+            "ns": 1345375
+          },
+          "lossless_predictor": {
+            "calls": 1,
+            "ns": 242984750
+          },
+          "lossless_prepare": {
+            "calls": 1,
+            "ns": 0
+          },
+          "lossless_riff_write": {
+            "calls": 1,
+            "ns": 5000
+          },
+          "lossless_stream_finalize": {
+            "calls": 1,
+            "ns": 7708
+          },
+          "lossless_subtract_green": {
+            "calls": 1,
+            "ns": 625167
+          }
+        },
+        "thread_level": 0,
+        "total_ns": 929582958,
+        "width": 3000
+      },
+      "variant": "L"
+    },
+    {
+      "output": {
+        "baseline_dp_calls": 0,
+        "case_id": "photo-large",
+        "exact_activations": 3,
+        "hint_dp_calls": 3,
+        "layout_clone_dp_calls": 0,
+        "method": 4,
+        "per_pixel_clock_calls": 0,
+        "reset_scope": "one-encode",
+        "schema": "libwebp-backref-cost-specialization-alignment-v4-timer-accounting-output-v1",
+        "selected_dp_calls": 3,
+        "selector_evaluations": 3,
+        "variant": "H"
+      },
+      "stage": {
+        "backend": "H",
+        "case_id": "photo-large",
+        "encode_index": 0,
+        "error_code": 0,
+        "exact": true,
+        "height": 2000,
+        "lossless": true,
+        "metal_cross_color": false,
+        "metal_hash": false,
+        "method": 4,
+        "ok": true,
+        "output_bytes": 283992,
+        "pid": 39352,
+        "pixels": 6000000,
+        "quality": 75.0,
+        "record_type": "encode",
+        "run_id": "timer-validation-H",
+        "sample_role": "timer-validation",
+        "schema": "libwebp-backref-cost-specialization-alignment-v4-timer-accounting-stage-v1",
+        "stages": {
+          "backref_cost_dp_setup": {
+            "calls": 3,
+            "ns": 3492291
+          },
+          "backref_cost_dp_steady": {
+            "calls": 3,
+            "ns": 36220667
+          },
+          "backref_cost_dp_total": {
+            "calls": 3,
+            "ns": 39717959
+          },
+          "backref_cost_materialize": {
+            "calls": 3,
+            "ns": 2246208
+          },
+          "backref_cost_traceback": {
+            "calls": 3,
+            "ns": 821292
+          },
+          "lossless_analyze": {
+            "calls": 1,
+            "ns": 12931584
+          },
+          "lossless_backward_refs": {
+            "calls": 4,
+            "ns": 143133417
+          },
+          "lossless_bitstream": {
+            "calls": 4,
+            "ns": 1311416
+          },
+          "lossless_container_setup": {
+            "calls": 1,
+            "ns": 1380041
+          },
+          "lossless_cross_color": {
+            "calls": 1,
+            "ns": 450299667
+          },
+          "lossless_encoder_init": {
+            "calls": 1,
+            "ns": 3542
+          },
+          "lossless_hash_chain": {
+            "calls": 4,
+            "ns": 55858083
+          },
+          "lossless_histogram": {
+            "calls": 4,
+            "ns": 14850457
+          },
+          "lossless_huffman": {
+            "calls": 5,
+            "ns": 649542
+          },
+          "lossless_input_copy": {
+            "calls": 1,
+            "ns": 1370750
+          },
+          "lossless_predictor": {
+            "calls": 1,
+            "ns": 242216666
+          },
+          "lossless_prepare": {
+            "calls": 1,
+            "ns": 0
+          },
+          "lossless_riff_write": {
+            "calls": 1,
+            "ns": 5083
+          },
+          "lossless_stream_finalize": {
+            "calls": 1,
+            "ns": 7584
+          },
+          "lossless_subtract_green": {
+            "calls": 1,
+            "ns": 609625
+          }
+        },
+        "thread_level": 0,
+        "total_ns": 924895292,
+        "width": 3000
+      },
+      "variant": "H"
+    }
+  ],
+  "schema": "libwebp-backref-cost-specialization-alignment-v4-timer-accounting-summary-v1",
+  "schema_and_file_separation": true,
+  "stage_rows": 3,
+  "status": "PASS"
+}
