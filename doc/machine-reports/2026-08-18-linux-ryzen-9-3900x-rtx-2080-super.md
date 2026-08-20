@@ -2537,3 +2537,37 @@ native build identity, tests, and computed summary use
 `libwebp-i4-transform-split-*`. This is RTX 2080 SUPER-only evidence and
 leaves the pre-Ampere 784/12,544 and Ampere+ 64/4,000 warm/cold macroblock
 thresholds unchanged.
+
+
+## Direct result-to-bitwriter rejection
+
+The selecting current-source repeated-batch profile attributed 52.8% of PNG
+and 55.2% of JPEG exclusive CPU samples to `VP8RecordCoeffTokens`, with
+`VP8PutTokenPage` at about 5.5%. This justified a distinct coarse experiment:
+record exact adaptive statistics only, retain GPU coefficient results through
+probability finalization, and encode the eight partitions directly instead of
+constructing and replaying packed-token pages. Size-search and transactional
+CPU fallback retained the ordinary token path.
+
+An initial feasibility version used each accelerator result's per-block
+non-zero decision mask as a packed iterator context word. The frozen PNG/JPEG
+hash and byte checks rejected that assumption. A separate packed-context trace
+made the corrected implementation exact; it passed basic/trellis outputs,
+padded strides, every band remainder, injected fallbacks, concurrent encodes,
+and 20 near-lossless cases.
+
+Two reversed-order process pairs, one warmup and five retained forced-CUDA
+batch-24 samples per process, measured:
+
+| Format | Parent | Direct result coding | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 41.328 ms/image | 44.319 ms/image | -2.991 ms/image | `99f33682e7cc9063` / 6,441,688 |
+| JPEG lossy | 39.839 ms/image | 42.924 ms/image | -3.085 ms/image | `1b9eceb1d93cad23` / 6,400,792 |
+
+All 40 corrected timing rows were exact, but direct `PutCoeffs` traversal was
+about 3 ms/image slower in both formats than the compact token emitter. Source
+was restored and the restored trellis/fallback, concurrency, and near-lossless
+tests passed. The invalid feasibility rows are preserved separately from the
+corrected gate; all raw artifacts use `libwebp-direct-result-tokens-*`. This
+is RTX 2080 SUPER-only evidence and leaves the Turing/Ampere+ thresholds and
+defaults unchanged.

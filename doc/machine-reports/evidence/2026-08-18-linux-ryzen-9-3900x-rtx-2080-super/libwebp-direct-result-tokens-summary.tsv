@@ -1,0 +1,5 @@
+phase	format	parent_process_medians_ms	candidate_process_medians_ms	balanced_parent_ms	balanced_candidate_ms	gain_ms	output_hash	output_bytes	decision
+invalid_context	png	39.266228,39.498853	42.284009,42.323131	39.382540	42.303570	-2.921030	parent=99f33682e7cc9063,candidate=1030200defaa2383	parent=6441688,candidate=6441792	repair_context_layout_before_timing
+invalid_context	jpeg	39.390085,39.633453	42.903717,42.866349	39.511769	42.885033	-3.373264	parent=1b9eceb1d93cad23,candidate=75b6538ff270ec53	parent=6400792,candidate=6400856	repair_context_layout_before_timing
+corrected	png	43.020248,39.636304	46.000595,42.637181	41.328276	44.318888	-2.990612	99f33682e7cc9063	6441688	reject_regression
+corrected	jpeg	39.918218,39.760389	42.851959,42.995730	39.839304	42.923844	-3.084540	1b9eceb1d93cad23	6400792	reject_regression

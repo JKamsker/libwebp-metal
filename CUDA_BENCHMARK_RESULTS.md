@@ -2272,3 +2272,26 @@ distinct exact implementations—8-lane width, fused registers, shared matrix,
 and uniform AC—no repeated variant was created. Source is restored; raw
 artifacts use `libwebp-output-write-profile-*` and
 `libwebp-i4-transform-split-*`. No Ampere+ setting or claim changed.
+
+
+## Direct GPU-result entropy coding rejection
+
+The profile-led candidate replaced packed-token construction and replay with
+an exact-order statistics pass followed by direct coefficient coding from the
+retained accelerator results. It preserved ordinary token materialization for
+transactional fallback and disabled itself for size-search.
+
+After the frozen corpus exposed an initial packed-context layout mistake, the
+corrected candidate passed trellis/fallback, concurrency, and near-lossless
+tests. Two order-reversed process pairs per format produced exact aggregate
+output in all 40 corrected timing rows:
+
+| Format | Parent | Direct candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 41.328 ms/image | 44.319 ms/image | -2.991 ms/image | `99f33682e7cc9063` / 6,441,688 |
+| JPEG lossy | 39.839 ms/image | 42.924 ms/image | -3.085 ms/image | `1b9eceb1d93cad23` / 6,400,792 |
+
+Both formats regressed materially, so source was restored and the restored
+focused tests passed. Raw artifacts use `libwebp-direct-result-tokens-*`.
+This native-sm_75 experiment changes no Ampere+ setting or cross-hardware
+claim.

@@ -1014,3 +1014,39 @@ below 1.5 ms/image. The diagnostic was removed. Raw gprofng archives and
 rows use `libwebp-output-write-profile-*`; probe patch, cycles, native build
 identity, tests, and decision use `libwebp-i4-transform-split-*`. RTX 2080
 SUPER only; Ampere+ behavior and architecture thresholds are unchanged.
+
+
+## Direct result-to-bitwriter rejection
+
+The current repeated-workload gprofng refresh selected a coarse token boundary,
+not another residual specialization: `VP8RecordCoeffTokens` held 52.8% of PNG
+and 55.2% of JPEG exclusive CPU samples, while `VP8PutTokenPage` held about
+5.5%. The candidate therefore recorded exact adaptive statistics without
+building packed-token pages, retained the final GPU coefficient results, and
+coded each of the eight final partitions directly with the finalized
+probabilities. Size-search stayed on the ordinary token path, and an injected
+CUDA collection failure materialized the ordinary tokens before CPU fallback.
+
+The first feasibility build incorrectly treated the accelerator's per-block
+`result.nz` decision mask as the iterator's packed neighbor-context word.
+The frozen screen caught different hashes and byte counts immediately. The
+corrected build stored a separate packed-context trace and passed basic and
+trellis exactness, padded strides, every band remainder, transactional
+fallbacks, concurrency, and 20 near-lossless cases.
+
+Two order-reversed process pairs per format, one warmup and five retained
+batch-24 samples per process, were exact across all 40 corrected rows:
+
+| Format | Parent | Direct result coding | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 41.328 ms/image | 44.319 ms/image | -2.991 ms/image | `99f33682e7cc9063` / 6,441,688 |
+| JPEG lossy | 39.839 ms/image | 42.924 ms/image | -3.085 ms/image | `1b9eceb1d93cad23` / 6,400,792 |
+
+Direct boolean coding from coefficient arrays was substantially slower than
+the compact packed-token emitter, overwhelming the avoided page construction
+and traversal. The complete candidate was removed, and the restored native
+build passed the same three focused suites. The initial invalid rows, corrected
+rows, exact patch, native build identities, tests, and decision are archived
+under `libwebp-direct-result-tokens-*`. This is RTX 2080 SUPER-only evidence;
+the pre-Ampere 784/12,544 and Ampere+ 64/4,000 warm/cold thresholds and all
+architecture defaults remain unchanged.
