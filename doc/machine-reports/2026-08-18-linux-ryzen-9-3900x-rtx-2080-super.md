@@ -2571,3 +2571,31 @@ tests passed. The invalid feasibility rows are preserved separately from the
 corrected gate; all raw artifacts use `libwebp-direct-result-tokens-*`. This
 is RTX 2080 SUPER-only evidence and leaves the Turing/Ampere+ thresholds and
 defaults unchanged.
+
+
+## Adaptive token-statistics batching rejection
+
+A retained native phase refresh put realistic photo/texture I4 at
+63.2--65.2% of block cycles, but its remaining numeric, metric, prediction,
+and scheduling subdivisions are exhausted. The independent host profile still
+places 52.8--55.2% of CPU samples in `VP8RecordCoeffTokens`, with adaptive
+statistics read/modify/write among its largest instruction clusters.
+
+The candidate preserved each statistics slot's event order in 16-bit batches.
+It applied one packed counter addition when no saturation boundary occurred
+and replayed the original bits at the rare boundary. An initial token-indexed
+draft failed method-3 quality-99 because Cat5/Cat6 token slot 10 intentionally
+updates statistics slot 9; the corrected implementation keyed the actual
+statistics pointer and passed trellis/fallback, concurrency, and near-lossless.
+
+Two reversed-order, three-sample batch-24 pairs were exact:
+
+| Format | Parent | Batched stats | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 42.325 ms/image | 42.313 ms/image | 0.012 ms/image | `99f33682e7cc9063` / 6,441,688 |
+| JPEG lossy | 42.376 ms/image | 42.270 ms/image | 0.106 ms/image | `1b9eceb1d93cad23` / 6,400,792 |
+
+Both changes are noise. The cache-hot batch update merely replaced the
+cache-hot packed counter update, so source was restored and all focused tests
+passed again. Evidence uses `libwebp-token-stats-batch-*`. RTX 2080 SUPER
+only; architecture thresholds and Ampere+ behavior are unchanged.

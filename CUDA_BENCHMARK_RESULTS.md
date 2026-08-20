@@ -2295,3 +2295,19 @@ Both formats regressed materially, so source was restored and the restored
 focused tests passed. Raw artifacts use `libwebp-direct-result-tokens-*`.
 This native-sm_75 experiment changes no Ampere+ setting or cross-hardware
 claim.
+
+
+## Adaptive token-statistics batching rejection
+
+Exact per-probability event batches reduced up to sixteen ordinary adaptive
+counter updates to one bulk update, replaying original bit order only across
+the rare saturation boundary. After correcting the distinct Cat5/Cat6 token
+and statistics slot mapping, all focused tests and timing hashes were exact.
+
+| Format | Parent | Candidate | Gain |
+|---|---:|---:|---:|
+| PNG lossy | 42.325 ms/image | 42.313 ms/image | 0.012 ms/image |
+| JPEG lossy | 42.376 ms/image | 42.270 ms/image | 0.106 ms/image |
+
+The candidate is noise and was restored. Raw artifacts use
+`libwebp-token-stats-batch-*`; no architecture policy changed.
