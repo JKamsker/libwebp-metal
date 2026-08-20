@@ -1,0 +1,12 @@
+{
+  "archive_bytes": 44012,
+  "archive_sha256": "fe5f7fd96701331f4458ed20789fd2fc6c90156835d5afdab4986688600a95cb",
+  "complete_response_preflight_required": true,
+  "elapsed_before_cleanup_ns": 161758172959,
+  "error": null,
+  "exclusive_framed_response_cap_bytes": 1048576,
+  "process_refusal": null,
+  "process_refusal_sha256": null,
+  "schema": "libwebp-backref-cost-specialization-factorization-v4-integrity-footer-v1",
+  "status": "complete"
+}

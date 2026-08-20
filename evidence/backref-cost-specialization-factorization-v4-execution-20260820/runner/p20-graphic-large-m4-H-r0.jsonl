@@ -1,0 +1,5 @@
+{"schema":"libwebp-backref-cost-specialization-factorization-v4-output-v1","case_id":"graphic-large","method":4,"variant":"H","iteration":0,"sample_role":"warmup","bitstream_bytes":1274,"bitstream_fnv1a64":"8c1f2bbac5de8211"}
+{"schema":"libwebp-backref-cost-specialization-factorization-v4-output-v1","case_id":"graphic-large","method":4,"variant":"H","iteration":1,"sample_role":"retained","bitstream_bytes":1274,"bitstream_fnv1a64":"8c1f2bbac5de8211"}
+{"schema":"libwebp-backref-cost-specialization-factorization-v4-output-v1","case_id":"graphic-large","method":4,"variant":"H","iteration":2,"sample_role":"retained","bitstream_bytes":1274,"bitstream_fnv1a64":"8c1f2bbac5de8211"}
+{"schema":"libwebp-backref-cost-specialization-factorization-v4-output-v1","case_id":"graphic-large","method":4,"variant":"H","iteration":3,"sample_role":"retained","bitstream_bytes":1274,"bitstream_fnv1a64":"8c1f2bbac5de8211"}
+{"schema":"libwebp-backref-cost-specialization-factorization-v4-output-v1","case_id":"graphic-large","method":4,"variant":"H","iteration":4,"sample_role":"retained","bitstream_bytes":1274,"bitstream_fnv1a64":"8c1f2bbac5de8211"}

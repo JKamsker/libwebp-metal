@@ -1,0 +1,109 @@
+{
+  "admission": {
+    "bundle_sha256": "4cfad1e380facadf06aad51315478dc370aaa84511b6bca8a55fa916654dec8a",
+    "bundle_verified_in_repository_context": true,
+    "clean_status": true,
+    "source_hashes": {
+      "CMakeLists.txt": "700fc5531b8253d7bf259f63a4c9e7cfc8f13a4f300364c680be6000c65ca203",
+      "doc/backref-cost-specialization-factorization-v4-protocol-20260820.md": "b758ad8a9da3010f14b4c76777c2ce36cbc6ef07141a21996170e10e3fee0b3e",
+      "doc/experiment-guard-matrix.md": "0bd9b7995b7b5b4d585054b00d160b6b4ee2cd5c44f5ad700a6761684c3cc17a",
+      "evidence/backref-cost-specialization-factorization-v4-design/phase1-local-codegen.json": "959f0f8dda1eb1807bd6f318fe7f9d0952c7ec9030c6f6bbab9a71bdfc3afd4a",
+      "evidence/backref-cost-specialization-factorization-v4-design/phase1-local-validation.json": "02ee66a71ca4cfc78ae08319f64e0ab1a6d6d9acdf1a771542366194207d7cca",
+      "evidence/backref-cost-specialization-factorization-v4-design/phase1-prior-evidence-audit.json": "857b69262964671999b96b27895c85b9b7fd8a4b2fe64aceece8459699b0c9ce",
+      "evidence/backref-cost-specialization-factorization-v4-design/representative-payload-agreement.json": "f234038c60f2eb180af8de1f6d385a0d7a6f1c86bbdfa97e386ab93fdb51d84f",
+      "evidence/backref-cost-specialization-factorization-v4-design/representative-payload-fixture.json": "45fd40d9d6c48363e91faaf70f6bbceb122ec7f71d6ab478ce8a213fc0221df8",
+      "evidence/backref-cost-specialization-factorization-v4-design/toolchain-identity-agreement.json": "71253109efd653c14d738112b9117d1f2a0d2998b029b86c58e8bc283d3f4f1a",
+      "evidence/backref-cost-specialization-factorization-v4-design/toolchain-identity-fixture.json": "7626a5436a7ad4d76dd51bf6c63fb91f4f0a3a8a7bbbd23be166b698077eaaf2",
+      "makefile.unix": "93af6608cb2667b7adb24414619f5078a546a70fb6a277ae1cee9f6e88844a5f",
+      "scripts/backref_cost_specialization_factorization_v4_admission.py": "ca6caf4b3218f6bf746c643496fbb8b7392dcf9484e75a91a0ab7bff82065514",
+      "scripts/backref_cost_specialization_factorization_v4_archive.py": "e655b043f9b5d8dd292522380fa1dc1e9d45796438724ca3824d2c3ad723ed6b",
+      "scripts/backref_cost_specialization_factorization_v4_manifest.json": "f350d0a297b0a341b309f1ca2d218452b5362c29c7ff132a22afafcbcd2c2eb0",
+      "scripts/backref_cost_specialization_factorization_v4_paths.py": "67ade73264ef8794b024dbd9140315bd50e95ed785720663e1731327f1ef511b",
+      "scripts/backref_cost_specialization_factorization_v4_payload.py": "ebb55ee5d8f93f8b732759fa3245c699bf87ef6a93a69602d52336498b487f0e",
+      "scripts/backref_cost_specialization_factorization_v4_schemas.json": "11124fba8627d750d61fdbfd4d41c4d765e4a3da8182572122f1d9a4f5d759f2",
+      "scripts/backref_cost_specialization_factorization_v4_toolchain.py": "819c354206a6f4977b6eb5f3175a847ac365a08204aedada1549ab12f84a6e71",
+      "scripts/backref_cost_specialization_factorization_v4_transport.py": "b2a0b73938fa38b0a7ce17dc074c51a225fe2c372f15a174860a02f2cb1c045d",
+      "scripts/evaluate_backref_cost_specialization_factorization_v4.py": "b7edccf21729d632d87d2c6935a3232f8fcf06b656aabead856358d8276b6ca2",
+      "scripts/execute_backref_cost_specialization_factorization_v4.py": "9556d8f3c9c032dd41d0e0f7dd08179b140c4407f91aa5bc542fa961bee7fb3f",
+      "scripts/run_backref_cost_specialization_factorization_v4_experiment.py": "db3eb5a67303fb5fc3f4628a607176a4b88498f5543b93a9cc71b21ccd136d8c",
+      "scripts/test_backref_cost_specialization_factorization_v4_admission.py": "0c76543a5783cd89aaa7f457341e450cd4af2f9af565172dc520264eff144991",
+      "scripts/test_backref_cost_specialization_factorization_v4_archive.py": "6e3de52918c34c7a3bff0ab309d10d28c9e9d14754715a28894ac4c0c4ad3e74",
+      "scripts/test_backref_cost_specialization_factorization_v4_experiment.py": "7e9387ea31fe92e79d2697052eb298ceac0a4d2df7ec53a4ee9dc8c841dcb63d",
+      "scripts/test_backref_cost_specialization_factorization_v4_payload_identity.py": "b6b437d51ffd1ce06aaa004c68ad33d36588056f0f65bbcecb0e6e1b81e7f56d",
+      "scripts/test_backref_cost_specialization_factorization_v4_process_ownership.py": "a05ff81a63b8bff4607d4f3f01bef6773bde222d24493260cfb89f002f653e77",
+      "scripts/test_backref_cost_specialization_factorization_v4_protocol.py": "a3848185953d6b1f34985e5607f11fbd5f978f159cd9eaf091868a0c6a3da7d7",
+      "scripts/test_backref_cost_specialization_factorization_v4_streaming.py": "3a9a9a78f9bf557dfc76cde36bc56e0b023fa8aaca3d188585248a310f4577b1",
+      "scripts/test_backref_cost_specialization_factorization_v4_toolchain_identity.py": "2fcedf071f2e1c51a85b6c4542870dac5c7d82fe922bd573fe249f0ae9263150",
+      "scripts/test_experiment_guards.py": "49598bcd1814eb064d5c25f2c861ba0b77491ca90cb8683985afabd839a17150",
+      "src/enc/backref_cost_factorization_v4_layout_clone_enc.inc": "30f144d46895f210cf1969cda8696a7ad21fd7cf708c94ad32703f6caa675a7b",
+      "src/enc/backref_cost_specialization_factorization_v4_experiment_enc.c": "d93acf0321df6bf7b7790abdb62d184b1cc928c23aa88c06ad876839e57a2ef4",
+      "src/enc/backref_cost_specialization_factorization_v4_experiment_enc.h": "96ac9ddfc00dd10a37a8ce3264f2ae00134fd734d377cb4f182dc4b29c1a0965",
+      "src/enc/backward_references_cost_distance_only_enc.inc": "b4c9fc014784dd2c369cb5287b9fb79a7787d861e53abc2139f5effa23490ac5",
+      "src/enc/backward_references_cost_enc.c": "3a577b72e4e9594fb72fe0cf91df48b88cf6d860ad463fca5a01102dd966111f",
+      "src/enc/backward_references_enc.c": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03",
+      "src/enc/profile_enc.c": "4a43449a37f1fc8d1bf135a2c8af760027bf6e6098ac5c80f382d6b7f995e60f",
+      "src/enc/profile_enc.h": "ecf98363a1e660027d9a6c2947682e927db57ac6840baeb517e6d5b7af40673e",
+      "src/enc/vp8l_enc.c": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0",
+      "tools/backref_cost_specialization_factorization_v4_experiment_runner.c": "836de71d355b9f1203005f8ad16d0be9213e1e0e6fff5ce53b1b25bd9a8400ad"
+    },
+    "verification_repository_removed": true
+  },
+  "pre_operator_process_isolation": {
+    "ancestor_identity_policy": "structural self-to-PID1 proof; no positive identity allowlist",
+    "argument_text_collected": false,
+    "discovered_pid_signals": 0,
+    "exact_identity_conflicts": [],
+    "external_process_policy": "observe-only; exact-identity refusal; never signal",
+    "filesystem_identity_operations": [],
+    "identity_fields": [
+      "pid",
+      "ppid",
+      "comm"
+    ],
+    "lexical_basename_semantics": "exact final slash component; string operation only",
+    "parsed_process_count": 759,
+    "process_snapshot_sha256": "34d86d0408e5470e839100d45b346df10314f0bc711eb9214169d4a7a5282d0d",
+    "raw_comm_semantics": "complete exact opaque process-table string; never a path",
+    "resolved_path_api_used": false,
+    "verified_ancestor_chain": [
+      {
+        "lexical_basename": "Python",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 21067,
+        "ppid": 21066,
+        "raw_comm": "/Applications/Xcode-26.3.0.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "sshd-session: pandocs-agent-001@notty",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 21066,
+        "ppid": 21063,
+        "raw_comm": "sshd-session: pandocs-agent-001@notty",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "sshd-session: pandocs-agent-001 [priv]",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 21063,
+        "ppid": 1,
+        "raw_comm": "sshd-session: pandocs-agent-001 [priv]",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "launchd",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 1,
+        "ppid": 0,
+        "raw_comm": "/sbin/launchd",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      }
+    ]
+  },
+  "receipt_version": 1,
+  "schema": "libwebp-backref-cost-specialization-factorization-v4-source-admission-receipt-v1",
+  "source_bundle_sha256": "4cfad1e380facadf06aad51315478dc370aaa84511b6bca8a55fa916654dec8a",
+  "source_commit": "1f60c324142d3dafaeece95b060114261fff86ac",
+  "source_tree": "c9c3ca54aa3f7bc85b410cda4ec7233dded66075",
+  "status": "verified"
+}
