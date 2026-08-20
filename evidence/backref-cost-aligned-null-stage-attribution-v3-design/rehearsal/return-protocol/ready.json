@@ -1,0 +1,12 @@
+{
+  "bootstrap_sha256": "5e42bf84f5229ad9e2c3f6bcb762a17a8a500701e927e31e54edf03064e1f121",
+  "channel_binding_sha256": "2cca0c5c79d67b3b9ad41289c80b85b8b9217ddbffd320a5aefb0261036aed76",
+  "protocol_version": 1,
+  "remote_files_created_before_ready": 0,
+  "remote_process_pid": 51217,
+  "remote_process_ppid": 51216,
+  "request_declaration_sha256": "69305c8d441d7b31bbb393a2563bd577c56ba1f36e777a2a0555a46739dc8507",
+  "request_payload_read_before_ready": false,
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-ready-v1",
+  "transaction_nonce": "d5c781eeb2b0225224adf5ecd392368f00b59b7fc1e257372cd634aacc6b1737"
+}

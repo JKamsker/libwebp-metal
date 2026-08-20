@@ -1,0 +1,299 @@
+{
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-source-admission-details-v1",
+  "source_bundle_sha256": "394bb7e363c2ebebc6f4ee3211ba565656dbb66b5075c9750b4f3b7f1c32bef6",
+  "source_commit": "3b81544df3305601e8c0817e554833f0824ad634",
+  "source_map": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "1b87634fcecf31f667085b3b39ebc56eaeb857aac125fbb863467100f57b1194"
+    },
+    {
+      "path": "doc/backref-cost-aligned-null-stage-attribution-v3-protocol-20260820.md",
+      "sha256": "e21257f4aa4f9e4f9f0a8bee35aafdacf0c8f6402a18a4565232d9368747fa6b"
+    },
+    {
+      "path": "doc/backref-cost-specialization-alignment-v2-protocol-20260820.md",
+      "sha256": "0150581bae129d9c45ad41cb6db8f15c15fffddc5c1e5a5142c912dbf1e077a1"
+    },
+    {
+      "path": "doc/experiment-guard-matrix.md",
+      "sha256": "f1fba3864f0c061a742101ac141db658a5ebe7ac9ecdd0b770a7909d532ae148"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/four-body-actual-receipt.json",
+      "sha256": "4f9462508d4f02b4e141d55d5944a2ba9778f3a98740520b4b4e8bb52c9a4951"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/four-body-expected-receipt.json",
+      "sha256": "4f9462508d4f02b4e141d55d5944a2ba9778f3a98740520b4b4e8bb52c9a4951"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/linker-map-extract.txt",
+      "sha256": "c03ddb8450a8c29d122aeda275cca60bec2dc86eab7c7ed0446b49a5fa34494b"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/linker-map.txt",
+      "sha256": "cb7969b484a94b88781ed7fc74dad8caf0c8bbc559d8a35376b2e4ec3663e849"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/phase1-local-codegen.json",
+      "sha256": "94587998a468cf2fb897a42f260bb0b8fd5dbb6062ac6c1f3d33bc886fc94c1e"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/phase1-local-untimed-experiment.json",
+      "sha256": "64dda7ad36f5a10e296864e60dce1062b2bd223ddeba46a2e8bcb75a52409684"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/phase1-local-validation.json",
+      "sha256": "26aabf8659d1094ea230a07ebfeaeaf532278f50b38dcbbf3a46e2bfa5e69b7c"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/phase1-prior-evidence-audit.json",
+      "sha256": "5cb46d9b9fda949ae80dd20e3be77f6ebacf6cc90d0a422c666376a6526087b7"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/representative-payload-agreement.json",
+      "sha256": "7c5812237c9432f1b54b8353a7988289468466672cb4f0cba91339feb2a68ad2"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/representative-payload-fixture.json",
+      "sha256": "98b16f5b662b25b20f0a84b3d99fbcebd097f6abebcf4c8bf6db5629e56aca4c"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/request-channel-size-freeze.json",
+      "sha256": "64cd7906f501257c8d917a4972ccca2d105bbd45b3cb5b345cc692c811202813"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/toolchain-identity-agreement.json",
+      "sha256": "643d9d09d7669191aeed8a233e82321e9d66f85c512cdc7a2fa86323e85c2fd8"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/toolchain-identity-fixture.json",
+      "sha256": "d8872df38e8498ec53208e384383709edfd5d5ef2a0f893281348a4d20c09cf1"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/transport-comparison.json",
+      "sha256": "07be38b90396db2ee5a927eba78df8c2f1dc0f87c2df9a38792e00432ac92825"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/v4-static-audit-linker-map.txt",
+      "sha256": "ae960d4fbf6ab9bb88502ea10e14d703bd8dc883d216ab1e69d3c81030a6d1ee"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1-local-codegen.json",
+      "sha256": "8fea9afc0bf61f83c168db0991a6e0662b400a6fe640fd94232bd4107a171993"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1-local-validation.json",
+      "sha256": "dbb5bd2e96eb4493c837938ec3587927a1741311e3e6fb0abed72d2e4d8fb6fb"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1b-authorization.json",
+      "sha256": "b613a867c4c6e75be4676577e2041efdcdf16bc994bdcf1c15dd2727b61281a3"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1b-rehearsal-hashes.json",
+      "sha256": "30cd9be45e89f062e98b21f05966aa84f37db6c9ca40bb3dc91cfaeae924a0cf"
+    },
+    {
+      "path": "makefile.unix",
+      "sha256": "f25267a161704b36fa3b995f050e5a7b0987bd5f0e10e4fdc62bbbab83ded7d6"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v3_admission.py",
+      "sha256": "4e36e0937a7fadf2341d910d572440ad2774bf38d49cb1fe60e011e6bb10fe05"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v3_archive.py",
+      "sha256": "1fbf899b9ac5f9d7807443739b643de21ffe39a3a48f12c5ca926bc0a97ce076"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v3_bootstrap.py",
+      "sha256": "5e42bf84f5229ad9e2c3f6bcb762a17a8a500701e927e31e54edf03064e1f121"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v3_identity.py",
+      "sha256": "d1b4e786d25aca43c25d8c5e1736445c95f93e8e6f153537e60193125fabda46"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v3_manifest.json",
+      "sha256": "c3067e6506fb642f6afac48f1ce1549875066ad7dbfdf4302fa55b620bcaf426"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v3_paths.py",
+      "sha256": "e1aa6b14cd83822bed9c659bcbf769f03fdeade0098618ff6cd6e419da3990d6"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v3_payload.py",
+      "sha256": "448e6bd791ca2feb15be5451d7bfeb74a653b8e06c94331228f69bbda340fa94"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v3_schemas.json",
+      "sha256": "0e2263476886040acfd4cabbfd8d85ebc104720205dd65f46c8b472ef7c2588a"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v3_toolchain.py",
+      "sha256": "7d9c269a9dea669ea07bdcc14b00c850c813925126b62a973a7b66a031c85ef7"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v3_transport.py",
+      "sha256": "68f401540130cea715e4cd58c901592c0ddcda919d08dc53181cdf53bafdf1a1"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_admission.py",
+      "sha256": "24a4980da81f36ef65d8c199b91d4cf0e03cbcd35a92e4d479590ced915757ed"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_archive.py",
+      "sha256": "2769e9e7c932d90b64440d83e29ce547697825321876d1dcb52f18d40a516cf1"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_manifest.json",
+      "sha256": "42afa14d09de7d696eacf2a60bf46d0171cf7d0288aec72e35d673b950f9d89c"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_paths.py",
+      "sha256": "10b1917410a97571a571dd610f65a9a91f5ed528ca2c4df3ea3f07db9158ecc4"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_payload.py",
+      "sha256": "9a07da91902c11b37aff01eb9ef66dc2c1d02a4aad43f2d5ac2da9382ec20a14"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_schemas.json",
+      "sha256": "a18798767a7c7cccc0f782ea4fe055709b14e146393b62bbd022ef702ed457f6"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_toolchain.py",
+      "sha256": "ad7d4d9e9d3f59896c2542135b301a01701732cfa1e574c8f46c04ea826117ae"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_transport.py",
+      "sha256": "fe4884df1a74b0b676fb01dfe7b9cbcf3a9232f5493e731da28d5b5da6dc98ab"
+    },
+    {
+      "path": "scripts/evaluate_backref_cost_aligned_null_stage_attribution_v3.py",
+      "sha256": "34ecfb01dd13cc30a1b595f4a1f3c0484bde4764e1d1952206d2716dcf65f375"
+    },
+    {
+      "path": "scripts/execute_backref_cost_aligned_null_stage_attribution_v3.py",
+      "sha256": "5255d2440fd351937faa85278fd4c872e92e745757a3bf5e46aaae0f8fc77019"
+    },
+    {
+      "path": "scripts/execute_backref_cost_specialization_alignment_v2.py",
+      "sha256": "dab631c31a79ed9896da915d50ed04b9ea5ebe0aa4820c43dd76a9afa6ead02f"
+    },
+    {
+      "path": "scripts/freeze_backref_cost_aligned_null_stage_attribution_v3_phase1.py",
+      "sha256": "e5d5db027ec52bf562c9cb14993da66504e8ec2f158357ce90a44a2ed9520b04"
+    },
+    {
+      "path": "scripts/record_backref_cost_aligned_null_stage_attribution_v3_phase1b.py",
+      "sha256": "4391dc64adfff8d7fda95ce357d1b11d5b0d6f946cce241c6937efe3ad1cd99d"
+    },
+    {
+      "path": "scripts/run_backref_cost_aligned_null_stage_attribution_v3_experiment.py",
+      "sha256": "5d502c1856692929566ec866671fbdcb5c2d9849d33bb35156c0781df152b07a"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v3_admission.py",
+      "sha256": "87ce1e3d45fbbf02801fef5bbd21bc98fed3e6ef956391008dbf336fd5f3c487"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v3_archive.py",
+      "sha256": "c66d8c9e4b09a7d39b9cfa81a35530e0652f204efbfa2d1ff724dbc9f4cf743d"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v3_experiment.py",
+      "sha256": "38d9b09d550adc3e22f662e295b2aa81fac838ea5974acbdbbfc84cbdafd6d25"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v3_identity.py",
+      "sha256": "d3e407f05d5ad6f66723ba8c994a2082516835e8920e712414948791117aafe9"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v3_payload_identity.py",
+      "sha256": "d713b22605388434b1c2249c230b871e5bb70a8a292308d8312fc945435e507a"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v3_process_ownership.py",
+      "sha256": "90ba12daa9c2d00b7e575b6bfb0ccc70c91f0b038f87223faeaf543b02029831"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v3_protocol.py",
+      "sha256": "ef748169dbcf7ad25ba6e5b659f93e9f896f83b9f109288fe5d027c3659fd6c4"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v3_streaming.py",
+      "sha256": "9415946716966370787f4864fd77393e67d582e3bdb9dffedbcbac15db9238e7"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v3_toolchain_identity.py",
+      "sha256": "1a12afa2992d942b502b8a4b797bab0c9135cbfeac721bc9f699007ea3adafd1"
+    },
+    {
+      "path": "scripts/test_experiment_guards.py",
+      "sha256": "c58aa112f6e9febf57549954fe6158c2e4b6fcf86d9167db4147a470ae90a9b8"
+    },
+    {
+      "path": "src/enc/backref_cost_aligned_null_stage_attribution_v3_experiment_enc.c",
+      "sha256": "2334a70f3c9d117affce92645cb21a1625d33c4b1bbe84a9e883f5558e681d29"
+    },
+    {
+      "path": "src/enc/backref_cost_aligned_null_stage_attribution_v3_experiment_enc.h",
+      "sha256": "74c48d6dd0fee5b1fcbe1c8678993d9ae30c668d968a358f148c7b2a2df11f39"
+    },
+    {
+      "path": "src/enc/backref_cost_aligned_null_stage_attribution_v3_layout_clone_enc.inc",
+      "sha256": "fd0e0358f164ac65a839b1b49cfd81f6f6d6c8c26c6c9ff8091f847e5e0234ed"
+    },
+    {
+      "path": "src/enc/backref_cost_alignment_v2_layout_clone_enc.inc",
+      "sha256": "b6593c6125d3f88467f6b0ce171a0029586ab008f3ce845c27a7934e493e02fd"
+    },
+    {
+      "path": "src/enc/backref_cost_specialization_alignment_v2_experiment_enc.c",
+      "sha256": "63951eb750622d27284437be2936cb9a59e78092d02280ef80bea7e32acf00bc"
+    },
+    {
+      "path": "src/enc/backref_cost_specialization_alignment_v2_experiment_enc.h",
+      "sha256": "fe8f6aab99e67776a56522ac83ab10ce311f02ac79d4234a4305f5be6ab3081e"
+    },
+    {
+      "path": "src/enc/backward_references_cost_distance_only_enc.inc",
+      "sha256": "47b44223d37b3d0f9367e7cfe435655e12747fbb6bd9999b772a7dd7bb1de78e"
+    },
+    {
+      "path": "src/enc/backward_references_cost_enc.c",
+      "sha256": "bfddb8a4ee08f24a57871c23ffd9052e324ec5f6a1d5f1248d2850f55b3511c6"
+    },
+    {
+      "path": "src/enc/backward_references_enc.c",
+      "sha256": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03"
+    },
+    {
+      "path": "src/enc/profile_enc.c",
+      "sha256": "818491a176810eb9b10579d6e7f5db1484f4ee64a0416d1702dfbabf7a656292"
+    },
+    {
+      "path": "src/enc/profile_enc.h",
+      "sha256": "132debef7979b53dd14d2dd82c0f81616271c6651f6a7b3f6debc8d06b336945"
+    },
+    {
+      "path": "src/enc/vp8l_enc.c",
+      "sha256": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0"
+    },
+    {
+      "path": "tools/backref_cost_aligned_null_stage_attribution_v3_experiment_runner.c",
+      "sha256": "ce33e8fb1c3f7b58a46b8f3b3a3a9c9554b0ff0ca9e0ec71be0d2ea9d6dde6b5"
+    },
+    {
+      "path": "tools/backref_cost_specialization_alignment_v2_experiment_runner.c",
+      "sha256": "3c4130002bd8f47609aef6f2f8df1cbb9c354e159e633c4e03813a00f0d01f0b"
+    }
+  ],
+  "source_map_entry_count": 72,
+  "source_map_sha256": "f62396024aaf3b7449212b3dc2dbdb0356eca6966f11d9bb6cbc6bbbda166e15",
+  "source_tree": "5e51c6925729f994dcc9987c583a9f1d02acb721",
+  "status": "verified"
+}

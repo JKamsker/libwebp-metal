@@ -1,0 +1,50 @@
+{
+  "artifacts": [
+    {
+      "bytes": 2610,
+      "path": "build-identity.json",
+      "sha256": "2cd969ef7f29c9c9d82fd41a3b9e4a1109469ac39d0196d54680f2e60eaf6371"
+    },
+    {
+      "bytes": 4270,
+      "path": "codegen.json",
+      "sha256": "194c6a894dfb81383d5022c501e5a66a12985a13c4bbe36dfec22f62e9765d5e"
+    },
+    {
+      "bytes": 10930,
+      "path": "diagnostic-admission.json",
+      "sha256": "ff484c97fb5a5c1a02e3f0b6c5a3367aacbeef5442ec1e92a8efd1c8f1e38f83"
+    },
+    {
+      "bytes": 356,
+      "path": "operator-status.json",
+      "sha256": "5d43dd5a3b936ca41511e4800050519388ff9b92e5ef94cc819cda623943b3fb"
+    },
+    {
+      "bytes": 76793,
+      "path": "profile-plan.json",
+      "sha256": "a69d009e5092b0ad7f9183ab3a5b7cb286dca8956d66edc926d4e62e68eb8802"
+    },
+    {
+      "bytes": 1292,
+      "path": "rehearsal.json",
+      "sha256": "86ecfe7b39c658ae50850efc060264df50b71ce1f12b41eb061ed3ea3de5edec"
+    },
+    {
+      "bytes": 2469,
+      "path": "remote-admission-process-isolation.json",
+      "sha256": "c9786129443e8c9a38bdeecd9c0581d4e844fbba40176428d11f08f7424ab549"
+    },
+    {
+      "bytes": 5686,
+      "path": "resource-admission-admission.json",
+      "sha256": "0cee023fe72f1bb26b7ac37416fc7d6f205b19087007eb39883946c4f7450d97"
+    },
+    {
+      "bytes": 13584,
+      "path": "source-admission-details.json",
+      "sha256": "d82d06ea20de41f5fbcbda8f306d8cc1ba63f65963a78d1e29c5fcd5331352cb"
+    }
+  ],
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-artifact-hashes-v1"
+}

@@ -1,0 +1,9 @@
+{
+  "benchmark_lease_acquisition_attempted": false,
+  "mode": "rehearse",
+  "production_promotion_authorized": false,
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-operator-status-v1",
+  "source_commit": "3b81544df3305601e8c0817e554833f0824ad634",
+  "source_tree": "5e51c6925729f994dcc9987c583a9f1d02acb721",
+  "status": "complete"
+}
