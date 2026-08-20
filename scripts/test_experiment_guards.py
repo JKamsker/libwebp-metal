@@ -37,6 +37,7 @@ import test_backref_cost_specialization_factorization_v3_process_ownership as fa
 import test_backref_cost_specialization_factorization_v4_process_ownership as factorization_v4_ownership
 import test_backref_cost_specialization_alignment_v1_process_ownership as alignment_v1_ownership
 import test_backref_cost_specialization_alignment_v2_process_ownership as alignment_v2_ownership
+import test_backref_cost_specialization_alignment_v3_process_ownership as alignment_v3_ownership
 import test_next_boundary_operator_portability as boundary_portability
 
 
@@ -294,6 +295,12 @@ MATRIX = (
         "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_VARIANT",
         "src/enc/backref_cost_specialization_alignment_v2_experiment_enc.o",
     ),
+    (
+        "WEBP_BUILD_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT",
+        "WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT",
+        "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_VARIANT",
+        "src/enc/backref_cost_specialization_alignment_v3_experiment_enc.o",
+    ),
 )
 
 
@@ -434,6 +441,8 @@ def check_build_matrix() -> None:
     assert "tools/backref_cost_specialization_alignment_v1_experiment_runner" not in default.stdout
     assert "src/enc/backref_cost_specialization_alignment_v2_experiment_enc.o" not in default.stdout
     assert "tools/backref_cost_specialization_alignment_v2_experiment_runner" not in default.stdout
+    assert "src/enc/backref_cost_specialization_alignment_v3_experiment_enc.o" not in default.stdout
+    assert "tools/backref_cost_specialization_alignment_v3_experiment_runner" not in default.stdout
     assert "list(REMOVE_ITEM WEBP_ENC_SRCS" in cmake
     assert not any(
         f"add_definitions(-D{macro}" in cmake for macro in macros
@@ -490,6 +499,18 @@ def check_v3_v4_mutual_isolation() -> None:
             "cmake", "-S", ".", "-B", raw,
             "-DWEBP_BUILD_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT=ON",
             "-DWEBP_BUILD_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT=ON",
+        ], "mutually exclusive with")
+    require_failure([
+        "make", "-B", "-n", "-f", "makefile.unix", "WEBP_ENABLE_METAL=0",
+        "WEBP_BUILD_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT=1",
+        "WEBP_BUILD_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT=1",
+        "src/enc/backref_cost_specialization_alignment_v3_experiment_enc.o",
+    ], "mutually exclusive with overlapping experiments")
+    with tempfile.TemporaryDirectory(prefix="alignment-v3-overlap-") as raw:
+        require_failure([
+            "cmake", "-S", ".", "-B", raw,
+            "-DWEBP_BUILD_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT=ON",
+            "-DWEBP_BUILD_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT=ON",
         ], "mutually exclusive with")
 
 
@@ -751,12 +772,13 @@ def main() -> int:
     factorization_v4_ownership.main()
     alignment_v1_ownership.main()
     alignment_v2_ownership.main()
+    alignment_v3_ownership.main()
     check_build_matrix()
     check_v3_v4_mutual_isolation()
     check_omitted_targets()
     check_promoted_ablation_control()
     check_runtime_and_lease_refusals()
-    print("PASS: forty-two independent build/runtime guards, fail-closed "
+    print("PASS: forty-three independent build/runtime guards, fail-closed "
           "leases, and attribution v1-v16 process ownership")
     return 0
 

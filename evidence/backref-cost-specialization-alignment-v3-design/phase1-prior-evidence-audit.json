@@ -1,0 +1,186 @@
+{
+  "alignment_v2_request_write_audit": {
+    "conclusion": "An SSH process attempt is not evidence that the host/channel was established; V2 produced no authenticated remote identity receipt and no scientific timing.",
+    "initial_state": "REQUEST_WRITE",
+    "phase1a_source_hashes": {
+      "scripts/backref_cost_specialization_alignment_v2_admission.py": "24a4980da81f36ef65d8c199b91d4cf0e03cbcd35a92e4d479590ced915757ed",
+      "scripts/backref_cost_specialization_alignment_v2_manifest.json": "42afa14d09de7d696eacf2a60bf46d0171cf7d0288aec72e35d673b950f9d89c",
+      "scripts/backref_cost_specialization_alignment_v2_transport.py": "fe4884df1a74b0b676fb01dfe7b9cbcf3a9232f5493e731da28d5b5da6dc98ab",
+      "scripts/execute_backref_cost_specialization_alignment_v2.py": "dab631c31a79ed9896da915d50ed04b9ea5ebe0aa4820c43dd76a9afa6ead02f"
+    },
+    "request_shape": {
+      "exact_total_request_bytes_recorded_by_rehearsal": null,
+      "io_chunk_bytes": 65536,
+      "limitation": "V2 froze the serializer and component shape but its timeout refusal did not persist a request byte count, so no exact attempted byte total is inferred.",
+      "ordered_frames": [
+        "request-metadata sequence=0 canonical JSON",
+        "source-bundle sequence=1 exact git bundle",
+        "representative-payload sequence=2 exact 2097152-byte deterministic payload"
+      ],
+      "per_frame_payload_cap_bytes": 67108864,
+      "ready_or_request_ack_frames": 0,
+      "stream_magic": "libwebp-backref-cost-specialization-alignment-v2-stream-v1\\n"
+    },
+    "sole_rehearsal": {
+      "connection_attempts": 1,
+      "encoder_workloads": 0,
+      "framed_stdout_bytes": 0,
+      "lease_attempted": false,
+      "performance_samples": 0,
+      "remote_connection_established": false,
+      "remote_contacts_established": 0,
+      "timeout_deadline_kind": "request-progress",
+      "timeout_phase": "REQUEST_WRITE",
+      "transfer_cleanup_sha256": "cfb2305963c78f968d0265ace712b64e71c690ef1dc4d9c92a3773293edbab65",
+      "transport_stderr_bytes": 0
+    },
+    "source_admission_compact_freeze": {
+      "alignment_v1_full_map_payload_bytes": 9285,
+      "compact_control_payload_bytes": 554,
+      "compact_encoded_frame_bytes": 710,
+      "control_payload_margin_bytes": 7638,
+      "identity_paths": 66
+    },
+    "state_machine": {
+      "REQUEST_WRITE": "request progress deadline; stdout/stderr drained concurrently; stdout did not establish identity",
+      "RESPONSE_READ": "response progress deadline after first stdout byte",
+      "SILENT_OPERATOR": "entered only after local stdin completion and tracked silent response waiting"
+    },
+    "stdin_registration": "the directly spawned SSH stdin was registered writable immediately after process creation, before any stdout identity or readiness receipt"
+  },
+  "base_commit": "adf680e69b9eeeef636e62e0e0eb0c8fdace4013",
+  "performance_samples_generated": 0,
+  "provenance": {
+    "alignment_v1": {
+      "merge": "b96909b28b3d64f000d0f98ffa76137305010808",
+      "phase1a": "67b53054e327729f5e7b7d8f04d384a0ddf4e6c6",
+      "phase1b": "58444ffca4676ec4537ffc26542d777cf17e018f",
+      "phase2": "2999fe7e43fcf1bd88a1cabb6c458db2bb1ea672",
+      "phase3": "cab7f4e8d03d59fcae3c0ae89ef5033931955d56"
+    },
+    "alignment_v2": {
+      "merge": "c208d6ed33b0ee5e84ba02e78696879266658e7e",
+      "phase1a": "e2816e632075779b299adfc2cf8ab7d87d7c0d6f",
+      "phase1b": "d653a00a642fd1b2707016848a900f94ed51cfcf",
+      "phase2": "9c1d562db0e7fc79829a920762e81e16a5c80de8",
+      "phase3": "d158e57c57faf3ef0b567bfe8e4b0cd3634ea872"
+    },
+    "factorization_v4": {
+      "merge": "adf680e69b9eeeef636e62e0e0eb0c8fdace4013",
+      "phase1a": "1f60c324142d3dafaeece95b060114261fff86ac",
+      "phase1b": "c271d129d392c9c279722bb95e17805e1c262b9a",
+      "phase2": "b06596fb6c7c1fa6331dc2aa221d1bfa8f448403",
+      "phase3": "b2238c88da8ea3c4c70dd19e455e62388684fcff"
+    }
+  },
+  "remote_contacts": 0,
+  "schema": "libwebp-backref-cost-specialization-alignment-v3-prior-evidence-audit-v1",
+  "sources": {
+    "build_identity": {
+      "path": "evidence/backref-cost-specialization-factorization-v4-execution-20260820/build-identity.json",
+      "sha256": "ae0c7177b473be61c2ac1efce0c0594e0dccb60e480bf2242c88c05fd788797f"
+    },
+    "evaluation": {
+      "path": "evidence/backref-cost-specialization-factorization-v4-phase3-evaluation-20260820.json",
+      "sha256": "7e2c05e8d47188ff967a25edfd9bee28c66243a48f147f2566a9d10607603620"
+    },
+    "local_codegen": {
+      "path": "evidence/backref-cost-specialization-factorization-v4-design/phase1-local-codegen.json",
+      "sha256": "959f0f8dda1eb1807bd6f318fe7f9d0952c7ec9030c6f6bbab9a71bdfc3afd4a"
+    },
+    "reconstructed_static_linker_map": {
+      "build_only_no_encoder_workload": true,
+      "bytes": 66687,
+      "path": "evidence/backref-cost-specialization-alignment-v3-design/v4-static-audit-linker-map.txt",
+      "sha256": "d1eed14eb0d44100c397ad6e4e57f0007c2acd9d4b4c3ed149a82272f4dfe233",
+      "source_commit": "adf680e69b9eeeef636e62e0e0eb0c8fdace4013"
+    },
+    "remote_codegen": {
+      "path": "evidence/backref-cost-specialization-factorization-v4-execution-20260820/codegen.json",
+      "sha256": "b715dd33d2ac0c3a43a3b487a5aa14e82ee26b09273b3d9ee0c10771a0dab609"
+    }
+  },
+  "status": "PASS_WITH_V4_RAW_MAP_RECONSTRUCTED",
+  "v4_b_to_l_mean_percent": {
+    "graphic-m4": {
+      "dp_steady": 0.4121997819345828,
+      "dp_total": 0.3995928288236629,
+      "whole_encode": 0.3327690472518563
+    },
+    "graphic-m6": {
+      "dp_steady": -0.009055982943640774,
+      "dp_total": -0.02142064160331604,
+      "whole_encode": -0.808514727303845
+    },
+    "photo-m4": {
+      "dp_steady": 4.200103844867775,
+      "dp_total": 4.02692989381742,
+      "whole_encode": 0.39108222292600564
+    },
+    "photo-m6": {
+      "dp_steady": -0.7485474350992258,
+      "dp_total": -0.7664250981057142,
+      "whole_encode": -1.3459692402371841
+    }
+  },
+  "v4_codegen_crosscheck": {
+    "b_l_dp_mnemonics_equal": true,
+    "b_l_push_mnemonics_equal": true,
+    "distinct_addresses": true,
+    "finding": "B/L bodies were equal in normalized code and work but occupied unequal cache-line and 16 KiB offsets; the exact-base linker map reproduces every committed local address and size.",
+    "local_remote_common_facts_equal": true
+  },
+  "v4_finding": "L-to-H improved DP total/steady in all four cells while B-to-L ranged from -0.77% to +4.20% and whole encode was inconsistent; this is causal-design evidence only and is not pooled or rerun.",
+  "v4_linker_map_rows": [
+    "0x1000361C0\t0x0000050C\t[ 37] _BackwardReferencesHashChainDistanceOnly",
+    "0x1000366CC\t0x0000050C\t[ 37] _BackwardReferencesHashChainDistanceOnlyLayoutClone",
+    "0x100036BD8\t0x0000050C\t[ 37] _BackwardReferencesHashChainDistanceOnlySpecialized",
+    "0x1000381E0\t0x000001FC\t[ 37] _PushInterval",
+    "0x10003883C\t0x000001FC\t[ 37] _PushIntervalLayoutClone",
+    "0x100038A38\t0x000002DC\t[ 37] _PushIntervalSpecialized"
+  ],
+  "v4_raw_indexes": {
+    "artifact-hashes.json": {
+      "mismatches": [],
+      "rows": 123,
+      "sha256": "a979120ca9e9210176fd6ec090d690bc69f8737daef771b3e73e7d2b7b59459a"
+    },
+    "returned-evidence-hashes.json": {
+      "mismatches": [],
+      "rows": 133,
+      "sha256": "6ef2b10b17576a23384a0e644043196007743df73c1b8ba40ac2deb729d89ee9"
+    }
+  },
+  "v4_symbol_address_modulos": {
+    "BackwardReferencesHashChainDistanceOnly": {
+      "address": "00000001000361c0",
+      "mod_16384": 8640,
+      "mod_64": 0
+    },
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": {
+      "address": "00000001000366cc",
+      "mod_16384": 9932,
+      "mod_64": 12
+    },
+    "BackwardReferencesHashChainDistanceOnlySpecialized": {
+      "address": "0000000100036bd8",
+      "mod_16384": 11224,
+      "mod_64": 24
+    },
+    "PushInterval": {
+      "address": "00000001000381e0",
+      "mod_16384": 480,
+      "mod_64": 32
+    },
+    "PushIntervalLayoutClone": {
+      "address": "000000010003883c",
+      "mod_16384": 2108,
+      "mod_64": 60
+    },
+    "PushIntervalSpecialized": {
+      "address": "0000000100038a38",
+      "mod_16384": 2616,
+      "mod_64": 56
+    }
+  }
+}
