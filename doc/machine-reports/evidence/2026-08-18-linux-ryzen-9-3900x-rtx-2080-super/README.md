@@ -343,6 +343,13 @@ end-to-end methods 3--6 fallback test, native CMake cache, binary hashes, and
 the audit summary. Fixtures are reproducibly generated from the manifest and
 are not duplicated as 74 MB of repository artifacts.
 
+The `libwebp-lossy-analysis-default-*` files preserve the refreshed isolated
+CPU/device stage profile, exact rejected pre-Ampere policy patch, 60 raw
+order-balanced PNG/JPEG timing rows, candidate/restored executable hashes and
+focused tests, and decision summary. The candidate was removed after PNG
+gained only 0.200 ms/image and JPEG regressed 0.039 ms/image; exact lossy
+analysis remains opt-in.
+
 Inspect the sampling archives with:
 
 ```sh

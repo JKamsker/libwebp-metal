@@ -2169,3 +2169,23 @@ transactional-fallback tests passed. Both gains are below 1.5 ms/image, so
 the candidate was removed. Raw artifacts use the
 `libwebp-i4-vector-rowio-*` prefix. This is Turing-only evidence; Ampere+
 behavior and thresholds remain unchanged.
+
+## Automatic exact lossy-analysis rejection
+
+The refreshed native-sm_75 stage profile put CPU lossy analysis at
+9.662--11.644 ms for medium inputs; forced CUDA analysis reduced the isolated
+stage to 1.002--1.043 ms. A pre-Ampere-only automatic dispatch candidate was
+then measured in five order-balanced process pairs per format (15 retained
+24-image samples per cell):
+
+| Format | Parent | Candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 39.783707 ms/image | 39.583742 ms/image | 0.199965 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 39.770548 ms/image | 39.809526 ms/image | -0.038978 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+All 60 rows were exact, and candidate/restored concurrency,
+trellis/fallback, and near-lossless focused tests passed. End-to-end overlap
+hides the isolated stage reduction, so the source was restored and analysis
+remains opt-in. The result is below the 1.5 ms/image gate in both formats and
+makes no Ampere+ claim or threshold change. Raw artifacts use the
+`libwebp-lossy-analysis-default-*` prefix.

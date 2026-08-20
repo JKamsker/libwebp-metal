@@ -2381,3 +2381,31 @@ available. Issue #16's second-hardware acceptance item remains open, and this
 report makes no Blackwell or cross-hardware claim. Existing warm/cold
 decimation thresholds remain pre-Ampere 784/12,544 and Ampere+ 64/4,000
 macroblocks; the architecture split was not changed.
+
+## Automatic exact lossy-analysis rejection
+
+At retained base `eb38392bb014f701f75b1666a1d9e7daf359ddef`, an isolated
+native-sm_75 refresh measured medium-input CPU lossy analysis at
+11.644 ms graphic, 9.721 ms photo, and 9.662 ms texture. The existing exact
+CUDA analysis stage reduced those intervals to 1.043, 1.002, and 1.008 ms,
+respectively. Device phase timing still put realistic I4 at 63.2--65.1% of
+block cycles, so this selected a distinct host-stage policy candidate rather
+than another exhausted residual specialization.
+
+The candidate made analysis automatic only for pre-Ampere devices, preserved
+explicit environment overrides, and applied 784-warm / 12,544-cold
+macroblock guards. Five order-balanced fresh process pairs per format each
+discarded one warmup and retained three 24-image samples. Median results were:
+
+| Format | Baseline | Candidate | Gain | Exact hash / bytes |
+|---|---:|---:|---:|---|
+| PNG | 39.783707 ms/image | 39.583742 ms/image | 0.199965 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG | 39.770548 ms/image | 39.809526 ms/image | -0.038978 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+All 60 rows matched hashes and byte counts. Candidate and restored
+concurrency, trellis/padded-stride/band/fallback, and near-lossless focused
+tests passed. The source was restored because the end-to-end effect is noise:
+the large isolated stage reduction overlaps work already hidden by the
+persistent pipeline. Analysis remains opt-in. Artifacts use
+`libwebp-lossy-analysis-default-*`; Ampere+ behavior and the existing
+Turing/Ampere+ decimation threshold split are unchanged.

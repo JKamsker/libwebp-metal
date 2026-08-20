@@ -1,0 +1,42 @@
+Experiment: pre-Ampere automatic exact lossy-analysis dispatch
+Base: eb38392bb014f701f75b1666a1d9e7daf359ddef
+Hardware: Ryzen 9 3900X / RTX 2080 SUPER
+Build: Release, CMAKE_CUDA_ARCHITECTURES=native
+
+Profile:
+- CPU lossy analysis was a distinct 9.662--11.644 ms medium-input stage.
+- Forced CUDA analysis reduced that stage to 1.002--1.043 ms.
+- I4 remained 63.2--65.1% of realistic device block cycles, and the exhausted
+  residual micro-specialization family was not revisited.
+
+Candidate:
+- Enable exact lossy analysis automatically only on pre-Ampere devices.
+- Preserve explicit environment overrides on all architectures.
+- Use the existing measured Turing 784-warm / 12544-cold macroblock guards;
+  do not change Ampere+ behavior or decimation thresholds.
+
+Protocol:
+- Five order-balanced fresh process pairs per format.
+- One discarded warmup and three retained 24-image samples per process.
+- Frozen six-input medium/small corpus, method 4, quality 75, forced CUDA.
+- Fused lossy analysis explicitly disabled in both cells.
+
+Results (median of 15 post-warmup rows):
+  format  baseline     candidate    gain       hash              bytes
+  PNG     39.783707    39.583742    0.199965   455f70a1e139f043  6441688
+  JPEG    39.770548    39.809526   -0.038978   0c4b078d5c4d3173  6400792
+
+Correctness and restoration:
+- Every one of the 60 timing rows retained its format's exact hash and bytes.
+- Candidate and restored concurrency, trellis/padded-stride/band/fallback,
+  and near-lossless focused CTests passed (3/3 each).
+- The analysis kernel's earlier implementation validation already covered
+  methods 0--6, qualities 25/75/95, odd dimensions, and CPU fallback; this
+  policy candidate changed no arithmetic or output representation.
+
+Decision:
+Rejected and removed. PNG gained only 0.200 ms/image and JPEG regressed by
+0.039 ms/image, both far below the 1.5 ms/image retention threshold. The
+large isolated stage reduction is hidden by the existing host/device pipeline
+in end-to-end persistent batches. Keep lossy analysis opt-in. No Ampere+
+behavior, cross-hardware claim, or Turing/Ampere+ decimation threshold changed.

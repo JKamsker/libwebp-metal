@@ -884,3 +884,23 @@ Raw artifacts use `libwebp-nvdec-*`. This host has no RTX 5070 Ti access, so
 issue #16's required Blackwell cold/warm measurements remain open and no
 cross-hardware claim is made. Turing/Ampere+ decimation thresholds and their
 architecture split are unchanged.
+
+## Pre-Ampere automatic lossy-analysis rejection
+
+A fresh native-sm_75 profile found CPU lossy analysis still cost
+9.662--11.644 ms on medium graphic/photo/texture inputs, while the already
+integrated exact CUDA stage reduced that isolated interval to 1.002--1.043 ms.
+The single candidate therefore enabled that stage automatically only in a
+pre-Ampere branch, retained explicit overrides everywhere, and reused the
+measured Turing 784-warm / 12,544-cold macroblock guards. Ampere+ behavior and
+all decimation thresholds stayed unchanged.
+
+Five order-balanced fresh process pairs per format, with three post-warmup
+24-image samples each, overturned the isolated-stage expectation. PNG moved
+from 39.783707 to 39.583742 ms/image (0.199965 ms gain), while JPEG moved from
+39.770548 to 39.809526 ms/image (0.038978 ms regression). All 60 rows retained
+hashes/bytes `455f70a1e139f043` / 6,441,688 for PNG and
+`0c4b078d5c4d3173` / 6,400,792 for JPEG. Candidate and restored focused
+concurrency, trellis/fallback, and near-lossless tests passed. The source was
+restored because neither format approached the 1.5 ms/image gate; keep exact
+lossy analysis opt-in. Raw artifacts use `libwebp-lossy-analysis-default-*`.

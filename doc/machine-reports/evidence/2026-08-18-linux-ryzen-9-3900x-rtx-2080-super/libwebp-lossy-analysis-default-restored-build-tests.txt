@@ -1,0 +1,29 @@
+Restored build:
+[1/7] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_enc.cu.o
+[2/7] Linking CUDA static library libwebp.a
+[3/7] Linking CUDA executable cuda_near_lossless_test
+[4/7] Linking CUDA executable cuda_concurrency_test
+[5/7] Linking CUDA executable cuda_trellis_test
+[6/7] Linking CUDA executable cwebp
+[7/7] Linking CUDA executable webp_cuda_batch_benchmark
+
+Restored executable hashes:
+44084ed890a1652d01d209a2bbb24e6817bd62172c6e6c438c35733b08ef3bc6  /tmp/libwebp-issue16-profile.EfoCMR/cwebp
+efd7a286bcc673528854f73d9c3dcb05ed263acde9e4eecc4d101cec07454f14  /tmp/libwebp-issue16-profile.EfoCMR/webp_cuda_batch_benchmark
+4533ac10a2a5b4c9b570a0bb7079927a1fc70f1bf0fa34fc37525ca83deb5ff7  /tmp/libwebp-issue16-profile.EfoCMR/cuda_trellis_test
+c2c0d71355a521637b550f087c52265c6625bfdc27315b60f4e77b6fad1e4bc8  /tmp/libwebp-issue16-profile.EfoCMR/cuda_concurrency_test
+cba5a7b2efbcb50e359c036ac2581a7d15e9199ef8e880744c98c475d27ff0ba  /tmp/libwebp-issue16-profile.EfoCMR/cuda_near_lossless_test
+
+Restored focused CTest:
+Internal ctest changing into directory: /tmp/libwebp-issue16-profile.EfoCMR
+Test project /tmp/libwebp-issue16-profile.EfoCMR
+    Start 6: cuda_concurrency_test
+1/3 Test #6: cuda_concurrency_test ............   Passed    0.51 sec
+    Start 8: cuda_trellis_test
+2/3 Test #8: cuda_trellis_test ................   Passed    8.86 sec
+    Start 9: cuda_near_lossless_test
+3/3 Test #9: cuda_near_lossless_test ..........   Passed    0.36 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =   9.73 sec
