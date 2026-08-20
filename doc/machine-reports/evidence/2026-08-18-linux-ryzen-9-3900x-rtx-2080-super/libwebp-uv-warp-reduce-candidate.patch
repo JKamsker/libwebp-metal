@@ -1,0 +1,55 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index 7809e965..aa26b9d0 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -105,6 +105,7 @@ struct DecimateKernelParams {
+   int32_t max_i4_header_bits;
+   uint32_t use_error_diffusion;
+   uint32_t rd_opt_level;
++  uint32_t uv_warp_reduce;
+   uint32_t diagonal;       // current skewed diagonal (x + 2y)
+   uint32_t y_min;          // first tile row on this diagonal
+ };
+@@ -1628,7 +1629,12 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     const int nz_bit = CudaQuantizeBlock(w.uv_tmp[mode][block],
+                                          w.uv_levels_all[mode][block],
+                                          &dqm->uv);
+-    atomicOr(&w.uv_nz[mode], (uint32_t)nz_bit << block);
++    if (p.uv_warp_reduce) {
++      const uint32_t nz_mask = __ballot_sync(0xffffffffu, nz_bit != 0);
++      if (block == 0) w.uv_nz[mode] = (nz_mask >> (mode * 8)) & 0xffu;
++    } else {
++      atomicOr(&w.uv_nz[mode], (uint32_t)nz_bit << block);
++    }
+     const uint8_t* const ref =
+         w.yuv_p + kCudaVP8UVModeOffsets[mode] + kCudaVP8ScanUV[block];
+     // ScanUV offsets are relative to the U origin (columns 0..15 hold U|V).
+@@ -1642,8 +1648,16 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     const uint8_t* const src =
+         w.yuv_in + kCudaUOffEnc + kCudaVP8ScanUV[block];
+     const uint8_t* const rec = w.uv_out[mode] + kCudaVP8ScanUV[block];
+-    atomicAdd((unsigned long long*)&w.uv_sse[mode],
+-              (unsigned long long)CudaSSE4x4(src, rec));
++    if (p.uv_warp_reduce) {
++      uint32_t sse = (uint32_t)CudaSSE4x4(src, rec);
++      sse += __shfl_down_sync(0xffffffffu, sse, 4, 8);
++      sse += __shfl_down_sync(0xffffffffu, sse, 2, 8);
++      sse += __shfl_down_sync(0xffffffffu, sse, 1, 8);
++      if (block == 0) w.uv_sse[mode] = sse;
++    } else {
++      atomicAdd((unsigned long long*)&w.uv_sse[mode],
++                (unsigned long long)CudaSSE4x4(src, rec));
++    }
+   }
+   __syncthreads();
+   PHASE_TS(5);
+@@ -2734,6 +2748,9 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
+     params.max_i4_header_bits = request->max_i4_header_bits;
+     params.use_error_diffusion = (uint32_t)request->use_error_diffusion;
+     params.rd_opt_level = (uint32_t)request->rd_opt_level;
++    params.uv_warp_reduce =
++        (uint32_t)(!DecimateDeviceIsAmpereOrNewer() &&
++                   DecimateFlag("WEBP_CUDA_UV_WARP_REDUCE", false));
+
+     (void)cudaGetLastError();
+     const int last_diagonal =

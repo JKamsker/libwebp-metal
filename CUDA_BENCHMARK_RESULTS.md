@@ -2311,3 +2311,12 @@ and statistics slot mapping, all focused tests and timing hashes were exact.
 
 The candidate is noise and was restored. Raw artifacts use
 `libwebp-token-stats-batch-*`; no architecture policy changed.
+
+
+## Pre-Ampere UV warp-reduction rejection
+
+Exact eight-lane ballot/shuffle reductions replaced 64 shared UV atomics per
+macroblock on the Turing candidate. PNG regressed 0.104 ms/image and JPEG
+improved only 0.118 ms/image; both were exact and far below 1.5 ms/image.
+Source was restored. Evidence uses `libwebp-uv-warp-reduce-*`; Ampere+ was
+unchanged.

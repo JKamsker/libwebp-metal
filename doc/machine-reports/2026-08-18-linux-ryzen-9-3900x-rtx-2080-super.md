@@ -2599,3 +2599,27 @@ Both changes are noise. The cache-hot batch update merely replaced the
 cache-hot packed counter update, so source was restored and all focused tests
 passed again. Evidence uses `libwebp-token-stats-batch-*`. RTX 2080 SUPER
 only; architecture thresholds and Ampere+ behavior are unchanged.
+
+
+## Pre-Ampere UV warp-reduction rejection
+
+Fresh native batch medians were 39.63 ms/image PNG and 39.82 JPEG. Stage
+records averaged 20.92/19.79 ms in accelerated decimation and 2.94/2.97 ms
+in token emission. Device phase traces placed UV numeric work at 5--7% of
+realistic block cycles, the largest unexhausted non-I4 numeric interval.
+
+A Turing-only candidate replaced the eight nonzero atomics and eight SSE
+atomics for each of four UV modes with exact eight-lane ballot/shuffle
+reductions. The environment-off and Ampere+ paths retained the original
+atomics. Trellis including transactional fallback, concurrency, and
+near-lossless tests passed. All 24 order-reversed timing rows were exact:
+
+| Format | Parent | UV warp reduction | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 39.472 ms/image | 39.577 ms/image | -0.104 ms/image | `99f33682e7cc9063` / 6,441,688 |
+| JPEG lossy | 39.575 ms/image | 39.457 ms/image | 0.118 ms/image | `1b9eceb1d93cad23` / 6,400,792 |
+
+The shared atomics were not critical, so source was restored and the restored
+focused tests passed. Raw profiles, rows, patch, resources, identities, and
+tests use `libwebp-uv-warp-reduce-*`. No Ampere+ behavior or threshold
+changed.

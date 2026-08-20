@@ -1,0 +1,1 @@
+PASS: CUDA basic/trellis bitstreams, padded strides, all band remainders, and transactional fallbacks are byte-exact
