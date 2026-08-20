@@ -1,0 +1,44 @@
+[1/37] Building C object CMakeFiles/webpencode.dir/src/enc/filter_enc.c.o
+[2/37] Building C object CMakeFiles/bit_writer_utils_test.dir/tests/bit_writer_utils_test.c.o
+[3/37] Building C object CMakeFiles/webpencode.dir/src/enc/picture_enc.c.o
+[4/37] Building C object CMakeFiles/webpencode.dir/src/enc/near_lossless_enc.c.o
+[5/37] Building C object CMakeFiles/webpencode.dir/src/enc/alpha_enc.c.o
+[6/37] Building C object CMakeFiles/bit_writer_utils_test.dir/src/utils/bit_writer_utils.c.o
+[7/37] Building C object CMakeFiles/webpencode.dir/src/enc/cost_enc.c.o
+[8/37] Linking C executable bit_writer_utils_test
+[9/37] Building C object CMakeFiles/webpencode.dir/src/enc/picture_psnr_enc.c.o
+[10/37] Building C object CMakeFiles/webpencode.dir/src/enc/picture_rescale_enc.c.o
+[11/37] Building C object CMakeFiles/webpencode.dir/src/enc/analysis_enc.c.o
+[12/37] Building C object CMakeFiles/webpencode.dir/src/enc/tree_enc.c.o
+[13/37] Building C object CMakeFiles/webpencode.dir/src/enc/syntax_enc.c.o
+[14/37] Building C object CMakeFiles/webpencode.dir/src/enc/picture_tools_enc.c.o
+[15/37] Building C object CMakeFiles/webpencode.dir/src/enc/iterator_enc.c.o
+[16/37] Building C object CMakeFiles/webpencode.dir/src/enc/picture_csp_enc.c.o
+[17/37] Building C object CMakeFiles/webpdsp.dir/src/dsp/cost.c.o
+[18/37] Building C object CMakeFiles/webpencode.dir/src/enc/token_enc.c.o
+[19/37] Building C object CMakeFiles/webpdsp.dir/src/dsp/cost_sse2.c.o
+[20/37] Building C object CMakeFiles/webpencode.dir/src/enc/webp_enc.c.o
+[21/37] Building C object CMakeFiles/webpencode.dir/src/enc/backward_references_enc.c.o
+[22/37] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc_sse41.c.o
+[23/37] Building C object CMakeFiles/webpencode.dir/src/enc/frame_enc.c.o
+[24/37] Building C object CMakeFiles/cuda_near_lossless_test.dir/tests/cuda_near_lossless_test.c.o
+In file included from /home/jonas/priv/repos/libwebp-metal/tests/cuda_near_lossless_test.c:19:
+/home/jonas/priv/repos/libwebp-metal/tools/benchmark_platform.h:49:17: warning: ‘WebPBenchmarkNowNanoseconds’ defined but not used [-Wunused-function]
+   49 | static uint64_t WebPBenchmarkNowNanoseconds(void) {
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/jonas/priv/repos/libwebp-metal/tools/benchmark_platform.h:40:12: warning: ‘WebPBenchmarkUnsetEnvironment’ defined but not used [-Wunused-function]
+   40 | static int WebPBenchmarkUnsetEnvironment(const char* const name) {
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[25/37] Building C object CMakeFiles/webpencode.dir/src/enc/histogram_enc.c.o
+[26/37] Building C object CMakeFiles/webputils.dir/src/utils/bit_writer_utils.c.o
+[27/37] Building C object CMakeFiles/webpencode.dir/src/enc/predictor_enc.c.o
+[28/37] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc_sse2.c.o
+[29/37] Building C object CMakeFiles/webpencode.dir/src/enc/vp8l_enc.c.o
+[30/37] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc.c.o
+[31/37] Building C object CMakeFiles/webpencode.dir/src/enc/quant_enc.c.o
+[32/37] Linking CUDA static library libwebp.a
+[33/37] Linking CUDA executable cuda_concurrency_test
+[34/37] Linking CUDA executable cuda_near_lossless_test
+[35/37] Linking CUDA executable cuda_histogram_test
+[36/37] Linking CUDA executable cwebp
+[37/37] Linking CUDA executable cuda_trellis_test

@@ -1,0 +1,42 @@
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 11%] Building C object CMakeFiles/webpencode.dir/src/enc/alpha_enc.c.o
+[ 11%] Building C object CMakeFiles/webpencode.dir/src/enc/analysis_enc.c.o
+[ 12%] Building C object CMakeFiles/webpencode.dir/src/enc/backward_references_cost_enc.c.o
+[ 12%] Building C object CMakeFiles/webpencode.dir/src/enc/backward_references_enc.c.o
+[ 12%] Building C object CMakeFiles/webpencode.dir/src/enc/cost_enc.c.o
+[ 12%] Building C object CMakeFiles/webpencode.dir/src/enc/frame_enc.c.o
+[ 15%] Building C object CMakeFiles/webpencode.dir/src/enc/config_enc.c.o
+[ 15%] Building C object CMakeFiles/webpencode.dir/src/enc/filter_enc.c.o
+[ 15%] Building C object CMakeFiles/webpencode.dir/src/enc/histogram_enc.c.o
+[ 16%] Building C object CMakeFiles/webpencode.dir/src/enc/accelerator_enc.c.o
+[ 42%] Built target webpdspdecode
+[ 81%] Built target webpdsp
+[ 83%] Building C object CMakeFiles/webpencode.dir/src/enc/iterator_enc.c.o
+[ 88%] Built target webpdecode
+[ 88%] Building C object CMakeFiles/webpencode.dir/src/enc/near_lossless_enc.c.o
+[ 90%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_enc.c.o
+[ 90%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_csp_enc.c.o
+[ 90%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_rescale_enc.c.o
+[ 91%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_psnr_enc.c.o
+[ 91%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_tools_enc.c.o
+[ 92%] Building C object CMakeFiles/webpencode.dir/src/enc/predictor_enc.c.o
+[ 92%] Building C object CMakeFiles/webpencode.dir/src/enc/quant_enc.c.o
+[ 94%] Building C object CMakeFiles/webpencode.dir/src/enc/syntax_enc.c.o
+[ 94%] Building C object CMakeFiles/webpencode.dir/src/enc/token_enc.c.o
+[ 94%] Building C object CMakeFiles/webpencode.dir/src/enc/tree_enc.c.o
+[ 95%] Building C object CMakeFiles/webpencode.dir/src/enc/vp8l_enc.c.o
+[ 95%] Building C object CMakeFiles/webpencode.dir/src/enc/webp_enc.c.o
+[ 97%] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_enc.cu.o
+[ 97%] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(502): warning #177-D: function "<unnamed>::AddScoreDev" was declared but never referenced
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(687): warning #177-D: function "<unnamed>::ImportMB" was declared but never referenced
+
+[ 97%] Built target webpencode
+[ 98%] Linking CUDA static library libwebp.a
+[ 98%] Built target webp
+[100%] Linking CUDA executable cuda_histogram_test
+[100%] Built target cuda_histogram_test

@@ -2435,3 +2435,27 @@ regressed. The source was restored and 7/7 focused CTests passed. Raw evidence
 uses `libwebp-next-loop-*` and `libwebp-token-transition-*`. The retained
 eight-partition control remained best; no CUDA architecture threshold,
 Ampere+ behavior, frozen corpus input, or generator changed.
+
+
+## Eight-partition AVX2 lockstep screen
+
+After the dense-transition rejection, the retained CPU profile still put
+`VP8PutTokenPage` at 35.41% of sampled cycles across the eight token-emission
+workers. The retained 1/2/4/8 control kept eight partitions fastest, so the
+next distinct candidate vectorized across those eight independent arithmetic
+coders instead of revisiting a per-token branch.
+
+A native Release build used `-DCMAKE_CUDA_ARCHITECTURES=native`. Each cell is
+the median of three post-warmup batch-24 file-I/O rows:
+
+| Format | Parent | AVX2 lockstep | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 36.791 ms/image | 48.201 ms/image | -11.410 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 35.072 ms/image | 51.666 ms/image | -16.594 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+All 12 rows were exact and candidate/restored builds passed 7/7 focused
+CTests. The candidate was rejected and removed: one AVX2 thread could not
+replace eight Zen 2 worker cores, and regressed both formats far beyond the
+1.5 ms/image gate. Raw evidence uses `libwebp-token-simd8-*`. No CUDA
+architecture threshold, Ampere+ behavior, frozen corpus input, or generator
+changed.

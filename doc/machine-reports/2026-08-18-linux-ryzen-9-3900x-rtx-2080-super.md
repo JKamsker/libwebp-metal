@@ -2801,3 +2801,35 @@ exact patch, disassemblies, tests, and timing rows use
 3900X / RTX 2080 SUPER evidence only. Ampere+ behavior, the 784/12,544
 pre-Ampere and 64/4,000 Ampere+ thresholds, frozen corpus, and generator are
 unchanged.
+
+
+## Eight-partition AVX2 token-coder rejection
+
+The retained native profile identified token emission as the largest distinct
+boundary after the leading decimate/I4 sites were exhausted. Across all eight
+emit workers, zero-loss whole-process sampling attributed 35.41% of cycles to
+`VP8PutTokenPage`; fresh partition controls retained eight partitions as the
+fastest layout.
+
+At parent `079ddbd8002c871d9a169d6b70e916790ac75a77`, one coarse candidate
+replaced those eight OS-thread page coders with one AVX2 lockstep routine. The
+routine kept eight independent boolean-coder states, used vector range/value
+transitions, and retained scalar token/probability loads and byte/run flushes.
+It compiled to 2,758 bytes, versus 764 bytes for the scalar page coder.
+
+The native Release build used `-DCMAKE_CUDA_ARCHITECTURES=native`. One warmup
+and three measured batch-24 file-I/O rows per build and format produced:
+
+| Format | Parent | AVX2 lockstep | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 36.791 ms/image | 48.201 ms/image | -11.410 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 35.072 ms/image | 51.666 ms/image | -16.594 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+All 12 timing rows were exact. Candidate and restored builds passed 7/7
+focused CTests after the candidate build's initially disabled histogram option
+was aligned with the parent. The source was restored because replacing eight
+Ryzen workers with one SIMD thread severely regressed both formats. Raw exact
+patch, cache, builds, tests, symbols, disassembly, and timings use
+`libwebp-token-simd8-*`. This is Ryzen 9 3900X / RTX 2080 SUPER evidence only;
+Ampere+ behavior, the 784/12,544 pre-Ampere and 64/4,000 Ampere+ thresholds,
+frozen corpus, and generator are unchanged.

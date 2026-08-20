@@ -1,0 +1,300 @@
+diff --git a/src/enc/frame_enc.c b/src/enc/frame_enc.c
+index 3d9a97dc..71b2ac3e 100644
+--- a/src/enc/frame_enc.c
++++ b/src/enc/frame_enc.c
+@@ -1199,6 +1199,10 @@ static int EmitTokenPartitions(VP8Encoder* const enc) {
+     const char* const env = getenv("WEBP_TOKEN_EMIT_THREADS");
+     if (env != NULL && !strcmp(env, "0")) use_threads = 0;
+   }
++  if (use_threads && num_parts == MAX_NUM_PARTITIONS &&
++      VP8TokenPages8Available()) {
++    return VP8EmitTokens8(enc->tokens, enc->parts, probas);
++  }
+   for (p = 0; p < num_parts; ++p) {
+     jobs[p].tokens = &enc->tokens[p];
+     jobs[p].bw = enc->parts + p;
+diff --git a/src/enc/token_enc.c b/src/enc/token_enc.c
+index 9fe8adcc..d6c16864 100644
+--- a/src/enc/token_enc.c
++++ b/src/enc/token_enc.c
+@@ -216,6 +216,45 @@ int VP8EmitTokens(VP8TBuffer* const b, VP8BitWriter* const bw,
+   return 1;
+ }
+
++int VP8EmitTokens8(VP8TBuffer buffers[8], VP8BitWriter bws[8],
++                   const uint8_t* const probas) {
++  VP8Tokens* pages[8];
++  VP8BitWriter* writers[8];
++  int lane;
++  for (lane = 0; lane < 8; ++lane) {
++    pages[lane] = buffers[lane].pages;
++    writers[lane] = &bws[lane];
++  }
++  for (;;) {
++    const uint16_t* page_tokens[8];
++    int num_tokens[8], first_token[8];
++    int any_page = 0;
++    for (lane = 0; lane < 8; ++lane) {
++      if (pages[lane] != NULL) {
++        const VP8Tokens* const next = pages[lane]->next;
++        page_tokens[lane] = TOKEN_DATA(pages[lane]);
++        num_tokens[lane] = buffers[lane].page_size;
++        first_token[lane] = (next == NULL) ? buffers[lane].left : 0;
++        any_page = 1;
++      } else {
++        page_tokens[lane] = NULL;
++        num_tokens[lane] = first_token[lane] = 0;
++      }
++    }
++    if (!any_page) break;
++    VP8PutTokenPages8(writers, page_tokens, num_tokens, first_token, probas);
++    for (lane = 0; lane < 8; ++lane) {
++      if (pages[lane] != NULL) {
++        VP8Tokens* const next = pages[lane]->next;
++        WebPSafeFree(pages[lane]);
++        pages[lane] = next;
++      }
++    }
++  }
++  for (lane = 0; lane < 8; ++lane) buffers[lane].pages = NULL;
++  return 1;
++}
++
+ // Size estimation
+ size_t VP8EstimateTokenSize(VP8TBuffer* const b, const uint8_t* const probas) {
+   size_t size = 0;
+diff --git a/src/enc/vp8i_enc.h b/src/enc/vp8i_enc.h
+index be219a09..663707d3 100644
+--- a/src/enc/vp8i_enc.h
++++ b/src/enc/vp8i_enc.h
+@@ -336,6 +336,10 @@ void VP8TBufferClear(VP8TBuffer* const b);  // de-allocate pages memory
+ int VP8EmitTokens(VP8TBuffer* const b, VP8BitWriter* const bw,
+                   const uint8_t* const probas, int final_pass);
+
++// Emits exactly eight independent partitions with the lockstep AVX2 coder.
++int VP8EmitTokens8(VP8TBuffer buffers[8], VP8BitWriter bws[8],
++                   const uint8_t* const probas);
++
+ // record the coding of coefficients without knowing the probabilities yet
+ int VP8RecordCoeffTokens(int ctx, const struct VP8Residual* const res,
+                          VP8TBuffer* const tokens);
+diff --git a/src/utils/bit_writer_utils.c b/src/utils/bit_writer_utils.c
+index 5e0a05e1..0dbefd5d 100644
+--- a/src/utils/bit_writer_utils.c
++++ b/src/utils/bit_writer_utils.c
+@@ -18,6 +18,12 @@
+ #include <stdlib.h>
+ #include <string.h>  // for memcpy()
+
++#if (defined(__GNUC__) || defined(__clang__)) && \
++    (defined(__x86_64__) || defined(__i386__))
++#include <immintrin.h>
++#define WEBP_TOKEN_PAGES8_AVX2
++#endif
++
+ #include "src/utils/bounds_safety.h"
+ #include "src/utils/endian_inl_utils.h"
+ #include "src/utils/utils.h"
+@@ -105,6 +111,183 @@ static const uint8_t kNewRange[128] = {
+     211, 213, 215, 217, 219, 221, 223, 225, 227, 229, 231, 233, 235, 237, 239,
+     241, 243, 245, 247, 249, 251, 253, 127};
+
++#if defined(WEBP_TOKEN_PAGES8_AVX2)
++// Packed next range (low byte) and normalization shift (next byte), including
++// identity transitions for already-normalized ranges.
++static const uint32_t kPackedNormRange[256] = {
++    0x077fu, 0x067fu, 0x06bfu, 0x057fu, 0x059fu, 0x05bfu, 0x05dfu, 0x047fu,
++    0x048fu, 0x049fu, 0x04afu, 0x04bfu, 0x04cfu, 0x04dfu, 0x04efu, 0x037fu,
++    0x0387u, 0x038fu, 0x0397u, 0x039fu, 0x03a7u, 0x03afu, 0x03b7u, 0x03bfu,
++    0x03c7u, 0x03cfu, 0x03d7u, 0x03dfu, 0x03e7u, 0x03efu, 0x03f7u, 0x027fu,
++    0x0283u, 0x0287u, 0x028bu, 0x028fu, 0x0293u, 0x0297u, 0x029bu, 0x029fu,
++    0x02a3u, 0x02a7u, 0x02abu, 0x02afu, 0x02b3u, 0x02b7u, 0x02bbu, 0x02bfu,
++    0x02c3u, 0x02c7u, 0x02cbu, 0x02cfu, 0x02d3u, 0x02d7u, 0x02dbu, 0x02dfu,
++    0x02e3u, 0x02e7u, 0x02ebu, 0x02efu, 0x02f3u, 0x02f7u, 0x02fbu, 0x017fu,
++    0x0181u, 0x0183u, 0x0185u, 0x0187u, 0x0189u, 0x018bu, 0x018du, 0x018fu,
++    0x0191u, 0x0193u, 0x0195u, 0x0197u, 0x0199u, 0x019bu, 0x019du, 0x019fu,
++    0x01a1u, 0x01a3u, 0x01a5u, 0x01a7u, 0x01a9u, 0x01abu, 0x01adu, 0x01afu,
++    0x01b1u, 0x01b3u, 0x01b5u, 0x01b7u, 0x01b9u, 0x01bbu, 0x01bdu, 0x01bfu,
++    0x01c1u, 0x01c3u, 0x01c5u, 0x01c7u, 0x01c9u, 0x01cbu, 0x01cdu, 0x01cfu,
++    0x01d1u, 0x01d3u, 0x01d5u, 0x01d7u, 0x01d9u, 0x01dbu, 0x01ddu, 0x01dfu,
++    0x01e1u, 0x01e3u, 0x01e5u, 0x01e7u, 0x01e9u, 0x01ebu, 0x01edu, 0x01efu,
++    0x01f1u, 0x01f3u, 0x01f5u, 0x01f7u, 0x01f9u, 0x01fbu, 0x01fdu, 0x007fu,
++    0x0080u, 0x0081u, 0x0082u, 0x0083u, 0x0084u, 0x0085u, 0x0086u, 0x0087u,
++    0x0088u, 0x0089u, 0x008au, 0x008bu, 0x008cu, 0x008du, 0x008eu, 0x008fu,
++    0x0090u, 0x0091u, 0x0092u, 0x0093u, 0x0094u, 0x0095u, 0x0096u, 0x0097u,
++    0x0098u, 0x0099u, 0x009au, 0x009bu, 0x009cu, 0x009du, 0x009eu, 0x009fu,
++    0x00a0u, 0x00a1u, 0x00a2u, 0x00a3u, 0x00a4u, 0x00a5u, 0x00a6u, 0x00a7u,
++    0x00a8u, 0x00a9u, 0x00aau, 0x00abu, 0x00acu, 0x00adu, 0x00aeu, 0x00afu,
++    0x00b0u, 0x00b1u, 0x00b2u, 0x00b3u, 0x00b4u, 0x00b5u, 0x00b6u, 0x00b7u,
++    0x00b8u, 0x00b9u, 0x00bau, 0x00bbu, 0x00bcu, 0x00bdu, 0x00beu, 0x00bfu,
++    0x00c0u, 0x00c1u, 0x00c2u, 0x00c3u, 0x00c4u, 0x00c5u, 0x00c6u, 0x00c7u,
++    0x00c8u, 0x00c9u, 0x00cau, 0x00cbu, 0x00ccu, 0x00cdu, 0x00ceu, 0x00cfu,
++    0x00d0u, 0x00d1u, 0x00d2u, 0x00d3u, 0x00d4u, 0x00d5u, 0x00d6u, 0x00d7u,
++    0x00d8u, 0x00d9u, 0x00dau, 0x00dbu, 0x00dcu, 0x00ddu, 0x00deu, 0x00dfu,
++    0x00e0u, 0x00e1u, 0x00e2u, 0x00e3u, 0x00e4u, 0x00e5u, 0x00e6u, 0x00e7u,
++    0x00e8u, 0x00e9u, 0x00eau, 0x00ebu, 0x00ecu, 0x00edu, 0x00eeu, 0x00efu,
++    0x00f0u, 0x00f1u, 0x00f2u, 0x00f3u, 0x00f4u, 0x00f5u, 0x00f6u, 0x00f7u,
++    0x00f8u, 0x00f9u, 0x00fau, 0x00fbu, 0x00fcu, 0x00fdu, 0x00feu, 0x00ffu
++};
++
++int VP8TokenPages8Available(void) {
++  __builtin_cpu_init();
++  return __builtin_cpu_supports("avx2");
++}
++
++__attribute__((target("avx2")))
++static void PutTokenPages8AVX2(VP8BitWriter* const bws[8],
++                               const uint16_t* const tokens[8],
++                               const int num_tokens[8],
++                               const int first_token[8],
++                               const uint8_t* const probas) {
++  int range[8], value[8], nb_bits[8], next_token[8];
++  int lane;
++  __m256i ranges, values, pending_bits;
++  const __m256i zero = _mm256_setzero_si256();
++  const __m256i one = _mm256_set1_epi32(1);
++  const __m256i low_byte = _mm256_set1_epi32(0xff);
++  for (lane = 0; lane < 8; ++lane) {
++    assert(first_token[lane] >= 0);
++    assert(first_token[lane] <= num_tokens[lane]);
++    range[lane] = bws[lane]->range;
++    value[lane] = bws[lane]->value;
++    nb_bits[lane] = bws[lane]->nb_bits;
++    next_token[lane] = num_tokens[lane] - 1;
++  }
++  ranges = _mm256_loadu_si256((const __m256i*)range);
++  values = _mm256_loadu_si256((const __m256i*)value);
++  pending_bits = _mm256_loadu_si256((const __m256i*)nb_bits);
++  for (;;) {
++    int active[8], prob[8], bit_mask[8];
++    int any_active = 0;
++    __m256i active_v, probs, bits, split, add, raw_range;
++    __m256i packed, shifts, next_range, next_value, next_nb_bits;
++    int flush_mask;
++    for (lane = 0; lane < 8; ++lane) {
++      const int is_active = (next_token[lane] >= first_token[lane]);
++      active[lane] = -is_active;
++      any_active |= is_active;
++      if (is_active) {
++        const uint16_t token = tokens[lane][next_token[lane]--];
++        bit_mask[lane] = -((int)(token >> 15) & 1);
++        prob[lane] = (token & (1u << 14))
++                         ? token & 0xffu
++                         : probas[token & 0x3fffu];
++      } else {
++        bit_mask[lane] = 0;
++        prob[lane] = 0;
++      }
++    }
++    if (!any_active) break;
++    active_v = _mm256_loadu_si256((const __m256i*)active);
++    probs = _mm256_loadu_si256((const __m256i*)prob);
++    bits = _mm256_loadu_si256((const __m256i*)bit_mask);
++    split = _mm256_srli_epi32(_mm256_mullo_epi32(ranges, probs), 8);
++    add = _mm256_add_epi32(split, one);
++    raw_range = _mm256_blendv_epi8(
++        split, _mm256_sub_epi32(ranges, add), bits);
++    packed = _mm256_i32gather_epi32((const int*)kPackedNormRange, raw_range,
++                                    (int)sizeof(kPackedNormRange[0]));
++    shifts = _mm256_srli_epi32(packed, 8);
++    next_range = _mm256_and_si256(packed, low_byte);
++    next_value = _mm256_add_epi32(values, _mm256_and_si256(add, bits));
++    next_value = _mm256_sllv_epi32(next_value, shifts);
++    next_nb_bits = _mm256_add_epi32(pending_bits, shifts);
++    ranges = _mm256_blendv_epi8(ranges, next_range, active_v);
++    values = _mm256_blendv_epi8(values, next_value, active_v);
++    pending_bits =
++        _mm256_blendv_epi8(pending_bits, next_nb_bits, active_v);
++    flush_mask = _mm256_movemask_ps(_mm256_castsi256_ps(
++        _mm256_and_si256(
++            active_v,
++            _mm256_and_si256(_mm256_cmpgt_epi32(shifts, zero),
++                             _mm256_cmpgt_epi32(pending_bits, zero)))));
++    if (flush_mask != 0) {
++      _mm256_storeu_si256((__m256i*)range, ranges);
++      _mm256_storeu_si256((__m256i*)value, values);
++      _mm256_storeu_si256((__m256i*)nb_bits, pending_bits);
++      for (lane = 0; lane < 8; ++lane) {
++        if (flush_mask & (1 << lane)) {
++          VP8BitWriter* const bw = bws[lane];
++          const int s = 8 + nb_bits[lane];
++          const int32_t out_bits = value[lane] >> s;
++          value[lane] -= (int32_t)((uint32_t)out_bits << s);
++          nb_bits[lane] -= 8;
++          if ((out_bits & 0xff) == 0xff) {
++            ++bw->run;
++          } else {
++            const size_t pending = (size_t)bw->run + 1;
++            size_t pos = bw->pos;
++            if (!((pos <= bw->max_pos &&
++                   pending <= bw->max_pos - pos) ||
++                  BitWriterResize(bw, pending))) {
++              continue;
++            }
++            if ((out_bits & 0x100) && pos > 0) bw->buf[pos - 1]++;
++            if (bw->run > 0) {
++              const int fill = (out_bits & 0x100) ? 0x00 : 0xff;
++              for (; bw->run > 0; --bw->run) bw->buf[pos++] = fill;
++            }
++            bw->buf[pos++] = out_bits & 0xff;
++            bw->pos = pos;
++          }
++        }
++      }
++      values = _mm256_loadu_si256((const __m256i*)value);
++      pending_bits = _mm256_loadu_si256((const __m256i*)nb_bits);
++    }
++  }
++  _mm256_storeu_si256((__m256i*)range, ranges);
++  _mm256_storeu_si256((__m256i*)value, values);
++  _mm256_storeu_si256((__m256i*)nb_bits, pending_bits);
++  for (lane = 0; lane < 8; ++lane) {
++    bws[lane]->range = range[lane];
++    bws[lane]->value = value[lane];
++    bws[lane]->nb_bits = nb_bits[lane];
++  }
++}
++
++void VP8PutTokenPages8(VP8BitWriter* const bws[8],
++                       const uint16_t* const tokens[8],
++                       const int num_tokens[8], const int first_token[8],
++                       const uint8_t* const probas) {
++  PutTokenPages8AVX2(bws, tokens, num_tokens, first_token, probas);
++}
++#else
++int VP8TokenPages8Available(void) { return 0; }
++
++void VP8PutTokenPages8(VP8BitWriter* const bws[8],
++                       const uint16_t* const tokens[8],
++                       const int num_tokens[8], const int first_token[8],
++                       const uint8_t* const probas) {
++  int lane;
++  for (lane = 0; lane < 8; ++lane) {
++    VP8PutTokenPage(bws[lane], tokens[lane], num_tokens[lane],
++                    first_token[lane], probas);
++  }
++}
++#endif
++
+ int VP8PutBit(VP8BitWriter* const bw, int bit, int prob) {
+   const int split = (bw->range * prob) >> 8;
+   if (bit) {
+diff --git a/src/utils/bit_writer_utils.h b/src/utils/bit_writer_utils.h
+index 5386467e..c4ce58a6 100644
+--- a/src/utils/bit_writer_utils.h
++++ b/src/utils/bit_writer_utils.h
+@@ -63,6 +63,14 @@ void VP8PutTokenPage(VP8BitWriter* const bw, const uint16_t* const tokens,
+                      int num_tokens, int first_token,
+                      const uint8_t* const probas);
+
++// Returns true when the eight-page AVX2 boolean coder is available.
++int VP8TokenPages8Available(void);
++// Codes one page from each of eight independent token partitions in lockstep.
++void VP8PutTokenPages8(VP8BitWriter* const bws[8],
++                       const uint16_t* const tokens[8],
++                       const int num_tokens[8], const int first_token[8],
++                       const uint8_t* const probas);
++
+ // Appends some bytes to the internal buffer. Data is copied.
+ int VP8BitWriterAppend(VP8BitWriter* const bw, const uint8_t* data,
+                        size_t size);
