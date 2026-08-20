@@ -1,0 +1,58 @@
+{
+  "process_isolation": {
+    "ancestor_identity_policy": "structural self-to-PID1 proof; no positive identity allowlist",
+    "argument_text_collected": false,
+    "discovered_pid_signals": 0,
+    "exact_identity_conflicts": [],
+    "external_process_policy": "observe-only; exact-identity refusal; never signal",
+    "filesystem_identity_operations": [],
+    "identity_fields": [
+      "pid",
+      "ppid",
+      "comm"
+    ],
+    "lexical_basename_semantics": "exact final slash component; string operation only",
+    "parsed_process_count": 746,
+    "process_snapshot_sha256": "9d390fbb2808c6663e15a0555eeb0b7391f3d9ff5e3a43428f1f96de3a5e8e88",
+    "raw_comm_semantics": "complete exact opaque process-table string; never a path",
+    "resolved_path_api_used": false,
+    "verified_ancestor_chain": [
+      {
+        "lexical_basename": "Python",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 38108,
+        "ppid": 38107,
+        "raw_comm": "/Applications/Xcode-26.3.0.app/Contents/Developer/Library/Frameworks/Python3.framework/Versions/3.9/Resources/Python.app/Contents/MacOS/Python",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "sshd-session: pandocs-agent-001@notty",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 38107,
+        "ppid": 38104,
+        "raw_comm": "sshd-session: pandocs-agent-001@notty",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "sshd-session: pandocs-agent-001 [priv]",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 38104,
+        "ppid": 1,
+        "raw_comm": "sshd-session: pandocs-agent-001 [priv]",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      },
+      {
+        "lexical_basename": "launchd",
+        "lexical_basename_identity_kind": "final-slash-component-without-filesystem-access",
+        "pid": 1,
+        "ppid": 0,
+        "raw_comm": "/sbin/launchd",
+        "raw_comm_identity_kind": "opaque-process-table-string"
+      }
+    ]
+  },
+  "schema": "libwebp-backref-cost-specialization-alignment-v4-remote-process-isolation-v1",
+  "source_commit": "f1e1b1afd4c12921b326276ae7f07f4d27137548",
+  "source_tree": "4ec54223425a9ae3c08f720181bc34162e3db1bb",
+  "status": "verified"
+}
