@@ -1,0 +1,275 @@
+{
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v1-source-admission-details-v1",
+  "source_bundle_sha256": "ecdcfce34e29775ba22d319bc9f6e2b03d29a32b891746d05b435aa7c3811ab6",
+  "source_commit": "c674c815c65d0424f75f8391e09064da4364d04e",
+  "source_map": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "7fb257d9ef7a0477bf348ef7388a1530b0f65ffcbd704af4a899b97989273744"
+    },
+    {
+      "path": "doc/backref-cost-aligned-null-stage-attribution-v1-protocol-20260820.md",
+      "sha256": "4dc75a93005fba3a85ccb8eb353ad9c944d379d9603d9c0a75b05fde4033196d"
+    },
+    {
+      "path": "doc/backref-cost-specialization-alignment-v2-protocol-20260820.md",
+      "sha256": "0150581bae129d9c45ad41cb6db8f15c15fffddc5c1e5a5142c912dbf1e077a1"
+    },
+    {
+      "path": "doc/experiment-guard-matrix.md",
+      "sha256": "588373d44045541c369f24cc62af04cf031834723a5112442a68d4f466c685b9"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/linker-map-extract.txt",
+      "sha256": "e7da85c45193832577fea6f698543317e09bc961c150a0b4735fa4c30058de0a"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/linker-map.txt",
+      "sha256": "41662c58fb6d23d62a3d2c556dc3f5d0b84678945b67c3b378b8faa25a3a0f5b"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1-local-codegen.json",
+      "sha256": "8aed639232a55137ccdee8771560d9ae53153add6f77ef7f4ccd014321986260"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1-local-validation.json",
+      "sha256": "5dee6a9a7da8397020eab9d1e1a26a3383ce945891d1e9043de89da77081edae"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1-prior-evidence-audit.json",
+      "sha256": "3593ac4663695295acce08a2f6a22492c0085acbd5cf9057366bffd7d887cc8e"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/representative-payload-agreement.json",
+      "sha256": "3db18a7b34514f1b5286b1b454b2253f0e8c9351948cff908915a4f2f54698b7"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/representative-payload-fixture.json",
+      "sha256": "ced6074bcde73138ccfb34394496dbb5cb238f6316d729fc4d06e90f44ffb722"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/request-channel-size-freeze.json",
+      "sha256": "038e00bbe678df51c4f31e34e497012f2107e609f1d920e2551afb9158b32a3d"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/toolchain-identity-agreement.json",
+      "sha256": "518965351051958065a37272711e416645ca693cc506bd14d80015cd6c32e346"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/toolchain-identity-fixture.json",
+      "sha256": "134fcb12f4a035b97c0bcb45e2034dd064687c6b4c8ebca9524225ed3f223101"
+    },
+    {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/v4-static-audit-linker-map.txt",
+      "sha256": "ae960d4fbf6ab9bb88502ea10e14d703bd8dc883d216ab1e69d3c81030a6d1ee"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1-local-codegen.json",
+      "sha256": "8fea9afc0bf61f83c168db0991a6e0662b400a6fe640fd94232bd4107a171993"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1-local-validation.json",
+      "sha256": "dbb5bd2e96eb4493c837938ec3587927a1741311e3e6fb0abed72d2e4d8fb6fb"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1b-authorization.json",
+      "sha256": "b613a867c4c6e75be4676577e2041efdcdf16bc994bdcf1c15dd2727b61281a3"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/phase1b-rehearsal-hashes.json",
+      "sha256": "30cd9be45e89f062e98b21f05966aa84f37db6c9ca40bb3dc91cfaeae924a0cf"
+    },
+    {
+      "path": "makefile.unix",
+      "sha256": "2ddd9c1cb019be6c3a9cb61662ad12e8c4bd948c1ef14b11b2cf3c45bed207e5"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_admission.py",
+      "sha256": "7f1307cd21fb2569cb2ef70563be1269feb5981904d5e2690bbf33e1c55ed12d"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_archive.py",
+      "sha256": "3cfd8a98491870f4628df8909ab6dbc06ea888d4df27152477abb371e7834f9d"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_bootstrap.py",
+      "sha256": "49fdc6b4b6f378a59b5bfd0e6c50a455d71e05620b5508ac883369afe5d8e904"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_manifest.json",
+      "sha256": "b38602331821dc2e6f17d1aa82e974891697109e9d9011c724173bf55ae26439"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_paths.py",
+      "sha256": "bbc7fc75ae09e089343a0390a852572d3743617b821cba8b13b2ce21576df867"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_payload.py",
+      "sha256": "734f60787a1d8926d699fcb4a08a8466792a33e769cc84dfb7e7280b8f24d9d9"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_schemas.json",
+      "sha256": "e32aea4c674690431b470944476efe9abce959fe89d3d5e02f618246a10b7156"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_toolchain.py",
+      "sha256": "0517e1c9e03fb07b4bb6031d9e92f8233dc45b9d7dfa36d763b699c98af7d8bc"
+    },
+    {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_transport.py",
+      "sha256": "d295ae6980dc13aabf08b4eca42bfdc288eb571b96bf292413bb0a98f13bf46c"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_admission.py",
+      "sha256": "24a4980da81f36ef65d8c199b91d4cf0e03cbcd35a92e4d479590ced915757ed"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_archive.py",
+      "sha256": "2769e9e7c932d90b64440d83e29ce547697825321876d1dcb52f18d40a516cf1"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_manifest.json",
+      "sha256": "42afa14d09de7d696eacf2a60bf46d0171cf7d0288aec72e35d673b950f9d89c"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_paths.py",
+      "sha256": "10b1917410a97571a571dd610f65a9a91f5ed528ca2c4df3ea3f07db9158ecc4"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_payload.py",
+      "sha256": "9a07da91902c11b37aff01eb9ef66dc2c1d02a4aad43f2d5ac2da9382ec20a14"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_schemas.json",
+      "sha256": "a18798767a7c7cccc0f782ea4fe055709b14e146393b62bbd022ef702ed457f6"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_toolchain.py",
+      "sha256": "ad7d4d9e9d3f59896c2542135b301a01701732cfa1e574c8f46c04ea826117ae"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v2_transport.py",
+      "sha256": "fe4884df1a74b0b676fb01dfe7b9cbcf3a9232f5493e731da28d5b5da6dc98ab"
+    },
+    {
+      "path": "scripts/evaluate_backref_cost_aligned_null_stage_attribution_v1.py",
+      "sha256": "af8ddcf320d0fee5a32a8fce3f911b082edcc92fa12449428bc8dd222876f2df"
+    },
+    {
+      "path": "scripts/execute_backref_cost_aligned_null_stage_attribution_v1.py",
+      "sha256": "dabf35efa57d36bc50bff62f9ef0353518ee04cdb0bfa53ba1c2c5152a6c8c4c"
+    },
+    {
+      "path": "scripts/execute_backref_cost_specialization_alignment_v2.py",
+      "sha256": "dab631c31a79ed9896da915d50ed04b9ea5ebe0aa4820c43dd76a9afa6ead02f"
+    },
+    {
+      "path": "scripts/freeze_backref_cost_aligned_null_stage_attribution_v1_phase1.py",
+      "sha256": "1fa9bd9100d2d2044ca7331c2bd4540a1452cad8ddf848cdeb3788c303baa775"
+    },
+    {
+      "path": "scripts/record_backref_cost_aligned_null_stage_attribution_v1_phase1b.py",
+      "sha256": "5a4b68bb1e5c3ee99f8ff315077757bf2592020002d8440a5c30b1a7fa5803cd"
+    },
+    {
+      "path": "scripts/run_backref_cost_aligned_null_stage_attribution_v1_experiment.py",
+      "sha256": "6065efc04d150ceda8f787704d014fb0efd6b97eda274ccf12ac14fbcad9521d"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v1_admission.py",
+      "sha256": "c1b5cfc2d043981d164c5a4b9e225dfadba92cdbe17546aeb6bcc2b78ec614b9"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v1_archive.py",
+      "sha256": "b08fafcdbb954aebc05106f3734f1a8accec65eb6799eb2617ed5a809559c6ae"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v1_experiment.py",
+      "sha256": "dc75d2e23919ff158fa33a21b2f6eb289a66dbdc40503901caa0e57c99ec97aa"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v1_payload_identity.py",
+      "sha256": "dc9a1f311ece02a1babd1674bb8b01c7680d2522f4c158098a2ca1cf939e434c"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v1_process_ownership.py",
+      "sha256": "2fc3707144e6030ec78eb82bb787396eec3f71b25065a60e7e24e531eec8ec74"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v1_protocol.py",
+      "sha256": "018ea5943706322a926e468bc9538841c07cbb8509e89aa7e4a87882616b23bd"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v1_streaming.py",
+      "sha256": "6ba4652527bffc290be73ae922552c2872f28eb25b10bceba4fa20da246728bb"
+    },
+    {
+      "path": "scripts/test_backref_cost_aligned_null_stage_attribution_v1_toolchain_identity.py",
+      "sha256": "3ff6f84c4846b473dd0e3474cd2796c1210e460160971045efc7e30168b1a662"
+    },
+    {
+      "path": "scripts/test_experiment_guards.py",
+      "sha256": "17d7589a7259f17b5b4e4e2e5c80f477dc39054167cbfa21594852dd51f68155"
+    },
+    {
+      "path": "src/enc/backref_cost_aligned_null_stage_attribution_v1_experiment_enc.c",
+      "sha256": "11d8e8f52878faa839a3487b7625d9e68430a35ecb3121483611904c762f7d5f"
+    },
+    {
+      "path": "src/enc/backref_cost_aligned_null_stage_attribution_v1_experiment_enc.h",
+      "sha256": "9ea86d4fb98d804be625171e43948bd5157b3197cfc81c90e4b19a3b0149fa12"
+    },
+    {
+      "path": "src/enc/backref_cost_alignment_v2_layout_clone_enc.inc",
+      "sha256": "b6593c6125d3f88467f6b0ce171a0029586ab008f3ce845c27a7934e493e02fd"
+    },
+    {
+      "path": "src/enc/backref_cost_alignment_v4_layout_clone_enc.inc",
+      "sha256": "15edbf416827a49ddefd484c7a36800067939730be8e9d079c1f9c7d7ab0646b"
+    },
+    {
+      "path": "src/enc/backref_cost_specialization_alignment_v2_experiment_enc.c",
+      "sha256": "63951eb750622d27284437be2936cb9a59e78092d02280ef80bea7e32acf00bc"
+    },
+    {
+      "path": "src/enc/backref_cost_specialization_alignment_v2_experiment_enc.h",
+      "sha256": "fe8f6aab99e67776a56522ac83ab10ce311f02ac79d4234a4305f5be6ab3081e"
+    },
+    {
+      "path": "src/enc/backward_references_cost_distance_only_enc.inc",
+      "sha256": "47b44223d37b3d0f9367e7cfe435655e12747fbb6bd9999b772a7dd7bb1de78e"
+    },
+    {
+      "path": "src/enc/backward_references_cost_enc.c",
+      "sha256": "34263178a9740c32390e86172d8b90bba2f612cbd0079129643f6ec86384439b"
+    },
+    {
+      "path": "src/enc/backward_references_enc.c",
+      "sha256": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03"
+    },
+    {
+      "path": "src/enc/profile_enc.c",
+      "sha256": "09f3d010e01f92070692348c82ad68c9c90f4c149d7ee99d983d1661909445c7"
+    },
+    {
+      "path": "src/enc/profile_enc.h",
+      "sha256": "18ebc2cad4dddcce72edbc66ba5716a700121023303f260a21e1378e842b7a73"
+    },
+    {
+      "path": "src/enc/vp8l_enc.c",
+      "sha256": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0"
+    },
+    {
+      "path": "tools/backref_cost_aligned_null_stage_attribution_v1_experiment_runner.c",
+      "sha256": "4078e741ab15831a239227d87b8089ec18a35b8f44bc5b3ea22c0917d030bc2b"
+    },
+    {
+      "path": "tools/backref_cost_specialization_alignment_v2_experiment_runner.c",
+      "sha256": "3c4130002bd8f47609aef6f2f8df1cbb9c354e159e633c4e03813a00f0d01f0b"
+    }
+  ],
+  "source_map_entry_count": 66,
+  "source_map_sha256": "80be33814cf18cb5a93ef9bfe959032ac3be9de4236cf78206df1202accf21d3",
+  "source_tree": "0974b8310e69ce1e1a9a0bfa1ed8eecc1b037239",
+  "status": "verified"
+}

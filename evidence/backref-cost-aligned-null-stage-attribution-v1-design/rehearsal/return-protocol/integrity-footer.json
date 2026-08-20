@@ -1,0 +1,12 @@
+{
+  "archive_bytes": 13846,
+  "archive_sha256": "b79fe1e5c9266fdbfe5534aa34ba82fb66cb0d64b57d654534eb583f1fd9706a",
+  "complete_response_preflight_required": true,
+  "elapsed_before_cleanup_ns": 28319515583,
+  "error": null,
+  "exclusive_framed_response_cap_bytes": 1048576,
+  "process_refusal": null,
+  "process_refusal_sha256": null,
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v1-integrity-footer-v1",
+  "status": "complete"
+}

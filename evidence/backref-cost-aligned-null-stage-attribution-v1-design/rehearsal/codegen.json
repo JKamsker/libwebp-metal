@@ -1,0 +1,75 @@
+{
+  "alignment_boundary_bytes": 16384,
+  "all_four_private_addresses_distinct": true,
+  "baseline_layout_canonical_instructions_equal": true,
+  "baseline_layout_mnemonics_equal": true,
+  "disassembly_sha256": "ee78594d005eb68f0099444b7273651848d71574453edb28f576f3467ed92f2d",
+  "dp_to_push_displacement_bytes": 32768,
+  "facts": {
+    "BackwardReferencesHashChainDistanceOnly": {
+      "branch_count": 54,
+      "canonical_instructions_sha256": "7c234bd7c38accc78d0cc30d7b49941459cfeea92abdd0e24b9833142874141b",
+      "instruction_count": 323,
+      "instruction_words_sha256": "72e9f913e7e63026679e1962d81b63976014e036d084215606f73c2eeb56d9ee",
+      "load_count": 55,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+      "size_bytes": 1292,
+      "store_count": 23
+    },
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": {
+      "branch_count": 54,
+      "canonical_instructions_sha256": "7c234bd7c38accc78d0cc30d7b49941459cfeea92abdd0e24b9833142874141b",
+      "instruction_count": 323,
+      "instruction_words_sha256": "34897d54929c47bc442a6bc3700d9a0688a8cfe84991eb2df96f8622f82536fb",
+      "load_count": 55,
+      "mnemonics_sha256": "0c8cd1b91ff53baa9fb6f77fc94efb71d14e9e08b4802da5ac36da9f507f3f3f",
+      "size_bytes": 1292,
+      "store_count": 23
+    },
+    "PushInterval": {
+      "branch_count": 30,
+      "canonical_instructions_sha256": "b639260e4c9c1a64c8e33b333da6112d2520e1ab02d111d7de96cdc8d97967ab",
+      "instruction_count": 127,
+      "instruction_words_sha256": "8d38f4a2e6cf88da60a436d8ecba94fff456b665be79d953f43dd121142beaab",
+      "load_count": 25,
+      "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8",
+      "size_bytes": 508,
+      "store_count": 11
+    },
+    "PushIntervalLayoutClone": {
+      "branch_count": 30,
+      "canonical_instructions_sha256": "b639260e4c9c1a64c8e33b333da6112d2520e1ab02d111d7de96cdc8d97967ab",
+      "instruction_count": 127,
+      "instruction_words_sha256": "6214f7038f6ef8f2d55a2805eb68233b173cc9b005c03ab2f4fdfebdec3b752a",
+      "load_count": 25,
+      "mnemonics_sha256": "d1767b7cb27c43fde6339f86d66f75db35811f8cd795eee5d09e6ff74fa5b3b8",
+      "size_bytes": 508,
+      "store_count": 11
+    }
+  },
+  "inter_entry_padding_bytes": 46844,
+  "linker_map_bytes": 69803,
+  "linker_map_extract_sha256": "c6ea8f05720f99b556a5c2eba8f8d33995551816f04acbf475f924b2204bd909",
+  "linker_map_sha256": "583b8154271d05227bd1537ca9ec5d9d4daaea2a0447fcfa75cb528c51daccd7",
+  "no_h_body_in_candidate_scope": true,
+  "recorder_symbols_in_timed_binary": false,
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v1-codegen-v1",
+  "section": {
+    "address": "0x0000000100064000",
+    "alignment_power": 14,
+    "executable_pure_instructions": true,
+    "file_offset": 409600,
+    "flags": "0x80000400",
+    "name": "__br_null_v1",
+    "segment": "__TEXT",
+    "size_bytes": 50444
+  },
+  "symbol_addresses": {
+    "BackwardReferencesHashChainDistanceOnly": "000000010006c000",
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": "0000000100070000",
+    "PushInterval": "0000000100064000",
+    "PushIntervalLayoutClone": "0000000100068000"
+  },
+  "timed_runner_bytes": 653712,
+  "timed_runner_sha256": "f206ae75507d62324c82287312be617433452771a34ef3898bfc6999cf044bff"
+}

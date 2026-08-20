@@ -30,7 +30,8 @@
     !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT) && \
     !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT) && \
     !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT) && \
-    !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT)
+    !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT) && \
+    !defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
 #define WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT 1
 #endif
 #include "src/enc/profile_enc.h"
@@ -183,6 +184,20 @@
   "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_CASE_ID"
 #define WEBP_FACTORIZATION_SAMPLE_SET_ENV \
   "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_SAMPLE_SET"
+#elif defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+#include "src/enc/backref_cost_aligned_null_stage_attribution_v1_experiment_enc.h"
+#define WEBP_FACTORIZATION_VARIANT_ENV \
+  "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_VARIANT"
+#define WEBP_FACTORIZATION_TIMERS_ENV \
+  "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_TIMERS"
+#define WEBP_FACTORIZATION_STAGE_OUTPUT_ENV \
+  "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_STAGE_OUTPUT"
+#define WEBP_FACTORIZATION_RUN_ID_ENV \
+  "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_RUN_ID"
+#define WEBP_FACTORIZATION_CASE_ID_ENV \
+  "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_CASE_ID"
+#define WEBP_FACTORIZATION_SAMPLE_SET_ENV \
+  "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_SAMPLE_SET"
 #endif
 
 #include <stdio.h>
@@ -225,6 +240,14 @@ typedef struct {
   uint64_t total_start_ns;
   uint64_t elapsed_ns[WEBP_PROFILE_STAGE_COUNT];
   uint32_t calls[WEBP_PROFILE_STAGE_COUNT];
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+  uint64_t ledger_ns[8];
+  uint64_t ledger_last_ns;
+  uint32_t ledger_clock_reads;
+  int ledger_stack[64];
+  int ledger_stack_depth;
+  int ledger_error;
+#endif
 } WebPProfileContext;
 
 static WEBP_PROFILE_TLS WebPProfileContext profile_context;
@@ -263,6 +286,75 @@ static const char* const kStageNames[WEBP_PROFILE_STAGE_COUNT] = {
     "lossy_encode_loop",
     "lossy_alpha",
     "lossy_write"};
+
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+enum {
+  WEBP_NULL_LEDGER_PREP_SETUP = 0,
+  WEBP_NULL_LEDGER_ANALYSIS_TRANSFORMS,
+  WEBP_NULL_LEDGER_BACKWARD_REFS,
+  WEBP_NULL_LEDGER_HISTOGRAM,
+  WEBP_NULL_LEDGER_ENTROPY,
+  WEBP_NULL_LEDGER_BITSTREAM,
+  WEBP_NULL_LEDGER_FINALIZATION,
+  WEBP_NULL_LEDGER_ORCHESTRATION,
+  WEBP_NULL_LEDGER_COUNT
+};
+
+static const char* const kNullLedgerNames[WEBP_NULL_LEDGER_COUNT] = {
+    "pre_lossless_setup_input", "analysis_transforms",
+    "backward_reference_generation", "histogram_construction",
+    "entropy_huffman_preparation", "bitstream_serialization",
+    "container_output_finalization", "allocation_cleanup_orchestration"};
+
+static int NullLedgerBucket(WebPProfileStage stage) {
+  switch (stage) {
+    case WEBP_PROFILE_LOSSLESS_PREPARE:
+    case WEBP_PROFILE_LOSSLESS_CONTAINER_SETUP:
+    case WEBP_PROFILE_LOSSLESS_ENCODER_INIT:
+    case WEBP_PROFILE_LOSSLESS_PALETTE:
+    case WEBP_PROFILE_LOSSLESS_INPUT_COPY:
+      return WEBP_NULL_LEDGER_PREP_SETUP;
+    case WEBP_PROFILE_LOSSLESS_ANALYZE:
+    case WEBP_PROFILE_LOSSLESS_SUBTRACT_GREEN:
+    case WEBP_PROFILE_LOSSLESS_PREDICTOR:
+    case WEBP_PROFILE_LOSSLESS_CROSS_COLOR:
+      return WEBP_NULL_LEDGER_ANALYSIS_TRANSFORMS;
+    case WEBP_PROFILE_LOSSLESS_HASH_CHAIN:
+    case WEBP_PROFILE_LOSSLESS_BACKWARD_REFS:
+    case WEBP_PROFILE_BACKREF_COST_DP_TOTAL:
+    case WEBP_PROFILE_BACKREF_COST_DP_SETUP:
+    case WEBP_PROFILE_BACKREF_COST_DP_STEADY:
+    case WEBP_PROFILE_BACKREF_COST_TRACEBACK:
+    case WEBP_PROFILE_BACKREF_COST_MATERIALIZE:
+      return WEBP_NULL_LEDGER_BACKWARD_REFS;
+    case WEBP_PROFILE_LOSSLESS_HISTOGRAM:
+      return WEBP_NULL_LEDGER_HISTOGRAM;
+    case WEBP_PROFILE_LOSSLESS_HUFFMAN:
+      return WEBP_NULL_LEDGER_ENTROPY;
+    case WEBP_PROFILE_LOSSLESS_BITSTREAM:
+      return WEBP_NULL_LEDGER_BITSTREAM;
+    case WEBP_PROFILE_LOSSLESS_STREAM_FINALIZE:
+    case WEBP_PROFILE_LOSSLESS_RIFF_WRITE:
+      return WEBP_NULL_LEDGER_FINALIZATION;
+    default:
+      return WEBP_NULL_LEDGER_ORCHESTRATION;
+  }
+}
+
+static void NullLedgerAccumulate(WebPProfileContext* ctx, uint64_t now_ns) {
+  int bucket = WEBP_NULL_LEDGER_ORCHESTRATION;
+  if (now_ns < ctx->ledger_last_ns) {
+    ctx->ledger_error = 1;
+    return;
+  }
+  if (ctx->ledger_stack_depth > 0) {
+    bucket = NullLedgerBucket(
+        (WebPProfileStage)ctx->ledger_stack[ctx->ledger_stack_depth - 1]);
+  }
+  ctx->ledger_ns[bucket] += now_ns - ctx->ledger_last_ns;
+  ctx->ledger_last_ns = now_ns;
+}
+#endif
 
 static int EnvironmentOptIn(const char* name) {
   const char* const value = getenv(name);
@@ -312,7 +404,8 @@ static uint64_t ProfileNowNs(void) {
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
 uint64_t WebPProfileClockNowForValidation(void) { return ProfileNowNs(); }
 #endif
 
@@ -478,12 +571,17 @@ void WebPProfileBeginSession(const WebPConfig* config,
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
   {
     const char* const variant = getenv(WEBP_FACTORIZATION_VARIANT_ENV);
     if (variant == NULL ||
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+        (strcmp(variant, "B") != 0 && strcmp(variant, "L") != 0)) {
+#else
         (strcmp(variant, "B") != 0 && strcmp(variant, "L") != 0 &&
          strcmp(variant, "H") != 0)) {
+#endif
       return;
     }
   }
@@ -510,6 +608,10 @@ void WebPProfileBeginSession(const WebPConfig* config,
   ctx->height = picture != NULL ? picture->height : 0;
   ctx->encode_index = process_encode_index++;
   ctx->total_start_ns = ProfileNowNs();
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+  ctx->ledger_last_ns = ctx->total_start_ns;
+  ctx->ledger_clock_reads = 1;
+#endif
 }
 
 void WebPProfileEndSession(int ok, int error_code) {
@@ -701,7 +803,8 @@ void WebPProfileEndSession(int ok, int error_code) {
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
   const char* const output_path = getenv(WEBP_FACTORIZATION_STAGE_OUTPUT_ENV);
   const char* const run_id = getenv(WEBP_FACTORIZATION_RUN_ID_ENV);
   const char* const case_id = getenv(WEBP_FACTORIZATION_CASE_ID_ENV);
@@ -714,8 +817,13 @@ void WebPProfileEndSession(int ok, int error_code) {
   const char* const backend = getenv("WEBP_STAGE_PROFILE_BACKEND");
   const char* const sample_set = getenv("WEBP_STAGE_PROFILE_SAMPLE_SET");
 #endif
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+  const uint64_t end_ns = ctx->active ? ProfileNowNs() : 0;
+  const uint64_t total_ns = ctx->active ? end_ns - ctx->total_start_ns : 0;
+#else
   const uint64_t total_ns =
       ctx->active ? ProfileNowNs() - ctx->total_start_ns : 0;
+#endif
   const char* sample_role;
   const char* record_schema = "libwebp-encoder-stage-v1";
 #if defined(WEBP_USE_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT)
@@ -806,20 +914,39 @@ void WebPProfileEndSession(int ok, int error_code) {
   FILE* out;
   int i;
   if (!ctx->active) return;
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+  ++ctx->ledger_clock_reads;
+  NullLedgerAccumulate(ctx, end_ns);
+  if (ctx->ledger_stack_depth != 0) ctx->ledger_error = 1;
+#endif
   ctx->active = 0;
-#if defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+  record_schema =
+      "libwebp-backref-cost-aligned-null-stage-attribution-v1-stage-ledger-v1";
+  if (sample_set != NULL && strcmp(sample_set, "timer-validation") == 0) {
+    sample_role = "timer-validation";
+  } else if (sample_set != NULL &&
+             (strcmp(sample_set, "warm") == 0 ||
+              strcmp(sample_set, "warm-dominant") == 0)) {
+    sample_role = (ctx->encode_index == 0) ? "warmup" : "warm";
+  } else {
+    sample_role = "cold";
+  }
+#elif defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT)
   if (sample_set != NULL && strcmp(sample_set, "timer-validation") == 0) {
     sample_role = "timer-validation";
     record_schema =
         "libwebp-backref-cost-specialization-alignment-v4-timer-accounting-stage-v1";
   } else
 #endif
+#if !defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
   if (sample_set != NULL && (strcmp(sample_set, "warm") == 0 ||
                              strcmp(sample_set, "warm-dominant") == 0)) {
     sample_role = (ctx->encode_index == 0) ? "warmup" : "warm";
   } else {
     sample_role = "cold";
   }
+#endif
   out = (output_path == NULL || output_path[0] == '\0')
             ? stderr
             : fopen(output_path, "a");
@@ -896,13 +1023,73 @@ void WebPProfileEndSession(int ok, int error_code) {
       first = 0;
     }
   }
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+  {
+    uint64_t ledger_sum = 0;
+    uint64_t nested_call_sum = 0;
+    uint64_t residual = 0;
+    uint32_t expected_clock_reads;
+    int first = 1;
+    for (i = 0; i < WEBP_NULL_LEDGER_COUNT; ++i) {
+      ledger_sum += ctx->ledger_ns[i];
+    }
+    for (i = 0; i < WEBP_PROFILE_STAGE_COUNT; ++i) {
+      nested_call_sum += ctx->calls[i];
+    }
+    expected_clock_reads = (uint32_t)(2 + 2 * nested_call_sum);
+    if (ledger_sum <= total_ns) {
+      residual = total_ns - ledger_sum;
+    } else {
+      ctx->ledger_error = 1;
+    }
+    fputs("},\"top_level_ledger\":{", out);
+    for (i = 0; i < WEBP_NULL_LEDGER_COUNT; ++i) {
+      fprintf(out, "%s\"%s\":{\"ns\":%llu,\"calls\":1}",
+              first ? "" : ",", kNullLedgerNames[i],
+              (unsigned long long)ctx->ledger_ns[i]);
+      first = 0;
+    }
+    fprintf(out,
+            ",\"residual_unattributed\":{\"ns\":%llu,\"calls\":1}},"
+            "\"ledger_sum_ns\":%llu,\"reconciliation_delta_ns\":%llu,"
+            "\"clock_reads\":%u,\"expected_clock_reads\":%u,"
+            "\"clock_correction\":\"none-raw-with-bounded-overhead\","
+            "\"ledger_valid\":%s,\"nested_timers_additive\":false}\n",
+            (unsigned long long)residual, (unsigned long long)ledger_sum,
+            (unsigned long long)residual, ctx->ledger_clock_reads,
+            expected_clock_reads,
+            (!ctx->ledger_error && residual == 0 &&
+             ctx->ledger_clock_reads == expected_clock_reads)
+                ? "true"
+                : "false");
+  }
+#else
   fputs("}}\n", out);
+#endif
   if (out != stderr) fclose(out);
 }
 
 uint64_t WebPProfileStageBegin(WebPProfileStage stage) {
+  WebPProfileContext* const ctx = &profile_context;
+  if (!ctx->active) return 0;
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+  {
+    const uint64_t now_ns = ProfileNowNs();
+    ++ctx->ledger_clock_reads;
+    NullLedgerAccumulate(ctx, now_ns);
+    if (stage < 0 || stage >= WEBP_PROFILE_STAGE_COUNT ||
+        ctx->ledger_stack_depth >=
+            (int)(sizeof(ctx->ledger_stack) / sizeof(ctx->ledger_stack[0]))) {
+      ctx->ledger_error = 1;
+    } else {
+      ctx->ledger_stack[ctx->ledger_stack_depth++] = stage;
+    }
+    return now_ns;
+  }
+#else
   (void)stage;
-  return profile_context.active ? ProfileNowNs() : 0;
+  return ProfileNowNs();
+#endif
 }
 
 void WebPProfileStageEnd(WebPProfileStage stage, uint64_t start_ns) {
@@ -911,7 +1098,22 @@ void WebPProfileStageEnd(WebPProfileStage stage, uint64_t start_ns) {
       stage >= WEBP_PROFILE_STAGE_COUNT) {
     return;
   }
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+  {
+    const uint64_t now_ns = ProfileNowNs();
+    ++ctx->ledger_clock_reads;
+    NullLedgerAccumulate(ctx, now_ns);
+    if (ctx->ledger_stack_depth <= 0 ||
+        ctx->ledger_stack[ctx->ledger_stack_depth - 1] != stage) {
+      ctx->ledger_error = 1;
+    } else {
+      --ctx->ledger_stack_depth;
+    }
+    ctx->elapsed_ns[stage] += now_ns - start_ns;
+  }
+#else
   ctx->elapsed_ns[stage] += ProfileNowNs() - start_ns;
+#endif
   ++ctx->calls[stage];
 }
 

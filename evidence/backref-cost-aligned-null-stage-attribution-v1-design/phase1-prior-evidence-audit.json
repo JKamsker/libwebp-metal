@@ -1,0 +1,57 @@
+{
+  "alignment_v4_commits": {
+    "merge": "5de7b3848adfdb5d1058a061979535f05f976e5b",
+    "phase1a": "f1e1b1afd4c12921b326276ae7f07f4d27137548",
+    "phase1b": "22eaed7f89e12fc3a4510f75f570ca5edffe5ea2",
+    "phase2": "7f3bb9a4d05c786aac8cf4176268582123365959",
+    "phase3": "a0569a0adf14deb6a7d72078d883a21d3944dc38"
+  },
+  "audited_merge": "5de7b3848adfdb5d1058a061979535f05f976e5b",
+  "evaluator_reconstruction": {
+    "domains_passing": 11,
+    "domains_total": 12,
+    "graphic_m4_dp_steady_null_passed": true,
+    "graphic_m4_dp_total_null_passed": true,
+    "sole_failure": {
+      "cell": "graphic-m4",
+      "ci95_percent": [
+        -1.0795343104954225,
+        -0.21412171812593112
+      ],
+      "mean_percent": -0.6199563389094708,
+      "metric": "whole_encode"
+    }
+  },
+  "performance_samples_generated": 0,
+  "raw_index_audit": {
+    "artifact-hashes.json": {
+      "mismatches": [],
+      "rows": 136,
+      "sha256": "dd41359e33b72b522d7da68292bd279e5cf085ddc3d894867a3c4beed3a56b6f"
+    },
+    "returned-evidence-hashes.json": {
+      "mismatches": [],
+      "rows": 152,
+      "sha256": "d382c095370e828266364c1d4a3724bf1f5aeb1e42f96e81b799d78ea7bfdd89"
+    }
+  },
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v1-prior-evidence-audit-v1",
+  "status": "PASS_ALIGNMENT_V4_PREMISE_FROZEN",
+  "timer_boundary_classification": {
+    "attribution_suitable_v4_timers": [],
+    "nested_overlapping_descriptive": [
+      "backref_cost_dp_setup",
+      "backref_cost_dp_steady",
+      "backref_cost_dp_total",
+      "backref_cost_traceback",
+      "backref_cost_materialize"
+    ],
+    "parent_overlapping_descriptive": [
+      "lossless_hash_chain",
+      "lossless_backward_refs"
+    ],
+    "reason": "V4 lacks a complete mutually-exclusive whole-encode partition; its nested timers cannot be summed into a causal ledger."
+  },
+  "v4_samples_pooled_reused_or_relabelled": false,
+  "v4_timing_rows_loaded_into_v1_statistics": 0
+}

@@ -1,0 +1,400 @@
+{
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v1-phase2-refusal-audit-v1",
+  "record_kind": "phase2_frozen_executor_auditor_refusal",
+  "experiment_id": "BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1",
+  "phase": "2",
+  "role": "Luna/max frozen executor/auditor",
+  "branch": "codex/backref-cost-aligned-null-stage-attribution-v1",
+  "audit_scope": {
+    "local_worktree_only": true,
+    "phase1_work_performed": false,
+    "phase3_work_performed": false,
+    "phase1_files_modified": false,
+    "phase1_commits_modified": false,
+    "timing_samples_loaded": false,
+    "v4_timing_rows_loaded": false,
+    "v4_rows_pooled_relabelled_or_reused": false
+  },
+  "ancestry": {
+    "expected_main_commit": "5de7b3848adfdb5d1058a061979535f05f976e5b",
+    "expected_main_tree": "a5b2e958b3e89d3e1bf5fd5ecd6f92b2bc9622e6",
+    "phase1a_commit": "c674c815c65d0424f75f8391e09064da4364d04e",
+    "phase1a_parent": "5de7b3848adfdb5d1058a061979535f05f976e5b",
+    "phase1a_tree": "0974b8310e69ce1e1a9a0bfa1ed8eecc1b037239",
+    "phase1b_commit": "75ba4d7f001307becee11828f321f9f041ad64a6",
+    "phase1b_parent": "c674c815c65d0424f75f8391e09064da4364d04e",
+    "phase1b_tree": "a782f65b147073f45596b485c9c2ca5bfff904d0",
+    "audited_head": "75ba4d7f001307becee11828f321f9f041ad64a6",
+    "exact_main_ancestor_verified": true,
+    "phase1a_parent_verified": true,
+    "phase1b_single_parent_verified": true,
+    "branch_head_verified": true
+  },
+  "phase1b_additions_only_audit": {
+    "status": "PASS",
+    "phase1a_commit_file_count": 46,
+    "phase1b_delta_file_count": 29,
+    "phase1b_delta_status_counts": {
+      "A": 29,
+      "M": 0,
+      "D": 0,
+      "R": 0
+    },
+    "phase1a_paths_modified_by_phase1b": 0,
+    "phase1b_paths_are_additions_only": true,
+    "authorization_parent_matches_phase1a": true,
+    "source_commit_in_phase1b_records": "c674c815c65d0424f75f8391e09064da4364d04e",
+    "source_tree_in_phase1b_records": "0974b8310e69ce1e1a9a0bfa1ed8eecc1b037239"
+  },
+  "frozen_identity_hash_audit": {
+    "manifest": {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_manifest.json",
+      "sha256": "b38602331821dc2e6f17d1aa82e974891697109e9d9011c724173bf55ae26439"
+    },
+    "protocol": {
+      "path": "doc/backref-cost-aligned-null-stage-attribution-v1-protocol-20260820.md",
+      "sha256": "4dc75a93005fba3a85ccb8eb353ad9c944d379d9603d9c0a75b05fde4033196d"
+    },
+    "schema_catalog": {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_schemas.json",
+      "sha256": "e32aea4c674690431b470944476efe9abce959fe89d3d5e02f618246a10b7156"
+    },
+    "transport_source": {
+      "path": "scripts/backref_cost_aligned_null_stage_attribution_v1_transport.py",
+      "sha256": "d295ae6980dc13aabf08b4eca42bfdc288eb571b96bf292413bb0a98f13bf46c"
+    },
+    "phase1b_authorization": {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1b-authorization.json",
+      "sha256": "83c2bd6a30921090448bf20e8e77b3b2b04c0b3367cf475e17cdabcf5c9669df"
+    },
+    "phase1b_rehearsal_hash_index": {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1b-rehearsal-hashes.json",
+      "sha256": "d2eb93e9e09e79f444cf7baeae9ef074f032a9496527ac1b436c8f313bc21f54",
+      "declared_files": 27,
+      "verified_files": 27,
+      "hash_mismatches": 0,
+      "declared_total_bytes": 364350,
+      "verified_total_bytes": 364350
+    },
+    "nested_artifact_hash_indexes": {
+      "artifact-hashes.json": {
+        "declared_files": 9,
+        "verified_files": 9,
+        "hash_mismatches": 0
+      },
+      "returned-evidence-hashes.json": {
+        "declared_files": 25,
+        "verified_files": 25,
+        "hash_mismatches": 0
+      }
+    },
+    "raw_rehearsal_files": {
+      "total_files": 27,
+      "json_files_parsed": 25,
+      "binary_files_verified": 2,
+      "total_bytes": 364350,
+      "channel_stdout_bytes": 213140,
+      "framed_response_bytes": 18240,
+      "transport_stderr_bytes": 0
+    },
+    "source_admission_hash_audit": {
+      "source_map_entries_declared": 66,
+      "source_map_entries_verified": 66,
+      "source_map_file_hash_mismatches": 0,
+      "manifest_admission_paths": 66,
+      "source_map_paths": 66,
+      "manifest_and_source_map_sets_equal": true,
+      "source_map_sha256": "80be33814cf18cb5a93ef9bfe959032ac3be9de4236cf78206df1202accf21d3",
+      "source_bundle_sha256": "ecdcfce34e29775ba22d319bc9f6e2b03d29a32b891746d05b435aa7c3811ab6"
+    }
+  },
+  "schema_audit": {
+    "catalog_protocol_version": 1,
+    "catalog_entries": 45,
+    "catalog_unique_entries": 45,
+    "manifest_schema_id_references": 17,
+    "manifest_schema_ids_all_in_catalog": true,
+    "catalog_path_reference": "scripts/backref_cost_aligned_null_stage_attribution_v1_schemas.json",
+    "phase2_record_schema_added_to_frozen_catalog": false,
+    "phase2_record_schema_reason": "This additions-only audit artifact does not modify the frozen Phase 1 schema catalog."
+  },
+  "prior_v4_premise_audit": {
+    "source": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1-prior-evidence-audit.json",
+    "status": "PASS_ALIGNMENT_V4_PREMISE_FROZEN",
+    "audited_merge": "5de7b3848adfdb5d1058a061979535f05f976e5b",
+    "domains_passing": 11,
+    "domains_total": 12,
+    "graphic_m4_whole_mean_percent": -0.6199563389094708,
+    "graphic_m4_whole_ci95_percent": [
+      -1.0795343104954225,
+      -0.21412171812593112
+    ],
+    "graphic_m4_dp_total_null_passed": true,
+    "graphic_m4_dp_steady_null_passed": true,
+    "v4_timing_rows_loaded_into_v1_statistics": 0,
+    "v4_samples_pooled_reused_or_relabelled": false,
+    "v4_attribution_suitable_timers": [],
+    "v4_nested_descriptive_timers_not_additive": [
+      "backref_cost_dp_setup",
+      "backref_cost_dp_steady",
+      "backref_cost_dp_total",
+      "backref_cost_traceback",
+      "backref_cost_materialize",
+      "lossless_hash_chain",
+      "lossless_backward_refs"
+    ]
+  },
+  "fresh_v1_static_and_fixture_audit": {
+    "source": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1-local-validation.json",
+    "status": "PASS",
+    "named_validation_checks": 43,
+    "experiment_guard_count": 45,
+    "cmake_integration": "PASS",
+    "unix_make_integration": "PASS",
+    "ordinary_build_default_omission": "PASS",
+    "public_api_abi_equal": "PASS",
+    "recorder_build_distinct": "PASS",
+    "timed_recorder_free": "PASS",
+    "runtime_truth_table": "PASS_ABSENT_B_EXACT_B_L_OTHER_INVALID_H_INVALID",
+    "h_candidate_absent": "PASS",
+    "selector_once_before_mutation": "PASS",
+    "correctness_fallback_determinism_immutability": "PASS",
+    "sanitizer_configurations": 2,
+    "sanitizer_boundary_encodes": 24,
+    "local_correctness_encodes": 2,
+    "early_fault_skip_repeat_fixtures": 5,
+    "timer_accounting_fixture_rows": 2,
+    "clock_overhead_reads": 4096,
+    "source_admission_paths": 66,
+    "zero_accepted_samples_on_admission_failure": "PASS",
+    "static_only_qualification": "No dynamic Phase 2 child, correctness, work, or timing rows exist."
+  },
+  "b_l_semantic_work_codegen_alignment_audit": {
+    "static_codegen_source": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1-local-codegen.json",
+    "static_codegen_status": "PASS",
+    "candidate_scope": "B/L only",
+    "h_body_in_candidate_scope": false,
+    "private_symbol_count": 4,
+    "private_addresses_distinct": true,
+    "entry_addresses_modulo_16384": {
+      "PushInterval": 0,
+      "PushIntervalLayoutClone": 0,
+      "BackwardReferencesHashChainDistanceOnly": 0,
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone": 0
+    },
+    "section": "__TEXT,__br_null_v1",
+    "section_size_bytes": 50444,
+    "body_bytes_total": 3600,
+    "padding_bytes": 46844,
+    "inter_entry_spacing_bytes": 16384,
+    "dp_to_push_displacement_bytes": 32768,
+    "no_deduplicate": true,
+    "corresponding_canonical_instruction_identity": true,
+    "corresponding_branch_load_store_counts_equal": true,
+    "timed_binary_recorder_free": true,
+    "dynamic_work_rows": 0,
+    "dynamic_correctness_rows": 0,
+    "dynamic_bitstream_and_pixel_comparisons": 0,
+    "dynamic_b_l_equality_status": "UNAVAILABLE_NOT_RUN_AFTER_REFUSAL",
+    "static_semantic_and_codegen_status": "PASS"
+  },
+  "stage_ledger_and_attribution_audit": {
+    "static_source_and_fixture_status": "PASS",
+    "frozen_top_level_bucket_count": 9,
+    "frozen_top_level_buckets": [
+      "pre_lossless_setup_input",
+      "analysis_transforms",
+      "backward_reference_generation",
+      "histogram_construction",
+      "entropy_huffman_preparation",
+      "bitstream_serialization",
+      "container_output_finalization",
+      "allocation_cleanup_orchestration",
+      "residual_unattributed"
+    ],
+    "frozen_nested_descriptive_timer_count": 11,
+    "frozen_nested_descriptive_timers": [
+      "lossless_analyze",
+      "lossless_hash_chain",
+      "lossless_backward_refs",
+      "lossless_histogram",
+      "lossless_huffman",
+      "lossless_bitstream",
+      "backref_cost_dp_total",
+      "backref_cost_dp_setup",
+      "backref_cost_dp_steady",
+      "backref_cost_traceback",
+      "backref_cost_materialize"
+    ],
+    "top_level_partition_non_overlapping": true,
+    "nested_timers_sum_with_top_level": false,
+    "residual_rule": "whole_ns minus the eight top-level bucket sums; successful retained rows require zero residual",
+    "clock": "mach_continuous_time converted with mach_timebase_info",
+    "clock_reads_formula": "2 + 2 * sum(all emitted stage calls)",
+    "clock_overhead_method": "independent untimed 4096-read distribution; raw timings, no post-hoc fit",
+    "accounting_fail_closed_conditions": [
+      "negative residual",
+      "overlap or non-LIFO transition",
+      "missing or duplicate stage call",
+      "unexpected clock count",
+      "inconsistent DP parent/child totals",
+      "missing successful-path timer"
+    ],
+    "early_return_fault_skip_repeat_schema": "PASS",
+    "dynamic_timer_validation_children": 0,
+    "dynamic_stage_rows": 0,
+    "dynamic_ledger_status": "UNAVAILABLE_NOT_RUN_AFTER_REFUSAL",
+    "primary_cell": "graphic-m4",
+    "primary_null_bounds": {
+      "absolute_mean_percent_max": 0.75,
+      "ci_must_include_zero": true,
+      "ci_endpoint_absolute_percent_max": 1.5,
+      "paired_row_absolute_percent_max": 3.0
+    },
+    "attribution_multiplicity": "Bonferroni family-wise 95% over 9 buckets",
+    "attribution_effect_floor_percent": 0.2,
+    "attribution_whole_delta_fraction_floor": 0.2,
+    "attribution_direction_requirement": "whole-sign bucket mean and at least 3 of 4 repetition means",
+    "repeatability_max_ratio": 2.0,
+    "attribution_outcome": "NOT_EVALUATED"
+  },
+  "phase1_rehearsal_reference_only": {
+    "source": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/rehearsal/",
+    "phase1_rehearsal_attempts": 1,
+    "phase1_remote_contacts": 1,
+    "phase1_single_noninteractive_ssh_session": 1,
+    "phase1_rehearsal_exit_code": 0,
+    "phase1_request_bytes": 23673635,
+    "phase1_request_chunks_written": 362,
+    "phase1_request_chunks_acknowledged": 362,
+    "phase1_response_bytes": 18240,
+    "phase1_archive_bytes": 13846,
+    "phase1_transport_stderr_bytes": 0,
+    "phase1_source_receipt_status": "verified",
+    "phase1_source_map_entries": 66,
+    "phase1_ready_before_request": true,
+    "phase1_device_resource_status": "PASS_RECEIPTED",
+    "phase1_discovered_pid_signals": 0,
+    "phase1_exact_identity_conflicts": 0,
+    "phase1_archive_status": "accepted",
+    "phase1_integrity_status": "complete",
+    "phase1_cleanup_absence_proved": true,
+    "phase1_exact_child_removed": true,
+    "phase1_post_run_remote_cleanup_operations": 0,
+    "phase1_lease_attempts": 0,
+    "phase1_encoder_workloads": 0,
+    "phase1_correctness_encodes": 0,
+    "phase1_work_rows": 0,
+    "phase1_timer_validation_children": 0,
+    "phase1_direct_runner_children": 0,
+    "phase1_timing_rows": 0,
+    "phase1_profiler_workloads": 0,
+    "phase1_receipts_are_reference_only": true
+  },
+  "conditional_authority_audit": {
+    "phase1b_authorization_path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1b-authorization.json",
+    "phase1b_authorization_status": "REFUSED",
+    "phase2_authority": "NONE",
+    "pipeline_invocation_authorized": false,
+    "timed_execution_authorized": false,
+    "gate_count": 14,
+    "gate_pass_count": 13,
+    "gate_fail_count": 1,
+    "failed_gate": "alignment build frozen",
+    "refusal_reason": "The Phase 1B recorder gate retains predecessor six-body expectations despite the valid four-body V1 receipt.",
+    "gate_logic_reference": {
+      "path": "scripts/record_backref_cost_aligned_null_stage_attribution_v1_phase1b.py",
+      "lines": "201-214",
+      "six_body_expectations": {
+        "all_six_private_addresses_distinct": true,
+        "private_address_count": 6,
+        "section_size_bytes": 83212,
+        "body_bytes": 5624,
+        "padding_bytes": 77588
+      }
+    },
+    "valid_v1_receipt_reference": {
+      "build_path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/rehearsal/build-identity.json",
+      "codegen_path": "evidence/backref-cost-aligned-null-stage-attribution-v1-design/rehearsal/codegen.json",
+      "private_symbol_count": 4,
+      "all_four_private_addresses_distinct": true,
+      "section_size_bytes": 50444,
+      "body_bytes": 3600,
+      "padding_bytes": 46844,
+      "alignment_boundary_bytes": 16384,
+      "dp_to_push_displacement_bytes": 32768
+    },
+    "do_not_retry": true,
+    "do_not_override": true,
+    "do_not_reinterpret": true,
+    "zero_samples_on_failed_gate": true
+  },
+  "phase2_contact_and_work_record": {
+    "scope": "This Luna/max Phase 2 audit only; Phase 1 rehearsal contact is separately identified above.",
+    "remote_host": "pandocs-agent",
+    "remote_or_external_host_command_invocations": 0,
+    "ssh_invocations": 0,
+    "ready_requests": 0,
+    "lease_acquisition_attempts": 0,
+    "remote_transaction_invocations": 0,
+    "ping_invocations": 0,
+    "nc_invocations": 0,
+    "remote_children_created": 0,
+    "remote_child_lifecycle_events": 0,
+    "remote_cleanup_operations": 0,
+    "runner_or_workload_children_created": 0,
+    "phase2_correctness_records": 0,
+    "phase2_timer_validation_records": 0,
+    "phase2_work_records": 0,
+    "phase2_stage_rows": 0,
+    "phase2_timing_rows": 0,
+    "phase2_performance_samples": 0,
+    "phase2_profiler_workloads": 0,
+    "phase2_archives_created_or_extracted": 0,
+    "phase2_retries": 0,
+    "phase2_reruns": 0,
+    "phase2_tuning_or_threshold_edits": 0,
+    "phase2_h_variant_invocations": 0,
+    "phase2_cuda_invocations": 0,
+    "local_audit_method": "Read-only local Git ancestry, filesystem, SHA-256, JSON, and source/schema inspection only; no remote or workload command was executed.",
+    "forbidden_contact_commands_not_invoked": [
+      "/usr/bin/ssh",
+      "READY",
+      "lease",
+      "remote transaction",
+      "ping",
+      "nc",
+      "timed runner",
+      "encoder workload",
+      "profiler",
+      "CUDA"
+    ]
+  },
+  "decision": {
+    "status": "REFUSED_ZERO_ACCEPTED_PERFORMANCE_EVIDENCE",
+    "authority": "NONE",
+    "stage_attribution": "NOT_AVAILABLE",
+    "whole_encode_reproduction": "NOT_EVALUATED",
+    "top_level_statistics": "NOT_AVAILABLE",
+    "nested_timer_statistics": "NOT_AVAILABLE",
+    "production_promotion": "FORBIDDEN",
+    "phase3_consequence_evaluation": "NOT_PERFORMED_BY_PHASE2",
+    "decision_basis": "Frozen Phase 1B conditional authority is absent because the sole alignment-build-frozen gate is false."
+  },
+  "blocker": {
+    "status": "BLOCKED_BY_FROZEN_PHASE1B_REFUSAL",
+    "description": "Phase 2 cannot execute without conditional authority. The Phase 1A/Phase 1B additions-only rule forbids correcting the six-body gate or changing the frozen manifest, protocol, schemas, thresholds, identities, or inventory in this phase.",
+    "phase2_next_action": "None; hand off the refusal evidence without timing or interpretation."
+  },
+  "evidence_references": [
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1b-authorization.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1b-rehearsal-hashes.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1-prior-evidence-audit.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1-local-codegen.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-design/phase1-local-validation.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v1-design/rehearsal/",
+    "scripts/backref_cost_aligned_null_stage_attribution_v1_manifest.json",
+    "scripts/backref_cost_aligned_null_stage_attribution_v1_schemas.json",
+    "doc/backref-cost-aligned-null-stage-attribution-v1-protocol-20260820.md"
+  ]
+}

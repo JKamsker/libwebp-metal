@@ -1,0 +1,24 @@
+{
+  "complete_ack": {
+    "ack_kind": "request",
+    "request_bytes_acked": 23673635,
+    "request_chunks_acked": 362,
+    "request_declaration_sha256": "7a072d6ec342f3f3f2f7cf2f5839ae7b092c996a9f7bb8425f4b5bcce5ecccd5",
+    "request_sha256": "f0df4fd3a86a39b2c542548c87314262898c32bf7c8b64075355fb0056e0674f",
+    "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v1-request-ack-v1",
+    "status": "complete",
+    "transaction_nonce": "a104ebddf259bb3ad98e1dda9568987c846cd9478d5f1f384d72a1abc6fd18f3"
+  },
+  "declaration_accepted": true,
+  "request_bytes_acknowledged": 23673635,
+  "request_chunks_acknowledged": 362,
+  "request_chunks_written": 362,
+  "request_payload_bytes": 23673635,
+  "request_payload_sha256": "f0df4fd3a86a39b2c542548c87314262898c32bf7c8b64075355fb0056e0674f",
+  "request_wire_bytes": 23737848,
+  "request_wire_sha256": "3f297cdfdf8a32f36b1d8ba53768b8c061a5e75e3fbddfdd5cae6be54dbf48cc",
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v1-request-progress-v1",
+  "status": "complete",
+  "stdin_half_closed": true,
+  "transaction_nonce": "a104ebddf259bb3ad98e1dda9568987c846cd9478d5f1f384d72a1abc6fd18f3"
+}
