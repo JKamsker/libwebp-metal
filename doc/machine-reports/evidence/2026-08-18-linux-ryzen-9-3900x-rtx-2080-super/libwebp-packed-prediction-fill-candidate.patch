@@ -1,0 +1,81 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index 7809e965..70703ad1 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -822,6 +822,68 @@ __device__ void MakeIntraPredsParallel(MBWork* w, int x, int y, int tid,
+   const uint8_t* const y_top = (y > 0) ? w->y_top : nullptr;
+   const uint8_t* const uv_left = (x > 0) ? w->uv_left + 1 : nullptr;
+   const uint8_t* const uv_top = (y > 0) ? w->uv_top : nullptr;
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  // Turing's retained profile is barrier-bound after this fill. Generate four
++  // adjacent pixels per lane so the aligned prediction rows use one shared
++  // store while preserving the exact per-pixel prediction formulas.
++  for (int i = tid; i < 4 * 16 * 4 + 4 * 2 * 8 * 2; i += nthreads) {
++    uint8_t value[4];
++    uint8_t* dst;
++    if (i < 4 * 16 * 4) {
++      const int mode = i >> 6;
++      const int row_group = i & 63;
++      const int r = row_group >> 2, c = (row_group & 3) << 2;
++      for (int k = 0; k < 4; ++k) {
++        if (mode == 0) {
++          value[k] = (uint8_t)w->pred_dc[0];
++        } else if (mode == 1) {
++          value[k] =
++              (y_left != nullptr)
++                  ? ((y_top != nullptr)
++                         ? CudaClip8b(y_top[c + k] + y_left[r] - y_left[-1])
++                         : y_left[r])
++                  : ((y_top != nullptr) ? y_top[c + k] : 129);
++        } else if (mode == 2) {
++          value[k] = (y_top != nullptr) ? y_top[c + k] : 127;
++        } else {
++          value[k] = (y_left != nullptr) ? y_left[r] : 129;
++        }
++      }
++      dst = w->yuv_p + kCudaVP8I16ModeOffsets[mode] + r * kCudaBPS + c;
++    } else {
++      const int index = i - 4 * 16 * 4;
++      const int mode = index >> 5;
++      const int channel_row_group = index & 31;
++      const int channel = channel_row_group >> 4;
++      const int row_group = channel_row_group & 15;
++      const int r = row_group >> 1, c = (row_group & 1) << 2;
++      const uint8_t* const left =
++          (uv_left != nullptr) ? uv_left + channel * 16 : nullptr;
++      const uint8_t* const top =
++          (uv_top != nullptr) ? uv_top + channel * 8 : nullptr;
++      for (int k = 0; k < 4; ++k) {
++        if (mode == 0) {
++          value[k] = (uint8_t)w->pred_dc[1 + channel];
++        } else if (mode == 1) {
++          value[k] =
++              (left != nullptr)
++                  ? ((top != nullptr)
++                         ? CudaClip8b(top[c + k] + left[r] - left[-1])
++                         : left[r])
++                  : ((top != nullptr) ? top[c + k] : 129);
++        } else if (mode == 2) {
++          value[k] = (top != nullptr) ? top[c + k] : 127;
++        } else {
++          value[k] = (left != nullptr) ? left[r] : 129;
++        }
++      }
++      dst = w->yuv_p + kCudaVP8UVModeOffsets[mode] + channel * 8 +
++            r * kCudaBPS + c;
++    }
++    *reinterpret_cast<uchar4*>(dst) =
++        make_uchar4(value[0], value[1], value[2], value[3]);
++  }
++#else
+   for (int i = tid; i < 4 * 16 * 16 + 4 * 2 * 8 * 8; i += nthreads) {
+     if (i < 4 * 16 * 16) {
+       const int mode = i >> 8;
+@@ -871,6 +933,7 @@ __device__ void MakeIntraPredsParallel(MBWork* w, int x, int y, int tid,
+                r * kCudaBPS + c] = value;
+     }
+   }
++#endif
+ }
+
+ // VP8IteratorStartI4's 37-sample boundary snake.

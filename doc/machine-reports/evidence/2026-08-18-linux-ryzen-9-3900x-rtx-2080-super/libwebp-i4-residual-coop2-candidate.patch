@@ -1,0 +1,98 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index d5dd4a6e..62f48c9f 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -237,6 +237,57 @@ __device__ int ResidualCostDev(const CostCache* c, int ctx0, int first,
+   return cost;
+ }
+ 
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++// Two adjacent lanes evaluate one residual in eight coefficient waves. This
++// halves the scalar dependency chain while keeping all ten I4 modes in warp 0.
++__device__ __forceinline__ int ResidualCostCoop2(
++    const CostCache* c, int ctx0, int coeff_type, const int16_t* coeffs,
++    int lane, unsigned int group_mask) {
++  int values[8];
++  int last = -1;
++#pragma unroll
++  for (int wave = 0; wave < 8; ++wave) {
++    const int n = 2 * wave + lane;
++    const int value = CudaAbs(coeffs[n]);
++    values[wave] = value;
++    if (value != 0) last = n;
++  }
++  const int other = __shfl_xor_sync(group_mask, last, 1, 2);
++  if (other > last) last = other;
++
++  const int p0 = FirstProba(c, coeff_type, kEncBands[0], ctx0);
++  if (last < 0) return BitCostDev(c, 0, p0);
++
++  int cost = 0;
++#pragma unroll
++  for (int wave = 0; wave < 8; ++wave) {
++    const int n = 2 * wave + lane;
++    const int value = values[wave];
++    int previous = __shfl_up_sync(group_mask, value, 1, 2);
++    const int prior_wave_last =
++        (wave == 0)
++            ? 0
++            : __shfl_sync(group_mask, values[wave - 1], 1, 2);
++    if (lane == 0) {
++      previous = prior_wave_last;
++    }
++    if (n <= last) {
++      const int ctx = (n == 0) ? ctx0 : ((previous >= 2) ? 2 : previous);
++      const uint16_t* const table =
++          LevelCostTable(c, coeff_type, kEncBands[n], ctx);
++      cost += LevelCostDev(c, table, value);
++      if (n == last && n < 15) {
++        const int eob_ctx = (value == 1) ? 1 : 2;
++        cost += BitCostDev(
++            c, 0, FirstProba(c, coeff_type, kEncBands[n + 1], eob_ctx));
++      }
++    }
++  }
++  cost += __shfl_down_sync(group_mask, cost, 1, 2);
++  return cost + ((ctx0 == 0) ? BitCostDev(c, 1, p0) : 0);
++}
++#endif
++
+ // Warp-cooperative GetResidualCost_C: each coefficient's incoming context
+ // depends only on the previous coefficient's value (0/1/2+), so all 16
+ // costs are computed on parallel lanes and warp-reduced. Bit-exact against
+@@ -1479,6 +1530,27 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+             ((bx == 0) ? w.nz_ctx.left_nz[by] : i4_block_nz[block - 1]);
+         const uint8_t* const src =
+             w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++        if (warp == 0 && lane < 2 * kNumBModes) {
++          const int mode = lane >> 1;
++          const int mode_lane = lane & 1;
++          const int group_base = lane & ~1;
++          const unsigned int group_mask = 3u << group_base;
++          const int residual_cost = ResidualCostCoop2(
++              &cc, ctx, 3, w.i4_levels[team][mode], mode_lane, group_mask);
++          if (mode_lane == 0) w.i4_rcost[team][mode] = residual_cost;
++        } else if (warp == 2 && lane < kNumBModes) {
++          w.i4_sse[team][lane] =
++              CudaSSE4x4(src, w.i4_out[team][lane]);
++          w.i4_flat[team][lane] =
++              (lane > 0) ? CudaIsFlat(w.i4_levels[team][lane], 1,
++                                      kFlatnessLimitI4)
++                         : 0;
++        } else if (warp == 3 && lane < kNumBModes) {
++          w.i4_sd[team][lane] =
++              tlambda ? CudaDisto4x4(src, w.i4_out[team][lane], kWeightY) : 0;
++        }
++#else
+         if (warp == 0 && lane < kNumBModes) {
+           w.i4_rcost[team][lane] = ResidualCostDev(
+               &cc, ctx, 0, 3, w.i4_levels[team][lane]);
+@@ -1493,6 +1565,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+           w.i4_sd[team][lane] =
+               tlambda ? CudaDisto4x4(src, w.i4_out[team][lane], kWeightY) : 0;
+         }
++#endif
+       }
+       __syncthreads();
+       if (active && team_tid < kNumBModes) {

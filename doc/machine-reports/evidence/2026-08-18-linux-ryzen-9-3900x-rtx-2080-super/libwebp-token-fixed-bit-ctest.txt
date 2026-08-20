@@ -1,0 +1,23 @@
+Script started on 2026-08-19 17:39:11+00:00 [COMMAND="ctest --test-dir build-cuda-token-fixed-bit --output-on-failure -j7" <not executed on terminal>]
+Internal ctest changing into directory: /home/jonas/priv/repos/libwebp-metal/build-cuda-token-fixed-bit
+Test project /home/jonas/priv/repos/libwebp-metal/build-cuda-token-fixed-bit
+    Start 6: cuda_trellis_test
+    Start 4: cuda_concurrency_test
+    Start 7: cuda_near_lossless_test
+    Start 5: cuda_histogram_test
+    Start 1: bit_writer_utils_test
+    Start 2: accelerator_enc_auto
+    Start 3: accelerator_enc_cpu
+1/7 Test #2: accelerator_enc_auto .............   Passed    0.00 sec
+2/7 Test #1: bit_writer_utils_test ............   Passed    0.00 sec
+3/7 Test #3: accelerator_enc_cpu ..............   Passed    0.00 sec
+4/7 Test #5: cuda_histogram_test ..............   Passed    0.58 sec
+5/7 Test #7: cuda_near_lossless_test ..........   Passed    0.78 sec
+6/7 Test #4: cuda_concurrency_test ............   Passed    0.83 sec
+7/7 Test #6: cuda_trellis_test ................   Passed    8.51 sec
+
+100% tests passed, 0 tests failed out of 7
+
+Total Test time (real) =   8.51 sec
+
+Script done on 2026-08-19 17:39:19+00:00 [COMMAND_EXIT_CODE="0"]

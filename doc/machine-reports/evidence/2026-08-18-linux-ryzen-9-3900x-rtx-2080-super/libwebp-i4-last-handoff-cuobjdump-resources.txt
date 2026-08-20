@@ -1,0 +1,6 @@
+parent
+ Function _ZN53_GLOBAL__N__e8a64b43_20_cuda_decimate_enc_cu_08a8e32714DecimateKernelENS_10DeviceViewENS_20DecimateKernelParamsEPh:
+  REG:103 STACK:352 SHARED:23392 LOCAL:0 CONSTANT[0]:544 CONSTANT[2]:96 TEXTURE:0 SURFACE:0 SAMPLER:0
+candidate
+ Function _ZN53_GLOBAL__N__e8a64b43_20_cuda_decimate_enc_cu_08a8e32714DecimateKernelENS_10DeviceViewENS_20DecimateKernelParamsEPh:
+  REG:102 STACK:352 SHARED:23392 LOCAL:0 CONSTANT[0]:544 CONSTANT[2]:96 TEXTURE:0 SURFACE:0 SAMPLER:0

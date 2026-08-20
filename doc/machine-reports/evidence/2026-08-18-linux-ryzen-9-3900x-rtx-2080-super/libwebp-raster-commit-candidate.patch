@@ -1,0 +1,81 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index 7809e965..51c145b7 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -81,6 +81,12 @@ __device__ static const int8_t kI4DiagonalBlocks[10][2] = {
+     {0, -1}, {1, -1}, {2, 4}, {3, 5}, {6, 8},
+     {7, 9},  {10, 12}, {11, 13}, {14, -1}, {15, -1}};
+ 
++// Raster-order blocks made ready after each dependency diagonal. The two-team
++// schedule is fixed, so Turing does not need to publish and rescan readiness.
++__device__ static const int8_t kI4DiagonalCommit[10][2] = {
++    {0, 1}, {1, 1}, {2, 1}, {3, 3}, {6, 1},
++    {7, 3}, {10, 1}, {11, 3}, {14, 1}, {15, 1}};
++
+ // ---------------------------------------------------------------------------
+ // Host-uploaded static cost tables (copied from the encoder's symbols so the
+ // device never re-transcribes them).
+@@ -1378,14 +1384,20 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+ 
+   // ---- Phase 3: intra4 search on the exact x + 2y dependency diagonals.
+   if (p.max_i4_header_bits > 0) {
+-    __shared__ int i4_abort, i4_next_commit;
++    __shared__ int i4_abort;
++#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 800
++    __shared__ int i4_next_commit;
++#endif
+     __shared__ long long i4_best_score;
+     __shared__ long long i4_best_D, i4_best_SD, i4_best_H, i4_best_R;
+     __shared__ uint32_t i4_best_nz;
+     __shared__ int i4_header_bits;
+     __shared__ int16_t i4_best_levels[16][16];
+     __shared__ uint8_t i4_boundary2[2][13];
+-    __shared__ uint8_t i4_block_nz[16], i4_ready[16];
++    __shared__ uint8_t i4_block_nz[16];
++#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 800
++    __shared__ uint8_t i4_ready[16];
++#endif
+     __shared__ long long i4_block_D[16], i4_block_SD[16];
+     __shared__ long long i4_block_H[16], i4_block_R[16];
+     __shared__ long long i4_block_score[16];
+@@ -1397,14 +1409,18 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+       rd_best.H = 211;
+       SetRDScoreDev(dqm->lambda_mode, &rd_best);
+       i4_abort = 0;
++#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 800
+       i4_next_commit = 0;
++#endif
+       i4_best_score = rd_best.score;
+       i4_best_D = i4_best_SD = i4_best_R = 0;
+       i4_best_H = 211;
+       i4_best_nz = 0;
+       i4_header_bits = 0;
+     }
++#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 800
+     if (tid < 16) i4_ready[tid] = 0;
++#endif
+     __syncthreads();
+     for (int diagonal = 0; diagonal < 10; ++diagonal) {
+       const int block = kI4DiagonalBlocks[diagonal][team];
+@@ -1550,12 +1566,21 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+         i4_block_H[block] = rd_i4.H;
+         i4_block_R[block] = rd_i4.R;
+         i4_block_score[block] = rd_i4.score;
++#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 800
+         i4_ready[block] = 1;
++#endif
+       }
+       __syncthreads();
+       if (tid == 0) {
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++        const int commit_start = kI4DiagonalCommit[diagonal][0];
++        const int commit_end =
++            commit_start + kI4DiagonalCommit[diagonal][1];
++        for (int b = commit_start; b < commit_end; ++b) {
++#else
+         while (i4_next_commit < 16 && i4_ready[i4_next_commit]) {
+           const int b = i4_next_commit++;
++#endif
+           i4_best_D += i4_block_D[b];
+           i4_best_SD += i4_block_SD[b];
+           i4_best_H += i4_block_H[b];

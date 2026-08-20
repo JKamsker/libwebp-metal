@@ -1,0 +1,69 @@
+Portable lossy-decimate conformance, issue #19
+Date: 2026-08-19 UTC
+Host: Ryzen 9 3900X / RTX 2080 SUPER (Turing, native sm_75 build)
+
+Scope
+- Versioned WPDCRD schema 1 over accelerator ABI 12.
+- CPU-golden fixture capture; standalone loopback/CUDA/FPGA runner.
+- Whole-pass and streaming/banded CUDA comparison.
+- Transactional decline, timeout, error, and corrupt-checksum self-tests.
+- End-to-end methods 3--6 bitstream parity and methods 2--6 tiny/odd matrix.
+- Dependency-free FPGA descriptor that advertises and declines the stage.
+
+Fixture suite
+- 132 fixtures, 48,968 macroblocks.
+- Methods 3--6; qualities 0, 25, 75, 98, and 100.
+- Graphic, photo, texture, flat tie, and high-contrast inputs.
+- 17x13 tiny, 257x255 odd, 512x512 aligned, and 33x31 partial-edge cases.
+- All four segments, all 10 I4 modes, all four I16 modes, and all four UV
+  modes were observed.
+- 24,194 I4 and 24,774 I16 decisions; 8,570 zero-nz and 40,398 nonzero-nz
+  macroblocks; nz union 0x01ffffff; coefficients ranged from -434 to 619.
+- 120 error-diffusion fixtures, 80 banded fixtures, and 96 partial-edge
+  fixtures.
+
+Results
+- CUDA WHOLE: 132/132 success and byte-exact result/reconstruction output.
+- CUDA BEGIN/COLLECT: 132/132 success and byte-exact output.
+- Every CUDA row reported nonzero, separately measured wavefront-execution and
+  result-transfer times. These are diagnostic conformance timings, not an
+  optimization or cross-hardware performance claim.
+- End-to-end focused test: methods 3--6, qualities 75/99, one/two passes,
+  padded strides, every band remainder, and forced collect/download fallback
+  produced byte-identical WebP output.
+- Tiny/odd matrix: 90/90 method/quality/input cells had identical CPU/CUDA
+  SHA-256 and byte counts (methods 2--6, qualities 25/75/98, three content
+  classes at 17x13 and 257x255).
+- Portable self-test passed loopback success, decline, timeout, error,
+  unchanged-output transactionality, checksum rejection, and FPGA decline.
+- The portable self-test and an actual fixture load/loopback comparison also
+  passed a Debug build with AddressSanitizer and UndefinedBehaviorSanitizer.
+- A `BUILD_SHARED_LIBS=ON` CPU build linked and passed the same self-test; the
+  opt-in private runner entry points have explicit shared-library visibility.
+- All four CPU CTests passed. Seven targeted CUDA tests passed, including
+  concurrency, near-lossless, the expanded trellis test, and conformance.
+  The unrelated, pre-existing silent cuda_histogram_test failure was excluded
+  from that retained transcript and remains documented by earlier experiments.
+- A default CPU CMake build compiled neither lossy_decimate_fixture.c nor
+  fpga_enc.c. Local Autotools execution was unavailable because autoreconf is
+  not installed; the existing Correctness workflow retains Linux/macOS
+  Autotools coverage and now builds the portable CMake self-test on both.
+
+Oracle correction audit trail
+- The first expanded oracle run was exact in 94/132 fixtures and exposed 38
+  diffusion-tail mismatches in both whole and streaming modes.
+- Method 5 publishes diffusion state during the basic UV search, then computes
+  an intentionally discarded second value during selected-mode trellis.
+  Quality 100 disables diffusion, leaving the ordinary CPU score tail inactive.
+- Capture was corrected to reconstruct the state actually published to
+  neighboring macroblocks and to canonicalize inactive bytes. The CUDA result
+  itself already carried the published method-5 state. The retained 132/132
+  reruns are in the final cuda-whole/cuda-streaming artifacts; the 94/132
+  oracle-v1 rows and their manifests are retained for auditability.
+
+Build/architecture guards
+- CUDA configured with CMAKE_CUDA_ARCHITECTURES=native (cache retained).
+- Ampere+ warm/cold defaults remain 64/4000 MBs.
+- Pre-Ampere warm/cold defaults remain 784/12544 MBs.
+- No architecture split, dispatch threshold, publication corpus, or
+  publication generator was modified.

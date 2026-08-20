@@ -1,0 +1,60 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index 7809e965..241f2ab1 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -105,6 +105,7 @@ struct DecimateKernelParams {
+   int32_t max_i4_header_bits;
+   uint32_t use_error_diffusion;
+   uint32_t rd_opt_level;
++  uint32_t packed_i4_flatness;
+   uint32_t diagonal;       // current skewed diagonal (x + 2y)
+   uint32_t y_min;          // first tile row on this diagonal
+ };
+@@ -665,6 +666,22 @@ __device__ __forceinline__ void I4ITransformCoop4(
+   dst_row[3] = CudaClip8b(ref_row[3] + ((e - h) >> 3));
+ }
+
++// The I4 level arrays are 32-byte rows. Turing's scalar CudaIsFlat walk is a
++// line-resolved instruction hot spot, so inspect two adjacent 16-bit levels
++// per shared-memory load while retaining the same early threshold decision.
++__device__ __forceinline__ int I4IsFlatPacked2(const int16_t* levels,
++                                               int thresh) {
++  const uint32_t* const packed = (const uint32_t*)levels;
++  int score = ((packed[0] >> 16) != 0);  // omit DC (levels[0])
++  if (score > thresh) return 0;
++  for (int i = 1; i < 8; ++i) {
++    const uint32_t pair = packed[i];
++    score += ((pair & 0xffffu) != 0) + ((pair >> 16) != 0);
++    if (score > thresh) return 0;
++  }
++  return 1;
++}
++
+ // ---------------------------------------------------------------------------
+ // Import and borders.
+
+@@ -1486,9 +1503,13 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+           w.i4_sse[team][lane] =
+               CudaSSE4x4(src, w.i4_out[team][lane]);
+           w.i4_flat[team][lane] =
+-              (lane > 0) ? CudaIsFlat(w.i4_levels[team][lane], 1,
+-                                      kFlatnessLimitI4)
+-                         : 0;
++              (lane > 0)
++                  ? (p.packed_i4_flatness
++                         ? I4IsFlatPacked2(w.i4_levels[team][lane],
++                                           kFlatnessLimitI4)
++                         : CudaIsFlat(w.i4_levels[team][lane], 1,
++                                      kFlatnessLimitI4))
++                  : 0;
+         } else if (warp == 3 && lane < kNumBModes) {
+           w.i4_sd[team][lane] =
+               tlambda ? CudaDisto4x4(src, w.i4_out[team][lane], kWeightY) : 0;
+@@ -2734,6 +2755,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
+     params.max_i4_header_bits = request->max_i4_header_bits;
+     params.use_error_diffusion = (uint32_t)request->use_error_diffusion;
+     params.rd_opt_level = (uint32_t)request->rd_opt_level;
++    params.packed_i4_flatness = DecimateDeviceIsAmpereOrNewer() ? 0u : 1u;
+
+     (void)cudaGetLastError();
+     const int last_diagonal =

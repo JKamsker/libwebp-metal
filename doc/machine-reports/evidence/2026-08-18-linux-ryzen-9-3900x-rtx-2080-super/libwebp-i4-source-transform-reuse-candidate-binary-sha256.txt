@@ -1,0 +1,2 @@
+c7f996987374d0323a9fb68e52768819e7dff4c5091da39441ec16ce12937bd0  /tmp/libwebp-i4-source-reuse-profile/webp_cuda_batch_benchmark.candidate
+669009148d01d50d7b45c10fd0d77d8d49a92ab78323c2ee76b981a4576ac01f  /tmp/libwebp-i4-source-reuse-profile/cwebp.candidate

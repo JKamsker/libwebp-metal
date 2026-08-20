@@ -1,0 +1,50 @@
+[  5%] Built target sharpyuv
+[ 12%] Built target webputils
+[ 28%] Built target webpencode
+[ 53%] Built target webpdspdecode
+[ 92%] Built target webpdsp
+[ 98%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Built target webp_cuda_benchmark
+[  5%] Built target sharpyuv
+[ 12%] Built target webputils
+[ 28%] Built target webpencode
+[ 54%] Built target webpdspdecode
+[ 94%] Built target webpdsp
+[100%] Built target webpdecode
+[100%] Built target webp
+[100%] Built target lossy_decimate_conformance
+[100%] Built target bit_writer_utils_test
+[100%] Built target accelerator_enc_test
+[  5%] Built target sharpyuv
+[ 12%] Built target webputils
+[ 38%] Built target webpdspdecode
+[ 53%] Built target webpencode
+[ 92%] Built target webpdsp
+[ 98%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Built target cuda_concurrency_test
+[  7%] Built target webputils
+[ 12%] Built target sharpyuv
+[ 38%] Built target webpdspdecode
+[ 77%] Built target webpdsp
+[ 92%] Built target webpencode
+[ 98%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Built target cuda_histogram_test
+[  5%] Built target sharpyuv
+[ 12%] Built target webputils
+[ 28%] Built target webpencode
+[ 53%] Built target webpdspdecode
+[ 92%] Built target webpdsp
+[ 98%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Built target cuda_trellis_test
+[  7%] Built target sharpyuv
+[ 12%] Built target webputils
+[ 28%] Built target webpencode
+[ 54%] Built target webpdspdecode
+[ 94%] Built target webpdsp
+[100%] Built target webpdecode
+[100%] Built target webp
+[100%] Built target cuda_near_lossless_test

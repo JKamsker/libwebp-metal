@@ -1,0 +1,7 @@
+WebP-CUDA: using NVIDIA GeForce RTX 2080 SUPER (device 0)
+WebP-CUDA: lossy RGB->YUV 1600x1200 in 0.479 ms (fused analysis)
+WebP-CUDA: lossy RGB->YUV 1600x1200 in 0.561 ms (fused analysis)
+WebP-CUDA: lossy analysis 100x75 macroblocks (fused result)
+WebP-CUDA: lossy analysis 100x75 macroblocks in 0.367 ms
+decimate GPU wall: 29.22 ms (100x75 MBs)
+decimate GPU wall: 29.01 ms (100x75 MBs)

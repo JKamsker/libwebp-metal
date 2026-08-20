@@ -1,0 +1,15 @@
+[  3%] Built target sharpyuv
+[ 10%] Built target webputils
+[ 34%] Built target webpdspdecode
+[ 34%] Building C object CMakeFiles/webpencode.dir/src/enc/backward_references_enc.c.o
+[ 69%] Built target webpdsp
+[ 74%] Built target webpdecode
+[ 88%] Built target webpencode
+[ 89%] Linking CUDA static library libwebp.a
+[ 89%] Built target webp
+[ 92%] Built target imageioutil
+[ 91%] Built target webpdemux
+[ 93%] Built target exampleutil
+[ 98%] Built target imagedec
+[ 98%] Linking CUDA executable cwebp
+[100%] Built target cwebp

@@ -1,0 +1,9 @@
+{
+  "baseline_function": "_ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_741e9f1025HashChainCandidatesKernelEPKjPKiPjNS_16HashKernelParamsE",
+  "candidate_false_function": "_ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_741e9f1025HashChainCandidatesKernelILb0EEEvPKjPKiPjNS_16HashKernelParamsE",
+  "candidate_true_function": "_ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_741e9f1025HashChainCandidatesKernelILb1EEEvPKjPKiPjNS_16HashKernelParamsE",
+  "baseline_instruction_count": 296,
+  "false_instruction_count": 296,
+  "true_instruction_count": 296,
+  "false_mnemonics_equal_baseline": true
+}

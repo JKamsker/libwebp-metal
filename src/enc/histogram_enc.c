@@ -19,6 +19,7 @@
 
 #include "src/dsp/lossless.h"
 #include "src/dsp/lossless_common.h"
+#include "src/enc/accelerator_enc.h"
 #include "src/enc/backward_references_enc.h"
 #include "src/enc/histogram_enc.h"
 #include "src/enc/vp8i_enc.h"
@@ -86,6 +87,68 @@ static void HistogramCopy(const VP8LHistogram* const src,
   memcpy(dst->literal, src->literal, literal_size * sizeof(*dst->literal));
 }
 
+typedef char WebPPixOrCopyAcceleratorSizeCheck
+    [(sizeof(PixOrCopy) == sizeof(WebPAcceleratorHistogramCommand)) ? 1 : -1];
+typedef char WebPBackwardRefsAcceleratorSpanCountCheck
+    [(MAX_REFS_BLOCK_PER_IMAGE == WEBP_ACCELERATOR_MAX_HISTOGRAM_SPANS) ? 1
+                                                                       : -1];
+typedef char WebPPixOrCopyAcceleratorModeOffsetCheck
+    [(offsetof(PixOrCopy, mode) ==
+      offsetof(WebPAcceleratorHistogramCommand, mode))
+         ? 1
+         : -1];
+typedef char WebPPixOrCopyAcceleratorReservedOffsetCheck
+    [(offsetof(PixOrCopy, reserved) ==
+      offsetof(WebPAcceleratorHistogramCommand, reserved))
+         ? 1
+         : -1];
+typedef char WebPPixOrCopyAcceleratorLengthOffsetCheck
+    [(offsetof(PixOrCopy, len) ==
+      offsetof(WebPAcceleratorHistogramCommand, length))
+         ? 1
+         : -1];
+typedef char WebPPixOrCopyAcceleratorValueOffsetCheck
+    [(offsetof(PixOrCopy, argb_or_distance) ==
+      offsetof(WebPAcceleratorHistogramCommand, value))
+         ? 1
+         : -1];
+
+static int TryAcceleratedHistogramCreate(const VP8LBackwardRefs* const refs,
+                                         VP8LHistogram* const histo) {
+  WebPAcceleratorHistogramSpan
+      spans[WEBP_ACCELERATOR_MAX_HISTOGRAM_SPANS];
+  WebPAcceleratorHistogramRequest request;
+  VP8LRefsCursor cursor = VP8LRefsCursorInit(refs);
+  size_t span_count = 0;
+  size_t command_count = 0;
+  while (VP8LRefsCursorOk(&cursor)) {
+    const size_t count = (size_t)(cursor.last_pos - cursor.cur_pos);
+    if (span_count == WEBP_ACCELERATOR_MAX_HISTOGRAM_SPANS ||
+        count > (size_t)-1 - command_count) {
+      return 0;
+    }
+    spans[span_count].commands =
+        (const WebPAcceleratorHistogramCommand*)cursor.cur_pos;
+    spans[span_count].count = count;
+    ++span_count;
+    command_count += count;
+    VP8LRefsCursorNextBlock(&cursor);
+  }
+  if (command_count == 0) return 0;
+  request.spans = spans;
+  request.span_count = span_count;
+  request.command_count = command_count;
+  request.cache_bits = histo->palette_code_bits;
+  request.literal = histo->literal;
+  request.literal_count =
+      (size_t)VP8LHistogramNumCodes(histo->palette_code_bits);
+  request.red = histo->red;
+  request.blue = histo->blue;
+  request.alpha = histo->alpha;
+  request.distance = histo->distance;
+  return WebPAccelerateHistogram(&request) == WEBP_ACCELERATOR_SUCCESS;
+}
+
 void VP8LFreeHistogram(VP8LHistogram* const h) { WebPSafeFree(h); }
 
 void VP8LFreeHistogramSet(VP8LHistogramSet* const histograms) {
@@ -99,6 +162,7 @@ void VP8LHistogramCreate(VP8LHistogram* const h,
     h->palette_code_bits = palette_code_bits;
   }
   HistogramClear(h);
+  if (TryAcceleratedHistogramCreate(refs, h)) return;
   VP8LHistogramStoreRefs(refs, /*distance_modifier=*/NULL,
                          /*distance_modifier_arg0=*/0, h);
 }

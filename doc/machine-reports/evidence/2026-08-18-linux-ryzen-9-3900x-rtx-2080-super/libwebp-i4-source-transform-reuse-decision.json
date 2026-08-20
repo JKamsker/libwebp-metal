@@ -1,0 +1,134 @@
+{
+  "pooled": [
+    {
+      "format": "jpeg",
+      "arm": "candidate",
+      "n": 15,
+      "median_ms": 27.901971458000002,
+      "hashes": [
+        "1cbb84d2ab926db3"
+      ],
+      "bytes": [
+        6400792
+      ]
+    },
+    {
+      "format": "jpeg",
+      "arm": "control",
+      "n": 15,
+      "median_ms": 27.618609792,
+      "hashes": [
+        "1cbb84d2ab926db3"
+      ],
+      "bytes": [
+        6400792
+      ]
+    },
+    {
+      "format": "png",
+      "arm": "candidate",
+      "n": 15,
+      "median_ms": 29.489772958,
+      "hashes": [
+        "ace64e860de89b43"
+      ],
+      "bytes": [
+        6441688
+      ]
+    },
+    {
+      "format": "png",
+      "arm": "control",
+      "n": 15,
+      "median_ms": 29.208709667,
+      "hashes": [
+        "ace64e860de89b43"
+      ],
+      "bytes": [
+        6441688
+      ]
+    }
+  ],
+  "pairs": [
+    {
+      "format": "jpeg",
+      "pair": 0,
+      "control_ms": 27.451190583,
+      "candidate_ms": 27.871332167,
+      "gain_ms": -0.42014158399999957
+    },
+    {
+      "format": "jpeg",
+      "pair": 1,
+      "control_ms": 27.618609792,
+      "candidate_ms": 27.999819458,
+      "gain_ms": -0.38120966600000017
+    },
+    {
+      "format": "jpeg",
+      "pair": 2,
+      "control_ms": 27.766190625,
+      "candidate_ms": 27.691446333000002,
+      "gain_ms": 0.07474429199999832
+    },
+    {
+      "format": "jpeg",
+      "pair": 3,
+      "control_ms": 27.636860958,
+      "candidate_ms": 28.055757708,
+      "gain_ms": -0.4188967500000018
+    },
+    {
+      "format": "jpeg",
+      "pair": 4,
+      "control_ms": 27.688621833,
+      "candidate_ms": 27.7504065,
+      "gain_ms": -0.06178466700000129
+    },
+    {
+      "format": "png",
+      "pair": 0,
+      "control_ms": 28.862738,
+      "candidate_ms": 29.4508945,
+      "gain_ms": -0.5881565000000002
+    },
+    {
+      "format": "png",
+      "pair": 1,
+      "control_ms": 29.208709667,
+      "candidate_ms": 29.416485542,
+      "gain_ms": -0.2077758749999994
+    },
+    {
+      "format": "png",
+      "pair": 2,
+      "control_ms": 28.916101875,
+      "candidate_ms": 29.160016958,
+      "gain_ms": -0.24391508300000098
+    },
+    {
+      "format": "png",
+      "pair": 3,
+      "control_ms": 29.07305775,
+      "candidate_ms": 30.203449458,
+      "gain_ms": -1.1303917080000012
+    },
+    {
+      "format": "png",
+      "pair": 4,
+      "control_ms": 29.508414417,
+      "candidate_ms": 29.697321708,
+      "gain_ms": -0.1889072909999996
+    }
+  ],
+  "paired_medians": [
+    {
+      "format": "jpeg",
+      "median_gain_ms": -0.38120966600000017
+    },
+    {
+      "format": "png",
+      "median_gain_ms": -0.24391508300000098
+    }
+  ]
+}

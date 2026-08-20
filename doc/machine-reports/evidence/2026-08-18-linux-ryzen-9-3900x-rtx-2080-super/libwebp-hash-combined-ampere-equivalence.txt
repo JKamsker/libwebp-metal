@@ -1,0 +1,6 @@
+Script started on 2026-08-19 15:33:09+00:00 [COMMAND="cmp 'doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-original.norm' 'doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-ampere-false.norm' && wc -l 'doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-original.norm' 'doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-ampere-false.norm'" <not executed on terminal>]
+  296 doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-original.norm
+  296 doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-ampere-false.norm
+  592 total
+
+Script done on 2026-08-19 15:33:09+00:00 [COMMAND_EXIT_CODE="0"]

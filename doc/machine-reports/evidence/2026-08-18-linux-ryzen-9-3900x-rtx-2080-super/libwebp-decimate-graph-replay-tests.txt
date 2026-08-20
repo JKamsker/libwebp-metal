@@ -1,0 +1,18 @@
+Candidate build: PASS
+  CUDA 12.0.140, Release, CMAKE_CUDA_ARCHITECTURES=native
+Candidate focused test: PASS
+  PASS: CUDA trellis, padded strides, all band remainders, and transactional fallbacks are byte-exact
+
+Restored native build: PASS for the focused CUDA encoder/test targets.
+Restored CTest: 6/7 PASS
+  bit_writer_utils_test: PASS
+  accelerator_enc_auto: PASS
+  accelerator_enc_cpu: PASS
+  cuda_concurrency_test: PASS
+  cuda_histogram_test: FAIL (silent exit 1; pre-existing in untouched parent)
+  cuda_trellis_test: PASS
+  cuda_near_lossless_test: PASS
+
+An unscoped all-target build also encountered the pre-existing static include
+failure for sharpyuv/sharpyuv.h in img2webp and extras. It is unrelated to the
+CUDA candidate; all requested encoder and test targets built successfully.

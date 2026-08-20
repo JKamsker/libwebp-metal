@@ -15,6 +15,15 @@
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#if defined(_WIN32)
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN
+#endif
+#include <windows.h>
+#else
+#include <unistd.h>
+#endif
 #include <string.h>
 
 #ifdef HAVE_CONFIG_H
@@ -1146,10 +1155,13 @@ int main(int argc, const char* argv[]) {
 
   // Read the input. We need to decide if we prefer ARGB or YUVA
   // samples, depending on the expected compression mode (this saves
-  // some conversion steps).
+  // some conversion steps). The fused CUDA experiment deliberately defers
+  // regular lossy conversion until WebPEncode() has supplied method/quality.
   picture.use_argb =
       (config.lossless || config.use_sharp_yuv || config.preprocessing > 0 ||
-       crop || (resize_w | resize_h) > 0);
+       crop || (resize_w | resize_h) > 0 ||
+       (getenv("WEBP_CUDA_FUSED_LOSSY_ANALYSIS") != NULL &&
+        !strcmp(getenv("WEBP_CUDA_FUSED_LOSSY_ANALYSIS"), "1")));
   if (verbose) {
     StopwatchReset(&stop_watch);
   }
@@ -1450,6 +1462,20 @@ Error:
     fclose(out);
   }
 
+  // With every output flushed and closed, graceful process teardown only
+  // costs time: an accelerator context alone takes tens of milliseconds to
+  // destroy, which can rival a small image's whole encode. Skip the CRT and
+  // driver cleanup and let the OS reclaim the process, unless the operator
+  // opts out (e.g. when running under leak checkers).
+  if (getenv("WEBP_NO_FAST_EXIT") == NULL) {
+    fflush(stdout);
+    fflush(stderr);
+#if defined(_WIN32)
+    TerminateProcess(GetCurrentProcess(), (UINT)return_value);
+#else
+    _exit(return_value);
+#endif
+  }
   FREE_WARGV_AND_RETURN(return_value);
 }
 

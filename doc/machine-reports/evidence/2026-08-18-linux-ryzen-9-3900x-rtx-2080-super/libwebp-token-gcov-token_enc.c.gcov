@@ -1,0 +1,361 @@
+        -:    0:Source:/home/jonas/priv/repos/libwebp-metal/src/enc/token_enc.c
+        -:    0:Graph:build-cuda-token-gcov/CMakeFiles/webpencode.dir/src/enc/token_enc.c.gcno
+        -:    0:Data:build-cuda-token-gcov/CMakeFiles/webpencode.dir/src/enc/token_enc.c.gcda
+        -:    0:Runs:2
+        -:    1:// Copyright 2011 Google Inc. All Rights Reserved.
+        -:    2://
+        -:    3:// Use of this source code is governed by a BSD-style license
+        -:    4:// that can be found in the COPYING file in the root of the source
+        -:    5:// tree. An additional intellectual property rights grant can be found
+        -:    6:// in the file PATENTS. All contributing project authors may
+        -:    7:// be found in the AUTHORS file in the root of the source tree.
+        -:    8:// -----------------------------------------------------------------------------
+        -:    9://
+        -:   10:// Paginated token buffer
+        -:   11://
+        -:   12://  A 'token' is a bit value associated with a probability, either fixed
+        -:   13:// or a later-to-be-determined after statistics have been collected.
+        -:   14:// For dynamic probability, we just record the slot id (idx) for the probability
+        -:   15:// value in the final probability array (uint8_t* probas in VP8EmitTokens).
+        -:   16://
+        -:   17:// Author: Skal (pascal.massimino@gmail.com)
+        -:   18:
+        -:   19:#include <assert.h>
+        -:   20:#include <stdlib.h>
+        -:   21:#include <string.h>
+        -:   22:
+        -:   23:#include "src/dec/common_dec.h"
+        -:   24:#include "src/dsp/dsp.h"
+        -:   25:#include "src/enc/cost_enc.h"
+        -:   26:#include "src/enc/vp8i_enc.h"
+        -:   27:#include "src/utils/bit_writer_utils.h"
+        -:   28:#include "src/utils/utils.h"
+        -:   29:#include "src/webp/types.h"
+        -:   30:
+        -:   31:#if !defined(DISABLE_TOKEN_BUFFER)
+        -:   32:
+        -:   33:// we use pages to reduce the number of memcpy()
+        -:   34:#define MIN_PAGE_SIZE 8192  // minimum number of token per page
+        -:   35:#define FIXED_PROBA_BIT (1u << 14)
+        -:   36:
+        -:   37:typedef uint16_t token_t;  // bit #15: bit value
+        -:   38:                           // bit #14: flags for constant proba or idx
+        -:   39:                           // bits #0..13: slot or constant proba
+        -:   40:struct VP8Tokens {
+        -:   41:  VP8Tokens* next;  // pointer to next page
+        -:   42:};
+        -:   43:// Token data is located in memory just after the 'next' field.
+        -:   44:// This macro is used to return their address and hide the trick.
+        -:   45:#define TOKEN_DATA(p) ((const token_t*)&(p)[1])
+        -:   46:
+        -:   47://------------------------------------------------------------------------------
+        -:   48:
+function VP8TBufferInit called 1152 returned 100% blocks executed 100%
+     3456:   49:void VP8TBufferInit(VP8TBuffer* const b, int page_size) {
+     3456:   50:  b->tokens = NULL;
+     3456:   51:  b->pages = NULL;
+     3456:   52:  b->last_page = &b->pages;
+     3456:   53:  b->left = 0;
+     3456:   54:  b->page_size = (page_size < MIN_PAGE_SIZE) ? MIN_PAGE_SIZE : page_size;
+     3456:   55:  b->error = 0;
+     3456:   56:}
+        -:   57:
+function VP8TBufferClear called 2304 returned 100% blocks executed 83%
+     2304:   58:void VP8TBufferClear(VP8TBuffer* const b) {
+     2304:   59:  if (b != NULL) {
+branch  0 taken 2304 (fallthrough)
+branch  1 taken 0
+     2304:   60:    VP8Tokens* p = b->pages;
+     2304:   61:    while (p != NULL) {
+branch  0 taken 0
+branch  1 taken 2304 (fallthrough)
+    #####:   62:      VP8Tokens* const next = p->next;
+    #####:   63:      WebPSafeFree(p);
+    #####:   64:      p = next;
+call    0 never executed
+        -:   65:    }
+     2304:   66:    VP8TBufferInit(b, b->page_size);
+        -:   67:  }
+     2304:   68:}
+        -:   69:
+function TBufferNewPage called 28896 returned 100% blocks executed 83%
+    28896:   70:static int TBufferNewPage(VP8TBuffer* const b) {
+    28896:   71:  VP8Tokens* page = NULL;
+    28896:   72:  if (!b->error) {
+branch  0 taken 28896 (fallthrough)
+branch  1 taken 0
+    28896:   73:    const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    28896:   74:    page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+call    0 returned 28896
+        -:   75:  }
+    28896:   76:  if (page == NULL) {
+branch  0 taken 0 (fallthrough)
+branch  1 taken 28896
+    #####:   77:    b->error = 1;
+    #####:   78:    return 0;
+        -:   79:  }
+    28896:   80:  page->next = NULL;
+        -:   81:
+    28896:   82:  *b->last_page = page;
+    28896:   83:  b->last_page = &page->next;
+    28896:   84:  b->left = b->page_size;
+    28896:   85:  b->tokens = (token_t*)TOKEN_DATA(page);
+    28896:   86:  return 1;
+        -:   87:}
+        -:   88:
+        -:   89://------------------------------------------------------------------------------
+        -:   90:
+        -:   91:#define TOKEN_ID(t, b, ctx) \
+        -:   92:  (NUM_PROBAS * ((ctx) + NUM_CTX * ((b) + NUM_BANDS * (t))))
+        -:   93:
+function AddToken called 362698740 returned 100% blocks executed 100%
+362698740:   94:static WEBP_INLINE uint32_t AddToken(VP8TBuffer* const b, uint32_t bit,
+        -:   95:                                     uint32_t proba_idx, proba_t* const stats) {
+362698740:   96:  assert(proba_idx < FIXED_PROBA_BIT);
+362698740:   97:  assert(bit <= 1);
+362698740:   98:  if (b->left > 0 || TBufferNewPage(b)) {
+branch  0 taken 23952 (fallthrough)
+branch  1 taken 362674788
+call    2 returned 23952
+branch  3 taken 23952 (fallthrough)
+branch  4 taken 0
+362698740:   99:    const int slot = --b->left;
+362698740:  100:    b->tokens[slot] = (bit << 15) | proba_idx;
+        -:  101:  }
+362698740:  102:  VP8RecordStats(bit, stats);
+branch  0 taken 4596 (fallthrough)
+branch  1 taken 362694144
+362698740:  103:  return bit;
+        -:  104:}
+        -:  105:
+function AddConstantToken called 78812676 returned 100% blocks executed 100%
+ 78812676:  106:static WEBP_INLINE void AddConstantToken(VP8TBuffer* const b, uint32_t bit,
+        -:  107:                                         uint32_t proba) {
+ 78812676:  108:  assert(proba < 256);
+ 78812676:  109:  assert(bit <= 1);
+ 78812676:  110:  if (b->left > 0 || TBufferNewPage(b)) {
+branch  0 taken 4944 (fallthrough)
+branch  1 taken 78807732
+call    2 returned 4944
+branch  3 taken 4944 (fallthrough)
+branch  4 taken 0
+ 78812676:  111:    const int slot = --b->left;
+ 78812676:  112:    b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+        -:  113:  }
+ 78812676:  114:}
+        -:  115:
+function VP8RecordCoeffTokens called 15062880 returned 100% blocks executed 100%
+ 15062880:  116:int VP8RecordCoeffTokens(int ctx, const struct VP8Residual* const res,
+        -:  117:                         VP8TBuffer* const tokens) {
+ 15062880:  118:  const int16_t* const coeffs = res->coeffs;
+ 15062880:  119:  const int coeff_type = res->coeff_type;
+ 15062880:  120:  const int last = res->last;
+ 15062880:  121:  int n = res->first;
+ 15062880:  122:  uint32_t base_id = TOKEN_ID(coeff_type, n, ctx);
+        -:  123:  // should be stats[VP8EncBands[n]], but it's equivalent for n=0 or 1
+ 15062880:  124:  proba_t* s = res->stats[n][ctx];
+ 15062880:  125:  if (!AddToken(tokens, last >= 0, base_id + 0, s + 0)) {
+call    0 returned 15062880
+branch  1 taken 8528004
+branch  2 taken 6534876
+        -:  126:    return 0;
+        -:  127:  }
+        -:  128:
+117400812:  129:  while (n < 16) {
+branch  0 taken 117400812
+branch  1 taken 0
+117400812:  130:    const int c = coeffs[n++];
+117400812:  131:    const int sign = c < 0;
+117400812:  132:    const uint32_t v = sign ? -c : c;
+branch  0 taken 34402584 (fallthrough)
+branch  1 taken 82998228
+117400812:  133:    if (!AddToken(tokens, v != 0, base_id + 1, s + 1)) {
+call    0 returned 117400812
+branch  1 taken 46956000 (fallthrough)
+branch  2 taken 70444812
+ 46956000:  134:      base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 0);  // ctx=0
+ 46956000:  135:      s = res->stats[VP8EncBands[n]][0];
+ 46956000:  136:      continue;
+        -:  137:    }
+ 70444812:  138:    if (!AddToken(tokens, v > 1, base_id + 2, s + 2)) {
+call    0 returned 70444812
+branch  1 taken 33918456 (fallthrough)
+branch  2 taken 36526356
+ 33918456:  139:      base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 1);  // ctx=1
+ 33918456:  140:      s = res->stats[VP8EncBands[n]][1];
+        -:  141:    } else {
+ 36526356:  142:      if (!AddToken(tokens, v > 4, base_id + 3, s + 3)) {
+call    0 returned 36526356
+branch  1 taken 30088392 (fallthrough)
+branch  2 taken 6437964
+ 30088392:  143:        if (AddToken(tokens, v != 2, base_id + 4, s + 4)) {
+call    0 returned 30088392
+branch  1 taken 14226636 (fallthrough)
+branch  2 taken 15861756
+ 14226636:  144:          AddToken(tokens, v == 4, base_id + 5, s + 5);
+call    0 returned 14226636
+        -:  145:        }
+  6437964:  146:      } else if (!AddToken(tokens, v > 10, base_id + 6, s + 6)) {
+call    0 returned 6437964
+branch  1 taken 6247380 (fallthrough)
+branch  2 taken 190584
+  6247380:  147:        if (!AddToken(tokens, v > 6, base_id + 7, s + 7)) {
+call    0 returned 6247380
+branch  1 taken 4711680 (fallthrough)
+branch  2 taken 1535700
+  4711680:  148:          AddConstantToken(tokens, v == 6, 159);
+call    0 returned 4711680
+        -:  149:        } else {
+  1535700:  150:          AddConstantToken(tokens, v >= 9, 165);
+call    0 returned 1535700
+  1535700:  151:          AddConstantToken(tokens, !(v & 1), 145);
+call    0 returned 1535700
+        -:  152:        }
+        -:  153:      } else {
+   190584:  154:        int mask;
+   190584:  155:        const uint8_t* tab;
+   190584:  156:        uint32_t residue = v - 3;
+   190584:  157:        if (residue < (8 << 1)) {  // VP8Cat3  (3b)
+branch  0 taken 178788 (fallthrough)
+branch  1 taken 11796
+   178788:  158:          AddToken(tokens, 0, base_id + 8, s + 8);
+call    0 returned 178788
+   178788:  159:          AddToken(tokens, 0, base_id + 9, s + 9);
+call    0 returned 178788
+   178788:  160:          residue -= (8 << 0);
+   178788:  161:          mask = 1 << 2;
+   178788:  162:          tab = VP8Cat3;
+    11796:  163:        } else if (residue < (8 << 2)) {  // VP8Cat4  (4b)
+branch  0 taken 11280 (fallthrough)
+branch  1 taken 516
+    11280:  164:          AddToken(tokens, 0, base_id + 8, s + 8);
+call    0 returned 11280
+    11280:  165:          AddToken(tokens, 1, base_id + 9, s + 9);
+call    0 returned 11280
+    11280:  166:          residue -= (8 << 1);
+    11280:  167:          mask = 1 << 3;
+    11280:  168:          tab = VP8Cat4;
+      516:  169:        } else if (residue < (8 << 3)) {  // VP8Cat5  (5b)
+branch  0 taken 396 (fallthrough)
+branch  1 taken 120
+      396:  170:          AddToken(tokens, 1, base_id + 8, s + 8);
+call    0 returned 396
+      396:  171:          AddToken(tokens, 0, base_id + 10, s + 9);
+call    0 returned 396
+      396:  172:          residue -= (8 << 2);
+      396:  173:          mask = 1 << 4;
+      396:  174:          tab = VP8Cat5;
+        -:  175:        } else {  // VP8Cat6 (11b)
+      120:  176:          AddToken(tokens, 1, base_id + 8, s + 8);
+call    0 returned 120
+      120:  177:          AddToken(tokens, 1, base_id + 10, s + 9);
+call    0 returned 120
+      120:  178:          residue -= (8 << 3);
+      120:  179:          mask = 1 << 10;
+      120:  180:          tab = VP8Cat6;
+        -:  181:        }
+   775368:  182:        while (mask) {
+branch  0 taken 584784
+branch  1 taken 190584 (fallthrough)
+   584784:  183:          AddConstantToken(tokens, !!(residue & mask), *tab++);
+call    0 returned 584784
+   584784:  184:          mask >>= 1;
+        -:  185:        }
+        -:  186:      }
+ 36526356:  187:      base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 2);  // ctx=2
+ 36526356:  188:      s = res->stats[VP8EncBands[n]][2];
+        -:  189:    }
+ 70444812:  190:    AddConstantToken(tokens, sign, 128);
+call    0 returned 70444812
+ 70444812:  191:    if (n == 16 || !AddToken(tokens, n <= last, base_id + 0, s + 0)) {
+branch  0 taken 65882340 (fallthrough)
+branch  1 taken 4562472
+call    2 returned 65882340
+branch  3 taken 3965532 (fallthrough)
+branch  4 taken 61916808
+  8528004:  192:      return 1;  // EOB
+        -:  193:    }
+        -:  194:  }
+        -:  195:  return 1;
+        -:  196:}
+        -:  197:
+        -:  198:#undef TOKEN_ID
+        -:  199:
+        -:  200://------------------------------------------------------------------------------
+        -:  201:// Final coding pass, with known probabilities
+        -:  202:
+function VP8EmitTokens called 1152 returned 100% blocks executed 100%
+     1152:  203:int VP8EmitTokens(VP8TBuffer* const b, VP8BitWriter* const bw,
+        -:  204:                  const uint8_t* const probas, int final_pass) {
+     1152:  205:  const VP8Tokens* p = b->pages;
+     1152:  206:  assert(!b->error);
+    30048:  207:  while (p != NULL) {
+branch  0 taken 28896
+branch  1 taken 1152 (fallthrough)
+    28896:  208:    const VP8Tokens* const next = p->next;
+    28896:  209:    const int N = (next == NULL) ? b->left : 0;
+branch  0 taken 1152 (fallthrough)
+branch  1 taken 27744
+    28896:  210:    const token_t* const tokens = TOKEN_DATA(p);
+    28896:  211:    VP8PutTokenPage(bw, tokens, b->page_size, N, probas);
+call    0 returned 28896
+    28896:  212:    if (final_pass) WebPSafeFree((void*)p);
+branch  0 taken 28896 (fallthrough)
+branch  1 taken 0
+call    2 returned 28896
+        -:  213:    p = next;
+        -:  214:  }
+     1152:  215:  if (final_pass) b->pages = NULL;
+branch  0 taken 1152 (fallthrough)
+branch  1 taken 0
+     1152:  216:  return 1;
+        -:  217:}
+        -:  218:
+        -:  219:// Size estimation
+function VP8EstimateTokenSize called 0 returned 0% blocks executed 0%
+    #####:  220:size_t VP8EstimateTokenSize(VP8TBuffer* const b, const uint8_t* const probas) {
+    #####:  221:  size_t size = 0;
+    #####:  222:  const VP8Tokens* p = b->pages;
+    #####:  223:  assert(!b->error);
+    #####:  224:  while (p != NULL) {
+branch  0 never executed
+branch  1 never executed (fallthrough)
+    #####:  225:    const VP8Tokens* const next = p->next;
+    #####:  226:    const int N = (next == NULL) ? b->left : 0;
+branch  0 never executed (fallthrough)
+branch  1 never executed
+    #####:  227:    int n = b->page_size;
+    #####:  228:    const token_t* const tokens = TOKEN_DATA(p);
+    #####:  229:    while (n-- > N) {
+branch  0 never executed
+branch  1 never executed (fallthrough)
+    #####:  230:      const token_t token = tokens[n];
+    #####:  231:      const int bit = token & (1 << 15);
+    #####:  232:      if (token & FIXED_PROBA_BIT) {
+branch  0 never executed (fallthrough)
+branch  1 never executed
+    #####:  233:        size += VP8BitCost(bit, token & 0xffu);
+branch  0 never executed (fallthrough)
+branch  1 never executed
+        -:  234:      } else {
+    #####:  235:        size += VP8BitCost(bit, probas[token & 0x3fffu]);
+branch  0 never executed (fallthrough)
+branch  1 never executed
+        -:  236:      }
+        -:  237:    }
+        -:  238:    p = next;
+        -:  239:  }
+    #####:  240:  return size;
+        -:  241:}
+        -:  242:
+        -:  243://------------------------------------------------------------------------------
+        -:  244:
+        -:  245:#else  // DISABLE_TOKEN_BUFFER
+        -:  246:
+        -:  247:void VP8TBufferInit(VP8TBuffer* const b, int page_size) {
+        -:  248:  (void)b;
+        -:  249:  (void)page_size;
+        -:  250:}
+        -:  251:void VP8TBufferClear(VP8TBuffer* const b) { (void)b; }
+        -:  252:
+        -:  253:#endif  // !DISABLE_TOKEN_BUFFER

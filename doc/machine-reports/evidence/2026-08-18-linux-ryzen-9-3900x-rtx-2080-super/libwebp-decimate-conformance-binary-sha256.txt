@@ -1,0 +1,5 @@
+cbbcbb34625ffb50b1ddb1f8b13314416b193fc576a46f42f826c8a25f618c0f  /tmp/libwebp-issue19-cpu.zdG1Y2/cwebp
+2ecef9f3bfc601fd96ccab94d9a2068ac93bd797e05bdbdfa1096cef9644655f  /tmp/libwebp-issue19-cpu.zdG1Y2/lossy_decimate_conformance
+a052cbead2b79f68f6de207f3a1ee421a35eff468196431d50e315f3fcbaa781  /tmp/libwebp-issue19-cuda.auJQti/cwebp
+b7f76408226661e43c3fc50a4ffdc92c9c3e3d1dcd3449b2469782bea89bc669  /tmp/libwebp-issue19-cuda.auJQti/lossy_decimate_conformance
+15b0c215810689658244f6d658897a0f52a4813372fe768a53581ef77a64ebdd  /tmp/libwebp-issue19-cuda.auJQti/cuda_trellis_test

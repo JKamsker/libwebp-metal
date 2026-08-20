@@ -1,0 +1,24 @@
+decimate GPU wall: 9.83 ms (32x32 MBs)
+decimate phases (% of block cycles): import 3.8% i16-num 9.1% i16-sel 9.5% i4 63.4% uv-num 5.1% uv-sel 8.5% recon 0.5%
+decimate GPU wall: 8.95 ms (32x32 MBs)
+decimate phases (% of block cycles): import 4.9% i16-num 11.5% i16-sel 21.7% i4 43.3% uv-num 6.8% uv-sel 11.1% recon 0.7%
+decimate GPU wall: 8.62 ms (32x32 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.6% i16-sel 8.6% i4 65.8% uv-num 5.7% uv-sel 5.8% recon 0.6%
+decimate GPU wall: 23.51 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.6% i16-sel 9.2% i4 63.6% uv-num 5.1% uv-sel 8.0% recon 0.5%
+decimate GPU wall: 23.50 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.5% i16-num 12.8% i16-sel 24.9% i4 37.3% uv-num 7.3% uv-sel 11.6% recon 0.7%
+decimate GPU wall: 22.38 ms (100x75 MBs)
+decimate phases (% of block cycles): import 4.0% i16-num 10.0% i16-sel 8.5% i4 65.4% uv-num 5.8% uv-sel 5.7% recon 0.6%
+decimate GPU wall: 8.96 ms (32x32 MBs)
+decimate phases (% of block cycles): import 3.8% i16-num 9.2% i16-sel 9.5% i4 63.3% uv-num 5.2% uv-sel 8.5% recon 0.5%
+decimate GPU wall: 8.87 ms (32x32 MBs)
+decimate phases (% of block cycles): import 4.9% i16-num 11.5% i16-sel 21.7% i4 43.3% uv-num 6.8% uv-sel 11.1% recon 0.7%
+decimate GPU wall: 8.60 ms (32x32 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.6% i16-sel 8.6% i4 65.8% uv-num 5.7% uv-sel 5.8% recon 0.6%
+decimate GPU wall: 23.31 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.6% i16-sel 9.2% i4 63.6% uv-num 5.2% uv-sel 8.0% recon 0.5%
+decimate GPU wall: 23.35 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.5% i16-num 12.8% i16-sel 24.9% i4 37.3% uv-num 7.3% uv-sel 11.6% recon 0.7%
+decimate GPU wall: 22.36 ms (100x75 MBs)
+decimate phases (% of block cycles): import 4.0% i16-num 10.0% i16-sel 8.5% i4 65.4% uv-num 5.8% uv-sel 5.7% recon 0.6%

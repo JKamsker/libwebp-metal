@@ -1,0 +1,110 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index 7809e965..9e2192c6 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -105,6 +105,7 @@ struct DecimateKernelParams {
+   int32_t max_i4_header_bits;
+   uint32_t use_error_diffusion;
+   uint32_t rd_opt_level;
++  uint32_t i16_full_warp_pair;
+   uint32_t diagonal;       // current skewed diagonal (x + 2y)
+   uint32_t y_min;          // first tile row on this diagonal
+ };
+@@ -1275,26 +1276,68 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+   // sequential comparison (including the flatness chain) on the precomputed
+   // values.
+   __shared__ long long i16_R[4];
++  __shared__ long long i16_R_pair[4][2];
+   __shared__ int i16_levels_flat[4];
+-  if (tid < 4 * 32) {  // one mode per warp; 16 lanes cooperate per block
+-    const int mode = tid >> 5;
+-    const int lane = tid & 31;
+-    NzContext c = w.nz_ctx;
+-    int nz_bit;
+-    long long R = ResidualCostCoop16(&cc, c.top_nz[8] + c.left_nz[8], 0, 1,
+-                                     w.i16_dc_levels[mode], lane, &nz_bit);
+-    for (int by = 0; by < 4; ++by) {
+-      for (int bx = 0; bx < 4; ++bx) {
+-        const int ctx = c.top_nz[bx] + c.left_nz[by];
+-        const int16_t* const lv = w.i16_ac_levels[mode][bx + by * 4];
+-        R += ResidualCostCoop16(&cc, ctx, 1, 0, lv, lane, &nz_bit);
+-        c.top_nz[bx] = c.left_nz[by] = nz_bit;
++  if (p.i16_full_warp_pair) {
++    if (tid < 8 * 32) {  // two full residual-cost warps per mode
++      const int warp = tid >> 5;
++      const int mode = warp >> 1;
++      const int part = warp & 1;
++      const int lane = tid & 31;
++      const int first_block = part * 8;
++      int nz_bit;
++      long long R = 0;
++      if (part == 0) {
++        R = ResidualCostCoop16(&cc,
++                               w.nz_ctx.top_nz[8] + w.nz_ctx.left_nz[8],
++                               0, 1, w.i16_dc_levels[mode], lane, &nz_bit);
++      }
++      for (int block = first_block; block < first_block + 8; ++block) {
++        const int bx = block & 3;
++        const int by = block >> 2;
++        const int top_nz =
++            (by == 0) ? w.nz_ctx.top_nz[bx]
++                      : (int)((w.i16_nz[mode] >> (block - 4)) & 1u);
++        const int left_nz =
++            (bx == 0) ? w.nz_ctx.left_nz[by]
++                      : (int)((w.i16_nz[mode] >> (block - 1)) & 1u);
++        R += ResidualCostCoop16(&cc, top_nz + left_nz, 1, 0,
++                                w.i16_ac_levels[mode][block], lane, &nz_bit);
++      }
++      if (lane == 0) {
++        i16_R_pair[mode][part] = R;
++        if (part == 0) {
++          i16_levels_flat[mode] =
++              CudaIsFlat(w.i16_ac_levels[mode][0], 16, kFlatnessLimitI16);
++        }
+       }
+     }
+-    if (lane == 0) {
+-      i16_R[mode] = R;
+-      i16_levels_flat[mode] =
+-          CudaIsFlat(w.i16_ac_levels[mode][0], 16, kFlatnessLimitI16);
++    __syncthreads();
++    if (tid < 4) {
++      i16_R[tid] = i16_R_pair[tid][0] + i16_R_pair[tid][1];
++    }
++  } else {
++    if (tid < 4 * 32) {  // one mode per warp; 16 lanes cooperate per block
++      const int mode = tid >> 5;
++      const int lane = tid & 31;
++      NzContext c = w.nz_ctx;
++      int nz_bit;
++      long long R = ResidualCostCoop16(
++          &cc, c.top_nz[8] + c.left_nz[8], 0, 1,
++          w.i16_dc_levels[mode], lane, &nz_bit);
++      for (int by = 0; by < 4; ++by) {
++        for (int bx = 0; bx < 4; ++bx) {
++          const int ctx = c.top_nz[bx] + c.left_nz[by];
++          const int16_t* const lv = w.i16_ac_levels[mode][bx + by * 4];
++          R += ResidualCostCoop16(&cc, ctx, 1, 0, lv, lane, &nz_bit);
++          c.top_nz[bx] = c.left_nz[by] = nz_bit;
++        }
++      }
++      if (lane == 0) {
++        i16_R[mode] = R;
++        i16_levels_flat[mode] =
++            CudaIsFlat(w.i16_ac_levels[mode][0], 16, kFlatnessLimitI16);
++      }
+     }
+   }
+   __syncthreads();
+@@ -2734,6 +2777,11 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
+     params.max_i4_header_bits = request->max_i4_header_bits;
+     params.use_error_diffusion = (uint32_t)request->use_error_diffusion;
+     params.rd_opt_level = (uint32_t)request->rd_opt_level;
++    params.i16_full_warp_pair =
++        (!DecimateDeviceIsAmpereOrNewer() &&
++         DecimateFlag("WEBP_CUDA_I16_FULL_WARP_PAIR", true))
++            ? 1u
++            : 0u;
+ 
+     (void)cudaGetLastError();
+     const int last_diagonal =

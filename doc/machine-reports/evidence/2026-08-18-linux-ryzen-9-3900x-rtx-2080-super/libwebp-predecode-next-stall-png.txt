@@ -1,0 +1,4 @@
+predecode phases: wait 2.598 encode 33.268 finish 0.699 other 0.002 ms/image
+predecode phases: wait 1.534 encode 26.658 finish 0.728 other 0.002 ms/image
+predecode phases: wait 2.337 encode 27.283 finish 0.745 other 0.002 ms/image
+predecode phases: wait 1.281 encode 26.933 finish 0.720 other 0.002 ms/image

@@ -1,0 +1,9 @@
+{
+  "baseline_instruction_count": 296,
+  "candidate_false_instruction_count": 296,
+  "candidate_true_instruction_count": 296,
+  "candidate_false_mnemonics_equal_baseline": true,
+  "baseline_registers": 26,
+  "candidate_false_registers": 26,
+  "candidate_true_registers": 34
+}

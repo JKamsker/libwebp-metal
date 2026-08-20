@@ -1,0 +1,5 @@
+Script started on 2026-08-19 15:15:19+00:00 [COMMAND="WEBP_TEST_BIN_DIR=build-cuda-sm75-gate scripts/test_cuda.sh /tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png /tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png /tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png /tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-medium.png /tmp/libwebp-cuda-batch-corpus-20260818/png/photo-medium.png /tmp/libwebp-cuda-batch-corpus-20260818/png/texture-medium.png" <not executed on terminal>]
+PASS: CUDA color/hash/RGB correctness checks: /tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png
+/tmp/libwebp-cuda-test.hvymHb/photo-small.png-cpu.pam /tmp/libwebp-cuda-test.hvymHb/photo-small.png-cuda.pam differ: byte 67944, line 8
+
+Script done on 2026-08-19 15:15:32+00:00 [COMMAND_EXIT_CODE="1"]

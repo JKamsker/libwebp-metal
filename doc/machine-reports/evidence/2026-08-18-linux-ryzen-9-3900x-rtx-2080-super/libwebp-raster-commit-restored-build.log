@@ -1,0 +1,4 @@
+[1/4] Linking CUDA executable cuda_near_lossless_test
+[2/4] Linking CUDA executable cuda_concurrency_test
+[3/4] Linking CUDA executable cuda_histogram_test
+[4/4] Linking CUDA executable cuda_trellis_test

@@ -1,0 +1,31 @@
+Retained native-sm_75 profile before source modification
+Build: Release, CMAKE_CUDA_ARCHITECTURES=native
+
+Current medium method-4 / quality-75 device phase shares
+content   GPU wall ms  import  i16-num  i16-sel  I4     uv-num  uv-sel  recon
+graphic        26.37     5.5%    12.9%    25.0%  37.0%    7.3%   11.6%   0.7%
+photo          26.69     3.8%     9.4%     9.5%  63.8%    4.9%    8.0%   0.5%
+texture        25.37     4.0%    10.0%     8.5%  65.5%    5.8%    5.7%   0.6%
+
+Texture-medium eight-partition payload sizes (bytes)
+partition0 header: 48790
+token partitions: 152730 152668 152628 137399 137348 137366 137336 137476
+minimum / maximum / ratio: 137336 / 152730 / 1.11209
+
+The 11.2% token imbalance follows the standard macroblock-row modulo mapping:
+the first three partitions own ten of 75 rows and the remaining five own nine.
+All eight arithmetic coders already run concurrently, so scheduling cannot
+remove enough wall time to meet the aggregate gate.
+
+I4 remains the largest distinct device stage. Its inverse transforms and
+prediction paths execute many CudaClip8b calls. The retained range-test form
+was compared with pre-Ampere signed integer min/max saturation while Ampere+
+kept the original expression.
+
+Native DecimateKernel resources
+variant    registers  stack  shared  relative SASS instructions
+parent           103    352   23392  47414
+candidate        103    352   23392  47174
+
+The candidate shortened the emitted sm_75 kernel by 240 instructions without
+changing registers, stack, shared memory, or occupancy.

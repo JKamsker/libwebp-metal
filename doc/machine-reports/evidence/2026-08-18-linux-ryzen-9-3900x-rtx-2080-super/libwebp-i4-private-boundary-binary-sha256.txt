@@ -1,0 +1,2 @@
+1c6ebfe15982af72b7714b94c1ccfc5b7c95c3c4aa19d64e6b994d0bb6f74d88  /tmp/libwebp-i4-private-boundary-baseline
+592d95672ac632894b93105db81e35c090cf02a00400a17ce2053e3ade89d6d4  /tmp/libwebp-i4-private-boundary-candidate

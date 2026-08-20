@@ -1,0 +1,505 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index d5dd4a6e..9d6e510d 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -1146,6 +1146,13 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     DeviceView v, DecimateKernelParams p, uint8_t* left_nz8) {
+   __shared__ MBWork w;
+   __shared__ unsigned long long ph_ts[8];
++  __shared__ long long uv_R[4];
++  __shared__ long long uv_best_D, uv_best_H, uv_best_R;
++  __shared__ uint32_t uv_best_nz;
++  __shared__ int uv_best_mode;
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  __shared__ DeviceSegment dqm_shared;
++#endif
+   const int y = (int)(p.y_min + blockIdx.x);
+   const int x = (int)p.diagonal - 2 * y;
+   const int mb_index = y * (int)p.mb_w + x;
+@@ -1170,8 +1177,16 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     if (v.phase_cycles != nullptr && tid == 0) ph_ts[k] = clock64(); \
+   } while (0)
+   PHASE_TS(0);
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  const DeviceSegment* const dqm_global =
++      &v.segment_params[v.segments[mb_index]];
++  if ((size_t)tid * sizeof(uint32_t) < sizeof(DeviceSegment)) {
++    ((uint32_t*)&dqm_shared)[tid] = ((const uint32_t*)dqm_global)[tid];
++  }
++  const DeviceSegment* const dqm = &dqm_shared;
++#else
+   const DeviceSegment* const dqm = &v.segment_params[v.segments[mb_index]];
+-  const int tlambda = dqm->tlambda;
++#endif
+ 
+   // ---- Phase 0: import, borders, predictions (parallel-friendly setup).
+   ImportMBParallel(&v, &p, x, y, &w, tid, (int)blockDim.x);
+@@ -1189,6 +1204,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     w.nz_ctx.left_nz[8] = (x > 0) ? left_nz8[mb_index - 1] : 0;
+   }
+   __syncthreads();
++  const int tlambda = dqm->tlambda;
+   MakeIntraPredsParallel(&w, x, y, tid, (int)blockDim.x);
+   __syncthreads();
+   PHASE_TS(1);
+@@ -1202,6 +1218,16 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+         w.yuv_p + kCudaVP8I16ModeOffsets[mode] + kCudaVP8Scan[block];
+     CudaFTransform(src, ref, w.i16_tmp[mode][block]);
+   }
++  if (tid >= 128 && tid < 160) {
++    const int uv_tid = tid - 128;
++    const int mode = uv_tid >> 3;
++    const int block = uv_tid & 7;
++    const uint8_t* const src = w.yuv_in + kCudaUOffEnc + kCudaVP8ScanUV[block];
++    const uint8_t* const ref =
++        w.yuv_p + kCudaVP8UVModeOffsets[mode] + kCudaVP8ScanUV[block];
++    CudaFTransform(src, ref, w.uv_tmp[mode][block]);
++    if (block == 0) { w.uv_nz[mode] = 0; w.uv_sse[mode] = 0; }
++  }
+   __syncthreads();
+   if (tid < 4) {
+     const int mode = tid;
+@@ -1213,6 +1239,13 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     w.i16_sse[mode] = 0;
+     w.i16_sd[mode] = 0;
+   }
++  if (tid >= 128 && tid < 132 && p.use_error_diffusion) {
++    int8_t top_derr[2][2], left_derr[2][2];
++    const int mode = tid - 128;
++    LoadDiffusionErrors(&v, &p, x, y, top_derr, left_derr);
++    CorrectDCValuesDev(top_derr, left_derr, &dqm->uv, w.uv_tmp[mode],
++                       w.uv_derr[mode]);
++  }
+   __syncthreads();
+   if (p.rd_opt_level == kRDTrellisAll && tid < 4) {
+     const int mode = tid;
+@@ -1239,6 +1272,17 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+                                w.i16_ac_levels[mode][block], &dqm->y1);
+     atomicOr(&w.i16_nz[mode], (uint32_t)nz_bit << block);
+   }
++  if (tid >= 128 && tid < 160) {
++    const int uv_tid = tid - 128, mode = uv_tid >> 3, block = uv_tid & 7;
++    const int nz_bit = CudaQuantizeBlock(w.uv_tmp[mode][block],
++                                         w.uv_levels_all[mode][block],
++                                         &dqm->uv);
++    atomicOr(&w.uv_nz[mode], (uint32_t)nz_bit << block);
++    const uint8_t* const ref =
++        w.yuv_p + kCudaVP8UVModeOffsets[mode] + kCudaVP8ScanUV[block];
++    CudaITransformOne(ref, w.uv_tmp[mode][block],
++                      w.uv_out[mode] + kCudaVP8ScanUV[block]);
++  }
+   __syncthreads();
+   if (tid < 4) {
+     // CudaQuantizeBlockWHT rewrote i16_dc in place with the reconstructed
+@@ -1254,6 +1298,13 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     CudaITransformOne(ref, w.i16_tmp[mode][block],
+                       w.i16_out[mode] + kCudaVP8Scan[block]);
+   }
++  if (tid >= 128 && tid < 160) {
++    const int uv_tid = tid - 128, mode = uv_tid >> 3, block = uv_tid & 7;
++    const uint8_t* const src = w.yuv_in + kCudaUOffEnc + kCudaVP8ScanUV[block];
++    const uint8_t* const rec = w.uv_out[mode] + kCudaVP8ScanUV[block];
++    atomicAdd((unsigned long long*)&w.uv_sse[mode],
++              (unsigned long long)CudaSSE4x4(src, rec));
++  }
+   __syncthreads();
+   if (tid < 64) {
+     const int mode = tid >> 4;
+@@ -1296,6 +1347,27 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+       i16_levels_flat[mode] =
+           CudaIsFlat(w.i16_ac_levels[mode][0], 16, kFlatnessLimitI16);
+     }
++  } else if (tid < 256) {
++    const int uv_tid = tid - 128, mode = uv_tid >> 5, lane = uv_tid & 31;
++    NzContext c = w.nz_ctx;
++    long long R = 0;
++    int nz_bit;
++    for (int ch = 0; ch <= 2; ch += 2) {
++      for (int by = 0; by < 2; ++by) {
++        for (int bx = 0; bx < 2; ++bx) {
++          const int b = ch * 2 + bx + by * 2;
++          const int ctx = c.top_nz[4 + ch + bx] + c.left_nz[4 + ch + by];
++          R += ResidualCostCoop16(&cc, ctx, 0, 2,
++                                  w.uv_levels_all[mode][b], lane, &nz_bit);
++          c.top_nz[4 + ch + bx] = c.left_nz[4 + ch + by] = nz_bit;
++        }
++      }
++    }
++    if (lane == 0) {
++      if (mode > 0 && CudaIsFlat(w.uv_levels_all[mode][0], 8,
++                                 kFlatnessLimitUV)) R += kFlatnessPenalty * 8;
++      uv_R[mode] = R;
++    }
+   }
+   __syncthreads();
+   if (tid == 0) {
+@@ -1359,6 +1431,28 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+       w.rd.max_delta = (uint16_t)max_v;
+     }
+   }
++  if (tid == 128) {
++    ModeScore rd_best;
++    int best_mode = -1;
++    InitScoreDev(&rd_best);
++    for (int mode = 0; mode < kNumPredModes; ++mode) {
++      ModeScore rd_uv;
++      rd_uv.nz = w.uv_nz[mode] << 16;
++      rd_uv.D = w.uv_sse[mode]; rd_uv.SD = 0;
++      rd_uv.H = v.tables->fixed_costs_uv[mode]; rd_uv.R = uv_R[mode];
++      SetRDScoreDev(dqm->lambda_uv, &rd_uv);
++      if (mode == 0 || rd_uv.score < rd_best.score) {
++        CopyScoreDev(&rd_best, &rd_uv); best_mode = mode;
++      }
++    }
++    uv_best_mode = best_mode; uv_best_nz = rd_best.nz;
++    uv_best_D = rd_best.D; uv_best_H = rd_best.H; uv_best_R = rd_best.R;
++    w.rd.mode_uv = (uint8_t)best_mode;
++    if (p.use_error_diffusion) {
++      for (int ch = 0; ch < 2; ++ch) for (int k = 0; k < 3; ++k)
++        w.rd.derr[ch][k] = w.uv_derr[best_mode][ch][k];
++    }
++  }
+   __syncthreads();
+   // Winner copies in parallel (selection above published w.rd.mode_i16).
+   {
+@@ -1372,6 +1466,13 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+       w.yuv_out[kCudaYOffEnc + r * kCudaBPS + cx] =
+           w.i16_out[m][r * kCudaBPS + cx];
+     }
++    for (int i = tid; i < 8 * 16; i += (int)blockDim.x) {
++      w.rd.uv_levels[i >> 4][i & 15] =
++          w.uv_levels_all[uv_best_mode][i >> 4][i & 15];
++      const int r = i >> 4, cx = i & 15;
++      w.yuv_out[kCudaUOffEnc + r * kCudaBPS + cx] =
++          w.uv_out[uv_best_mode][r * kCudaBPS + cx];
++    }
+   }
+   __syncthreads();
+   PHASE_TS(3);
+@@ -1385,6 +1486,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     __shared__ int i4_header_bits;
+     __shared__ int16_t i4_best_levels[16][16];
+     __shared__ uint8_t i4_boundary2[2][13];
++    __shared__ int i4_selected_mode[2];
+     __shared__ uint8_t i4_block_nz[16], i4_ready[16];
+     __shared__ long long i4_block_D[16], i4_block_SD[16];
+     __shared__ long long i4_block_H[16], i4_block_R[16];
+@@ -1428,47 +1530,63 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+       }
+       if (active) {
+         const int warp = team_tid >> 5, lane = team_tid & 31;
++        const int group = lane >> 2;
++        const int mode_lane = lane & 3;
++        const int mode_offset = (warp == 0) ? 0 : (warp == 1) ? 3 :
++                                (warp == 2) ? 6 : 8;
++        const int mode_count = (warp < 2) ? 3 : 2;
+         uint8_t* const pred = (team == 0) ? w.yuv_p : w.i4_yuv_p2;
+-        if (lane == 0 && warp < 4) {
+-          for (int m = warp; m < kNumBModes; m += 4) {
+-            CudaIntra4PredMode(pred, i4_boundary2[team] + 5, m);
++        if (lane == 0) {
++          const uint8_t* const top = i4_boundary2[team] + 5;
++          if (warp == 0) {
++            CudaDC4(kCudaI4DC4 + pred, top);
++            CudaTM4(kCudaI4TM4 + pred, top);
++            CudaVE4(kCudaI4VE4 + pred, top);
++          } else if (warp == 1) {
++            CudaHE4(kCudaI4HE4 + pred, top);
++            CudaRD4(kCudaI4RD4 + pred, top);
++            CudaVR4(kCudaI4VR4 + pred, top);
++          } else if (warp == 2) {
++            CudaLD4(kCudaI4LD4 + pred, top);
++            CudaVL4(kCudaI4VL4 + pred, top);
++          } else {
++            CudaHD4(kCudaI4HD4 + pred, top);
++            CudaHU4(kCudaI4HU4 + pred, top);
+           }
+         }
+-      }
+-      __syncthreads();
+-      if (active && team_tid < 4 * kNumBModes) {
+-        const int mode = team_tid >> 2;
+-        const int mode_lane = team_tid & 3;
+-        const int bx = block & 3, by = block >> 2;
+-        const int ctx =
+-            ((by == 0) ? w.nz_ctx.top_nz[bx] : i4_block_nz[block - 4]) +
+-            ((bx == 0) ? w.nz_ctx.left_nz[by] : i4_block_nz[block - 1]);
+-        const unsigned int warp_mask = __activemask();
+-        const uint8_t* const src =
+-            w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
+-        uint8_t* const pred = (team == 0) ? w.yuv_p : w.i4_yuv_p2;
+-        const uint8_t* const ref = pred + kCudaVP8I4ModeOffsets[mode];
+-        int nz = 0;
+-        I4FTransformCoop4(src, ref, w.i4_tmp[team][mode],
+-                          w.i4_transform_tmp[team][mode], mode_lane,
+-                          warp_mask);
+-        __syncwarp(warp_mask);
+-        if (p.rd_opt_level == kRDTrellisAll) {
+-          if (mode_lane == 0) {
+-            nz = TrellisQuantizeBlockDev(
+-                &cc, w.i4_tmp[team][mode], w.i4_levels[team][mode], ctx, 3,
+-                &dqm->y1, dqm->lambda_trellis_i4);
++        __syncwarp();
++        if (group < mode_count) {
++          const int mode = mode_offset + group;
++          const int bx = block & 3, by = block >> 2;
++          const int ctx =
++              ((by == 0) ? w.nz_ctx.top_nz[bx] : i4_block_nz[block - 4]) +
++              ((bx == 0) ? w.nz_ctx.left_nz[by] : i4_block_nz[block - 1]);
++          const unsigned int warp_mask = __activemask();
++          const uint8_t* const src =
++              w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
++          const uint8_t* const ref = pred + kCudaVP8I4ModeOffsets[mode];
++          int nz = 0;
++          I4FTransformCoop4(src, ref, w.i4_tmp[team][mode],
++                            w.i4_transform_tmp[team][mode], mode_lane,
++                            warp_mask);
++          __syncwarp(warp_mask);
++          if (p.rd_opt_level == kRDTrellisAll) {
++            if (mode_lane == 0) {
++              nz = TrellisQuantizeBlockDev(
++                  &cc, w.i4_tmp[team][mode], w.i4_levels[team][mode], ctx, 3,
++                  &dqm->y1, dqm->lambda_trellis_i4);
++            }
++          } else {
++            nz = I4QuantizeBlockCoop4(
++                w.i4_tmp[team][mode], w.i4_levels[team][mode], &dqm->y1,
++                mode_lane, warp_mask);
+           }
+-        } else {
+-          nz = I4QuantizeBlockCoop4(
+-              w.i4_tmp[team][mode], w.i4_levels[team][mode], &dqm->y1,
+-              mode_lane, warp_mask);
++          if (mode_lane == 0) w.i4_nz[team][mode] = nz;
++          __syncwarp(warp_mask);
++          I4ITransformCoop4(ref, w.i4_tmp[team][mode], w.i4_out[team][mode],
++                            w.i4_transform_tmp[team][mode], mode_lane,
++                            warp_mask);
+         }
+-        if (mode_lane == 0) w.i4_nz[team][mode] = nz;
+-        __syncwarp(warp_mask);
+-        I4ITransformCoop4(ref, w.i4_tmp[team][mode], w.i4_out[team][mode],
+-                          w.i4_transform_tmp[team][mode], mode_lane,
+-                          warp_mask);
+       }
+       __syncthreads();
+       if (active) {
+@@ -1511,38 +1629,28 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+       }
+       if (active && (team_tid >> 5) == 0) __syncwarp();
+       if (active && team_tid == 0) {
+-        ModeScore rd_i4;
+         int best_mode = -1;
+-        InitScoreDev(&rd_i4);
++        long long best_score = 0;
+         for (int mode = 0; mode < kNumBModes; ++mode) {
+-          ModeScore rd_tmp;
+-          rd_tmp.D = w.i4_sse[team][mode];
+-          rd_tmp.SD =
+-              tlambda ? MULT_8B_DEV(tlambda, w.i4_sd[team][mode]) : 0;
+-          rd_tmp.H = w.i4_mode_cost[team][mode];
+-          rd_tmp.nz = (uint32_t)w.i4_nz[team][mode] << block;
+-          rd_tmp.R = w.i4_flat[team][mode] ? kFlatnessPenalty : 0;
+-          rd_tmp.score = w.i4_base_score[team][mode];
+-          if (best_mode >= 0 && rd_tmp.score >= rd_i4.score) continue;
+-          rd_tmp.R += w.i4_rcost[team][mode];
+-          rd_tmp.score = w.i4_full_score[team][mode];
+-          if (best_mode < 0 || rd_tmp.score < rd_i4.score) {
+-            CopyScoreDev(&rd_i4, &rd_tmp);
++          const long long base_score = w.i4_base_score[team][mode];
++          if (best_mode >= 0 && base_score >= best_score) continue;
++          const long long full_score = w.i4_full_score[team][mode];
++          if (best_mode < 0 || full_score < best_score) {
++            best_score = full_score;
+             best_mode = mode;
+           }
+         }
++        ModeScore rd_i4;
++        rd_i4.D = w.i4_sse[team][best_mode];
++        rd_i4.SD =
++            tlambda ? MULT_8B_DEV(tlambda, w.i4_sd[team][best_mode]) : 0;
++        rd_i4.H = w.i4_mode_cost[team][best_mode];
++        rd_i4.nz = (uint32_t)w.i4_nz[team][best_mode] << block;
++        rd_i4.R = (w.i4_flat[team][best_mode] ? kFlatnessPenalty : 0) +
++                  w.i4_rcost[team][best_mode];
++        rd_i4.score = best_score;
+         SetRDScoreDev(dqm->lambda_mode, &rd_i4);
+-        for (int k = 0; k < 16; ++k) {
+-          i4_best_levels[block][k] = w.i4_levels[team][best_mode][k];
+-        }
+-        uint8_t* const dst =
+-            w.yuv_out2 + kCudaYOffEnc + kCudaVP8Scan[block];
+-        for (int r = 0; r < 4; ++r) {
+-          for (int c = 0; c < 4; ++c) {
+-            dst[r * kCudaBPS + c] =
+-                w.i4_out[team][best_mode][r * kCudaBPS + c];
+-          }
+-        }
++        i4_selected_mode[team] = best_mode;
+         w.rd.modes_i4[block] = (uint8_t)best_mode;
+         i4_block_nz[block] = rd_i4.nz ? 1 : 0;
+         i4_block_D[block] = rd_i4.D;
+@@ -1550,6 +1658,20 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+         i4_block_H[block] = rd_i4.H;
+         i4_block_R[block] = rd_i4.R;
+         i4_block_score[block] = rd_i4.score;
++      }
++      if (active && (team_tid >> 5) == 0) __syncwarp();
++      if (active && team_tid < 16) {
++        const int best_mode = i4_selected_mode[team];
++        i4_best_levels[block][team_tid] =
++            w.i4_levels[team][best_mode][team_tid];
++        uint8_t* const dst =
++            w.yuv_out2 + kCudaYOffEnc + kCudaVP8Scan[block];
++        dst[(team_tid >> 2) * kCudaBPS + (team_tid & 3)] =
++            w.i4_out[team][best_mode]
++                    [(team_tid >> 2) * kCudaBPS + (team_tid & 3)];
++      }
++      if (active && (team_tid >> 5) == 0) __syncwarp();
++      if (active && team_tid == 0) {
+         i4_ready[block] = 1;
+       }
+       __syncthreads();
+@@ -1599,134 +1721,24 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+   }
+   PHASE_TS(4);
+ 
+-  // ---- Phase 4 (parallel): chroma transforms per mode.
+-  if (tid < 32) {
+-    const int mode = tid >> 3;
+-    const int block = tid & 7;
+-    const uint8_t* const src =
+-        w.yuv_in + kCudaUOffEnc + kCudaVP8ScanUV[block];
+-    const uint8_t* const ref =
+-        w.yuv_p + kCudaVP8UVModeOffsets[mode] + kCudaVP8ScanUV[block];
+-    CudaFTransform(src, ref, w.uv_tmp[mode][block]);
+-    if (block == 0) {
+-      w.uv_nz[mode] = 0;
+-      w.uv_sse[mode] = 0;
+-    }
+-  }
+-  __syncthreads();
+-  if (tid < 4 && p.use_error_diffusion) {
+-    int8_t top_derr[2][2];
+-    int8_t left_derr[2][2];
+-    LoadDiffusionErrors(&v, &p, x, y, top_derr, left_derr);
+-    CorrectDCValuesDev(top_derr, left_derr, &dqm->uv, w.uv_tmp[tid],
+-                       w.uv_derr[tid]);
+-  }
+-  __syncthreads();
+-  if (tid < 32) {
+-    const int mode = tid >> 3;
+-    const int block = tid & 7;
+-    const int nz_bit = CudaQuantizeBlock(w.uv_tmp[mode][block],
+-                                         w.uv_levels_all[mode][block],
+-                                         &dqm->uv);
+-    atomicOr(&w.uv_nz[mode], (uint32_t)nz_bit << block);
+-    const uint8_t* const ref =
+-        w.yuv_p + kCudaVP8UVModeOffsets[mode] + kCudaVP8ScanUV[block];
+-    // ScanUV offsets are relative to the U origin (columns 0..15 hold U|V).
+-    CudaITransformOne(ref, w.uv_tmp[mode][block],
+-                      w.uv_out[mode] + kCudaVP8ScanUV[block]);
+-  }
+-  __syncthreads();
+-  if (tid < 32) {
+-    const int mode = tid >> 3;
+-    const int block = tid & 7;
+-    const uint8_t* const src =
+-        w.yuv_in + kCudaUOffEnc + kCudaVP8ScanUV[block];
+-    const uint8_t* const rec = w.uv_out[mode] + kCudaVP8ScanUV[block];
+-    atomicAdd((unsigned long long*)&w.uv_sse[mode],
+-              (unsigned long long)CudaSSE4x4(src, rec));
+-  }
+-  __syncthreads();
++  // ---- Phase 4: chroma numeric work completed alongside intra16 above.
+   PHASE_TS(5);
+ 
+-  // ---- Phase 5: chroma selection (PickBestUV). Cost walks run one mode per
+-  // warp; thread 0 replays the CPU comparison order on precomputed values.
+-  __shared__ long long uv_R[4];
+-  if (tid < 4 * 32) {  // one mode per warp; 16 lanes cooperate per block
+-    const int mode = tid >> 5;
+-    const int lane = tid & 31;
+-    NzContext c = w.nz_ctx;
+-    long long R = 0;
+-    int nz_bit;
+-    for (int ch = 0; ch <= 2; ch += 2) {
+-      for (int by = 0; by < 2; ++by) {
+-        for (int bx = 0; bx < 2; ++bx) {
+-          const int b = ch * 2 + bx + by * 2;
+-          const int ctx = c.top_nz[4 + ch + bx] + c.left_nz[4 + ch + by];
+-          const int16_t* const lv = w.uv_levels_all[mode][b];
+-          R += ResidualCostCoop16(&cc, ctx, 0, 2, lv, lane, &nz_bit);
+-          c.top_nz[4 + ch + bx] = c.left_nz[4 + ch + by] = nz_bit;
+-        }
+-      }
+-    }
+-    if (lane == 0) {
+-      if (mode > 0 &&
+-          CudaIsFlat(w.uv_levels_all[mode][0], 8, kFlatnessLimitUV)) {
+-        R += kFlatnessPenalty * 8;
+-      }
+-      uv_R[mode] = R;
+-    }
+-  }
+-  __syncthreads();
++  // ---- Phase 5: integrate the already-selected chroma winner.
+   if (tid == 0) {
+-    ModeScore rd_best;
+-    int best_mode = -1;
+-    InitScoreDev(&rd_best);
+-    for (int mode = 0; mode < kNumPredModes; ++mode) {
+-      ModeScore rd_uv;
+-      rd_uv.nz = w.uv_nz[mode] << 16;
+-      rd_uv.D = w.uv_sse[mode];
+-      rd_uv.SD = 0;
+-      rd_uv.H = v.tables->fixed_costs_uv[mode];
+-      rd_uv.R = uv_R[mode];
+-      SetRDScoreDev(dqm->lambda_uv, &rd_uv);
+-      if (mode == 0 || rd_uv.score < rd_best.score) {
+-        CopyScoreDev(&rd_best, &rd_uv);
+-        best_mode = mode;
+-      }
+-    }
+-    w.rd.mode_uv = (uint8_t)best_mode;
+-    if (p.use_error_diffusion) {
+-      for (int ch = 0; ch < 2; ++ch) {
+-        for (int k = 0; k < 3; ++k) {
+-          w.rd.derr[ch][k] = w.uv_derr[best_mode][ch][k];
+-        }
+-      }
+-    } else {
++    if (!p.use_error_diffusion) {
+       for (int ch = 0; ch < 2; ++ch) {
+         for (int k = 0; k < 3; ++k) w.rd.derr[ch][k] = 0;
+       }
+     }
+-    // AddScore(rd, rd_best) for the totals the token loop consumes.
+-    w.rd.nz |= rd_best.nz;
+-    w.rd_D += rd_best.D;
+-    w.rd_H += rd_best.H;
++    w.rd.nz |= uv_best_nz;
++    w.rd_D += uv_best_D;
++    w.rd_H += uv_best_H;
++    w.rd_R += uv_best_R;
+     w.rd.distortion = (uint32_t)w.rd_D;
+     w.rd.header_bits = (uint32_t)w.rd_H;
+   }
+   __syncthreads();
+-  // Chroma winner copies in parallel (selection published w.rd.mode_uv).
+-  {
+-    const int m = w.rd.mode_uv;
+-    for (int i = tid; i < 8 * 16; i += (int)blockDim.x) {
+-      w.rd.uv_levels[i >> 4][i & 15] = w.uv_levels_all[m][i >> 4][i & 15];
+-    }
+-    for (int i = tid; i < 8 * 16; i += (int)blockDim.x) {
+-      const int r = i >> 4, cx = i & 15;
+-      w.yuv_out[kCudaUOffEnc + r * kCudaBPS + cx] =
+-          w.uv_out[m][r * kCudaBPS + cx];
+-    }
+-  }
+-  __syncthreads();
+   if (tid == 0 && p.rd_opt_level == kRDTrellis) {
+     ApplySelectedModeTrellis(&p, &cc, dqm, &w);
+   }
+

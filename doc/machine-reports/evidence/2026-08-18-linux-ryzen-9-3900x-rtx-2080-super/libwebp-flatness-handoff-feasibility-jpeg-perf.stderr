@@ -1,0 +1,2 @@
+[ perf record: Woken up 529 times to write data ]
+[ perf record: Captured and wrote 141.580 MB /tmp/libwebp-next-stage-50ed9f7d/jpeg-perf.data (17795 samples) ]

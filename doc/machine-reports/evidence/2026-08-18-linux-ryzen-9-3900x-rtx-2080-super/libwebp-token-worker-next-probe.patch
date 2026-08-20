@@ -1,0 +1,62 @@
+diff --git a/src/enc/frame_enc.c b/src/enc/frame_enc.c
+index 3d9a97dc..4286bd6d 100644
+--- a/src/enc/frame_enc.c
++++ b/src/enc/frame_enc.c
+@@ -1194,6 +1194,14 @@ static int EmitTokenPartitions(VP8Encoder* const enc) {
+   int started = 0;
+   int ok = 1;
+   int use_threads = (num_parts > 1);
++  const int profile = getenv("WEBP_TOKEN_EMIT_PROFILE") != NULL &&
++                      !strcmp(getenv("WEBP_TOKEN_EMIT_PROFILE"), "1");
++  uint64_t phase_start;
++  uint64_t setup_ns = 0;
++  uint64_t main_ns = 0;
++  uint64_t serial_ns = 0;
++  uint64_t sync_ns = 0;
++  uint64_t end_ns = 0;
+   int p;
+   {
+     const char* const env = getenv("WEBP_TOKEN_EMIT_THREADS");
+@@ -1204,6 +1212,7 @@ static int EmitTokenPartitions(VP8Encoder* const enc) {
+     jobs[p].bw = enc->parts + p;
+     jobs[p].probas = probas;
+   }
++  phase_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS);
+   if (use_threads) {
+     for (p = 1; p < num_parts; ++p) {
+       WebPWorker* const worker = &workers[p];
+@@ -1219,13 +1228,34 @@ static int EmitTokenPartitions(VP8Encoder* const enc) {
+       ++started;
+     }
+   }
++  setup_ns = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS) -
++             phase_start;
++  phase_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS);
+   ok &= TokenEmitJobHook(&jobs[0], NULL);
++  main_ns = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS) -
++            phase_start;
++  phase_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS);
+   for (p = 1 + started; p < num_parts; ++p) {
+     ok &= TokenEmitJobHook(&jobs[p], NULL);
+   }
++  serial_ns = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS) -
++              phase_start;
+   for (p = 1; p <= started; ++p) {
++    phase_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS);
+     ok &= worker_interface->Sync(&workers[p]);
++    sync_ns += WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS) -
++               phase_start;
++    phase_start = WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS);
+     worker_interface->End(&workers[p]);
++    end_ns += WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS) -
++              phase_start;
++  }
++  if (profile) {
++    fprintf(stderr,
++            "token emit phases: setup %.3f main %.3f serial %.3f "
++            "sync %.3f end %.3f ms\n",
++            setup_ns / 1e6, main_ns / 1e6, serial_ns / 1e6,
++            sync_ns / 1e6, end_ns / 1e6);
+   }
+   return ok;
+ }

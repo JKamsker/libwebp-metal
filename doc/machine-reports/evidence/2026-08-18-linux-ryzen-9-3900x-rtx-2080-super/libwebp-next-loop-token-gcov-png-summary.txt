@@ -1,0 +1,14 @@
+File '/home/jonas/priv/repos/libwebp-metal/src/utils/bit_writer_utils.c'
+Lines executed:64.96% of 234
+Branches executed:75.56% of 90
+Taken at least once:67.78% of 90
+Calls executed:60.87% of 23
+Creating 'bit_writer_utils.c.gcov'
+
+File '/usr/include/x86_64-linux-gnu/bits/string_fortified.h'
+Lines executed:100.00% of 4
+No branches
+Calls executed:0.00% of 1
+Creating 'string_fortified.h.gcov'
+
+Lines executed:65.55% of 238

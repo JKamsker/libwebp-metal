@@ -1,0 +1,32 @@
+Experiment: fused RGB/import plus exact lossy-analysis default-policy screen
+Base: 6f99fc9ae9b99f9426dbe6b45f26163ea995c962
+Hardware: Ryzen 9 3900X / RTX 2080 SUPER
+Build: Release, CMAKE_CUDA_ARCHITECTURES=native
+
+Profile basis:
+- Retained CPU lossy analysis cost 9.662--11.644 ms on medium inputs.
+- Ordinary exact CUDA analysis reduced the isolated stage to 1.002--1.043 ms
+  but its preceding automatic-policy experiment was end-to-end noise.
+- The distinct fused path queues RGB conversion and exact analysis on one
+  stream with one completion boundary and consumes identity-matched results.
+
+Protocol correction:
+- Two order-reversed fresh processes per labeled cell were recorded, with one
+  warmup and three retained 24-image samples per process.
+- Every command used --force-cuda. ConfigureDispatch() overwrote both labeled
+  cells with WEBP_CUDA_LOSSY_ANALYSIS=1 and
+  WEBP_CUDA_FUSED_LOSSY_ANALYSIS=1 after process startup.
+- All 24 rows therefore exercised the same retained fused path. They are
+  repeatability evidence, not a valid default/fused comparison.
+
+Every one of the 24 rows retained the exact format hash and byte count. The
+integrated fused implementation's prior correctness gate covers methods
+0/4/6, qualities 25/75/95, odd geometry, identity mismatch, and transactional
+fallback; this screen changed no source or output arithmetic.
+
+Decision:
+Rejected with no source change because fused analysis is already mandatory in
+the forced-CUDA benchmark. The previously reported -0.001/0.146 ms deltas are
+withdrawn. Keep ordinary and fused lossy analysis opt-in outside the benchmark.
+No Turing/Ampere+ decimation threshold, Ampere+ behavior, or cross-hardware
+claim changed.

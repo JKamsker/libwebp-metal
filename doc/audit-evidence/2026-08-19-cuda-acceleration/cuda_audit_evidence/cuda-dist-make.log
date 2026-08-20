@@ -1,0 +1,100 @@
+make  dist-gzip am__post_remove_distdir='@:'
+make[1]: Entering directory '/mnt/data/cuda_dist_test'
+make  distdir-am
+make[2]: Entering directory '/mnt/data/cuda_dist_test'
+if test -d "libwebp-1.6.0"; then find "libwebp-1.6.0" -type d ! -perm -700 -exec chmod u+rwx {} ';' ; rm -rf "libwebp-1.6.0" || { sleep 5 && rm -rf "libwebp-1.6.0"; }; else :; fi
+ (cd sharpyuv && make  top_distdir=../libwebp-1.6.0 distdir=../libwebp-1.6.0/sharpyuv \
+     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
+make[3]: Entering directory '/mnt/data/cuda_dist_test/sharpyuv'
+make  distdir-am
+make[4]: Entering directory '/mnt/data/cuda_dist_test/sharpyuv'
+make[4]: Leaving directory '/mnt/data/cuda_dist_test/sharpyuv'
+make[3]: Leaving directory '/mnt/data/cuda_dist_test/sharpyuv'
+ (cd src && make  top_distdir=../libwebp-1.6.0 distdir=../libwebp-1.6.0/src \
+     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
+make[3]: Entering directory '/mnt/data/cuda_dist_test/src'
+make  distdir-am
+make[4]: Entering directory '/mnt/data/cuda_dist_test/src'
+ (cd dec && make  top_distdir=../../libwebp-1.6.0 distdir=../../libwebp-1.6.0/src/dec \
+     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
+make[5]: Entering directory '/mnt/data/cuda_dist_test/src/dec'
+make  distdir-am
+make[6]: Entering directory '/mnt/data/cuda_dist_test/src/dec'
+make[6]: Leaving directory '/mnt/data/cuda_dist_test/src/dec'
+make[5]: Leaving directory '/mnt/data/cuda_dist_test/src/dec'
+ (cd enc && make  top_distdir=../../libwebp-1.6.0 distdir=../../libwebp-1.6.0/src/enc \
+     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
+make[5]: Entering directory '/mnt/data/cuda_dist_test/src/enc'
+make  distdir-am
+make[6]: Entering directory '/mnt/data/cuda_dist_test/src/enc'
+make[6]: Leaving directory '/mnt/data/cuda_dist_test/src/enc'
+make[5]: Leaving directory '/mnt/data/cuda_dist_test/src/enc'
+ (cd dsp && make  top_distdir=../../libwebp-1.6.0 distdir=../../libwebp-1.6.0/src/dsp \
+     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
+make[5]: Entering directory '/mnt/data/cuda_dist_test/src/dsp'
+make  distdir-am
+make[6]: Entering directory '/mnt/data/cuda_dist_test/src/dsp'
+make[6]: Leaving directory '/mnt/data/cuda_dist_test/src/dsp'
+make[5]: Leaving directory '/mnt/data/cuda_dist_test/src/dsp'
+ (cd utils && make  top_distdir=../../libwebp-1.6.0 distdir=../../libwebp-1.6.0/src/utils \
+     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
+make[5]: Entering directory '/mnt/data/cuda_dist_test/src/utils'
+make  distdir-am
+make[6]: Entering directory '/mnt/data/cuda_dist_test/src/utils'
+make[6]: Leaving directory '/mnt/data/cuda_dist_test/src/utils'
+make[5]: Leaving directory '/mnt/data/cuda_dist_test/src/utils'
+ (cd mux && make  top_distdir=../../libwebp-1.6.0 distdir=../../libwebp-1.6.0/src/mux \
+     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
+make[5]: Entering directory '/mnt/data/cuda_dist_test/src/mux'
+make  distdir-am
+make[6]: Entering directory '/mnt/data/cuda_dist_test/src/mux'
+make[6]: Leaving directory '/mnt/data/cuda_dist_test/src/mux'
+make[5]: Leaving directory '/mnt/data/cuda_dist_test/src/mux'
+ (cd demux && make  top_distdir=../../libwebp-1.6.0 distdir=../../libwebp-1.6.0/src/demux \
+     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
+make[5]: Entering directory '/mnt/data/cuda_dist_test/src/demux'
+make  distdir-am
+make[6]: Entering directory '/mnt/data/cuda_dist_test/src/demux'
+make[6]: Leaving directory '/mnt/data/cuda_dist_test/src/demux'
+make[5]: Leaving directory '/mnt/data/cuda_dist_test/src/demux'
+make[4]: Leaving directory '/mnt/data/cuda_dist_test/src'
+make[3]: Leaving directory '/mnt/data/cuda_dist_test/src'
+ (cd imageio && make  top_distdir=../libwebp-1.6.0 distdir=../libwebp-1.6.0/imageio \
+     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
+make[3]: Entering directory '/mnt/data/cuda_dist_test/imageio'
+make  distdir-am
+make[4]: Entering directory '/mnt/data/cuda_dist_test/imageio'
+make[4]: Leaving directory '/mnt/data/cuda_dist_test/imageio'
+make[3]: Leaving directory '/mnt/data/cuda_dist_test/imageio'
+ (cd man && make  top_distdir=../libwebp-1.6.0 distdir=../libwebp-1.6.0/man \
+     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
+make[3]: Entering directory '/mnt/data/cuda_dist_test/man'
+make  distdir-am
+make[4]: Entering directory '/mnt/data/cuda_dist_test/man'
+make[4]: Leaving directory '/mnt/data/cuda_dist_test/man'
+make[3]: Leaving directory '/mnt/data/cuda_dist_test/man'
+ (cd extras && make  top_distdir=../libwebp-1.6.0 distdir=../libwebp-1.6.0/extras \
+     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
+make[3]: Entering directory '/mnt/data/cuda_dist_test/extras'
+make  distdir-am
+make[4]: Entering directory '/mnt/data/cuda_dist_test/extras'
+make[4]: Leaving directory '/mnt/data/cuda_dist_test/extras'
+make[3]: Leaving directory '/mnt/data/cuda_dist_test/extras'
+ (cd examples && make  top_distdir=../libwebp-1.6.0 distdir=../libwebp-1.6.0/examples \
+     am__remove_distdir=: am__skip_length_check=: am__skip_mode_fix=: distdir)
+make[3]: Entering directory '/mnt/data/cuda_dist_test/examples'
+make  distdir-am
+make[4]: Entering directory '/mnt/data/cuda_dist_test/examples'
+make[4]: Leaving directory '/mnt/data/cuda_dist_test/examples'
+make[3]: Leaving directory '/mnt/data/cuda_dist_test/examples'
+test -n "" \
+|| find "libwebp-1.6.0" -type d ! -perm -755 \
+	-exec chmod u+rwx,go+rx {} \; -o \
+  ! -type d ! -perm -444 -links 1 -exec chmod a+r {} \; -o \
+  ! -type d ! -perm -400 -exec chmod a+r {} \; -o \
+  ! -type d ! -perm -444 -exec /bin/bash /mnt/data/cuda_dist_test/install-sh -c -m a+r {} {} \; \
+|| chmod -R a+r "libwebp-1.6.0"
+make[2]: Leaving directory '/mnt/data/cuda_dist_test'
+tardir=libwebp-1.6.0 && ${TAR-tar} chof - "$tardir" | eval GZIP= gzip -9 -c >libwebp-1.6.0.tar.gz
+make[1]: Leaving directory '/mnt/data/cuda_dist_test'
+if test -d "libwebp-1.6.0"; then find "libwebp-1.6.0" -type d ! -perm -700 -exec chmod u+rwx {} ';' ; rm -rf "libwebp-1.6.0" || { sleep 5 && rm -rf "libwebp-1.6.0"; }; else :; fi

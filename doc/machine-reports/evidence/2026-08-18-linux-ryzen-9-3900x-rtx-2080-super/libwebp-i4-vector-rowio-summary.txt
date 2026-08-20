@@ -1,0 +1,19 @@
+Candidate: pre-Ampere vectorized four-byte I4 transform row I/O
+Status: rejected and removed
+Hardware: Ryzen 9 3900X / RTX 2080 SUPER
+Build: Release, CMAKE_CUDA_ARCHITECTURES=native
+Benchmark: lossy method 4 quality 75, six-image small/medium corpus,
+           batch size 24, one discarded warmup, three retained samples,
+           two order-reversed process pairs per format
+
+Format  Parent median  Candidate median  Gain ms/image  Hash              Bytes
+PNG         39.500564         39.400057       0.100508  99f33682e7cc9063  6441688
+JPEG        39.921735         39.532737       0.388997  1b9eceb1d93cad23  6400792
+
+The candidate replaced aligned scalar source/prediction loads and inverse-row
+stores in the four-lane I4 transform with uchar4 I/O on pre-Ampere only.
+Ampere+ retained the original path. The native sm_75 kernel kept identical
+register, stack, and shared-memory resources, but vector byte extraction and
+packing made static SASS eight instructions longer. The focused exact suite
+and all 24 timing outputs matched. Neither format reached the strict 1.5
+ms/image threshold, so the source was restored.

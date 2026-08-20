@@ -1,0 +1,4 @@
+[1/4] Building C object CMakeFiles/webpencode.dir/src/enc/frame_enc.c.o
+[2/4] Building C object CMakeFiles/webpencode.dir/src/enc/quant_enc.c.o
+[3/4] Linking C static library libwebp.a
+[4/4] Linking C executable cwebp

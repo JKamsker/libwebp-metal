@@ -1,0 +1,49 @@
+{
+  "schema": "libwebp-i4-i16-spec-screen-summary-v1",
+  "rows": 24,
+  "all_exact": true,
+  "formats": [
+    {
+      "format": "png",
+      "control_pooled_median_ms": 36.0395205835,
+      "candidate_pooled_median_ms": 33.861209353999996,
+      "control_mean_ms": 35.9132085485,
+      "candidate_mean_ms": 33.842121416666664,
+      "pairs": [
+        {
+          "pair": "pair0",
+          "control_median_ms": 35.73119320799999,
+          "candidate_median_ms": 33.85627225,
+          "gain_ms": 1.87492095799999
+        },
+        {
+          "pair": "pair1",
+          "control_median_ms": 36.06033725,
+          "candidate_median_ms": 34.242442042,
+          "gain_ms": 1.817895208000003
+        }
+      ]
+    },
+    {
+      "format": "jpeg",
+      "control_pooled_median_ms": 35.0128496665,
+      "candidate_pooled_median_ms": 34.2294278125,
+      "control_mean_ms": 35.218883757,
+      "candidate_mean_ms": 34.23893972916667,
+      "pairs": [
+        {
+          "pair": "pair0",
+          "control_median_ms": 35.146966958,
+          "candidate_median_ms": 34.196734082999996,
+          "gain_ms": 0.9502328750000046
+        },
+        {
+          "pair": "pair1",
+          "control_median_ms": 34.878732375,
+          "candidate_median_ms": 34.324153167000006,
+          "gain_ms": 0.5545792079999927
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,10 @@
+stage	median_ms_per_image
+total	28.430612833333335
+lossy_import	1.3724856666666667
+lossy_encode_loop	24.749773333333334
+lossy_decimate	18.92692316666667
+lossy_record_tokens	0.107373625
+lossy_write	2.1849005416666665
+lossy_iter_import	0.38449770833333335
+lossy_side_info	0.122390875
+lossy_emit_tokens	3.933708

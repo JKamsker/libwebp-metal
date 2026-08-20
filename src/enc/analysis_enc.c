@@ -17,6 +17,7 @@
 
 #include "src/dec/common_dec.h"
 #include "src/dsp/dsp.h"
+#include "src/enc/accelerator_enc.h"
 #include "src/enc/vp8i_enc.h"
 #include "src/utils/thread_utils.h"
 #include "src/utils/utils.h"
@@ -427,6 +428,69 @@ static void InitSegmentJob(VP8Encoder* const enc, SegmentJob* const job,
   job->delta_progress = (start_row == 0) ? 20 : 0;
 }
 
+// Returns 1 after committing a complete accelerated result, 0 when the
+// accelerator declines, and -1 when the progress hook cancels after success.
+static int TryAcceleratedSegments(VP8Encoder* const enc, int total_mb) {
+  WebPAcceleratorLossyAnalysisResult* results;
+  WebPAcceleratorLossyAnalysisRequest request;
+  WebPAcceleratorResult accelerated;
+  int alphas[MAX_ALPHA + 1] = {0};
+  uint64_t alpha_sum = 0;
+  uint64_t uv_alpha_sum = 0;
+  VP8EncIterator it;
+  int n;
+  if (!WebPAcceleratorLossyAnalysisEnabled()) return 0;
+  results = (WebPAcceleratorLossyAnalysisResult*)WebPSafeMalloc(
+      total_mb, sizeof(*results));
+  if (results == NULL) return 0;
+  request.y = enc->pic->y;
+  request.u = enc->pic->u;
+  request.v = enc->pic->v;
+  request.y_stride = enc->pic->y_stride;
+  request.uv_stride = enc->pic->uv_stride;
+  request.width = enc->pic->width;
+  request.height = enc->pic->height;
+  request.method = enc->method;
+  request.quality = (int)enc->config->quality;
+  request.results = results;
+  accelerated = WebPAccelerateLossyAnalysis(&request);
+  if (accelerated != WEBP_ACCELERATOR_SUCCESS) {
+    WebPSafeFree(results);
+    return 0;
+  }
+  for (n = 0; n < total_mb; ++n) {
+    if (results[n].type > 1 || results[n].y_mode >= MAX_INTRA16_MODE ||
+        results[n].uv_mode >= MAX_UV_MODE) {
+      WebPSafeFree(results);
+      return 0;
+    }
+  }
+
+  VP8IteratorInit(enc, &it);
+  for (n = 0; n < total_mb; ++n) {
+    const WebPAcceleratorLossyAnalysisResult* const result = &results[n];
+    DefaultMBInfo(it.mb);
+    if (result->type == 1) {
+      VP8SetIntra16Mode(&it, result->y_mode);
+    } else {
+      const uint8_t modes[16] = {0};
+      VP8SetIntra4Mode(&it, modes);
+    }
+    VP8SetIntraUVMode(&it, result->uv_mode);
+    it.mb->alpha = result->alpha;
+    ++alphas[result->alpha];
+    alpha_sum += result->alpha;
+    uv_alpha_sum += result->uv_alpha;
+    if (n + 1 < total_mb) VP8IteratorNext(&it);
+  }
+  enc->alpha = (int)(alpha_sum / (uint64_t)total_mb);
+  enc->uv_alpha = (int)(uv_alpha_sum / (uint64_t)total_mb);
+  AssignSegments(enc, alphas);
+  WebPSafeFree(results);
+  return WebPReportProgress(enc->pic, enc->percent + 20, &enc->percent) ? 1
+                                                                       : -1;
+}
+
 // main entry point
 int VP8EncAnalyze(VP8Encoder* const enc) {
   int ok = 1;
@@ -437,48 +501,53 @@ int VP8EncAnalyze(VP8Encoder* const enc) {
   if (do_segments) {
     const int last_row = enc->mb_h;
     const int total_mb = last_row * enc->mb_w;
+    const int accelerated = TryAcceleratedSegments(enc, total_mb);
+    if (accelerated != 0) {
+      ok = accelerated > 0;
+    } else {
 #ifdef WEBP_USE_THREAD
-    // We give a little more than a half work to the main thread.
-    const int split_row = (9 * last_row + 15) >> 4;
-    const int kMinSplitRow = 2;  // minimal rows needed for mt to be worth it
-    const int do_mt = (enc->thread_level > 0) && (split_row >= kMinSplitRow);
+      // We give a little more than a half work to the main thread.
+      const int split_row = (9 * last_row + 15) >> 4;
+      const int kMinSplitRow = 2;  // minimal rows needed for mt to be worth it
+      const int do_mt = (enc->thread_level > 0) && (split_row >= kMinSplitRow);
 #else
-    const int do_mt = 0;
+      const int do_mt = 0;
 #endif
-    const WebPWorkerInterface* const worker_interface =
-        WebPGetWorkerInterface();
-    SegmentJob main_job;
-    if (do_mt) {
+      const WebPWorkerInterface* const worker_interface =
+          WebPGetWorkerInterface();
+      SegmentJob main_job;
+      if (do_mt) {
 #ifdef WEBP_USE_THREAD
-      SegmentJob side_job;
-      // Note the use of '&' instead of '&&' because we must call the functions
-      // no matter what.
-      InitSegmentJob(enc, &main_job, 0, split_row);
-      InitSegmentJob(enc, &side_job, split_row, last_row);
-      // we don't need to call Reset() on main_job.worker, since we're calling
-      // WebPWorkerExecute() on it
-      ok &= worker_interface->Reset(&side_job.worker);
-      // launch the two jobs in parallel
-      if (ok) {
-        worker_interface->Launch(&side_job.worker);
+        SegmentJob side_job;
+        // Note the use of '&' instead of '&&' because we must call the
+        // functions no matter what.
+        InitSegmentJob(enc, &main_job, 0, split_row);
+        InitSegmentJob(enc, &side_job, split_row, last_row);
+        // we don't need to call Reset() on main_job.worker, since we're
+        // calling WebPWorkerExecute() on it
+        ok &= worker_interface->Reset(&side_job.worker);
+        // launch the two jobs in parallel
+        if (ok) {
+          worker_interface->Launch(&side_job.worker);
+          worker_interface->Execute(&main_job.worker);
+          ok &= worker_interface->Sync(&side_job.worker);
+          ok &= worker_interface->Sync(&main_job.worker);
+        }
+        worker_interface->End(&side_job.worker);
+        if (ok) MergeJobs(&side_job, &main_job);  // merge results together
+#endif                                          // WEBP_USE_THREAD
+      } else {
+        // Even for single-thread case, we use the generic Worker tools.
+        InitSegmentJob(enc, &main_job, 0, last_row);
         worker_interface->Execute(&main_job.worker);
-        ok &= worker_interface->Sync(&side_job.worker);
         ok &= worker_interface->Sync(&main_job.worker);
       }
-      worker_interface->End(&side_job.worker);
-      if (ok) MergeJobs(&side_job, &main_job);  // merge results together
-#endif                                          // WEBP_USE_THREAD
-    } else {
-      // Even for single-thread case, we use the generic Worker tools.
-      InitSegmentJob(enc, &main_job, 0, last_row);
-      worker_interface->Execute(&main_job.worker);
-      ok &= worker_interface->Sync(&main_job.worker);
-    }
-    worker_interface->End(&main_job.worker);
-    if (ok) {
-      enc->alpha = main_job.alpha / total_mb;
-      enc->uv_alpha = main_job.uv_alpha / total_mb;
-      AssignSegments(enc, main_job.alphas);
+      worker_interface->End(&main_job.worker);
+      if (ok) {
+        enc->alpha = main_job.alpha / total_mb;
+        enc->uv_alpha = main_job.uv_alpha / total_mb;
+        AssignSegments(enc, main_job.alphas);
+      }
     }
   } else {  // Use only one default segment.
     ResetAllMBInfo(enc);

@@ -1,0 +1,2 @@
+838bdfa396f790a777dd34ded089a3cf2e370ee801c885078f4d84b3cfe2055d  /tmp/libwebp-hash-pair-baseline
+bb34e1d73a05042c31c519548d0f3ca1cadd742e3674047295165c594c330bba  /tmp/libwebp-hash-link-prefetch-candidate

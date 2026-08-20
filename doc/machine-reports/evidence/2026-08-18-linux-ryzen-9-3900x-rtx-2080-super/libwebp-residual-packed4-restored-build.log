@@ -1,0 +1,67 @@
+[  5%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 11%] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+[ 35%] Built target webpdspdecode
+[ 71%] Built target webpdsp
+[ 76%] Built target webpdecode
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(502): warning #177-D: function "<unnamed>::AddScoreDev" was declared but never referenced
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(687): warning #177-D: function "<unnamed>::ImportMB" was declared but never referenced
+
+[ 90%] Built target webpencode
+[ 90%] Linking CUDA static library libwebp.a
+[ 90%] Built target webp
+[ 92%] Built target imageioutil
+[ 93%] Built target webpdemux
+[ 98%] Built target imagedec
+[100%] Linking CUDA executable webp_cuda_batch_benchmark
+[100%] Built target webp_cuda_batch_benchmark
+[  5%] Built target sharpyuv
+[ 12%] Built target webputils
+[ 38%] Built target webpdspdecode
+[ 78%] Built target webpdsp
+[ 94%] Built target webpencode
+[100%] Built target webpdecode
+[100%] Built target webp
+[100%] Linking CUDA executable lossy_decimate_conformance
+[100%] Built target lossy_decimate_conformance
+[100%] Built target bit_writer_utils_test
+[100%] Built target accelerator_enc_test
+[  5%] Built target sharpyuv
+[ 12%] Built target webputils
+[ 28%] Built target webpencode
+[ 53%] Built target webpdspdecode
+[ 92%] Built target webpdsp
+[ 98%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Linking CUDA executable cuda_concurrency_test
+[100%] Built target cuda_concurrency_test
+[  7%] Built target webputils
+[ 12%] Built target sharpyuv
+[ 28%] Built target webpencode
+[ 53%] Built target webpdspdecode
+[ 92%] Built target webpdsp
+[ 98%] Built target webpdecode
+[ 98%] Built target webp
+[100%] Linking CUDA executable cuda_histogram_test
+[100%] Built target cuda_histogram_test
+[  5%] Built target sharpyuv
+[ 12%] Built target webputils
+[ 28%] Built target webpencode
+[ 53%] Built target webpdspdecode
+[ 92%] Built target webpdsp
+[ 98%] Built target webpdecode
+[ 98%] Built target webp
+[ 98%] Linking CUDA executable cuda_trellis_test
+[100%] Built target cuda_trellis_test
+[  7%] Built target webputils
+[ 12%] Built target sharpyuv
+[ 28%] Built target webpencode
+[ 54%] Built target webpdspdecode
+[ 94%] Built target webpdsp
+[100%] Built target webpdecode
+[100%] Built target webp
+[100%] Linking CUDA executable cuda_near_lossless_test
+[100%] Built target cuda_near_lossless_test

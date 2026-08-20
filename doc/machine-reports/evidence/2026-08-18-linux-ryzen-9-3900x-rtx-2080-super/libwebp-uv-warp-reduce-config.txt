@@ -1,0 +1,8 @@
+CMAKE_BUILD_TYPE=Release
+CMAKE_CUDA_ARCHITECTURES=native
+WEBP_ENABLE_CUDA=ON
+source_parent=3238df6c
+candidate_toggle=WEBP_CUDA_UV_WARP_REDUCE
+candidate_scope=pre-Ampere only; Ampere+ retains atomics
+benchmark=forced CUDA lossy, batch 24, method 4, quality 75, one warmup, three samples
+pair_orders=png:P-C,C-P;jpeg:C-P,P-C

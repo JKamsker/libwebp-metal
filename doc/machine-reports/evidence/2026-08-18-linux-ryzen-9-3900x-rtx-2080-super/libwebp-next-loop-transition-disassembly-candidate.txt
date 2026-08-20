@@ -1,0 +1,207 @@
+
+build-cuda-token-transition/webp_cuda_batch_benchmark:     file format elf64-x86-64
+
+
+Disassembly of section .init:
+
+Disassembly of section .plt:
+
+Disassembly of section .plt.got:
+
+Disassembly of section .text:
+
+000000000009ca20 <VP8PutTokenPage>:
+   9ca20:	f3 0f 1e fa          	endbr64
+   9ca24:	41 57                	push   %r15
+   9ca26:	49 89 fb             	mov    %rdi,%r11
+   9ca29:	89 d0                	mov    %edx,%eax
+   9ca2b:	41 89 c9             	mov    %ecx,%r9d
+   9ca2e:	41 56                	push   %r14
+   9ca30:	41 55                	push   %r13
+   9ca32:	41 54                	push   %r12
+   9ca34:	55                   	push   %rbp
+   9ca35:	53                   	push   %rbx
+   9ca36:	48 83 ec 38          	sub    $0x38,%rsp
+   9ca3a:	44 8b 6f 0c          	mov    0xc(%rdi),%r13d
+   9ca3e:	8b 57 08             	mov    0x8(%rdi),%edx
+   9ca41:	f3 0f 6f 07          	movdqu (%rdi),%xmm0
+   9ca45:	8b 6f 04             	mov    0x4(%rdi),%ebp
+   9ca48:	4c 89 04 24          	mov    %r8,(%rsp)
+   9ca4c:	48 8b 7f 10          	mov    0x10(%rdi),%rdi
+   9ca50:	4d 8b 7b 18          	mov    0x18(%r11),%r15
+   9ca54:	4d 8b 43 20          	mov    0x20(%r11),%r8
+   9ca58:	48 89 7c 24 08       	mov    %rdi,0x8(%rsp)
+   9ca5d:	39 c8                	cmp    %ecx,%eax
+   9ca5f:	0f 8e a6 01 00 00    	jle    9cc0b <VP8PutTokenPage+0x1eb>
+   9ca65:	8d 48 ff             	lea    -0x1(%rax),%ecx
+   9ca68:	44 29 c8             	sub    %r9d,%eax
+   9ca6b:	66 0f 7e c3          	movd   %xmm0,%ebx
+   9ca6f:	48 63 c9             	movslq %ecx,%rcx
+   9ca72:	83 e8 01             	sub    $0x1,%eax
+   9ca75:	4c 8d 0d e4 3f 15 00 	lea    0x153fe4(%rip),%r9        # 1f0a60 <kTokenTransitions>
+   9ca7c:	48 01 c9             	add    %rcx,%rcx
+   9ca7f:	48 01 c0             	add    %rax,%rax
+   9ca82:	4c 8d 74 0e fe       	lea    -0x2(%rsi,%rcx,1),%r14
+   9ca87:	4c 8d 24 0e          	lea    (%rsi,%rcx,1),%r12
+   9ca8b:	49 29 c6             	sub    %rax,%r14
+   9ca8e:	4c 89 d8             	mov    %r11,%rax
+   9ca91:	4d 89 fb             	mov    %r15,%r11
+   9ca94:	4d 89 f7             	mov    %r14,%r15
+   9ca97:	49 89 c6             	mov    %rax,%r14
+   9ca9a:	eb 47                	jmp    9cae3 <VP8PutTokenPage+0xc3>
+   9ca9c:	0f 1f 40 00          	nopl   0x0(%rax)
+   9caa0:	0f b6 c0             	movzbl %al,%eax
+   9caa3:	83 eb 7f             	sub    $0x7f,%ebx
+   9caa6:	c1 e3 08             	shl    $0x8,%ebx
+   9caa9:	01 c3                	add    %eax,%ebx
+   9caab:	8d 04 59             	lea    (%rcx,%rbx,2),%eax
+   9caae:	48 98                	cltq
+   9cab0:	41 8b 1c 81          	mov    (%r9,%rax,4),%ebx
+   9cab4:	89 d9                	mov    %ebx,%ecx
+   9cab6:	89 d8                	mov    %ebx,%eax
+   9cab8:	0f b6 db             	movzbl %bl,%ebx
+   9cabb:	c1 e9 08             	shr    $0x8,%ecx
+   9cabe:	c1 e8 10             	shr    $0x10,%eax
+   9cac1:	83 e1 07             	and    $0x7,%ecx
+   9cac4:	01 e8                	add    %ebp,%eax
+   9cac6:	d3 e0                	shl    %cl,%eax
+   9cac8:	41 01 cd             	add    %ecx,%r13d
+   9cacb:	89 c5                	mov    %eax,%ebp
+   9cacd:	85 c9                	test   %ecx,%ecx
+   9cacf:	74 05                	je     9cad6 <VP8PutTokenPage+0xb6>
+   9cad1:	45 85 ed             	test   %r13d,%r13d
+   9cad4:	7f 32                	jg     9cb08 <VP8PutTokenPage+0xe8>
+   9cad6:	49 83 ec 02          	sub    $0x2,%r12
+   9cada:	4d 39 e7             	cmp    %r12,%r15
+   9cadd:	0f 84 05 01 00 00    	je     9cbe8 <VP8PutTokenPage+0x1c8>
+   9cae3:	41 0f b7 04 24       	movzwl (%r12),%eax
+   9cae8:	89 c1                	mov    %eax,%ecx
+   9caea:	66 c1 e9 0f          	shr    $0xf,%cx
+   9caee:	0f b7 c9             	movzwl %cx,%ecx
+   9caf1:	f6 c4 40             	test   $0x40,%ah
+   9caf4:	75 aa                	jne    9caa0 <VP8PutTokenPage+0x80>
+   9caf6:	48 8b 3c 24          	mov    (%rsp),%rdi
+   9cafa:	25 ff 3f 00 00       	and    $0x3fff,%eax
+   9caff:	0f b6 04 07          	movzbl (%rdi,%rax,1),%eax
+   9cb03:	eb 9e                	jmp    9caa3 <VP8PutTokenPage+0x83>
+   9cb05:	0f 1f 00             	nopl   (%rax)
+   9cb08:	41 89 c2             	mov    %eax,%r10d
+   9cb0b:	41 8d 4d 08          	lea    0x8(%r13),%ecx
+   9cb0f:	41 d3 fa             	sar    %cl,%r10d
+   9cb12:	41 0f b6 c2          	movzbl %r10b,%eax
+   9cb16:	3d ff 00 00 00       	cmp    $0xff,%eax
+   9cb1b:	0f 84 07 01 00 00    	je     9cc28 <VP8PutTokenPage+0x208>
+   9cb21:	4d 39 d8             	cmp    %r11,%r8
+   9cb24:	72 5a                	jb     9cb80 <VP8PutTokenPage+0x160>
+   9cb26:	4c 89 c6             	mov    %r8,%rsi
+   9cb29:	48 63 c2             	movslq %edx,%rax
+   9cb2c:	4c 29 de             	sub    %r11,%rsi
+   9cb2f:	48 83 c0 01          	add    $0x1,%rax
+   9cb33:	48 39 c6             	cmp    %rax,%rsi
+   9cb36:	72 48                	jb     9cb80 <VP8PutTokenPage+0x160>
+   9cb38:	44 89 d0             	mov    %r10d,%eax
+   9cb3b:	41 83 ed 08          	sub    $0x8,%r13d
+   9cb3f:	d3 e0                	shl    %cl,%eax
+   9cb41:	29 c5                	sub    %eax,%ebp
+   9cb43:	41 f7 c2 00 01 00 00 	test   $0x100,%r10d
+   9cb4a:	0f 84 f0 00 00 00    	je     9cc40 <VP8PutTokenPage+0x220>
+   9cb50:	4d 85 db             	test   %r11,%r11
+   9cb53:	0f 84 07 01 00 00    	je     9cc60 <VP8PutTokenPage+0x240>
+   9cb59:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+   9cb5e:	42 80 44 18 ff 01    	addb   $0x1,-0x1(%rax,%r11,1)
+   9cb64:	85 d2                	test   %edx,%edx
+   9cb66:	0f 8f 74 01 00 00    	jg     9cce0 <VP8PutTokenPage+0x2c0>
+   9cb6c:	4c 01 d8             	add    %r11,%rax
+   9cb6f:	49 83 c3 01          	add    $0x1,%r11
+   9cb73:	e9 d8 00 00 00       	jmp    9cc50 <VP8PutTokenPage+0x230>
+   9cb78:	0f 1f 84 00 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+   9cb80:	66 0f 6e ca          	movd   %edx,%xmm1
+   9cb84:	66 41 0f 6e d5       	movd   %r13d,%xmm2
+   9cb89:	66 0f 6e dd          	movd   %ebp,%xmm3
+   9cb8d:	4c 89 f7             	mov    %r14,%rdi
+   9cb90:	66 0f 6e c3          	movd   %ebx,%xmm0
+   9cb94:	4d 89 5e 18          	mov    %r11,0x18(%r14)
+   9cb98:	66 0f 62 ca          	punpckldq %xmm2,%xmm1
+   9cb9c:	49 83 ec 02          	sub    $0x2,%r12
+   9cba0:	66 0f 62 c3          	punpckldq %xmm3,%xmm0
+   9cba4:	66 0f 6c c1          	punpcklqdq %xmm1,%xmm0
+   9cba8:	41 0f 11 06          	movups %xmm0,(%r14)
+   9cbac:	e8 6f fc ff ff       	call   9c820 <Flush>
+   9cbb1:	49 8b 46 10          	mov    0x10(%r14),%rax
+   9cbb5:	41 8b 1e             	mov    (%r14),%ebx
+   9cbb8:	4c 8d 0d a1 3e 15 00 	lea    0x153ea1(%rip),%r9        # 1f0a60 <kTokenTransitions>
+   9cbbf:	41 8b 6e 04          	mov    0x4(%r14),%ebp
+   9cbc3:	45 8b 6e 0c          	mov    0xc(%r14),%r13d
+   9cbc7:	41 8b 56 08          	mov    0x8(%r14),%edx
+   9cbcb:	4d 8b 5e 18          	mov    0x18(%r14),%r11
+   9cbcf:	48 89 44 24 08       	mov    %rax,0x8(%rsp)
+   9cbd4:	4d 8b 46 20          	mov    0x20(%r14),%r8
+   9cbd8:	4d 39 e7             	cmp    %r12,%r15
+   9cbdb:	0f 85 02 ff ff ff    	jne    9cae3 <VP8PutTokenPage+0xc3>
+   9cbe1:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+   9cbe8:	66 0f 6e ca          	movd   %edx,%xmm1
+   9cbec:	66 41 0f 6e e5       	movd   %r13d,%xmm4
+   9cbf1:	66 0f 6e c3          	movd   %ebx,%xmm0
+   9cbf5:	4d 89 df             	mov    %r11,%r15
+   9cbf8:	66 0f 6e ed          	movd   %ebp,%xmm5
+   9cbfc:	66 0f 62 cc          	punpckldq %xmm4,%xmm1
+   9cc00:	4d 89 f3             	mov    %r14,%r11
+   9cc03:	66 0f 62 c5          	punpckldq %xmm5,%xmm0
+   9cc07:	66 0f 6c c1          	punpcklqdq %xmm1,%xmm0
+   9cc0b:	4d 89 7b 18          	mov    %r15,0x18(%r11)
+   9cc0f:	41 0f 11 03          	movups %xmm0,(%r11)
+   9cc13:	48 83 c4 38          	add    $0x38,%rsp
+   9cc17:	5b                   	pop    %rbx
+   9cc18:	5d                   	pop    %rbp
+   9cc19:	41 5c                	pop    %r12
+   9cc1b:	41 5d                	pop    %r13
+   9cc1d:	41 5e                	pop    %r14
+   9cc1f:	41 5f                	pop    %r15
+   9cc21:	c3                   	ret
+   9cc22:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+   9cc28:	41 d3 e2             	shl    %cl,%r10d
+   9cc2b:	41 83 ed 08          	sub    $0x8,%r13d
+   9cc2f:	83 c2 01             	add    $0x1,%edx
+   9cc32:	44 29 d5             	sub    %r10d,%ebp
+   9cc35:	e9 9c fe ff ff       	jmp    9cad6 <VP8PutTokenPage+0xb6>
+   9cc3a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+   9cc40:	85 d2                	test   %edx,%edx
+   9cc42:	7f 34                	jg     9cc78 <VP8PutTokenPage+0x258>
+   9cc44:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+   9cc49:	4c 01 d8             	add    %r11,%rax
+   9cc4c:	49 83 c3 01          	add    $0x1,%r11
+   9cc50:	44 88 10             	mov    %r10b,(%rax)
+   9cc53:	e9 7e fe ff ff       	jmp    9cad6 <VP8PutTokenPage+0xb6>
+   9cc58:	0f 1f 84 00 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+   9cc60:	85 d2                	test   %edx,%edx
+   9cc62:	7f 7c                	jg     9cce0 <VP8PutTokenPage+0x2c0>
+   9cc64:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+   9cc69:	41 bb 01 00 00 00    	mov    $0x1,%r11d
+   9cc6f:	eb df                	jmp    9cc50 <VP8PutTokenPage+0x230>
+   9cc71:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+   9cc78:	be ff 00 00 00       	mov    $0xff,%esi
+   9cc7d:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+   9cc82:	8d 4a ff             	lea    -0x1(%rdx),%ecx
+   9cc85:	4c 89 44 24 28       	mov    %r8,0x28(%rsp)
+   9cc8a:	48 8d 51 01          	lea    0x1(%rcx),%rdx
+   9cc8e:	44 89 54 24 24       	mov    %r10d,0x24(%rsp)
+   9cc93:	4a 8d 3c 18          	lea    (%rax,%r11,1),%rdi
+   9cc97:	48 89 4c 24 18       	mov    %rcx,0x18(%rsp)
+   9cc9c:	4c 89 5c 24 10       	mov    %r11,0x10(%rsp)
+   9cca1:	e8 8a 74 f6 ff       	call   4130 <memset@plt>
+   9cca6:	4c 8b 5c 24 10       	mov    0x10(%rsp),%r11
+   9ccab:	48 8b 4c 24 18       	mov    0x18(%rsp),%rcx
+   9ccb0:	31 d2                	xor    %edx,%edx
+   9ccb2:	48 8b 44 24 08       	mov    0x8(%rsp),%rax
+   9ccb7:	4c 8b 44 24 28       	mov    0x28(%rsp),%r8
+   9ccbc:	4c 8d 0d 9d 3d 15 00 	lea    0x153d9d(%rip),%r9        # 1f0a60 <kTokenTransitions>
+   9ccc3:	4d 8d 5c 0b 01       	lea    0x1(%r11,%rcx,1),%r11
+   9ccc8:	44 8b 54 24 24       	mov    0x24(%rsp),%r10d
+   9cccd:	4c 01 d8             	add    %r11,%rax
+   9ccd0:	49 83 c3 01          	add    $0x1,%r11
+   9ccd4:	e9 77 ff ff ff       	jmp    9cc50 <VP8PutTokenPage+0x230>
+   9ccd9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+   9cce0:	31 f6                	xor    %esi,%esi
+   9cce2:	eb 99                	jmp    9cc7d <VP8PutTokenPage+0x25d>
+
+Disassembly of section .fini:

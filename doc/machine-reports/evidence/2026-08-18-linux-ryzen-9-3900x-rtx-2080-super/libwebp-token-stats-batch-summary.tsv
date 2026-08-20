@@ -1,0 +1,3 @@
+format	parent_process_medians_ms	candidate_process_medians_ms	balanced_parent_ms	balanced_candidate_ms	gain_ms	output_hash	output_bytes	decision
+png	42.364640,42.285255	42.340723,42.284654	42.324947	42.312688	0.012259	99f33682e7cc9063	6441688	reject_noise
+jpeg	42.384142,42.367912	42.357059,42.183125	42.376027	42.270092	0.105935	1b9eceb1d93cad23	6400792	reject_noise

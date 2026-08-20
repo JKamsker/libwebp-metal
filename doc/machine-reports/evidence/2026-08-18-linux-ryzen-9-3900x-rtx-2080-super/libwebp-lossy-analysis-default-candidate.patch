@@ -1,0 +1,39 @@
+diff --git a/src/enc/cuda_enc.cu b/src/enc/cuda_enc.cu
+--- a/src/enc/cuda_enc.cu
++++ b/src/enc/cuda_enc.cu
+@@
+ #if defined(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS)
++// Exact lossy analysis had only been measured on Turing. The candidate
++// queried compute capability and enabled the stage automatically only when
++// major < 8; explicit WEBP_CUDA_LOSSY_ANALYSIS retained precedence.
++bool LossyAnalysisEnabledByDefault(const CudaState* state) {
++  int major = state->compute_capability_major;
++  if (major <= 0) {
++    const int device = state->available ? state->device : EnvironmentDevice();
++    if (device < 0 || cudaDeviceGetAttribute(
++                            &major, cudaDevAttrComputeCapabilityMajor,
++                            device) != cudaSuccess) {
++      (void)cudaGetLastError();
++      return false;
++    }
++  }
++  return major < 8;
++}
+@@
++  const char* const enabled_override = getenv("WEBP_CUDA_LOSSY_ANALYSIS");
++  const bool automatic_policy =
++      enabled_override == nullptr || enabled_override[0] == '\0';
+   if (!EnvironmentFlag("WEBP_CUDA", true) ||
+-      !EnvironmentFlag("WEBP_CUDA_LOSSY_ANALYSIS", false)) {
++      !(automatic_policy ? LossyAnalysisEnabledByDefault(state)
++                         : EnvironmentFlag("WEBP_CUDA_LOSSY_ANALYSIS",
++                                           false))) {
+@@
+   if (result_count < EnvironmentSize(
+-                         "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS", 0u)) {
++                         "WEBP_CUDA_LOSSY_ANALYSIS_MIN_MACROBLOCKS",
++                         automatic_policy ? (state->available ? 784u : 12544u)
++                                          : 0u)) {
+
+This exact candidate was applied only for the measured native-sm_75 gate and
+was removed after the end-to-end retention gate failed. It was never pushed.

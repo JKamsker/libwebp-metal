@@ -19,6 +19,7 @@
 #include <string.h>
 
 #include "src/dsp/lossless_common.h"
+#include "src/enc/accelerator_enc.h"
 #include "src/enc/vp8li_enc.h"
 #include "src/utils/utils.h"
 #include "src/webp/encode.h"
@@ -129,6 +130,14 @@ int VP8ApplyNearLossless(const WebPPicture* const picture, int quality,
              xsize * sizeof(*argb_dst));
     }
     return 1;
+  }
+
+  {
+    const WebPAcceleratorNearLosslessRequest request = {
+        picture->argb, stride, xsize, ysize, limit_bits, argb_dst};
+    if (WebPAccelerateNearLossless(&request) == WEBP_ACCELERATOR_SUCCESS) {
+      return 1;
+    }
   }
 
   copy_buffer = (uint32_t*)WebPSafeMalloc(xsize * 3, sizeof(*copy_buffer));

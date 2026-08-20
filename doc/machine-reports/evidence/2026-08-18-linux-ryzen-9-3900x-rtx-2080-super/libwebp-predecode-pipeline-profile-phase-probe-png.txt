@@ -1,0 +1,4 @@
+batch phases: encode-input 50.290 init 0.000 decode 11.671 webp-encode 37.900 picture-free 0.718 hash 0.251 clear 0.000 other 0.000 ms/image
+batch phases: encode-input 39.094 init 0.000 decode 11.650 webp-encode 26.645 picture-free 0.798 hash 0.251 clear 0.000 other 0.000 ms/image
+batch phases: encode-input 39.415 init 0.000 decode 11.710 webp-encode 26.914 picture-free 0.790 hash 0.252 clear 0.000 other 0.000 ms/image
+batch phases: encode-input 39.511 init 0.000 decode 11.854 webp-encode 26.833 picture-free 0.823 hash 0.252 clear 0.000 other 0.000 ms/image

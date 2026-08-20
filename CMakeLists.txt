@@ -13,12 +13,15 @@ else()
 endif()
 
 project(WebP C)
+include(CTest)
 
 # Options for coder / decoder executables.
 if(BUILD_SHARED_LIBS)
   set(WEBP_LINK_STATIC_DEFAULT OFF)
+  set(WEBP_BUILD_SHARED ON)
 else()
   set(WEBP_LINK_STATIC_DEFAULT ON)
+  set(WEBP_BUILD_SHARED OFF)
 endif()
 option(WEBP_LINK_STATIC
        "Link using static libraries. If OFF, use dynamic libraries."
@@ -32,6 +35,9 @@ option(WEBP_ENABLE_SIMD "Enable any SIMD optimization."
        ${WEBP_ENABLE_SIMD_DEFAULT})
 option(WEBP_ENABLE_METAL "Enable Metal encoder acceleration on Apple platforms."
        ${APPLE})
+option(WEBP_ENABLE_CUDA "Enable CUDA encoder acceleration." OFF)
+option(WEBP_ENABLE_FPGA_EXPERIMENTAL
+       "Enable the dependency-free experimental FPGA decline skeleton." OFF)
 option(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT
        "Build the internal encoder stage profiling experiment." OFF)
 option(WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT
@@ -40,6 +46,17 @@ option(WEBP_BUILD_METAL_BATCH_EXPERIMENT
        "Build non-installed Metal lifecycle/batching experiment tools." OFF)
 option(WEBP_BUILD_METAL_ABLATION_EXPERIMENT
        "Build the non-installed Metal ablation benchmark tool." OFF)
+option(WEBP_BUILD_CUDA_BENCHMARK
+       "Build non-installed CUDA benchmark and concurrency tools." OFF)
+option(WEBP_BUILD_CUDA_TRANSCODER
+       "Build private CUDA transcoder policy tests and optional tools." OFF)
+option(WEBP_ENABLE_NVDEC
+       "Build the NVDEC WebP transcoder (requires Video Codec SDK headers)."
+       OFF)
+option(WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS
+       "Build the non-installed CUDA acceleration experiment lab." OFF)
+option(WEBP_BUILD_DECIMATE_CONFORMANCE
+       "Build portable lossy-decimate fixture and conformance tools." OFF)
 option(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT
        "Build the opt-in experimental Metal predictor-residual stage." OFF)
 option(WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT
@@ -173,6 +190,28 @@ set_property(CACHE WEBP_BITTRACE PROPERTY STRINGS 0 1 2)
 option(WEBP_ENABLE_WUNUSED_RESULT "Add [[nodiscard]] to some functions. \
        CMake must be at least 3.21 to force C23" OFF)
 
+if(BUILD_TESTING)
+  add_executable(bit_writer_utils_test tests/bit_writer_utils_test.c
+                                       src/utils/bit_writer_utils.c)
+  target_include_directories(bit_writer_utils_test
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                                     ${CMAKE_CURRENT_BINARY_DIR}/src
+                                     ${CMAKE_CURRENT_SOURCE_DIR})
+  add_test(NAME bit_writer_utils_test COMMAND bit_writer_utils_test)
+  add_executable(accelerator_enc_test tests/accelerator_enc_test.c
+                                      src/enc/accelerator_enc.c)
+  target_compile_definitions(accelerator_enc_test
+                             PRIVATE WEBP_ACCELERATOR_TESTING=1)
+  target_include_directories(accelerator_enc_test
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
+                                     ${CMAKE_CURRENT_BINARY_DIR}/src
+                                     ${CMAKE_CURRENT_SOURCE_DIR})
+  add_test(NAME accelerator_enc_auto COMMAND accelerator_enc_test)
+  add_test(NAME accelerator_enc_cpu COMMAND accelerator_enc_test)
+  set_tests_properties(accelerator_enc_cpu
+                       PROPERTIES ENVIRONMENT "WEBP_ACCELERATOR=none")
+endif()
+
 if(WEBP_ENABLE_METAL)
   if(NOT APPLE)
     message(FATAL_ERROR "WEBP_ENABLE_METAL is only supported on Apple platforms.")
@@ -191,11 +230,94 @@ if(WEBP_ENABLE_METAL)
   set(CMAKE_OBJCXX_VISIBILITY_PRESET hidden)
   set(METAL_LIBS "-framework Foundation -framework Metal -lc++")
 endif()
+if(WEBP_ENABLE_CUDA)
+  if(CMAKE_VERSION VERSION_LESS 3.17)
+    message(FATAL_ERROR "WEBP_ENABLE_CUDA requires CMake 3.17 or newer.")
+  endif()
+  if(POLICY CMP0104)
+    cmake_policy(SET CMP0104 NEW)
+  endif()
+  # Distributable default: Turing SASS plus forward-compatible PTX. Local
+  # benchmark builds should pass -DCMAKE_CUDA_ARCHITECTURES=native explicitly.
+  if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES AND NOT DEFINED ENV{CUDAARCHS}
+     AND CMAKE_VERSION VERSION_GREATER_EQUAL 3.24)
+    set(CMAKE_CUDA_ARCHITECTURES "75-real;75-virtual")
+  endif()
+  enable_language(CUDA)
+  find_package(CUDAToolkit REQUIRED)
+  find_package(Threads REQUIRED)
+  set(CMAKE_CUDA_STANDARD 11)
+  set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+  set(CMAKE_CUDA_VISIBILITY_PRESET hidden)
+  add_definitions(-DWEBP_USE_CUDA=1)
+  set(CUDA_LIBS "-lcudart")
+
+  # Every CUDA stage and optimization is independently compiled so benchmark
+  # builds can isolate effects without changing runtime code paths.
+  option(WEBP_CUDA_ENABLE_COLOR_TRANSFORM
+         "Build the CUDA lossless cross-color stage." ON)
+  option(WEBP_CUDA_ENABLE_COLOR_SHARED_TILE
+         "Cache CUDA cross-color source tiles in shared memory." ON)
+  option(WEBP_CUDA_ENABLE_HASH_CHAIN
+         "Build the CUDA lossless hash-candidate stage." ON)
+  option(WEBP_CUDA_ENABLE_RGB_TO_YUV
+         "Build the CUDA opaque RGB-to-YUV420 stage." ON)
+  option(WEBP_CUDA_ENABLE_NEAR_LOSSLESS
+         "Build CUDA near-lossless preprocessing." ON)
+  option(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS
+         "Build CUDA lossy macroblock analysis." ON)
+  option(WEBP_CUDA_ENABLE_FUSED_LOSSY_ANALYSIS
+         "Build fused CUDA RGB conversion and lossy analysis." ON)
+  option(WEBP_CUDA_ENABLE_PREDICTOR
+         "Build the CUDA lossless predictor stage." ON)
+  option(WEBP_CUDA_ENABLE_HISTOGRAM
+         "Build experimental CUDA lossless histogram counting." OFF)
+  option(WEBP_CUDA_ENABLE_LOSSY_DECIMATE
+         "Build CUDA lossy macroblock decimation." ON)
+  option(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS
+         "Retain CUDA staging allocations across encoder calls." ON)
+  option(WEBP_CUDA_ENABLE_PINNED_HOST_MEMORY
+         "Use persistent page-locked CUDA host staging buffers." OFF)
+  option(WEBP_CUDA_ENABLE_ASYNC_COPIES
+         "Use stream-ordered asynchronous CUDA transfers." ON)
+  option(WEBP_CUDA_ENABLE_HASH_MATCH4
+         "Compare four hash-chain pixels per loop iteration." ON)
+  option(WEBP_CUDA_ENABLE_RGB_BLOCK_2X2
+         "Fuse four luma samples with each CUDA chroma thread." OFF)
+  option(WEBP_CUDA_ENABLE_COLOR_256_THREAD_BLOCKS
+         "Use 256-thread CUDA color-transform blocks instead of 128." OFF)
+  option(WEBP_CUDA_ENABLE_HASH_256_THREAD_BLOCKS
+         "Use 256-thread CUDA hash-chain blocks instead of 128." OFF)
+  option(WEBP_CUDA_ENABLE_RGB_256_THREAD_BLOCKS
+         "Use 256-thread CUDA RGB-to-YUV blocks instead of 128." ON)
+  option(WEBP_CUDA_ENABLE_READ_ONLY_CACHE
+         "Use CUDA read-only loads in the hash-chain traversal." ON)
+  option(WEBP_CUDA_ENABLE_RESTRICT_POINTERS
+         "Expose non-aliasing CUDA kernel pointers to the compiler." ON)
+  option(WEBP_CUDA_ENABLE_RGB_PACKED4_LOADS
+         "Load aligned four-byte RGB(A) source pixels in one transaction." ON)
+  option(WEBP_CUDA_ENABLE_STREAM_ORDERED_ALLOCATIONS
+         "Use CUDA stream-ordered device allocation (experimental)." OFF)
+  if(WEBP_CUDA_ENABLE_STREAM_ORDERED_ALLOCATIONS AND
+     CUDAToolkit_VERSION VERSION_LESS 11.2)
+    message(FATAL_ERROR
+            "Stream-ordered CUDA allocation requires CUDA Toolkit 11.2.")
+  endif()
+endif()
 if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
   if(NOT WEBP_ENABLE_METAL)
     message(FATAL_ERROR
             "WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT requires WEBP_ENABLE_METAL.")
   endif()
+endif()
+if(WEBP_BUILD_CUDA_BENCHMARK AND NOT WEBP_ENABLE_CUDA)
+  message(FATAL_ERROR
+          "WEBP_BUILD_CUDA_BENCHMARK requires WEBP_ENABLE_CUDA=ON.")
+endif()
+if(WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS AND NOT WEBP_ENABLE_CUDA)
+  message(FATAL_ERROR
+          "WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS requires "
+          "WEBP_ENABLE_CUDA=ON.")
 endif()
 if((WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT OR
     WEBP_BUILD_BACKREF_EXACT_EXPERIMENT OR
@@ -293,6 +415,7 @@ endif()
 # Include dependencies.
 if(WEBP_BUILD_ANIM_UTILS
    OR WEBP_BUILD_CWEBP
+   OR WEBP_BUILD_CUDA_BENCHMARK
    OR WEBP_BUILD_DWEBP
    OR WEBP_BUILD_EXTRAS
    OR WEBP_BUILD_GIF2WEBP
@@ -448,6 +571,87 @@ parse_makefile_am(${WEBP_SRC_DIR}/enc "WEBP_ENC_SRCS" "")
 parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_COMMON_SRCS" "COMMON")
 parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_ENC_SRCS" "ENC")
 parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_DEC_SRCS" "decode_[^ ]*")
+
+if(WEBP_ENABLE_FPGA_EXPERIMENTAL OR WEBP_BUILD_DECIMATE_CONFORMANCE)
+  list(APPEND WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/fpga_enc.c)
+endif()
+if(WEBP_BUILD_DECIMATE_CONFORMANCE)
+  list(APPEND WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/lossy_decimate_fixture.c)
+endif()
+
+if(WEBP_BUILD_CUDA_TRANSCODER)
+  add_executable(
+    cuda_transcode_policy_test
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/cuda_transcode_policy_test.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/cuda_transcode_common.c)
+  target_include_directories(
+    cuda_transcode_policy_test
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+  if(BUILD_TESTING)
+    add_test(NAME cuda_transcode_policy_test
+             COMMAND cuda_transcode_policy_test)
+  endif()
+
+  if(WEBP_ENABLE_CUDA AND WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+    add_executable(cuda_external_yuv_test
+                   ${CMAKE_CURRENT_SOURCE_DIR}/tests/cuda_external_yuv_test.cu)
+    target_include_directories(
+      cuda_external_yuv_test
+      PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+              ${CMAKE_CURRENT_SOURCE_DIR})
+    target_link_libraries(cuda_external_yuv_test PRIVATE webp CUDA::cudart)
+    set_target_properties(
+      cuda_external_yuv_test
+      PROPERTIES CUDA_STANDARD 11 CUDA_STANDARD_REQUIRED ON)
+    if(BUILD_TESTING)
+      add_test(NAME cuda_external_yuv_test COMMAND cuda_external_yuv_test)
+      set_tests_properties(cuda_external_yuv_test PROPERTIES SKIP_RETURN_CODE
+                                                             77)
+    endif()
+  endif()
+
+  if(WEBP_ENABLE_NVDEC)
+    if(NOT WEBP_ENABLE_CUDA)
+      message(FATAL_ERROR "WEBP_ENABLE_NVDEC requires WEBP_ENABLE_CUDA=ON")
+    endif()
+    if(NOT WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+      message(
+        FATAL_ERROR
+          "WEBP_ENABLE_NVDEC requires WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS=ON"
+      )
+    endif()
+    if(NOT WEBP_BUILD_LIBWEBPMUX)
+      message(FATAL_ERROR
+              "WEBP_ENABLE_NVDEC requires WEBP_BUILD_LIBWEBPMUX=ON")
+    endif()
+    find_path(
+      WEBP_NVCUVID_INCLUDE_DIR nvcuvid.h
+      HINTS ENV VIDEO_CODEC_SDK_ROOT ENV NVIDIA_VIDEO_CODEC_SDK_ROOT
+      PATH_SUFFIXES Interface Samples/NvCodec/NvDecoder)
+    find_library(WEBP_NVCUVID_LIBRARY NAMES nvcuvid)
+    if(NOT WEBP_NVCUVID_INCLUDE_DIR OR NOT WEBP_NVCUVID_LIBRARY)
+      message(
+        FATAL_ERROR
+          "WEBP_ENABLE_NVDEC requires nvcuvid.h from the NVIDIA Video Codec SDK and libnvcuvid"
+      )
+    endif()
+    add_executable(
+      webp_cuda_transcode
+      ${CMAKE_CURRENT_SOURCE_DIR}/tools/nvdec_webp_transcode.cu
+      ${CMAKE_CURRENT_SOURCE_DIR}/tools/cuda_transcode_common.c)
+    target_include_directories(
+      webp_cuda_transcode
+      PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+              ${CMAKE_CURRENT_SOURCE_DIR} ${WEBP_NVCUVID_INCLUDE_DIR})
+    target_link_libraries(
+      webp_cuda_transcode PRIVATE webp libwebpmux CUDA::cuda_driver
+                                  CUDA::cudart ${WEBP_NVCUVID_LIBRARY})
+    set_target_properties(
+      webp_cuda_transcode
+      PROPERTIES CUDA_STANDARD 11 CUDA_STANDARD_REQUIRED ON)
+  endif()
+endif()
 
 if(NOT WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT)
   list(REMOVE_ITEM WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/profile_enc.c)
@@ -1586,6 +1790,12 @@ else()
        ${WEBP_SRC_DIR}/enc/metal_enc.c
        ${WEBP_SRC_DIR}/enc/picture_csp_enc_metal.mm)
 endif()
+if(WEBP_ENABLE_CUDA)
+  list(APPEND WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/cuda_enc.cu)
+  if(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+    list(APPEND WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/cuda_decimate_enc.cu)
+  endif()
+endif()
 if(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT)
   list(APPEND WEBP_ENC_SRCS
        ${WEBP_SRC_DIR}/enc/predictor_enc_metal.mm)
@@ -1736,6 +1946,28 @@ add_library(webpencode OBJECT ${WEBP_ENC_SRCS})
 target_include_directories(
   webpencode PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR}
                      ${CMAKE_CURRENT_SOURCE_DIR}/src)
+if(WEBP_ENABLE_CUDA)
+  foreach(CUDA_OPTION
+          COLOR_TRANSFORM COLOR_SHARED_TILE HASH_CHAIN RGB_TO_YUV
+          NEAR_LOSSLESS LOSSY_ANALYSIS FUSED_LOSSY_ANALYSIS PREDICTOR HISTOGRAM
+          LOSSY_DECIMATE PERSISTENT_BUFFERS
+          PINNED_HOST_MEMORY ASYNC_COPIES HASH_MATCH4 RGB_BLOCK_2X2
+          COLOR_256_THREAD_BLOCKS HASH_256_THREAD_BLOCKS
+          RGB_256_THREAD_BLOCKS READ_ONLY_CACHE RESTRICT_POINTERS
+          RGB_PACKED4_LOADS STREAM_ORDERED_ALLOCATIONS)
+    if(WEBP_CUDA_ENABLE_${CUDA_OPTION})
+      target_compile_definitions(
+        webpencode PRIVATE WEBP_CUDA_ENABLE_${CUDA_OPTION}=1)
+    endif()
+  endforeach()
+endif()
+if(WEBP_ENABLE_FPGA_EXPERIMENTAL)
+  target_compile_definitions(webpencode PRIVATE WEBP_USE_FPGA_EXPERIMENTAL=1)
+endif()
+if(WEBP_BUILD_DECIMATE_CONFORMANCE)
+  target_compile_definitions(webpencode
+                             PRIVATE WEBP_DECIMATE_FIXTURE_CAPTURE=1)
+endif()
 add_library(webpdsp OBJECT ${WEBP_DSP_COMMON_SRCS} ${WEBP_DSP_DEC_SRCS}
                            ${WEBP_DSP_ENC_SRCS})
 target_include_directories(webpdsp PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
@@ -1997,10 +2229,46 @@ if(WEBP_ENABLE_METAL)
   target_link_libraries(webp PRIVATE ${WEBP_FOUNDATION_FRAMEWORK}
                                      ${WEBP_METAL_FRAMEWORK} "-lc++")
 endif()
+if(WEBP_ENABLE_CUDA)
+  target_link_libraries(webp PRIVATE CUDA::cudart Threads::Threads)
+endif()
 target_include_directories(
   webp PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/src>
               $<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}>
   PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+
+if(WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS)
+  add_executable(
+    cuda_acceleration_experiments
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/cuda_acceleration_experiments.cu)
+  target_link_libraries(cuda_acceleration_experiments
+                        PRIVATE CUDA::cudart Threads::Threads)
+  target_include_directories(
+    cuda_acceleration_experiments
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+  set_target_properties(
+    cuda_acceleration_experiments
+    PROPERTIES CUDA_STANDARD 11 CUDA_STANDARD_REQUIRED ON)
+endif()
+
+if(WEBP_BUILD_DECIMATE_CONFORMANCE)
+  add_executable(lossy_decimate_conformance
+                 ${CMAKE_CURRENT_SOURCE_DIR}/tools/lossy_decimate_conformance.c)
+  target_link_libraries(lossy_decimate_conformance PRIVATE webp)
+  target_include_directories(
+    lossy_decimate_conformance
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+            ${CMAKE_CURRENT_SOURCE_DIR})
+  if(WEBP_ENABLE_CUDA AND WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+    target_compile_definitions(
+      lossy_decimate_conformance
+      PRIVATE WEBP_CUDA_ENABLE_LOSSY_DECIMATE=1)
+  endif()
+  if(BUILD_TESTING)
+    add_test(NAME lossy_decimate_conformance_selftest
+             COMMAND lossy_decimate_conformance --selftest)
+  endif()
+endif()
 
 if(WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT)
   add_executable(cache_size_serial_sweep_test
@@ -2587,6 +2855,7 @@ endif()
 # Build the executables if asked for.
 if(WEBP_BUILD_ANIM_UTILS
    OR WEBP_BUILD_CWEBP
+   OR WEBP_BUILD_CUDA_BENCHMARK
    OR WEBP_BUILD_DWEBP
    OR WEBP_BUILD_EXTRAS
    OR WEBP_BUILD_FUZZTEST
@@ -2672,6 +2941,63 @@ if(WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT)
                              PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src)
   target_compile_definitions(
     webp_metal_benchmark PRIVATE WEBP_USE_METAL_CROSSOVER_EXPERIMENT=1)
+endif()
+
+if(WEBP_BUILD_CUDA_BENCHMARK)
+  # Internal, non-installed runners for warm-process strategy comparisons and
+  # shared-state stress testing on a physical CUDA device.
+  add_executable(webp_cuda_benchmark tools/cuda_benchmark.c)
+  target_link_libraries(webp_cuda_benchmark PRIVATE webp)
+  target_include_directories(
+    webp_cuda_benchmark
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+            ${CMAKE_CURRENT_SOURCE_DIR})
+  add_executable(webp_cuda_batch_benchmark tools/cuda_batch_benchmark.c)
+  target_link_libraries(webp_cuda_batch_benchmark PRIVATE imagedec webp)
+  target_include_directories(
+    webp_cuda_batch_benchmark
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+            ${CMAKE_CURRENT_SOURCE_DIR})
+  add_executable(cuda_concurrency_test tests/cuda_concurrency_test.c)
+  target_link_libraries(cuda_concurrency_test PRIVATE webp Threads::Threads
+                                                     CUDA::cudart)
+  target_include_directories(cuda_concurrency_test
+                             PRIVATE ${CMAKE_CURRENT_BINARY_DIR}/src
+                                     ${CMAKE_CURRENT_SOURCE_DIR})
+  add_executable(cuda_histogram_test tests/cuda_histogram_test.c)
+  target_link_libraries(cuda_histogram_test PRIVATE webp CUDA::cudart)
+  target_include_directories(
+    cuda_histogram_test
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+            ${CMAKE_CURRENT_SOURCE_DIR})
+  if(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+    add_executable(cuda_trellis_test tests/cuda_trellis_test.c)
+    target_link_libraries(cuda_trellis_test PRIVATE webp CUDA::cudart)
+    target_include_directories(
+      cuda_trellis_test
+      PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+              ${CMAKE_CURRENT_SOURCE_DIR})
+    if(NOT BUILD_SHARED_LIBS)
+      target_compile_definitions(cuda_trellis_test
+                                 PRIVATE WEBP_CUDA_DIRECT_PRIVATE_TEST=1)
+    endif()
+  endif()
+  if(WEBP_NEAR_LOSSLESS)
+    add_executable(cuda_near_lossless_test tests/cuda_near_lossless_test.c)
+    target_link_libraries(cuda_near_lossless_test PRIVATE webp CUDA::cudart)
+    target_include_directories(
+      cuda_near_lossless_test
+      PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+              ${CMAKE_CURRENT_SOURCE_DIR})
+  endif()
+  foreach(cuda_test cuda_concurrency_test cuda_histogram_test
+                    cuda_trellis_test cuda_near_lossless_test)
+    if(TARGET ${cuda_test})
+      target_compile_definitions(${cuda_test} PRIVATE WEBP_CUDA_TESTING=1)
+      add_test(NAME ${cuda_test} COMMAND ${cuda_test})
+      set_tests_properties(${cuda_test} PROPERTIES SKIP_RETURN_CODE 77)
+    endif()
+  endforeach()
 endif()
 
 if(WEBP_BUILD_LIBWEBPMUX)

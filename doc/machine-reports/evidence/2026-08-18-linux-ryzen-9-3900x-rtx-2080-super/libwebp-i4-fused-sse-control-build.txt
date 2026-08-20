@@ -1,0 +1,33 @@
+[  3%] Built target sharpyuv
+[ 10%] Built target webputils
+[ 10%] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+[ 35%] Built target webpdspdecode
+[ 71%] Built target webpdsp
+[ 76%] Built target webpdecode
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(502): warning #177-D: function "<unnamed>::AddScoreDev" was declared but never referenced
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(687): warning #177-D: function "<unnamed>::ImportMB" was declared but never referenced
+
+[ 90%] Built target webpencode
+[ 92%] Linking CUDA static library libwebp.a
+[ 92%] Built target webp
+[ 93%] Built target imageioutil
+[ 94%] Built target webpdemux
+[100%] Built target imagedec
+[100%] Linking CUDA executable webp_cuda_batch_benchmark
+[100%] Built target webp_cuda_batch_benchmark
+[  7%] Built target webputils
+[ 10%] Built target sharpyuv
+[ 34%] Built target webpdspdecode
+[ 69%] Built target webpdsp
+[ 83%] Built target webpencode
+[ 88%] Built target webpdecode
+[ 89%] Built target webp
+[ 91%] Built target imageioutil
+[ 92%] Built target webpdemux
+[ 93%] Built target exampleutil
+[ 98%] Built target imagedec
+[ 98%] Linking CUDA executable cwebp
+[100%] Built target cwebp

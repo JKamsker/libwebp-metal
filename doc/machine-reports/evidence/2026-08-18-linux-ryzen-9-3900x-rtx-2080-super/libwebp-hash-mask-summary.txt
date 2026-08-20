@@ -1,0 +1,43 @@
+Experiment: pre-Ampere hash four-pixel mismatch mask
+Machine: AMD Ryzen 9 3900X; NVIDIA GeForce RTX 2080 SUPER (sm_75)
+Decision: rejected and removed
+
+Profile:
+- Explicit-native retained build.
+- 1,920,000-pixel resident hash kernel: 7.557 ms.
+- 960,000-pixel non-resident hash kernel: 10.891 ms.
+
+Candidate:
+- For each four-pixel match group, form a four-bit mismatch mask and use the
+  first-set-bit position instead of four divergent early-return branches.
+- Compose the already-proven redundant initial-precheck removal for full
+  chain candidates.
+- Select this specialization only below compute capability 8; Ampere+ keeps
+  the original matcher specialization.
+
+Validation:
+- Candidate CTest: 7/7 passed.
+- Restored-parent CTest: 7/7 passed.
+- Timing rows: 48 (12 per format/arm), all output hashes and byte counts exact.
+- PNG output: 81fa42c7697cb521, 6720632 bytes.
+- JPEG output: a4fca74ecf18a917, 8956690 bytes.
+
+Pooled median batch time:
+- PNG lossless parent: 75.826519 ms/image.
+- PNG lossless candidate: 74.587197 ms/image.
+- PNG gain: 1.239321 ms/image.
+- JPEG lossless parent: 127.712572 ms/image.
+- JPEG lossless candidate: 123.393201 ms/image.
+- JPEG gain: 4.319371 ms/image.
+
+Generated-code checks:
+- Parent: 26 registers, 296 mnemonic instructions.
+- Candidate pre-Ampere specialization: 34 registers, 296 instructions.
+- Candidate Ampere+ specialization: 26 registers, 296 instructions.
+- Ampere+ specialization mnemonic stream exactly matches the parent.
+
+Conclusion:
+The PNG gain remains below the strict 1.5 ms/image gate despite the large
+JPEG gain, and the candidate adds eight Turing registers. The source was
+restored. These measurements characterize only the RTX 2080 SUPER and make
+no Ampere+ performance claim.

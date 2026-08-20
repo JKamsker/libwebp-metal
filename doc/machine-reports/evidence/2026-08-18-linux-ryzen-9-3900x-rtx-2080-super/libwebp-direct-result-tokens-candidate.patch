@@ -1,0 +1,424 @@
+diff --git a/src/enc/frame_enc.c b/src/enc/frame_enc.c
+index 3d9a97dc..dec5d308 100644
+--- a/src/enc/frame_enc.c
++++ b/src/enc/frame_enc.c
+@@ -448,14 +448,19 @@ typedef struct {
+   int record_pipeline;        // pipeline enabled for this pass
+   int record_active;          // a job is launched and not yet synced
+   int record_ok;              // sticky recording success (main thread only)
++  int direct_results;         // stats-only recording, code results at the end
+   int record_rows;            // rows handed to the recorder so far
+   int record_job_start;       // row range of the in-flight job
+   int record_job_end;
+   uint32_t* record_nz;        // shadow nz words of the last recorded row
++  uint32_t* direct_nz;        // packed context word for every recorded MB
+ } AcceleratedDecimatePass;
+
+-// RecordTokens for a range of rows, reading everything from the collected
+-// GPU results instead of the iterator. The nz-context bookkeeping mirrors
++// Records coefficient events for a range of rows, reading everything from
++// the collected GPU results instead of the iterator. In direct-results mode
++// this updates only the exact adaptive statistics; otherwise it also appends
++// the packed tokens used by the ordinary final emitter. The nz bookkeeping
++// mirrors
+ // VP8IteratorNzToBytes/BytesToNz exactly: the top words come from the shadow
+ // row, the left word is the previously packed word of this row (0 at the
+ // border, like enc->nz[-1]), and the left-DC context is carried separately
+@@ -501,7 +506,10 @@ static int RecordTokensFromResults(VP8Encoder* const enc,
+         const int ctx = top_nz[8] + left_nz[8];
+         VP8InitResidual(0, 1, enc, &res);
+         VP8SetResidualCoeffs(r->y_dc_levels, &res);
+-        top_nz[8] = left_nz[8] = VP8RecordCoeffTokens(ctx, &res, tokens);
++        top_nz[8] = left_nz[8] =
++            pass->direct_results
++                ? VP8RecordCoeffStatsExact(ctx, &res)
++                : VP8RecordCoeffTokens(ctx, &res, tokens);
+         VP8InitResidual(1, 0, enc, &res);
+       } else {
+         VP8InitResidual(0, 3, enc, &res);
+@@ -510,7 +518,10 @@ static int RecordTokensFromResults(VP8Encoder* const enc,
+         for (bx = 0; bx < 4; ++bx) {
+           const int ctx = top_nz[bx] + left_nz[by];
+           VP8SetResidualCoeffs(r->y_ac_levels[bx + by * 4], &res);
+-          top_nz[bx] = left_nz[by] = VP8RecordCoeffTokens(ctx, &res, tokens);
++          top_nz[bx] = left_nz[by] =
++              pass->direct_results
++                  ? VP8RecordCoeffStatsExact(ctx, &res)
++                  : VP8RecordCoeffTokens(ctx, &res, tokens);
+         }
+       }
+       VP8InitResidual(0, 2, enc, &res);
+@@ -520,7 +531,9 @@ static int RecordTokensFromResults(VP8Encoder* const enc,
+             const int ctx = top_nz[4 + ch + bx] + left_nz[4 + ch + by];
+             VP8SetResidualCoeffs(r->uv_levels[ch * 2 + bx + by * 2], &res);
+             top_nz[4 + ch + bx] = left_nz[4 + ch + by] =
+-                VP8RecordCoeffTokens(ctx, &res, tokens);
++                pass->direct_results
++                    ? VP8RecordCoeffStatsExact(ctx, &res)
++                    : VP8RecordCoeffTokens(ctx, &res, tokens);
+           }
+         }
+       }
+@@ -533,15 +546,35 @@ static int RecordTokensFromResults(VP8Encoder* const enc,
+       nz |= (left_nz[2] << 11);
+       nz |= (left_nz[4] << 17) | (left_nz[6] << 21);
+       pass->record_nz[mb_x] = nz;
++      if (pass->direct_results) {
++        pass->direct_nz[row * mb_w + mb_x] = nz;
++      }
+       lnz = nz;
+       left_nz8 = left_nz[8];
+-      if (tokens->error) return 0;
++      if (!pass->direct_results && tokens->error) return 0;
+     }
+   }
+   return 1;
+ #undef NZ_BIT
+ }
+
++// A CUDA collection failure must hand an ordinary token stream to the CPU
++// fallback. Replaying the completed rows would also re-record their adaptive
++// statistics, so preserve and restore those counters around materialization.
++static int MaterializeRecordedTokens(VP8Encoder* const enc,
++                                     AcceleratedDecimatePass* const pass,
++                                     int end_row) {
++  StatsArray saved_stats[NUM_TYPES][NUM_BANDS];
++  int ok;
++  memcpy(saved_stats, enc->proba.stats, sizeof(saved_stats));
++  memset(pass->record_nz, 0,
++         (size_t)enc->mb_w * sizeof(*pass->record_nz));
++  pass->direct_results = 0;
++  ok = RecordTokensFromResults(enc, pass, 0, end_row);
++  memcpy(enc->proba.stats, saved_stats, sizeof(saved_stats));
++  return ok;
++}
++
+ static int RecordBandJobHook(void* arg1, void* arg2) {
+   AcceleratedDecimatePass* const pass = (AcceleratedDecimatePass*)arg1;
+   VP8Encoder* const enc = (VP8Encoder*)arg2;
+@@ -606,6 +639,7 @@ static void AcceleratedDecimateClear(AcceleratedDecimatePass* const pass) {
+     worker_interface->End(&pass->record_worker);
+   }
+   WebPSafeFree(pass->record_nz);
++  WebPSafeFree(pass->direct_nz);
+   WebPSafeFree(pass->results);
+   WebPSafeFree(pass->recon);
+   WebPSafeFree(pass->segments);
+@@ -738,6 +772,15 @@ static int TryAcceleratedDecimate(VP8Encoder* const enc,
+       pass->record_worker_started = worker_interface->Reset(&pass->record_worker);
+     }
+   }
++  if (pass->record_pipeline) {
++    const char* const env = getenv("WEBP_CUDA_DIRECT_RESULT_TOKENS");
++    pass->direct_results = (env != NULL && strcmp(env, "0"));
++    if (pass->direct_results) {
++      pass->direct_nz =
++          (uint32_t*)WebPSafeMalloc(mb_count, sizeof(*pass->direct_nz));
++      if (pass->direct_nz == NULL) pass->direct_results = 0;
++    }
++  }
+   request->phase = WEBP_ACCELERATOR_DECIMATE_BEGIN;
+   request->band_count = pass->band_count;
+   request->band_index = 0;
+@@ -1176,12 +1219,153 @@ typedef struct {
+   const uint8_t* probas;
+ } TokenEmitJob;
+
++typedef struct {
++  VP8Encoder* enc;
++  const AcceleratedDecimatePass* pass;
++  VP8BitWriter* bw;
++  int partition;
++} DirectTokenEmitJob;
++
+ static int TokenEmitJobHook(void* arg1, void* arg2) {
+   TokenEmitJob* const job = (TokenEmitJob*)arg1;
+   (void)arg2;
+   return VP8EmitTokens(job->tokens, job->bw, job->probas, 1);
+ }
+
++// Codes one partition directly from the retained accelerator results after
++// the final probabilities are known. This is the same coefficient traversal
++// as RecordTokensFromResults, but it avoids constructing and then traversing
++// the packed-token pages.
++static int DirectTokenEmitJobHook(void* arg1, void* arg2) {
++#define NZ_BIT(word, n) (!!((word) & (1u << (n))))
++  DirectTokenEmitJob* const job = (DirectTokenEmitJob*)arg1;
++  VP8Encoder* const enc = job->enc;
++  const AcceleratedDecimatePass* const pass = job->pass;
++  VP8BitWriter* const bw = job->bw;
++  const int mb_w = enc->mb_w;
++  int row;
++  (void)arg2;
++  for (row = job->partition; row < enc->mb_h; row += enc->num_parts) {
++    uint32_t lnz = 0;
++    int left_nz8 = 0;
++    int mb_x;
++    for (mb_x = 0; mb_x < mb_w; ++mb_x) {
++      const WebPAcceleratorDecimateResult* const r =
++          &pass->results[row * mb_w + mb_x];
++      const uint32_t tnz =
++          (row == 0) ? 0 : pass->direct_nz[(row - 1) * mb_w + mb_x];
++      int top_nz[9], left_nz[9];
++      VP8Residual res;
++      uint32_t nz = 0;
++      int bx, by, ch;
++      top_nz[0] = NZ_BIT(tnz, 12);
++      top_nz[1] = NZ_BIT(tnz, 13);
++      top_nz[2] = NZ_BIT(tnz, 14);
++      top_nz[3] = NZ_BIT(tnz, 15);
++      top_nz[4] = NZ_BIT(tnz, 18);
++      top_nz[5] = NZ_BIT(tnz, 19);
++      top_nz[6] = NZ_BIT(tnz, 22);
++      top_nz[7] = NZ_BIT(tnz, 23);
++      top_nz[8] = NZ_BIT(tnz, 24);
++      left_nz[0] = NZ_BIT(lnz, 3);
++      left_nz[1] = NZ_BIT(lnz, 7);
++      left_nz[2] = NZ_BIT(lnz, 11);
++      left_nz[3] = NZ_BIT(lnz, 15);
++      left_nz[4] = NZ_BIT(lnz, 17);
++      left_nz[5] = NZ_BIT(lnz, 19);
++      left_nz[6] = NZ_BIT(lnz, 21);
++      left_nz[7] = NZ_BIT(lnz, 23);
++      left_nz[8] = left_nz8;
++      if (!r->is_i4) {
++        const int ctx = top_nz[8] + left_nz[8];
++        VP8InitResidual(0, 1, enc, &res);
++        VP8SetResidualCoeffs(r->y_dc_levels, &res);
++        top_nz[8] = left_nz[8] = PutCoeffs(bw, ctx, &res);
++        VP8InitResidual(1, 0, enc, &res);
++      } else {
++        VP8InitResidual(0, 3, enc, &res);
++      }
++      for (by = 0; by < 4; ++by) {
++        for (bx = 0; bx < 4; ++bx) {
++          const int ctx = top_nz[bx] + left_nz[by];
++          VP8SetResidualCoeffs(r->y_ac_levels[bx + by * 4], &res);
++          top_nz[bx] = left_nz[by] = PutCoeffs(bw, ctx, &res);
++        }
++      }
++      VP8InitResidual(0, 2, enc, &res);
++      for (ch = 0; ch <= 2; ch += 2) {
++        for (by = 0; by < 2; ++by) {
++          for (bx = 0; bx < 2; ++bx) {
++            const int ctx = top_nz[4 + ch + bx] + left_nz[4 + ch + by];
++            VP8SetResidualCoeffs(r->uv_levels[ch * 2 + bx + by * 2], &res);
++            top_nz[4 + ch + bx] = left_nz[4 + ch + by] =
++                PutCoeffs(bw, ctx, &res);
++          }
++        }
++      }
++      nz |= (top_nz[0] << 12) | (top_nz[1] << 13);
++      nz |= (top_nz[2] << 14) | (top_nz[3] << 15);
++      nz |= (top_nz[4] << 18) | (top_nz[5] << 19);
++      nz |= (top_nz[6] << 22) | (top_nz[7] << 23);
++      nz |= (top_nz[8] << 24);
++      nz |= (left_nz[0] << 3) | (left_nz[1] << 7);
++      nz |= (left_nz[2] << 11);
++      nz |= (left_nz[4] << 17) | (left_nz[6] << 21);
++      lnz = nz;
++      left_nz8 = left_nz[8];
++      if (bw->error) return 0;
++    }
++  }
++  return 1;
++#undef NZ_BIT
++}
++
++static int EmitDirectTokenPartitions(
++    VP8Encoder* const enc, const AcceleratedDecimatePass* const pass) {
++  const int num_parts = enc->num_parts;
++  const WebPWorkerInterface* const worker_interface = WebPGetWorkerInterface();
++  WebPWorker workers[MAX_NUM_PARTITIONS];
++  DirectTokenEmitJob jobs[MAX_NUM_PARTITIONS];
++  int started = 0;
++  int ok = 1;
++  int use_threads = (num_parts > 1);
++  int p;
++  {
++    const char* const env = getenv("WEBP_TOKEN_EMIT_THREADS");
++    if (env != NULL && !strcmp(env, "0")) use_threads = 0;
++  }
++  for (p = 0; p < num_parts; ++p) {
++    jobs[p].enc = enc;
++    jobs[p].pass = pass;
++    jobs[p].bw = enc->parts + p;
++    jobs[p].partition = p;
++  }
++  if (use_threads) {
++    for (p = 1; p < num_parts; ++p) {
++      WebPWorker* const worker = &workers[p];
++      worker_interface->Init(worker);
++      worker->data1 = &jobs[p];
++      worker->data2 = NULL;
++      worker->hook = DirectTokenEmitJobHook;
++      if (!worker_interface->Reset(worker)) {
++        worker_interface->End(worker);
++        break;
++      }
++      worker_interface->Launch(worker);
++      ++started;
++    }
++  }
++  ok &= DirectTokenEmitJobHook(&jobs[0], NULL);
++  for (p = 1 + started; p < num_parts; ++p) {
++    ok &= DirectTokenEmitJobHook(&jobs[p], NULL);
++  }
++  for (p = 1; p <= started; ++p) {
++    ok &= worker_interface->Sync(&workers[p]);
++    worker_interface->End(&workers[p]);
++  }
++  return ok;
++}
++
+ // Emits every token partition; partitions past the first run on worker
+ // threads (the partition contents do not depend on the thread schedule).
+ // WEBP_TOKEN_EMIT_THREADS=0 forces serial emission.
+@@ -1257,6 +1441,7 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
+   const uint64_t pixel_count = (uint64_t)enc->mb_w * enc->mb_h * 384;
+   PassStats stats;
+   int ok;
++  int direct_emitted = 0;
+
+   InitPassStats(enc, &stats);
+   ok = PreLoopInitialize(enc);
+@@ -1299,6 +1484,8 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
+       accelerated = TryAcceleratedDecimate(enc, &accel_pass);
+       WebPProfileStageEnd(WEBP_PROFILE_LOSSY_DECIMATE, accel_start);
+     }
++    // Size-search needs the intermediate token buffers for size estimates.
++    accel_pass.direct_results &= !stats.do_size_search;
+     // While the pass is accelerated and nothing consumes the per-MB
+     // reconstruction (no filter stats, no show_compressed export), the
+     // replay skips the yuv_out copies and the boundary saves; a CPU
+@@ -1328,6 +1515,10 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
+           // the recorder first so the CPU path appends tokens after it.
+           AcceleratedDecimateSyncRecorder(&accel_pass);
+           if (accel_pass.record_pipeline) {
++            if (accel_pass.direct_results &&
++                !MaterializeRecordedTokens(enc, &accel_pass, it.y)) {
++              accel_pass.record_ok = 0;
++            }
+             // With pipelined recording the main thread skipped the inline
+             // RecordTokens that maintains the iterator's packed nz words;
+             // the recorder's shadow row is exactly the last recorded row
+@@ -1413,8 +1604,10 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
+       ok = WebPEncodingSetError(enc->pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
+     }
+     WebPDecimateFixtureCaptureFinish(ok);
+-    AcceleratedDecimateClear(&accel_pass);
+-    if (!ok) break;
++    if (!ok) {
++      AcceleratedDecimateClear(&accel_pass);
++      break;
++    }
+
+     size_p0 += enc->segment_hdr.size;
+     if (stats.do_size_search) {
+@@ -1444,16 +1637,30 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
+       if (is_last_pass) {
+         ResetSideInfo(&it);
+       }
++      AcceleratedDecimateClear(&accel_pass);
+       continue;  // ...and start over
+     }
+     if (is_last_pass) {
++      if (accel_pass.direct_results) {
++        const uint64_t emit_start =
++            WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS);
++        FinalizeTokenProbas(&enc->proba);
++        ok = EmitDirectTokenPartitions(enc, &accel_pass);
++        WebPProfileStageEnd(WEBP_PROFILE_LOSSY_EMIT_TOKENS, emit_start);
++        direct_emitted = ok;
++        if (!ok) {
++          WebPEncodingSetError(enc->pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
++        }
++      }
++      AcceleratedDecimateClear(&accel_pass);
+       break;  // done
+     }
++    AcceleratedDecimateClear(&accel_pass);
+     if (do_search) {
+       ComputeNextQ(&stats);  // Adjust q
+     }
+   }
+-  if (ok) {
++  if (ok && !direct_emitted) {
+     const uint64_t emit_start =
+         WebPProfileStageBegin(WEBP_PROFILE_LOSSY_EMIT_TOKENS);
+     if (!stats.do_size_search) {
+diff --git a/src/enc/token_enc.c b/src/enc/token_enc.c
+index 9fe8adcc..44b86808 100644
+--- a/src/enc/token_enc.c
++++ b/src/enc/token_enc.c
+@@ -195,6 +195,56 @@ int VP8RecordCoeffTokens(int ctx, const struct VP8Residual* const res,
+   return 1;
+ }
+
++// Records adaptive statistics in precisely the event order used above.
++// VP8RecordCoeffs groups some EOB events differently, which is observable
++// when a 16-bit counter reaches its renormalization threshold.
++int VP8RecordCoeffStatsExact(int ctx,
++                             const struct VP8Residual* const res) {
++  const int16_t* const coeffs = res->coeffs;
++  const int last = res->last;
++  int n = res->first;
++  proba_t* s = res->stats[n][ctx];
++  if (!VP8RecordStats(last >= 0, s + 0)) return 0;
++
++  while (n < 16) {
++    const int c = coeffs[n++];
++    const uint32_t v = (c < 0) ? -c : c;
++    if (!VP8RecordStats(v != 0, s + 1)) {
++      s = res->stats[VP8EncBands[n]][0];
++      continue;
++    }
++    if (!VP8RecordStats(v > 1, s + 2)) {
++      s = res->stats[VP8EncBands[n]][1];
++    } else {
++      if (!VP8RecordStats(v > 4, s + 3)) {
++        if (VP8RecordStats(v != 2, s + 4)) {
++          VP8RecordStats(v == 4, s + 5);
++        }
++      } else if (!VP8RecordStats(v > 10, s + 6)) {
++        (void)VP8RecordStats(v > 6, s + 7);
++      } else {
++        const uint32_t residue = v - 3;
++        if (residue < (8 << 1)) {
++          VP8RecordStats(0, s + 8);
++          VP8RecordStats(0, s + 9);
++        } else if (residue < (8 << 2)) {
++          VP8RecordStats(0, s + 8);
++          VP8RecordStats(1, s + 9);
++        } else if (residue < (8 << 3)) {
++          VP8RecordStats(1, s + 8);
++          VP8RecordStats(0, s + 9);
++        } else {
++          VP8RecordStats(1, s + 8);
++          VP8RecordStats(1, s + 9);
++        }
++      }
++      s = res->stats[VP8EncBands[n]][2];
++    }
++    if (n == 16 || !VP8RecordStats(n <= last, s + 0)) return 1;
++  }
++  return 1;
++}
++
+ #undef TOKEN_ID
+
+ //------------------------------------------------------------------------------
+diff --git a/src/enc/vp8i_enc.h b/src/enc/vp8i_enc.h
+index be219a09..c992d894 100644
+--- a/src/enc/vp8i_enc.h
++++ b/src/enc/vp8i_enc.h
+@@ -339,6 +339,9 @@ int VP8EmitTokens(VP8TBuffer* const b, VP8BitWriter* const bw,
+ // record the coding of coefficients without knowing the probabilities yet
+ int VP8RecordCoeffTokens(int ctx, const struct VP8Residual* const res,
+                          VP8TBuffer* const tokens);
++// Same adaptive-statistics event order, without emitting packed tokens.
++int VP8RecordCoeffStatsExact(int ctx,
++                             const struct VP8Residual* const res);
+
+ // Estimate the final coded size given a set of 'probas'.
+ size_t VP8EstimateTokenSize(VP8TBuffer* const b, const uint8_t* const probas);

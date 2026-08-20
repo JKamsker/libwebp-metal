@@ -1,0 +1,11 @@
+Saving file '/tmp/libwebp-uv-coop4-profile/candidate-launchstats-cuda-root.webp'
+==PROF== Connected to process 2683206 (/home/jonas/priv/repos/libwebp-metal/build-cuda-ncu/cwebp)
+==PROF== Profiling "DecimateKernel": 0%....50%....100% - 1 pass
+
+==ERROR== LaunchFailed
+
+==ERROR== LaunchFailed
+==PROF== Trying to shutdown target application
+==ERROR== The application returned an error code (9).
+==ERROR== An error occurred while trying to profile.
+==PROF== Report: /tmp/libwebp-uv-coop4-profile/candidate-launchstats-cuda-root.ncu-rep

@@ -1,0 +1,168 @@
+{
+  "warm": [
+    {
+      "content": "graphic",
+      "cpu": {
+        "content": "graphic",
+        "backend": "cpu",
+        "n": 40,
+        "median_total_ms": 27.6269055,
+        "median_decode_ms": 3.511424,
+        "median_encode_ms": 24.0924535,
+        "images_per_second": 36.19659827627093
+      },
+      "nvdec": {
+        "content": "graphic",
+        "backend": "nvdec",
+        "n": 40,
+        "median_total_ms": 24.6890775,
+        "median_decode_ms": 1.1428495,
+        "median_handoff_ms": 0.0425,
+        "median_encode_ms": 23.537351,
+        "images_per_second": 40.50374097614623,
+        "all_zero_host_roundtrip": true,
+        "device_to_device_bytes": [
+          5760000
+        ]
+      },
+      "gain_ms": 2.9378279999999997,
+      "speedup": 1.1189930243444697
+    },
+    {
+      "content": "photo",
+      "cpu": {
+        "content": "photo",
+        "backend": "cpu",
+        "n": 40,
+        "median_total_ms": 42.628362,
+        "median_decode_ms": 14.743159,
+        "median_encode_ms": 27.856289,
+        "images_per_second": 23.45856028903949
+      },
+      "nvdec": {
+        "content": "photo",
+        "backend": "nvdec",
+        "n": 40,
+        "median_total_ms": 29.9862325,
+        "median_decode_ms": 2.82119,
+        "median_handoff_ms": 0.04291,
+        "median_encode_ms": 27.1571125,
+        "images_per_second": 33.34863757892893,
+        "all_zero_host_roundtrip": true,
+        "device_to_device_bytes": [
+          5760000
+        ]
+      },
+      "gain_ms": 12.642129500000003,
+      "speedup": 1.421597794921386
+    },
+    {
+      "content": "texture",
+      "cpu": {
+        "content": "texture",
+        "backend": "cpu",
+        "n": 40,
+        "median_total_ms": 152.4989875,
+        "median_decode_ms": 79.702524,
+        "median_encode_ms": 72.673995,
+        "images_per_second": 6.557420586153072
+      },
+      "nvdec": {
+        "content": "texture",
+        "backend": "nvdec",
+        "n": 40,
+        "median_total_ms": 95.013414,
+        "median_decode_ms": 10.1595325,
+        "median_handoff_ms": 0.0549475,
+        "median_encode_ms": 84.7205675,
+        "images_per_second": 10.524829683522372,
+        "all_zero_host_roundtrip": true,
+        "device_to_device_bytes": [
+          5760000
+        ]
+      },
+      "gain_ms": 57.4855735,
+      "speedup": 1.605025870347107
+    }
+  ],
+  "cold": [
+    {
+      "content": "graphic",
+      "cpu": {
+        "content": "graphic",
+        "backend": "cpu",
+        "n": 8,
+        "median_total_ms": 171.0631435,
+        "min_total_ms": 165.802256,
+        "max_total_ms": 261.260515,
+        "images_per_second": 5.845794596893983
+      },
+      "nvdec": {
+        "content": "graphic",
+        "backend": "nvdec",
+        "n": 8,
+        "median_total_ms": 190.908493,
+        "min_total_ms": 184.778974,
+        "max_total_ms": 198.293518,
+        "images_per_second": 5.238111643362037,
+        "device_to_device_bytes": [
+          5760000
+        ]
+      },
+      "gain_ms": -19.845349499999998,
+      "speedup": 0.896047843717461
+    },
+    {
+      "content": "photo",
+      "cpu": {
+        "content": "photo",
+        "backend": "cpu",
+        "n": 8,
+        "median_total_ms": 182.777294,
+        "min_total_ms": 177.709408,
+        "max_total_ms": 256.940936,
+        "images_per_second": 5.471139101118325
+      },
+      "nvdec": {
+        "content": "photo",
+        "backend": "nvdec",
+        "n": 8,
+        "median_total_ms": 190.314503,
+        "min_total_ms": 185.482617,
+        "max_total_ms": 203.286224,
+        "images_per_second": 5.254460297227059,
+        "device_to_device_bytes": [
+          5760000
+        ]
+      },
+      "gain_ms": -7.53720899999999,
+      "speedup": 0.9603960345575976
+    },
+    {
+      "content": "texture",
+      "cpu": {
+        "content": "texture",
+        "backend": "cpu",
+        "n": 8,
+        "median_total_ms": 298.033579,
+        "min_total_ms": 291.344179,
+        "max_total_ms": 312.791471,
+        "images_per_second": 3.3553266157301023
+      },
+      "nvdec": {
+        "content": "texture",
+        "backend": "nvdec",
+        "n": 8,
+        "median_total_ms": 251.065987,
+        "min_total_ms": 247.916269,
+        "max_total_ms": 255.610941,
+        "images_per_second": 3.983016624231143,
+        "device_to_device_bytes": [
+          5760000
+        ]
+      },
+      "gain_ms": 46.96759199999997,
+      "speedup": 1.1870726997361054
+    }
+  ]
+}

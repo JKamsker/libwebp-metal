@@ -1,0 +1,9 @@
+CMAKE_BUILD_TYPE=Release
+CMAKE_CUDA_ARCHITECTURES=native
+WEBP_BUILD_CUDA_BENCHMARK=ON
+WEBP_ENABLE_CUDA=ON
+source_parent=70f229ce
+candidate_toggle=WEBP_CUDA_DIRECT_RESULT_TOKENS
+benchmark=webp_cuda_batch_benchmark --variant cuda --mode lossy --batch-size 24 --method 4 --quality 75 --warmups 1 --samples 5 --force-cuda
+corpus=/tmp/libwebp-cuda-batch-corpus-20260818/{png,jpeg}/{graphic,photo,texture}-{small,medium}
+pair_orders=png:P-C,C-P;jpeg:C-P,P-C

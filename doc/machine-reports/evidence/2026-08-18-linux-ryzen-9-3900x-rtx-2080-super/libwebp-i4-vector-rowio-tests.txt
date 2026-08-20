@@ -1,0 +1,19 @@
+Candidate build configuration:
+  Release, CMAKE_CUDA_ARCHITECTURES=native, CUDA 12.0.140
+Candidate executable SHA-256:
+  9c5da885fb1513d4b21f0a4ab56e52b2efd4e6723b0c9eac203ca77555f5bd0d
+
+Candidate focused test:
+  PASS: CUDA trellis, padded strides, all band remainders, and transactional fallbacks are byte-exact
+
+Restored build configuration:
+  Release, CMAKE_CUDA_ARCHITECTURES=native, CUDA 12.0.140
+Restored executable SHA-256:
+  6d3caa19b2a83e006c1984b4da8aedfc6d23f43dc7ade8149af22e886b611f09
+
+Restored focused test:
+  PASS: CUDA trellis, padded strides, all band remainders, and transactional fallbacks are byte-exact
+
+Every parent/candidate timing row retained its format-specific aggregate hash
+and byte count. The rejected source patch and complete parent/candidate sm_75
+SASS dumps are archived beside this transcript.

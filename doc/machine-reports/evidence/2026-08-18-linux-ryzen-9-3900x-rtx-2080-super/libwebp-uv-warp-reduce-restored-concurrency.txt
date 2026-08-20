@@ -1,0 +1,1 @@
+PASS: concurrent CUDA encoder calls are deterministic

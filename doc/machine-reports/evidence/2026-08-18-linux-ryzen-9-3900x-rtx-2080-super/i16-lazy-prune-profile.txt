@@ -1,0 +1,19 @@
+decimate GPU wall: 11.07 ms (32x32 MBs)
+decimate phases (% of block cycles): import 3.7% i16-num 9.1% i16-sel 10.4% i4 62.8% uv-num 5.1% uv-sel 8.4% recon 0.5%
+i16 counters: total 1024 lazy-evals 4096 winners 0:1024 1:0 2:0 3:0
+decimate GPU wall: 26.92 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.8% i16-num 9.4% i16-sel 10.2% i4 63.2% uv-num 4.9% uv-sel 8.0% recon 0.5%
+i16 counters: total 7500 lazy-evals 30000 winners 0:7500 1:0 2:0 3:0
+decimate GPU wall: 9.78 ms (32x32 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.6% i16-sel 9.5% i4 64.9% uv-num 5.8% uv-sel 5.8% recon 0.5%
+i16 counters: total 1024 lazy-evals 4096 winners 0:981 1:0 2:26 3:17
+decimate GPU wall: 25.67 ms (100x75 MBs)
+decimate phases (% of block cycles): import 4.0% i16-num 10.0% i16-sel 9.3% i4 64.8% uv-num 5.8% uv-sel 5.7% recon 0.6%
+i16 counters: total 7500 lazy-evals 30000 winners 0:7374 1:0 2:78 3:48
+decimate GPU wall: 10.31 ms (32x32 MBs)
+decimate phases (% of block cycles): import 4.8% i16-num 11.1% i16-sel 25.9% i4 40.3% uv-num 6.6% uv-sel 10.7% recon 0.6%
+i16 counters: total 1024 lazy-evals 3262 winners 0:394 1:231 2:364 3:35
+decimate GPU wall: 27.56 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.1% i16-num 12.0% i16-sel 30.3% i4 34.2% uv-num 6.8% uv-sel 10.9% recon 0.7%
+i16 counters: total 7500 lazy-evals 14757 winners 0:5220 1:1198 2:1027 3:55
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":6,"input_count":6,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":6546432,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":430780006,"ns_per_image":71796667.667,"images_per_second":13.928223,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"743146796a9addc7","output_bytes":1610422}

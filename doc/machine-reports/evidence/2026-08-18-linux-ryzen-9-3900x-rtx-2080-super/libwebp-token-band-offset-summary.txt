@@ -1,0 +1,30 @@
+Machine: AMD Ryzen 9 3900X / NVIDIA GeForce RTX 2080 SUPER (sm_75)
+Builds: CMAKE_CUDA_ARCHITECTURES=native, retained parent and temporary candidate
+Workload: forced CUDA lossy, method 4, quality 75, batch 6, warmups 2
+Protocol: two order-reversed processes per format, six samples per process
+
+Optimized coverage profile (combined PNG and JPEG workload):
+  VP8RecordCoeffTokens calls: 15,062,880
+  coefficient iterations:    117,400,812
+  zero coefficients:          46,956,000 (40.0%)
+  magnitude-one coefficients: 33,918,456 (28.9%)
+  magnitude > 1:              36,526,356 (31.1%)
+  magnitude > 10:                190,584 (0.16%)
+
+Generated code:
+  parent VP8RecordCoeffTokens:    0x1370 = 4976 bytes
+  candidate VP8RecordCoeffTokens: 0x1350 = 4944 bytes
+  Candidate replaces two band-times-33 arithmetic chains with one uint16 load.
+
+Pooled timing medians:
+  format  parent ms/image  candidate ms/image  parent-candidate gain
+  PNG     40.239901        40.356235          -0.116334
+  JPEG    40.321496        39.850567           0.470929
+
+Exactness:
+  PNG  hash 0eaafe6ff2862adb, bytes 1610422 (all 24 rows)
+  JPEG hash de1a26dc5ccc887e, bytes 1600198 (all 24 rows)
+  CTest: 7/7 passed
+
+Decision: rejected and removed. PNG regressed; JPEG gain is below 1.5 ms/image.
+Scope: RTX 2080 SUPER evidence only; no Ampere+ claim.

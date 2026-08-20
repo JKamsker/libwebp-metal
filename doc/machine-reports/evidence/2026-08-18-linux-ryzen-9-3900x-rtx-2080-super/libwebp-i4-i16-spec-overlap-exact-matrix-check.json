@@ -1,0 +1,218 @@
+{
+  "schema": "libwebp-exact-matrix-check-v1",
+  "rows": 30,
+  "cells": 15,
+  "all_exact": true,
+  "details": [
+    {
+      "method": 2,
+      "quality": 25,
+      "hashes": [
+        "162dbc1dc392e008"
+      ],
+      "bytes": [
+        5154
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 2,
+      "quality": 75,
+      "hashes": [
+        "bc91d346d4f45456"
+      ],
+      "bytes": [
+        13262
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 2,
+      "quality": 98,
+      "hashes": [
+        "6c8914298bd62820"
+      ],
+      "bytes": [
+        52226
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 3,
+      "quality": 25,
+      "hashes": [
+        "752e9a24c5e4585d"
+      ],
+      "bytes": [
+        5072
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 3,
+      "quality": 75,
+      "hashes": [
+        "e335883abee09135"
+      ],
+      "bytes": [
+        13326
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 3,
+      "quality": 98,
+      "hashes": [
+        "eaa8b07e7c84dae4"
+      ],
+      "bytes": [
+        51758
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 4,
+      "quality": 25,
+      "hashes": [
+        "1e97fd068d1d3be1"
+      ],
+      "bytes": [
+        5064
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 4,
+      "quality": 75,
+      "hashes": [
+        "db6d00cbcc6deda2"
+      ],
+      "bytes": [
+        13376
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 4,
+      "quality": 98,
+      "hashes": [
+        "2377d2f0ccffa583"
+      ],
+      "bytes": [
+        51780
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 5,
+      "quality": 25,
+      "hashes": [
+        "391d577367f6ba14"
+      ],
+      "bytes": [
+        4930
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 5,
+      "quality": 75,
+      "hashes": [
+        "fbdbef4a301c378e"
+      ],
+      "bytes": [
+        12270
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 5,
+      "quality": 98,
+      "hashes": [
+        "63a31040aa9cd96d"
+      ],
+      "bytes": [
+        51106
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 6,
+      "quality": 25,
+      "hashes": [
+        "e0d8448639e3e17d"
+      ],
+      "bytes": [
+        4800
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 6,
+      "quality": 75,
+      "hashes": [
+        "08219eaae5b41a07"
+      ],
+      "bytes": [
+        11968
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    },
+    {
+      "method": 6,
+      "quality": 98,
+      "hashes": [
+        "6028ab2384dc1d5e"
+      ],
+      "bytes": [
+        49702
+      ],
+      "arms": [
+        "cpu",
+        "cuda"
+      ]
+    }
+  ]
+}

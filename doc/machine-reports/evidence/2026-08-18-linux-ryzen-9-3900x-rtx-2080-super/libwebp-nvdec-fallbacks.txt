@@ -1,0 +1,36 @@
+ALPHA FALLBACK
+{"operation":"webp_transcode","sequence":0,"backend":"cpu","decline_reason":"alpha","decoded_format":"cpu-rgba","nvdec_decode_status":0,"nvdec_decode_status_result":-1,"nvdec_error_concealed":false,"width":65,"height":63,"method":4,"quality":75,"parse_ns":151,"decode_ns":224900,"device_handoff_ns":0,"webp_encode_ns":229136170,"metadata_ns":30,"total_ns":229361812,"images_per_second":4.359924,"decoded_host_to_device_bytes":0,"decoded_device_to_host_bytes":0,"decoded_device_to_device_bytes":0,"verification_psnr_db":-1.000000,"output_bytes":1110}
+62570c2ed23c77589632c1eedadcc957dd635d453c875ad5f66b11e2c07dff50  /tmp/issue16-alpha-input.pgm
+62570c2ed23c77589632c1eedadcc957dd635d453c875ad5f66b11e2c07dff50  /tmp/issue16-alpha-output.pgm
+METADATA ROUNDTRIP
+{"operation":"webp_transcode","sequence":0,"backend":"nvdec","decline_reason":"none","decoded_format":"nvdec-nv12","nvdec_decode_status":0,"nvdec_decode_status_result":801,"nvdec_error_concealed":false,"width":1600,"height":1200,"method":4,"quality":75,"parse_ns":151,"decode_ns":162611029,"device_handoff_ns":942380,"webp_encode_ns":27570689,"metadata_ns":6522,"total_ns":190241078,"images_per_second":5.256488,"decoded_host_to_device_bytes":0,"decoded_device_to_host_bytes":0,"decoded_device_to_device_bytes":5760000,"verification_psnr_db":99.000000,"output_bytes":14508}
+Canvas size: 1600 x 1200
+Features present: EXIF metadata
+Size of the EXIF metadata: 1496
+Canvas size: 1600 x 1200
+Features present: EXIF metadata
+Size of the EXIF metadata: 1496
+Saved file /tmp/issue16-metadata-input-exif.bin (1496 bytes)
+Saved file /tmp/issue16-metadata-output-exif.bin (1496 bytes)
+5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  /tmp/issue16-metadata-input-exif.bin
+5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  /tmp/issue16-metadata-output-exif.bin
+INJECTED FALLBACKS
+{"operation":"webp_transcode","sequence":0,"backend":"cpu","decline_reason":"forced-cpu","decoded_format":"cpu-yuv420","nvdec_decode_status":0,"nvdec_decode_status_result":-1,"nvdec_error_concealed":false,"width":1600,"height":1200,"method":4,"quality":75,"parse_ns":120,"decode_ns":6327569,"device_handoff_ns":0,"webp_encode_ns":156416638,"metadata_ns":50,"total_ns":163000125,"images_per_second":6.134965,"decoded_host_to_device_bytes":0,"decoded_device_to_host_bytes":0,"decoded_device_to_device_bytes":0,"verification_psnr_db":-1.000000,"output_bytes":12986}
+{"operation":"webp_transcode","sequence":0,"backend":"cpu","decline_reason":"injected-parser-error","decoded_format":"cpu-yuv420","nvdec_decode_status":0,"nvdec_decode_status_result":-1,"nvdec_error_concealed":false,"width":1600,"height":1200,"method":4,"quality":75,"parse_ns":181,"decode_ns":6099473,"device_handoff_ns":0,"webp_encode_ns":158890229,"metadata_ns":70,"total_ns":165020570,"images_per_second":6.059851,"decoded_host_to_device_bytes":0,"decoded_device_to_host_bytes":0,"decoded_device_to_device_bytes":0,"verification_psnr_db":-1.000000,"output_bytes":12986}
+{"operation":"webp_transcode","sequence":0,"backend":"cpu","decline_reason":"injected-decoder-error","decoded_format":"cpu-yuv420","nvdec_decode_status":0,"nvdec_decode_status_result":-1,"nvdec_error_concealed":false,"width":1600,"height":1200,"method":4,"quality":75,"parse_ns":150,"decode_ns":6033350,"device_handoff_ns":0,"webp_encode_ns":27669413,"metadata_ns":140,"total_ns":161400968,"images_per_second":6.195750,"decoded_host_to_device_bytes":0,"decoded_device_to_host_bytes":0,"decoded_device_to_device_bytes":0,"verification_psnr_db":-1.000000,"output_bytes":12986}
+{"operation":"webp_transcode","sequence":0,"backend":"cpu","decline_reason":"nvdec-map-error","decoded_format":"cpu-yuv420","nvdec_decode_status":0,"nvdec_decode_status_result":-1,"nvdec_error_concealed":false,"width":1600,"height":1200,"method":4,"quality":75,"parse_ns":141,"decode_ns":6097409,"device_handoff_ns":0,"webp_encode_ns":27734344,"metadata_ns":40,"total_ns":193108334,"images_per_second":5.178440,"decoded_host_to_device_bytes":0,"decoded_device_to_host_bytes":0,"decoded_device_to_device_bytes":0,"verification_psnr_db":-1.000000,"output_bytes":12986}
+{"operation":"webp_transcode","sequence":0,"backend":"cpu","decline_reason":"nvdec-map-or-allocation-error","decoded_format":"cpu-yuv420","nvdec_decode_status":0,"nvdec_decode_status_result":-1,"nvdec_error_concealed":false,"width":1600,"height":1200,"method":4,"quality":75,"parse_ns":140,"decode_ns":6089785,"device_handoff_ns":0,"webp_encode_ns":27743452,"metadata_ns":51,"total_ns":196878707,"images_per_second":5.079269,"decoded_host_to_device_bytes":0,"decoded_device_to_host_bytes":0,"decoded_device_to_device_bytes":0,"verification_psnr_db":-1.000000,"output_bytes":12986}
+{"operation":"webp_transcode","sequence":0,"backend":"cpu","decline_reason":"device-yuv-handoff-error","decoded_format":"cpu-yuv420","nvdec_decode_status":0,"nvdec_decode_status_result":801,"nvdec_error_concealed":false,"width":1600,"height":1200,"method":4,"quality":75,"parse_ns":140,"decode_ns":5949874,"device_handoff_ns":98985,"webp_encode_ns":27304942,"metadata_ns":100,"total_ns":197771163,"images_per_second":5.056349,"decoded_host_to_device_bytes":0,"decoded_device_to_host_bytes":0,"decoded_device_to_device_bytes":0,"verification_psnr_db":-1.000000,"output_bytes":12986}
+{"operation":"webp_transcode","sequence":0,"backend":"cpu","decline_reason":"cuda-device-unavailable","decoded_format":"cpu-yuv420","nvdec_decode_status":0,"nvdec_decode_status_result":-1,"nvdec_error_concealed":false,"width":1600,"height":1200,"method":4,"quality":75,"parse_ns":151,"decode_ns":6111125,"device_handoff_ns":0,"webp_encode_ns":63598314,"metadata_ns":50,"total_ns":100718892,"images_per_second":9.928624,"decoded_host_to_device_bytes":0,"decoded_device_to_host_bytes":0,"decoded_device_to_device_bytes":0,"verification_psnr_db":-1.000000,"output_bytes":12986}
+dedeac1e41c28bf952817345714618c0b11a09fef298e730c2646a0e9abf358b  /tmp/issue16-final-reference.webp
+dedeac1e41c28bf952817345714618c0b11a09fef298e730c2646a0e9abf358b  /tmp/issue16-final-inject-allocation.webp
+dedeac1e41c28bf952817345714618c0b11a09fef298e730c2646a0e9abf358b  /tmp/issue16-final-inject-decoder.webp
+dedeac1e41c28bf952817345714618c0b11a09fef298e730c2646a0e9abf358b  /tmp/issue16-final-inject-handoff.webp
+dedeac1e41c28bf952817345714618c0b11a09fef298e730c2646a0e9abf358b  /tmp/issue16-final-inject-map.webp
+dedeac1e41c28bf952817345714618c0b11a09fef298e730c2646a0e9abf358b  /tmp/issue16-final-inject-parser.webp
+dedeac1e41c28bf952817345714618c0b11a09fef298e730c2646a0e9abf358b  /tmp/issue16-final-no-device.webp
+MALFORMED TRANSACTION
+dedeac1e41c28bf952817345714618c0b11a09fef298e730c2646a0e9abf358b  /tmp/issue16-final-transaction.webp
+transcode failed at sequence 0
+malformed_exit=1
+dedeac1e41c28bf952817345714618c0b11a09fef298e730c2646a0e9abf358b  /tmp/issue16-final-transaction.webp

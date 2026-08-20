@@ -4,15 +4,23 @@
 
 This is the private interface between the current libwebp encoder and optional
 compute backends. It is deliberately not a public WebP API and not a generic
-GPU runtime. The first ABI describes only the three complete stages already in
-this tree:
+GPU runtime. ABI version 11 describes the complete stages already in this tree:
 
 - `VP8LColorSpaceTransform()`: lossless cross-color transform search and
   application;
 - the candidate-search half of `VP8LHashChainFill()`, with CPU replay of the
   left-extension and skip policy;
 - the opaque, non-dithered, non-Sharp-YUV RGB/BGR to YUV420 import path in
-  `ImportYUVAFromRGBA()`.
+  `ImportYUVAFromRGBA()`;
+- exact near-lossless preprocessing; and
+- the independent macroblock susceptibility and initial-mode work performed by
+  `VP8EncAnalyze()`, with global segment assignment retained on the CPU; and
+- an experimental lossless predictor selector plus exact residual transform;
+  and
+- exact population counting for full-stream lossless backward-reference
+  histograms, with entropy and merge policy retained on the CPU; and
+- exact whole-pass lossy macroblock decimation for basic, selected-mode
+  trellis, and all-candidate trellis RD levels.
 
 The local `15418-Final-Project` repository was reviewed at commit `b55ba547`.
 Its final CUDA path installs a `VP8LColorSpaceTransform` function pointer,
@@ -33,7 +41,7 @@ removes the encoder-to-Metal dependency without changing those kernel caches.
 
 ## ABI and capability discovery
 
-`src/enc/accelerator_enc.h` defines ABI version 1. A backend returns one static,
+`src/enc/accelerator_enc.h` defines ABI version 11. A backend returns one static,
 immutable `WebPEncoderAccelerator` descriptor with:
 
 - a name used by `WEBP_ACCELERATOR=auto|none|metal|cuda` selection;
@@ -41,7 +49,7 @@ immutable `WebPEncoderAccelerator` descriptor with:
 - behavioral properties;
 - an opaque backend-owned context;
 - one typed callback per supported stage;
-- optional `flush` and `trim` lifecycle hooks.
+- optional `end_encode`, `flush`, and `trim` lifecycle hooks.
 
 The required properties are synchronous completion and transactional outputs.
 The current Metal descriptor additionally declares deterministic operation,
@@ -50,11 +58,16 @@ stage without its typed callback is rejected as an accelerator error and the
 CPU implementation remains the authority.
 
 The built-in registry is compile-time, not a dynamic plugin ABI. Metal is added
-under `WEBP_USE_METAL`. A CUDA port should add `WebPGetCUDAEncoderAccelerator()`
-under `WEBP_USE_CUDA` to the same short registry. In automatic mode, a backend
-that returns `NOT_RUN` permits the next backend to try the stage; an attempted
-backend error goes directly to CPU fallback. An explicit, unknown backend name
-selects none, which is safer than silently selecting a different accelerator.
+under `WEBP_USE_METAL`, and CUDA is added under `WEBP_USE_CUDA` through
+`WebPGetCUDAEncoderAccelerator()`. The current CUDA descriptor advertises the
+lossless color-transform, lossless hash-candidate, opaque RGB-to-YUV, exact
+near-lossless, experimental lossy-analysis, experimental lossless predictor,
+exact lossless histogram-counting, and exact lossy-decimation stages. In
+automatic mode, a
+backend that returns
+`NOT_RUN` permits the next backend to try the stage; an attempted backend error
+goes directly to CPU fallback. An explicit, unknown backend name selects none,
+which is safer than silently selecting a different accelerator.
 
 The existing Metal controls remain compatible and are evaluated inside Metal:
 `WEBP_METAL`, `WEBP_METAL_HASH`, `WEBP_METAL_LOSSY`, their minimum-pixel
@@ -65,11 +78,21 @@ override a Metal stage-specific disable or threshold.
 ## Lifecycle and resource ownership
 
 Backend descriptors have process lifetime. Backend initialization must be lazy
-and thread-safe because libwebp has no global accelerator init/shutdown API and
-the lossy import call occurs before either encoder object exists. A backend may
+and thread-safe because libwebp has no global accelerator init/shutdown API. A
+backend may
 retain its device, compiled pipelines/modules, streams/queues, events, and
 private staging buffers across encodes. It must not retain any pointer from a
-request.
+request for later access. A synchronous pipeline may retain pointer values only
+as opaque identity tokens: CUDA uses the Y/U/V plane identities and geometry to
+connect RGB conversion to analysis, never dereferences them after the callback,
+and clears the tokens at the end of every encode.
+
+The common dispatcher holds the active encode's lossless flag, method, and
+quality in thread-local storage between `WebPAcceleratorBeginEncode()` and
+`WebPAcceleratorEndEncode()`. It copies method and quality into an RGB request
+only during a lossy `WebPEncode()` call. Direct picture-conversion calls receive
+`-1` for both values, and toolchains without supported thread-local storage
+decline this optional context rather than sharing it across threads.
 
 All request buffers are borrowed until the synchronous callback returns:
 
@@ -77,7 +100,12 @@ All request buffers are borrowed until the synchronous callback returns:
 | --- | --- | --- |
 | Lossless color transform | dimensions, transform bits, quality, original `argb` | transformed `argb`, tile `transform_image` |
 | Lossless hash chain | `pixels`, CPU-built `chain`, search parameters | one packed candidate per pixel |
-| RGB to YUV420 | packed-channel pointers, source step/stride, dimensions | caller-allocated Y/U/V planes and their strides |
+| RGB to YUV420 | packed-channel pointers, source step/stride, dimensions, and optional active-encode method/quality | caller-allocated Y/U/V planes and their strides |
+| Near-lossless | original ARGB and preprocessing parameters | tightly packed preprocessed ARGB |
+| Lossy analysis | Y/U/V planes, geometry, method, quality | one susceptibility/mode record per macroblock |
+| Lossy decimation | Y/U/V planes, segments, quantizers, stable coefficient costs, RD level | mode decisions, levels, non-zero contexts, diffusion errors, reconstructed planes |
+| Lossless predictor | ARGB, allowed tile-bit range, exact/quantization semantics | residual ARGB, predictor map, selected tile bits |
+| Lossless histogram | at most 16 linked command spans, command count, cache bits | five complete population-count arrays |
 
 Backends should upload into private buffers, run, validate device completion,
 then copy to caller outputs. In-place or zero-copy execution is allowed only if
@@ -88,8 +116,10 @@ owned and must use overflow-checked sizes.
 There is no automatic destruction at process exit. The optional `trim` hook is
 the future way to release capacity caches while keeping the descriptor usable.
 The optional `flush` hook is a synchronization boundary for a future encoder
-batch API. ABI v1 stage calls remain synchronous, so current Metal needs neither
-hook. An asynchronous callback must not be added to ABI v1.
+batch API. The optional `end_encode` hook clears temporary cross-stage handoff
+state after success or every recoverable early exit. Current stage calls remain
+synchronous, so current Metal needs none of these hooks. An asynchronous
+callback requires a future ABI.
 
 ## Result, fallback, and synchronization contract
 
@@ -110,9 +140,11 @@ state should be quarantined by the backend so later calls decline cheaply.
 Callbacks must be thread-safe. They return only after command completion and
 host visibility. The current Metal backends use shared-storage buffers,
 `waitUntilCompleted`, a completion-status check, then `memcpy`, all under a
-mutex. A CUDA backend should use a private stream plus events or stream
-synchronization, copy into host outputs only after success, and serialize any
-shared staging allocation. Synchronizing the entire CUDA device is unnecessary.
+mutex. CUDA uses a private nonblocking stream plus stream synchronization,
+copies into host outputs only after success, and serializes its shared staging
+allocation. Even the synchronous-copy experiment keeps transfers on that
+private stream; the default stream would not order them with a nonblocking
+stream. Synchronizing the entire CUDA device is unnecessary.
 
 Progress and cancellation remain in the CPU call sites. The GPU work is one
 synchronous stage; after success the lossless call sites continue current
@@ -126,8 +158,8 @@ backend thread.
 software stack produce identical stage outputs. It does not require the
 lossless cross-color heuristic to choose the same transform as upstream CPU.
 All successful WebP files must decode to identical pixels; stages documented as
-CPU-equivalent (currently hash candidates and RGB-to-YUV) should also remain
-byte-identical in focused tests.
+CPU-equivalent (currently hash candidates, RGB-to-YUV, near-lossless, and lossy
+analysis) should also remain byte-identical in focused tests.
 
 The color transform keeps the deterministic independent-tile semantics ported
 from CUDA: zero neighbor multipliers and no accumulated cross-tile histogram.
@@ -145,10 +177,40 @@ negative stride; output strides are explicit because WebP plane padding is not
 part of the device result. The exact 2x2 Metal grid is the production
 specialization selected after the item-4 ablation matrix.
 
-New work such as predictor residual/final-transform or subtract-green/fused
-transforms must receive a new stage bit and typed request only after its modern
-CPU call-site semantics, ordering, and fallback transaction are defined. Do not
-route unrelated kernels through the color-transform request.
+Lossy analysis uploads the already-created YUV420 planes and returns one small
+record per macroblock: susceptibility, initial luma type/mode, chroma mode, and
+chroma susceptibility. Macroblocks are independent at this boundary because
+the CPU path deliberately imports original, uncompressed neighbor samples. The
+CPU validates every result, commits the records transactionally, performs
+global k-means segment assignment, and retains progress/cancellation. CUDA
+reproduces the integer forward transform, coefficient histogram, edge
+replication, prediction defaults, comparisons, and tie behavior. The stage is
+runtime opt-in until matched end-to-end measurements establish a crossover.
+With the separate fused experiment enabled, RGB conversion launches this exact
+analysis kernel on the same stream before the first synchronization and
+downloads both outputs together. The later analysis callback accepts the
+cached host result only after matching plane identity, strides, geometry,
+method, quality, and result count. A mismatch invalidates the cache and follows
+the normal path, so the cross-stage optimization changes performance only.
+
+The experimental CUDA predictor deliberately changes the lossless selection
+heuristic while preserving codec semantics. Independent tiles evaluate all 14
+legal WebP predictors with a deterministic integer histogram-concentration
+score, select the coarsest allowed tile grid, and emit exact residuals. It
+declines near-lossless scan-order quantization and non-exact inputs containing
+fully transparent pixels, whose RGB cleanup has scan-order dependencies. The
+selected map and residuals are transactional and may therefore
+produce a different-size but pixel-identical lossless stream. Runtime remains
+off until E2E time and output-size measurements establish that the parallel
+policy is worthwhile.
+
+The CUDA histogram callback consumes the encoder's existing full-image linked
+backward-reference blocks directly. It computes the five exact integer symbol
+counts used by candidate-cost evaluation and final Huffman preparation, then
+commits all arrays only after kernel completion and command validation. It does
+not accelerate distance-remapped local histogram images, entropy estimates,
+histogram merging, or Huffman construction. The runtime opt-in remains off
+until matched end-to-end measurements establish a crossover.
 
 ## Persistence, batching, and instrumentation
 
@@ -156,9 +218,9 @@ Persistence is advertised explicitly so threshold policy can account for warm
 pipelines and reused buffers. Backends should grow staging capacity
 geometrically or in bounded pages, never shrink on the hot path, and serialize
 reuse or maintain a small pool. The current Metal path rounds buffers and keeps
-them for the process. A CUDA port should create its context/module/stream once
-and reuse allocations rather than repeating the historical `cudaMalloc` and
-`cudaFree` sequence.
+them for the process. CUDA creates its context/stream once and reuses
+geometrically grown allocations rather than repeating the historical
+`cudaMalloc` and `cudaFree` sequence.
 
 Batch submission is intentionally a hook, not active behavior: no common
 encoder session currently spans lossy import and both lossless stages without a
@@ -184,7 +246,8 @@ interface. The Metal implementation still owns two caches (lossless/hash and
 lossy import). Consolidating them behind one shared device/queue allocator is a
 safe follow-up, not required for backend neutrality.
 
-A CUDA implementation should be introduced without reviving the old tree:
+A CUDA implementation was introduced stage by stage without reviving the old
+tree:
 
 1. Add an opt-in `WEBP_ENABLE_CUDA` build choice and define `WEBP_USE_CUDA`
    only for supported toolchains; do not make CUDA a project-wide required
@@ -201,6 +264,33 @@ A CUDA implementation should be introduced without reviving the old tree:
    cases.
 5. Compare decoded pixels and stage output as required above before enabling a
    stage by default. Performance threshold work is separate from this design.
+
+All seven ABI-v7 stages are implemented in `src/enc/cuda_enc.cu`. They share a
+private nonblocking stream, optional events, geometrically grown device/host
+staging, serialized access, transactional output commits, and device-loss
+quarantine. The color kernel preserves independent-tile semantics; hash output
+is replayed through the CPU's left-extension boundary; RGB conversion matches
+the eligible CPU import byte-for-byte. When both lossy stages run sequentially,
+analysis consumes the packed device YUV left by RGB conversion instead of
+uploading the just-downloaded host planes again. A runtime-gated fused mode
+instead launches conversion and exact analysis before a single synchronization;
+its later callback consumes the identity-matched cached analysis result. An
+independent runtime-gated lossless handoff preserves cross-color output in a dedicated device buffer
+across transform-map encoding and reuses it for the matching main hash request.
+When predictor and residency are both enabled, cross-color consumes the
+resident predictor residuals directly. The synchronous callback still commits
+host output transactionally, but that readback is no longer used as the source
+of a subsequent cross-color upload.
+CMake/package integration, forced-device correctness, deterministic output,
+CPU override, unavailable-device fallback, compile-time ablations, and
+concurrent encodes are covered.
+
+Every performance choice is independently preprocessor-gated: the seven stages,
+persistent buffers, pinned staging, copy synchronization policy, hash matching
+unroll, read-only cache loads, restrict-qualified pointers, per-stage block
+width, fused 2x2 RGB work, packed four-byte RGB loads, fused lossy import and
+analysis, and stream-ordered device allocation. Defaults are selected from warm/cold measurements on an RTX 2080
+SUPER; experimental alternatives stay buildable for later hardware matrices.
 
 ## Migration plan and compatibility risks
 

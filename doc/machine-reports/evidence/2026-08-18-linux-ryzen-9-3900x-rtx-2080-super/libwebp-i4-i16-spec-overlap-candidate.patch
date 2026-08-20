@@ -1,0 +1,353 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index 7809e965..e99d03e6 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -665,6 +665,170 @@ __device__ __forceinline__ void I4ITransformCoop4(
+   dst_row[3] = CudaClip8b(ref_row[3] + ((e - h) >> 3));
+ }
+ 
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++__device__ void BuildI4BoundaryDirect(const MBWork* w, int block,
++                                      uint8_t boundary[13]);
++
++__device__ __forceinline__ void I16TeamBarrier() {
++  asm volatile("bar.sync 1, 128;" : : : "memory");
++}
++
++__device__ __forceinline__ void I4SpecTeamBarrier() {
++  asm volatile("bar.sync 2, 128;" : : : "memory");
++}
++
++// The lower 128-thread team owns I16. While it is active, the otherwise idle
++// upper team may compute a raster prefix of I4 blocks. The authoritative I4
++// loop later replays the original ordered I16 threshold/header checks over
++// these ready blocks before consuming any speculative result.
++__device__ __forceinline__ void SpeculateI4Prefix(
++    const DeviceView* v, const DecimateKernelParams* p,
++    const CostCache* costs, const DeviceSegment* dqm, int x, int y,
++    int tlambda, MBWork* w, volatile int* i16_done,
++    volatile int* spec_stop, int16_t i4_best_levels[16][16],
++    uint8_t i4_boundary[13], uint8_t i4_block_nz[16],
++    volatile uint8_t i4_ready[16], long long i4_block_D[16],
++    long long i4_block_SD[16], long long i4_block_H[16],
++    long long i4_block_R[16], long long i4_block_score[16]) {
++  const int team_tid = (int)threadIdx.x - 128;
++  const int team = 1;
++  for (int block = 0; block < 16; ++block) {
++    if (team_tid == 0) *spec_stop = *i16_done;
++    I4SpecTeamBarrier();
++    if (*spec_stop) break;
++    if (team_tid == 0) BuildI4BoundaryDirect(w, block, i4_boundary);
++    I4SpecTeamBarrier();
++    if (team_tid < kNumBModes) {
++      const int bx = block & 3, by = block >> 2;
++      const int preds_w = 4 * (int)p->mb_w + 1;
++      const uint8_t* const preds_base =
++          v->preds + (size_t)(4 * y + by) * preds_w + (4 * x + bx);
++      const int left_mode =
++          (bx == 0) ? preds_base[-1] : w->rd.modes_i4[block - 1];
++      const int top_mode =
++          (by == 0) ? preds_base[-preds_w] : w->rd.modes_i4[block - 4];
++      w->i4_mode_cost[team][team_tid] =
++          v->tables->fixed_costs_i4[top_mode][left_mode][team_tid];
++    }
++    {
++      const int warp = team_tid >> 5, lane = team_tid & 31;
++      if (lane == 0 && warp < 4) {
++        for (int m = warp; m < kNumBModes; m += 4) {
++          CudaIntra4PredMode(w->i4_yuv_p2, i4_boundary + 5, m);
++        }
++      }
++    }
++    I4SpecTeamBarrier();
++    if (team_tid < 4 * kNumBModes) {
++      const int mode = team_tid >> 2;
++      const int mode_lane = team_tid & 3;
++      const unsigned int warp_mask = __activemask();
++      const uint8_t* const src =
++          w->yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
++      const uint8_t* const ref =
++          w->i4_yuv_p2 + kCudaVP8I4ModeOffsets[mode];
++      int nz = 0;
++      I4FTransformCoop4(src, ref, w->i4_tmp[team][mode],
++                        w->i4_transform_tmp[team][mode], mode_lane,
++                        warp_mask);
++      __syncwarp(warp_mask);
++      nz = I4QuantizeBlockCoop4(w->i4_tmp[team][mode],
++                                w->i4_levels[team][mode], &dqm->y1,
++                                mode_lane, warp_mask);
++      if (mode_lane == 0) w->i4_nz[team][mode] = nz;
++      __syncwarp(warp_mask);
++      I4ITransformCoop4(ref, w->i4_tmp[team][mode],
++                        w->i4_out[team][mode],
++                        w->i4_transform_tmp[team][mode], mode_lane,
++                        warp_mask);
++    }
++    I4SpecTeamBarrier();
++    {
++      const int warp = team_tid >> 5, lane = team_tid & 31;
++      const int bx = block & 3, by = block >> 2;
++      const int ctx =
++          ((by == 0) ? w->nz_ctx.top_nz[bx] : i4_block_nz[block - 4]) +
++          ((bx == 0) ? w->nz_ctx.left_nz[by] : i4_block_nz[block - 1]);
++      const uint8_t* const src =
++          w->yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
++      if (warp == 0 && lane < kNumBModes) {
++        w->i4_rcost[team][lane] = ResidualCostDev(
++            costs, ctx, 0, 3, w->i4_levels[team][lane]);
++      } else if (warp == 2 && lane < kNumBModes) {
++        w->i4_sse[team][lane] =
++            CudaSSE4x4(src, w->i4_out[team][lane]);
++        w->i4_flat[team][lane] =
++            (lane > 0) ? CudaIsFlat(w->i4_levels[team][lane], 1,
++                                    kFlatnessLimitI4)
++                       : 0;
++      } else if (warp == 3 && lane < kNumBModes) {
++        w->i4_sd[team][lane] =
++            tlambda ? CudaDisto4x4(src, w->i4_out[team][lane], kWeightY) : 0;
++      }
++    }
++    I4SpecTeamBarrier();
++    if (team_tid < kNumBModes) {
++      const long long D = w->i4_sse[team][team_tid];
++      const long long SD =
++          tlambda ? MULT_8B_DEV(tlambda, w->i4_sd[team][team_tid]) : 0;
++      const long long H = w->i4_mode_cost[team][team_tid];
++      const long long R =
++          w->i4_flat[team][team_tid] ? kFlatnessPenalty : 0;
++      w->i4_base_score[team][team_tid] =
++          (R + H) * (long long)dqm->lambda_i4 + kRDDistoMult * (D + SD);
++      w->i4_full_score[team][team_tid] =
++          (R + w->i4_rcost[team][team_tid] + H) *
++              (long long)dqm->lambda_i4 +
++          kRDDistoMult * (D + SD);
++    }
++    if ((team_tid >> 5) == 0) __syncwarp();
++    if (team_tid == 0) {
++      ModeScore rd_i4;
++      int best_mode = -1;
++      InitScoreDev(&rd_i4);
++      for (int mode = 0; mode < kNumBModes; ++mode) {
++        ModeScore rd_tmp;
++        rd_tmp.D = w->i4_sse[team][mode];
++        rd_tmp.SD =
++            tlambda ? MULT_8B_DEV(tlambda, w->i4_sd[team][mode]) : 0;
++        rd_tmp.H = w->i4_mode_cost[team][mode];
++        rd_tmp.nz = (uint32_t)w->i4_nz[team][mode] << block;
++        rd_tmp.R = w->i4_flat[team][mode] ? kFlatnessPenalty : 0;
++        rd_tmp.score = w->i4_base_score[team][mode];
++        if (best_mode >= 0 && rd_tmp.score >= rd_i4.score) continue;
++        rd_tmp.R += w->i4_rcost[team][mode];
++        rd_tmp.score = w->i4_full_score[team][mode];
++        if (best_mode < 0 || rd_tmp.score < rd_i4.score) {
++          CopyScoreDev(&rd_i4, &rd_tmp);
++          best_mode = mode;
++        }
++      }
++      SetRDScoreDev(dqm->lambda_mode, &rd_i4);
++      for (int k = 0; k < 16; ++k) {
++        i4_best_levels[block][k] = w->i4_levels[team][best_mode][k];
++      }
++      uint8_t* const dst =
++          w->yuv_out2 + kCudaYOffEnc + kCudaVP8Scan[block];
++      for (int r = 0; r < 4; ++r) {
++        for (int c = 0; c < 4; ++c) {
++          dst[r * kCudaBPS + c] =
++              w->i4_out[team][best_mode][r * kCudaBPS + c];
++        }
++      }
++      w->rd.modes_i4[block] = (uint8_t)best_mode;
++      i4_block_nz[block] = rd_i4.nz ? 1 : 0;
++      i4_block_D[block] = rd_i4.D;
++      i4_block_SD[block] = rd_i4.SD;
++      i4_block_H[block] = rd_i4.H;
++      i4_block_R[block] = rd_i4.R;
++      i4_block_score[block] = rd_i4.score;
++      i4_ready[block] = 1;
++    }
++    I4SpecTeamBarrier();
++  }
++}
++#endif
++
+ // ---------------------------------------------------------------------------
+ // Import and borders.
+ 
+@@ -1146,6 +1310,21 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     DeviceView v, DecimateKernelParams p, uint8_t* left_nz8) {
+   __shared__ MBWork w;
+   __shared__ unsigned long long ph_ts[8];
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  __shared__ int i4_abort, i4_next_commit;
++  __shared__ long long i4_best_score;
++  __shared__ long long i4_best_D, i4_best_SD, i4_best_H, i4_best_R;
++  __shared__ uint32_t i4_best_nz;
++  __shared__ int i4_header_bits;
++  __shared__ int16_t i4_best_levels[16][16];
++  __shared__ uint8_t i4_boundary2[2][13];
++  __shared__ uint8_t i4_block_nz[16];
++  __shared__ volatile uint8_t i4_ready[16];
++  __shared__ long long i4_block_D[16], i4_block_SD[16];
++  __shared__ long long i4_block_H[16], i4_block_R[16];
++  __shared__ long long i4_block_score[16];
++  __shared__ volatile int i16_done, i4_spec_stop;
++#endif
+   const int y = (int)(p.y_min + blockIdx.x);
+   const int x = (int)p.diagonal - 2 * y;
+   const int mb_index = y * (int)p.mb_w + x;
+@@ -1193,6 +1372,20 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+   __syncthreads();
+   PHASE_TS(1);
+ 
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  if (tid == 128) {
++    i16_done = 0;
++    i4_spec_stop = 0;
++  }
++  if (tid >= 128 && tid < 144) i4_ready[tid - 128] = 0;
++#define I16_PHASE_SYNC() \
++  do { \
++    if (tid < 128) I16TeamBarrier(); \
++  } while (0)
++#else
++#define I16_PHASE_SYNC() __syncthreads()
++#endif
++
+   // ---- Phase 1 (parallel): intra16 transforms/quantization/reconstruction.
+   if (tid < 64) {
+     const int mode = tid >> 4;
+@@ -1202,7 +1395,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+         w.yuv_p + kCudaVP8I16ModeOffsets[mode] + kCudaVP8Scan[block];
+     CudaFTransform(src, ref, w.i16_tmp[mode][block]);
+   }
+-  __syncthreads();
++  I16_PHASE_SYNC();
+   if (tid < 4) {
+     const int mode = tid;
+     CudaFTransformWHT(w.i16_tmp[mode][0], w.i16_dc[mode]);
+@@ -1213,7 +1406,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     w.i16_sse[mode] = 0;
+     w.i16_sd[mode] = 0;
+   }
+-  __syncthreads();
++  I16_PHASE_SYNC();
+   if (p.rd_opt_level == kRDTrellisAll && tid < 4) {
+     const int mode = tid;
+     NzContext context = w.nz_ctx;
+@@ -1239,13 +1432,13 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+                                w.i16_ac_levels[mode][block], &dqm->y1);
+     atomicOr(&w.i16_nz[mode], (uint32_t)nz_bit << block);
+   }
+-  __syncthreads();
++  I16_PHASE_SYNC();
+   if (tid < 4) {
+     // CudaQuantizeBlockWHT rewrote i16_dc in place with the reconstructed
+     // coefficients; the inverse WHT scatters them back into the AC blocks.
+     CudaTransformWHT(w.i16_dc[tid], w.i16_tmp[tid][0]);
+   }
+-  __syncthreads();
++  I16_PHASE_SYNC();
+   if (tid < 64) {
+     const int mode = tid >> 4;
+     const int block = tid & 15;
+@@ -1254,7 +1447,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     CudaITransformOne(ref, w.i16_tmp[mode][block],
+                       w.i16_out[mode] + kCudaVP8Scan[block]);
+   }
+-  __syncthreads();
++  I16_PHASE_SYNC();
+   if (tid < 64) {
+     const int mode = tid >> 4;
+     const int block = tid & 15;
+@@ -1267,7 +1460,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+                 (unsigned long long)CudaDisto4x4(src, rec, kWeightY));
+     }
+   }
+-  __syncthreads();
++  I16_PHASE_SYNC();
+   PHASE_TS(2);
+ 
+   // ---- Phase 2: intra16 selection (PickBestIntra16). The residual-cost
+@@ -1297,7 +1490,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+           CudaIsFlat(w.i16_ac_levels[mode][0], 16, kFlatnessLimitI16);
+     }
+   }
+-  __syncthreads();
++  I16_PHASE_SYNC();
+   if (tid == 0) {
+     int is_flat = CudaIsFlatSource16(w.yuv_in + kCudaYOffEnc);
+     long long best_score = 0;
+@@ -1359,8 +1552,32 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+       w.rd.max_delta = (uint16_t)max_v;
+     }
+   }
+-  __syncthreads();
++  I16_PHASE_SYNC();
+   // Winner copies in parallel (selection above published w.rd.mode_i16).
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  if (tid < 128) {
++    const int m = w.rd.mode_i16;
++    for (int i = tid; i < 16 * 16; i += 128) {
++      w.rd.y_ac_levels[i >> 4][i & 15] = w.i16_ac_levels[m][i >> 4][i & 15];
++    }
++    if (tid < 16) w.rd.y_dc_levels[tid] = w.i16_dc_levels[m][tid];
++    for (int i = tid; i < 16 * 16; i += 128) {
++      const int r = i >> 4, cx = i & 15;
++      w.yuv_out[kCudaYOffEnc + r * kCudaBPS + cx] =
++          w.i16_out[m][r * kCudaBPS + cx];
++    }
++  }
++  I16_PHASE_SYNC();
++  if (tid == 0) i16_done = 1;
++  if (tid >= 128 && p.max_i4_header_bits > 0 &&
++      p.rd_opt_level != kRDTrellisAll) {
++    SpeculateI4Prefix(&v, &p, &cc, dqm, x, y, tlambda, &w, &i16_done,
++                      &i4_spec_stop, i4_best_levels, i4_boundary2[1],
++                      i4_block_nz, i4_ready, i4_block_D, i4_block_SD,
++                      i4_block_H, i4_block_R, i4_block_score);
++  }
++  __syncthreads();
++#else
+   {
+     const int m = w.rd.mode_i16;
+     for (int i = tid; i < 16 * 16; i += (int)blockDim.x) {
+@@ -1374,10 +1591,13 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     }
+   }
+   __syncthreads();
++#endif
++#undef I16_PHASE_SYNC
+   PHASE_TS(3);
+ 
+   // ---- Phase 3: intra4 search on the exact x + 2y dependency diagonals.
+   if (p.max_i4_header_bits > 0) {
++#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 800
+     __shared__ int i4_abort, i4_next_commit;
+     __shared__ long long i4_best_score;
+     __shared__ long long i4_best_D, i4_best_SD, i4_best_H, i4_best_R;
+@@ -1389,6 +1609,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     __shared__ long long i4_block_D[16], i4_block_SD[16];
+     __shared__ long long i4_block_H[16], i4_block_R[16];
+     __shared__ long long i4_block_score[16];
++#endif
+     const int team = tid >> 7;
+     const int team_tid = tid & 127;
+     if (tid == 0) {
+@@ -1404,11 +1625,17 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+       i4_best_nz = 0;
+       i4_header_bits = 0;
+     }
++#if !defined(__CUDA_ARCH__) || __CUDA_ARCH__ >= 800
+     if (tid < 16) i4_ready[tid] = 0;
++#endif
+     __syncthreads();
+     for (int diagonal = 0; diagonal < 10; ++diagonal) {
+       const int block = kI4DiagonalBlocks[diagonal][team];
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++      const int active = (block >= 0 && !i4_ready[block]);
++#else
+       const int active = (block >= 0);
++#endif
+       if (i4_abort) break;
+       if (active && team_tid == 0) {
+         BuildI4BoundaryDirect(&w, block, i4_boundary2[team]);

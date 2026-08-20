@@ -1,0 +1,35 @@
+Retained-head profile before source modification
+Base: eb38392bb014f701f75b1666a1d9e7daf359ddef
+Build: Release, CMAKE_CUDA_ARCHITECTURES=native (sm_75)
+Corpus: frozen 2026-08-18 PNG/JPEG graphic, photo, and texture medium/small
+
+Isolated forced-full-stack medians (15 post-warmup rows per format):
+  PNG  39.783707 ms/image, hash 455f70a1e139f043, 6441688 bytes
+  JPEG 39.770548 ms/image, hash 0c4b078d5c4d3173, 6400792 bytes
+
+WEBP_CUDA_DECIMATE_TIMING=2, PNG medium method 4 / quality 75:
+  content   GPU wall   import  i16-num  i16-sel    i4  uv-num  uv-sel  recon
+  graphic   26.87 ms     5.5%    12.9%    25.2%  36.5%    7.4%   11.7%   0.7%
+  photo     27.08 ms     3.9%     9.5%     9.7%  63.2%    5.1%    8.1%   0.5%
+  texture   25.91 ms     4.0%    10.0%     8.6%  65.1%    5.9%    5.7%   0.6%
+
+Guarded CPU stage profiler, isolated direct CUDA cwebp (cold process):
+  content    total      lossy_analyze   lossy_decimate   lossy_emit_tokens
+  graphic   42.697 ms     11.644 ms        26.800 ms          0.694 ms
+  photo     46.755 ms      9.721 ms        28.185 ms          2.839 ms
+  texture   86.799 ms      9.662 ms        54.311 ms         11.613 ms
+
+The distinct non-residual candidate was the already-integrated exact CUDA
+lossy-analysis stage. Forced stage timing reduced lossy_analyze to 1.043,
+1.002, and 1.008 ms for medium graphic/photo/texture. On 512x512 inputs it
+reduced 1.591/1.414/1.283 ms to 0.199/0.176/0.186 ms. This selected a
+pre-Ampere automatic-policy candidate, subject to an isolated end-to-end gate.
+Code inspection after that gate found that --force-cuda already enables both
+ordinary and fused analysis explicitly, making the automatic policy a no-op
+in the mandatory benchmark. See the corrected decision summary.
+
+An initial PNG/JPEG benchmark pair was accidentally run concurrently and is
+not evidence: both rows were about 44.7 ms/image because the two
+processes contended for one GPU. Every retained A/B row below was collected
+sequentially in isolated fresh processes, but the benchmark later proved to
+have overwritten both labeled cells with the same forced fused policy.

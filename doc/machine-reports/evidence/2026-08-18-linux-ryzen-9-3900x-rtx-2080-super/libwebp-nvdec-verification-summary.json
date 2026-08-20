@@ -1,0 +1,18 @@
+{
+  "rows": 9,
+  "all_nvdec": true,
+  "minimum_psnr_db": 99.000000,
+  "maximum_psnr_db": 99.000000,
+  "all_zero_host_roundtrip": true,
+  "device_to_device_bytes": [
+    5760000
+  ],
+  "decode_status_results": [
+    801
+  ],
+  "output_bytes": [
+    12986,
+    239436,
+    1167310
+  ]
+}

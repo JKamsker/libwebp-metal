@@ -1,0 +1,24 @@
+[  3%] Built target sharpyuv
+[ 10%] Built target webputils
+[ 25%] Built target webpencode
+[ 50%] Built target webpdspdecode
+[ 85%] Built target webpdsp
+[ 90%] Built target webpdecode
+[ 92%] Built target webp
+[ 94%] Built target imageioutil
+[ 94%] Built target webpdemux
+[100%] Built target imagedec
+[100%] Built target webp_cuda_batch_benchmark
+[  3%] Built target sharpyuv
+[ 10%] Built target webputils
+[ 24%] Built target webpencode
+[ 48%] Built target webpdspdecode
+[ 83%] Built target webpdsp
+[ 88%] Built target webpdecode
+[ 89%] Built target webp
+[ 91%] Built target webpdemux
+[ 92%] Built target imageioutil
+[ 94%] Built target exampleutil
+[ 98%] Built target imagedec
+[ 98%] Linking CUDA executable cwebp
+[100%] Built target cwebp

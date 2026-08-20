@@ -1,0 +1,28 @@
+Retained native-sm_75 profile before source modification
+Build: Release, CMAKE_CUDA_ARCHITECTURES=native
+
+Current medium method-4 / quality-75 device phase shares
+content   GPU wall ms  import  i16-num  i16-sel  I4     uv-num  uv-sel  recon
+graphic        27.21     5.5%    12.8%    25.0%  37.0%    7.3%   11.6%   0.7%
+photo          27.30     3.9%     9.4%     9.5%  63.8%    5.0%    8.0%   0.5%
+texture        25.87     4.1%    10.1%     8.5%  65.2%    5.8%    5.7%   0.6%
+
+The retained subphase trace attributes 25.6--26.5% of I4 cycles to forward
+transform, quantization, and inverse transform. Existing rejected candidates
+already covered coefficient handoff, wider quantization, matrix staging,
+uniform-AC specialization, and shared/register transpose changes.
+
+The remaining aligned four-byte row I/O was inspected in native sm_75 SASS.
+The parent DecimateKernel contained 893 LDS.U.U8 and 203 STS.U8 instructions.
+The candidate used uchar4 loads for source/prediction rows and an uchar4 store
+for each inverse-transform output row on pre-Ampere only. Ampere+ compiled the
+original scalar expressions.
+
+Native DecimateKernel resources and static SASS counts
+variant    registers  stack  shared  instructions  LDS.U.U8  STS.U8
+parent           103    352   23392         23704        893     203
+candidate        103    352   23392         23712        881     199
+
+Vector I/O removed twelve byte-load and four byte-store sites but added eight
+instructions after byte extraction and packing. Resources and occupancy were
+unchanged. The complete parent and candidate SASS dumps are archived.

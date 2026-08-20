@@ -55,6 +55,14 @@ int VP8PutBitUniform(VP8BitWriter* const bw, int bit);
 void VP8PutBits(VP8BitWriter* const bw, uint32_t value, int nb_bits);
 void VP8PutSignedBits(VP8BitWriter* const bw, int value, int nb_bits);
 
+// Writes one encoder token-buffer page in reverse order while retaining the
+// arithmetic coder state between byte flushes. Token bit 15 is the value, bit
+// 14 selects a fixed probability, and bits 0..13 hold that probability or an
+// index into 'probas'.
+void VP8PutTokenPage(VP8BitWriter* const bw, const uint16_t* const tokens,
+                     int num_tokens, int first_token,
+                     const uint8_t* const probas);
+
 // Appends some bytes to the internal buffer. Data is copied.
 int VP8BitWriterAppend(VP8BitWriter* const bw, const uint8_t* data,
                        size_t size);

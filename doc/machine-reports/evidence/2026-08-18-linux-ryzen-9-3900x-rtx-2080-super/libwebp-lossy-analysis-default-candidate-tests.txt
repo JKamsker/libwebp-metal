@@ -1,0 +1,20 @@
+Candidate executable hashes:
+ab133554c2ea78e66758be759e46ef2e4bd7cc36f2bbb0861cc91c6c15448bea  /tmp/libwebp-issue16-profile.EfoCMR/cwebp
+b0491605299c8bcec17470fa947dcc7153cec7381ea7a90121e106c57c806a2b  /tmp/libwebp-issue16-profile.EfoCMR/webp_cuda_batch_benchmark
+bd7a5580d71900ad1cdd601e536a6981f1e4a1d445a80a63d10f48be64022599  /tmp/libwebp-issue16-profile.EfoCMR/cuda_trellis_test
+5a96ea328a4f40ba1b8d60865fde054099b00f1311331cd1a51d5e1a50eafbe2  /tmp/libwebp-issue16-profile.EfoCMR/cuda_concurrency_test
+ca1514d2f5629cd3dbe2371573d87bccca79c9e16626a44e10bac08e074cae11  /tmp/libwebp-issue16-profile.EfoCMR/cuda_near_lossless_test
+
+Candidate focused CTest:
+Internal ctest changing into directory: /tmp/libwebp-issue16-profile.EfoCMR
+Test project /tmp/libwebp-issue16-profile.EfoCMR
+    Start 6: cuda_concurrency_test
+1/3 Test #6: cuda_concurrency_test ............   Passed    0.54 sec
+    Start 8: cuda_trellis_test
+2/3 Test #8: cuda_trellis_test ................   Passed    8.63 sec
+    Start 9: cuda_near_lossless_test
+3/3 Test #9: cuda_near_lossless_test ..........   Passed    0.35 sec
+
+100% tests passed, 0 tests failed out of 3
+
+Total Test time (real) =   9.52 sec

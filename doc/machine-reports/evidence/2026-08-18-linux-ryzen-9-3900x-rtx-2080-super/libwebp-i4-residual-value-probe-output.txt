@@ -1,0 +1,24 @@
+CONTENT=graphic
+decimate GPU wall: 28.11 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.4% i16-num 12.7% i16-sel 24.6% i4 37.8% uv-num 7.2% uv-sel 11.5% recon 0.7%
+decimate I4 residual values: total 497492 zero 225768 one 122006 2+ 149718 (45.38% / 24.52% / 30.09%)
+decimate GPU wall: 27.36 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.4% i16-num 12.7% i16-sel 24.6% i4 37.8% uv-num 7.2% uv-sel 11.5% recon 0.7%
+decimate I4 residual values: total 497492 zero 225768 one 122006 2+ 149718 (45.38% / 24.52% / 30.09%)
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":53285316,"ns_per_image":53285316.000,"images_per_second":18.766896,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"89f47b56944cfe79","output_bytes":12648}
+CONTENT=photo
+decimate GPU wall: 29.56 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.5% i16-num 8.7% i16-sel 8.7% i4 66.5% uv-num 4.6% uv-sel 7.4% recon 0.5%
+decimate I4 residual values: total 16282497 zero 12149213 one 3995625 2+ 137659 (74.62% / 24.54% / 0.85%)
+decimate GPU wall: 28.83 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.5% i16-num 8.7% i16-sel 8.7% i4 66.6% uv-num 4.6% uv-sel 7.4% recon 0.5%
+decimate I4 residual values: total 16282497 zero 12149213 one 3995625 2+ 137659 (74.62% / 24.54% / 0.85%)
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":53934869,"ns_per_image":53934869.000,"images_per_second":18.540881,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"13085afa0c135d5c","output_bytes":206128}
+CONTENT=texture
+decimate GPU wall: 28.54 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.7% i16-num 9.1% i16-sel 7.7% i4 68.5% uv-num 5.3% uv-sel 5.2% recon 0.5%
+decimate I4 residual values: total 18988615 zero 2433880 one 4443677 2+ 12111058 (12.82% / 23.40% / 63.78%)
+decimate GPU wall: 27.93 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.6% i16-num 9.0% i16-sel 7.6% i4 68.7% uv-num 5.3% uv-sel 5.2% recon 0.5%
+decimate I4 residual values: total 18988615 zero 2433880 one 4443677 2+ 12111058 (12.82% / 23.40% / 63.78%)
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":111645994,"ns_per_image":111645994.000,"images_per_second":8.956882,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"48ed500df8ed450e","output_bytes":1193792}

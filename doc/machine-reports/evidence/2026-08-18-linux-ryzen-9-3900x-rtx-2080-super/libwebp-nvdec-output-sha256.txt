@@ -1,0 +1,3 @@
+dedeac1e41c28bf952817345714618c0b11a09fef298e730c2646a0e9abf358b  /tmp/issue16-final-verify-graphic.webp
+85b869d6a504aeea38cc15445d7c0d0318dc945290f365f4065abf7ef77375b2  /tmp/issue16-final-verify-photo.webp
+13dcd63ba540b6aedd7c0b253d1c843da2974175fd5d9e377ce4df6b38d38ee9  /tmp/issue16-final-verify-texture.webp

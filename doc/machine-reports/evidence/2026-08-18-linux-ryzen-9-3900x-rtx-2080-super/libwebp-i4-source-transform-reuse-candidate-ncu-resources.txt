@@ -1,0 +1,52 @@
+
+Fatbin elf code:
+================
+arch = sm_75
+code version = [1,7]
+host = linux
+compile_size = 64bit
+identifier = /home/jonas/priv/repos/libwebp-metal/src/enc/cuda_enc.cu
+
+Resource usage:
+ Common:
+  GLOBAL:0 CONSTANT[3]:736
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1531NearLosslessTileHistogramKernelILj64EEEvPKjPjjNS_24NearLosslessKernelParamsE:
+  REG:41 STACK:0 SHARED:38688 LOCAL:0 CONSTANT[0]:396 CONSTANT[2]:12 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1531NearLosslessTileHistogramKernelILj32EEEvPKjPjjNS_24NearLosslessKernelParamsE:
+  REG:41 STACK:0 SHARED:13216 LOCAL:0 CONSTANT[0]:396 CONSTANT[2]:12 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1531NearLosslessTileHistogramKernelILj16EEEvPKjPjjNS_24NearLosslessKernelParamsE:
+  REG:41 STACK:0 SHARED:6624 LOCAL:0 CONSTANT[0]:396 CONSTANT[2]:12 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1519LossyAnalysisKernelEPKhS1_S1_P34WebPAcceleratorLossyAnalysisResultNS_25LossyAnalysisKernelParamsE:
+  REG:60 STACK:0 SHARED:1296 LOCAL:0 CONSTANT[0]:412 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1517RGBToYUV420KernelEPKhPhNS_15RGBKernelParamsE:
+  REG:26 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:412 CONSTANT[2]:16 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1525HashChainCandidatesKernelEPKjPKiPjNS_16HashKernelParamsE:
+  REG:26 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:396 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1531NearLosslessAccumulateRowKernelEPKjS1_PjjNS_24NearLosslessKernelParamsE:
+  REG:12 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:404 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1527NearLosslessSelectRowKernelEPKjPjS1_jNS_24NearLosslessKernelParamsE:
+  REG:44 STACK:0 SHARED:4112 LOCAL:0 CONSTANT[0]:404 CONSTANT[2]:104 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1523PredictorResidualKernelEPKjS1_PjNS_21PredictorKernelParamsE:
+  REG:18 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:392 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1528PredictorAccumulateRowKernelEPKjS1_PjjNS_21PredictorKernelParamsE:
+  REG:23 STACK:0 SHARED:4096 LOCAL:0 CONSTANT[0]:396 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1524PredictorSelectRowKernelEPKjPjS1_jNS_21PredictorKernelParamsE:
+  REG:46 STACK:0 SHARED:8208 LOCAL:0 CONSTANT[0]:396 CONSTANT[2]:120 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1518NearLosslessKernelEPKjPjjji:
+  REG:17 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:380 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1525ColorSpaceTransformKernelEPjS0_NS_12KernelParamsE:
+  REG:45 STACK:0 SHARED:1056 LOCAL:0 CONSTANT[0]:388 CONSTANT[2]:8 TEXTURE:0 SURFACE:0 SAMPLER:0
+
+Fatbin elf code:
+================
+arch = sm_75
+code version = [1,7]
+host = linux
+compile_size = 64bit
+identifier = /home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu
+
+Resource usage:
+ Common:
+  GLOBAL:149 CONSTANT[3]:100
+ Function _ZN53_GLOBAL__N__e8a64b43_20_cuda_decimate_enc_cu_08a8e32714DecimateKernelENS_10DeviceViewENS_20DecimateKernelParamsEPh:
+  REG:103 STACK:352 SHARED:23520 LOCAL:0 CONSTANT[0]:544 CONSTANT[2]:96 TEXTURE:0 SURFACE:0 SAMPLER:0

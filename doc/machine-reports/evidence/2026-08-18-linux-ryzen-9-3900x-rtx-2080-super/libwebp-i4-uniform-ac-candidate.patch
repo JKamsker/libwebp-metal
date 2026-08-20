@@ -1,0 +1,109 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index d5dd4a6e..6e8eb408 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -105,6 +105,7 @@ struct DecimateKernelParams {
+   int32_t max_i4_header_bits;
+   uint32_t use_error_diffusion;
+   uint32_t rd_opt_level;
++  uint32_t uniform_y1_ac;
+   uint32_t diagonal;       // current skewed diagonal (x + 2y)
+   uint32_t y_min;          // first tile row on this diagonal
+ };
+@@ -635,6 +636,43 @@ __device__ __forceinline__ int I4QuantizeBlockCoop4(
+   return (non_zero_lanes & group_mask) != 0;
+ }
+ 
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++__device__ __forceinline__ int I4QuantizeBlockCoop4UniformAC(
++    int16_t* in, int16_t* out, const CudaVP8Matrix* mtx, int lane,
++    unsigned int warp_mask) {
++  const uint32_t ac_q = mtx->q[1];
++  const uint32_t ac_iq = mtx->iq[1];
++  const uint32_t ac_bias = mtx->bias[1];
++  const uint32_t ac_zthresh = mtx->zthresh[1];
++  int non_zero = 0;
++  for (int n = lane; n < 16; n += 4) {
++    const int j = kCudaZigzag[n];
++    const int sign = (in[j] < 0);
++    const uint32_t coeff = (sign ? -in[j] : in[j]) + mtx->sharpen[j];
++    const bool is_dc = (n == 0);
++    const uint32_t zthresh = is_dc ? mtx->zthresh[0] : ac_zthresh;
++    if (coeff > zthresh) {
++      const uint32_t q = is_dc ? mtx->q[0] : ac_q;
++      const uint32_t iq = is_dc ? mtx->iq[0] : ac_iq;
++      const uint32_t bias = is_dc ? mtx->bias[0] : ac_bias;
++      int level = CudaQuantDiv(coeff, iq, bias);
++      if (level > kMaxLevel) level = kMaxLevel;
++      if (sign) level = -level;
++      in[j] = (int16_t)(level * (int)q);
++      out[n] = (int16_t)level;
++      non_zero |= level;
++    } else {
++      out[n] = 0;
++      in[j] = 0;
++    }
++  }
++  const unsigned int group_shift = ((threadIdx.x & 31) >> 2) * 4;
++  const unsigned int group_mask = 0xfu << group_shift;
++  const unsigned int non_zero_lanes = __ballot_sync(warp_mask, non_zero != 0);
++  return (non_zero_lanes & group_mask) != 0;
++}
++#endif
++
+ __device__ __forceinline__ void I4ITransformCoop4(
+     const uint8_t* ref, const int16_t* in, uint8_t* dst, int* tmp, int lane,
+     unsigned int warp_mask) {
+@@ -1460,9 +1498,21 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+                 &dqm->y1, dqm->lambda_trellis_i4);
+           }
+         } else {
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++          if (p.uniform_y1_ac) {
++            nz = I4QuantizeBlockCoop4UniformAC(
++                w.i4_tmp[team][mode], w.i4_levels[team][mode], &dqm->y1,
++                mode_lane, warp_mask);
++          } else {
++            nz = I4QuantizeBlockCoop4(
++                w.i4_tmp[team][mode], w.i4_levels[team][mode], &dqm->y1,
++                mode_lane, warp_mask);
++          }
++#else
+           nz = I4QuantizeBlockCoop4(
+               w.i4_tmp[team][mode], w.i4_levels[team][mode], &dqm->y1,
+               mode_lane, warp_mask);
++#endif
+         }
+         if (mode_lane == 0) w.i4_nz[team][mode] = nz;
+         __syncwarp(warp_mask);
+@@ -2272,6 +2322,22 @@ bool ValidateDecimateRequest(const WebPAcceleratorDecimateRequest* request,
+   return true;
+ }
+ 
++bool DecimateHasUniformY1AC(
++    const WebPAcceleratorDecimateRequest* request) {
++  for (int segment = 0; segment < 4; ++segment) {
++    const WebPAcceleratorQuantMatrix* const y1 =
++        &request->segment_params[segment].y1;
++    for (int i = 2; i < 16; ++i) {
++      if (y1->q[i] != y1->q[1] || y1->iq[i] != y1->iq[1] ||
++          y1->bias[i] != y1->bias[1] ||
++          y1->zthresh[i] != y1->zthresh[1]) {
++        return false;
++      }
++    }
++  }
++  return true;
++}
++
+ void CommitPlaneRows(uint8_t* destination, size_t destination_stride,
+                      const uint8_t* source, size_t source_stride,
+                      size_t first_row, size_t row_count) {
+@@ -2636,6 +2702,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
+     params.max_i4_header_bits = request->max_i4_header_bits;
+     params.use_error_diffusion = (uint32_t)request->use_error_diffusion;
+     params.rd_opt_level = (uint32_t)request->rd_opt_level;
++    params.uniform_y1_ac = DecimateHasUniformY1AC(request) ? 1u : 0u;
+ 
+     (void)cudaGetLastError();
+     const int last_diagonal =

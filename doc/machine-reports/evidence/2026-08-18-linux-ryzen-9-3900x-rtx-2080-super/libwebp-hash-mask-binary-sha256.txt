@@ -1,0 +1,2 @@
+b45a0b578da6af378e1b0ffa2f661f87e5efdcb3a0b366b92ec96a97c4510036  /tmp/libwebp-hash-mask-baseline
+66ae6da3f78aeff797c4e3363ed2d361a57505cd3e57692be9ae18ddf6d68864  /tmp/libwebp-hash-mask-candidate

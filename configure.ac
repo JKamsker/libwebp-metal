@@ -79,6 +79,11 @@ _ACEOF
 AM_CONDITIONAL([ENABLE_METAL], [test "x$enable_metal" = "xyes"])
 AC_SUBST([METAL_LIBS])
 
+dnl === CUDA is a CMake-only build mode. Keep its pkg-config substitution
+dnl === empty in Autotools builds instead of installing a literal @CUDA_LIBS@.
+CUDA_LIBS=
+AC_SUBST([CUDA_LIBS])
+
 dnl === Check whether libwebpmux should be built
 AC_MSG_CHECKING(whether libwebpmux is to be built)
 AC_ARG_ENABLE([libwebpmux],

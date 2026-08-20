@@ -1,0 +1,111 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index d5dd4a6e..c6f8118f 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -1389,6 +1389,9 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     __shared__ long long i4_block_D[16], i4_block_SD[16];
+     __shared__ long long i4_block_H[16], i4_block_R[16];
+     __shared__ long long i4_block_score[16];
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++    __shared__ int i4_best_mode_by_team[2];
++#endif
+     const int team = tid >> 7;
+     const int team_tid = tid & 127;
+     if (tid == 0) {
+@@ -1429,11 +1432,33 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+       if (active) {
+         const int warp = team_tid >> 5, lane = team_tid & 31;
+         uint8_t* const pred = (team == 0) ? w.yuv_p : w.i4_yuv_p2;
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++        // Keep each warp's fixed mode set explicit on Turing. This avoids the
++        // loop/switch dispatch in the dependency-critical prediction phase.
++        if (lane == 0) {
++          if (warp == 0) {
++            CudaDC4(kCudaI4DC4 + pred, i4_boundary2[team] + 5);
++            CudaRD4(kCudaI4RD4 + pred, i4_boundary2[team] + 5);
++            CudaHD4(kCudaI4HD4 + pred, i4_boundary2[team] + 5);
++          } else if (warp == 1) {
++            CudaTM4(kCudaI4TM4 + pred, i4_boundary2[team] + 5);
++            CudaVR4(kCudaI4VR4 + pred, i4_boundary2[team] + 5);
++            CudaHU4(kCudaI4HU4 + pred, i4_boundary2[team] + 5);
++          } else if (warp == 2) {
++            CudaVE4(kCudaI4VE4 + pred, i4_boundary2[team] + 5);
++            CudaLD4(kCudaI4LD4 + pred, i4_boundary2[team] + 5);
++          } else {
++            CudaHE4(kCudaI4HE4 + pred, i4_boundary2[team] + 5);
++            CudaVL4(kCudaI4VL4 + pred, i4_boundary2[team] + 5);
++          }
++        }
++#else
+         if (lane == 0 && warp < 4) {
+           for (int m = warp; m < kNumBModes; m += 4) {
+             CudaIntra4PredMode(pred, i4_boundary2[team] + 5, m);
+           }
+         }
++#endif
+       }
+       __syncthreads();
+       if (active && team_tid < 4 * kNumBModes) {
+@@ -1510,6 +1535,54 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+             kRDDistoMult * (D + SD);
+       }
+       if (active && (team_tid >> 5) == 0) __syncwarp();
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++      if (active && (team_tid >> 5) == 0) {
++        const int lane = team_tid & 31;
++        if (lane == 0) {
++          ModeScore rd_i4;
++          int best_mode = -1;
++          InitScoreDev(&rd_i4);
++          for (int mode = 0; mode < kNumBModes; ++mode) {
++            ModeScore rd_tmp;
++            rd_tmp.D = w.i4_sse[team][mode];
++            rd_tmp.SD =
++                tlambda ? MULT_8B_DEV(tlambda, w.i4_sd[team][mode]) : 0;
++            rd_tmp.H = w.i4_mode_cost[team][mode];
++            rd_tmp.nz = (uint32_t)w.i4_nz[team][mode] << block;
++            rd_tmp.R = w.i4_flat[team][mode] ? kFlatnessPenalty : 0;
++            rd_tmp.score = w.i4_base_score[team][mode];
++            if (best_mode >= 0 && rd_tmp.score >= rd_i4.score) continue;
++            rd_tmp.R += w.i4_rcost[team][mode];
++            rd_tmp.score = w.i4_full_score[team][mode];
++            if (best_mode < 0 || rd_tmp.score < rd_i4.score) {
++              CopyScoreDev(&rd_i4, &rd_tmp);
++              best_mode = mode;
++            }
++          }
++          SetRDScoreDev(dqm->lambda_mode, &rd_i4);
++          i4_best_mode_by_team[team] = best_mode;
++          w.rd.modes_i4[block] = (uint8_t)best_mode;
++          i4_block_nz[block] = rd_i4.nz ? 1 : 0;
++          i4_block_D[block] = rd_i4.D;
++          i4_block_SD[block] = rd_i4.SD;
++          i4_block_H[block] = rd_i4.H;
++          i4_block_R[block] = rd_i4.R;
++          i4_block_score[block] = rd_i4.score;
++        }
++        __syncwarp();
++        if (lane < 16) {
++          const int best_mode = i4_best_mode_by_team[team];
++          const int r = lane >> 2, c = lane & 3;
++          i4_best_levels[block][lane] =
++              w.i4_levels[team][best_mode][lane];
++          w.yuv_out2[kCudaYOffEnc + kCudaVP8Scan[block] +
++                     r * kCudaBPS + c] =
++              w.i4_out[team][best_mode][r * kCudaBPS + c];
++        }
++        __syncwarp();
++        if (lane == 0) i4_ready[block] = 1;
++      }
++#else
+       if (active && team_tid == 0) {
+         ModeScore rd_i4;
+         int best_mode = -1;
+@@ -1552,6 +1625,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+         i4_block_score[block] = rd_i4.score;
+         i4_ready[block] = 1;
+       }
++#endif
+       __syncthreads();
+       if (tid == 0) {
+         while (i4_next_commit < 16 && i4_ready[i4_next_commit]) {

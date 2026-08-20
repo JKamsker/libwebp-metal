@@ -123,6 +123,82 @@ int VP8PutBit(VP8BitWriter* const bw, int bit, int prob) {
   return bit;
 }
 
+void VP8PutTokenPage(VP8BitWriter* const bw, const uint16_t* const tokens,
+                     int num_tokens, int first_token,
+                     const uint8_t* const probas) {
+  int range = bw->range;
+  int value = bw->value;
+  int nb_bits = bw->nb_bits;
+  int run = bw->run;
+  uint8_t* buf = bw->buf;
+  size_t pos = bw->pos;
+  size_t max_pos = bw->max_pos;
+  assert(first_token >= 0);
+  assert(first_token <= num_tokens);
+  while (num_tokens-- > first_token) {
+    const uint16_t token = tokens[num_tokens];
+    const int bit = (token >> 15) & 1;
+    const int prob = (token & (1u << 14))
+                         ? token & 0xffu
+                         : probas[token & 0x3fffu];
+    const int split = (range * prob) >> 8;
+    if (bit) {
+      value += split + 1;
+      range -= split + 1;
+    } else {
+      range = split;
+    }
+    if (range < 127) {
+      const int shift = kNorm[range];
+      range = kNewRange[range];
+      value <<= shift;
+      nb_bits += shift;
+      if (nb_bits > 0) {
+        const int s = 8 + nb_bits;
+        const int32_t bits = value >> s;
+        const size_t pending = (size_t)run + 1;
+        assert(nb_bits >= 0);
+        if ((bits & 0xff) == 0xff) {
+          value -= bits << s;
+          nb_bits -= 8;
+          ++run;
+        } else if (pos <= max_pos && pending <= max_pos - pos) {
+          value -= bits << s;
+          nb_bits -= 8;
+          if ((bits & 0x100) && pos > 0) buf[pos - 1]++;
+          if (run > 0) {
+            const int fill = (bits & 0x100) ? 0x00 : 0xff;
+            for (; run > 0; --run) buf[pos++] = fill;
+          }
+          buf[pos++] = bits & 0xff;
+        } else {
+          // Preserve the original allocation, overflow, and error path. The
+          // common case above has enough room and avoids round-tripping the
+          // page-local writer state through the structure for every byte.
+          bw->range = range;
+          bw->value = value;
+          bw->nb_bits = nb_bits;
+          bw->run = run;
+          bw->pos = pos;
+          Flush(bw);
+          range = bw->range;
+          value = bw->value;
+          nb_bits = bw->nb_bits;
+          run = bw->run;
+          buf = bw->buf;
+          pos = bw->pos;
+          max_pos = bw->max_pos;
+        }
+      }
+    }
+  }
+  bw->range = range;
+  bw->value = value;
+  bw->nb_bits = nb_bits;
+  bw->run = run;
+  bw->pos = pos;
+}
+
 int VP8PutBitUniform(VP8BitWriter* const bw, int bit) {
   const int split = bw->range >> 1;
   if (bit) {

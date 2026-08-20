@@ -1,0 +1,18 @@
+format	parent_ms_per_image	candidate_ms_per_image	gain_ms_per_image	output_hash	output_bytes	decision
+PNG lossy	36.791034250	48.201091125	-11.410056875	455f70a1e139f043	6441688	reject
+JPEG lossy	35.072451583	51.665943333	-16.593491750	0c4b078d5c4d3173	6400792	reject
+
+# Parent: 079ddbd8002c871d9a169d6b70e916790ac75a77
+# Machine: Ryzen 9 3900X / RTX 2080 SUPER; native CUDA architecture; Release.
+# Workload: frozen six-image realistic corpus, method 4, quality 75, batch 24,
+# one warmup and three measured rows per build/format, file I/O included.
+# Candidate: replace eight retained OS-thread boolean coders with one AVX2
+# lockstep coder across the eight independent token partitions.
+# Medians are the middle ns_per_image value among each file's three rows.
+# All 12 measured rows in total reported the exact aggregate hash and
+# byte count shown above. Candidate and restored builds passed 7/7 focused
+# CTests after enabling the histogram option in the candidate build. The
+# initial histogram-only failure was caused by WEBP_CUDA_ENABLE_HISTOGRAM=OFF,
+# not the candidate; its initial and corrected logs are both retained.
+# Candidate symbol size: PutTokenPages8AVX2 2758 bytes; scalar
+# VP8PutTokenPage 764 bytes. Source was restored because both formats regressed.

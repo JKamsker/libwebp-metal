@@ -18,6 +18,7 @@
 
 #include "src/dec/common_dec.h"
 #include "src/dsp/dsp.h"
+#include "src/enc/accelerator_enc.h"
 #include "src/enc/cost_enc.h"
 #include "src/enc/backref_cache_search_experiment_enc.h"
 #include "src/enc/profile_enc.h"
@@ -124,7 +125,22 @@ static void MapConfigToTools(VP8Encoder* const enc) {
     enc->use_tokens = (enc->rd_opt_level >= RD_OPT_BASIC);  // need rd stats
 #endif
     if (enc->use_tokens) {
-      enc->num_parts = 1;  // doesn't work with multi-partition
+      // This fork records tokens per macroblock row modulo the partition
+      // count, so the token path supports multi-partition output and emits
+      // the partitions on parallel workers. Default to 8 partitions;
+      // WEBP_TOKEN_PARTITIONS=0..3 selects 1/2/4/8 (0 restores the
+      // upstream single-partition stream).
+      int parts_log2 = 3;
+      const char* const parts_env = getenv("WEBP_TOKEN_PARTITIONS");
+      if (parts_env != NULL && parts_env[0] != '\0') {
+        const int v = atoi(parts_env);
+        if (v >= 0 && v <= 3) parts_log2 = v;
+      }
+      enc->num_parts = 1 << parts_log2;
+      // every partition must own at least one macroblock row
+      while (enc->num_parts > 1 && enc->num_parts > enc->mb_h) {
+        enc->num_parts >>= 1;
+      }
     }
   }
 }
@@ -254,7 +270,12 @@ static VP8Encoder* InitVP8Encoder(const WebPConfig* const config,
   // size based on quality. This is just a crude 1rst-order prediction.
   {
     const float scale = 1.f + config->quality * 5.f / 100.f;  // in [1,6]
-    VP8TBufferInit(&enc->tokens, (int)(mb_w * mb_h * 4 * scale));
+    int page_size = (int)(mb_w * mb_h * 4 * scale) / enc->num_parts;
+    int p;
+    if (page_size < 8192) page_size = 8192;
+    for (p = 0; p < MAX_NUM_PARTITIONS; ++p) {
+      VP8TBufferInit(&enc->tokens[p], page_size);
+    }
   }
   return enc;
 }
@@ -262,8 +283,11 @@ static VP8Encoder* InitVP8Encoder(const WebPConfig* const config,
 static int DeleteVP8Encoder(VP8Encoder* enc) {
   int ok = 1;
   if (enc != NULL) {
+    int p;
     ok = VP8EncDeleteAlpha(enc);
-    VP8TBufferClear(&enc->tokens);
+    for (p = 0; p < MAX_NUM_PARTITIONS; ++p) {
+      VP8TBufferClear(&enc->tokens[p]);
+    }
     WebPSafeFree(enc);
   }
   return ok;
@@ -337,19 +361,34 @@ int WebPReportProgress(const WebPPicture* const pic, int percent,
 
 int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
   int ok = 0;
-  if (pic == NULL) return 0;
+  if (pic == NULL) {
+    WebPAcceleratorEndEncode();
+    return 0;
+  }
 
   pic->error_code = VP8_ENC_OK;  // all ok so far
   if (config == NULL) {          // bad params
-    return WebPEncodingSetError(pic, VP8_ENC_ERROR_NULL_PARAMETER);
+    ok = WebPEncodingSetError(pic, VP8_ENC_ERROR_NULL_PARAMETER);
+    WebPAcceleratorEndEncode();
+    return ok;
   }
   if (!WebPValidateConfig(config)) {
-    return WebPEncodingSetError(pic, VP8_ENC_ERROR_INVALID_CONFIGURATION);
+    ok = WebPEncodingSetError(pic, VP8_ENC_ERROR_INVALID_CONFIGURATION);
+    WebPAcceleratorEndEncode();
+    return ok;
   }
-  if (!WebPValidatePicture(pic)) return 0;
+  if (!WebPValidatePicture(pic)) {
+    WebPAcceleratorEndEncode();
+    return 0;
+  }
   if (pic->width > WEBP_MAX_DIMENSION || pic->height > WEBP_MAX_DIMENSION) {
-    return WebPEncodingSetError(pic, VP8_ENC_ERROR_BAD_DIMENSION);
+    ok = WebPEncodingSetError(pic, VP8_ENC_ERROR_BAD_DIMENSION);
+    WebPAcceleratorEndEncode();
+    return ok;
   }
+
+  WebPAcceleratorBeginEncode(config->lossless, config->method,
+                             (int)config->quality);
 
   if (pic->stats != NULL) memset(pic->stats, 0, sizeof(*pic->stats));
   WebPProfileBeginSession(config, pic);
@@ -371,6 +410,7 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
           WebPPredictorBoundaryEnd(0, pic->error_code);
           WebPBackrefExactEnd(0, pic->error_code);
           WebPBackrefCacheSearchEnd(0, pic->error_code);
+          WebPAcceleratorEndEncode();
           return 0;
         }
       } else {
@@ -388,6 +428,7 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
           WebPPredictorBoundaryEnd(0, pic->error_code);
           WebPBackrefExactEnd(0, pic->error_code);
           WebPBackrefCacheSearchEnd(0, pic->error_code);
+          WebPAcceleratorEndEncode();
           return 0;
         }
       }
@@ -403,6 +444,10 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
     WebPProfileStageEnd(WEBP_PROFILE_LOSSY_ENCODER_INIT, profile_start);
     if (enc == NULL) {
       WebPProfileEndSession(0, pic->error_code);
+      WebPPredictorBoundaryEnd(0, pic->error_code);
+      WebPBackrefExactEnd(0, pic->error_code);
+      WebPBackrefCacheSearchEnd(0, pic->error_code);
+      WebPAcceleratorEndEncode();
       return 0;  // pic->error is already set.
     }
     // Note: each of the tasks below account for 20% in the progress report.
@@ -443,6 +488,7 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
       WebPPredictorBoundaryEnd(0, pic->error_code);
       WebPBackrefExactEnd(0, pic->error_code);
       WebPBackrefCacheSearchEnd(0, pic->error_code);
+      WebPAcceleratorEndEncode();
       return 0;
     }
 
@@ -458,5 +504,6 @@ int WebPEncode(const WebPConfig* config, WebPPicture* pic) {
   WebPPredictorBoundaryEnd(ok, pic->error_code);
   WebPBackrefExactEnd(ok, pic->error_code);
   WebPBackrefCacheSearchEnd(ok, pic->error_code);
+  WebPAcceleratorEndEncode();
   return ok;
 }

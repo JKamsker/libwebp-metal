@@ -1,0 +1,20 @@
+Candidate: pre-Ampere decimation CUDA Graph replay
+Status: rejected and removed
+Hardware: Ryzen 9 3900X / RTX 2080 SUPER
+Build: Release, CMAKE_CUDA_ARCHITECTURES=native
+Benchmark: lossy method 4 quality 75, six-image small/medium corpus,
+           batch size 24, one discarded warmup, three retained samples
+
+Format  Control ms/image  Graph ms/image  Gain ms/image  Hash              Bytes
+PNG          39.936790       82.736113      -42.799323  ace64e860de89b43  6441688
+JPEG         39.515433       80.974342      -41.458910  1cbb84d2ab926db3  6400792
+
+PNG ran candidate then control; JPEG ran control then candidate. Both sides
+used the same binary, with WEBP_CUDA_DECIMATE_GRAPH=0 selecting the control.
+Aggregate hashes and byte counts matched exactly in every retained row.
+
+The graph cached and replayed the roughly 250 dependent decimation kernel
+launches for each exact geometry/configuration key. Despite removing repeated
+host submission, graph-node scheduling more than doubled the decimation-heavy
+end-to-end cost on Turing. The regression is decisive, so the full 15-cell
+correctness matrix was not warranted. The candidate source was restored.

@@ -1,0 +1,7 @@
+CMAKE_BUILD_TYPE=Release
+CMAKE_CUDA_ARCHITECTURES=native
+WEBP_ENABLE_CUDA=ON
+source_parent=61883276
+candidate_toggle=WEBP_CUDA_TOKEN_STATS_BATCH
+benchmark=forced CUDA lossy, batch 24, method 4, quality 75, one warmup, three samples
+pair_orders=png:P-C,C-P;jpeg:C-P,P-C

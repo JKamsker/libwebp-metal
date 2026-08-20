@@ -1,0 +1,15 @@
+Candidate configure/build: PASS
+  Release, CMAKE_CUDA_ARCHITECTURES=native, CUDA 12.0.140
+  targets: webp_cuda_batch_benchmark cuda_trellis_test
+
+Candidate focused exact test: PASS
+  PASS: CUDA trellis, padded strides, all band remainders, and transactional fallbacks are byte-exact
+
+All 24 retained timing rows matched the parent aggregate hash and byte count.
+The source candidate was removed after failing the 1.5 ms/image performance
+gate, so the larger 15-cell correctness matrix was not warranted.
+
+Restored configure/build: PASS
+  targets: webp_cuda_batch_benchmark cuda_trellis_test
+Restored focused exact test: PASS
+  PASS: CUDA trellis, padded strides, all band remainders, and transactional fallbacks are byte-exact

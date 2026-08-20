@@ -1,0 +1,21 @@
+Command:
+cmake --build build-cuda-warp-inline -j12 --target webp_cuda_batch_benchmark cuda_concurrency_test cuda_near_lossless_test cuda_histogram_test
+
+[  6%] Built target webputils
+[ 10%] Built target sharpyuv
+[ 10%] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+[ 34%] Built target webpdspdecode
+[ 71%] Built target webpdsp
+[ 76%] Built target webpdecode
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(64): warning #1444-D: function "__ballot"
+/usr/include/sm_20_intrinsics.h(412): here was declared deprecated ("__ballot() is not valid on compute_70 and above, and should be replaced with __ballot_sync().To continue using __ballot(), specify virtual architecture compute_60 when targeting sm_70 and above, for example, using the pair of compiler options: -arch=compute_60 -code=sm_70.")
+
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(74): error: identifier "__shfl_up" is undefined
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(84): error: identifier "__shfl_down" is undefined
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(94): error: identifier "__shfl" is undefined
+
+3 errors detected in the compilation of "/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu".
+gmake[3]: *** [CMakeFiles/webpencode.dir/build.make:428: CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o] Error 1
+gmake[2]: *** [CMakeFiles/Makefile2:1083: CMakeFiles/webpencode.dir/all] Error 2
+gmake[1]: *** [CMakeFiles/Makefile2:1431: CMakeFiles/webp_cuda_batch_benchmark.dir/rule] Error 2
+gmake: *** [Makefile:790: webp_cuda_batch_benchmark] Error 2

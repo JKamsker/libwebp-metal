@@ -1,0 +1,4 @@
+interface:
+  display_name: "Worker Session Lifecycle"
+  short_description: "Delegate, wake, gather, and archive workers"
+  default_prompt: "Use $worker-session-lifecycle to delegate this task to a worker and cleanly collect its result."

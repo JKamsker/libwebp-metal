@@ -1,0 +1,18 @@
+{
+  "n": 72,
+  "total_ms": 26.790056236111113,
+  "stages": {
+    "lossy_alpha": 0.00013483333333333335,
+    "lossy_analyze": 0.04713288888888889,
+    "lossy_decimate": 18.859165777777775,
+    "lossy_emit_tokens": 3.0518268055555553,
+    "lossy_encode_loop": 23.772740125,
+    "lossy_encoder_init": 0.003908125,
+    "lossy_import": 1.3554686805555556,
+    "lossy_iter_import": 0.35661883333333333,
+    "lossy_post_loop": 0.0016989444444444443,
+    "lossy_record_tokens": 0.10411347222222223,
+    "lossy_side_info": 0.1191250138888889,
+    "lossy_write": 1.6096521805555555
+  }
+}

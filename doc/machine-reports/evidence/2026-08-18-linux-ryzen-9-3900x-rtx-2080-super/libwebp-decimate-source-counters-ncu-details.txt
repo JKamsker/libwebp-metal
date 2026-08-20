@@ -1,0 +1,460 @@
+[671475] cwebp@127.0.0.1
+  <unnamed>::DecimateKernel(<unnamed>::DeviceView, <unnamed>::DecimateKernelParams, unsigned char *) (50, 1, 1)x(256, 1, 1), Context 1, Stream 14, Device 0, CC 7.5
+    Section: GPU Speed Of Light Throughput
+    ----------------------- ------------- ------------
+    Metric Name               Metric Unit Metric Value
+    ----------------------- ------------- ------------
+    DRAM Frequency          cycle/nsecond         7.40
+    SM Frequency            cycle/nsecond         1.63
+    Elapsed Cycles                  cycle       192999
+    Memory Throughput                   %        14.89
+    DRAM Throughput                     %         0.79
+    Duration                      usecond       117.79
+    L1/TEX Cache Throughput             %        22.92
+    Waves Per SM                                  0.52
+    L2 Cache Throughput                 %         1.26
+    SM Active Cycles                cycle    189748.62
+    Compute (SM) Throughput             %        14.89
+    ----------------------- ------------- ------------
+
+    GPU Throughput Chart
+    Table Name : GPU Throughput
+    ---------------- ----------- ------------
+    Metric Name      Metric Unit Metric Value
+    ---------------- ----------- ------------
+    Memory [%]                 %        14.89
+    Compute (SM) [%]           %        14.89
+    ---------------- ----------- ------------
+
+    GPU Throughput Breakdown
+    Table Name : Compute Throughput Breakdown
+    -------------------------------------- ----------- ------------
+    Metric Name                            Metric Unit Metric Value
+    -------------------------------------- ----------- ------------
+    SM: Inst Executed Pipe Lsu                       %        14.89
+    SM: Issue Active                                 %        10.51
+    SM: Inst Executed                                %        10.49
+    SM: Pipe Alu Cycles Active                       %         8.18
+    SM: Mio Inst Issued                              %         5.75
+    SM: Pipe Fma Cycles Active                       %         5.46
+    SM: Inst Executed Pipe Cbu Pred On Any           %         3.30
+    SM: Mio2rf Writeback Active                      %         3.13
+    SM: Mio Pq Read Cycles Active                    %         2.87
+    SM: Mio Pq Write Cycles Active                   %         2.74
+    SM: Inst Executed Pipe Adu                       %         2.35
+    IDC: Request Cycles Active                       %         1.44
+    SM: Inst Executed Pipe Xu                        %         0.29
+    SM: Inst Executed Pipe Uniform                   %         0.16
+    SM: Inst Executed Pipe Fp16                      %            0
+    SM: Inst Executed Pipe Ipa                       %            0
+    SM: Inst Executed Pipe Tex                       %            0
+    SM: Pipe Fp64 Cycles Active                      %            0
+    SM: Pipe Shared Cycles Active                    %            0
+    SM: Pipe Tensor Cycles Active                    %            0
+    -------------------------------------- ----------- ------------
+
+    Table Name : Memory Throughput Breakdown
+    ---------------------------------- ----------- ------------
+    Metric Name                        Metric Unit Metric Value
+    ---------------------------------- ----------- ------------
+    L1: Lsuin Requests                           %        14.89
+    L1: Data Pipe Lsu Wavefronts                 %        11.46
+    L1: Lsu Writeback Active                     %         5.54
+    L2: T Sectors                                %         1.26
+    L2: Lts2xbar Cycles Active                   %         1.16
+    DRAM: Cycles Active                          %         0.79
+    L2: Xbar2lts Cycles Active                   %         0.67
+    L2: T Tag Requests                           %         0.52
+    L1: Data Bank Reads                          %         0.50
+    DRAM: Dram Sectors                           %         0.47
+    L2: D Sectors                                %         0.37
+    L2: D Sectors Fill Device                    %         0.24
+    L1: Data Bank Writes                         %         0.22
+    L1: M L1tex2xbar Req Cycles Active           %         0.14
+    L1: M Xbar2l1tex Read Sectors                %         0.10
+    L1: Texin Sm2tex Req Cycles Active           %         0.05
+    L1: Data Pipe Tex Wavefronts                 %            0
+    L1: F Wavefronts                             %         0.00
+    L1: Tex Writeback Active                     %            0
+    L2: D Atomic Input Cycles Active             %            0
+    L2: D Sectors Fill Sysmem                    %         0.00
+    ---------------------------------- ----------- ------------
+
+    WRN   This kernel grid is too small to fill the available resources on this device, resulting in only 0.5 full      
+          waves across all SMs. Look at Launch Statistics for more details.                                             
+
+    Section: Memory Workload Analysis
+    ----------------- ------------ ------------
+    Metric Name        Metric Unit Metric Value
+    ----------------- ------------ ------------
+    Memory Throughput Gbyte/second         3.75
+    Mem Busy                     %        11.46
+    Max Bandwidth                %        14.89
+    L1/TEX Hit Rate              %        93.89
+    L2 Hit Rate                  %        86.89
+    Mem Pipes Busy               %        14.89
+    ----------------- ------------ ------------
+
+    Section: Scheduler Statistics
+    ------------------------------------- ----------- ------------
+    Metric Name                           Metric Unit Metric Value
+    ------------------------------------- ----------- ------------
+    One or More Eligible                            %        10.66
+    Issued Warp Per Scheduler                                 0.11
+    No Eligible                                     %        89.34
+    smsp__warps_active.avg.peak_sustained        warp            8
+    Active Warps Per Scheduler                   warp         2.08
+    Eligible Warps Per Scheduler                 warp         0.12
+    ------------------------------------- ----------- ------------
+
+    Table Name : Warps Per Scheduler
+    ------------------------------- ----------- ------------
+    Metric Name                     Metric Unit Metric Value
+    ------------------------------- ----------- ------------
+    Issued Warp Per Scheduler                           0.11
+    Theoretical Warps Per Scheduler        warp            4
+    GPU Maximum Warps Per Scheduler        warp            8
+    Active Warps Per Scheduler             warp         2.08
+    Eligible Warps Per Scheduler           warp         0.12
+    ------------------------------- ----------- ------------
+
+    WRN   Every scheduler is capable of issuing one instruction per cycle, but for this kernel each scheduler only      
+          issues an instruction every 9.4 cycles. This might leave hardware resources underutilized and may lead to     
+          less optimal performance. Out of the maximum of 8 warps per scheduler, this kernel allocates an average of    
+          2.08 active warps per scheduler, but only an average of 0.12 warps were eligible per cycle. Eligible warps    
+          are the subset of active warps that are ready to issue their next instruction. Every cycle with no eligible   
+          warp results in no instruction being issued and the issue slot remains unused. To increase the number of      
+          eligible warps, reduce the time the active warps are stalled by inspecting the top stall reasons on the Warp  
+          State Statistics and Source Counters sections.                                                                
+    ----- --------------------------------------------------------------------------------------------------------------
+    WRN   The 4.00 theoretical warps per scheduler this kernel can issue according to its occupancy are below the       
+          hardware maximum of 8. Use the Occupancy section to identify what limits this kernel's theoretical occupancy. 
+
+    Section: Warp State Statistics
+    ---------------------------------------- ----------- ------------
+    Metric Name                              Metric Unit Metric Value
+    ---------------------------------------- ----------- ------------
+    Warp Cycles Per Issued Instruction             cycle        19.51
+    Warp Cycles Per Executed Instruction           cycle        19.55
+    smsp__issue_active.avg.per_cycle_active                      0.11
+    Avg. Active Threads Per Warp                                14.52
+    Avg. Not Predicated Off Threads Per Warp                    12.77
+    ---------------------------------------- ----------- ------------
+
+    Table Name : Warp State (All Cycles)
+    ------------------------ ----------- ------------
+    Metric Name              Metric Unit Metric Value
+    ------------------------ ----------- ------------
+    Stall Barrier                   inst        11.12
+    Stall No Instruction            inst         2.26
+    Stall Wait                      inst         2.21
+    Stall Short Scoreboard          inst         1.17
+    Selected                        inst         1.00
+    Stall Long Scoreboard           inst         0.70
+    Stall Branch Resolving          inst         0.51
+    Stall Not Selected              inst         0.17
+    Stall IMC Miss                  inst         0.15
+    Stall Math Pipe Throttle        inst         0.12
+    Stall MIO Throttle              inst         0.12
+    Stall Dispatch Stall            inst         0.03
+    Stall Drain                     inst         0.00
+    Stall LG Throttle               inst         0.00
+    Stall Membar                    inst            0
+    Stall Misc                      inst         0.00
+    Stall Sleeping                  inst            0
+    Stall Tex Throttle              inst            0
+    ------------------------ ----------- ------------
+
+    WRN   On average, each warp of this kernel spends 11.1 cycles being stalled waiting for sibling warps at a CTA      
+          barrier. This represents about 57.0% of the total average of 19.5 cycles between issuing two instructions. A  
+          high number of warps waiting at a barrier is commonly caused by diverging code paths before a barrier that    
+          causes some warps to wait a long time until other warps reach the synchronization point. Whenever possible    
+          try to divide up the work into blocks of uniform workloads. Use the Source View's sampling columns to         
+          identify which barrier instruction causes the most stalls and optimize the code executed before that          
+          synchronization point first.                                                                                  
+    ----- --------------------------------------------------------------------------------------------------------------
+    INF   Check the Source Counters section for the top stall locations in your source based on sampling data. The      
+          Kernel Profiling Guide (https://docs.nvidia.com/nsight-compute/ProfilingGuide/index.html#sampling) provides   
+          more details on each stall reason.                                                                            
+    ----- --------------------------------------------------------------------------------------------------------------
+    WRN   Instructions are executed in warps, which are groups of 32 threads. Optimal instruction throughput is         
+          achieved if all 32 threads of a warp execute the same instruction. The chosen launch configuration, early     
+          thread completion, and divergent flow control can significantly lower the number of active threads in a warp  
+          per cycle. This kernel achieves an average of 14.5 threads being active per cycle. This is further reduced    
+          to 12.8 threads per warp due to predication. The compiler may use predication to avoid an actual branch.      
+          Instead, all instructions are scheduled, but a per-thread condition code or predicate controls which threads  
+          execute the instructions. Try to avoid different execution paths within a warp when possible. In addition,    
+          ensure your kernel makes use of Independent Thread Scheduling, which allows a warp to reconverge after a      
+          data-dependent conditional block by explicitly calling __syncwarp().                                          
+
+    Section: Occupancy
+    ------------------------------- ----------- ------------
+    Metric Name                     Metric Unit Metric Value
+    ------------------------------- ----------- ------------
+    Block Limit SM                        block           16
+    Block Limit Registers                 block            2
+    Block Limit Shared Mem                block            2
+    Block Limit Warps                     block            4
+    Theoretical Active Warps per SM        warp           16
+    Theoretical Occupancy                     %           50
+    Achieved Occupancy                        %        26.04
+    Achieved Active Warps Per SM           warp         8.33
+    ------------------------------- ----------- ------------
+
+    Table Name : Impact of Varying Register Count Per Thread
+    --------------------------------- --------------- ------------------------------
+    Metric Name                           Metric Unit                   Metric Value
+    --------------------------------- --------------- ------------------------------
+    Warp Occupancy Per Register Count                  3088 (16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 16; 16; 16;
+                                                         16; 16; 16; 16; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                          8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                                8; 8; 8; 8; 8; 8; 8)
+    Registers Per Thread              register/thread                            103
+    --------------------------------- --------------- ------------------------------
+
+    Table Name : Impact of Varying Block Size
+    ----------------------------- ----------- ------------------------------
+    Metric Name                   Metric Unit                   Metric Value
+    ----------------------------- ----------- ------------------------------
+    Block Size                                                           256
+    Warp Occupancy Per Block Size               346 (2; 2; 2; 4; 4; 6; 6; 8;
+                                                  8; 10; 10; 12; 12; 14; 14;
+                                                   16; 16; 9; 9; 10; 10; 11;
+                                                 11; 12; 12; 13; 13; 14; 14;
+                                                 15; 15; 16; 16; 0; 0; 0; 0;
+                                                  0; 0; 0; 0; 0; 0; 0; 0; 0;
+                                                  0; 0; 0; 0; 0; 0; 0; 0; 0;
+                                               0; 0; 0; 0; 0; 0; 0; 0; 0; 0)
+    ----------------------------- ----------- ------------------------------
+
+    Table Name : Impact of Varying Shared Memory Usage Per Block
+    ---------------------------------- ----------- ------------------------------
+    Metric Name                        Metric Unit                   Metric Value
+    ---------------------------------- ----------- ------------------------------
+    Warp Occupancy Per Shared Mem Size              1544 (16; 16; 16; 16; 16; 16;
+                                                      16; 16; 16; 16; 16; 16; 16;
+                                                      16; 16; 16; 16; 16; 16; 16;
+                                                      16; 16; 16; 16; 16; 16; 16;
+                                                      16; 16; 16; 16; 16; 16; 16;
+                                                      16; 16; 16; 16; 16; 16; 16;
+                                                      16; 16; 16; 16; 16; 16; 16;
+                                                      16; 16; 16; 16; 16; 16; 16;
+                                                      16; 16; 16; 16; 16; 16; 16;
+                                                       16; 16; 16; 8; 8; 8; 8; 8;
+                                                       8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                       8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                       8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                       8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                       8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                       8; 8; 8; 8; 8; 8; 8; 8; 8;
+                                                                      8; 8; 8; 8)
+    Shared Memory Per Block            Kbyte/block                          23.39
+    ---------------------------------- ----------- ------------------------------
+
+    WRN   This kernel's theoretical occupancy (50.0%) is limited by the number of required registers. This kernel's     
+          theoretical occupancy (50.0%) is limited by the required amount of shared memory. The difference between      
+          calculated theoretical (50.0%) and measured achieved occupancy (26.0%) can be the result of warp scheduling   
+          overheads or workload imbalances during the kernel execution. Load imbalances can occur between warps within  
+          a block as well as across blocks of the same kernel. See the CUDA Best Practices Guide                        
+          (https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#occupancy) for more details on           
+          optimizing occupancy.                                                                                         
+
+    Section: Source Counters
+    -------------------------------------------------------------------------------------------------------- ----------- ------------
+    Metric Name                                                                                              Metric Unit Metric Value
+    -------------------------------------------------------------------------------------------------------- ----------- ------------
+    Avg. Threads Executed                                                                                         thread           14
+    Avg. Predicated-On Threads Executed                                                                           thread           12
+    L1 Wavefronts Shared Excessive                                                                                 Kbyte       334.80
+    L2 Theoretical Sectors Global Excessive                                                                        Kbyte        37.18
+    Branch Instructions Ratio                                                                                          %         0.10
+    gpc__cycles_elapsed.max                                                                                        cycle       192999
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_barrier)                                     warp         5158
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_branch_resolving)                            warp          207
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_dispatch_stall)                              warp           19
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_drain)                                       warp            1
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_imc_miss)                                    warp           64
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_lg_throttle)                                 warp            0
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_long_scoreboard)                             warp          321
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_math_pipe_throttle)                          warp           61
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_membar)                                      byte            0
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_mio_throttle)                                warp           44
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_misc)                                        warp            3
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_no_instructions)                             inst          974
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_not_selected)                                warp           89
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_selected)                                    warp          487
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_short_scoreboard)                            warp          554
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_sleeping)                                    warp            0
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_tex_throttle)                                warp            0
+    Warp Stall Sampling (All Cycles) (smsp__pcsamp_warps_issue_stalled_wait)                                        warp          998
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_barrier_not_issued)                   warp         4945
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_branch_resolving_not_issued)          warp          190
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_dispatch_stall_not_issued)            warp            6
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_drain_not_issued)                     warp            1
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_imc_miss_not_issued)                  warp           64
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_lg_throttle_not_issued)               warp            0
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_long_scoreboard_not_issued)           warp          309
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_math_pipe_throttle_not_issued)        warp           43
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_membar_not_issued)                    byte            0
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_mio_throttle_not_issued)              warp           41
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_misc_not_issued)                      warp            3
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_no_instructions_not_issued)           inst          950
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_not_selected_not_issued)              warp            0
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_selected_not_issued)                  warp            0
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_short_scoreboard_not_issued)          warp          511
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_sleeping_not_issued)                  warp            0
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_tex_throttle_not_issued)              warp            0
+    Warp Stall Sampling (Not-issued Cycles) (smsp__pcsamp_warps_issue_stalled_wait_not_issued)                      warp          865
+    Instructions Executed                                                                                           inst      3873324
+    Access Size                                                                                                                      
+    Access Operation                                                                                                                 
+    L1 Tag Requests Global                                                                                       sectors       150568
+    L1 Wavefronts Shared                                                                                         sectors       846791
+    L1 Wavefronts Shared Ideal                                                                                   sectors       511988
+    L2 Theoretical Sectors Global                                                                                sectors       166808
+    L2 Theoretical Sectors Global Ideal                                                                          sectors       129627
+    L2 Theoretical Sectors Local                                                                                 sectors            0
+    Address Space                                                                                                                    
+    Divergent Branches                                                                                                          22981
+    smsp__inst_executed.sum                                                                                         inst      3875476
+    Branch Instructions                                                                                             inst       379748
+    # Samples                                                                                                                    8980
+    stall_barrier                                                                                                   warp         5158
+    stall_barrier (Not Issued)                                                                                      warp         4945
+    stall_dispatch                                                                                                  warp           19
+    stall_dispatch (Not Issued)                                                                                     warp            6
+    stall_drain                                                                                                     warp            1
+    stall_drain (Not Issued)                                                                                        warp            1
+    stall_imc                                                                                                       warp           64
+    stall_imc (Not Issued)                                                                                          warp           64
+    stall_lg                                                                                                        warp            0
+    stall_lg (Not Issued)                                                                                           warp            0
+    stall_long_sb                                                                                                   warp          321
+    stall_long_sb (Not Issued)                                                                                      warp          309
+    stall_math                                                                                                      warp           61
+    stall_math (Not Issued)                                                                                         warp           43
+    stall_membar                                                                                                    byte            0
+    stall_membar (Not Issued)                                                                                       byte            0
+    stall_mio                                                                                                       warp           44
+    stall_mio (Not Issued)                                                                                          warp           41
+    stall_misc                                                                                                      warp            3
+    stall_misc (Not Issued)                                                                                         warp            3
+    stall_no_inst                                                                                                   inst          974
+    stall_no_inst (Not Issued)                                                                                      inst          950
+    stall_not_selected                                                                                              warp           89
+    stall_not_selected (Not Issued)                                                                                 warp            0
+    stall_selected                                                                                                  warp          487
+    stall_selected (Not Issued)                                                                                     warp            0
+    stall_short_sb                                                                                                  warp          554
+    stall_short_sb (Not Issued)                                                                                     warp          511
+    stall_sleep                                                                                                     warp            0
+    stall_sleeping (Not Issued)                                                                                     warp            0
+    stall_tex                                                                                                       warp            0
+    stall_tex (Not Issued)                                                                                          warp            0
+    stall_wait                                                                                                      warp          998
+    stall_wait (Not Issued)                                                                                         warp          865
+    Branch Efficiency                                                                                                  %        91.08
+    Avg. Divergent Branches                                                                                                    119.69
+    Thread Instructions Executed                                                                                    inst     56210985
+    Predicated-On Thread Instructions Executed                                                                      inst     49460948
+    -------------------------------------------------------------------------------------------------------- ----------- ------------
+
+    Warp Stall Sampling (All Cycles)
+    Table Name : Warp Stall Sampling (All Cycles)
+    --------------------------------------------------- ----------- ------------
+    Metric Name                                         Metric Unit Metric Value
+    --------------------------------------------------- ----------- ------------
+    smsp__pcsamp_warps_issue_stalled_barrier                   warp         5158
+    smsp__pcsamp_warps_issue_stalled_branch_resolving          warp          207
+    smsp__pcsamp_warps_issue_stalled_dispatch_stall            warp           19
+    smsp__pcsamp_warps_issue_stalled_drain                     warp            1
+    smsp__pcsamp_warps_issue_stalled_imc_miss                  warp           64
+    smsp__pcsamp_warps_issue_stalled_lg_throttle               warp            0
+    smsp__pcsamp_warps_issue_stalled_long_scoreboard           warp          321
+    smsp__pcsamp_warps_issue_stalled_math_pipe_throttle        warp           61
+    smsp__pcsamp_warps_issue_stalled_membar                    byte            0
+    smsp__pcsamp_warps_issue_stalled_mio_throttle              warp           44
+    smsp__pcsamp_warps_issue_stalled_misc                      warp            3
+    smsp__pcsamp_warps_issue_stalled_no_instructions           inst          974
+    smsp__pcsamp_warps_issue_stalled_not_selected              warp           89
+    smsp__pcsamp_warps_issue_stalled_selected                  warp          487
+    smsp__pcsamp_warps_issue_stalled_short_scoreboard          warp          554
+    smsp__pcsamp_warps_issue_stalled_sleeping                  warp            0
+    smsp__pcsamp_warps_issue_stalled_tex_throttle              warp            0
+    smsp__pcsamp_warps_issue_stalled_wait                      warp          998
+    --------------------------------------------------- ----------- ------------
+
+    Warp Stall Sampling (Not-issued Cycles)
+    Table Name : Warp Stall Sampling (Not-issued Cycles)
+    -------------------------------------------------------------- ----------- ------------
+    Metric Name                                                    Metric Unit Metric Value
+    -------------------------------------------------------------- ----------- ------------
+    smsp__pcsamp_warps_issue_stalled_barrier_not_issued                   warp         4945
+    smsp__pcsamp_warps_issue_stalled_branch_resolving_not_issued          warp          190
+    smsp__pcsamp_warps_issue_stalled_dispatch_stall_not_issued            warp            6
+    smsp__pcsamp_warps_issue_stalled_drain_not_issued                     warp            1
+    smsp__pcsamp_warps_issue_stalled_imc_miss_not_issued                  warp           64
+    smsp__pcsamp_warps_issue_stalled_lg_throttle_not_issued               warp            0
+    smsp__pcsamp_warps_issue_stalled_long_scoreboard_not_issued           warp          309
+    smsp__pcsamp_warps_issue_stalled_math_pipe_throttle_not_issued        warp           43
+    smsp__pcsamp_warps_issue_stalled_membar_not_issued                    byte            0
+    smsp__pcsamp_warps_issue_stalled_mio_throttle_not_issued              warp           41
+    smsp__pcsamp_warps_issue_stalled_misc_not_issued                      warp            3
+    smsp__pcsamp_warps_issue_stalled_no_instructions_not_issued           inst          950
+    smsp__pcsamp_warps_issue_stalled_not_selected_not_issued              warp            0
+    smsp__pcsamp_warps_issue_stalled_selected_not_issued                  warp            0
+    smsp__pcsamp_warps_issue_stalled_short_scoreboard_not_issued          warp          511
+    smsp__pcsamp_warps_issue_stalled_sleeping_not_issued                  warp            0
+    smsp__pcsamp_warps_issue_stalled_tex_throttle_not_issued              warp            0
+    smsp__pcsamp_warps_issue_stalled_wait_not_issued                      warp          865
+    -------------------------------------------------------------- ----------- ------------
+
+    Most Instructions Executed
+    Table Name : Most Instructions Executed
+    ------------- ----------- ------------
+    Metric Name   Metric Unit Metric Value
+    ------------- ----------- ------------
+    inst_executed        inst      3873324
+    ------------- ----------- ------------
+
+    WRN   This kernel has uncoalesced global accesses resulting in a total of 37181 excessive sectors (22% of the total 
+          166808 sectors). Check the L2 Theoretical Sectors Global Excessive table for the primary source locations.    
+          The CUDA Programming Guide                                                                                    
+          (https://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html#device-memory-accesses) had additional      
+          information on reducing uncoalesced device memory accesses.                                                   
+    ----- --------------------------------------------------------------------------------------------------------------
+    WRN   This kernel has uncoalesced shared accesses resulting in a total of 334803 excessive wavefronts (40% of the   
+          total 846791 wavefronts). Check the L1 Wavefronts Shared Excessive table for the primary source locations.    
+          The CUDA Best Practices Guide                                                                                 
+           (https://docs.nvidia.com/cuda/cuda-c-best-practices-guide/index.html#shared-memory-in-matrix-multiplication-c
+          -aa) has an example on optimizing shared memory accesses.                                                     
+

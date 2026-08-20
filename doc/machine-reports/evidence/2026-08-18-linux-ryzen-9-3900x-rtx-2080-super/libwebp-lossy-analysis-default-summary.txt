@@ -1,0 +1,42 @@
+Experiment: pre-Ampere automatic exact lossy-analysis dispatch
+Base: eb38392bb014f701f75b1666a1d9e7daf359ddef
+Hardware: Ryzen 9 3900X / RTX 2080 SUPER
+Build: Release, CMAKE_CUDA_ARCHITECTURES=native
+
+Profile:
+- CPU lossy analysis was a distinct 9.662--11.644 ms medium-input stage.
+- Forced CUDA analysis reduced that stage to 1.002--1.043 ms.
+- I4 remained 63.2--65.1% of realistic device block cycles, and the exhausted
+  residual micro-specialization family was not revisited.
+
+Candidate:
+- Enable exact lossy analysis automatically only on pre-Ampere devices.
+- Preserve explicit environment overrides on all architectures.
+- Use the existing measured Turing 784-warm / 12544-cold macroblock guards;
+  do not change Ampere+ behavior or decimation thresholds.
+
+Protocol correction:
+- Five order-balanced fresh process pairs per format were recorded, with one
+  warmup and three retained 24-image samples per process.
+- Every command used --force-cuda. ConfigureDispatch() runs after startup and
+  unconditionally sets WEBP_CUDA_LOSSY_ANALYSIS=1 and
+  WEBP_CUDA_FUSED_LOSSY_ANALYSIS=1.
+- It therefore overwrote the requested analysis-off/fused-off baseline. The
+  candidate's automatic default was also bypassed by the explicit value.
+- All 60 rows exercised the same forced fused path. They are repeatability
+  evidence and are not a valid parent/candidate timing comparison.
+
+Correctness and restoration:
+- Every one of the 60 timing rows retained its format's exact hash and bytes.
+- Candidate and restored concurrency, trellis/padded-stride/band/fallback,
+  and near-lossless focused CTests passed (3/3 each).
+- The analysis kernel's earlier implementation validation already covered
+  methods 0--6, qualities 25/75/95, odd dimensions, and CPU fallback; this
+  policy candidate changed no arithmetic or output representation.
+
+Decision:
+Rejected and removed because the automatic policy is a no-op in the mandatory
+forced-CUDA benchmark, which already explicitly enables ordinary and fused
+analysis. The previously reported 0.200/-0.039 ms deltas are withdrawn. Keep
+lossy analysis opt-in outside the benchmark. No Ampere+ behavior,
+cross-hardware claim, or Turing/Ampere+ decimation threshold changed.

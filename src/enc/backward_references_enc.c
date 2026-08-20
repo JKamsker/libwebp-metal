@@ -19,6 +19,9 @@
 #if defined(WEBP_USE_CACHE_SIZE_SINGLE_PASS_SLAB_EXPERIMENT)
 #include "src/enc/cache_size_single_pass_slab_enc.h"
 #endif
+#if defined(WEBP_USE_CUDA)
+#include "src/enc/cuda_enc.h"
+#endif
 
 #include <assert.h>
 #include <string.h>
@@ -31,6 +34,9 @@
 #include "src/enc/profile_enc.h"
 #include "src/enc/vp8i_enc.h"
 #include "src/utils/color_cache_utils.h"
+#if defined(WEBP_USE_CUDA)
+#include "src/utils/thread_utils.h"
+#endif
 #include "src/utils/utils.h"
 #include "src/webp/encode.h"
 #include "src/webp/format_constants.h"
@@ -385,7 +391,7 @@ int VP8LHashChainFill(VP8LHashChain* const p, int quality,
   {
     const WebPAcceleratorHashChainRequest request = {
         argb, chain, size, xsize, iter_max, window_size, low_effort,
-        p->offset_length};
+        p->offset_length, 0};
     if (WebPAccelerateHashChain(&request) == WEBP_ACCELERATOR_SUCCESS) {
       base_position = size - 2;
       p->offset_length[0] = p->offset_length[size - 1] = 0;
@@ -915,6 +921,154 @@ Error:
   return ok;
 }
 
+#if defined(WEBP_USE_CUDA)
+enum {
+  // Turing break-even from the RTX 2080 SUPER publication corpus. The CUDA
+  // policy helper keeps these values out of the Ampere+ default path.
+  CACHE_SEARCH_PARALLEL_MIN_BITS = 8,
+  CACHE_SEARCH_PARALLEL_MIN_COMMANDS = 32768
+};
+
+typedef struct {
+  const uint32_t* argb;
+  const VP8LBackwardRefs* refs;
+  int cache_bits;
+  uint64_t entropy;
+} CacheSearchJob;
+
+static int CacheSearchJobHook(void* arg1, void* arg2) {
+  CacheSearchJob* const job = (CacheSearchJob*)arg1;
+  const uint32_t* argb = job->argb;
+  VP8LRefsCursor c = VP8LRefsCursorInit(job->refs);
+  VP8LHistogram* const histo = VP8LAllocateHistogram(job->cache_bits);
+  VP8LColorCache hasher;
+  int hasher_init = 0;
+  (void)arg2;
+  if (histo == NULL) return 0;
+  VP8LHistogramInit(histo, job->cache_bits, /*init_arrays=*/1);
+  if (job->cache_bits > 0) {
+    hasher_init = VP8LColorCacheInit(&hasher, job->cache_bits);
+    if (!hasher_init) {
+      VP8LFreeHistogram(histo);
+      return 0;
+    }
+  }
+  while (VP8LRefsCursorOk(&c)) {
+    const PixOrCopy* const v = c.cur_pos;
+    if (PixOrCopyIsLiteral(v)) {
+      const uint32_t pix = *argb++;
+      const uint32_t a = (pix >> 24) & 0xff;
+      const uint32_t r = (pix >> 16) & 0xff;
+      const uint32_t g = (pix >> 8) & 0xff;
+      const uint32_t b = pix & 0xff;
+      if (job->cache_bits == 0) {
+        ++histo->blue[b];
+        ++histo->literal[g];
+        ++histo->red[r];
+        ++histo->alpha[a];
+      } else {
+        const int key = VP8LHashPix(pix, hasher.hash_shift);
+        if (VP8LColorCacheLookup(&hasher, key) == pix) {
+          ++histo->literal[NUM_LITERAL_CODES + NUM_LENGTH_CODES + key];
+        } else {
+          VP8LColorCacheSet(&hasher, key, pix);
+          ++histo->blue[b];
+          ++histo->literal[g];
+          ++histo->red[r];
+          ++histo->alpha[a];
+        }
+      }
+    } else {
+      int code, extra_bits, extra_bits_value;
+      int len = (int)PixOrCopyLength(v);
+      VP8LPrefixEncode(len, &code, &extra_bits, &extra_bits_value);
+      ++histo->literal[NUM_LITERAL_CODES + code];
+      if (job->cache_bits == 0) {
+        argb += len;
+      } else {
+        uint32_t argb_prev = *argb ^ 0xffffffffu;
+        do {
+          if (*argb != argb_prev) {
+            VP8LColorCacheInsert(&hasher, *argb);
+            argb_prev = *argb;
+          }
+          ++argb;
+        } while (--len != 0);
+      }
+    }
+    VP8LRefsCursorNext(&c);
+  }
+  job->entropy = VP8LHistogramEstimateBits(histo);
+  if (hasher_init) VP8LColorCacheClear(&hasher);
+  VP8LFreeHistogram(histo);
+  return 1;
+}
+
+static int CalculateBestCacheSizeParallel(const uint32_t* const argb,
+                                          int quality,
+                                          const VP8LBackwardRefs* const refs,
+                                          int* const best_cache_bits) {
+  const int cache_bits_max = (quality <= 25) ? 0 : *best_cache_bits;
+  const WebPWorkerInterface* const worker_interface = WebPGetWorkerInterface();
+  CacheSearchJob jobs[MAX_COLOR_CACHE_BITS + 1];
+  WebPWorker workers[MAX_COLOR_CACHE_BITS + 1];
+  int started[MAX_COLOR_CACHE_BITS + 1] = {0};
+  uint64_t entropy_min = WEBP_UINT64_MAX;
+  int ok = 1;
+  int i;
+  if (cache_bits_max == 0) {
+    *best_cache_bits = 0;
+    return 1;
+  }
+  for (i = 0; i <= cache_bits_max; ++i) {
+    jobs[i].argb = argb;
+    jobs[i].refs = refs;
+    jobs[i].cache_bits = i;
+    jobs[i].entropy = WEBP_UINT64_MAX;
+  }
+  for (i = 1; i <= cache_bits_max; ++i) {
+    worker_interface->Init(&workers[i]);
+    workers[i].data1 = &jobs[i];
+    workers[i].data2 = NULL;
+    workers[i].hook = CacheSearchJobHook;
+    if (worker_interface->Reset(&workers[i])) {
+      started[i] = 1;
+      worker_interface->Launch(&workers[i]);
+    } else {
+      worker_interface->End(&workers[i]);
+      ok = 0;
+      break;
+    }
+  }
+  if (ok) ok = CacheSearchJobHook(&jobs[0], NULL);
+  for (i = 1; i <= cache_bits_max; ++i) {
+    if (started[i]) {
+      ok &= worker_interface->Sync(&workers[i]);
+      worker_interface->End(&workers[i]);
+    }
+  }
+  if (!ok) return 0;
+  for (i = 0; i <= cache_bits_max; ++i) {
+    if (i == 0 || jobs[i].entropy < entropy_min) {
+      entropy_min = jobs[i].entropy;
+      *best_cache_bits = i;
+    }
+  }
+  return 1;
+}
+
+static int CacheSearchHasEnoughCommands(const VP8LBackwardRefs* const refs) {
+  VP8LRefsCursor c = VP8LRefsCursorInit(refs);
+  int commands = 0;
+  while (VP8LRefsCursorOk(&c) &&
+         commands < CACHE_SEARCH_PARALLEL_MIN_COMMANDS) {
+    ++commands;
+    VP8LRefsCursorNext(&c);
+  }
+  return commands == CACHE_SEARCH_PARALLEL_MIN_COMMANDS;
+}
+#endif
+
 #if defined(WEBP_USE_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT)
 int VP8LCompareCacheSizeSearchForTest(
     const uint32_t* const argb, int quality,
@@ -954,6 +1108,18 @@ int VP8LCompareCacheSizeSinglePassSlabForTest(
 static int CalculateBestCacheSize(const uint32_t* const argb, int quality,
                                   const VP8LBackwardRefs* const refs,
                                   int* const best_cache_bits) {
+#if defined(WEBP_USE_CUDA)
+  if (*best_cache_bits >= CACHE_SEARCH_PARALLEL_MIN_BITS &&
+      WebPCUDAParallelCacheSearchEnabled() &&
+      CacheSearchHasEnoughCommands(refs)) {
+    int candidate_bits = *best_cache_bits;
+    if (CalculateBestCacheSizeParallel(argb, quality, refs,
+                                       &candidate_bits)) {
+      *best_cache_bits = candidate_bits;
+      return 1;
+    }
+  }
+#endif
 #if defined(WEBP_USE_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT)
   const int runtime_state = VP8LCacheSizeSerialSweepRuntimeState();
   if (runtime_state < 0) return 0;

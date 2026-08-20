@@ -1,0 +1,619 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index 7809e965..c42199df 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -1897,8 +1897,56 @@ struct DecimateState {
+   int external_height = 0;
+ };
+ 
+-DecimateState g_decimate_state;
++constexpr int kDecimateStateSlots = 2;
++DecimateState g_decimate_states[kDecimateStateSlots];
++bool g_decimate_state_in_use[kDecimateStateSlots] = {};
++#if defined(_MSC_VER)
++__declspec(thread) int g_decimate_state_slot = -1;
++__declspec(thread) int g_decimate_last_state_slot = 0;
++#else
++thread_local int g_decimate_state_slot = -1;
++thread_local int g_decimate_last_state_slot = 0;
++#endif
+ DecimateMutex g_decimate_mutex = DECIMATE_MUTEX_INITIALIZER;
++DecimateMutex g_decimate_pass_mutex = DECIMATE_MUTEX_INITIALIZER;
++#if defined(_MSC_VER)
++__declspec(thread) bool g_decimate_pass_lock_held = false;
++#else
++thread_local bool g_decimate_pass_lock_held = false;
++#endif
++
++// Call only while holding g_decimate_mutex. A worker keeps its slot for the
++// duration of one WebPEncode() call, including every BEGIN/COLLECT pair. This
++// makes pending-pass identity structural: another encode cannot abandon or
++// collect this worker's arena even when its dimensions happen to match.
++DecimateState* DecimateAcquireStateLocked(void) {
++  if (g_decimate_state_slot >= 0) {
++    return &g_decimate_states[g_decimate_state_slot];
++  }
++  for (int i = 0; i < kDecimateStateSlots; ++i) {
++    if (!g_decimate_state_in_use[i]) {
++      g_decimate_state_in_use[i] = true;
++      g_decimate_state_slot = i;
++      g_decimate_last_state_slot = i;
++      return &g_decimate_states[i];
++    }
++  }
++  return nullptr;
++}
++
++DecimateState* DecimateCurrentStateLocked(void) {
++  return g_decimate_state_slot >= 0
++             ? &g_decimate_states[g_decimate_state_slot]
++             : nullptr;
++}
++
++DecimateState* DecimateAcquireState(void) {
++  DecimateState* state;
++  LockDecimate(&g_decimate_mutex);
++  state = DecimateAcquireStateLocked();
++  UnlockDecimate(&g_decimate_mutex);
++  return state;
++}
+ 
+ bool DecimateStringEqualsIgnoreCase(const char* value, const char* expected) {
+   while (*value != '\0' && *expected != '\0') {
+@@ -1958,8 +2006,8 @@ bool DecimateDeviceIsAmpereOrNewer(void) {
+   static int cached = -1;  // -1 unknown, 0 pre-Ampere, 1 Ampere or newer
+   if (cached < 0) {
+     int major = 0;
+-    const int device = g_decimate_state.available
+-                           ? g_decimate_state.device
++    const int device = g_decimate_states[0].available
++                           ? g_decimate_states[0].device
+                            : DecimateEnvironmentDevice();
+     if (device >= 0 &&
+         cudaDeviceGetAttribute(&major, cudaDevAttrComputeCapabilityMajor,
+@@ -2390,9 +2438,12 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
+     // Wait for one band's completion event, then copy its rows out on the
+     // dedicated copy stream so later diagonals keep running.
+     WebPAcceleratorResult collect_result = WEBP_ACCELERATOR_ERROR;
+-    LockDecimate(&g_decimate_mutex);
+-    DecimateState* const state = &g_decimate_state;
++    DecimateState* const state = DecimateAcquireState();
+     do {
++      if (state == nullptr) {
++        collect_result = WEBP_ACCELERATOR_NOT_RUN;
++        break;
++      }
+       if (!state->pass_pending || state->pending_mb_w != request->mb_w ||
+           state->pending_mb_h != request->mb_h ||
+           request->band_count != state->pending_requested_band_count ||
+@@ -2533,12 +2584,15 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
+       if (band == state->pending_band_count - 1) {
+         DecimateReportTiming(state, state->pending_mb_w, state->pending_mb_h);
+         DecimateClearPending(state);
++        if (g_decimate_pass_lock_held) {
++          g_decimate_pass_lock_held = false;
++          UnlockDecimate(&g_decimate_pass_mutex);
++        }
+       } else {
+         ++state->pending_next_band;
+       }
+       collect_result = WEBP_ACCELERATOR_SUCCESS;
+     } while (0);
+-    UnlockDecimate(&g_decimate_mutex);
+     return collect_result;
+   }
+   {
+@@ -2553,7 +2607,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
+     // band between them pays the one-time compute-capability query.
+     const char* const backend = getenv("WEBP_ACCELERATOR");
+     const bool context_warm =
+-        g_decimate_state.available ||
++        g_decimate_states[0].available ||
+         (backend != nullptr && strcmp(backend, "cuda") == 0);
+     const size_t ampere_minimum = context_warm ? 64u : 4000u;
+     const size_t turing_minimum = context_warm ? 784u : 12544u;
+@@ -2579,9 +2633,11 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
+   WebPAcceleratorResult result = WEBP_ACCELERATOR_NOT_RUN;
+   const int streaming = (request->phase == WEBP_ACCELERATOR_DECIMATE_BEGIN);
+   const int requested_band_count = streaming ? request->band_count : 1;
+-  LockDecimate(&g_decimate_mutex);
+-  DecimateState* const state = &g_decimate_state;
++  LockDecimate(&g_decimate_pass_mutex);
++  g_decimate_pass_lock_held = true;
++  DecimateState* const state = DecimateAcquireState();
+   do {
++    if (state == nullptr) break;
+     if (state->quarantined || !DecimateInitialize(state)) break;
+     if (cudaSetDevice(state->device) != cudaSuccess) {
+       state->quarantined = true;
+@@ -2859,7 +2915,10 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
+     }
+     result = WEBP_ACCELERATOR_SUCCESS;
+   } while (0);
+-  UnlockDecimate(&g_decimate_mutex);
++  if (!streaming || result != WEBP_ACCELERATOR_SUCCESS) {
++    g_decimate_pass_lock_held = false;
++    UnlockDecimate(&g_decimate_pass_mutex);
++  }
+   return result;
+ }
+ 
+@@ -2878,115 +2937,126 @@ extern "C" WebPAcceleratorResult WebPCUDARegisterDecimateExternalYUV420(
+       host_uv_stride < (int)uv_width) {
+     return WEBP_ACCELERATOR_ERROR;
+   }
+-  LockDecimate(&g_decimate_mutex);
+-  if (!g_decimate_state.external_yuv_valid) {
+-    g_decimate_state.external_device_y = device_y;
+-    g_decimate_state.external_device_u = device_u;
+-    g_decimate_state.external_device_v = device_v;
+-    g_decimate_state.external_device_y_stride = device_y_stride;
+-    g_decimate_state.external_device_uv_stride = device_uv_stride;
+-    g_decimate_state.external_host_y = host_y;
+-    g_decimate_state.external_host_u = host_u;
+-    g_decimate_state.external_host_v = host_v;
+-    g_decimate_state.external_host_y_stride = host_y_stride;
+-    g_decimate_state.external_host_uv_stride = host_uv_stride;
+-    g_decimate_state.external_width = width;
+-    g_decimate_state.external_height = height;
+-    g_decimate_state.external_yuv_valid = true;
++  DecimateState* const state = DecimateAcquireState();
++  if (state != nullptr && !state->external_yuv_valid) {
++    state->external_device_y = device_y;
++    state->external_device_u = device_u;
++    state->external_device_v = device_v;
++    state->external_device_y_stride = device_y_stride;
++    state->external_device_uv_stride = device_uv_stride;
++    state->external_host_y = host_y;
++    state->external_host_u = host_u;
++    state->external_host_v = host_v;
++    state->external_host_y_stride = host_y_stride;
++    state->external_host_uv_stride = host_uv_stride;
++    state->external_width = width;
++    state->external_height = height;
++    state->external_yuv_valid = true;
+     result = WEBP_ACCELERATOR_SUCCESS;
+   }
+-  UnlockDecimate(&g_decimate_mutex);
+   return result;
+ }
+ 
+ extern "C" void WebPCUDAClearDecimateExternalYUV420(void) {
+-  LockDecimate(&g_decimate_mutex);
+-  g_decimate_state.external_yuv_valid = false;
+-  UnlockDecimate(&g_decimate_mutex);
++  DecimateState* const state = g_decimate_state_slot >= 0
++                                   ? &g_decimate_states[g_decimate_state_slot]
++                                   : nullptr;
++  if (state != nullptr) state->external_yuv_valid = false;
+ }
+ 
+ extern "C" uint64_t WebPCUDAGetLastDecimateExecutionNanoseconds(void) {
+-  uint64_t value;
+-  LockDecimate(&g_decimate_mutex);
+-  value = g_decimate_state.last_execution_ns;
+-  UnlockDecimate(&g_decimate_mutex);
+-  return value;
++  return g_decimate_states[g_decimate_last_state_slot].last_execution_ns;
+ }
+ 
+ extern "C" uint64_t WebPCUDAGetLastDecimateResultTransferNanoseconds(void) {
+-  uint64_t value;
+-  LockDecimate(&g_decimate_mutex);
+-  value = g_decimate_state.last_result_transfer_ns;
+-  UnlockDecimate(&g_decimate_mutex);
+-  return value;
++  return g_decimate_states[g_decimate_last_state_slot]
++      .last_result_transfer_ns;
+ }
+ 
+ // Called from the CUDA backend's process-start prewarm thread: creating the
+ // stream and uploading the static tables here overlaps with image decode.
+ extern "C" void WebPCUDALossyDecimatePrewarm(void) {
+   LockDecimate(&g_decimate_mutex);
+-  if (!g_decimate_state.quarantined &&
+-      DecimateInitialize(&g_decimate_state) &&
+-      cudaSetDevice(g_decimate_state.device) == cudaSuccess) {
+-    (void)DecimateEnsureTables(&g_decimate_state);
++  DecimateState* const state = &g_decimate_states[0];
++  if (!state->quarantined && DecimateInitialize(state) &&
++      cudaSetDevice(state->device) == cudaSuccess) {
++    (void)DecimateEnsureTables(state);
+   }
+   UnlockDecimate(&g_decimate_mutex);
+ }
+ 
+ extern "C" WebPAcceleratorResult WebPCUDALossyDecimateFlush(void) {
+   WebPAcceleratorResult result = WEBP_ACCELERATOR_NOT_RUN;
+-  LockDecimate(&g_decimate_mutex);
+-  if (g_decimate_state.available && !g_decimate_state.quarantined) {
+-    cudaError_t error = cudaSetDevice(g_decimate_state.device);
+-    if (error == cudaSuccess && g_decimate_state.stream != nullptr) {
+-      error = cudaStreamSynchronize(g_decimate_state.stream);
++  DecimateState* const state = g_decimate_state_slot >= 0
++                                   ? &g_decimate_states[g_decimate_state_slot]
++                                   : nullptr;
++  if (state != nullptr && state->available && !state->quarantined) {
++    cudaError_t error = cudaSetDevice(state->device);
++    if (error == cudaSuccess && state->stream != nullptr) {
++      error = cudaStreamSynchronize(state->stream);
+     }
+-    if (error == cudaSuccess && g_decimate_state.copy_stream != nullptr) {
+-      error = cudaStreamSynchronize(g_decimate_state.copy_stream);
++    if (error == cudaSuccess && state->copy_stream != nullptr) {
++      error = cudaStreamSynchronize(state->copy_stream);
+     }
+     if (error == cudaSuccess) {
+       result = WEBP_ACCELERATOR_SUCCESS;
+     } else {
+-      g_decimate_state.quarantined = true;
++      state->quarantined = true;
+       result = WEBP_ACCELERATOR_ERROR;
+     }
+   }
+-  UnlockDecimate(&g_decimate_mutex);
+   return result;
+ }
+ 
+ extern "C" void WebPCUDALossyDecimateEndEncode(void) {
+-  LockDecimate(&g_decimate_mutex);
+-  g_decimate_state.external_yuv_valid = false;
+-  if (g_decimate_state.available) {
+-    cudaError_t error = cudaSetDevice(g_decimate_state.device);
+-    if (error == cudaSuccess && g_decimate_state.stream != nullptr) {
+-      error = cudaStreamSynchronize(g_decimate_state.stream);
++  DecimateState* const state = g_decimate_state_slot >= 0
++                                   ? &g_decimate_states[g_decimate_state_slot]
++                                   : nullptr;
++  if (state != nullptr) {
++    state->external_yuv_valid = false;
++  }
++  if (state != nullptr && state->available) {
++    cudaError_t error = cudaSetDevice(state->device);
++    if (error == cudaSuccess && state->stream != nullptr) {
++      error = cudaStreamSynchronize(state->stream);
+     }
+-    if (error == cudaSuccess && g_decimate_state.copy_stream != nullptr) {
+-      error = cudaStreamSynchronize(g_decimate_state.copy_stream);
++    if (error == cudaSuccess && state->copy_stream != nullptr) {
++      error = cudaStreamSynchronize(state->copy_stream);
+     }
+     if (error != cudaSuccess) {
+-      g_decimate_state.quarantined = true;
++      state->quarantined = true;
+     } else {
+-      DecimateClearPending(&g_decimate_state);
++      DecimateClearPending(state);
+     }
+-  } else {
+-    DecimateClearPending(&g_decimate_state);
++  } else if (state != nullptr) {
++    DecimateClearPending(state);
++  }
++  if (g_decimate_pass_lock_held) {
++    g_decimate_pass_lock_held = false;
++    UnlockDecimate(&g_decimate_pass_mutex);
++  }
++  if (g_decimate_state_slot >= 0) {
++    LockDecimate(&g_decimate_mutex);
++    g_decimate_state_in_use[g_decimate_state_slot] = false;
++    UnlockDecimate(&g_decimate_mutex);
++    g_decimate_state_slot = -1;
+   }
+-  UnlockDecimate(&g_decimate_mutex);
+ }
+ 
+ extern "C" void WebPCUDALossyDecimateTrim(void) {
+   LockDecimate(&g_decimate_mutex);
+-  if (g_decimate_state.available) {
+-    if (cudaSetDevice(g_decimate_state.device) == cudaSuccess) {
+-      DecimateReleaseAll(&g_decimate_state);
++  for (int i = 0; i < kDecimateStateSlots; ++i) {
++    DecimateState* const state = &g_decimate_states[i];
++    if (g_decimate_state_in_use[i]) continue;
++    if (state->available) {
++      if (cudaSetDevice(state->device) == cudaSuccess) {
++        DecimateReleaseAll(state);
++      } else {
++        state->quarantined = true;
++      }
+     } else {
+-      g_decimate_state.quarantined = true;
++      DecimateReleaseAll(state);
+     }
+-  } else {
+-    DecimateReleaseAll(&g_decimate_state);
+   }
+   UnlockDecimate(&g_decimate_mutex);
+ }
+diff --git a/src/enc/cuda_enc.cu b/src/enc/cuda_enc.cu
+index 62699e7d..1321aa4d 100644
+--- a/src/enc/cuda_enc.cu
++++ b/src/enc/cuda_enc.cu
+@@ -263,8 +263,42 @@ struct CudaState {
+ };
+ 
+ CudaState g_cuda_state;
++CudaState g_cuda_parallel_state;
++bool g_cuda_lossy_state_in_use[2] = {};
++#if defined(_MSC_VER)
++__declspec(thread) int g_cuda_lossy_state_slot = -1;
++#else
++thread_local int g_cuda_lossy_state_slot = -1;
++#endif
+ CudaMutex g_cuda_mutex = WEBP_CUDA_MUTEX_INITIALIZER;
+ 
++CudaState* CUDAAcquireLossyState(void) {
++  CudaState* state = nullptr;
++  LockCudaMutex(&g_cuda_mutex);
++  if (g_cuda_lossy_state_slot >= 0) {
++    state = g_cuda_lossy_state_slot == 0 ? &g_cuda_state
++                                         : &g_cuda_parallel_state;
++  } else {
++    for (int i = 0; i < 2; ++i) {
++      if (!g_cuda_lossy_state_in_use[i]) {
++        g_cuda_lossy_state_in_use[i] = true;
++        g_cuda_lossy_state_slot = i;
++        state = i == 0 ? &g_cuda_state : &g_cuda_parallel_state;
++        break;
++      }
++    }
++  }
++  UnlockCudaMutex(&g_cuda_mutex);
++  return state;
++}
++
++CudaState* CUDACurrentLossyState(void) {
++  return g_cuda_lossy_state_slot < 0
++             ? nullptr
++             : (g_cuda_lossy_state_slot == 0 ? &g_cuda_state
++                                              : &g_cuda_parallel_state);
++}
++
+ bool EnvironmentFlag(const char* name, bool default_value) {
+   const char* const value = getenv(name);
+   if (value == nullptr || value[0] == '\0') return default_value;
+@@ -3739,12 +3773,23 @@ WebPAcceleratorResult CUDARGBToYUVLocked(
+ WebPAcceleratorResult CUDARGBToYUV(
+     void* context, const WebPAcceleratorRGBToYUVRequest* request) {
+   WebPAcceleratorResult result;
+-  LockCudaMutex(&g_cuda_mutex);
+-  result = CUDARGBToYUVLocked(context, request);
++  CudaState* const state =
++      request != nullptr && request->handoff_generation != 0
++          ? CUDAAcquireLossyState()
++          : static_cast<CudaState*>(context);
++  if (state == nullptr) return WEBP_ACCELERATOR_NOT_RUN;
++  if (request == nullptr || request->handoff_generation == 0) {
++    LockCudaMutex(&g_cuda_mutex);
++  }
++  result = CUDARGBToYUVLocked(state, request);
++  if (request == nullptr || request->handoff_generation == 0) {
++    UnlockCudaMutex(&g_cuda_mutex);
++  }
+   if (result == WEBP_ACCELERATOR_SUCCESS) {
++    LockCudaMutex(&g_cuda_mutex);
+     g_cuda_state.successful_stages |= WEBP_ACCELERATOR_STAGE_RGB_TO_YUV;
++    UnlockCudaMutex(&g_cuda_mutex);
+   }
+-  UnlockCudaMutex(&g_cuda_mutex);
+   return result;
+ }
+ 
+@@ -4005,12 +4050,23 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
+ WebPAcceleratorResult CUDALossyAnalysis(
+     void* context, const WebPAcceleratorLossyAnalysisRequest* request) {
+   WebPAcceleratorResult result;
+-  LockCudaMutex(&g_cuda_mutex);
+-  result = CUDALossyAnalysisLocked(context, request);
++  CudaState* const state =
++      request != nullptr && request->handoff_generation != 0
++          ? CUDAAcquireLossyState()
++          : CUDACurrentLossyState() != nullptr
++                ? CUDACurrentLossyState()
++                : static_cast<CudaState*>(context);
++  const bool serialize_default = state == static_cast<CudaState*>(context) &&
++                                 CUDACurrentLossyState() == nullptr;
++  if (state == nullptr) return WEBP_ACCELERATOR_NOT_RUN;
++  if (serialize_default) LockCudaMutex(&g_cuda_mutex);
++  result = CUDALossyAnalysisLocked(state, request);
++  if (serialize_default) UnlockCudaMutex(&g_cuda_mutex);
+   if (result == WEBP_ACCELERATOR_SUCCESS) {
++    LockCudaMutex(&g_cuda_mutex);
+     g_cuda_state.successful_stages |= WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS;
++    UnlockCudaMutex(&g_cuda_mutex);
+   }
+-  UnlockCudaMutex(&g_cuda_mutex);
+   return result;
+ }
+ 
+@@ -4025,7 +4081,7 @@ WebPAcceleratorResult RegisterExternalYUV420(
+ #if defined(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS) && \
+     defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE) && \
+     defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+-  CudaState* const state = &g_cuda_state;
++  CudaState* const state = CUDAAcquireLossyState();
+   WebPAcceleratorResult result = WEBP_ACCELERATOR_ERROR;
+   const size_t uv_width = width > 0 ? ((size_t)width + 1u) / 2u : 0u;
+   const size_t uv_height = height > 0 ? ((size_t)height + 1u) / 2u : 0u;
+@@ -4043,7 +4099,7 @@ WebPAcceleratorResult RegisterExternalYUV420(
+   }
+   y_bytes = (size_t)width * (size_t)height;
+   uv_bytes = uv_width * uv_height;
+-  LockCudaMutex(&g_cuda_mutex);
++  if (state == nullptr) return WEBP_ACCELERATOR_NOT_RUN;
+   do {
+     if (state->external_yuv_valid || state->quarantined) break;
+     if (Initialize(state) != WEBP_ACCELERATOR_SUCCESS) {
+@@ -4108,7 +4164,6 @@ WebPAcceleratorResult RegisterExternalYUV420(
+           2u * ((uint64_t)y_bytes + 2u * (uint64_t)uv_bytes);
+     }
+   } while (0);
+-  UnlockCudaMutex(&g_cuda_mutex);
+   if (result != WEBP_ACCELERATOR_SUCCESS) {
+     WebPCUDAClearDecimateExternalYUV420();
+   }
+@@ -4133,9 +4188,8 @@ WebPAcceleratorResult RegisterExternalYUV420(
+ }
+ 
+ void ClearExternalYUV420(void) {
+-  LockCudaMutex(&g_cuda_mutex);
+-  g_cuda_state.external_yuv_valid = false;
+-  UnlockCudaMutex(&g_cuda_mutex);
++  CudaState* const state = CUDACurrentLossyState();
++  if (state != nullptr) state->external_yuv_valid = false;
+ #if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+   WebPCUDAClearDecimateExternalYUV420();
+ #endif
+@@ -4156,8 +4210,8 @@ WebPAcceleratorResult CUDALossyDecimate(
+ #endif
+ 
+ void CUDAEndEncode(void* context) {
+-  CudaState* const state = static_cast<CudaState*>(context);
+-  LockCudaMutex(&g_cuda_mutex);
++  CudaState* state = CUDACurrentLossyState();
++  if (state == nullptr) state = static_cast<CudaState*>(context);
+   state->resident_lossless_pixels_valid = false;
+   state->resident_lossless_pixels_hash_ready = false;
+   state->resident_lossless_generation = 0;
+@@ -4166,10 +4220,15 @@ void CUDAEndEncode(void* context) {
+   state->external_yuv_valid = false;
+   state->fused_lossy_analysis_valid = false;
+   state->fused_lossy_analysis_generation = 0;
+-  UnlockCudaMutex(&g_cuda_mutex);
+ #if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+   WebPCUDALossyDecimateEndEncode();
+ #endif
++  if (g_cuda_lossy_state_slot >= 0) {
++    LockCudaMutex(&g_cuda_mutex);
++    g_cuda_lossy_state_in_use[g_cuda_lossy_state_slot] = false;
++    UnlockCudaMutex(&g_cuda_mutex);
++    g_cuda_lossy_state_slot = -1;
++  }
+ }
+ 
+ WebPAcceleratorResult CUDAFlush(void* context) {
+diff --git a/tools/cuda_batch_benchmark.c b/tools/cuda_batch_benchmark.c
+index 72c068fc..e1912331 100644
+--- a/tools/cuda_batch_benchmark.c
++++ b/tools/cuda_batch_benchmark.c
+@@ -466,6 +466,87 @@ end:
+   return ok;
+ }
+ 
++typedef struct {
++  const Options* options;
++  const Input* input;
++  WebPMemoryWriter writer;
++  int encoded;
++} ParallelEncodeJob;
++
++static int ParallelEncodeInput(void* data1, void* data2) {
++  ParallelEncodeJob* const job = (ParallelEncodeJob*)data1;
++  (void)data2;
++  job->encoded = EncodeInput(job->options, job->input, &job->writer);
++  return job->encoded;
++}
++
++// Runs two complete encodes at a time. Each worker receives a dedicated CUDA
++// decimate slot, while the parent consumes completed writers in submission
++// order. At most two decoded pictures, outputs, and accelerator arenas are
++// live, so the memory and ordering bounds do not depend on batch size.
++static int RunParallelEncodeBatch(const Options* const options,
++                                  uint64_t* const elapsed_ns,
++                                  uint64_t* const output_hash,
++                                  uint64_t* const output_bytes) {
++  const WebPWorkerInterface* const worker_interface =
++      WebPGetWorkerInterface();
++  WebPWorker workers[2];
++  ParallelEncodeJob jobs[2];
++  uint64_t hash = UINT64_C(1469598103934665603);
++  uint64_t bytes = 0;
++  uint64_t begin, end;
++  int workers_ready = 0;
++  int ok = 0;
++  int i;
++  memset(workers, 0, sizeof(workers));
++  memset(jobs, 0, sizeof(jobs));
++  for (i = 0; i < 2; ++i) {
++    worker_interface->Init(&workers[i]);
++    if (!worker_interface->Reset(&workers[i])) goto end;
++    ++workers_ready;
++    workers[i].hook = ParallelEncodeInput;
++  }
++  begin = WebPBenchmarkNowNanoseconds();
++  for (i = 0; i < options->batch_size; i += 2) {
++    const int active = options->batch_size - i < 2
++                           ? options->batch_size - i
++                           : 2;
++    int j;
++    memset(jobs, 0, sizeof(jobs));
++    for (j = 0; j < active; ++j) {
++      jobs[j].options = options;
++      jobs[j].input =
++          &options->inputs[(i + j) % options->input_count];
++      workers[j].data1 = &jobs[j];
++      workers[j].data2 = NULL;
++      worker_interface->Launch(&workers[j]);
++    }
++    for (j = 0; j < active; ++j) {
++      if (!worker_interface->Sync(&workers[j])) goto end;
++    }
++    for (j = 0; j < active; ++j) {
++      hash = HashBytes(hash, jobs[j].writer.mem, jobs[j].writer.size);
++      hash = HashBytes(hash, (const uint8_t*)&jobs[j].writer.size,
++                       sizeof(jobs[j].writer.size));
++      bytes += jobs[j].writer.size;
++      WebPMemoryWriterClear(&jobs[j].writer);
++      jobs[j].encoded = 0;
++    }
++  }
++  end = WebPBenchmarkNowNanoseconds();
++  if (begin == 0 || end <= begin) goto end;
++  *elapsed_ns = end - begin;
++  *output_hash = hash;
++  *output_bytes = bytes;
++  ok = 1;
++end:
++  for (i = 0; i < workers_ready; ++i) worker_interface->End(&workers[i]);
++  for (i = 0; i < 2; ++i) {
++    if (jobs[i].encoded) WebPMemoryWriterClear(&jobs[i].writer);
++  }
++  return ok ? 1 : (workers_ready < 2 ? -1 : 0);
++}
++
+ static int DecodedOutputsEqual(const WebPMemoryWriter* const left,
+                                const WebPMemoryWriter* const right) {
+   int left_width, left_height, right_width, right_height;
+@@ -552,13 +633,28 @@ static int RunBatch(const Options* const options, uint64_t* const elapsed_ns,
+       predecode_env != NULL && predecode_env[0] != '\0'
+           ? strcmp(predecode_env, "0") != 0
+           : WebPCUDAIsPreAmpereDevice();
++  const char* const concurrency_env =
++      getenv("WEBP_CUDA_BATCH_CONCURRENCY");
++  const int use_parallel_encode =
++      concurrency_env != NULL && concurrency_env[0] != '\0'
++          ? strcmp(concurrency_env, "1") != 0 &&
++                strcmp(concurrency_env, "0") != 0
++          : WebPCUDAIsPreAmpereDevice();
+   uint64_t begin, end;
+   uint64_t hash = UINT64_C(1469598103934665603);
+   uint64_t bytes = 0;
+   int i;
+-  // Turing measurements show enough decode/import wall time to hide behind
+-  // the serialized lossy encode. Keep Ampere+ unchanged until measured there;
+-  // WEBP_CUDA_BATCH_PREDECODE=0 restores the serial batch on every device.
++  // Turing measurements show enough device capacity for two independent
++  // decimate passes. Keep Ampere+ unchanged until measured there;
++  // WEBP_CUDA_BATCH_CONCURRENCY=1 restores the retained serial-encode path.
++  if (use_parallel_encode && !strcmp(options->variant, "cuda") &&
++      options->mode == MODE_LOSSY && options->batch_size > 1) {
++    const int parallel_ok =
++        RunParallelEncodeBatch(options, elapsed_ns, output_hash, output_bytes);
++    if (parallel_ok >= 0) return parallel_ok;
++  }
++  // The prior Turing default overlaps image decode with the serialized lossy
++  // encode. Keep it as the worker-creation fallback and explicit restore.
+   if (use_predecode && !strcmp(options->variant, "cuda") &&
+       options->mode == MODE_LOSSY && options->batch_size > 1) {
+     const int predecode_ok =

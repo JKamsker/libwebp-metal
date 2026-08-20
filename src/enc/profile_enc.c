@@ -314,8 +314,15 @@ static const char* const kStageNames[WEBP_PROFILE_STAGE_COUNT] = {
     "lossy_analyze",
     "lossy_stat_loop",
     "lossy_encode_loop",
+    "lossy_decimate",
+    "lossy_record_tokens",
     "lossy_alpha",
-    "lossy_write"};
+    "lossy_write",
+    "lossy_iter_import",
+    "lossy_side_info",
+    "lossy_save_boundary",
+    "lossy_emit_tokens",
+    "lossy_post_loop"};
 
 #if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
 enum {

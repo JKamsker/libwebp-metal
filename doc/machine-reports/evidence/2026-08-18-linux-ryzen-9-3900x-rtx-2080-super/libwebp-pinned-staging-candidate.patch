@@ -1,0 +1,62 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index 7809e965..37c50c82 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -1852,6 +1852,7 @@ struct DecimateState {
+   StaticCostTables* device_tables = nullptr;
+   uint8_t* host_staging = nullptr;
+   size_t host_staging_capacity = 0;
++  bool host_staging_pinned = false;
+   // Streaming pass in flight (BEGIN issued, not all bands collected).
+   bool pass_pending = false;
+   int pending_band_count = 0;
+@@ -2036,7 +2037,11 @@ void DecimateReleaseAll(DecimateState* state) {
+     (void)cudaStreamDestroy(state->copy_stream);
+   }
+   if (state->stream != nullptr) (void)cudaStreamDestroy(state->stream);
+-  free(state->host_staging);
++  if (state->host_staging_pinned) {
++    (void)cudaFreeHost(state->host_staging);
++  } else {
++    free(state->host_staging);
++  }
+   *state = DecimateState();
+ }
+
+@@ -2139,12 +2144,34 @@ bool DecimateEnsureArena(DecimateState* state, size_t bytes) {
+ }
+
+ bool DecimateEnsureHostStaging(DecimateState* state, size_t bytes) {
+-  void* replacement;
++  void* replacement = nullptr;
++  bool replacement_pinned = false;
+   if (bytes <= state->host_staging_capacity) return true;
+-  replacement = realloc(state->host_staging, bytes);
+-  if (replacement == nullptr) return false;
++
++  // The streaming copy path can overlap a completed band's download with
++  // later wavefront diagonals only when the destination is page-locked.
++  // Keep this Turing tuning out of the Ampere+ path until measured there.
++  if (!DecimateDeviceIsAmpereOrNewer() &&
++      DecimateFlag("WEBP_CUDA_DECIMATE_PINNED_STAGING", true)) {
++    if (cudaHostAlloc(&replacement, bytes, cudaHostAllocDefault) ==
++        cudaSuccess) {
++      replacement_pinned = true;
++    } else {
++      (void)cudaGetLastError();
++    }
++  }
++  if (replacement == nullptr) {
++    replacement = malloc(bytes);
++    if (replacement == nullptr) return false;
++  }
++  if (state->host_staging_pinned) {
++    (void)cudaFreeHost(state->host_staging);
++  } else {
++    free(state->host_staging);
++  }
+   state->host_staging = (uint8_t*)replacement;
+   state->host_staging_capacity = bytes;
++  state->host_staging_pinned = replacement_pinned;
+   return true;
+ }

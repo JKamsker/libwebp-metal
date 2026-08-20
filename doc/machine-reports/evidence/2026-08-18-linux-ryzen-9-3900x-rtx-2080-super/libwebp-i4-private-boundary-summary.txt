@@ -1,0 +1,41 @@
+Experiment: pre-Ampere warp-private I4 prediction boundaries
+Machine: AMD Ryzen 9 3900X; NVIDIA GeForce RTX 2080 SUPER (sm_75)
+Decision: rejected and removed
+
+Fresh retained profile:
+- PNG lossy: CPU 85.134 ms/image, CUDA 41.061 ms/image.
+- JPEG lossy: CPU 85.822 ms/image, CUDA 39.555 ms/image.
+- Medium photo/texture device walls: about 22--26 ms.
+- Photo/texture I4 share: about 63--65% of block cycles.
+
+Candidate:
+- Replace the one shared 13-byte boundary per active I4 team with one exact
+  private shared boundary per prediction warp.
+- Each of four warp leaders gathers and immediately consumes its own boundary,
+  removing the first CTA-wide barrier of every I4 dependency diagonal.
+- Compile the candidate only for pre-Ampere; Ampere+ retains the parent path.
+
+Validation:
+- Candidate CTest: 7/7 passed.
+- Restored-parent CTest: 7/7 passed.
+- Timing rows: 24 (6 per format/arm), all hashes and byte counts exact.
+- PNG output: d01c3571a90d2653, 1610422 bytes.
+- JPEG output: befeef70bef22946, 1600198 bytes.
+
+Pooled median batch time:
+- PNG parent: 39.887852 ms/image.
+- PNG candidate: 39.720484 ms/image.
+- PNG gain: 0.167368 ms/image.
+- JPEG parent: 39.404962 ms/image.
+- JPEG candidate: 39.680605 ms/image.
+- JPEG gain: -0.275643 ms/image.
+
+Resources:
+- Parent: 103 registers, 352-byte stack, 23392-byte shared memory.
+- Candidate: 103 registers, 352-byte stack, 23464-byte shared memory.
+
+Conclusion:
+The removed CTA barrier does not repay four duplicate boundary gathers. PNG
+is far below the 1.5 ms/image gate and JPEG regresses. The exact candidate was
+removed. This is RTX 2080 SUPER-only performance evidence; Ampere+ behavior
+was compile-time unchanged and no Ampere+ performance claim is made.

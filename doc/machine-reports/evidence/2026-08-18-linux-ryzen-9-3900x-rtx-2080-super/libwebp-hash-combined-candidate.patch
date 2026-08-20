@@ -1,0 +1,147 @@
+diff --git a/src/enc/cuda_enc.cu b/src/enc/cuda_enc.cu
+index eb46ef2e..14b1bec6 100644
+--- a/src/enc/cuda_enc.cu
++++ b/src/enc/cuda_enc.cu
+@@ -1321,33 +1321,54 @@ __device__ __forceinline__ int32_t ReadHashLink(const int32_t* chain,
+ #endif
+ }
+ 
++template <bool kLoadMatch4Ahead, bool kSkipInitialPixelPrecheck>
+ __device__ uint32_t HashMatchLength(const uint32_t* pixels, uint32_t first,
+                                     uint32_t second, uint32_t best_length,
+                                     uint32_t max_length) {
+   uint32_t length = 0u;
+-  if (ReadHashPixel(pixels, first + best_length) !=
+-      ReadHashPixel(pixels, second + best_length)) {
+-    return 0u;
++  if (!kSkipInitialPixelPrecheck) {
++    if (ReadHashPixel(pixels, first + best_length) !=
++        ReadHashPixel(pixels, second + best_length)) {
++      return 0u;
++    }
+   }
+ #if defined(WEBP_CUDA_ENABLE_HASH_MATCH4)
+-  while (length + 4u <= max_length) {
+-    if (ReadHashPixel(pixels, first + length) !=
+-        ReadHashPixel(pixels, second + length)) {
+-      return length;
+-    }
+-    if (ReadHashPixel(pixels, first + length + 1u) !=
+-        ReadHashPixel(pixels, second + length + 1u)) {
+-      return length + 1u;
+-    }
+-    if (ReadHashPixel(pixels, first + length + 2u) !=
+-        ReadHashPixel(pixels, second + length + 2u)) {
+-      return length + 2u;
++  if (kLoadMatch4Ahead) {
++    while (length + 4u <= max_length) {
++      const uint32_t first0 = ReadHashPixel(pixels, first + length);
++      const uint32_t second0 = ReadHashPixel(pixels, second + length);
++      const uint32_t first1 = ReadHashPixel(pixels, first + length + 1u);
++      const uint32_t second1 = ReadHashPixel(pixels, second + length + 1u);
++      const uint32_t first2 = ReadHashPixel(pixels, first + length + 2u);
++      const uint32_t second2 = ReadHashPixel(pixels, second + length + 2u);
++      const uint32_t first3 = ReadHashPixel(pixels, first + length + 3u);
++      const uint32_t second3 = ReadHashPixel(pixels, second + length + 3u);
++      if (first0 != second0) return length;
++      if (first1 != second1) return length + 1u;
++      if (first2 != second2) return length + 2u;
++      if (first3 != second3) return length + 3u;
++      length += 4u;
+     }
+-    if (ReadHashPixel(pixels, first + length + 3u) !=
+-        ReadHashPixel(pixels, second + length + 3u)) {
+-      return length + 3u;
++  } else {
++    while (length + 4u <= max_length) {
++      if (ReadHashPixel(pixels, first + length) !=
++          ReadHashPixel(pixels, second + length)) {
++        return length;
++      }
++      if (ReadHashPixel(pixels, first + length + 1u) !=
++          ReadHashPixel(pixels, second + length + 1u)) {
++        return length + 1u;
++      }
++      if (ReadHashPixel(pixels, first + length + 2u) !=
++          ReadHashPixel(pixels, second + length + 2u)) {
++        return length + 2u;
++      }
++      if (ReadHashPixel(pixels, first + length + 3u) !=
++          ReadHashPixel(pixels, second + length + 3u)) {
++        return length + 3u;
++      }
++      length += 4u;
+     }
+-    length += 4u;
+   }
+ #endif
+   while (length < max_length &&
+@@ -1358,6 +1379,7 @@ __device__ uint32_t HashMatchLength(const uint32_t* pixels, uint32_t first,
+   return length;
+ }
+ 
++template <bool kUsePreAmpereMatchLoop>
+ __global__ void HashChainCandidatesKernel(
+     const uint32_t* WEBP_CUDA_RESTRICT pixels,
+     const int32_t* WEBP_CUDA_RESTRICT chain,
+@@ -1384,8 +1406,9 @@ __global__ void HashChainCandidatesKernel(
+   if (params.low_effort == 0u) {
+     if (base_position >= params.xsize) {
+       const uint32_t current =
+-          HashMatchLength(pixels, base_position - params.xsize, base_position,
+-                          best_length, max_length);
++          HashMatchLength<kUsePreAmpereMatchLoop, false>(
++              pixels, base_position - params.xsize, base_position, best_length,
++              max_length);
+       if (current > best_length) {
+         best_length = current;
+         best_distance = params.xsize;
+@@ -1393,8 +1416,8 @@ __global__ void HashChainCandidatesKernel(
+       --iterations;
+     }
+     const uint32_t current =
+-        HashMatchLength(pixels, base_position - 1u, base_position, best_length,
+-                        max_length);
++        HashMatchLength<kUsePreAmpereMatchLoop, false>(
++            pixels, base_position - 1u, base_position, best_length, max_length);
+     if (current > best_length) {
+       best_length = current;
+       best_distance = 1u;
+@@ -1411,9 +1434,13 @@ __global__ void HashChainCandidatesKernel(
+     if (iterations == 0) break;
+     if (ReadHashPixel(pixels, static_cast<uint32_t>(position) + best_length) ==
+         best_pixel) {
+-      const uint32_t current =
+-          HashMatchLength(pixels, static_cast<uint32_t>(position),
+-                          base_position, 0u, max_length);
++      // Full-chain calls start at zero, so the generic precheck repeats the
++      // loop's first comparison. Pre-Ampere benefits from issuing each group
++      // of four loads together and omitting that duplicate comparison.
++      const uint32_t current = HashMatchLength<kUsePreAmpereMatchLoop,
++                                               kUsePreAmpereMatchLoop>(
++          pixels, static_cast<uint32_t>(position), base_position, 0u,
++          max_length);
+       if (current > best_length) {
+         best_length = current;
+         best_distance = base_position - static_cast<uint32_t>(position);
+@@ -3316,8 +3343,18 @@ WebPAcceleratorResult CUDAHashChainLocked(
+   const uint32_t blocks =
+       (static_cast<uint32_t>(request->size) + kHashThreadsPerBlock - 1u) /
+       kHashThreadsPerBlock;
+-  HashChainCandidatesKernel<<<blocks, kHashThreadsPerBlock, 0, state->stream>>>(
+-      device_pixels, state->chain, state->transform, params);
++  // Native sm_75 measurements favor the grouped-load matcher. Preserve the
++  // original Ampere+ specialization until that hardware has its own evidence.
++  if (state->compute_capability_major > 0 &&
++      state->compute_capability_major < 8) {
++    HashChainCandidatesKernel<true>
++        <<<blocks, kHashThreadsPerBlock, 0, state->stream>>>(
++            device_pixels, state->chain, state->transform, params);
++  } else {
++    HashChainCandidatesKernel<false>
++        <<<blocks, kHashThreadsPerBlock, 0, state->stream>>>(
++            device_pixels, state->chain, state->transform, params);
++  }
+   error = cudaGetLastError();
+   if (error == cudaSuccess && timing) {
+     error = cudaEventRecord(state->event_stop, state->stream);

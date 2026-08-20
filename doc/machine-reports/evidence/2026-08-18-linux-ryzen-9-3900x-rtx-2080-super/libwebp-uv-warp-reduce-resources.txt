@@ -1,0 +1,282 @@
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:alpha_dec.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:buffer_dec.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:frame_dec.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:idec_dec.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:io_dec.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:quant_dec.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:tree_dec.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:vp8_dec.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:vp8l_dec.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:webp_dec.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:alpha_processing.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:cpu.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:dec.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:dec_clip_tables.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:filters.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:rescaler.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:upsampling.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:yuv.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_avx2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:alpha_processing_sse41.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:dec_sse41.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_sse41.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:upsampling_sse41.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:yuv_sse41.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:alpha_processing_sse2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:dec_sse2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:filters_sse2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_sse2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:rescaler_sse2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:upsampling_sse2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:yuv_sse2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:alpha_processing_neon.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:dec_neon.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:filters_neon.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_neon.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:rescaler_neon.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:upsampling_neon.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:yuv_neon.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:dec_msa.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:filters_msa.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_msa.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:rescaler_msa.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:upsampling_msa.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:dec_mips32.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:rescaler_mips32.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:yuv_mips32.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:alpha_processing_mips_dsp_r2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:dec_mips_dsp_r2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:filters_mips_dsp_r2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_mips_dsp_r2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:rescaler_mips_dsp_r2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:upsampling_mips_dsp_r2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:yuv_mips_dsp_r2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:cost.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:ssim.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:cost_sse2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:enc_sse2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_enc_sse2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:ssim_sse2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:enc_sse41.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_enc_sse41.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_enc_avx2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:cost_neon.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:enc_neon.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_enc_neon.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:enc_msa.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_enc_msa.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:cost_mips32.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:enc_mips32.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_enc_mips32.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:cost_mips_dsp_r2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:enc_mips_dsp_r2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:lossless_enc_mips_dsp_r2.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:accelerator_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:alpha_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:analysis_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:backward_references_cost_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:backward_references_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:config_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:cost_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:filter_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:frame_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:histogram_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:iterator_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:near_lossless_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:picture_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:picture_csp_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:picture_psnr_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:picture_rescale_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:picture_tools_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:profile_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:predictor_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:quant_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:syntax_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:token_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:tree_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:vp8l_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:webp_enc.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:cuda_enc.cu.o:
+
+Fatbin elf code:
+================
+arch = sm_75
+code version = [1,7]
+host = linux
+compile_size = 64bit
+
+Resource usage:
+ Common:
+  GLOBAL:0 CONSTANT[3]:736
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1531NearLosslessTileHistogramKernelILj64EEEvPKjPjjNS_24NearLosslessKernelParamsE:
+  REG:41 STACK:0 SHARED:38688 LOCAL:0 CONSTANT[0]:396 CONSTANT[2]:12 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1531NearLosslessTileHistogramKernelILj32EEEvPKjPjjNS_24NearLosslessKernelParamsE:
+  REG:41 STACK:0 SHARED:13216 LOCAL:0 CONSTANT[0]:396 CONSTANT[2]:12 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1531NearLosslessTileHistogramKernelILj16EEEvPKjPjjNS_24NearLosslessKernelParamsE:
+  REG:41 STACK:0 SHARED:6624 LOCAL:0 CONSTANT[0]:396 CONSTANT[2]:12 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1519LossyAnalysisKernelEPKhS1_S1_P34WebPAcceleratorLossyAnalysisResultNS_25LossyAnalysisKernelParamsE:
+  REG:60 STACK:0 SHARED:1296 LOCAL:0 CONSTANT[0]:412 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1517RGBToYUV420KernelEPKhPhNS_15RGBKernelParamsE:
+  REG:26 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:412 CONSTANT[2]:16 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1525HashChainCandidatesKernelEPKjPKiPjNS_16HashKernelParamsE:
+  REG:26 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:396 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1531NearLosslessAccumulateRowKernelEPKjS1_PjjNS_24NearLosslessKernelParamsE:
+  REG:12 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:404 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1527NearLosslessSelectRowKernelEPKjPjS1_jNS_24NearLosslessKernelParamsE:
+  REG:44 STACK:0 SHARED:4112 LOCAL:0 CONSTANT[0]:404 CONSTANT[2]:104 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1523PredictorResidualKernelEPKjS1_PjNS_21PredictorKernelParamsE:
+  REG:18 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:392 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1528PredictorAccumulateRowKernelEPKjS1_PjjNS_21PredictorKernelParamsE:
+  REG:23 STACK:0 SHARED:4096 LOCAL:0 CONSTANT[0]:396 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1524PredictorSelectRowKernelEPKjPjS1_jNS_21PredictorKernelParamsE:
+  REG:46 STACK:0 SHARED:8208 LOCAL:0 CONSTANT[0]:396 CONSTANT[2]:120 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1518NearLosslessKernelEPKjPjjji:
+  REG:17 STACK:0 SHARED:0 LOCAL:0 CONSTANT[0]:380 TEXTURE:0 SURFACE:0 SAMPLER:0
+ Function _ZN44_GLOBAL__N__4418dc47_11_cuda_enc_cu_7ee67b1525ColorSpaceTransformKernelEPjS0_NS_12KernelParamsE:
+  REG:45 STACK:0 SHARED:1056 LOCAL:0 CONSTANT[0]:388 CONSTANT[2]:8 TEXTURE:0 SURFACE:0 SAMPLER:0
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:cuda_decimate_enc.cu.o:
+
+Fatbin elf code:
+================
+arch = sm_75
+code version = [1,7]
+host = linux
+compile_size = 64bit
+
+Resource usage:
+ Common:
+  GLOBAL:149 CONSTANT[3]:100
+ Function _ZN53_GLOBAL__N__e8a64b43_20_cuda_decimate_enc_cu_08a8e32714DecimateKernelENS_10DeviceViewENS_20DecimateKernelParamsEPh:
+  REG:102 STACK:352 SHARED:23392 LOCAL:0 CONSTANT[0]:544 CONSTANT[2]:96 TEXTURE:0 SURFACE:0 SAMPLER:0
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:bit_reader_utils.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:color_cache_utils.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:filters_utils.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:huffman_utils.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:palette.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:quant_levels_dec_utils.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:rescaler_utils.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:random_utils.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:thread_utils.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:utils.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:bit_writer_utils.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:huffman_encode_utils.c.o:
+
+member /tmp/libwebp-token-stats-split-candidate-20260820/libwebp.a:quant_levels_utils.c.o:

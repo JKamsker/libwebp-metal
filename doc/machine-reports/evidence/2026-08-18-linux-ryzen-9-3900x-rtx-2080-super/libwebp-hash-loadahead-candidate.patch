@@ -1,0 +1,133 @@
+diff --git a/src/enc/cuda_enc.cu b/src/enc/cuda_enc.cu
+index eb46ef2e..4a46778a 100644
+--- a/src/enc/cuda_enc.cu
++++ b/src/enc/cuda_enc.cu
+@@ -1321,6 +1321,7 @@ __device__ __forceinline__ int32_t ReadHashLink(const int32_t* chain,
+ #endif
+ }
+ 
++template <bool kLoadMatch4Ahead>
+ __device__ uint32_t HashMatchLength(const uint32_t* pixels, uint32_t first,
+                                     uint32_t second, uint32_t best_length,
+                                     uint32_t max_length) {
+@@ -1330,24 +1331,42 @@ __device__ uint32_t HashMatchLength(const uint32_t* pixels, uint32_t first,
+     return 0u;
+   }
+ #if defined(WEBP_CUDA_ENABLE_HASH_MATCH4)
+-  while (length + 4u <= max_length) {
+-    if (ReadHashPixel(pixels, first + length) !=
+-        ReadHashPixel(pixels, second + length)) {
+-      return length;
++  if (kLoadMatch4Ahead) {
++    while (length + 4u <= max_length) {
++      const uint32_t first0 = ReadHashPixel(pixels, first + length);
++      const uint32_t second0 = ReadHashPixel(pixels, second + length);
++      const uint32_t first1 = ReadHashPixel(pixels, first + length + 1u);
++      const uint32_t second1 = ReadHashPixel(pixels, second + length + 1u);
++      const uint32_t first2 = ReadHashPixel(pixels, first + length + 2u);
++      const uint32_t second2 = ReadHashPixel(pixels, second + length + 2u);
++      const uint32_t first3 = ReadHashPixel(pixels, first + length + 3u);
++      const uint32_t second3 = ReadHashPixel(pixels, second + length + 3u);
++      if (first0 != second0) return length;
++      if (first1 != second1) return length + 1u;
++      if (first2 != second2) return length + 2u;
++      if (first3 != second3) return length + 3u;
++      length += 4u;
+     }
+-    if (ReadHashPixel(pixels, first + length + 1u) !=
+-        ReadHashPixel(pixels, second + length + 1u)) {
+-      return length + 1u;
+-    }
+-    if (ReadHashPixel(pixels, first + length + 2u) !=
+-        ReadHashPixel(pixels, second + length + 2u)) {
+-      return length + 2u;
+-    }
+-    if (ReadHashPixel(pixels, first + length + 3u) !=
+-        ReadHashPixel(pixels, second + length + 3u)) {
+-      return length + 3u;
++  } else {
++    while (length + 4u <= max_length) {
++      if (ReadHashPixel(pixels, first + length) !=
++          ReadHashPixel(pixels, second + length)) {
++        return length;
++      }
++      if (ReadHashPixel(pixels, first + length + 1u) !=
++          ReadHashPixel(pixels, second + length + 1u)) {
++        return length + 1u;
++      }
++      if (ReadHashPixel(pixels, first + length + 2u) !=
++          ReadHashPixel(pixels, second + length + 2u)) {
++        return length + 2u;
++      }
++      if (ReadHashPixel(pixels, first + length + 3u) !=
++          ReadHashPixel(pixels, second + length + 3u)) {
++        return length + 3u;
++      }
++      length += 4u;
+     }
+-    length += 4u;
+   }
+ #endif
+   while (length < max_length &&
+@@ -1358,6 +1377,7 @@ __device__ uint32_t HashMatchLength(const uint32_t* pixels, uint32_t first,
+   return length;
+ }
+ 
++template <bool kLoadMatch4Ahead>
+ __global__ void HashChainCandidatesKernel(
+     const uint32_t* WEBP_CUDA_RESTRICT pixels,
+     const int32_t* WEBP_CUDA_RESTRICT chain,
+@@ -1384,8 +1404,9 @@ __global__ void HashChainCandidatesKernel(
+   if (params.low_effort == 0u) {
+     if (base_position >= params.xsize) {
+       const uint32_t current =
+-          HashMatchLength(pixels, base_position - params.xsize, base_position,
+-                          best_length, max_length);
++          HashMatchLength<kLoadMatch4Ahead>(
++              pixels, base_position - params.xsize, base_position, best_length,
++              max_length);
+       if (current > best_length) {
+         best_length = current;
+         best_distance = params.xsize;
+@@ -1393,8 +1414,8 @@ __global__ void HashChainCandidatesKernel(
+       --iterations;
+     }
+     const uint32_t current =
+-        HashMatchLength(pixels, base_position - 1u, base_position, best_length,
+-                        max_length);
++        HashMatchLength<kLoadMatch4Ahead>(
++            pixels, base_position - 1u, base_position, best_length, max_length);
+     if (current > best_length) {
+       best_length = current;
+       best_distance = 1u;
+@@ -1412,8 +1433,9 @@ __global__ void HashChainCandidatesKernel(
+     if (ReadHashPixel(pixels, static_cast<uint32_t>(position) + best_length) ==
+         best_pixel) {
+       const uint32_t current =
+-          HashMatchLength(pixels, static_cast<uint32_t>(position),
+-                          base_position, 0u, max_length);
++          HashMatchLength<kLoadMatch4Ahead>(
++              pixels, static_cast<uint32_t>(position), base_position, 0u,
++              max_length);
+       if (current > best_length) {
+         best_length = current;
+         best_distance = base_position - static_cast<uint32_t>(position);
+@@ -3316,8 +3338,16 @@ WebPAcceleratorResult CUDAHashChainLocked(
+   const uint32_t blocks =
+       (static_cast<uint32_t>(request->size) + kHashThreadsPerBlock - 1u) /
+       kHashThreadsPerBlock;
+-  HashChainCandidatesKernel<<<blocks, kHashThreadsPerBlock, 0, state->stream>>>(
+-      device_pixels, state->chain, state->transform, params);
++  if (state->compute_capability_major > 0 &&
++      state->compute_capability_major < 8) {
++    HashChainCandidatesKernel<true>
++        <<<blocks, kHashThreadsPerBlock, 0, state->stream>>>(
++            device_pixels, state->chain, state->transform, params);
++  } else {
++    HashChainCandidatesKernel<false>
++        <<<blocks, kHashThreadsPerBlock, 0, state->stream>>>(
++            device_pixels, state->chain, state->transform, params);
++  }
+   error = cudaGetLastError();
+   if (error == cudaSuccess && timing) {
+     error = cudaEventRecord(state->event_stop, state->stream);

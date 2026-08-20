@@ -1,0 +1,88 @@
+Functions sorted by metric: Exclusive Total CPU Time
+
+Excl. Total   Incl. Total    Name
+CPU           CPU
+ sec.      %   sec.      %
+1.641 100.00  1.641 100.00   <Total>
+0.520  31.71  0.540  32.93   VP8RecordCoeffTokens
+0.370  22.56  0.370  22.56   inflate_fast
+0.120   7.32  0.120   7.32   PackRGB_C
+0.090   5.49  0.090   5.49   VP8PutTokenPage
+0.070   4.27  0.070   4.27   adler32_z
+0.060   3.66  0.060   3.66   <static>@0x1881e1 (<libc.so.6>)
+0.060   3.66  0.110   6.71   <static>@0x396586 (<libcuda.so.595.84>)
+0.060   3.66  0.060   3.66   png_read_filter_row_paeth_multibyte_pixel
+0.040   2.44  0.480  29.27   inflate
+0.030   1.83  0.030   1.83   png_read_filter_row_sub
+0.020   1.22  0.080   4.88   <static>@0x2067e0 (<libcuda.so.595.84>)
+0.020   1.22  0.020   1.22   <static>@0xaab1b (<libc.so.6>)
+0.020   1.22  0.020   1.22   crc32_z
+0.020   1.22  0.020   1.22   ioctl
+0.020   1.22  0.680  41.46   png_read_row
+0.020   1.22  0.020   1.22   read
+0.010   0.61  0.080   4.88   <static>@0x223510 (<libcuda.so.595.84>)
+0.010   0.61  0.010   0.61   <static>@0x98cd5 (<libc.so.6>)
+0.010   0.61  0.010   0.61   ImportBlock
+0.010   0.61  0.560  34.15   RecordTokensFromResults
+0.010   0.61  0.010   0.61   SetResidualCoeffs_SSE2
+0.010   0.61  0.010   0.61   VP8SetIntra16Mode
+0.010   0.61  0.010   0.61   adler32
+0.010   0.61  0.180  10.98   main
+0.010   0.61  0.010   0.61   png_read_filter_row_up
+0.010   0.61  0.010   0.61   pthread_create
+0.      0.    0.080   4.88   (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+0.      0.    0.020   1.22   (anonymous namespace)::CUDARGBToYUV(void*, WebPAcceleratorRGBToYUVRequest const*)
+0.      0.    0.020   1.22   (anonymous namespace)::CUDARGBToYUVLocked(void*, WebPAcceleratorRGBToYUVRequest const*)
+0.      0.    0.010   0.61   (anonymous namespace)::Initialize((anonymous namespace)::CudaState*)
+0.      0.    0.090   5.49   <static>@0x1d0f96 (<libcuda.so.595.84>)
+0.      0.    0.110   6.71   <static>@0x21b7b (<libcudart.so.12.0.146>)
+0.      0.    0.040   2.44   <static>@0x245ece (<libcuda.so.595.84>)
+0.      0.    0.190  11.59   <static>@0x2a145 (<libc.so.6>)
+0.      0.    0.020   1.22   <static>@0x317126 (<libcuda.so.595.84>)
+0.      0.    0.090   5.49   <static>@0x36ab16 (<libcuda.so.595.84>)
+0.      0.    0.010   0.61   <static>@0x4790c (<libc.so.6>)
+0.      0.    0.010   0.61   <static>@0x49a45 (<libgp-collector.so>)
+0.      0.    0.010   0.61   <static>@0x4c9dc (<libgp-collector.so>)
+0.      0.    1.441  87.80   <static>@0x5115c (<libgp-collector.so>)
+0.      0.    0.010   0.61   <static>@0x723d8 (<libcudart.so.12.0.146>)
+0.      0.    0.010   0.61   <static>@0x72b60 (<libgp-collector.so>)
+0.      0.    0.010   0.61   <static>@0x93dfb (<libc.so.6>)
+0.      0.    1.441  87.80   <static>@0x9c526 (<libc.so.6>)
+0.      0.    0.010   0.61   <static>@0xa1eb6 (<libc.so.6>)
+0.      0.    0.100   6.10   <static>@0xf360 (<libcudart.so.12.0.146>)
+0.      0.    1.431  87.20   Execute
+0.      0.    0.010   0.61   ImgIoUtilReadFile
+0.      0.    0.020   1.22   ImportYUVAFromRGBA
+0.      0.    0.811  49.39   PredecodeInput
+0.      0.    0.010   0.61   ReadFunc
+0.      0.    0.801  48.78   ReadPNG
+0.      0.    0.010   0.61   Reset
+0.      0.    1.441  87.80   ThreadLoop
+0.      0.    0.090   5.49   VP8EmitTokens
+0.      0.    0.140   8.54   VP8EncTokenLoop
+0.      0.    0.010   0.61   VP8IteratorImport
+0.      0.    0.010   0.61   VP8ReplayDecimate
+0.      0.    0.080   4.88   WebPAccelerateLossyDecimate
+0.      0.    0.020   1.22   WebPAccelerateRGBToYUV
+0.      0.    0.010   0.61   WebPCUDAIsPreAmpereDevice
+0.      0.    0.080   4.88   WebPCUDALossyDecimate
+0.      0.    0.160   9.76   WebPEncode
+0.      0.    0.020   1.22   WebPPictureARGBToYUVADithered
+0.      0.    0.120   7.32   WebPPictureImportRGB
+0.      0.    0.190  11.59   __libc_start_main
+0.      0.    0.010   0.61   cuDevicePrimaryCtxRetain
+0.      0.    0.010   0.61   cuInit
+0.      0.    0.080   4.88   cuMemcpyDtoHAsync_v2
+0.      0.    0.010   0.61   cuMemcpyHtoDAsync_v2
+0.      0.    0.010   0.61   cudaGetDeviceCount
+0.      0.    0.090   5.49   cudaMemcpyAsync
+0.      0.    0.010   0.61   cudaSetDevice
+0.      0.    0.010   0.61   exit
+0.      0.    0.010   0.61   fread
+0.      0.    0.020   1.22   malloc
+0.      0.    0.020   1.22   png_calculate_crc
+0.      0.    0.040   2.44   png_combine_row
+0.      0.    0.510  31.10   png_read_IDAT_data
+0.      0.    0.680  41.46   png_read_rows
+0.      0.    0.010   0.61   pthread_cond_wait
+

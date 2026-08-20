@@ -1,0 +1,16 @@
+{
+  "rows": 22,
+  "injected_cells": 20,
+  "all_exact": true,
+  "references": {
+    "png": {
+      "hash": "f1941b87f9b95d60",
+      "bytes": 3281332
+    },
+    "jpeg": {
+      "hash": "0133801cfd46cbe6",
+      "bytes": 3343166
+    }
+  },
+  "mismatches": []
+}

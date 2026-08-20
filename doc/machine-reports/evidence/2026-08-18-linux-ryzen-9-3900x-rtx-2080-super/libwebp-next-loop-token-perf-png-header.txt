@@ -1,0 +1,56 @@
+# ========
+# captured on    : Thu Aug 20 06:16:27 2026
+# header version : 1
+# data offset    : 448
+# data size      : 404749576
+# feat offset    : 404750024
+# hostname : dev-build-server
+# os release : 6.8.0-137-generic
+# perf version : 6.8.12
+# arch : x86_64
+# nrcpus online : 24
+# nrcpus avail : 24
+# cpudesc : AMD Ryzen 9 3900X 12-Core Processor
+# cpuid : AuthenticAMD,23,113,0
+# total memory : 65753864 kB
+# cmdline : /usr/lib/linux-tools-6.8.0-137/perf record -o /tmp/libwebp-next-loop-token-perf-png.data -e cycles:u -F 999 --call-graph dwarf,16384 -- ./build-cuda-token-lineprofile/webp_cuda_batch_benchmark --variant cuda --mode lossy --batch-size 24 --method 4 --quality 75 --warmups 2 --samples 8 --force-cuda /tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-medium.png /tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png /tmp/libwebp-cuda-batch-corpus-20260818/png/photo-medium.png /tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png /tmp/libwebp-cuda-batch-corpus-20260818/png/texture-medium.png /tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png 
+# event : name = cycles:u, , id = { 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52 }, type = 0 (PERF_TYPE_HARDWARE), size = 136, config = 0 (PERF_COUNT_HW_CPU_CYCLES), { sample_period, sample_freq } = 999, sample_type = IP|TID|TIME|ADDR|CALLCHAIN|PERIOD|REGS_USER|STACK_USER|DATA_SRC, read_format = ID|LOST, disabled = 1, inherit = 1, exclude_kernel = 1, exclude_hv = 1, mmap = 1, comm = 1, freq = 1, enable_on_exec = 1, task = 1, mmap_data = 1, sample_id_all = 1, exclude_guest = 1, exclude_callchain_user = 1, mmap2 = 1, comm_exec = 1, ksymbol = 1, bpf_event = 1, sample_regs_user = 0xff0fff, sample_stack_user = 16384
+# CPU_TOPOLOGY info available, use -I to display
+# NUMA_TOPOLOGY info available, use -I to display
+# pmu mappings: cpu = 4, amd_iommu_0 = 12, breakpoint = 5, ibs_fetch = 10, ibs_op = 11, kprobe = 8, msr = 13, power = 14, software = 1, tracepoint = 2, uprobe = 9
+# CACHE info available, use -I to display
+# time of first sample : 287629.406129
+# time of last sample : 287637.865008
+# sample duration :   8458.879 ms
+# MEM_TOPOLOGY info available, use -I to display
+# bpf_prog_info 2: bpf_prog_7cc47bbf07148bfe_hid_tail_call addr 0xffffffffc030694c size 138
+# bpf_prog_info 27: bpf_prog_ab4bc4523b7fe6b4 addr 0xffffffffc0329108 size 361
+# bpf_prog_info 32: bpf_prog_ab4bc4523b7fe6b4 addr 0xffffffffc0329514 size 361
+# bpf_prog_info 37: bpf_prog_ab4bc4523b7fe6b4 addr 0xffffffffc0329920 size 361
+# bpf_prog_info 42: bpf_prog_ab4bc4523b7fe6b4 addr 0xffffffffc0329d08 size 361
+# bpf_prog_info 3291: bpf_prog_3918c82a5f4c0360 addr 0xffffffffc031baf0 size 45
+# bpf_prog_info 3299: bpf_prog_3918c82a5f4c0360 addr 0xffffffffc031bb60 size 45
+# bpf_prog_info 4195: bpf_prog_6deef7357e7b4530_sd_fw_egress addr 0xffffffffc03068a8 size 59
+# bpf_prog_info 4196: bpf_prog_6deef7357e7b4530_sd_fw_ingress addr 0xffffffffc0306b20 size 59
+# bpf_prog_info 4197: bpf_prog_5b66259bfca5c6d7_sd_devices addr 0xffffffffc030e960 size 299
+# bpf_prog_info 4198: bpf_prog_6deef7357e7b4530_sd_fw_egress addr 0xffffffffc0306ba0 size 59
+# bpf_prog_info 4199: bpf_prog_6deef7357e7b4530_sd_fw_ingress addr 0xffffffffc030eac8 size 59
+# bpf_prog_info 4200: bpf_prog_fbee7646fdd03110_sd_devices addr 0xffffffffc030eb4c size 106
+# bpf_prog_info 4201: bpf_prog_e3dbd137be8d6168_sd_devices addr 0xffffffffc0317c4c size 314
+# bpf_prog_info 4202: bpf_prog_5b66259bfca5c6d7_sd_devices addr 0xffffffffc0317df4 size 299
+# bpf_prog_info 4203: bpf_prog_e3dbd137be8d6168_sd_devices addr 0xffffffffc0327910 size 314
+# bpf_prog_info 4204: bpf_prog_6deef7357e7b4530_sd_fw_egress addr 0xffffffffc030ec18 size 59
+# bpf_prog_info 4205: bpf_prog_6deef7357e7b4530_sd_fw_ingress addr 0xffffffffc030eca0 size 59
+# bpf_prog_info 4206: bpf_prog_5b66259bfca5c6d7_sd_devices addr 0xffffffffc0327aa0 size 299
+# bpf_prog_info 4207: bpf_prog_c8b47a902f1cc68b_sd_devices addr 0xffffffffc0327c08 size 293
+# bpf_prog_info 4208: bpf_prog_5b66259bfca5c6d7_sd_devices addr 0xffffffffc031b724 size 299
+# bpf_prog_info 4209: bpf_prog_ee0e253c78993a24_sd_devices addr 0xffffffffc031b8b4 size 263
+# bpf_prog_info 4210: bpf_prog_8b9c33f36f812014_sd_devices addr 0xffffffffc031bbcc size 452
+# bpf_prog_info 4211: bpf_prog_6deef7357e7b4530_sd_fw_egress addr 0xffffffffc030937c size 59
+# bpf_prog_info 4212: bpf_prog_6deef7357e7b4530_sd_fw_ingress addr 0xffffffffc03093ec size 59
+# btf info of id 5
+# cpu pmu capabilities: max_precise=0
+# AMD systems uses ibs_op// PMU for some precise events, e.g.: cycles:p, see the 'perf list' man page for further details.
+# missing features: TRACING_DATA BRANCH_STACK GROUP_DESC AUXTRACE STAT CLOCKID DIR_FORMAT COMPRESSED CLOCK_DATA HYBRID_TOPOLOGY 
+# ========
+#

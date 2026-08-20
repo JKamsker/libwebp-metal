@@ -1,0 +1,7 @@
+c0fb63636f5469074686e60ba326bbd822afb0ac
+CMAKE_CUDA_ARCHITECTURES:UNINITIALIZED=native
+9ffa680aaa4dbc2b89f28b4d3fcca04bacc769cfe13214038b04ac48fc28c618  build-cuda-stage-current/webp_cuda_batch_benchmark
+833d5484fc1ab65be6551b72afff318078cf5b522b2a95898924299a30c2dbf4  build-cuda-residual-packed4/lossy_decimate_conformance
+2595fbc95f3addf52d7ad3d02a6635da6cbc26f126d948e6d5ef64cbcc41aa79  doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-pinned-staging-fixture-graphic-medium-m4-q75.wpd.zst
+59dd3d9906b91b465c192b4bacf3c824bfc04fba5c0754800297cd6ec6962ae6  doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-pinned-staging-fixture-photo-medium-m4-q75.wpd.zst
+9e6a92a754f625c8a53775b27742cfb5483ad7a53d74851e52a3a7f75ded52a8  doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-pinned-staging-fixture-texture-medium-m4-q75.wpd.zst

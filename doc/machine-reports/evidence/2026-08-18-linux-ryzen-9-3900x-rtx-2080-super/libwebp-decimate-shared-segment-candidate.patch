@@ -1,0 +1,40 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index d5dd4a6e..7b86059c 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -1146,6 +1146,9 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     DeviceView v, DecimateKernelParams p, uint8_t* left_nz8) {
+   __shared__ MBWork w;
+   __shared__ unsigned long long ph_ts[8];
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  __shared__ DeviceSegment dqm_shared;
++#endif
+   const int y = (int)(p.y_min + blockIdx.x);
+   const int x = (int)p.diagonal - 2 * y;
+   const int mb_index = y * (int)p.mb_w + x;
+@@ -1170,8 +1173,16 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     if (v.phase_cycles != nullptr && tid == 0) ph_ts[k] = clock64(); \
+   } while (0)
+   PHASE_TS(0);
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  const DeviceSegment* const dqm_global =
++      &v.segment_params[v.segments[mb_index]];
++  if ((size_t)tid * sizeof(uint32_t) < sizeof(DeviceSegment)) {
++    ((uint32_t*)&dqm_shared)[tid] = ((const uint32_t*)dqm_global)[tid];
++  }
++  const DeviceSegment* const dqm = &dqm_shared;
++#else
+   const DeviceSegment* const dqm = &v.segment_params[v.segments[mb_index]];
+-  const int tlambda = dqm->tlambda;
++#endif
+ 
+   // ---- Phase 0: import, borders, predictions (parallel-friendly setup).
+   ImportMBParallel(&v, &p, x, y, &w, tid, (int)blockDim.x);
+@@ -1189,6 +1200,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     w.nz_ctx.left_nz[8] = (x > 0) ? left_nz8[mb_index - 1] : 0;
+   }
+   __syncthreads();
++  const int tlambda = dqm->tlambda;
+   MakeIntraPredsParallel(&w, x, y, tid, (int)blockDim.x);
+   __syncthreads();
+   PHASE_TS(1);

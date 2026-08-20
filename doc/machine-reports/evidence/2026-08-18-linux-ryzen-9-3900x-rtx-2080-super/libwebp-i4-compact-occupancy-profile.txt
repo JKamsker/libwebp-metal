@@ -1,0 +1,40 @@
+Profile basis (before source change)
+====================================
+Revision: c14027c6
+GPU: NVIDIA GeForce RTX 2080 SUPER, compute capability 7.5
+Build configuration: cmake -S . -B build-cuda-occupancy-parent -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CUDA_ARCHITECTURES=native -DWEBP_ENABLE_CUDA=ON -DWEBP_BUILD_CUDA_BENCHMARK=ON -DBUILD_TESTING=ON
+
+Retained native-sm_75 method-4 kernel resources:
+  REG:103 STACK:352 SHARED:23392 LOCAL:0
+Turing residency limits for 256-thread CTAs:
+  registers: floor(65536 / (103 * 256)) = 2 CTAs/SM
+  shared: floor(65536 / 23392) = 2 CTAs/SM
+
+The previously exact RD-level specialization had already measured:
+  method 4 REG:67 STACK:0 SHARED:23392
+It remained limited to two CTAs by shared memory, which explained its rejected
+0.200/0.412 ms PNG/JPEG result. The candidate paired that exact specialization
+with compact pre-Ampere I4 reconstruction rows to cross the shared-memory
+residency boundary without changing Ampere+ layout or dispatch.
+
+Candidate native-sm_75 resources
+================================
+Build configuration: cmake -S . -B build-cuda-occupancy-candidate -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_CUDA_ARCHITECTURES=native -DWEBP_ENABLE_CUDA=ON -DWEBP_BUILD_CUDA_BENCHMARK=ON -DBUILD_TESTING=ON
+  method 6 REG:94 STACK:272 SHARED:21152 LOCAL:0
+  method 5 REG:96 STACK:272 SHARED:21152 LOCAL:0
+  method 4 REG:69 STACK:0 SHARED:21152 LOCAL:0
+Turing method-4 residency limits:
+  registers: floor(65536 / (69 * 256)) = 3 CTAs/SM
+  shared: floor(65536 / 21152) = 3 CTAs/SM
+
+Representative parent timing probe before the source change:
+  decimate GPU wall: 27.36 ms (100x75 MBs) [warmup]
+  decimate GPU wall: 26.66 ms (100x75 MBs)
+  output_hash=13085afa0c135d5c output_bytes=206128
+
+Interpretation after timing
+===========================
+The medium corpus has at most 75 CTAs on a macroblock diagonal. Two CTAs per
+each of 48 SMs already provide 96 resident slots, so the third residency slot
+does not expose additional diagonal parallelism for this workload. Its small
+latency-hiding benefit is below the project retention threshold.

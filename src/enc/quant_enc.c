@@ -19,7 +19,9 @@
 #include "src/dec/common_dec.h"
 #include "src/dsp/dsp.h"
 #include "src/dsp/quant.h"
+#include "src/enc/accelerator_enc.h"
 #include "src/enc/cost_enc.h"
+#include "src/enc/lossy_decimate_fixture.h"
 #include "src/enc/vp8i_enc.h"
 #include "src/webp/types.h"
 
@@ -960,6 +962,7 @@ static void StoreMaxDelta(VP8SegmentInfo* const dqm, const int16_t DCs[16]) {
   const int v2 = abs(DCs[4]);
   int max_v = (v1 > v0) ? v1 : v0;
   max_v = (v2 > max_v) ? v2 : max_v;
+  WebPDecimateFixtureCaptureNoteMaxDelta(max_v);
   if (max_v > dqm->max_edge) dqm->max_edge = max_v;
 }
 
@@ -1339,6 +1342,70 @@ static void RefineUsingDistortion(VP8EncIterator* WEBP_RESTRICT const it,
 
 //------------------------------------------------------------------------------
 // Entry point
+
+// Installs one accelerator-computed macroblock decision as if VP8Decimate had
+// produced it: reconstructed samples into yuv_out, levels/modes/nz into 'rd'
+// and the iterator, and the same side effects (skip flag, max-edge record,
+// diffusion-error propagation).
+int VP8ReplayDecimate(VP8EncIterator* WEBP_RESTRICT const it,
+                      VP8ModeScore* WEBP_RESTRICT const rd,
+                      const WebPAcceleratorDecimateResult* WEBP_RESTRICT const
+                          result,
+                      const uint8_t* WEBP_RESTRICT const recon_y,
+                      const uint8_t* WEBP_RESTRICT const recon_u,
+                      const uint8_t* WEBP_RESTRICT const recon_v,
+                      int recon_y_stride, int recon_uv_stride,
+                      int copy_levels, int copy_recon) {
+  VP8SegmentInfo* const dqm = &it->enc->dqm[it->mb->segment];
+  int i;
+  if (copy_recon) {
+    const uint8_t* const src_y =
+        recon_y + (size_t)it->y * 16 * recon_y_stride + (size_t)it->x * 16;
+    const uint8_t* const src_u =
+        recon_u + (size_t)it->y * 8 * recon_uv_stride + (size_t)it->x * 8;
+    const uint8_t* const src_v =
+        recon_v + (size_t)it->y * 8 * recon_uv_stride + (size_t)it->x * 8;
+    uint8_t* const out_y = it->yuv_out + Y_OFF_ENC;
+    uint8_t* const out_u = it->yuv_out + U_OFF_ENC;
+    uint8_t* const out_v = it->yuv_out + V_OFF_ENC;
+    for (i = 0; i < 16; ++i) {
+      memcpy(out_y + i * BPS, src_y + (size_t)i * recon_y_stride, 16);
+    }
+    for (i = 0; i < 8; ++i) {
+      memcpy(out_u + i * BPS, src_u + (size_t)i * recon_uv_stride, 8);
+      memcpy(out_v + i * BPS, src_v + (size_t)i * recon_uv_stride, 8);
+    }
+  }
+  InitScore(rd);
+  rd->nz = result->nz;
+  rd->D = (score_t)result->distortion;
+  rd->H = (score_t)result->header_bits;
+  if (copy_levels) {
+    // Only the inline RecordTokens consumes the levels; the pipelined
+    // recorder reads them straight from the results array.
+    memcpy(rd->y_dc_levels, result->y_dc_levels, sizeof(rd->y_dc_levels));
+    memcpy(rd->y_ac_levels, result->y_ac_levels, sizeof(rd->y_ac_levels));
+    memcpy(rd->uv_levels, result->uv_levels, sizeof(rd->uv_levels));
+  }
+  rd->mode_i16 = result->mode_i16;
+  rd->mode_uv = result->mode_uv;
+  memcpy(rd->modes_i4, result->modes_i4, sizeof(rd->modes_i4));
+  if (result->is_i4) {
+    VP8SetIntra4Mode(it, rd->modes_i4);
+  } else {
+    VP8SetIntra16Mode(it, rd->mode_i16);
+  }
+  VP8SetIntraUVMode(it, rd->mode_uv);
+  if (result->store_max_delta && (int)result->max_delta > dqm->max_edge) {
+    dqm->max_edge = result->max_delta;
+  }
+  if (it->top_derr != NULL) {
+    memcpy(rd->derr, result->derr, sizeof(rd->derr));
+    StoreDiffusionErrors(it, rd);
+  }
+  VP8SetSkip(it, rd->nz == 0);
+  return (rd->nz == 0);
+}
 
 int VP8Decimate(VP8EncIterator* WEBP_RESTRICT const it,
                 VP8ModeScore* WEBP_RESTRICT const rd, VP8RDLevel rd_opt) {

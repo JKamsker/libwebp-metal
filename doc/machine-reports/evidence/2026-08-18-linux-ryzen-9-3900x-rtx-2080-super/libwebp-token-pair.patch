@@ -1,0 +1,68 @@
+diff --git a/src/enc/token_enc.c b/src/enc/token_enc.c
+index 9fe8adcc..38ceafa4 100644
+--- a/src/enc/token_enc.c
++++ b/src/enc/token_enc.c
+@@ -103,6 +103,46 @@ static WEBP_INLINE uint32_t AddToken(VP8TBuffer* const b, uint32_t bit,
+   return bit;
+ }
+ 
++// Stores two consecutive adaptive tokens together. Coefficient magnitudes
++// above zero always record the non-zero and greater-than-one decisions as a
++// pair, and their statistics occupy adjacent slots. Keep the page-boundary
++// case on the scalar path so allocation and failure behavior remain exact.
++static WEBP_INLINE uint32_t AddTokenPair(
++    VP8TBuffer* const b, uint32_t bit0, uint32_t proba_idx0,
++    proba_t* const stats0, uint32_t bit1, uint32_t proba_idx1,
++    proba_t* const stats1) {
++  assert(stats1 == stats0 + 1);
++  assert(proba_idx0 < FIXED_PROBA_BIT);
++  assert(proba_idx1 < FIXED_PROBA_BIT);
++  assert(bit0 <= 1);
++  assert(bit1 <= 1);
++  if (b->left >= 2) {
++    token_t pair[2];
++    const int slot = b->left - 2;
++    pair[0] = (token_t)((bit1 << 15) | proba_idx1);
++    pair[1] = (token_t)((bit0 << 15) | proba_idx0);
++    memcpy(&b->tokens[slot], pair, sizeof(pair));
++    b->left = slot;
++    {
++      proba_t stats[2];
++      memcpy(stats, stats0, sizeof(stats));
++      if (stats[0] >= 0xfffe0000u) {
++        stats[0] = ((stats[0] + 1u) >> 1) & 0x7fff7fffu;
++      }
++      if (stats[1] >= 0xfffe0000u) {
++        stats[1] = ((stats[1] + 1u) >> 1) & 0x7fff7fffu;
++      }
++      stats[0] += 0x00010000u + bit0;
++      stats[1] += 0x00010000u + bit1;
++      memcpy(stats0, stats, sizeof(stats));
++    }
++  } else {
++    AddToken(b, bit0, proba_idx0, stats0);
++    AddToken(b, bit1, proba_idx1, stats1);
++  }
++  return bit1;
++}
++
+ static WEBP_INLINE void AddConstantToken(VP8TBuffer* const b, uint32_t bit,
+                                          uint32_t proba) {
+   assert(proba < 256);
+@@ -130,12 +170,14 @@ int VP8RecordCoeffTokens(int ctx, const struct VP8Residual* const res,
+     const int c = coeffs[n++];
+     const int sign = c < 0;
+     const uint32_t v = sign ? -c : c;
+-    if (!AddToken(tokens, v != 0, base_id + 1, s + 1)) {
++    if (v == 0) {
++      AddToken(tokens, 0, base_id + 1, s + 1);
+       base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 0);  // ctx=0
+       s = res->stats[VP8EncBands[n]][0];
+       continue;
+     }
+-    if (!AddToken(tokens, v > 1, base_id + 2, s + 2)) {
++    if (!AddTokenPair(tokens, 1, base_id + 1, s + 1, v > 1, base_id + 2,
++                      s + 2)) {
+       base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 1);  // ctx=1
+       s = res->stats[VP8EncBands[n]][1];
+     } else {

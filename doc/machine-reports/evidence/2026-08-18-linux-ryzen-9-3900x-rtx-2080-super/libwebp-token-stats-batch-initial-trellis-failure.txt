@@ -1,0 +1,2 @@
+CPU/CUDA trellis mismatch (method=3 quality=99 pass=1 fail_band=-1 fail_download=-1 size=513x517 bytes=288526/288526)
+Cause: pending Cat5/Cat6 adaptive events were initially keyed by token probability slot 10 instead of the intentionally distinct statistics slot 9. The corrected candidate keyed batches by their actual statistics pointer.

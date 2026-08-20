@@ -1,0 +1,26 @@
+Candidate: pre-Ampere compact I4 reconstruction rows composed with the exact
+RD-level kernel specialization.
+
+Builds: Release, -DCMAKE_CUDA_ARCHITECTURES=native, CUDA Toolkit 12.0.
+Benchmark: two order-reversed processes per format; each process discarded one
+warmup and retained three 24-image samples across six corpus inputs.
+
+format	parent pooled median ms/image	candidate pooled median ms/image	gain
+PNG	39.438373	38.973637	0.464735
+JPEG	39.427291	39.141319	0.285972
+
+All 24 timing rows retained exact hash/byte pairs:
+PNG ace64e860de89b43 / 6441688
+JPEG 1cbb84d2ab926db3 / 6400792
+
+Decision: reject and restore. Both gains are far below 1.5 ms/image. The
+third theoretical Turing CTA residency slot is mostly unused because the
+measured corpus has at most 75 CTAs per diagonal while two resident CTAs on
+48 SMs already provide 96 slots. Ampere+ code, thresholds, and claims remain
+unchanged.
+
+Test note: cuda_trellis_test, cuda_concurrency_test, cuda_near_lossless_test,
+bit_writer_utils_test, and both accelerator tests passed. cuda_histogram_test
+returned 1 with no diagnostic in both the untouched parent and candidate
+native builds, so it is a pre-existing environment/build result unrelated to
+this decimate-only candidate.

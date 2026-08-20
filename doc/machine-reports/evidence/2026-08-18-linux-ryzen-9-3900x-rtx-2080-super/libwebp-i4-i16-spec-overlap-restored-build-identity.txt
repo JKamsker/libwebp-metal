@@ -1,0 +1,3 @@
+30f68cfb90cbe39e3eddef3143510e9638404aae1ae08fa2ee09931ad812881e  src/enc/cuda_decimate_enc.cu
+b5b5e95b84467072d0c146b9aba664d22310ef629fa0051fa2788851bfd16c24  build-cuda-stage-current/CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+22ec8024b9a6cfa74e1f29fcff8de15c220db56fad3148a50b0019935ae86d43  build-cuda-stage-current/webp_cuda_batch_benchmark

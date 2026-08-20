@@ -1,0 +1,53 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index 7809e965..7d773e8e 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -105,6 +105,7 @@ struct DecimateKernelParams {
+   int32_t max_i4_header_bits;
+   uint32_t use_error_diffusion;
+   uint32_t rd_opt_level;
++  uint32_t fuse_i4_sse;
+   uint32_t diagonal;       // current skewed diagonal (x + 2y)
+   uint32_t y_min;          // first tile row on this diagonal
+ };
+@@ -1469,6 +1470,19 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+         I4ITransformCoop4(ref, w.i4_tmp[team][mode], w.i4_out[team][mode],
+                           w.i4_transform_tmp[team][mode], mode_lane,
+                           warp_mask);
++        if (p.fuse_i4_sse) {
++          const uint8_t* const src_row = src + mode_lane * kCudaBPS;
++          const uint8_t* const out_row =
++              w.i4_out[team][mode] + mode_lane * kCudaBPS;
++          const int d0 = (int)src_row[0] - out_row[0];
++          const int d1 = (int)src_row[1] - out_row[1];
++          const int d2 = (int)src_row[2] - out_row[2];
++          const int d3 = (int)src_row[3] - out_row[3];
++          int sse = d0 * d0 + d1 * d1 + d2 * d2 + d3 * d3;
++          sse += __shfl_down_sync(warp_mask, sse, 2, 4);
++          sse += __shfl_down_sync(warp_mask, sse, 1, 4);
++          if (mode_lane == 0) w.i4_sse[team][mode] = sse;
++        }
+       }
+       __syncthreads();
+       if (active) {
+@@ -1483,8 +1497,10 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+           w.i4_rcost[team][lane] = ResidualCostDev(
+               &cc, ctx, 0, 3, w.i4_levels[team][lane]);
+         } else if (warp == 2 && lane < kNumBModes) {
+-          w.i4_sse[team][lane] =
+-              CudaSSE4x4(src, w.i4_out[team][lane]);
++          if (!p.fuse_i4_sse) {
++            w.i4_sse[team][lane] =
++                CudaSSE4x4(src, w.i4_out[team][lane]);
++          }
+           w.i4_flat[team][lane] =
+               (lane > 0) ? CudaIsFlat(w.i4_levels[team][lane], 1,
+                                       kFlatnessLimitI4)
+@@ -2734,6 +2750,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
+     params.max_i4_header_bits = request->max_i4_header_bits;
+     params.use_error_diffusion = (uint32_t)request->use_error_diffusion;
+     params.rd_opt_level = (uint32_t)request->rd_opt_level;
++    params.fuse_i4_sse = DecimateDeviceIsAmpereOrNewer() ? 0u : 1u;
+ 
+     (void)cudaGetLastError();
+     const int last_diagonal =

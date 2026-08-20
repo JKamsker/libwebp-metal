@@ -1,0 +1,3 @@
+==PROF== Connected to process 2349786 (/home/jonas/priv/repos/libwebp-metal/build-cuda-ncu/cwebp)
+==PROF== Profiling "DecimateKernel": 0%....50%....100% - 31 passes
+==PROF== Report: /tmp/libwebp-i4-source-reuse-profile/retained-decimate.ncu-rep

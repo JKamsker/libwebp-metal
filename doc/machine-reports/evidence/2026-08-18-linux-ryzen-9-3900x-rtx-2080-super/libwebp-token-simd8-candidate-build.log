@@ -1,0 +1,72 @@
+[  6%] Built target webputils
+[ 10%] Built target sharpyuv
+[ 25%] Built target webpencode
+[ 48%] Built target webpdspdecode
+[ 85%] Built target webpdsp
+[ 90%] Built target webpdecode
+[ 92%] Built target webp
+[ 93%] Built target webpdemux
+[ 94%] Built target imageioutil
+[100%] Built target imagedec
+[100%] Built target webp_cuda_batch_benchmark
+[100%] Built target bit_writer_utils_test
+[  0%] Building C object CMakeFiles/accelerator_enc_test.dir/tests/accelerator_enc_test.c.o
+[  0%] Building C object CMakeFiles/accelerator_enc_test.dir/src/enc/accelerator_enc.c.o
+[100%] Linking C executable accelerator_enc_test
+[100%] Built target accelerator_enc_test
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 26%] Built target webpencode
+[ 52%] Built target webpdspdecode
+[ 91%] Built target webpdsp
+[ 97%] Built target webpdecode
+[ 98%] Built target webp
+[ 98%] Building C object CMakeFiles/cuda_concurrency_test.dir/tests/cuda_concurrency_test.c.o
+In file included from /home/jonas/priv/repos/libwebp-metal/tests/cuda_concurrency_test.c:24:
+/home/jonas/priv/repos/libwebp-metal/tools/benchmark_platform.h:49:17: warning: ‘WebPBenchmarkNowNanoseconds’ defined but not used [-Wunused-function]
+   49 | static uint64_t WebPBenchmarkNowNanoseconds(void) {
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/jonas/priv/repos/libwebp-metal/tools/benchmark_platform.h:40:12: warning: ‘WebPBenchmarkUnsetEnvironment’ defined but not used [-Wunused-function]
+   40 | static int WebPBenchmarkUnsetEnvironment(const char* const name) {
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[100%] Linking CUDA executable cuda_concurrency_test
+[100%] Built target cuda_concurrency_test
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 26%] Built target webpencode
+[ 52%] Built target webpdspdecode
+[ 91%] Built target webpdsp
+[ 97%] Built target webpdecode
+[ 98%] Built target webp
+[ 98%] Building C object CMakeFiles/cuda_histogram_test.dir/tests/cuda_histogram_test.c.o
+In file included from /home/jonas/priv/repos/libwebp-metal/tests/cuda_histogram_test.c:16:
+/home/jonas/priv/repos/libwebp-metal/tools/benchmark_platform.h:49:17: warning: ‘WebPBenchmarkNowNanoseconds’ defined but not used [-Wunused-function]
+   49 | static uint64_t WebPBenchmarkNowNanoseconds(void) {
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+[100%] Linking CUDA executable cuda_histogram_test
+[100%] Built target cuda_histogram_test
+[  5%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 27%] Built target webpencode
+[ 52%] Built target webpdspdecode
+[ 92%] Built target webpdsp
+[ 98%] Built target webpdecode
+[100%] Built target webp
+[100%] Built target cuda_trellis_test
+[  4%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 26%] Built target webpencode
+[ 52%] Built target webpdspdecode
+[ 91%] Built target webpdsp
+[ 97%] Built target webpdecode
+[ 98%] Built target webp
+[ 98%] Building C object CMakeFiles/cuda_near_lossless_test.dir/tests/cuda_near_lossless_test.c.o
+In file included from /home/jonas/priv/repos/libwebp-metal/tests/cuda_near_lossless_test.c:19:
+/home/jonas/priv/repos/libwebp-metal/tools/benchmark_platform.h:49:17: warning: ‘WebPBenchmarkNowNanoseconds’ defined but not used [-Wunused-function]
+   49 | static uint64_t WebPBenchmarkNowNanoseconds(void) {
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/jonas/priv/repos/libwebp-metal/tools/benchmark_platform.h:40:12: warning: ‘WebPBenchmarkUnsetEnvironment’ defined but not used [-Wunused-function]
+   40 | static int WebPBenchmarkUnsetEnvironment(const char* const name) {
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[100%] Linking CUDA executable cuda_near_lossless_test
+[100%] Built target cuda_near_lossless_test

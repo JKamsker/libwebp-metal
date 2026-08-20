@@ -12,7 +12,8 @@
 extern "C" {
 #endif
 
-#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 1u
+#define WEBP_ENCODER_ACCELERATOR_ABI_VERSION 12u
+#define WEBP_ACCELERATOR_MAX_HISTOGRAM_SPANS 16u
 
 // These are deliberately encoder stages, not low-level GPU kernels. A backend
 // advertises only the stages whose complete CPU call-site contract it can
@@ -20,7 +21,12 @@ extern "C" {
 typedef enum {
   WEBP_ACCELERATOR_STAGE_LOSSLESS_COLOR_TRANSFORM = 1u << 0,
   WEBP_ACCELERATOR_STAGE_LOSSLESS_HASH_CHAIN = 1u << 1,
-  WEBP_ACCELERATOR_STAGE_RGB_TO_YUV = 1u << 2
+  WEBP_ACCELERATOR_STAGE_RGB_TO_YUV = 1u << 2,
+  WEBP_ACCELERATOR_STAGE_NEAR_LOSSLESS = 1u << 3,
+  WEBP_ACCELERATOR_STAGE_LOSSY_ANALYSIS = 1u << 4,
+  WEBP_ACCELERATOR_STAGE_LOSSLESS_PREDICTOR = 1u << 5,
+  WEBP_ACCELERATOR_STAGE_LOSSLESS_HISTOGRAM = 1u << 6,
+  WEBP_ACCELERATOR_STAGE_LOSSY_DECIMATE = 1u << 7
 } WebPAcceleratorStage;
 
 // SUCCESS is the only result for which a caller may consume output buffers.
@@ -34,10 +40,10 @@ typedef enum {
 } WebPAcceleratorResult;
 
 typedef enum {
-  // Required by ABI v1. A callback returns only after its outputs are visible
+  // Required by the ABI. A callback returns only after its outputs are visible
   // to the host.
   WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS = 1u << 0,
-  // Required by ABI v1. Caller-owned outputs are unchanged on NOT_RUN/ERROR.
+  // Required by the ABI. Caller-owned outputs are unchanged on NOT_RUN/ERROR.
   WEBP_ACCELERATOR_PROPERTY_TRANSACTIONAL_OUTPUT = 1u << 1,
   // Repeated calls on one backend produce the same result for the same input.
   // This does not imply byte identity with the CPU encoder.
@@ -57,6 +63,8 @@ typedef struct {
   // transform_image has ceil(width / 2^bits) * ceil(height / 2^bits).
   uint32_t* argb;
   uint32_t* transform_image;
+  // Filled by the dispatcher for one encode. Zero forbids resident reuse.
+  uint64_t handoff_generation;
 } WebPAcceleratorColorTransformRequest;
 
 typedef struct {
@@ -70,6 +78,8 @@ typedef struct {
   int low_effort;
   // Borrowed mutable output with size elements.
   uint32_t* candidates;
+  // Must match the producer's non-zero generation for resident reuse.
+  uint64_t handoff_generation;
 } WebPAcceleratorHashChainRequest;
 
 typedef struct {
@@ -87,7 +97,214 @@ typedef struct {
   uint8_t* v;
   int y_stride;
   int uv_stride;
+  // Filled by the common dispatcher while WebPEncode() is active. quality is
+  // the encoder's canonical integer analysis quality (VP8EncAnalyze truncates
+  // WebPConfig.quality before this stage's decisions). Direct
+  // picture-conversion API calls receive -1 for both fields.
+  int method;
+  int quality;
+  // Filled by the dispatcher for one encode. Zero forbids resident reuse.
+  uint64_t handoff_generation;
 } WebPAcceleratorRGBToYUVRequest;
+
+typedef struct {
+  // Borrowed source with source_stride pixels per row. output is tightly
+  // packed with width * height elements and is committed only on SUCCESS.
+  const uint32_t* source;
+  int source_stride;
+  int width;
+  int height;
+  int limit_bits;
+  uint32_t* output;
+} WebPAcceleratorNearLosslessRequest;
+
+// One independently computed lossy macroblock-analysis result. The caller
+// performs the global segment assignment after every result is available.
+typedef struct {
+  uint16_t uv_alpha;
+  uint8_t alpha;
+  uint8_t type;
+  uint8_t y_mode;
+  uint8_t uv_mode;
+} WebPAcceleratorLossyAnalysisResult;
+
+typedef struct {
+  // Borrowed YUV420 input planes. Plane padding is not part of the result.
+  const uint8_t* y;
+  const uint8_t* u;
+  const uint8_t* v;
+  int y_stride;
+  int uv_stride;
+  int width;
+  int height;
+  int method;
+  int quality;
+  // Borrowed mutable output with ceil(width / 16) * ceil(height / 16)
+  // elements, committed only on SUCCESS.
+  WebPAcceleratorLossyAnalysisResult* results;
+  // Must match the producer's non-zero generation for resident reuse.
+  uint64_t handoff_generation;
+} WebPAcceleratorLossyAnalysisRequest;
+
+typedef struct {
+  int width;
+  int height;
+  int min_bits;
+  int max_bits;
+  int max_quantization;
+  int exact;
+  int used_subtract_green;
+  // Borrowed source and transactional outputs. source and residuals may
+  // alias. mode_image has room for the min_bits tile grid. best_bits is
+  // committed only on SUCCESS.
+  const uint32_t* source;
+  uint32_t* residuals;
+  uint32_t* mode_image;
+  int* best_bits;
+  // Out. A backend that can select modes but not apply them (near-lossless
+  // residual quantization applies modes with scan-order source rewrites) sets
+  // this to 1 on SUCCESS after filling only mode_image and best_bits; the
+  // caller then applies the prediction itself. The caller initializes it to 0.
+  int* modes_only;
+  // Filled by the dispatcher for one encode. Zero forbids resident reuse.
+  uint64_t handoff_generation;
+} WebPAcceleratorPredictorRequest;
+
+// This layout intentionally matches the encoder's private PixOrCopy command.
+// Padding is named so backends never depend on compiler-generated bytes.
+typedef struct {
+  uint8_t mode;
+  uint8_t reserved;
+  uint16_t length;
+  uint32_t value;
+} WebPAcceleratorHistogramCommand;
+
+typedef struct {
+  const WebPAcceleratorHistogramCommand* commands;
+  size_t count;
+} WebPAcceleratorHistogramSpan;
+
+typedef struct {
+  // The block-based backward-reference list is exposed as at most 16 borrowed
+  // contiguous spans, avoiding a CPU flattening pass. command_count is the sum
+  // of their counts. mode values are literal=0, cache index=1, copy=2.
+  const WebPAcceleratorHistogramSpan* spans;
+  size_t span_count;
+  size_t command_count;
+  int cache_bits;
+  // Transactional population-count outputs. literal_count is
+  // 256 + 24 + (cache_bits > 0 ? 2^cache_bits : 0); the fixed arrays have
+  // 256, 256, 256, and 40 elements respectively.
+  uint32_t* literal;
+  size_t literal_count;
+  uint32_t* red;
+  uint32_t* blue;
+  uint32_t* alpha;
+  uint32_t* distance;
+} WebPAcceleratorHistogramRequest;
+
+// Mirror of the encoder's VP8Matrix quantization tables.
+typedef struct {
+  uint16_t q[16];
+  uint16_t iq[16];
+  uint32_t bias[16];
+  uint32_t zthresh[16];
+  uint16_t sharpen[16];
+} WebPAcceleratorQuantMatrix;
+
+// Per-segment rate-distortion parameters for the lossy decimate stage.
+typedef struct {
+  WebPAcceleratorQuantMatrix y1;
+  WebPAcceleratorQuantMatrix y2;
+  WebPAcceleratorQuantMatrix uv;
+  int32_t lambda_i16;
+  int32_t lambda_i4;
+  int32_t lambda_uv;
+  int32_t lambda_mode;
+  int32_t lambda_trellis_i16;
+  int32_t lambda_trellis_i4;
+  int32_t lambda_trellis_uv;
+  int32_t tlambda;
+  int32_t min_disto;
+} WebPAcceleratorDecimateSegment;
+
+// One macroblock's decimate decision: quantized levels, chosen modes, the
+// packed non-zero word in the encoder's nz layout, and the header/distortion
+// terms the token loop accumulates. Padding is named so backends never depend
+// on compiler-generated bytes. The struct is tagged so encoder-internal
+// headers can forward-declare it.
+typedef struct WebPAcceleratorDecimateResultTag {
+  int16_t y_dc_levels[16];
+  int16_t y_ac_levels[16][16];
+  int16_t uv_levels[8][16];
+  uint32_t nz;
+  uint32_t distortion;       // rd->D
+  uint32_t header_bits;      // rd->H
+  uint8_t is_i4;             // 1 when intra4 was selected over intra16
+  uint8_t mode_i16;
+  uint8_t mode_uv;
+  uint8_t store_max_delta;   // whether the i16 pass requests StoreMaxDelta
+  uint8_t modes_i4[16];
+  int8_t derr[2][3];         // U/V DC diffusion errors (blocks #1/2/3)
+  uint8_t reserved[2];
+  uint16_t max_delta;        // StoreMaxDelta candidate value
+} WebPAcceleratorDecimateResult;
+
+// Decimate call phases. WHOLE runs the complete pass synchronously. A
+// streaming caller instead issues BEGIN once (the backend uploads and
+// launches the whole pass without waiting) and then COLLECT for each band of
+// macroblock rows in order; each COLLECT returns after that band's results
+// and reconstruction rows are in the caller's buffers, so the caller can
+// consume band k while the device still computes band k+1. Outputs are only
+// valid for the collected bands. A BEGIN not followed by all COLLECTs is
+// abandoned safely by the next BEGIN or WHOLE call.
+typedef enum {
+  WEBP_ACCELERATOR_DECIMATE_WHOLE = 0,
+  WEBP_ACCELERATOR_DECIMATE_BEGIN = 1,
+  WEBP_ACCELERATOR_DECIMATE_COLLECT = 2
+} WebPAcceleratorDecimatePhase;
+
+typedef struct {
+  int width;
+  int height;
+  int mb_w;
+  int mb_h;
+  // Streaming control; see WebPAcceleratorDecimatePhase. band_count and
+  // band_index are ignored for WHOLE.
+  int phase;
+  int band_count;
+  int band_index;
+  // Borrowed source planes in picture layout (cropped origin); partial edge
+  // macroblocks are replicated by the backend exactly like the iterator's
+  // import.
+  const uint8_t* y;
+  const uint8_t* u;
+  const uint8_t* v;
+  int y_stride;
+  int uv_stride;
+  // Borrowed per-macroblock segment ids (mb_w * mb_h entries, values 0..3).
+  const uint8_t* segments;
+  const WebPAcceleratorDecimateSegment* segment_params;  // 4 entries
+  // Borrowed cost model, valid for the whole pass: the encoder's level_cost
+  // block (4 types x 8 bands x 3 contexts x 68 uint16 entries, contiguous)
+  // and coefficient probabilities (4 x 8 x 3 x 11 uint8 entries, contiguous).
+  const uint16_t* level_costs;
+  const uint8_t* coeff_probas;
+  // VP8RDLevel. The CUDA backend accepts BASIC, selected-mode TRELLIS, and
+  // all-candidate TRELLIS; other values are declined transactionally.
+  int rd_opt_level;
+  int max_i4_header_bits;
+  int use_error_diffusion;  // it->top_derr != NULL
+  // Transactional outputs, committed only on SUCCESS: one result per
+  // macroblock and the reconstructed planes (strides in bytes, planes sized
+  // mb_w * 16 by mb_h * 16 and mb_w * 8 by mb_h * 8).
+  WebPAcceleratorDecimateResult* results;
+  uint8_t* recon_y;
+  uint8_t* recon_u;
+  uint8_t* recon_v;
+  int recon_y_stride;
+  int recon_uv_stride;
+} WebPAcceleratorDecimateRequest;
 
 typedef struct WebPEncoderAccelerator WebPEncoderAccelerator;
 
@@ -105,9 +322,24 @@ struct WebPEncoderAccelerator {
       void* context, const WebPAcceleratorHashChainRequest* request);
   WebPAcceleratorResult (*rgb_to_yuv)(
       void* context, const WebPAcceleratorRGBToYUVRequest* request);
+  WebPAcceleratorResult (*near_lossless)(
+      void* context, const WebPAcceleratorNearLosslessRequest* request);
+  // lossy_analysis(NULL) is a side-effect-free enabled-state probe. It returns
+  // SUCCESS only when a real request may be attempted under current policy.
+  WebPAcceleratorResult (*lossy_analysis)(
+      void* context, const WebPAcceleratorLossyAnalysisRequest* request);
+  WebPAcceleratorResult (*predictor)(
+      void* context, const WebPAcceleratorPredictorRequest* request);
+  WebPAcceleratorResult (*histogram)(
+      void* context, const WebPAcceleratorHistogramRequest* request);
+  WebPAcceleratorResult (*lossy_decimate)(
+      void* context, const WebPAcceleratorDecimateRequest* request);
 
-  // Optional lifecycle hooks for a future encoder-level batch boundary.
-  // ABI v1 operations are synchronous, so flush may be NULL. trim may release
+  // Optional lifecycle hooks. end_encode discards backend-owned handoff state
+  // after the current encode has consumed it or stopped early.
+  void (*end_encode)(void* context);
+  // Hooks for a future encoder-level batch boundary.
+  // ABI operations are synchronous, so flush may be NULL. trim may release
   // cached backend-owned buffers, but must leave the descriptor usable.
   WebPAcceleratorResult (*flush)(void* context);
   void (*trim)(void* context);
@@ -119,6 +351,19 @@ WebPAcceleratorResult WebPAccelerateHashChain(
     const WebPAcceleratorHashChainRequest* request);
 WebPAcceleratorResult WebPAccelerateRGBToYUV(
     const WebPAcceleratorRGBToYUVRequest* request);
+WebPAcceleratorResult WebPAccelerateNearLossless(
+    const WebPAcceleratorNearLosslessRequest* request);
+WebPAcceleratorResult WebPAccelerateLossyAnalysis(
+    const WebPAcceleratorLossyAnalysisRequest* request);
+WebPAcceleratorResult WebPAcceleratePredictor(
+    const WebPAcceleratorPredictorRequest* request);
+WebPAcceleratorResult WebPAccelerateHistogram(
+    const WebPAcceleratorHistogramRequest* request);
+WebPAcceleratorResult WebPAccelerateLossyDecimate(
+    const WebPAcceleratorDecimateRequest* request);
+int WebPAcceleratorLossyAnalysisEnabled(void);
+void WebPAcceleratorBeginEncode(int lossless, int method, int quality);
+void WebPAcceleratorEndEncode(void);
 
 #if defined(WEBP_ACCELERATOR_TESTING)
 // Installs one process-global fake backend. Test programs must not call this

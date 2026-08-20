@@ -1,0 +1,42 @@
+Parent:
+  git rev-parse HEAD
+  50ed9f7dfc9feb13568fba2daa26bdb8b0624105
+
+Build:
+  build-cuda-stage-current
+  CMAKE_CUDA_ARCHITECTURES=native
+  WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT=ON
+
+Stage profile, repeated once for PNG and once for JPEG with the corresponding
+six small/medium corpus paths:
+  env WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT=1 \
+      WEBP_BENCHMARK_SESSION=exclusive \
+      WEBP_STAGE_PROFILE_SAMPLE_SET=warm \
+      WEBP_STAGE_PROFILE_OUTPUT=<format>-stage.jsonl \
+      WEBP_STAGE_PROFILE_RUN_ID=50ed9f7d-retained \
+      WEBP_STAGE_PROFILE_CASE_ID=<format>-full \
+      WEBP_STAGE_PROFILE_BACKEND=cuda \
+    build-cuda-stage-current/webp_cuda_batch_benchmark \
+      --variant cuda --mode lossy --batch-size 24 --method 4 --quality 75 \
+      --near-lossless 40 --warmups 1 --samples 3 --include-file-io \
+      --force-cuda <six inputs>
+
+Whole-thread cycle profile, repeated once per format:
+  sudo -n perf record -F 999 -g --call-graph dwarf \
+    -o <format>-perf.data -- \
+    build-cuda-stage-current/webp_cuda_batch_benchmark \
+      --variant cuda --mode lossy --batch-size 24 --method 4 --quality 75 \
+      --near-lossless 40 --warmups 1 --samples 6 --include-file-io \
+      --force-cuda <six inputs>
+
+Worker/syscall control, repeated once per format:
+  strace -f -c -w -e trace=clone,clone3,futex,mmap,munmap,madvise \
+    build-cuda-stage-current/webp_cuda_batch_benchmark \
+      --variant cuda --mode lossy --batch-size 24 --method 4 --quality 75 \
+      --near-lossless 40 --warmups 0 --samples 1 --include-file-io \
+      --force-cuda <six inputs>
+
+Inputs and exact SHA-256 hashes are the unchanged paths listed in
+libwebp-i4-packed-flatness-input-sha256.txt. The PNG aggregate remained
+455f70a1e139f043 / 6,441,688 bytes and JPEG remained
+0c4b078d5c4d3173 / 6,400,792 bytes.

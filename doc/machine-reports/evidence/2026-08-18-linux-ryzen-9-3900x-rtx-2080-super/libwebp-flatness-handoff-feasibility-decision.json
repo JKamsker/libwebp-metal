@@ -1,0 +1,29 @@
+{
+  "schema": "libwebp-cuda-experiment-decision-v1",
+  "experiment": "pre-ampere-i4-quantizer-flatness-handoff-feasibility",
+  "parent": "50ed9f7dfc9feb13568fba2daa26bdb8b0624105",
+  "candidate_opened": false,
+  "decision": "rejected-before-source-change",
+  "reason": "An impossible critical-path bound is 0 ms on photo/texture and 0.173 ms on graphic-medium, or 0.058 ms/image over the six-input corpus, below the 1.5 ms/image two-format gate.",
+  "png": {
+    "stage_total_ms": 28.785841,
+    "decimate_ms": 19.177002,
+    "emit_tokens_ms": 4.037956,
+    "benchmark_hash": "455f70a1e139f043",
+    "benchmark_bytes": 6441688,
+    "perf_vp8_put_token_page_percent": 24.16
+  },
+  "jpeg": {
+    "stage_total_ms": 28.084080,
+    "decimate_ms": 19.028235,
+    "emit_tokens_ms": 3.836278,
+    "benchmark_hash": "0c4b078d5c4d3173",
+    "benchmark_bytes": 6400792,
+    "perf_vp8_put_token_page_percent": 25.09
+  },
+  "graphic_medium_impossible_bound_ms": 0.173,
+  "six_input_impossible_bound_ms_per_image": 0.058,
+  "source_changed": false,
+  "architecture_policy_changed": false,
+  "frozen_corpus_changed": false
+}

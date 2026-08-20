@@ -1,0 +1,63 @@
+Experiment: pre-Ampere two-pixel grouped hash matcher
+Date: 2026-08-19 UTC
+Machine: AMD Ryzen 9 3900X / NVIDIA GeForce RTX 2080 SUPER (compute 7.5)
+Branch parent: bec5a690
+Build: build-cuda-sm75-gate, Release, WEBP_ENABLE_CUDA=ON,
+       CMAKE_CUDA_ARCHITECTURES=native
+
+Profile and rationale
+---------------------
+A retained forced-lossless six-image run with WEBP_CUDA_VERBOSE=1 measured
+dominant hash-candidate kernel calls around 7.5 ms (1,920,000 resident pixels)
+and 10.9 ms (960,000 pixels). The prior pre-Ampere four-pixel load-ahead
+candidate gained 1.395 ms/image PNG and 1.851 JPEG but raised the Turing hash
+kernel from 26 to 32 registers. The separately exact duplicate-precheck
+removal gained 1.013/1.881 ms/image at 24 registers.
+
+Candidate
+---------
+The pre-Ampere specialization omitted the already-validated duplicate
+zero-offset precheck for full-chain calls. Within each four-pixel group it
+issued the first two pixel pairs before their ordered comparisons, then the
+second two pairs before their ordered comparisons. Return positions and
+comparison order were unchanged. Ampere+ selected a false template
+specialization containing the original serial matcher.
+
+Both the parent and pre-Ampere candidate kernels use 26 registers, with zero
+stack/shared/local memory. The candidate's pre-Ampere mnemonic stream has 288
+instructions versus 296 for the parent. The Ampere+ false specialization has
+296 instructions and its complete mnemonic sequence is identical to the
+parent.
+
+Correctness and screen
+----------------------
+All seven focused CTests passed on the candidate. The source was then restored
+and the same seven tests passed again.
+
+Two order-reversed process pairs per format used separate statically linked
+native-sm_75 executables, the six small/medium PNG or JPEG inputs, one warmup,
+and six measured persistent batches per arm (48 JSON rows total):
+  --variant cuda --mode lossless --batch-size 6 --method 4 --quality 75
+  --warmups 1 --samples 6 --force-cuda <six inputs>
+
+Pooled medians (milliseconds/image):
+  PNG:  baseline 77.100745, candidate 76.102015, gain 0.998730
+  JPEG: baseline 128.924068, candidate 123.830406, gain 5.093662
+
+All PNG rows retained hash ae63469bc03eece1 and 6720632 bytes. All JPEG rows
+retained hash 7396c2ca11b0f48f and 8956690 bytes. The candidate was rejected
+and removed because PNG's gain is below the strict 1.5 ms/image gate despite
+the large JPEG win. This is RTX 2080 SUPER-only performance evidence; Ampere+
+behavior was unchanged and no Ampere+ performance claim is made.
+
+Raw files
+---------
+libwebp-hash-pair-retained-profile.txt
+libwebp-hash-pair-candidate.patch.gz
+libwebp-hash-pair-screen.jsonl
+libwebp-hash-pair-{baseline,candidate}-resources.txt
+libwebp-hash-pair-{baseline,candidate}-sass.txt.gz
+libwebp-hash-pair-sass-compare.json
+libwebp-hash-pair-binary-sha256.txt
+libwebp-hash-pair-native-cmake-cache.txt
+libwebp-hash-pair-restored-ctest.txt

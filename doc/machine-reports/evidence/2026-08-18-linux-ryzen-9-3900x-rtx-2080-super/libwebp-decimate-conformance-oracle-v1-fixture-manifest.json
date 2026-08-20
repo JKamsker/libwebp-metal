@@ -1,0 +1,1087 @@
+{
+  "fixtures": [
+    {
+      "encoded_bytes": 4072,
+      "encoded_sha256": "5037b75b50fd37b6a83efa6a5396cd003625ae9829c38460519cdf5447012519",
+      "fixture": "graphic-small-m3-q25.wpd",
+      "fixture_sha256": "db8c241225355f33df94b7af650d19bb211f5c3bd8c16bf714b3f5cf28903042",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png",
+      "input_sha256": "6265634dc45f763665157269f82f235fbbb1d90fbd84766d257a9660a75aff57",
+      "method": 3,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 4586,
+      "encoded_sha256": "46cd5200086923446b90d91fb9b06c2ca720e7a7d1a56faa66f09f8e82f6b53c",
+      "fixture": "graphic-small-m3-q75.wpd",
+      "fixture_sha256": "b4483edb894588f9952a9a4e895fb6b1a8d73bdf77749aa18cc32f1472aae6d7",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png",
+      "input_sha256": "6265634dc45f763665157269f82f235fbbb1d90fbd84766d257a9660a75aff57",
+      "method": 3,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 5262,
+      "encoded_sha256": "de2075b20a12b069bfc9844656087fb1a2dc85116013942794a5e5a5e31588f3",
+      "fixture": "graphic-small-m3-q98.wpd",
+      "fixture_sha256": "9f97464322c136a33c7153cc1f563bca050b9c7e37626358baf9d0c52437af08",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png",
+      "input_sha256": "6265634dc45f763665157269f82f235fbbb1d90fbd84766d257a9660a75aff57",
+      "method": 3,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 4078,
+      "encoded_sha256": "09434f66797343ffbef96a496980658ccf5a8c2587874f174a9dad5673cf6cb9",
+      "fixture": "graphic-small-m4-q25.wpd",
+      "fixture_sha256": "f2f59f35d554f578e62d69bf0c95b187aa4f0452012ce0af4af7e5db327700da",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png",
+      "input_sha256": "6265634dc45f763665157269f82f235fbbb1d90fbd84766d257a9660a75aff57",
+      "method": 4,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 4584,
+      "encoded_sha256": "58ffc5bb17c5cfbb020ef4048d0efbe00bc846ed18011b2b33854f5d8537f9e7",
+      "fixture": "graphic-small-m4-q75.wpd",
+      "fixture_sha256": "f3e39115e21aeb8b0184b44bfeb9d32b66235d9fb55d5e8e12a9330f05968ba3",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png",
+      "input_sha256": "6265634dc45f763665157269f82f235fbbb1d90fbd84766d257a9660a75aff57",
+      "method": 4,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 5264,
+      "encoded_sha256": "2a3e2001274dc6357bb8a14d4aaaca8f72bc89b17ae6ce6c157ee2920f8fbebf",
+      "fixture": "graphic-small-m4-q98.wpd",
+      "fixture_sha256": "cab2ac38f108786e1329eaf689ad7bd63937affe4bb13cb54de1291d28da7445",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png",
+      "input_sha256": "6265634dc45f763665157269f82f235fbbb1d90fbd84766d257a9660a75aff57",
+      "method": 4,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 4096,
+      "encoded_sha256": "4f39139803a15a56a9cac58954405a82d1ac7035417f88c865626526043a4c6b",
+      "fixture": "graphic-small-m5-q25.wpd",
+      "fixture_sha256": "8d3541edff4703b35e24446cc8a42fa19ae7702141838740e515ff1f74e9e40f",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png",
+      "input_sha256": "6265634dc45f763665157269f82f235fbbb1d90fbd84766d257a9660a75aff57",
+      "method": 5,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 4650,
+      "encoded_sha256": "e7026cfb5d989ec13fe4ce243159ac4359bfdc1850a2ef31bf8aea2dbb467921",
+      "fixture": "graphic-small-m5-q75.wpd",
+      "fixture_sha256": "9f3ed79ae038481896f2e60735b2bb398d6b5f757a6b01d138573840668f5cd8",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png",
+      "input_sha256": "6265634dc45f763665157269f82f235fbbb1d90fbd84766d257a9660a75aff57",
+      "method": 5,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 5312,
+      "encoded_sha256": "d7c834b8f78fb9e522b30cceac02a0c14bd13aa38e10ce596f2975bbcb527eed",
+      "fixture": "graphic-small-m5-q98.wpd",
+      "fixture_sha256": "4d153364023d4a4f56f7826e7aa981b0691d5dfedfab928c3afc785b1caccb22",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png",
+      "input_sha256": "6265634dc45f763665157269f82f235fbbb1d90fbd84766d257a9660a75aff57",
+      "method": 5,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 4038,
+      "encoded_sha256": "9489bc1327228901b23f265fb6079c67ea97f8da58ac9d90804b06f01204da7f",
+      "fixture": "graphic-small-m6-q25.wpd",
+      "fixture_sha256": "9fb5898d2c288adcf7d0496106ab3346534f7b58ec64ba03551f1f20e80d2988",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png",
+      "input_sha256": "6265634dc45f763665157269f82f235fbbb1d90fbd84766d257a9660a75aff57",
+      "method": 6,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 4578,
+      "encoded_sha256": "c052f0634f14994850c5d65be50c3349bd4056fc940e40588494d72f2f79fe0a",
+      "fixture": "graphic-small-m6-q75.wpd",
+      "fixture_sha256": "cd5dccbee0a5a2cb09fdd0ff58362808734f585efb71105b49d18b7ab75cd1cb",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png",
+      "input_sha256": "6265634dc45f763665157269f82f235fbbb1d90fbd84766d257a9660a75aff57",
+      "method": 6,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 5286,
+      "encoded_sha256": "6e2c5638aab8848ee261da0277a7e31d370a3a000eef4f6e21472b2f79e1b388",
+      "fixture": "graphic-small-m6-q98.wpd",
+      "fixture_sha256": "a269723feb9e21a97bd1f1c04dd1f563457a86370d15ccf52da4b6cb816b8dea",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/graphic-small.png",
+      "input_sha256": "6265634dc45f763665157269f82f235fbbb1d90fbd84766d257a9660a75aff57",
+      "method": 6,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 964,
+      "encoded_sha256": "8c3db9f052395758714d411d81940f93f4d17c0a2fe692b32daef66cc61e929a",
+      "fixture": "photo-small-m3-q25.wpd",
+      "fixture_sha256": "e0812912b40dd56580221f12ce28d2bf69c875e9c4a908f16225f396e07cd1f7",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png",
+      "input_sha256": "cece36ac1d5aa79b213e4507768155a8b8c872e6f7acc1974b57f666ecf31ef6",
+      "method": 3,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 29858,
+      "encoded_sha256": "824bfb02e7b45c38aeed46d4db2ea785fec44888ba200a57456de60002b8bdcc",
+      "fixture": "photo-small-m3-q75.wpd",
+      "fixture_sha256": "8c4da4bddff6cbdddce6a7892f9457ee610abfab850884718d9b244fba4dc1ce",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png",
+      "input_sha256": "cece36ac1d5aa79b213e4507768155a8b8c872e6f7acc1974b57f666ecf31ef6",
+      "method": 3,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 111760,
+      "encoded_sha256": "d7a345e99fbaf383b570208e79d7cdefdfc76612d870c468a5cf44117da34643",
+      "fixture": "photo-small-m3-q98.wpd",
+      "fixture_sha256": "9e0a98e8404966ac16fd72f9180b1dda1be626d2777df2fbeb46fbd418b72acd",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png",
+      "input_sha256": "cece36ac1d5aa79b213e4507768155a8b8c872e6f7acc1974b57f666ecf31ef6",
+      "method": 3,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 966,
+      "encoded_sha256": "78fdbe54096fc2035e64796641e7acf094142d5ee99fd1c8608de77d27f60a02",
+      "fixture": "photo-small-m4-q25.wpd",
+      "fixture_sha256": "6c6624c11242944f240ea1bd1c50efafe11b5bc3b415de32809db864e7f9ca42",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png",
+      "input_sha256": "cece36ac1d5aa79b213e4507768155a8b8c872e6f7acc1974b57f666ecf31ef6",
+      "method": 4,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 29986,
+      "encoded_sha256": "79a6530fd90e95b538102e4e48698bee9577cef49446ec1006c2b35e905c402d",
+      "fixture": "photo-small-m4-q75.wpd",
+      "fixture_sha256": "1d2e7e61fc77e0de9fec754092015e3aa06280c2aa999bc2b98e1bb429c06dd1",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png",
+      "input_sha256": "cece36ac1d5aa79b213e4507768155a8b8c872e6f7acc1974b57f666ecf31ef6",
+      "method": 4,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 111766,
+      "encoded_sha256": "318bf258aca56025e52661b9225df3d2fd8ceb9b8a7f2a7e7c6988d5cdef1154",
+      "fixture": "photo-small-m4-q98.wpd",
+      "fixture_sha256": "902d1ff564fea9273e16b9523befe8a060de7115815769f8b6daadd53b5b748b",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png",
+      "input_sha256": "cece36ac1d5aa79b213e4507768155a8b8c872e6f7acc1974b57f666ecf31ef6",
+      "method": 4,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 1116,
+      "encoded_sha256": "1e4da35a5f92c118e6f33be91fb51ae183d36ed94c27d6641e39bbcebcb6e7f3",
+      "fixture": "photo-small-m5-q25.wpd",
+      "fixture_sha256": "f368266b62a0669dba58dbddba94e1b13159da3ec36c691199b5ecfe75d3d48c",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png",
+      "input_sha256": "cece36ac1d5aa79b213e4507768155a8b8c872e6f7acc1974b57f666ecf31ef6",
+      "method": 5,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 19774,
+      "encoded_sha256": "cc490b27d4345df268d9a60d9907004ae71c19d26981d73d91b1cc3a143c9f32",
+      "fixture": "photo-small-m5-q75.wpd",
+      "fixture_sha256": "1a0052e45a9a356550617a4594e3ec0d4ba9dfcb0f616c8e1979a32c7b52f210",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png",
+      "input_sha256": "cece36ac1d5aa79b213e4507768155a8b8c872e6f7acc1974b57f666ecf31ef6",
+      "method": 5,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 111884,
+      "encoded_sha256": "a7376d07d548fe82447faf4b61dd616fd5980635934ff986125875ae6f4a81f9",
+      "fixture": "photo-small-m5-q98.wpd",
+      "fixture_sha256": "57c424bdf7114200e9ef318704f88031df4d34a35e9c726960120925b554063e",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png",
+      "input_sha256": "cece36ac1d5aa79b213e4507768155a8b8c872e6f7acc1974b57f666ecf31ef6",
+      "method": 5,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 966,
+      "encoded_sha256": "78fdbe54096fc2035e64796641e7acf094142d5ee99fd1c8608de77d27f60a02",
+      "fixture": "photo-small-m6-q25.wpd",
+      "fixture_sha256": "393ca05dc23389630971cb518780edd03ff6a010e6a19113c314c48a032f34a7",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png",
+      "input_sha256": "cece36ac1d5aa79b213e4507768155a8b8c872e6f7acc1974b57f666ecf31ef6",
+      "method": 6,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 18504,
+      "encoded_sha256": "4add7d4d1985b109a08271e587418c908dd453053f41ca9e87601753f534af03",
+      "fixture": "photo-small-m6-q75.wpd",
+      "fixture_sha256": "e03d386036b8111e8534ec4bd90b93485184b08d814fcf2efce8e3b4e2b66e93",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png",
+      "input_sha256": "cece36ac1d5aa79b213e4507768155a8b8c872e6f7acc1974b57f666ecf31ef6",
+      "method": 6,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 111076,
+      "encoded_sha256": "cb7e77e7a08c193b2b6c90a511e06274e5bd761371d5c9495c61244556717e09",
+      "fixture": "photo-small-m6-q98.wpd",
+      "fixture_sha256": "1f6854389dcd8a967fc56b283dc09775bde0e6c7666afc52defbe622bf61439e",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/photo-small.png",
+      "input_sha256": "cece36ac1d5aa79b213e4507768155a8b8c872e6f7acc1974b57f666ecf31ef6",
+      "method": 6,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 110636,
+      "encoded_sha256": "22a7e17758a2909f0c5c105793f958f7f2899aa669a8da6b8c05e80915c5f602",
+      "fixture": "texture-small-m3-q25.wpd",
+      "fixture_sha256": "edaee4876e6cfc531d163c7016717ccaa730ac9b7376e03a2854742f973937ba",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png",
+      "input_sha256": "359304d1414dd739f47732f8e6b6db2a16f8aace872e46df6703cc73e24c070a",
+      "method": 3,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 163266,
+      "encoded_sha256": "f67eede26e528b3c77917cfba91eee3c1b4b68aba2bb5187278ac95375fc4fd6",
+      "fixture": "texture-small-m3-q75.wpd",
+      "fixture_sha256": "e14176146784bd886d9488ef16acbce72c0e43fd956c20e15b9240f09bea23ff",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png",
+      "input_sha256": "359304d1414dd739f47732f8e6b6db2a16f8aace872e46df6703cc73e24c070a",
+      "method": 3,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 282578,
+      "encoded_sha256": "b0c044e73bc6ebb2af8cceda2012a601c38779ef9b9dd8f362b2f324079f8b80",
+      "fixture": "texture-small-m3-q98.wpd",
+      "fixture_sha256": "2922ffa2073919683e264b13eb5eb00fc57119055cc24937061e811efdc1e3ff",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png",
+      "input_sha256": "359304d1414dd739f47732f8e6b6db2a16f8aace872e46df6703cc73e24c070a",
+      "method": 3,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 110684,
+      "encoded_sha256": "5130c632a7b9490efe9367127ab5691649a5b5bca404bdaeb45eda4fc336da79",
+      "fixture": "texture-small-m4-q25.wpd",
+      "fixture_sha256": "3f46d39bd0ee5a4f4438126122553a415fbfd489033f9c819aed27988ea9495a",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png",
+      "input_sha256": "359304d1414dd739f47732f8e6b6db2a16f8aace872e46df6703cc73e24c070a",
+      "method": 4,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 163284,
+      "encoded_sha256": "869981385411a56fb618f92c8e28b4f7e0eef7ce19a362e42192da2e37e96812",
+      "fixture": "texture-small-m4-q75.wpd",
+      "fixture_sha256": "1ee5d9749a198fbaa3ad8a378a0900fe11f7fd8bc4b965534a5d12856f55fac7",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png",
+      "input_sha256": "359304d1414dd739f47732f8e6b6db2a16f8aace872e46df6703cc73e24c070a",
+      "method": 4,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 282586,
+      "encoded_sha256": "1395a5506cd3b906c2ce9681ae171d1b39c5db2ab9dbb72d427887e06631be00",
+      "fixture": "texture-small-m4-q98.wpd",
+      "fixture_sha256": "84d84bd243251e59a3ae255d4ea707548d2b7a0400481d915c148ca397663063",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png",
+      "input_sha256": "359304d1414dd739f47732f8e6b6db2a16f8aace872e46df6703cc73e24c070a",
+      "method": 4,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 110450,
+      "encoded_sha256": "3b57af36fef4b0f45864468288fc2b4dca4075686171fb66425e9fc8b8d592ca",
+      "fixture": "texture-small-m5-q25.wpd",
+      "fixture_sha256": "2940ba3b147db0eff9563a8087cbbccbd6fa155380616f6577dfefeedf4b10b9",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png",
+      "input_sha256": "359304d1414dd739f47732f8e6b6db2a16f8aace872e46df6703cc73e24c070a",
+      "method": 5,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 163448,
+      "encoded_sha256": "3a6fce305bdb3d8132963364a207b1cec33a0f13e70381abca84f594c49dde90",
+      "fixture": "texture-small-m5-q75.wpd",
+      "fixture_sha256": "568b7f76e5d74da58ef3d32d120966564ddd0e77dce101ed553021e28935fccc",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png",
+      "input_sha256": "359304d1414dd739f47732f8e6b6db2a16f8aace872e46df6703cc73e24c070a",
+      "method": 5,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 282660,
+      "encoded_sha256": "f05ede271b1bf1a8d9ab09e269c3e3af8c5a040f13b67091f86926ae0b5097eb",
+      "fixture": "texture-small-m5-q98.wpd",
+      "fixture_sha256": "01845e5bb057c4de08db8eb2ff4351ca3f38a9fc010e59eeef9ee67e67683399",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png",
+      "input_sha256": "359304d1414dd739f47732f8e6b6db2a16f8aace872e46df6703cc73e24c070a",
+      "method": 5,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 109650,
+      "encoded_sha256": "6a094f0e6bcfe6d75f1116a9a456d3b503ba7d0bcb6829a4cf1dc4a2b3385eb9",
+      "fixture": "texture-small-m6-q25.wpd",
+      "fixture_sha256": "c478212b6906590ce9d91d602bd87ae50c030d71aea3d35a6b98f9795050e98f",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png",
+      "input_sha256": "359304d1414dd739f47732f8e6b6db2a16f8aace872e46df6703cc73e24c070a",
+      "method": 6,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 163084,
+      "encoded_sha256": "b4161300e8d707af772ee533fb5368609a7c6a935256e9aaf28699604b5457e6",
+      "fixture": "texture-small-m6-q75.wpd",
+      "fixture_sha256": "f7dec75a48fe2142732348b19535e5f163df96cd9c033d3efeb199add29cb5cc",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png",
+      "input_sha256": "359304d1414dd739f47732f8e6b6db2a16f8aace872e46df6703cc73e24c070a",
+      "method": 6,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 282634,
+      "encoded_sha256": "f2ecbd998b3f9a6e11c27a98356049453963d0f17bb07cb7d76154d9907370ef",
+      "fixture": "texture-small-m6-q98.wpd",
+      "fixture_sha256": "15221e615bf7d960ba188887c2822c6bece6a268934e44e6ee4fe3d59c380f21",
+      "input": "/tmp/libwebp-cuda-batch-corpus-20260818/png/texture-small.png",
+      "input_sha256": "359304d1414dd739f47732f8e6b6db2a16f8aace872e46df6703cc73e24c070a",
+      "method": 6,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 170,
+      "encoded_sha256": "8cbdc0767600194b779da18851ef7ba8ae840ab97d8cb544c2094f64fc0ccf4b",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m3-q25.wpd",
+      "fixture_sha256": "ef3b4b1f43554fec844bec535ebc44d6f7cd067b857aeb8b66d252488c45502d",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 3,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 258,
+      "encoded_sha256": "de06db011d7fb6e9115d74e21b739f9409bebaa0a3805d7100876d57dec1a0fe",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m3-q75.wpd",
+      "fixture_sha256": "b2511e83c7e320097f962a8345211f2733e1e132223dcaa40fa7663fec796238",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 3,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 452,
+      "encoded_sha256": "06173d0a5eb2dc583c2c8e15dfe3623e1391a1250fadf9579df41e3da77cc89c",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m3-q98.wpd",
+      "fixture_sha256": "f35effdad9a7c16d36a186bc5dc73e33125047aa856acd62121dee5afc3946cb",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 3,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 170,
+      "encoded_sha256": "8cbdc0767600194b779da18851ef7ba8ae840ab97d8cb544c2094f64fc0ccf4b",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m4-q25.wpd",
+      "fixture_sha256": "64e5d8236b684123d5f8ad12f13d2d220481c48fc17b7524cb0560af0af06452",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 4,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 258,
+      "encoded_sha256": "de06db011d7fb6e9115d74e21b739f9409bebaa0a3805d7100876d57dec1a0fe",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m4-q75.wpd",
+      "fixture_sha256": "580c28e75d7a6903a6ed7211f80abbadd226e6ad776ec364120b1bdc30ea5c61",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 4,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 452,
+      "encoded_sha256": "06173d0a5eb2dc583c2c8e15dfe3623e1391a1250fadf9579df41e3da77cc89c",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m4-q98.wpd",
+      "fixture_sha256": "3f7ca8599f4b683c4b128430a85d27790f4ce209d2a5917eff3a9cc326e5ca5c",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 4,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 158,
+      "encoded_sha256": "b24f9962c1cbcae341233f10058d1d8dae69aeec09ce9e90be79b8c77a710cac",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m5-q25.wpd",
+      "fixture_sha256": "0c70da325d8d67d3aee38289658493c60a968ccf58a602fa596c7d05c9fa3e56",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 5,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 252,
+      "encoded_sha256": "ab3e67ba0875f123f2c558510b6a2f189377cfcf1e0bd44a6196c92b7716deb1",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m5-q75.wpd",
+      "fixture_sha256": "b002afe75a271f24fbf00c6324be7fcb02071211145c8fb6ef7a24f289bca28f",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 5,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 452,
+      "encoded_sha256": "852e247e1f597180c281d5b7da6dfaa04afcdc1551d580064206b36372e7a0a6",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m5-q98.wpd",
+      "fixture_sha256": "20c64241cfcd6781054902ff116e2fc6d3fc0956dcdb19bf8604a65ffdebfff6",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 5,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 158,
+      "encoded_sha256": "3eb900e945dc04584b439d0ee2c5d5eca005a0043f285b6167b5f2db39321d05",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m6-q25.wpd",
+      "fixture_sha256": "4ba39d7f45775e7e949b87703f706a11af713d952bac5ac8f62a98770ded211d",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 6,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 250,
+      "encoded_sha256": "68ef744e1ae9df0d8e62baa49ff94ab33c60e1df7ac18097c8d7bb351ae3cd5e",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m6-q75.wpd",
+      "fixture_sha256": "9486a9759890ba1b4233da75f88e6ee6848ec31e7cde04a68143a6a9962fa1db",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 6,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 452,
+      "encoded_sha256": "06173d0a5eb2dc583c2c8e15dfe3623e1391a1250fadf9579df41e3da77cc89c",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m6-q98.wpd",
+      "fixture_sha256": "8a7cbd450cbb7d82b94a767b1293ea1957d53b7103f53972dacd598f0f43aa62",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 6,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 92,
+      "encoded_sha256": "f902533a4ab5aa750baf81643fd844b00217613ffe74639315b21b3afeea6e4a",
+      "fixture": "libwebp-hash-combined-input-photo-tiny-17x13-m3-q25.wpd",
+      "fixture_sha256": "b11654fabbcca1606f3096beea8be36eda777becbe039431b3cbaaec656cfca1",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-tiny-17x13.ppm",
+      "input_sha256": "8613147848baec1746336d14f71f09402e4dd2c877124dbd608344cd7559eb66",
+      "method": 3,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 100,
+      "encoded_sha256": "7c56b1291944085f12e2014a0dda314a13b9ec81954d92fb464133acf0d0bbdd",
+      "fixture": "libwebp-hash-combined-input-photo-tiny-17x13-m3-q75.wpd",
+      "fixture_sha256": "e727ca7add049cfd611a56f6e5b22203f9e7f80a2e5f2c7e1c792a5bc0bfb118",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-tiny-17x13.ppm",
+      "input_sha256": "8613147848baec1746336d14f71f09402e4dd2c877124dbd608344cd7559eb66",
+      "method": 3,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 156,
+      "encoded_sha256": "c207e7467cc1d316875ab38cefd1f6ed2dbc7e0c016c2b020e7d03bdedb39f31",
+      "fixture": "libwebp-hash-combined-input-photo-tiny-17x13-m3-q98.wpd",
+      "fixture_sha256": "c9dc517b76247266babc3386214ac43eb0811bbafb5534b72f1f38278e82b372",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-tiny-17x13.ppm",
+      "input_sha256": "8613147848baec1746336d14f71f09402e4dd2c877124dbd608344cd7559eb66",
+      "method": 3,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 92,
+      "encoded_sha256": "f902533a4ab5aa750baf81643fd844b00217613ffe74639315b21b3afeea6e4a",
+      "fixture": "libwebp-hash-combined-input-photo-tiny-17x13-m4-q25.wpd",
+      "fixture_sha256": "2d62250d7a48d576330bea9d3b5db05f83fa9e93333bc7751e6d0c141b95810f",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-tiny-17x13.ppm",
+      "input_sha256": "8613147848baec1746336d14f71f09402e4dd2c877124dbd608344cd7559eb66",
+      "method": 4,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 100,
+      "encoded_sha256": "7c56b1291944085f12e2014a0dda314a13b9ec81954d92fb464133acf0d0bbdd",
+      "fixture": "libwebp-hash-combined-input-photo-tiny-17x13-m4-q75.wpd",
+      "fixture_sha256": "e6e7d1be5d3d948a1f53697a486f102cd018047f5edf8fe06586a670b0743f26",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-tiny-17x13.ppm",
+      "input_sha256": "8613147848baec1746336d14f71f09402e4dd2c877124dbd608344cd7559eb66",
+      "method": 4,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 156,
+      "encoded_sha256": "c207e7467cc1d316875ab38cefd1f6ed2dbc7e0c016c2b020e7d03bdedb39f31",
+      "fixture": "libwebp-hash-combined-input-photo-tiny-17x13-m4-q98.wpd",
+      "fixture_sha256": "8d4f6a4e6b92f49b982f889cfc43f95ff29847ddb6c326d501a331199b12aa66",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-tiny-17x13.ppm",
+      "input_sha256": "8613147848baec1746336d14f71f09402e4dd2c877124dbd608344cd7559eb66",
+      "method": 4,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 92,
+      "encoded_sha256": "f3c9ae2e414fc87465d54120519500fcf461eb394a4705900c67c27bd9325e11",
+      "fixture": "libwebp-hash-combined-input-photo-tiny-17x13-m5-q25.wpd",
+      "fixture_sha256": "8998872ac80d88b70821efd68d07da9512466aa1616b21f00e476832eab1827c",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-tiny-17x13.ppm",
+      "input_sha256": "8613147848baec1746336d14f71f09402e4dd2c877124dbd608344cd7559eb66",
+      "method": 5,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 100,
+      "encoded_sha256": "a0cb0c6cd9edc88a8bf52a01f0af4012638dba4e471061bcda96fd9243c86038",
+      "fixture": "libwebp-hash-combined-input-photo-tiny-17x13-m5-q75.wpd",
+      "fixture_sha256": "9bbf05666ad4fb0031046cd7daed20ec96af2edaeb88420d17ad13f56239164c",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-tiny-17x13.ppm",
+      "input_sha256": "8613147848baec1746336d14f71f09402e4dd2c877124dbd608344cd7559eb66",
+      "method": 5,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 156,
+      "encoded_sha256": "d876f84c0f06d82aa3c42d9915643db24900b27a7f284c41896d98b52a08fff6",
+      "fixture": "libwebp-hash-combined-input-photo-tiny-17x13-m5-q98.wpd",
+      "fixture_sha256": "f7a22db1624a60ad97fb2659f25e7830dfa45fb924736343639b6fa9d172614f",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-tiny-17x13.ppm",
+      "input_sha256": "8613147848baec1746336d14f71f09402e4dd2c877124dbd608344cd7559eb66",
+      "method": 5,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 92,
+      "encoded_sha256": "f902533a4ab5aa750baf81643fd844b00217613ffe74639315b21b3afeea6e4a",
+      "fixture": "libwebp-hash-combined-input-photo-tiny-17x13-m6-q25.wpd",
+      "fixture_sha256": "91aec77896b6f339234e6b49f38f8151f885ae5d4af0bb946ca654737d657746",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-tiny-17x13.ppm",
+      "input_sha256": "8613147848baec1746336d14f71f09402e4dd2c877124dbd608344cd7559eb66",
+      "method": 6,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 100,
+      "encoded_sha256": "670bea30026cc7ab9509305aae1c66f38624d44cd9914e49a5abfa927821d408",
+      "fixture": "libwebp-hash-combined-input-photo-tiny-17x13-m6-q75.wpd",
+      "fixture_sha256": "7078ea951a29d892f8d76b0e0fb33395948c89ad3a0699b1fa355721caa266c8",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-tiny-17x13.ppm",
+      "input_sha256": "8613147848baec1746336d14f71f09402e4dd2c877124dbd608344cd7559eb66",
+      "method": 6,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 156,
+      "encoded_sha256": "73b066c9ffd0348afee79a30baeac3291d89420bb320069eb6b5bcdb4a0a6884",
+      "fixture": "libwebp-hash-combined-input-photo-tiny-17x13-m6-q98.wpd",
+      "fixture_sha256": "309ecf9258282f2ef6f755e460f87068f2a46577573718275cb77fa9611dcf49",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-tiny-17x13.ppm",
+      "input_sha256": "8613147848baec1746336d14f71f09402e4dd2c877124dbd608344cd7559eb66",
+      "method": 6,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 54,
+      "encoded_sha256": "a3c1751602eae3c4e781bc144601727752d70519db5f521b3cc98ecc54672cab",
+      "fixture": "libwebp-hash-combined-input-texture-tiny-17x13-m3-q25.wpd",
+      "fixture_sha256": "cb7d420a93cd418974f23d536e3a93c8e3166c337bf26882c83cc948194a8463",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-tiny-17x13.ppm",
+      "input_sha256": "91c99a98686405954ea9865aacef30d1652240c0c8e0949e14c7560b216feb3c",
+      "method": 3,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 56,
+      "encoded_sha256": "d4f5a1e60e787413c9a57bbd79ea04a6042468c061bb75764f83cf86e3f60809",
+      "fixture": "libwebp-hash-combined-input-texture-tiny-17x13-m3-q75.wpd",
+      "fixture_sha256": "7d7ab054111825c0fa346b87bd7211fe0ce83d7cabd81850a335db633500e96a",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-tiny-17x13.ppm",
+      "input_sha256": "91c99a98686405954ea9865aacef30d1652240c0c8e0949e14c7560b216feb3c",
+      "method": 3,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 60,
+      "encoded_sha256": "7ba48e6bb9f6e933c9b4c144f46ca8b56d8766e4660eeb4d71f233da54fa55f0",
+      "fixture": "libwebp-hash-combined-input-texture-tiny-17x13-m3-q98.wpd",
+      "fixture_sha256": "d6e300370adffe789eff24bad7d7c991812b4c6142293775cd6d2b613ed80bd3",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-tiny-17x13.ppm",
+      "input_sha256": "91c99a98686405954ea9865aacef30d1652240c0c8e0949e14c7560b216feb3c",
+      "method": 3,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 54,
+      "encoded_sha256": "a3c1751602eae3c4e781bc144601727752d70519db5f521b3cc98ecc54672cab",
+      "fixture": "libwebp-hash-combined-input-texture-tiny-17x13-m4-q25.wpd",
+      "fixture_sha256": "dfa09dbbcf1b1160e63633a5328fb8fbe2e506373b05e9e81f6be3deed2056b3",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-tiny-17x13.ppm",
+      "input_sha256": "91c99a98686405954ea9865aacef30d1652240c0c8e0949e14c7560b216feb3c",
+      "method": 4,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 56,
+      "encoded_sha256": "d4f5a1e60e787413c9a57bbd79ea04a6042468c061bb75764f83cf86e3f60809",
+      "fixture": "libwebp-hash-combined-input-texture-tiny-17x13-m4-q75.wpd",
+      "fixture_sha256": "9ea78743575280f98d78e3806633a41325ac150fca001ebe422482e012553a53",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-tiny-17x13.ppm",
+      "input_sha256": "91c99a98686405954ea9865aacef30d1652240c0c8e0949e14c7560b216feb3c",
+      "method": 4,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 60,
+      "encoded_sha256": "7ba48e6bb9f6e933c9b4c144f46ca8b56d8766e4660eeb4d71f233da54fa55f0",
+      "fixture": "libwebp-hash-combined-input-texture-tiny-17x13-m4-q98.wpd",
+      "fixture_sha256": "66f8fef73fecc588fff944324f9b747b835dcf3626a60b3edcc8177de9a9cfcf",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-tiny-17x13.ppm",
+      "input_sha256": "91c99a98686405954ea9865aacef30d1652240c0c8e0949e14c7560b216feb3c",
+      "method": 4,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 54,
+      "encoded_sha256": "a3c1751602eae3c4e781bc144601727752d70519db5f521b3cc98ecc54672cab",
+      "fixture": "libwebp-hash-combined-input-texture-tiny-17x13-m5-q25.wpd",
+      "fixture_sha256": "902854911ca2e36d6df61180d1e62d7496bf74c9ee43553ae4c09065167a15fc",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-tiny-17x13.ppm",
+      "input_sha256": "91c99a98686405954ea9865aacef30d1652240c0c8e0949e14c7560b216feb3c",
+      "method": 5,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 56,
+      "encoded_sha256": "d4f5a1e60e787413c9a57bbd79ea04a6042468c061bb75764f83cf86e3f60809",
+      "fixture": "libwebp-hash-combined-input-texture-tiny-17x13-m5-q75.wpd",
+      "fixture_sha256": "ffd5cc0fef751a566bbaa85f02088118a2ca7ea847ba7f365367b69755d90056",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-tiny-17x13.ppm",
+      "input_sha256": "91c99a98686405954ea9865aacef30d1652240c0c8e0949e14c7560b216feb3c",
+      "method": 5,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 58,
+      "encoded_sha256": "d5ae0bb6ad5ec8f6147a853163e890ec9efaf5d15d3766e5d89bafbd3e93d775",
+      "fixture": "libwebp-hash-combined-input-texture-tiny-17x13-m5-q98.wpd",
+      "fixture_sha256": "a67247f46b23e6a6ec006c5dc7564c36063dc7ad137cfcae990e464fd991116e",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-tiny-17x13.ppm",
+      "input_sha256": "91c99a98686405954ea9865aacef30d1652240c0c8e0949e14c7560b216feb3c",
+      "method": 5,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 54,
+      "encoded_sha256": "a3c1751602eae3c4e781bc144601727752d70519db5f521b3cc98ecc54672cab",
+      "fixture": "libwebp-hash-combined-input-texture-tiny-17x13-m6-q25.wpd",
+      "fixture_sha256": "888cee8ee3d361bc7fe17422a4d08e27f650bb6ac8a761e7218b1c7d6c2c74e9",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-tiny-17x13.ppm",
+      "input_sha256": "91c99a98686405954ea9865aacef30d1652240c0c8e0949e14c7560b216feb3c",
+      "method": 6,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 56,
+      "encoded_sha256": "d4f5a1e60e787413c9a57bbd79ea04a6042468c061bb75764f83cf86e3f60809",
+      "fixture": "libwebp-hash-combined-input-texture-tiny-17x13-m6-q75.wpd",
+      "fixture_sha256": "f36374fce21e69a74ca816bbf2709d36a4b28384750a7c5ee22fddc66b7c8813",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-tiny-17x13.ppm",
+      "input_sha256": "91c99a98686405954ea9865aacef30d1652240c0c8e0949e14c7560b216feb3c",
+      "method": 6,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 56,
+      "encoded_sha256": "24ad41ad9dd7ba869a7b51f7b8a58aa0dc5299277b1bbb28d098d870fa07ffb8",
+      "fixture": "libwebp-hash-combined-input-texture-tiny-17x13-m6-q98.wpd",
+      "fixture_sha256": "7d7b9be67ede85eb3bc7045f5732c8f25e545da5a073143dfa64944bec84d6a4",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-tiny-17x13.ppm",
+      "input_sha256": "91c99a98686405954ea9865aacef30d1652240c0c8e0949e14c7560b216feb3c",
+      "method": 6,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 3338,
+      "encoded_sha256": "e0955ef72e182d3f11a6890dbf7a76c613dc85ba698a01719e6aeef5d17eb9e9",
+      "fixture": "libwebp-hash-combined-input-graphic-odd-257x255-m3-q25.wpd",
+      "fixture_sha256": "870a7052f34c1932f8ebfa54867b3baec5e036f5f6f793939d6befc5f75acee8",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-odd-257x255.ppm",
+      "input_sha256": "14b417d44d30772d48a6f840bbf08d8f32941a06c432d56ceaa95f3acfe7727f",
+      "method": 3,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 4662,
+      "encoded_sha256": "e1c36426333bdcf79610ae363394a9945acc8f89444aa261500d7c1bf5e64b9f",
+      "fixture": "libwebp-hash-combined-input-graphic-odd-257x255-m3-q75.wpd",
+      "fixture_sha256": "1e026bd5775496486d0deb6a36638b4c486b3c80c233c0cd697faac74fe92d4e",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-odd-257x255.ppm",
+      "input_sha256": "14b417d44d30772d48a6f840bbf08d8f32941a06c432d56ceaa95f3acfe7727f",
+      "method": 3,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 8072,
+      "encoded_sha256": "74033b17b9af561d263feed22ccaeedc1ac3a325e22b794379793ac4de97e719",
+      "fixture": "libwebp-hash-combined-input-graphic-odd-257x255-m3-q98.wpd",
+      "fixture_sha256": "525355acdca9734e73421f37edb3ad8efb87c1eafff7d74252a98f87a0de3158",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-odd-257x255.ppm",
+      "input_sha256": "14b417d44d30772d48a6f840bbf08d8f32941a06c432d56ceaa95f3acfe7727f",
+      "method": 3,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 3338,
+      "encoded_sha256": "053156d98225e627661895d42412f22bbc8ff45c24db1e46581a55152c5aa5e9",
+      "fixture": "libwebp-hash-combined-input-graphic-odd-257x255-m4-q25.wpd",
+      "fixture_sha256": "bfb89dbdb69494145e6299e9a7b283b37f4ad760f1deafdfc0098b25fa1e8f4d",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-odd-257x255.ppm",
+      "input_sha256": "14b417d44d30772d48a6f840bbf08d8f32941a06c432d56ceaa95f3acfe7727f",
+      "method": 4,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 4670,
+      "encoded_sha256": "15be0fd430ccaa1e44946e09a17d03608c38c6bcb3399ad36a07a15a456cb7c4",
+      "fixture": "libwebp-hash-combined-input-graphic-odd-257x255-m4-q75.wpd",
+      "fixture_sha256": "ff830f6f4695362c34b27099d5aaf2307b71b854d6ab22588ca08468614ef994",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-odd-257x255.ppm",
+      "input_sha256": "14b417d44d30772d48a6f840bbf08d8f32941a06c432d56ceaa95f3acfe7727f",
+      "method": 4,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 8070,
+      "encoded_sha256": "851e0274edde589df2d2d817d278a42cb35d2695fd7254041a845fe77313c0ce",
+      "fixture": "libwebp-hash-combined-input-graphic-odd-257x255-m4-q98.wpd",
+      "fixture_sha256": "832db9fde5f0d73c7d7995f033989d197fcb0ff8d58fb73386f155b42943ea2a",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-odd-257x255.ppm",
+      "input_sha256": "14b417d44d30772d48a6f840bbf08d8f32941a06c432d56ceaa95f3acfe7727f",
+      "method": 4,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 3300,
+      "encoded_sha256": "5fdf8382f50983cbe0c34b71e082e08b588940f4ffa23735dc57aae8c7242cd1",
+      "fixture": "libwebp-hash-combined-input-graphic-odd-257x255-m5-q25.wpd",
+      "fixture_sha256": "fc3d4f92dae3ffa3c57c841e29948c514b1e5fedeacb01b4cdc343ece86a403f",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-odd-257x255.ppm",
+      "input_sha256": "14b417d44d30772d48a6f840bbf08d8f32941a06c432d56ceaa95f3acfe7727f",
+      "method": 5,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 4600,
+      "encoded_sha256": "9f181970988d2388f7e0d67f3e44dcb25a7059237d00181bf30fbc69cad64e19",
+      "fixture": "libwebp-hash-combined-input-graphic-odd-257x255-m5-q75.wpd",
+      "fixture_sha256": "b4f5f11e6c74f0aa4ef0f72474726cba045c039bb7f170b10c7475d7bf175663",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-odd-257x255.ppm",
+      "input_sha256": "14b417d44d30772d48a6f840bbf08d8f32941a06c432d56ceaa95f3acfe7727f",
+      "method": 5,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 7978,
+      "encoded_sha256": "fa04af4221e07e3c667e9bd4d6aa86d59b4d3376f9e169ca7daeac6ffeac58c5",
+      "fixture": "libwebp-hash-combined-input-graphic-odd-257x255-m5-q98.wpd",
+      "fixture_sha256": "b752dad9370dcc746f79c66794eadd4daf28ba8a8c1e44c9ec3dfa4dfc4f4bc2",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-odd-257x255.ppm",
+      "input_sha256": "14b417d44d30772d48a6f840bbf08d8f32941a06c432d56ceaa95f3acfe7727f",
+      "method": 5,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 3250,
+      "encoded_sha256": "43728e5c615ac5cb9f770a503781bf1cb993bcb858e7f87f8a1b49b0fb4aecfb",
+      "fixture": "libwebp-hash-combined-input-graphic-odd-257x255-m6-q25.wpd",
+      "fixture_sha256": "e786ee1d329ea182202973b5ca88fce011cf2151ccc2729b869838df0964e063",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-odd-257x255.ppm",
+      "input_sha256": "14b417d44d30772d48a6f840bbf08d8f32941a06c432d56ceaa95f3acfe7727f",
+      "method": 6,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 4568,
+      "encoded_sha256": "f6e6db45e65dfc8adcc7467b0da1e996391188943955f9d0bedf4504ff0f2b52",
+      "fixture": "libwebp-hash-combined-input-graphic-odd-257x255-m6-q75.wpd",
+      "fixture_sha256": "ada7c21fe17d76ae0a82c1fc06d41356aa09331caa5fb4f2ffacb6580ffb21dc",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-odd-257x255.ppm",
+      "input_sha256": "14b417d44d30772d48a6f840bbf08d8f32941a06c432d56ceaa95f3acfe7727f",
+      "method": 6,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 7862,
+      "encoded_sha256": "f5f0e14e2f54a7415e2fd6e08d8096185b8b10926c748ea1cf5aa51eb695d15a",
+      "fixture": "libwebp-hash-combined-input-graphic-odd-257x255-m6-q98.wpd",
+      "fixture_sha256": "b01a814dc397cb5533cfcfe50b82931d4a014416910a74dd68e8017036faa955",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-odd-257x255.ppm",
+      "input_sha256": "14b417d44d30772d48a6f840bbf08d8f32941a06c432d56ceaa95f3acfe7727f",
+      "method": 6,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 546,
+      "encoded_sha256": "7583ce8ea22f8ce00ad2a0e373d5806e529c72464aa2cef533650e5857b9419a",
+      "fixture": "libwebp-hash-combined-input-photo-odd-257x255-m3-q25.wpd",
+      "fixture_sha256": "7b29846222c983bac0ce7aadacf691bf2a60949a12b66cc8a779781547f6bb1c",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-odd-257x255.ppm",
+      "input_sha256": "3816ffc64547acaf2c77b52a12fb49e33d269928f122c794b0a390262e7b9460",
+      "method": 3,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 852,
+      "encoded_sha256": "a3f2ac4c9e1ba344a793131020279219fc7d04430cefd3ebbf603b52e63fce64",
+      "fixture": "libwebp-hash-combined-input-photo-odd-257x255-m3-q75.wpd",
+      "fixture_sha256": "3d2714adaeac698c56d1a3fcf859f80906b37bad88292e48f402dea299a05425",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-odd-257x255.ppm",
+      "input_sha256": "3816ffc64547acaf2c77b52a12fb49e33d269928f122c794b0a390262e7b9460",
+      "method": 3,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 7600,
+      "encoded_sha256": "bc7a1141b6a7096cb79cd36a654a4042a2e537836a8b1e225cda407af3400327",
+      "fixture": "libwebp-hash-combined-input-photo-odd-257x255-m3-q98.wpd",
+      "fixture_sha256": "108e40377133d130d93d9c678f76bc68bc32258b54e6937840b33dc1fa423c12",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-odd-257x255.ppm",
+      "input_sha256": "3816ffc64547acaf2c77b52a12fb49e33d269928f122c794b0a390262e7b9460",
+      "method": 3,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 536,
+      "encoded_sha256": "7470061b9039ef21cbc091cd64e162731da6ac2c82ec239187971f61a469b9da",
+      "fixture": "libwebp-hash-combined-input-photo-odd-257x255-m4-q25.wpd",
+      "fixture_sha256": "ca81e7e823105093a79f423e2bc94d31d5f6ce3e3e4dc6e9d526f44d1fdda736",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-odd-257x255.ppm",
+      "input_sha256": "3816ffc64547acaf2c77b52a12fb49e33d269928f122c794b0a390262e7b9460",
+      "method": 4,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 852,
+      "encoded_sha256": "a3f2ac4c9e1ba344a793131020279219fc7d04430cefd3ebbf603b52e63fce64",
+      "fixture": "libwebp-hash-combined-input-photo-odd-257x255-m4-q75.wpd",
+      "fixture_sha256": "451e67e2d85fb7ec3798ceec9c938cd2512cb5c45d1ff7865503e6dbf3c30070",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-odd-257x255.ppm",
+      "input_sha256": "3816ffc64547acaf2c77b52a12fb49e33d269928f122c794b0a390262e7b9460",
+      "method": 4,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 7642,
+      "encoded_sha256": "eec55074caa7dc950473c5be998f606b3a20486da346f6eae1cf19213288defe",
+      "fixture": "libwebp-hash-combined-input-photo-odd-257x255-m4-q98.wpd",
+      "fixture_sha256": "e3faf29d172db24477e02a6cf0de61e35c2cff9416d80a34a1cbe8ce89caf422",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-odd-257x255.ppm",
+      "input_sha256": "3816ffc64547acaf2c77b52a12fb49e33d269928f122c794b0a390262e7b9460",
+      "method": 4,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 542,
+      "encoded_sha256": "0707f79c2c1c8607e47fbdeca467adafe51d7e9836ceb96ef7bc6f594dd4d2d1",
+      "fixture": "libwebp-hash-combined-input-photo-odd-257x255-m5-q25.wpd",
+      "fixture_sha256": "68ff59cc7a9c8524be4e4991c808c71ded966d59819bfe485fa56c639815c123",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-odd-257x255.ppm",
+      "input_sha256": "3816ffc64547acaf2c77b52a12fb49e33d269928f122c794b0a390262e7b9460",
+      "method": 5,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 874,
+      "encoded_sha256": "ef47aecef88a2b0132f3925beacc9303b3d7853b35e4aad0308c0fe37626092a",
+      "fixture": "libwebp-hash-combined-input-photo-odd-257x255-m5-q75.wpd",
+      "fixture_sha256": "db12ac778f46960f49c698b351614f354d724ba88c299481c9045dd89561f10d",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-odd-257x255.ppm",
+      "input_sha256": "3816ffc64547acaf2c77b52a12fb49e33d269928f122c794b0a390262e7b9460",
+      "method": 5,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 5286,
+      "encoded_sha256": "5c8904cd25328e893954ef57d8792715bc507761dc824e20b9e4d076de19cf02",
+      "fixture": "libwebp-hash-combined-input-photo-odd-257x255-m5-q98.wpd",
+      "fixture_sha256": "acab5adbc07da496fa2e2bee5e1d88c66898763e131e333c4b07d9d91886188d",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-odd-257x255.ppm",
+      "input_sha256": "3816ffc64547acaf2c77b52a12fb49e33d269928f122c794b0a390262e7b9460",
+      "method": 5,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 536,
+      "encoded_sha256": "7470061b9039ef21cbc091cd64e162731da6ac2c82ec239187971f61a469b9da",
+      "fixture": "libwebp-hash-combined-input-photo-odd-257x255-m6-q25.wpd",
+      "fixture_sha256": "cb1d1ed4ad1333f198efb8893ba36b071cf98a1cdb1bfbddc2e0f6cd20b9dbcf",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-odd-257x255.ppm",
+      "input_sha256": "3816ffc64547acaf2c77b52a12fb49e33d269928f122c794b0a390262e7b9460",
+      "method": 6,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 852,
+      "encoded_sha256": "a3f2ac4c9e1ba344a793131020279219fc7d04430cefd3ebbf603b52e63fce64",
+      "fixture": "libwebp-hash-combined-input-photo-odd-257x255-m6-q75.wpd",
+      "fixture_sha256": "6241a2fb94530fa13403bf5763559d206102fa81f04e6a3868574bd89d5cd6b1",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-odd-257x255.ppm",
+      "input_sha256": "3816ffc64547acaf2c77b52a12fb49e33d269928f122c794b0a390262e7b9460",
+      "method": 6,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 3882,
+      "encoded_sha256": "00e6066dd5386a7b3d0ef6865a7af4181645a57e4edfb871b13389924bb48c86",
+      "fixture": "libwebp-hash-combined-input-photo-odd-257x255-m6-q98.wpd",
+      "fixture_sha256": "e76d198222817c3aa89ace1daa60a14a1865848a87650e24bc6c201ef43b1474",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-photo-odd-257x255.ppm",
+      "input_sha256": "3816ffc64547acaf2c77b52a12fb49e33d269928f122c794b0a390262e7b9460",
+      "method": 6,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 2234,
+      "encoded_sha256": "953af634650d87d1362cd3f6afbe60cf3f979499910e492d611079a861e18873",
+      "fixture": "libwebp-hash-combined-input-texture-odd-257x255-m3-q25.wpd",
+      "fixture_sha256": "45435853df21ecea7c7ee8eebf02255dbca3a363cfe9699ed727587668175665",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-odd-257x255.ppm",
+      "input_sha256": "0d41de0f3a0f5bdd0c87184b5d1eb2eaccb86248a7424ccaebab2c5361eb2958",
+      "method": 3,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 11872,
+      "encoded_sha256": "e3ff36b54a73622ff3b5148bacc6721bc69b38e50b0409c9e3112bd6dc8dbad9",
+      "fixture": "libwebp-hash-combined-input-texture-odd-257x255-m3-q75.wpd",
+      "fixture_sha256": "a6d0390efff67ea6f36c8c1db511f43393834d4edf90782f9b10aa80643f4fbb",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-odd-257x255.ppm",
+      "input_sha256": "0d41de0f3a0f5bdd0c87184b5d1eb2eaccb86248a7424ccaebab2c5361eb2958",
+      "method": 3,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 42882,
+      "encoded_sha256": "3898443ba7f019254c635576af62040cba90f70de61b633093a2307328298ee1",
+      "fixture": "libwebp-hash-combined-input-texture-odd-257x255-m3-q98.wpd",
+      "fixture_sha256": "c34a6eaa381663a252461bdfd818778193bfd03986483c86a89a2d71cf9b52ae",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-odd-257x255.ppm",
+      "input_sha256": "0d41de0f3a0f5bdd0c87184b5d1eb2eaccb86248a7424ccaebab2c5361eb2958",
+      "method": 3,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 2224,
+      "encoded_sha256": "e9019f97625a45580e72e2b697e2584e60867c5a68e0193bd39dfe8007af135c",
+      "fixture": "libwebp-hash-combined-input-texture-odd-257x255-m4-q25.wpd",
+      "fixture_sha256": "ec30198d5e2498614f84ccb96b9c545883905265a3648d51faa3d232e21af8da",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-odd-257x255.ppm",
+      "input_sha256": "0d41de0f3a0f5bdd0c87184b5d1eb2eaccb86248a7424ccaebab2c5361eb2958",
+      "method": 4,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 11938,
+      "encoded_sha256": "fd9096cb868120b6018ed059a12c38aa85ef3197b580c8ad6d78b82e827097c4",
+      "fixture": "libwebp-hash-combined-input-texture-odd-257x255-m4-q75.wpd",
+      "fixture_sha256": "1542957c3c474e96045a12e6758b87eb2177ac7224f7e15743eb1f392ad86f42",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-odd-257x255.ppm",
+      "input_sha256": "0d41de0f3a0f5bdd0c87184b5d1eb2eaccb86248a7424ccaebab2c5361eb2958",
+      "method": 4,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 42854,
+      "encoded_sha256": "06832a9d800addf4cceafabc59ff9063a1520fbdd7e44b14af302aa0301787f4",
+      "fixture": "libwebp-hash-combined-input-texture-odd-257x255-m4-q98.wpd",
+      "fixture_sha256": "c79b30fcae76989e8168b91faf8d23532dc97945120f3a4bcd8af53e7d4d0aef",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-odd-257x255.ppm",
+      "input_sha256": "0d41de0f3a0f5bdd0c87184b5d1eb2eaccb86248a7424ccaebab2c5361eb2958",
+      "method": 4,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 1566,
+      "encoded_sha256": "44babebe40261f5d87570c9763f02a68614eadb4597caab69df0deb6c8150c98",
+      "fixture": "libwebp-hash-combined-input-texture-odd-257x255-m5-q25.wpd",
+      "fixture_sha256": "7bac1c258a8984356b4a61229b10aa679a9ec9800aa6225ba264b91d62ece64b",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-odd-257x255.ppm",
+      "input_sha256": "0d41de0f3a0f5bdd0c87184b5d1eb2eaccb86248a7424ccaebab2c5361eb2958",
+      "method": 5,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 10682,
+      "encoded_sha256": "2e6a6840e19995b7b390d665da0decddc2e5b02f837cb1b697f817130202cb96",
+      "fixture": "libwebp-hash-combined-input-texture-odd-257x255-m5-q75.wpd",
+      "fixture_sha256": "c61f9a8f9909218729d90714d1149df41710e7f70ff594581b02f149ae2603dc",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-odd-257x255.ppm",
+      "input_sha256": "0d41de0f3a0f5bdd0c87184b5d1eb2eaccb86248a7424ccaebab2c5361eb2958",
+      "method": 5,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 42712,
+      "encoded_sha256": "4067204545ed8e9010ec4fce4883744136fd553e0335614a43a04b19b0b0a627",
+      "fixture": "libwebp-hash-combined-input-texture-odd-257x255-m5-q98.wpd",
+      "fixture_sha256": "e9727b1391758d7adfabdb35ffb1c4d587d4ecdc5efd5107b3efe3a491fd8562",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-odd-257x255.ppm",
+      "input_sha256": "0d41de0f3a0f5bdd0c87184b5d1eb2eaccb86248a7424ccaebab2c5361eb2958",
+      "method": 5,
+      "quality": 98
+    },
+    {
+      "encoded_bytes": 1400,
+      "encoded_sha256": "9e8d7e348eadfc44a91729ec24e5ea5a13ce61754f43c93bdaaab3b25cbe0bdd",
+      "fixture": "libwebp-hash-combined-input-texture-odd-257x255-m6-q25.wpd",
+      "fixture_sha256": "168f16e625d3ae8911afdbb28f1e95e0bbe935cbc1943f414550362d2b852a43",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-odd-257x255.ppm",
+      "input_sha256": "0d41de0f3a0f5bdd0c87184b5d1eb2eaccb86248a7424ccaebab2c5361eb2958",
+      "method": 6,
+      "quality": 25
+    },
+    {
+      "encoded_bytes": 10424,
+      "encoded_sha256": "73681d90116b38640d553e77fe6f9f6b1ae3d27eddbc3a1be5c06b275a83bbe5",
+      "fixture": "libwebp-hash-combined-input-texture-odd-257x255-m6-q75.wpd",
+      "fixture_sha256": "3ce78a7fa6c4f53c56f5c0406dd24ee01083fd7cbe3856f6d6c9848f15ee9ccd",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-odd-257x255.ppm",
+      "input_sha256": "0d41de0f3a0f5bdd0c87184b5d1eb2eaccb86248a7424ccaebab2c5361eb2958",
+      "method": 6,
+      "quality": 75
+    },
+    {
+      "encoded_bytes": 42526,
+      "encoded_sha256": "3e569eb02b794bc6e5951015e7039e1b9595ee90786dd8430c1a6a301da7e6f2",
+      "fixture": "libwebp-hash-combined-input-texture-odd-257x255-m6-q98.wpd",
+      "fixture_sha256": "5e4beb3c73133032110a5b459dbf06fd21d7624f9e4eeb8a7737f7a51aaedf92",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-texture-odd-257x255.ppm",
+      "input_sha256": "0d41de0f3a0f5bdd0c87184b5d1eb2eaccb86248a7424ccaebab2c5361eb2958",
+      "method": 6,
+      "quality": 98
+    }
+  ],
+  "generator": "generate_lossy_decimate_fixtures.py",
+  "schema": "webp-lossy-decimate-fixture-manifest",
+  "version": 1
+}
