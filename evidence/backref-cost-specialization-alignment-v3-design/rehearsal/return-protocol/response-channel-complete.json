@@ -1,0 +1,9 @@
+{
+  "response_bytes": 18697,
+  "response_chunk_count": 1,
+  "response_sha256": "0ddf376e747b810f5ce7f5c19eab6a749f64f626fe79387ade876b3ff935db90",
+  "schema": "libwebp-backref-cost-specialization-alignment-v3-response-complete-v1",
+  "status": "complete",
+  "transaction_exit_code": 0,
+  "transaction_nonce": "7cd2d84a28df2606445cd1510a74ea39f8381db5222b9e68d6495e57f8925e11"
+}

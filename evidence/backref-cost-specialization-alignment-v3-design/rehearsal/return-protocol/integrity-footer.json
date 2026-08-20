@@ -1,0 +1,12 @@
+{
+  "archive_bytes": 14363,
+  "archive_sha256": "2543b1755322546409c68198572419ea948e1ff006da8455da040b237bb39bb1",
+  "complete_response_preflight_required": true,
+  "elapsed_before_cleanup_ns": 29010110875,
+  "error": null,
+  "exclusive_framed_response_cap_bytes": 1048576,
+  "process_refusal": null,
+  "process_refusal_sha256": null,
+  "schema": "libwebp-backref-cost-specialization-alignment-v3-integrity-footer-v1",
+  "status": "complete"
+}
