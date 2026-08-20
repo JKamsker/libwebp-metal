@@ -904,3 +904,16 @@ hashes/bytes `455f70a1e139f043` / 6,441,688 for PNG and
 concurrency, trellis/fallback, and near-lossless tests passed. The source was
 restored because neither format approached the 1.5 ms/image gate; keep exact
 lossy analysis opt-in. Raw artifacts use `libwebp-lossy-analysis-default-*`.
+
+## Fused lossy-analysis policy screen rejection
+
+The existing correctness-only fused path was screened next without a source
+change: it queues RGB conversion and exact analysis on one stream with one
+completion boundary. Two order-reversed fresh processes per format retained
+six post-warmup 24-image rows per cell. PNG was exactly neutral at 39.568166
+ms/image default versus 39.569219 fused, while JPEG moved from 39.549203 to
+39.403428 ms/image (0.145775 ms gain). All 24 rows retained the same exact
+hashes and byte counts as the preceding experiment. This is far below the
+1.5 ms/image gate, so both ordinary and fused analysis remain opt-in. No
+source, Ampere+ behavior, architecture threshold, or cross-hardware claim
+changed. Raw artifacts use `libwebp-fused-lossy-analysis-screen-*`.

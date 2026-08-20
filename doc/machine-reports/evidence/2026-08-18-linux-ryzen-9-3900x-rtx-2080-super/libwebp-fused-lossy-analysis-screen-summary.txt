@@ -1,0 +1,34 @@
+Experiment: fused RGB/import plus exact lossy-analysis default-policy screen
+Base: 6f99fc9ae9b99f9426dbe6b45f26163ea995c962
+Hardware: Ryzen 9 3900X / RTX 2080 SUPER
+Build: Release, CMAKE_CUDA_ARCHITECTURES=native
+
+Profile basis:
+- Retained CPU lossy analysis cost 9.662--11.644 ms on medium inputs.
+- Ordinary exact CUDA analysis reduced the isolated stage to 1.002--1.043 ms
+  but its preceding automatic-policy experiment was end-to-end noise.
+- The distinct fused path queues RGB conversion and exact analysis on one
+  stream with one completion boundary and consumes identity-matched results.
+
+Protocol:
+- No source change: compare the retained default-off path with the existing
+  WEBP_CUDA_LOSSY_ANALYSIS=1 + WEBP_CUDA_FUSED_LOSSY_ANALYSIS=1 path.
+- Two order-reversed fresh processes per cell, one discarded warmup and three
+  retained 24-image samples per process (six rows/cell).
+- Frozen six-input medium/small PNG and JPEG corpus, method 4, quality 75.
+
+Results (even-sample median):
+  format  baseline     fused        gain       hash              bytes
+  PNG     39.568166    39.569219   -0.001053   455f70a1e139f043  6441688
+  JPEG    39.549203    39.403428    0.145775   0c4b078d5c4d3173  6400792
+
+Every one of the 24 rows retained the exact format hash and byte count. The
+integrated fused implementation's prior correctness gate covers methods
+0/4/6, qualities 25/75/95, odd geometry, identity mismatch, and transactional
+fallback; this screen changed no source or output arithmetic.
+
+Decision:
+Rejected with no source change. PNG was exactly neutral and JPEG gained only
+0.146 ms/image, both far below the 1.5 ms/image retention threshold. Keep
+ordinary and fused lossy analysis opt-in. No Turing/Ampere+ decimation
+threshold, Ampere+ behavior, or cross-hardware claim changed.

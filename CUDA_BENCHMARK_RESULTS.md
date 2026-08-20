@@ -2189,3 +2189,19 @@ hides the isolated stage reduction, so the source was restored and analysis
 remains opt-in. The result is below the 1.5 ms/image gate in both formats and
 makes no Ampere+ claim or threshold change. Raw artifacts use the
 `libwebp-lossy-analysis-default-*` prefix.
+
+## Fused lossy-analysis screen rejection
+
+The already-integrated fused RGB/analysis path was compared with retained
+defaults in two order-reversed fresh processes per format, six post-warmup
+24-image samples per cell:
+
+| Format | Default | Fused analysis | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 39.568166 ms/image | 39.569219 ms/image | -0.001053 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 39.549203 ms/image | 39.403428 ms/image | 0.145775 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+All 24 rows were exact. No source was changed; the fused path remains opt-in
+because neither format approaches the 1.5 ms/image gate. This screen makes no
+Ampere+ claim and changes no architecture threshold. Raw artifacts use the
+`libwebp-fused-lossy-analysis-screen-*` prefix.

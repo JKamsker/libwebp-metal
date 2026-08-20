@@ -350,6 +350,11 @@ focused tests, and decision summary. The candidate was removed after PNG
 gained only 0.200 ms/image and JPEG regressed 0.039 ms/image; exact lossy
 analysis remains opt-in.
 
+The `libwebp-fused-lossy-analysis-screen-*` files preserve 24 raw
+order-reversed PNG/JPEG rows and the decision summary for the existing fused
+RGB/analysis path. It remained opt-in after a neutral PNG result and only a
+0.146 ms/image JPEG gain.
+
 Inspect the sampling archives with:
 
 ```sh

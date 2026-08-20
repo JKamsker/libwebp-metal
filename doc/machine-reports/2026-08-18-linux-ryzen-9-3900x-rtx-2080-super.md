@@ -2409,3 +2409,18 @@ the large isolated stage reduction overlaps work already hidden by the
 persistent pipeline. Analysis remains opt-in. Artifacts use
 `libwebp-lossy-analysis-default-*`; Ampere+ behavior and the existing
 Turing/Ampere+ decimation threshold split are unchanged.
+
+## Fused lossy-analysis policy screen
+
+After ordinary automatic analysis proved neutral, the existing fused
+RGB/import plus exact-analysis path was screened without changing source. Two
+order-reversed processes per format retained six post-warmup 24-image rows per
+cell. PNG moved from 39.568166 ms/image to 39.569219 (0.001053 ms regression),
+and JPEG moved from 39.549203 to 39.403428 (0.145775 ms gain). All rows matched
+`455f70a1e139f043` / 6,441,688 bytes for PNG and
+`0c4b078d5c4d3173` / 6,400,792 bytes for JPEG.
+
+The fused completion boundary does not expose a hidden end-to-end win on this
+Turing pipeline. Both exact analysis paths remain opt-in; no source or
+architecture policy changed. Raw artifacts use
+`libwebp-fused-lossy-analysis-screen-*`.
