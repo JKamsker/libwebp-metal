@@ -2556,3 +2556,31 @@ provides a proof that I16 can be skipped. The retained source passed 7/7
 registered focused tests. Evidence uses
 `libwebp-i4-first-feasibility-*`; architecture thresholds/defaults, Ampere+
 behavior, and the frozen corpus/generator are unchanged.
+
+
+## Coefficient-token zero-pair feasibility screen
+
+The clean native build at `792e2592cdbda92f19a22ad3f2c6a4cfd50619bc`
+measured exact batch-24 full-corpus medians of 34.485 ms/image PNG and 35.322
+JPEG. Stage records and whole-thread sampling selected the recorder rather
+than another CUDA residual specialization: restored-source
+`VP8RecordCoeffTokens` CPU time was 0.520/0.460 seconds over 72 PNG/JPEG
+encodes, or 7.222/6.389 ms/image.
+
+A temporary exact counter measured the largest remaining structural store
+idea:
+
+| Workload | Pair coefficients / iterations | Maximum removed-store share |
+|---|---:|---:|
+| Full PNG corpus | 11,365,872 / 38,703,920 (29.366%) | 14.683% |
+| Full JPEG corpus | 11,392,000 / 39,563,288 (28.794%) | 14.397% |
+| Texture-medium PNG | 11,211,840 / 135,462,480 (8.277%) | 4.138% |
+| Texture-medium JPEG | 11,174,592 / 135,479,616 (8.248%) | 4.124% |
+
+One packed pair can remove only one store. Applying the full-corpus shares to
+the entire recorder, an intentionally impossible bound, yields 1.060 ms/image
+PNG and 0.920 JPEG. That is already below the gate before retaining statistics
+updates or adding pair/page handling, so no representation candidate followed.
+The probe was restored and 7/7 focused tests passed. Evidence uses
+`libwebp-token-zero-pair-*`; architecture thresholds/defaults, Ampere+
+behavior, and the frozen corpus/generator are unchanged.

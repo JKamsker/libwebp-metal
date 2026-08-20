@@ -1,0 +1,76 @@
+Functions sorted by metric: Exclusive Total CPU Time
+
+Excl. Total   Incl. Total    Name
+CPU           CPU
+ sec.      %   sec.      %
+5.964 100.00  5.964 100.00   <Total>
+2.602  43.62  2.672  44.80   VP8RecordCoeffTokens
+1.881  31.54  1.881  31.54   decode_mcu
+0.550   9.23  0.550   9.23   VP8PutTokenPage
+0.220   3.69  0.220   3.69   <static>@0x10e1a5 (<webp_cuda_batch_benchmark>)
+0.140   2.35  0.140   2.35   PackRGB_C
+0.080   1.34  0.080   1.34   read
+0.070   1.17  0.130   2.18   <static>@0x396586 (<libcuda.so.595.84>)
+0.070   1.17  0.080   1.34   <static>@0xaab1b (<libc.so.6>)
+0.050   0.84  2.772  46.48   RecordTokensFromResults
+0.050   0.84  0.050   0.84   SetResidualCoeffs_SSE2
+0.040   0.67  0.100   1.68   <static>@0x2067e0 (<libcuda.so.595.84>)
+0.040   0.67  0.040   0.67   VP8PutBit
+0.030   0.50  2.091  35.07   decompress_onepass
+0.020   0.34  0.020   0.34   <static>@0x1881e1 (<libc.so.6>)
+0.020   0.34  0.060   1.01   VP8CodeIntraModes
+0.010   0.17  0.010   0.17   <static>@0x120af2 (<webp_cuda_batch_benchmark>)
+0.010   0.17  0.010   0.17   <static>@0x7ffd265fa6f0 ([vdso])
+0.010   0.17  0.010   0.17   ImportBlock
+0.010   0.17  0.010   0.17   SetLoopParams
+0.010   0.17  0.010   0.17   WebPProfileStageBegin
+0.010   0.17  0.020   0.34   free
+0.010   0.17  0.010   0.17   ioctl
+0.010   0.17  0.010   0.17   madvise
+0.010   0.17  0.390   6.54   main
+0.010   0.17  0.010   0.17   pthread_mutex_unlock
+0.      0.    0.130   2.18   (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+0.      0.    0.020   0.34   (anonymous namespace)::CUDARGBToYUV(void*, WebPAcceleratorRGBToYUVRequest const*)
+0.      0.    0.020   0.34   (anonymous namespace)::CUDARGBToYUVLocked(void*, WebPAcceleratorRGBToYUVRequest const*)
+0.      0.    0.010   0.17   (anonymous namespace)::Initialize((anonymous namespace)::CudaState*)
+0.      0.    0.120   2.01   <static>@0x1d0f96 (<libcuda.so.595.84>)
+0.      0.    0.140   2.35   <static>@0x21b7b (<libcudart.so.12.0.146>)
+0.      0.    0.090   1.51   <static>@0x223510 (<libcuda.so.595.84>)
+0.      0.    0.060   1.01   <static>@0x245ece (<libcuda.so.595.84>)
+0.      0.    0.390   6.54   <static>@0x2a145 (<libc.so.6>)
+0.      0.    0.010   0.17   <static>@0x317126 (<libcuda.so.595.84>)
+0.      0.    0.120   2.01   <static>@0x36ab16 (<libcuda.so.595.84>)
+0.      0.    5.514  92.45   <static>@0x5115c (<libgp-collector.so>)
+0.      0.    0.080   1.34   <static>@0x93dfb (<libc.so.6>)
+0.      0.    5.514  92.45   <static>@0x9c526 (<libc.so.6>)
+0.      0.    0.140   2.35   <static>@0xf360 (<libcudart.so.12.0.146>)
+0.      0.    5.514  92.45   Execute
+0.      0.    0.080   1.34   ImgIoUtilReadFile
+0.      0.    0.020   0.34   ImportYUVAFromRGBA
+0.      0.    2.312  38.76   PredecodeInput
+0.      0.    2.232  37.42   ReadJPEG
+0.      0.    5.514  92.45   ThreadLoop
+0.      0.    0.010   0.17   VP8BitWriterWipeOut
+0.      0.    0.560   9.40   VP8EmitTokens
+0.      0.    0.290   4.87   VP8EncTokenLoop
+0.      0.    0.070   1.17   VP8EncWrite
+0.      0.    0.010   0.17   VP8IteratorImport
+0.      0.    0.130   2.18   WebPAccelerateLossyDecimate
+0.      0.    0.020   0.34   WebPAccelerateRGBToYUV
+0.      0.    0.130   2.18   WebPCUDALossyDecimate
+0.      0.    0.380   6.38   WebPEncode
+0.      0.    0.020   0.34   WebPPictureARGBToYUVADithered
+0.      0.    0.140   2.35   WebPPictureImportRGB
+0.      0.    0.010   0.17   __device_stub__ZN53_GLOBAL__N__e8a64b43_20_cuda_decimate_enc_cu_08a8e32714DecimateKernelENS_10DeviceViewENS_20DecimateKernelParamsEPh((anonymous namespace)::DeviceView&, (anonymous namespace)::DecimateKernelParams&, unsigned char*)
+0.      0.    0.390   6.54   __libc_start_main
+0.      0.    0.010   0.17   clock_gettime
+0.      0.    0.010   0.17   cuDevicePrimaryCtxRetain
+0.      0.    0.120   2.01   cuMemcpyDtoHAsync_v2
+0.      0.    0.010   0.17   cudaLaunchKernel
+0.      0.    0.120   2.01   cudaMemcpyAsync
+0.      0.    0.010   0.17   cudaSetDevice
+0.      0.    0.080   1.34   fread
+0.      0.    2.091  35.07   jpeg_read_scanlines
+0.      0.    0.070   1.17   malloc
+0.      0.    2.091  35.07   process_data_simple_main
+

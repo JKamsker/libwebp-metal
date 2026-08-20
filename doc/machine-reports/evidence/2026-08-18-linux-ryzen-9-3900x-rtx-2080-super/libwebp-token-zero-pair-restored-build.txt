@@ -1,0 +1,14 @@
+[  3%] Built target sharpyuv
+[ 10%] Built target webputils
+[ 35%] Built target webpdspdecode
+[ 71%] Built target webpdsp
+[ 71%] Building C object CMakeFiles/webpencode.dir/src/enc/token_enc.c.o
+[ 76%] Built target webpdecode
+[ 90%] Built target webpencode
+[ 92%] Linking CUDA static library libwebp.a
+[ 92%] Built target webp
+[ 93%] Built target imageioutil
+[ 94%] Built target webpdemux
+[100%] Built target imagedec
+[100%] Linking CUDA executable webp_cuda_batch_benchmark
+[100%] Built target webp_cuda_batch_benchmark

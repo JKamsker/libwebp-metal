@@ -2968,3 +2968,41 @@ The retained source passed all seven registered focused tests after the three
 CPU test executables absent from the benchmark-only cache were built. This is
 RTX 2080 SUPER-only evidence; the 784/12,544 pre-Ampere and 64/4,000 Ampere+
 thresholds, architecture split, frozen corpus, and generator are unchanged.
+
+
+## Coefficient-token zero-pair feasibility rejection
+
+At clean parent `792e2592cdbda92f19a22ad3f2c6a4cfd50619bc`, the native Release
+stage refresh produced exact full-corpus medians of 34.485 ms/image PNG and
+35.322 JPEG. Texture-medium remained the critical host case:
+
+| Format | Total | Decimate/collect/replay | Token emit | Write |
+|---|---:|---:|---:|---:|
+| PNG | 79.262 ms | 47.572 ms | 15.746 ms | 8.563 ms |
+| JPEG | 82.280 ms | 47.192 ms | 18.388 ms | 9.477 ms |
+
+Whole-thread texture sampling assigned 46.57% of PNG CPU samples and 43.62%
+of JPEG samples to `VP8RecordCoeffTokens`. The restored-source full-corpus
+control measured 0.520/0.460 seconds in that function over 72 encodes, equal
+to 7.222/6.389 ms/image.
+
+The adjacent ledgers already reject local token-buffer state, packed nonzero
+pairs, statistics batching, generation/statistics overlap, and direct result
+coding. A temporary counter therefore screened disjoint consecutive-zero
+packing before opening another representation candidate. Full-corpus pair
+coefficients covered 29.366% PNG and 28.794% JPEG iterations, but one pair can
+remove only one store: at most 14.683% and 14.397%. The critical
+texture-medium maxima were just 4.138% and 4.124%.
+
+Even deleting the full-corpus fraction of the entire recorder, rather than a
+single store while retaining statistics, bounds the benefit at 1.060 ms/image
+PNG and 0.920 JPEG. Pair detection and page handling can only lower it. No
+representation candidate was implemented; the counter was removed and the
+restored tree passed 7/7 focused tests.
+
+Raw exact timing/hashes, stage records, counters, probe patch, annotated
+disassembly, full and texture compressed `gprofng` experiments, and restored
+build/test logs use `libwebp-token-zero-pair-*` in the adjacent evidence
+directory. This is RTX 2080 SUPER-only evidence; the 784/12,544 pre-Ampere and
+64/4,000 Ampere+ thresholds, architecture split, frozen corpus, and generator
+are unchanged.

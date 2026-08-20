@@ -127,6 +127,7 @@ that hardware and workload.
 | Eight-partition AVX2 lockstep boolean coder | The retained eight-partition profile left boolean coding as the largest distinct CPU chain: `VP8PutTokenPage` held 35.41% of zero-loss whole-process samples, while fresh partition controls showed that eight independent emit workers remained best. One coarse candidate replaced those eight OS workers with a single AVX2 routine that advanced all eight arithmetic coders in lockstep. The 2,758-byte SIMD routine gathered exact range/shift transitions and retained scalar per-lane byte flushes. All 12 timing outputs were exact and the corrected candidate build passed 7/7 focused CTests. PNG moved 36.791 to 48.201 ms/image; JPEG moved 35.072 to 51.666. | Rejected and removed. Giving up eight Zen 2 cores for one SIMD thread regressed PNG/JPEG by 11.410/16.594 ms/image. Cross-partition SIMD cannot hide scalar token/probability loads, unequal partition lengths, or independent byte flushing. Do not retry this one-core/eight-lane mapping without a fundamentally different profile. RTX 2080 SUPER only; no architecture policy changed. |
 | Pre-Ampere pinned decimate-result staging | A refreshed native profile kept decimation first at 18.927/18.666 ms/image PNG/JPEG. Streaming conformance isolated 1.534--1.536 ms per 1600x1200 image in four pageable result/Y/U/V downloads per band. One Turing-only candidate used page-locked staging with ordinary-allocation fallback; Ampere+ stayed unchanged. It cut transfer-event time to about 0.733 ms, but callback wall by only 0.05--0.08 ms because copies already overlap later diagonals and encoder-owned outputs still require a host copy. All 12 timing outputs and 48 conformance outputs were exact; candidate/restored builds passed 7/7 CTests. PNG moved 35.695 to 35.976 ms/image and JPEG 36.239 to 35.385. | Rejected and removed. PNG regressed 0.281 ms/image and JPEG gained only 0.854, below the two-format 1.5 ms/image gate. Do not infer end-to-end gain from CUDA event transfer time when existing stream overlap and host commit remain. RTX 2080 SUPER only; no Ampere+ or threshold change. |
 | I4-first / I16-pruning feasibility | A fresh native-sm_75 trace kept I4 at 63--65% of photo/texture block cycles. Exact medium-fixture outcomes were 191/7,500 I4 for graphic, 4,101/7,500 for photo, and 7,500/7,500 for texture. This screened reversing the luma order so final I4 winners could avoid I16. | Rejected before source change. I4's exact raster search consumes the completed I16 score as its per-block abort threshold; reversing it forces extra work on the 97.45%-I16 graphic case. Final-mode coverage cannot certify an I16 skip, and the request exposes neither an exact content discriminator nor a strong pre-quantization I16 lower bound. Do not replace exact proof with a segment/content heuristic. RTX 2080 SUPER only; no architecture policy changed. |
+| Coefficient-token zero-pair feasibility | A fresh whole-thread profile again selected `VP8RecordCoeffTokens`: 0.520 seconds PNG and 0.460 JPEG over 72 full-corpus encodes (7.222/6.389 ms/image). A counter-only probe found disjoint zero pairs covered 29.366%/28.794% of coefficient iterations, permitting at most one fewer store per pair, or 14.683%/14.397% of coefficient iterations. On the critical texture-medium path the maximum fell to 4.138%/4.124%. | Rejected before a representation candidate. Even pretending pair packing deletes the same fraction of the entire recorder—not merely one store while preserving statistics—bounds the full-corpus benefit at 1.060 ms/image PNG and 0.920 JPEG, below the two-format gate. The probe was removed and restored source passed 7/7 tests. Do not retry zero-pair token packing without a different representation/profile that removes additional work. RTX 2080 SUPER only; no architecture policy changed. |
 
 All original and follow-up benchmark rows produced stable expected checksums.
 The historical color rows remain raw evidence, but their ratios are not matched
@@ -1407,3 +1408,34 @@ was opened. The retained source passed all seven registered focused tests.
 Evidence uses `libwebp-i4-first-feasibility-*`. Architecture
 thresholds/defaults, Ampere+ behavior, and the frozen corpus/generator are
 unchanged.
+
+
+## Coefficient-token zero-pair feasibility rejection
+
+At clean parent `792e2592cdbda92f19a22ad3f2c6a4cfd50619bc`, the native stage
+profile produced exact full-corpus medians of 34.485 ms/image PNG and 35.322
+JPEG. Texture-medium remained the host-side worst case at 79.262/82.280 ms
+total, including 47.572/47.192 ms in decimate/collect/replay and
+15.746/18.388 ms in token emission.
+
+Whole-thread sampling selected `VP8RecordCoeffTokens` again. A restored-source
+full-corpus profile measured 0.520 seconds PNG and 0.460 JPEG in the function
+over 72 encodes, or 7.222 and 6.389 ms/image. The existing local-cursor,
+packed-nonzero-pair, statistics-batching, split-generation, and direct-coding
+avenues are already exhausted, so a counter-only probe screened a distinct
+representation change: packing disjoint consecutive zero decisions.
+
+The probe found pair coefficients covered 29.366% of all PNG and 28.794% of
+all JPEG coefficient iterations. Because one packed pair removes at most one
+store, the maximum store reduction is half those shares: 14.683% and 14.397%.
+Assigning that fraction unrealistically to the entire recorder gives only
+1.060 ms/image PNG and 0.920 JPEG. The actual candidate would retain both
+statistics updates and add detection and page-boundary work; texture-medium's
+maximum store share was smaller still at 4.138%/4.124%.
+
+No representation candidate was built. The probe was removed and the restored
+source passed all seven focused tests. Raw stage rows, exact counters and
+hashes, probe patch, restored build/tests, annotated disassembly, and
+compressed `gprofng` experiments use `libwebp-token-zero-pair-*`.
+Architecture thresholds/defaults, Ampere+ behavior, and the frozen
+corpus/generator are unchanged.

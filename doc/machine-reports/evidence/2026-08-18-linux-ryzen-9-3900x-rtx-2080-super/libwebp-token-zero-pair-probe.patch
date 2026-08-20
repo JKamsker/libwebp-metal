@@ -1,0 +1,83 @@
+diff --git a/src/enc/token_enc.c b/src/enc/token_enc.c
+index 9fe8adcc..8be96cb7 100644
+--- a/src/enc/token_enc.c
++++ b/src/enc/token_enc.c
+@@ -17,6 +17,7 @@
+ // Author: Skal (pascal.massimino@gmail.com)
+ 
+ #include <assert.h>
++#include <stdio.h>
+ #include <stdlib.h>
+ #include <string.h>
+ 
+@@ -44,6 +45,36 @@ struct VP8Tokens {
+ // This macro is used to return their address and hide the trick.
+ #define TOKEN_DATA(p) ((const token_t*)&(p)[1])
+ 
++// Temporary feasibility probe for packing disjoint consecutive zero tokens.
++// Enabled only by WEBP_TOKEN_ZERO_PAIR_PROBE=1 and removed after measurement.
++static int g_zero_pair_probe_enabled = -1;
++static unsigned long long g_zero_pair_probe_calls;
++static unsigned long long g_zero_pair_probe_coeffs;
++static unsigned long long g_zero_pair_probe_zeros;
++static unsigned long long g_zero_pair_probe_pair_coeffs;
++
++static int ZeroPairProbeEnabled(void) {
++  if (g_zero_pair_probe_enabled < 0) {
++    const char* const value = getenv("WEBP_TOKEN_ZERO_PAIR_PROBE");
++    g_zero_pair_probe_enabled =
++        (value != NULL && value[0] == '1' && value[1] == '\0');
++  }
++  return g_zero_pair_probe_enabled;
++}
++
++#if defined(__GNUC__) || defined(__clang__)
++__attribute__((destructor))
++#endif
++static void ReportZeroPairProbe(void) {
++  if (g_zero_pair_probe_enabled > 0) {
++    fprintf(stderr,
++            "token zero-pair probe: calls=%llu coeffs=%llu zeros=%llu "
++            "pair_coeffs=%llu\n",
++            g_zero_pair_probe_calls, g_zero_pair_probe_coeffs,
++            g_zero_pair_probe_zeros, g_zero_pair_probe_pair_coeffs);
++  }
++}
++
+ //------------------------------------------------------------------------------
+ 
+ void VP8TBufferInit(VP8TBuffer* const b, int page_size) {
+@@ -119,9 +150,12 @@ int VP8RecordCoeffTokens(int ctx, const struct VP8Residual* const res,
+   const int coeff_type = res->coeff_type;
+   const int last = res->last;
+   int n = res->first;
++  const int probe = ZeroPairProbeEnabled();
++  int probe_second_of_pair = 0;
+   uint32_t base_id = TOKEN_ID(coeff_type, n, ctx);
+   // should be stats[VP8EncBands[n]], but it's equivalent for n=0 or 1
+   proba_t* s = res->stats[n][ctx];
++  if (probe) __sync_fetch_and_add(&g_zero_pair_probe_calls, 1);
+   if (!AddToken(tokens, last >= 0, base_id + 0, s + 0)) {
+     return 0;
+   }
+@@ -130,6 +164,20 @@ int VP8RecordCoeffTokens(int ctx, const struct VP8Residual* const res,
+     const int c = coeffs[n++];
+     const int sign = c < 0;
+     const uint32_t v = sign ? -c : c;
++    if (probe) {
++      __sync_fetch_and_add(&g_zero_pair_probe_coeffs, 1);
++      if (v == 0) {
++        __sync_fetch_and_add(&g_zero_pair_probe_zeros, 1);
++        if (!probe_second_of_pair && n < 16 && coeffs[n] == 0) {
++          __sync_fetch_and_add(&g_zero_pair_probe_pair_coeffs, 2);
++          probe_second_of_pair = 1;
++        } else {
++          probe_second_of_pair = 0;
++        }
++      } else {
++        probe_second_of_pair = 0;
++      }
++    }
+     if (!AddToken(tokens, v != 0, base_id + 1, s + 1)) {
+       base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 0);  // ctx=0
+       s = res->stats[VP8EncBands[n]][0];
