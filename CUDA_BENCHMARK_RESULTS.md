@@ -2508,3 +2508,25 @@ configured CTests. The candidate was rejected and restored because it missed
 the 1.5 ms/image gate in both formats. Evidence uses
 `libwebp-residual-packed4-*`; architecture thresholds, Ampere+ behavior, and
 the frozen corpus/generator are unchanged.
+
+
+## Lossy write-boundary upper-bound screen
+
+A fresh native Release stage trace used
+`-DCMAKE_CUDA_ARCHITECTURES=native`, two warmup batch-24 iterations, and eight
+measured iterations. The 192 measured image records per format averaged the
+lossy write boundary at 2.148 ms/image PNG and 1.892 JPEG.
+
+No source was changed. With hardware sampling denied by
+`perf_event_paranoid=4`, `gprofng` clock profiles over 360 encodes per format
+measured only 0.139 ms/image of inclusive user CPU in `VP8EncWrite`. Tracing
+240 additional encodes attributed 1.148 ms/image PNG and 1.001 JPEG to every
+memory-management syscall in the whole process. Adding all of that unrelated
+allocation work to the write CPU time gives intentionally impossible upper
+bounds of 1.287 and 1.139 ms/image, respectively.
+
+Both bounds are below the 1.5 ms/image two-format gate, so buffer reservation,
+partition assembly, and writer-copy candidates were rejected on feasibility
+without a source edit. Evidence uses `libwebp-write-boundary-*`; architecture
+thresholds/defaults, Ampere+ behavior, and the frozen corpus/generator are
+unchanged.

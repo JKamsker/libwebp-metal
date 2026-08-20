@@ -2901,3 +2901,36 @@ because PNG was below the 1.5 ms/image threshold and JPEG regressed. Raw
 evidence uses `libwebp-residual-packed4-*`. This is RTX 2080 SUPER evidence
 only; the 784/12,544 pre-Ampere and 64/4,000 Ampere+ thresholds, Ampere+
 behavior, frozen corpus, and generator remain unchanged.
+
+
+## Lossy write-boundary feasibility rejection
+
+At clean parent `3deb8d76784d650cc0f54a34858ae545f55eb6c4`, a native Release
+build with `-DCMAKE_CUDA_ARCHITECTURES=native` collected two warmup and eight
+measured batch-24 stage iterations. Across 192 measured image records per
+format, `VP8EncWrite` averaged 2.148 ms/image PNG and 1.892 JPEG.
+
+The host denied `perf` sampling at `perf_event_paranoid=4`, so `gprofng` clock
+profiles covered one warmup and two measured batch-120 iterations per format.
+Across all 360 encodes, inclusive `VP8EncWrite` user CPU totaled 50 ms, or
+0.139 ms/image. Resolved samples were partition-0 mode-bit coding,
+bit-writer cleanup, and memory-writer copying.
+
+A separate one-warmup/one-measured batch-120 `strace` control then provided a
+conservative feasibility bound. Every `brk`, `mmap`, `munmap`, and `madvise`
+second in the entire 240-encode process—not merely calls under
+`VP8EncWrite`—totaled 275.499 ms PNG and 240.139 ms JPEG. Adding those whole-
+process memory costs to the write user CPU produced:
+
+| Format | Write wall | Write user CPU | All memory syscalls | Upper bound |
+|---|---:|---:|---:|---:|
+| PNG lossy | 2.148 ms/image | 0.139 ms/image | 1.148 ms/image | 1.287 ms/image |
+| JPEG lossy | 1.892 ms/image | 0.139 ms/image | 1.001 ms/image | 1.139 ms/image |
+
+Because even this impossible deletion of unrelated process work misses the
+1.5 ms/image gate in both formats, no output-buffer or partition-assembly
+candidate was opened. Raw stage rows, compressed `gprofng` experiments,
+function/call-tree reports, syscall summaries, the denied `perf` record, and
+the calculation use `libwebp-write-boundary-*`. This is RTX 2080 SUPER-only
+evidence; architecture thresholds/defaults, Ampere+ behavior, frozen corpus,
+and generator remain unchanged.

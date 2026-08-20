@@ -1350,3 +1350,31 @@ regressed. Raw profile selection, exact patch, native caches/builds/tests,
 resource reports, and timing rows use `libwebp-residual-packed4-*`.
 Architecture thresholds, Ampere+ behavior, and the frozen publication corpus
 and generator are unchanged.
+
+
+## Lossy write-boundary feasibility rejection
+
+At clean parent `3deb8d76784d650cc0f54a34858ae545f55eb6c4`, a fresh native
+stage profile averaged `VP8EncWrite` at 2.148 ms/image PNG and 1.892 JPEG over
+192 measured image records per format. Hardware sampling was unavailable
+because this host has `perf_event_paranoid=4`, so a no-source-change `gprofng`
+clock profile and syscall control resolved the actionable portion.
+
+Across 360 encodes per format, `VP8EncWrite` accumulated only 50 ms of user
+CPU time, or 0.139 ms/image. Its resolved samples were limited to partition-0
+mode bits, bit-writer cleanup, and the memory-writer copy. A deliberately
+generous upper bound then added every `brk`, `mmap`, `munmap`, and `madvise`
+second from the entire 240-encode traced process, including allocation work
+outside the write boundary:
+
+| Format | Write wall | User CPU | All memory syscalls | Impossible upper bound |
+|---|---:|---:|---:|---:|
+| PNG lossy | 2.148 ms/image | 0.139 ms/image | 1.148 ms/image | 1.287 ms/image |
+| JPEG lossy | 1.892 ms/image | 0.139 ms/image | 1.001 ms/image | 1.139 ms/image |
+
+Even deleting more work than a real write optimization can touch stays below
+the 1.5 ms/image gate in both formats. No source candidate was opened. Raw
+stage rows, compressed `gprofng` experiments, function/call-tree reports,
+syscall summaries, the denied `perf` diagnostic, and the calculation use
+`libwebp-write-boundary-*`. Architecture thresholds/defaults, Ampere+
+behavior, and the frozen publication corpus/generator are unchanged.

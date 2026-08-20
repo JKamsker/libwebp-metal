@@ -1,0 +1,10 @@
+parent_commit=3deb8d76784d650cc0f54a34858ae545f55eb6c4
+build=Release,-DCMAKE_CUDA_ARCHITECTURES=native,WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT=ON
+stage_profile=two warmup batch-24 iterations followed by eight measured iterations; 192 measured image records per format
+cycle_profile=one warmup plus two measured batch-120 iterations; 360 total encodes per format
+syscall_profile=one warmup plus one measured batch-120 iteration; 240 total encodes per format
+perf_status=denied by perf_event_paranoid=4
+fallback_profiler=gprofng clock profiling with raw experiments archived as zstd-compressed tar files
+upper_bound=VP8EncWrite inclusive user CPU plus every brk/mmap/munmap/madvise second in the whole traced process, divided by all encodes
+rationale=the upper bound deliberately includes memory-management work outside VP8EncWrite, so any real write-only optimization must save less
+decision=reject without source candidate because PNG 1.286801 and JPEG 1.139468 ms/image are both below the 1.5 ms/image gate
