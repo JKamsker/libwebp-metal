@@ -60,7 +60,17 @@ jobs:
           -DWEBP_BUILD_WEBPMUX=OFF
       - name: Build and run registered tests
         run: |
-          cmake --build build-cuda --target cwebp dwebp cuda_concurrency_test cuda_histogram_test cuda_trellis_test cuda_near_lossless_test --parallel 2
+          cmake --build build-cuda \
+            --target \
+              cwebp \
+              dwebp \
+              bit_writer_utils_test \
+              accelerator_enc_test \
+              cuda_concurrency_test \
+              cuda_histogram_test \
+              cuda_trellis_test \
+              cuda_near_lossless_test \
+            --parallel 2
           ctest --test-dir build-cuda --output-on-failure
       - name: Forced public-encoder parity suite
         env:
