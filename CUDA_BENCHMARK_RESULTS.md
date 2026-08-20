@@ -2483,3 +2483,28 @@ All 12 timing rows and 48 conformance rows were exact; candidate and restored
 builds passed 7/7 focused CTests. The candidate was rejected and removed.
 Evidence uses `libwebp-pinned-staging-*`. No architecture threshold, Ampere+
 behavior, frozen corpus input, or generator changed.
+
+
+## Pre-Ampere packed I4 coefficient-load screen
+
+The retained native profile selected the scalar I4 residual scorer after
+decimation remained 18.927/18.666 ms/image for PNG/JPEG and I4 retained about
+63--65% of realistic photo/texture block cycles. The candidate replaced
+sixteen scalar shared coefficient loads with four aligned 64-bit loads only
+on pre-Ampere devices; Ampere+ retained the original path. Kernel resources
+were 102 registers and 23,392 shared bytes, versus 103 and 23,392 for the
+parent.
+
+Native Release builds used `-DCMAKE_CUDA_ARCHITECTURES=native`. Each cell is
+the median of three post-warmup batch-24 file-I/O rows:
+
+| Format | Parent | Packed loads | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 35.626 ms/image | 35.063 ms/image | 0.563 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 33.736 ms/image | 34.028 ms/image | -0.292 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+All twelve rows were exact, and candidate/restored builds passed 8/8
+configured CTests. The candidate was rejected and restored because it missed
+the 1.5 ms/image gate in both formats. Evidence uses
+`libwebp-residual-packed4-*`; architecture thresholds, Ampere+ behavior, and
+the frozen corpus/generator are unchanged.

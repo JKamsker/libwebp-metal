@@ -1319,3 +1319,34 @@ ms/image gate. Raw stage/phase profiles, syscall control, compressed exact
 fixtures, pageable/pinned transfer rows, patch, builds, tests, and timings use
 `libwebp-pinned-staging-*`. Architecture thresholds, Ampere+ behavior, and
 the frozen publication corpus/generator are unchanged.
+
+
+## Pre-Ampere packed I4 residual-load rejection
+
+At parent `4565c4206fa427460e05258e2aaa8c418211a24d`, the refreshed
+native stage profile still placed decimation at 18.927 ms/image PNG and
+18.666 JPEG. I4 held about 63--65% of realistic photo/texture block cycles,
+and scalar residual scoring remained its largest warp after scan, subgroup,
+handoff, fixed-cost, table, and coefficient-mirror variants had been
+exhausted.
+
+One pre-Ampere-only candidate loaded each contiguous sixteen-coefficient I4
+block as four aligned 64-bit shared-memory words while preserving the scalar
+probability/context dependency. A uniform runtime parameter kept the original
+path on Ampere+. Native resource usage changed from 103 to 102 registers and
+kept shared memory at 23,392 bytes.
+
+One warmup and three measured batch-24 file-I/O rows per variant and format
+were exact:
+
+| Format | Parent | Packed loads | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 35.626 ms/image | 35.063 ms/image | 0.563 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 33.736 ms/image | 34.028 ms/image | -0.292 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+Candidate and restored native builds passed all eight configured CTests. The
+candidate was removed because PNG was below the 1.5 ms/image gate and JPEG
+regressed. Raw profile selection, exact patch, native caches/builds/tests,
+resource reports, and timing rows use `libwebp-residual-packed4-*`.
+Architecture thresholds, Ampere+ behavior, and the frozen publication corpus
+and generator are unchanged.

@@ -1,0 +1,100 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index 7809e965..b206d1d0 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -105,6 +105,7 @@ struct DecimateKernelParams {
+   int32_t max_i4_header_bits;
+   uint32_t use_error_diffusion;
+   uint32_t rd_opt_level;
++  uint32_t pre_ampere_tuning;
+   uint32_t diagonal;       // current skewed diagonal (x + 2y)
+   uint32_t y_min;          // first tile row on this diagonal
+ };
+@@ -237,6 +238,55 @@ __device__ int ResidualCostDev(const CostCache* c, int ctx0, int first,
+   return cost;
+ }
+ 
++// Pre-Ampere I4 residual scorer. Load the sixteen contiguous coefficients as
++// four packed shared-memory words, then retain the scalar scoring dependency.
++// This reduces shared-load instructions without changing the bit-cost path.
++__device__ int ResidualCostPacked4Dev(const CostCache* c, int ctx0, int first,
++                                      int coeff_type,
++                                      const int16_t* coeffs) {
++  const unsigned long long* const packed_coeffs =
++      reinterpret_cast<const unsigned long long*>(coeffs);
++  const unsigned long long packed0 = packed_coeffs[0];
++  const unsigned long long packed1 = packed_coeffs[1];
++  const unsigned long long packed2 = packed_coeffs[2];
++  const unsigned long long packed3 = packed_coeffs[3];
++  const unsigned long long packed[4] = {packed0, packed1, packed2, packed3};
++  int last = -1;
++  for (int n = 15; n >= 0; --n) {
++    const int val = (int)(int16_t)(packed[n >> 2] >> ((n & 3) * 16));
++    if (val != 0) {
++      last = n;
++      break;
++    }
++  }
++  int n = first;
++  const int p0 = FirstProba(c, coeff_type, kEncBands[n], ctx0);
++  const uint16_t* t = LevelCostTable(c, coeff_type, kEncBands[n], ctx0);
++  int cost = (ctx0 == 0) ? BitCostDev(c, 1, p0) : 0;
++  if (last < 0) {
++    return BitCostDev(c, 0, p0);
++  }
++  for (; n < last; ++n) {
++    const int coeff = (int)(int16_t)(packed[n >> 2] >> ((n & 3) * 16));
++    const int val = abs(coeff);
++    const int ctx = (val >= 2) ? 2 : val;
++    cost += LevelCostDev(c, t, val);
++    t = LevelCostTable(c, coeff_type, kEncBands[n + 1], ctx);
++  }
++  {
++    const int coeff = (int)(int16_t)(packed[n >> 2] >> ((n & 3) * 16));
++    const int val = abs(coeff);
++    cost += LevelCostDev(c, t, val);
++    if (n < 15) {
++      const int b = kEncBands[n + 1];
++      const int ctx = (val == 1) ? 1 : 2;
++      const int last_p0 = FirstProba(c, coeff_type, b, ctx);
++      cost += BitCostDev(c, 0, last_p0);
++    }
++  }
++  return cost;
++}
++
+ // Warp-cooperative GetResidualCost_C: each coefficient's incoming context
+ // depends only on the previous coefficient's value (0/1/2+), so all 16
+ // costs are computed on parallel lanes and warp-reduced. Bit-exact against
+@@ -548,7 +598,7 @@ struct MBWork {
+   int i16_flat[4];
+   // Intra4 per-mode scratch (one sub-block at a time).
+   int16_t i4_tmp[2][kNumBModes][16];
+-  int16_t i4_levels[2][kNumBModes][16];
++  __align__(8) int16_t i4_levels[2][kNumBModes][16];
+   uint8_t i4_out[2][kNumBModes][4 * kCudaBPS];
+   int i4_transform_tmp[2][kNumBModes][16];
+   int i4_nz[2][kNumBModes];
+@@ -1480,8 +1530,12 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+         const uint8_t* const src =
+             w.yuv_in + kCudaYOffEnc + kCudaVP8Scan[block];
+         if (warp == 0 && lane < kNumBModes) {
+-          w.i4_rcost[team][lane] = ResidualCostDev(
+-              &cc, ctx, 0, 3, w.i4_levels[team][lane]);
++          w.i4_rcost[team][lane] =
++              p.pre_ampere_tuning
++                  ? ResidualCostPacked4Dev(
++                        &cc, ctx, 0, 3, w.i4_levels[team][lane])
++                  : ResidualCostDev(&cc, ctx, 0, 3,
++                                    w.i4_levels[team][lane]);
+         } else if (warp == 2 && lane < kNumBModes) {
+           w.i4_sse[team][lane] =
+               CudaSSE4x4(src, w.i4_out[team][lane]);
+@@ -2734,6 +2788,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
+     params.max_i4_header_bits = request->max_i4_header_bits;
+     params.use_error_diffusion = (uint32_t)request->use_error_diffusion;
+     params.rd_opt_level = (uint32_t)request->rd_opt_level;
++    params.pre_ampere_tuning = DecimateDeviceIsAmpereOrNewer() ? 0u : 1u;
+ 
+     (void)cudaGetLastError();
+     const int last_diagonal =

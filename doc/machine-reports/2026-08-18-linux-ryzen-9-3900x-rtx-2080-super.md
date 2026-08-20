@@ -2870,3 +2870,34 @@ and JPEG missed the 1.5 ms/image gate. Raw evidence uses
 `libwebp-pinned-staging-*`. This is Ryzen 9 3900X / RTX 2080 SUPER evidence
 only; the 784/12,544 pre-Ampere and 64/4,000 Ampere+ thresholds, Ampere+
 behavior, frozen corpus, and generator remain unchanged.
+
+
+## Pre-Ampere packed I4 residual-load rejection
+
+At parent `4565c4206fa427460e05258e2aaa8c418211a24d`, the refreshed native
+profile still measured decimation at 18.927 ms/image PNG and 18.666 JPEG. I4
+accounted for about 63--65% of realistic photo/texture block cycles, with the
+scalar residual scorer its largest warp after the previously rejected scan,
+subgroup, fixed-cost, table, handoff, and coefficient-layout avenues.
+
+The single candidate used four aligned 64-bit shared loads for each contiguous
+sixteen-coefficient I4 block on pre-Ampere devices, then ran the unchanged
+scalar cost dependency. A uniform runtime flag left Ampere+ on the original
+implementation. `cuobjdump` reported 102 registers and 23,392 shared bytes,
+versus 103 and 23,392 for the exact parent.
+
+One warmup and three measured native batch-24 file-I/O rows per build and
+format produced:
+
+| Format | Parent | Packed loads | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 35.626 ms/image | 35.063 ms/image | 0.563 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 33.736 ms/image | 34.028 ms/image | -0.292 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+All twelve rows were exact. Candidate and restored native builds passed all
+eight configured CTests, including trellis, histogram, concurrency,
+near-lossless, and decimate conformance self-test. The source was restored
+because PNG was below the 1.5 ms/image threshold and JPEG regressed. Raw
+evidence uses `libwebp-residual-packed4-*`. This is RTX 2080 SUPER evidence
+only; the 784/12,544 pre-Ampere and 64/4,000 Ampere+ thresholds, Ampere+
+behavior, frozen corpus, and generator remain unchanged.

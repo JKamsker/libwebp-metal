@@ -1,0 +1,22 @@
+[  5%] Built target sharpyuv
+[ 11%] Built target webputils
+[ 35%] Built target webpdspdecode
+[ 49%] Built target webpencode
+[ 85%] Built target webpdsp
+[ 90%] Built target webpdecode
+[ 90%] Built target webp
+[ 92%] Built target webpdemux
+[ 93%] Built target imageioutil
+[ 94%] Building C object CMakeFiles/imagedec.dir/imageio/jpegdec.c.o
+[ 94%] Building C object CMakeFiles/imagedec.dir/imageio/image_dec.c.o
+[ 94%] Building C object CMakeFiles/imagedec.dir/imageio/metadata.c.o
+[ 94%] Building C object CMakeFiles/imagedec.dir/imageio/webpdec.c.o
+[ 96%] Building C object CMakeFiles/imagedec.dir/imageio/wicdec.c.o
+[ 96%] Building C object CMakeFiles/imagedec.dir/imageio/pnmdec.c.o
+[ 97%] Building C object CMakeFiles/imagedec.dir/imageio/tiffdec.c.o
+[ 98%] Building C object CMakeFiles/imagedec.dir/imageio/pngdec.c.o
+[ 98%] Linking CUDA static library libimagedec.a
+[ 98%] Built target imagedec
+[ 98%] Building C object CMakeFiles/webp_cuda_batch_benchmark.dir/tools/cuda_batch_benchmark.c.o
+[100%] Linking CUDA executable webp_cuda_batch_benchmark
+[100%] Built target webp_cuda_batch_benchmark

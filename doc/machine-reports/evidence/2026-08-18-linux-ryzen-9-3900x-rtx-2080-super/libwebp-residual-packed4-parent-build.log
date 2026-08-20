@@ -1,0 +1,203 @@
+[  2%] Building C object CMakeFiles/webputils.dir/src/utils/color_cache_utils.c.o
+[  2%] Building C object CMakeFiles/webputils.dir/src/utils/quant_levels_dec_utils.c.o
+[  2%] Building C object CMakeFiles/webputils.dir/src/utils/random_utils.c.o
+[  2%] Building C object CMakeFiles/webputils.dir/src/utils/bit_reader_utils.c.o
+[  2%] Building C object CMakeFiles/sharpyuv.dir/sharpyuv/sharpyuv_sse2.c.o
+[  2%] Building C object CMakeFiles/webputils.dir/src/utils/filters_utils.c.o
+[  5%] Building C object CMakeFiles/sharpyuv.dir/sharpyuv/sharpyuv_neon.c.o
+[  5%] Building C object CMakeFiles/webputils.dir/src/utils/rescaler_utils.c.o
+[  5%] Building C object CMakeFiles/webpencode.dir/src/enc/accelerator_enc.c.o
+[  5%] Building C object CMakeFiles/webputils.dir/src/utils/palette.c.o
+[  6%] Building C object CMakeFiles/sharpyuv.dir/sharpyuv/sharpyuv_cpu.c.o
+[  7%] Building C object CMakeFiles/webpencode.dir/src/enc/analysis_enc.c.o
+[  6%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/cpu.c.o
+[  8%] Building C object CMakeFiles/webputils.dir/src/utils/thread_utils.c.o
+[  8%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/alpha_processing.c.o
+[  8%] Building C object CMakeFiles/sharpyuv.dir/sharpyuv/sharpyuv_csp.c.o
+[ 10%] Building C object CMakeFiles/webpencode.dir/src/enc/backward_references_cost_enc.c.o
+[ 10%] Building C object CMakeFiles/sharpyuv.dir/sharpyuv/sharpyuv_gamma.c.o
+[ 10%] Building C object CMakeFiles/webputils.dir/src/utils/utils.c.o
+[ 11%] Building C object CMakeFiles/sharpyuv.dir/sharpyuv/sharpyuv_dsp.c.o
+[ 11%] Building C object CMakeFiles/webputils.dir/src/utils/huffman_utils.c.o
+[ 12%] Building C object CMakeFiles/webpencode.dir/src/enc/alpha_enc.c.o
+[ 12%] Building C object CMakeFiles/webpdsp.dir/src/dsp/alpha_processing.c.o
+[ 12%] Building C object CMakeFiles/webputils.dir/src/utils/bit_writer_utils.c.o
+[ 13%] Building C object CMakeFiles/webputils.dir/src/utils/huffman_encode_utils.c.o
+[ 13%] Building C object CMakeFiles/webpencode.dir/src/enc/backward_references_enc.c.o
+[ 13%] Building C object CMakeFiles/webputils.dir/src/utils/quant_levels_utils.c.o
+[ 13%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/dec.c.o
+[ 13%] Building C object CMakeFiles/sharpyuv.dir/sharpyuv/sharpyuv.c.o
+[ 15%] Building C object CMakeFiles/webpdsp.dir/src/dsp/cpu.c.o
+[ 16%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/dec_clip_tables.c.o
+[ 16%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/filters.c.o
+[ 16%] Building C object CMakeFiles/webpdsp.dir/src/dsp/dec.c.o
+[ 17%] Building C object CMakeFiles/webpencode.dir/src/enc/config_enc.c.o
+[ 17%] Building C object CMakeFiles/webpencode.dir/src/enc/cost_enc.c.o
+[ 17%] Building C object CMakeFiles/webpencode.dir/src/enc/filter_enc.c.o
+[ 18%] Building C object CMakeFiles/webpencode.dir/src/enc/frame_enc.c.o
+[ 20%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/lossless.c.o
+[ 21%] Building C object CMakeFiles/webpdsp.dir/src/dsp/dec_clip_tables.c.o
+[ 21%] Building C object CMakeFiles/webpencode.dir/src/enc/histogram_enc.c.o
+[ 22%] Building C object CMakeFiles/webpencode.dir/src/enc/iterator_enc.c.o
+[ 22%] Building C object CMakeFiles/webpencode.dir/src/enc/near_lossless_enc.c.o
+[ 24%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_enc.c.o
+[ 24%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/rescaler.c.o
+[ 25%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/upsampling.c.o
+[ 25%] Building C object CMakeFiles/webpdsp.dir/src/dsp/filters.c.o
+[ 25%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_csp_enc.c.o
+[ 25%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/yuv.c.o
+[ 25%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_psnr_enc.c.o
+[ 26%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_rescale_enc.c.o
+[ 26%] Built target webputils
+[ 27%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless.c.o
+[ 27%] Building C object CMakeFiles/webpdsp.dir/src/dsp/rescaler.c.o
+[ 27%] Building C object CMakeFiles/webpencode.dir/src/enc/picture_tools_enc.c.o
+[ 29%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/alpha_processing_sse41.c.o
+[ 29%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/lossless_avx2.c.o
+[ 30%] Building C object CMakeFiles/webpencode.dir/src/enc/predictor_enc.c.o
+[ 30%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/dec_sse41.c.o
+[ 30%] Building C object CMakeFiles/webpdsp.dir/src/dsp/upsampling.c.o
+[ 31%] Building C object CMakeFiles/webpdsp.dir/src/dsp/yuv.c.o
+[ 32%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/lossless_sse41.c.o
+[ 32%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/upsampling_sse41.c.o
+[ 34%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/yuv_sse41.c.o
+[ 34%] Building C object CMakeFiles/webpencode.dir/src/enc/quant_enc.c.o
+[ 34%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/alpha_processing_sse2.c.o
+[ 34%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_avx2.c.o
+[ 35%] Building C object CMakeFiles/webpencode.dir/src/enc/syntax_enc.c.o
+[ 36%] Building C object CMakeFiles/webpdsp.dir/src/dsp/alpha_processing_sse41.c.o
+[ 37%] Linking C static library libsharpyuv.a
+[ 37%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/dec_sse2.c.o
+[ 37%] Building C object CMakeFiles/webpdsp.dir/src/dsp/dec_sse41.c.o
+[ 39%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_sse41.c.o
+[ 39%] Built target sharpyuv
+[ 39%] Building C object CMakeFiles/webpencode.dir/src/enc/token_enc.c.o
+[ 39%] Building C object CMakeFiles/webpdsp.dir/src/dsp/upsampling_sse41.c.o
+[ 40%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/filters_sse2.c.o
+[ 40%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/lossless_sse2.c.o
+[ 40%] Building C object CMakeFiles/webpencode.dir/src/enc/tree_enc.c.o
+[ 41%] Building C object CMakeFiles/webpencode.dir/src/enc/vp8l_enc.c.o
+[ 41%] Building C object CMakeFiles/webpdsp.dir/src/dsp/yuv_sse41.c.o
+[ 41%] Building C object CMakeFiles/webpdsp.dir/src/dsp/dec_sse2.c.o
+[ 43%] Building C object CMakeFiles/webpdsp.dir/src/dsp/alpha_processing_sse2.c.o
+[ 43%] Building C object CMakeFiles/webpencode.dir/src/enc/webp_enc.c.o
+[ 44%] Building C object CMakeFiles/webpencode.dir/src/enc/fpga_enc.c.o
+[ 44%] Building C object CMakeFiles/webpencode.dir/src/enc/lossy_decimate_fixture.c.o
+[ 45%] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_enc.cu.o
+[ 45%] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+[ 46%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/rescaler_sse2.c.o
+[ 46%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/upsampling_sse2.c.o
+[ 48%] Building C object CMakeFiles/webpdsp.dir/src/dsp/filters_sse2.c.o
+[ 48%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_sse2.c.o
+[ 49%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/yuv_sse2.c.o
+[ 49%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/alpha_processing_neon.c.o
+[ 50%] Building C object CMakeFiles/webpdsp.dir/src/dsp/rescaler_sse2.c.o
+[ 50%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/dec_neon.c.o
+[ 50%] Building C object CMakeFiles/webpdsp.dir/src/dsp/upsampling_sse2.c.o
+[ 51%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/filters_neon.c.o
+[ 51%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/lossless_neon.c.o
+[ 51%] Building C object CMakeFiles/webpdsp.dir/src/dsp/yuv_sse2.c.o
+[ 53%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/rescaler_neon.c.o
+[ 53%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/upsampling_neon.c.o
+[ 54%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/yuv_neon.c.o
+[ 55%] Building C object CMakeFiles/webpdsp.dir/src/dsp/alpha_processing_neon.c.o
+[ 55%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/dec_msa.c.o
+[ 55%] Building C object CMakeFiles/webpdsp.dir/src/dsp/dec_neon.c.o
+[ 55%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/filters_msa.c.o
+[ 56%] Building C object CMakeFiles/webpdsp.dir/src/dsp/filters_neon.c.o
+[ 58%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/lossless_msa.c.o
+[ 58%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/rescaler_msa.c.o
+[ 59%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_neon.c.o
+[ 59%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/upsampling_msa.c.o
+[ 59%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/dec_mips32.c.o
+[ 60%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/rescaler_mips32.c.o
+[ 62%] Building C object CMakeFiles/webpdsp.dir/src/dsp/rescaler_neon.c.o
+[ 62%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/yuv_mips32.c.o
+[ 62%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/alpha_processing_mips_dsp_r2.c.o
+[ 62%] Building C object CMakeFiles/webpdsp.dir/src/dsp/upsampling_neon.c.o
+[ 63%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/dec_mips_dsp_r2.c.o
+[ 63%] Building C object CMakeFiles/webpdsp.dir/src/dsp/yuv_neon.c.o
+[ 63%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/filters_mips_dsp_r2.c.o
+[ 64%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/lossless_mips_dsp_r2.c.o
+[ 64%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/rescaler_mips_dsp_r2.c.o
+[ 65%] Building C object CMakeFiles/webpdsp.dir/src/dsp/dec_msa.c.o
+[ 65%] Building C object CMakeFiles/webpdsp.dir/src/dsp/filters_msa.c.o
+[ 67%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_msa.c.o
+[ 68%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/upsampling_mips_dsp_r2.c.o
+[ 68%] Building C object CMakeFiles/webpdsp.dir/src/dsp/rescaler_msa.c.o
+[ 68%] Building C object CMakeFiles/webpdspdecode.dir/src/dsp/yuv_mips_dsp_r2.c.o
+[ 68%] Building C object CMakeFiles/webpdsp.dir/src/dsp/dec_mips32.c.o
+[ 68%] Building C object CMakeFiles/webpdsp.dir/src/dsp/alpha_processing_mips_dsp_r2.c.o
+[ 68%] Building C object CMakeFiles/webpdsp.dir/src/dsp/rescaler_mips32.c.o
+[ 69%] Building C object CMakeFiles/webpdsp.dir/src/dsp/upsampling_msa.c.o
+[ 70%] Building C object CMakeFiles/webpdsp.dir/src/dsp/dec_mips_dsp_r2.c.o
+[ 72%] Building C object CMakeFiles/webpdsp.dir/src/dsp/yuv_mips32.c.o
+[ 72%] Building C object CMakeFiles/webpdsp.dir/src/dsp/filters_mips_dsp_r2.c.o
+[ 73%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_mips_dsp_r2.c.o
+[ 73%] Building C object CMakeFiles/webpdsp.dir/src/dsp/rescaler_mips_dsp_r2.c.o
+[ 73%] Building C object CMakeFiles/webpdsp.dir/src/dsp/upsampling_mips_dsp_r2.c.o
+[ 74%] Building C object CMakeFiles/webpdsp.dir/src/dsp/yuv_mips_dsp_r2.c.o
+[ 74%] Building C object CMakeFiles/webpdsp.dir/src/dsp/cost.c.o
+[ 75%] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc.c.o
+[ 75%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_enc.c.o
+[ 77%] Building C object CMakeFiles/webpdsp.dir/src/dsp/ssim.c.o
+[ 77%] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc_sse2.c.o
+[ 77%] Building C object CMakeFiles/webpdsp.dir/src/dsp/cost_sse2.c.o
+[ 78%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_sse2.c.o
+[ 78%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_sse41.c.o
+[ 78%] Building C object CMakeFiles/webpdsp.dir/src/dsp/ssim_sse2.c.o
+[ 79%] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc_sse41.c.o
+[ 79%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_avx2.c.o
+[ 81%] Building C object CMakeFiles/webpdsp.dir/src/dsp/cost_neon.c.o
+[ 81%] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc_neon.c.o
+[ 82%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_neon.c.o
+[ 83%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_msa.c.o
+[ 83%] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc_msa.c.o
+[ 83%] Building C object CMakeFiles/webpdsp.dir/src/dsp/cost_mips32.c.o
+[ 83%] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc_mips32.c.o
+[ 84%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_mips32.c.o
+[ 84%] Building C object CMakeFiles/webpdsp.dir/src/dsp/cost_mips_dsp_r2.c.o
+[ 86%] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc_mips_dsp_r2.c.o
+[ 86%] Building C object CMakeFiles/webpdsp.dir/src/dsp/lossless_enc_mips_dsp_r2.c.o
+/tmp/libwebp-residual-packed4-parent-wt/src/enc/cuda_decimate_enc.cu(502): warning #177-D: function "<unnamed>::AddScoreDev" was declared but never referenced
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+/tmp/libwebp-residual-packed4-parent-wt/src/enc/cuda_decimate_enc.cu(687): warning #177-D: function "<unnamed>::ImportMB" was declared but never referenced
+
+[ 86%] Built target webpdspdecode
+[ 87%] Building C object CMakeFiles/webpdecode.dir/src/dec/frame_dec.c.o
+[ 87%] Building C object CMakeFiles/webpdecode.dir/src/dec/buffer_dec.c.o
+[ 89%] Building C object CMakeFiles/webpdecode.dir/src/dec/vp8l_dec.c.o
+[ 89%] Building C object CMakeFiles/webpdecode.dir/src/dec/quant_dec.c.o
+[ 91%] Building C object CMakeFiles/webpdecode.dir/src/dec/webp_dec.c.o
+[ 91%] Building C object CMakeFiles/webpdecode.dir/src/dec/idec_dec.c.o
+[ 91%] Building C object CMakeFiles/webpdecode.dir/src/dec/alpha_dec.c.o
+[ 91%] Building C object CMakeFiles/webpdecode.dir/src/dec/vp8_dec.c.o
+[ 91%] Building C object CMakeFiles/webpdecode.dir/src/dec/io_dec.c.o
+[ 91%] Building C object CMakeFiles/webpdecode.dir/src/dec/tree_dec.c.o
+[ 91%] Built target webpdsp
+[ 91%] Built target webpdecode
+[ 91%] Built target webpencode
+[ 91%] Linking CUDA static library libwebp.a
+[ 91%] Built target webp
+[ 91%] Building C object CMakeFiles/imageioutil.dir/imageio/imageio_util.c.o
+[ 91%] Building C object CMakeFiles/webpdemux.dir/src/demux/anim_decode.c.o
+[ 92%] Building C object CMakeFiles/webpdemux.dir/src/demux/demux.c.o
+[ 93%] Linking CUDA static library libimageioutil.a
+[ 93%] Built target imageioutil
+[ 93%] Linking CUDA static library libwebpdemux.a
+[ 93%] Built target webpdemux
+[ 94%] Building C object CMakeFiles/imagedec.dir/imageio/image_dec.c.o
+[ 94%] Building C object CMakeFiles/imagedec.dir/imageio/jpegdec.c.o
+[ 94%] Building C object CMakeFiles/imagedec.dir/imageio/webpdec.c.o
+[ 94%] Building C object CMakeFiles/imagedec.dir/imageio/metadata.c.o
+[ 96%] Building C object CMakeFiles/imagedec.dir/imageio/pngdec.c.o
+[ 96%] Building C object CMakeFiles/imagedec.dir/imageio/wicdec.c.o
+[ 96%] Building C object CMakeFiles/imagedec.dir/imageio/pnmdec.c.o
+[ 97%] Building C object CMakeFiles/imagedec.dir/imageio/tiffdec.c.o
+[ 98%] Linking CUDA static library libimagedec.a
+[ 98%] Built target imagedec
+[100%] Building C object CMakeFiles/webp_cuda_batch_benchmark.dir/tools/cuda_batch_benchmark.c.o
+[100%] Linking CUDA executable webp_cuda_batch_benchmark
+[100%] Built target webp_cuda_batch_benchmark

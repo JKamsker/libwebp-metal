@@ -1,0 +1,10 @@
+parent_commit=4565c4206fa427460e05258e2aaa8c418211a24d
+profile_build=Release,-DCMAKE_CUDA_ARCHITECTURES=native
+profile_basis=libwebp-pinned-staging-profile-stage-*.jsonl,libwebp-pinned-staging-profile-phase-*.jsonl,retained NCU metrics
+selected_boundary=pre-Ampere scalar I4 residual coefficient loads
+rationale=decimation remained 18.927 ms/image PNG and 18.666 ms/image JPEG; I4 held about 63--65% of photo/texture block cycles; scalar residual scoring remained its largest warp; scan, subgroup, handoff, fixed-cost, table, and coefficient-mirror variants were exhausted
+candidate=four aligned 64-bit loads for sixteen contiguous int16 coefficients, preserving scalar scoring dependencies; runtime pre-Ampere selection; original Ampere+ path
+parent_resources=REG:103 STACK:352 SHARED:23392 LOCAL:0
+candidate_resources=REG:102 STACK:352 SHARED:23392 LOCAL:0
+gate=retain only if both PNG and JPEG improve by at least 1.5 ms/image
+decision=reject and restore
