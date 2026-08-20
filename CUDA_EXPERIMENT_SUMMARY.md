@@ -126,6 +126,7 @@ that hardware and workload.
 | Dense boolean-coder transition table | A retained native profile put `VP8PutTokenPage` at 35.41% of sampled cycles across all eight emit workers. Coverage counted 292.2 million tokens: dynamic probability 82.20%, bit one 54.89%, and normalization 53.65%, ruling out another dominant branch. One exact 65,536-entry table packed value increment, shift, and next range, replacing the split multiply, bit/range decision, and both normalization lookups. The function shrank 764 to 708 bytes but added 256 KiB BSS; the focused bit-writer test and all 24 timing hashes/byte counts were exact. PNG moved 35.380 to 35.117 ms/image and JPEG 34.541 to 35.848. | Rejected and removed. PNG's 0.263 ms/image gain is noise and JPEG regressed 1.308 ms/image. The L2-resident random transition load is worse than the compact arithmetic chain on Zen 2. Restored source passed 7/7 CTests. Do not retry a dense whole-transition table without a materially different cache/data-layout profile. RTX 2080 SUPER only; no architecture policy changed. |
 | Eight-partition AVX2 lockstep boolean coder | The retained eight-partition profile left boolean coding as the largest distinct CPU chain: `VP8PutTokenPage` held 35.41% of zero-loss whole-process samples, while fresh partition controls showed that eight independent emit workers remained best. One coarse candidate replaced those eight OS workers with a single AVX2 routine that advanced all eight arithmetic coders in lockstep. The 2,758-byte SIMD routine gathered exact range/shift transitions and retained scalar per-lane byte flushes. All 12 timing outputs were exact and the corrected candidate build passed 7/7 focused CTests. PNG moved 36.791 to 48.201 ms/image; JPEG moved 35.072 to 51.666. | Rejected and removed. Giving up eight Zen 2 cores for one SIMD thread regressed PNG/JPEG by 11.410/16.594 ms/image. Cross-partition SIMD cannot hide scalar token/probability loads, unequal partition lengths, or independent byte flushing. Do not retry this one-core/eight-lane mapping without a fundamentally different profile. RTX 2080 SUPER only; no architecture policy changed. |
 | Pre-Ampere pinned decimate-result staging | A refreshed native profile kept decimation first at 18.927/18.666 ms/image PNG/JPEG. Streaming conformance isolated 1.534--1.536 ms per 1600x1200 image in four pageable result/Y/U/V downloads per band. One Turing-only candidate used page-locked staging with ordinary-allocation fallback; Ampere+ stayed unchanged. It cut transfer-event time to about 0.733 ms, but callback wall by only 0.05--0.08 ms because copies already overlap later diagonals and encoder-owned outputs still require a host copy. All 12 timing outputs and 48 conformance outputs were exact; candidate/restored builds passed 7/7 CTests. PNG moved 35.695 to 35.976 ms/image and JPEG 36.239 to 35.385. | Rejected and removed. PNG regressed 0.281 ms/image and JPEG gained only 0.854, below the two-format 1.5 ms/image gate. Do not infer end-to-end gain from CUDA event transfer time when existing stream overlap and host commit remain. RTX 2080 SUPER only; no Ampere+ or threshold change. |
+| I4-first / I16-pruning feasibility | A fresh native-sm_75 trace kept I4 at 63--65% of photo/texture block cycles. Exact medium-fixture outcomes were 191/7,500 I4 for graphic, 4,101/7,500 for photo, and 7,500/7,500 for texture. This screened reversing the luma order so final I4 winners could avoid I16. | Rejected before source change. I4's exact raster search consumes the completed I16 score as its per-block abort threshold; reversing it forces extra work on the 97.45%-I16 graphic case. Final-mode coverage cannot certify an I16 skip, and the request exposes neither an exact content discriminator nor a strong pre-quantization I16 lower bound. Do not replace exact proof with a segment/content heuristic. RTX 2080 SUPER only; no architecture policy changed. |
 
 All original and follow-up benchmark rows produced stable expected checksums.
 The historical color rows remain raw evidence, but their ratios are not matched
@@ -1378,3 +1379,31 @@ stage rows, compressed `gprofng` experiments, function/call-tree reports,
 syscall summaries, the denied `perf` diagnostic, and the calculation use
 `libwebp-write-boundary-*`. Architecture thresholds/defaults, Ampere+
 behavior, and the frozen publication corpus/generator are unchanged.
+
+
+## I4-first / I16-pruning feasibility rejection
+
+At clean parent `c0fb63636f5469074686e60ba326bbd822afb0ac`, one warmup and three
+measured native batch-24 method-4/quality-75 rows produced 36.389 ms/image PNG
+and 36.417 JPEG. Aggregate hashes and byte counts remained
+`455f70a1e139f043` / 6,441,688 and `0c4b078d5c4d3173` / 6,400,792. The raw
+phase trace again assigned about 63--65% of realistic photo/texture block
+cycles to I4.
+
+Exact coverage of the retained medium fixtures found 191 of 7,500 graphic
+macroblocks selected I4 (2.55%), versus 4,101 photo (54.68%) and all 7,500
+texture macroblocks. That outcome distribution made I4-first evaluation look
+attractive for photo/texture, but source inspection exposed an exact
+dependency: the raster-order I4 commit compares its cumulative score against
+the completed I16 score after every block. Reversing the stages would discard
+that early bound and fully search more graphic macroblocks, where 97.45%
+ultimately use I16.
+
+Final-mode frequency also cannot prove that I16 is unnecessary for an
+individual request. The current inputs contain no exact discriminator and no
+sufficiently strong pre-quantization I16 lower bound; a content or segment
+heuristic would violate the required byte-exact semantics. No source candidate
+was opened. The retained source passed all seven registered focused tests.
+Evidence uses `libwebp-i4-first-feasibility-*`. Architecture
+thresholds/defaults, Ampere+ behavior, and the frozen corpus/generator are
+unchanged.

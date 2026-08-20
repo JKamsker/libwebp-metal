@@ -2934,3 +2934,37 @@ function/call-tree reports, syscall summaries, the denied `perf` record, and
 the calculation use `libwebp-write-boundary-*`. This is RTX 2080 SUPER-only
 evidence; architecture thresholds/defaults, Ampere+ behavior, frozen corpus,
 and generator remain unchanged.
+
+
+## I4-first / I16-pruning feasibility rejection
+
+At clean parent `c0fb63636f5469074686e60ba326bbd822afb0ac`, the native Release
+build collected one warmup and three measured batch-24 method-4/quality-75
+file-I/O rows. Medians were 36.389 ms/image PNG and 36.417 JPEG, with the
+expected aggregate hashes and byte counts. Raw phase timing again assigned
+about 63--65% of realistic photo/texture block cycles to I4.
+
+The retained exact medium fixtures then quantified final luma modes:
+
+| Content | I4 | I16 | I4 share |
+|---|---:|---:|---:|
+| Graphic | 191 | 7,309 | 2.55% |
+| Photo | 4,101 | 3,399 | 54.68% |
+| Texture | 7,500 | 0 | 100.00% |
+
+The proposed distinct lever was to run I4 first and omit I16 where an exact
+bound proves the I4 result wins. It was rejected before implementation. The
+retained I4 raster search relies on the completed I16 RD score as its
+per-block early-abort threshold; reversing the phases therefore expands work
+on graphic inputs, where 97.45% of macroblocks select I16. Final outcome
+coverage is not an admissible predictor, and the request has neither an exact
+content discriminator nor a sufficiently strong pre-quantization I16 lower
+bound. Segment-based guessing would violate byte parity.
+
+No source candidate was opened. Raw native timing, phase traces, fixture
+coverage, parent/binary/fixture hashes, and the decision summary are stored
+under `libwebp-i4-first-feasibility-*` in the adjacent evidence directory.
+The retained source passed all seven registered focused tests after the three
+CPU test executables absent from the benchmark-only cache were built. This is
+RTX 2080 SUPER-only evidence; the 784/12,544 pre-Ampere and 64/4,000 Ampere+
+thresholds, architecture split, frozen corpus, and generator are unchanged.

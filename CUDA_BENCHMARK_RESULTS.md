@@ -2530,3 +2530,29 @@ partition assembly, and writer-copy candidates were rejected on feasibility
 without a source edit. Evidence uses `libwebp-write-boundary-*`; architecture
 thresholds/defaults, Ampere+ behavior, and the frozen corpus/generator are
 unchanged.
+
+
+## I4-first / I16-pruning feasibility screen
+
+The clean retained native build at
+`c0fb63636f5469074686e60ba326bbd822afb0ac` used
+`-DCMAKE_CUDA_ARCHITECTURES=native`. One warmup and three measured batch-24
+method-4/quality-75 file-I/O rows gave:
+
+| Format | Median | Hash / bytes |
+|---|---:|---|
+| PNG lossy | 36.389 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 36.417 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+I4 remained about 63--65% of block cycles on photo/texture. Coverage of the
+retained exact medium fixtures counted 191/7,500 I4 macroblocks for graphic,
+4,101/7,500 for photo, and 7,500/7,500 for texture.
+
+No source candidate followed. The current I4 search requires the completed
+I16 score as its exact raster-order abort threshold, so reversing the order
+would increase graphic I4 work. The observed final mode is not an exact
+pre-search discriminator, and neither request state nor segment identity
+provides a proof that I16 can be skipped. The retained source passed 7/7
+registered focused tests. Evidence uses
+`libwebp-i4-first-feasibility-*`; architecture thresholds/defaults, Ampere+
+behavior, and the frozen corpus/generator are unchanged.
