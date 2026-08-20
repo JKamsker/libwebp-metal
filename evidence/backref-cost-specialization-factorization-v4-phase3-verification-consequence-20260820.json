@@ -1,0 +1,167 @@
+{
+  "schema": "libwebp-backref-cost-specialization-factorization-v4-phase3-verification-consequence-v1",
+  "status": "PASS_DIAGNOSTIC",
+  "cycle": "BACKREF COST SPECIALIZATION FACTORIZATION V4",
+  "branch": "codex/backref-cost-specialization-factorization-v4",
+  "lineage": {
+    "main": "f289499b37875d8166792ed104f2b26e23cf4ffd",
+    "phase1a": "1f60c324142d3dafaeece95b060114261fff86ac",
+    "phase1b": "c271d129d392c9c279722bb95e17805e1c262b9a",
+    "phase2": "b06596fb6c7c1fa6331dc2aa221d1bfa8f448403",
+    "first_parent_linear": true,
+    "phase1b_additions_only_files": 23,
+    "phase2_additions_only_files": 136,
+    "frozen_artifacts_unchanged": true
+  },
+  "provenance": {
+    "phase1_rehearsal_attempts": 1,
+    "phase1_rehearsal_remote_contacts": 1,
+    "phase1_rehearsal_reruns": 0,
+    "phase1_rehearsal_encoder_workloads": 0,
+    "phase1_rehearsal_performance_samples": 0,
+    "phase1_rehearsal_lease_attempted": false,
+    "phase2_remote_sessions": 1,
+    "phase2_connection_attempts": 1,
+    "phase2_retries": 0,
+    "phase2_reruns": 0,
+    "phase2_profiler_workloads": 0,
+    "prior_v2_v3_samples_loaded": false,
+    "stale_v2_payload_rejected": true,
+    "stale_v3_payload_rejected": true,
+    "stale_v2_xcrun_rejected": true,
+    "stale_v3_toolchain_identity_rejected": true
+  },
+  "identity": {
+    "payload_bytes": 2097152,
+    "payload_sha256": "d34b944ec0b8eead809367d456785cf37d325459bca34506bec74af5efba4db0",
+    "payload_manifest_generator_fixture_rehearsal_agree": true,
+    "toolchain_identity_sha256": "703ceac0715a267f5519726ed3309a86ff6cbee57562c6b051c6d33c78b6c1ad",
+    "toolchain_manifest_actual_fixture_remote_agree": true,
+    "xcode_version": "26.3",
+    "xcode_product_build_version": "17C529",
+    "sdk": "macosx26.2",
+    "absolute_executables": [
+      "clang",
+      "clang++",
+      "nm",
+      "ar",
+      "ranlib",
+      "llvm-objdump"
+    ],
+    "xcrun_in_required_lists": false
+  },
+  "source_and_codegen": {
+    "ordinary_build_omits_experiment": true,
+    "selector_once_before_mutation": true,
+    "closed_switch_one_selected_body": true,
+    "absent_variant_has_B_semantics": true,
+    "unknown_variant_fails_closed": true,
+    "public_abi_unchanged": true,
+    "sanitizer_and_integer_boundary_evidence_passes": true,
+    "fallback_tie_update_order_traceback_semantics_pass": true,
+    "bitstream_pixel_rgb_repeat_input_semantics_pass": true,
+    "timed_binary_recorder_free": true,
+    "separate_recorder_binary": true,
+    "no_deduplicate": true,
+    "six_private_addresses_distinct": true,
+    "baseline_layout_dp_codegen_equal": true,
+    "baseline_layout_push_codegen_equal": true,
+    "hint_push_codegen_distinct": true
+  },
+  "raw_evidence": {
+    "archive_index_rows": 123,
+    "archive_index_sha256": "a979120ca9e9210176fd6ec090d690bc69f8737daef771b3e73e7d2b7b59459a",
+    "returned_index_rows": 133,
+    "returned_index_sha256": "6ef2b10b17576a23384a0e644043196007743df73c1b8ba40ac2deb729d89ee9",
+    "archive_members": 126,
+    "archive_bytes": 44012,
+    "framed_stdout_bytes": 55858,
+    "frame_order": [
+      "source-admission",
+      "operator-status",
+      "archive-build",
+      "lease-state",
+      "bulk-declaration",
+      "bulk-chunk",
+      "integrity-footer",
+      "cleanup-footer"
+    ],
+    "archive_cap_bytes": 786432,
+    "exclusive_framed_response_cap_bytes": 1048576,
+    "chunk_bytes": 262144,
+    "safe_extraction_verified": true,
+    "integrity_verified": true,
+    "cleanup_absence_proved": true,
+    "one_exclusive_lease_acquired_and_released": true,
+    "observe_only_discovered_pid_signals": 0,
+    "resource_settings_changed": false
+  },
+  "inventory": {
+    "profile_processes": 36,
+    "runner_rows": 180,
+    "stage_rows": 180,
+    "warmups": 36,
+    "retained_rows": 144,
+    "work_rows": 12,
+    "correctness_executions": 24,
+    "correctness_summary_rows": 4,
+    "correctness_representation": "The frozen runner performs two encodes for each B/L/H case/method combination (24 executions) and correctness.json retains one aggregate record for each of the four case/method cells.",
+    "profile_order_exact": true,
+    "retained_ordinal_pairing_exact": true,
+    "input_identities_exact": true,
+    "timed_work_correctness_bitstream_sizes_reconciled": true,
+    "timed_work_bitstream_fnv1a64_reconciled": true
+  },
+  "statistics": {
+    "evaluation_path": "evidence/backref-cost-specialization-factorization-v4-phase3-evaluation-20260820.json",
+    "evaluation_sha256": "7e2c05e8d47188ff967a25edfd9bee28c66243a48f147f2566a9d10607603620",
+    "cells": 4,
+    "metrics_per_cell": 3,
+    "contrasts_per_metric": 3,
+    "independently_matched_statistic_blocks": 36,
+    "paired_rows_per_block": 12,
+    "bootstrap_resamples_per_block": 100000,
+    "bootstrap_percentile_method_exact": true,
+    "classification_exact": true,
+    "repeatability_ratio_max": 1.0343707969157505,
+    "repeatability_ratio_threshold": 2.0,
+    "required_stage_share_range_max": 0.006374577913818985,
+    "required_stage_share_range_threshold": 0.1
+  },
+  "evaluator_contract": {
+    "direct_phase2_root_invocation": "FAILS_PRE_SAMPLE_INTEGRITY_CONTRACT",
+    "reason": "The frozen evaluator requires artifact-hashes.json to cover the whole argument directory, while the committed Phase 2 root correctly also contains outer transport, returned-index, and transfer-cleanup receipts that are not archive members.",
+    "resolution": "The frozen evaluator was not modified. It was run on a temporary byte-identical view containing exactly artifact-hashes.json and its 123 indexed archive artifacts, then every result was independently recomputed from the committed Phase 2 root.",
+    "raw_or_frozen_artifacts_mutated": false
+  },
+  "production_acceptance": {
+    "passes": false,
+    "required_metrics": [
+      "dp_steady",
+      "whole_encode"
+    ],
+    "maximum_material_paired_regression_percent": 0.5,
+    "failed_checks": [
+      "photo-m4 dp_steady has a +2.4371236975% maximum paired regression",
+      "photo-m4 whole encode has a +1.9414864461% mean, +2.7937875348% upper CI, and +3.7134282246% maximum paired regression",
+      "photo-m6 whole encode has a +0.7942387088% maximum paired regression",
+      "graphic-m4 whole encode has a +0.5585015442% maximum paired regression",
+      "graphic-m6 whole encode has a +0.1139302524% upper CI and +1.0843498861% maximum paired regression"
+    ]
+  },
+  "interpretation": {
+    "B_to_L": "layout/control",
+    "L_to_H": "append hint within matched always-specialized structure",
+    "B_to_H": "simultaneous total",
+    "finding": "Layout and hint effects are method- and content-dependent. Method 4 DP shows opposing layout regressions and hint gains; method 6 DP is mixed/additive for photo and hint-dominant for graphic. Whole encode does not preserve a stable hint effect and includes opposite-sign layout/hint components in three cells.",
+    "causal_limit": "The simultaneous diagnostic identifies context interaction but does not support a context-independent production winner."
+  },
+  "consequence": {
+    "decision": "RETAIN_DIAGNOSTIC_ONLY_DEFAULT_OFF",
+    "productionize": false,
+    "thresholds_weakened": false,
+    "post_hoc_exclusions": 0,
+    "unplanned_pooling": false,
+    "reason": "The diagnostic is valid, but the frozen production acceptance is not met."
+  }
+}
