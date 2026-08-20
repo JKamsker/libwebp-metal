@@ -133,6 +133,7 @@ that hardware and workload.
 | Pre-Ampere packed-pair I4 flatness scan | A fresh native profile put decimate/collect/replay at 18.912/18.751 ms/image PNG/JPEG. Root Nsight Compute source correlation selected the distinct scalar I4 flatness walk at 306,400 executed instructions and 221 samples on a representative launch. One Turing candidate tested two adjacent 16-bit levels per 32-bit shared load while retaining the exact DC omission, nonzero count, and early threshold; Ampere+ kept the scalar path. Registers fell 103 to 102, but the measured kernel moved 122.11 to 122.56 us with unchanged 26.04% occupancy. All 60 timing rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 PNG/JPEG fallback cells were exact; candidate/restored builds passed 7/7 tests. | Rejected and removed. PNG pooled median regressed 29.499 to 29.768 ms/image and paired change was -0.288 ms; JPEG gained only 0.234 ms paired (27.770 to 27.561 pooled), far below 1.5 ms/image. Pair extraction and counting do not shorten the dependency-bound flatness walk. Do not retry packed-pair I4 flatness without a new critical-path profile. RTX 2080 SUPER only; Ampere+, thresholds, architecture split, and frozen files are unchanged. |
 | Pre-Ampere I4 source-transform reuse | A fresh native profile measured a 121.89 us representative decimate launch and correlated 140,800 instructions with the four-lane I4 forward-transform body. One Turing candidate computed the exact source-side horizontal numerators once per block in idle prediction lanes, then let all ten modes subtract their reference terms before the unchanged rounding/vertical pass; Ampere+ compiled the retained path. All 60 timing rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 PNG/JPEG fallback cells were exact; candidate/restored builds passed 7/7 tests. | Rejected and removed. The candidate added 128 shared bytes, increased launch instructions from 3,879,409 to 3,896,209, and regressed the kernel to 123.39 us. Pooled PNG/JPEG medians regressed 29.209 to 29.490 and 27.619 to 27.902 ms/image; paired changes were -0.244/-0.381 ms. Shared publication/address arithmetic costs more than repeated source-row work. Do not retry without a register-only handoff. RTX 2080 SUPER only; Ampere+, thresholds, architecture split, and frozen files are unchanged. |
 | Pre-Ampere packed whole-macroblock prediction fill | Fresh root Nsight correlation measured 136,965 instructions and 186 barrier-stall samples in the retained parallel I16/UV prediction-plane fill. One Turing-only candidate generated four adjacent pixels per lane and used aligned `uchar4` shared stores while preserving every DC/TM/VE/HE formula; Ampere+ compiled the original scalar-per-pixel loop. It removed 42,070 launch instructions with unchanged 103-register / 352-byte-stack / 23,392-byte-shared resources. All 60 timing rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 PNG/JPEG fallback cells were exact; candidate/restored builds passed 7/7 tests. | Rejected and removed. The representative launch stayed flat at 121.79 to 121.86 us and `No Eligible` worsened from 89.78% to 89.90%. Paired-median PNG gain was only 0.544 ms/image and JPEG changed by -0.080 ms/image. Instruction reduction alone does not shorten the barrier-bound setup critical path. RTX 2080 SUPER only; Ampere+, thresholds, architecture split, and frozen files are unchanged. |
+| Pre-Ampere cooperative UV transform/quantization | The retained profile assigned 5.1% of photo block cycles and 252 completion-barrier samples to UV numerical work. The first Turing-only four-lane-per-block build exposed a misaligned `int*` reuse of `i16_tmp`; Nsight reported `LaunchFailed` and exact CPU fallback, so that iteration was corrected with explicit four-byte alignment before measurement. The valid candidate reduced UV numerical share to 3.4%, kernel duration 121.79 to 119.26 us, registers 103 to 102, and `No Eligible` 89.78% to 89.51%, with stack/shared/occupancy unchanged. All 60 timing rows, 15 methods/qualities tiny/odd pairs, and 20 injected-fallback cells were exact; aligned-candidate/restored suites passed 7/7. | Rejected and removed. Despite the local kernel gain, five paired process medians regressed by 0.337 ms/image PNG and 0.200 JPEG. Four-lane UV cooperation does not improve the end-to-end GPU/host critical path. The restored source matches the parent blob. Do not reuse merely type-aligned shared fields through wider pointers, and do not infer process gain from the isolated UV phase. RTX 2080 SUPER only; Ampere+, thresholds, architecture split, and frozen files are unchanged. |
 
 All original and follow-up benchmark rows produced stable expected checksums.
 The historical color rows remain raw evidence, but their ratios are not matched
@@ -1624,3 +1625,41 @@ returned to 103 / 352 / 23,392 bytes, and the rebuilt suite passed 7/7 tests.
 Raw evidence uses `libwebp-packed-prediction-fill-*`; architecture
 thresholds/defaults, Ampere+ behavior, and the frozen corpus/generator are
 unchanged.
+
+
+## Pre-Ampere cooperative UV transform/quantization rejection
+
+At clean parent `8ac27efcf21b3ec208e8fea78cbcf2f78b43a05d`, the retained
+native profile put UV numerical work at 5.1% of representative photo block
+cycles and assigned 252 barrier-stall samples to the completion barrier. A
+Turing-only candidate mapped four lanes to each of 32 UV mode/block forward
+transforms, basic quantizers, and inverse transforms; Ampere+ compiled the
+retained scalar path. Resources changed from 103 to 102 registers, with the
+352-byte stack and 23,392-byte shared allocation unchanged.
+
+The first build reused the expired `int16_t i16_tmp` storage through an
+`int*`. Exact layout analysis placed that field at shared byte offset 5,250,
+two bytes off four-byte alignment. Nsight recorded `LaunchFailed` and the
+transactional path emitted exact CPU fallback, so that diagnostic run was not
+accepted as performance evidence. Adding explicit four-byte field alignment
+corrected the same sole candidate. Its representative launch improved from
+121.79 to 119.26 us, `No Eligible` from 89.78% to 89.51%, and UV numerical
+share from 5.1% to 3.4%; executed instructions rose to 3,895,408 and photo GPU
+wall moved only from 26.27 to 26.01 ms. Occupancy stayed 26.04%.
+
+Five order-balanced full-corpus process pairs for the aligned candidate
+produced exact aggregate hashes and byte counts:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 35.271 ms/image | 35.608 ms/image | -0.337 ms/image |
+| JPEG | 35.485 ms/image | 35.785 ms/image | -0.200 ms/image |
+
+The aligned candidate and restored builds passed 7/7 focused tests. CPU/CUDA
+hashes and bytes matched across methods 2--6, qualities 25/75/98, six
+tiny/odd fixtures, and 20 forced-fallback cells covering both formats, bands
+0/1/3/5/7, and inline/pipelined token recording. Both process medians
+regressed, so the candidate was removed. Restored source matches blob
+`7809e965a02b2eaec04a0e659239e66c6056c025`; raw evidence uses
+`libwebp-uv-coop4-*`. Architecture thresholds/defaults, Ampere+ behavior,
+and the frozen corpus/generator are unchanged.

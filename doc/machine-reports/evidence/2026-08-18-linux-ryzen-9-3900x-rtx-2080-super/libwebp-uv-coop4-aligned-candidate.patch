@@ -1,0 +1,84 @@
+diff --git a/src/enc/cuda_decimate_enc.cu b/src/enc/cuda_decimate_enc.cu
+index 7809e965..8be05078 100644
+--- a/src/enc/cuda_decimate_enc.cu
++++ b/src/enc/cuda_decimate_enc.cu
+@@ -537,7 +537,7 @@ struct MBWork {
+   int pred_dc[3];  // Y, U, V DC prediction values
+   uint8_t i4_boundary[37];
+   // Intra16 per-mode scratch.
+-  int16_t i16_tmp[4][16][16];
++  alignas(4) int16_t i16_tmp[4][16][16];
+   int16_t i16_dc[4][16];
+   int16_t i16_ac_levels[4][16][16];
+   int16_t i16_dc_levels[4][16];
+@@ -1600,6 +1600,27 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+   PHASE_TS(4);
+ 
+   // ---- Phase 4 (parallel): chroma transforms per mode.
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  if (tid < 4 * 8 * 4) {
++    const int group = tid >> 2;
++    const int lane = tid & 3;
++    const int mode = group >> 3;
++    const int block = group & 7;
++    const unsigned int warp_mask = __activemask();
++    const uint8_t* const src =
++        w.yuv_in + kCudaUOffEnc + kCudaVP8ScanUV[block];
++    const uint8_t* const ref =
++        w.yuv_p + kCudaVP8UVModeOffsets[mode] + kCudaVP8ScanUV[block];
++    // I16 scratch is dead after luma selection and exactly covers the 32
++    // sixteen-int transpose workspaces needed by the UV mode/block groups.
++    int* const tmp = reinterpret_cast<int*>(&w.i16_tmp[0][0][0]) + group * 16;
++    I4FTransformCoop4(src, ref, w.uv_tmp[mode][block], tmp, lane, warp_mask);
++    if (block == 0 && lane == 0) {
++      w.uv_nz[mode] = 0;
++      w.uv_sse[mode] = 0;
++    }
++  }
++#else
+   if (tid < 32) {
+     const int mode = tid >> 3;
+     const int block = tid & 7;
+@@ -1613,6 +1634,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+       w.uv_sse[mode] = 0;
+     }
+   }
++#endif
+   __syncthreads();
+   if (tid < 4 && p.use_error_diffusion) {
+     int8_t top_derr[2][2];
+@@ -1622,6 +1644,26 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+                        w.uv_derr[tid]);
+   }
+   __syncthreads();
++#if defined(__CUDA_ARCH__) && __CUDA_ARCH__ < 800
++  if (tid < 4 * 8 * 4) {
++    const int group = tid >> 2;
++    const int lane = tid & 3;
++    const int mode = group >> 3;
++    const int block = group & 7;
++    const unsigned int warp_mask = __activemask();
++    int* const tmp = reinterpret_cast<int*>(&w.i16_tmp[0][0][0]) + group * 16;
++    const int nz_bit = I4QuantizeBlockCoop4(
++        w.uv_tmp[mode][block], w.uv_levels_all[mode][block], &dqm->uv, lane,
++        warp_mask);
++    if (lane == 0) atomicOr(&w.uv_nz[mode], (uint32_t)nz_bit << block);
++    __syncwarp(warp_mask);
++    const uint8_t* const ref =
++        w.yuv_p + kCudaVP8UVModeOffsets[mode] + kCudaVP8ScanUV[block];
++    I4ITransformCoop4(ref, w.uv_tmp[mode][block],
++                      w.uv_out[mode] + kCudaVP8ScanUV[block], tmp, lane,
++                      warp_mask);
++  }
++#else
+   if (tid < 32) {
+     const int mode = tid >> 3;
+     const int block = tid & 7;
+@@ -1635,6 +1677,7 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
+     CudaITransformOne(ref, w.uv_tmp[mode][block],
+                       w.uv_out[mode] + kCudaVP8ScanUV[block]);
+   }
++#endif
+   __syncthreads();
+   if (tid < 32) {
+     const int mode = tid >> 3;

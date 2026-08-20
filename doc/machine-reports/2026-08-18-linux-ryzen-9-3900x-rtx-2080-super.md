@@ -3213,3 +3213,49 @@ matrices, tests, and timings use `libwebp-packed-prediction-fill-*` in the
 adjacent evidence directory. This is RTX 2080 SUPER-only evidence; the
 784/12,544 pre-Ampere and 64/4,000 Ampere+ thresholds, architecture split,
 frozen corpus, and generator are unchanged.
+
+
+## Pre-Ampere cooperative UV transform/quantization rejection
+
+At clean parent `8ac27efcf21b3ec208e8fea78cbcf2f78b43a05d`, retained device
+timing measured 26.27 ms for the 100x75 photo macroblock grid and assigned
+5.1% of block cycles to UV numerical work. Root source sampling assigned 252
+barrier-stall samples to the UV completion barrier, selecting a distinct
+non-residual target.
+
+The pre-Ampere candidate mapped four lanes to each of the 32 UV mode/block
+forward transforms, basic quantizers, and inverse transforms. Ampere+
+compiled the retained scalar path. Native resources moved from 103 to 102
+registers while stack and shared allocation remained 352 and 23,392 bytes.
+
+The first zero-growth scratch reuse was invalid. `i16_tmp` begins at byte
+offset 5,250 within `MBWork`, so reinterpreting it as `int*` generated
+two-byte-misaligned 32-bit shared accesses. Nsight captured `LaunchFailed`,
+and normal encoding quarantined the backend and transactionally fell back to
+CPU. That diagnostic iteration was preserved but not used as performance
+evidence. Explicit four-byte field alignment corrected the same sole
+candidate. The representative launch improved from 121.79 to 119.26 us,
+executed instructions rose from 3,879,409 to 3,895,408, `No Eligible`
+improved from 89.78% to 89.51%, and occupancy stayed 26.04%. UV numerical
+share fell from 5.1% to 3.4%, but photo GPU wall moved only 26.27 to 26.01 ms.
+
+Five order-balanced full-corpus process pairs produced:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 35.271 ms/image | 35.608 ms/image | -0.337 ms/image |
+| JPEG | 35.485 ms/image | 35.785 ms/image | -0.200 ms/image |
+
+All 60 aligned-candidate aggregate hashes and byte counts matched. The
+aligned candidate and restored builds passed 7/7 focused tests. Methods 2--6
+at qualities 25/75/98 matched across six
+graphic/photo/texture 17x13 and 257x255 fixtures; 20 forced-fallback cells
+matched across PNG/JPEG, bands 0/1/3/5/7, and inline/pipelined recording.
+
+Both process medians regressed despite the local kernel gain, so the candidate
+was removed. Restored source exactly matches blob
+`7809e965a02b2eaec04a0e659239e66c6056c025`, resources returned to
+103 / 352 / 23,392, and 7/7 tests passed. Raw evidence uses
+`libwebp-uv-coop4-*`. This is RTX 2080 SUPER-only evidence; the 784/12,544
+pre-Ampere and 64/4,000 Ampere+ defaults, architecture split, and frozen
+publication corpus/generator are unchanged.

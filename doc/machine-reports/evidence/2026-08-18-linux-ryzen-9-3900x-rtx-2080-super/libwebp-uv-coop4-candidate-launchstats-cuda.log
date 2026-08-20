@@ -1,0 +1,17 @@
+Saving file '/tmp/libwebp-uv-coop4-profile/candidate-launchstats-cuda.webp'
+==PROF== Connected to process 2681438 (/home/jonas/priv/repos/libwebp-metal/build-cuda-ncu/cwebp)
+==ERROR== ERR_NVGPUCTRPERM - The user does not have permission to access NVIDIA GPU Performance Counters on the target device 0. For instructions on enabling permissions and to get more information see https://developer.nvidia.com/ERR_NVGPUCTRPERM
+File:      /tmp/libwebp-cuda-batch-corpus-20260818/png/photo-medium.png
+Dimension: 1600 x 1200
+Output:    206128 bytes Y-U-V-All-PSNR 35.65 53.38 48.88   37.34 dB
+           (0.86 bpp)
+block count:  intra4:       4101  (54.68%)
+              intra16:      3399  (45.32%)
+              skipped:         0  (0.00%)
+bytes used:  header:            168  (0.1%)
+             mode-partition:  32718  (15.9%)
+ Residuals bytes  |segment 1|segment 2|segment 3|segment 4|  total
+    macroblocks:  |       0%|       0%|       1%|      99%|    7500
+      quantizer:  |      36 |      36 |      28 |      26 |
+   filter level:  |      11 |       8 |       4 |       4 |
+==WARNING== No kernels were profiled.

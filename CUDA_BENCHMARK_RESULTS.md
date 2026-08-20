@@ -2734,3 +2734,39 @@ Candidate and restored builds passed 7/7 tests. PNG missed 1.5 ms/image and
 JPEG regressed, so the source was restored. Evidence uses
 `libwebp-packed-prediction-fill-*`; the pre-Ampere/Ampere+ threshold split
 and frozen publication files are unchanged.
+
+
+## Pre-Ampere cooperative UV transform/quantization screen
+
+The retained native photo timing measured 26.27 ms of GPU wall and attributed
+5.1% of block cycles to UV numerical work. Nsight source sampling put 252
+barrier-stall samples at that phase's completion barrier. The Turing-only
+candidate used four lanes for each UV block's forward transform,
+quantization, and inverse transform; Ampere+ retained the scalar path.
+
+The first build's `int*` transpose workspace came from `i16_tmp`, whose exact
+`MBWork` offset is 5,250 bytes and therefore not four-byte aligned. Nsight
+reported `LaunchFailed`, and transactional CPU fallback preserved exact
+output. That diagnostic result was discarded. Explicitly aligning the field
+produced the valid candidate: resources were 102 registers / 352 stack bytes /
+23,392 shared bytes versus 103 / 352 / 23,392 retained. The representative
+launch improved 121.79 to 119.26 us, `No Eligible` 89.78% to 89.51%, and UV
+numerical share 5.1% to 3.4%, while photo GPU wall moved 26.27 to 26.01 ms.
+
+Five order-balanced full-corpus process pairs measured:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 35.271 ms/image | 35.608 ms/image | -0.337 ms/image |
+| JPEG | 35.485 ms/image | 35.785 ms/image | -0.200 ms/image |
+
+All 60 aligned-candidate timing rows had the expected
+`455f70a1e139f043` / 6,441,688-byte PNG and `0c4b078d5c4d3173` /
+6,400,792-byte JPEG aggregates. The full methods 2--6 / qualities 25/75/98
+tiny/odd matrix and 20 injected-fallback cells were exact, and
+aligned-candidate/restored builds passed 7/7 tests.
+
+Both formats regressed despite the isolated kernel improvement, so the source
+was restored. Evidence uses `libwebp-uv-coop4-*`; the pre-Ampere/Ampere+
+split, 784/12,544 versus 64/4,000 defaults, and frozen publication files are
+unchanged.

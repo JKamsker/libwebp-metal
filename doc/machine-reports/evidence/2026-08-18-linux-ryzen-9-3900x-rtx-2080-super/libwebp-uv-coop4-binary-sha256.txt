@@ -1,0 +1,2 @@
+a824960c90fff1cb8fc2105540258cd5485da96b511e50e0d82d5958be0cf6a7  build-cuda-stage-current/webp_cuda_batch_benchmark
+2d774f954a947298f27b1d0546dc98a1fa4fb4bb5b1bf4a71cd61cd993674e4b  build-cuda-sm75-gate/webp_cuda_batch_benchmark

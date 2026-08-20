@@ -1,0 +1,33 @@
+[1/12] Building C object CMakeFiles/cuda_histogram_test.dir/tests/cuda_histogram_test.c.o
+In file included from /home/jonas/priv/repos/libwebp-metal/tests/cuda_histogram_test.c:16:
+/home/jonas/priv/repos/libwebp-metal/tools/benchmark_platform.h:49:17: warning: ‘WebPBenchmarkNowNanoseconds’ defined but not used [-Wunused-function]
+   49 | static uint64_t WebPBenchmarkNowNanoseconds(void) {
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+[2/12] Building C object CMakeFiles/cuda_near_lossless_test.dir/tests/cuda_near_lossless_test.c.o
+In file included from /home/jonas/priv/repos/libwebp-metal/tests/cuda_near_lossless_test.c:19:
+/home/jonas/priv/repos/libwebp-metal/tools/benchmark_platform.h:49:17: warning: ‘WebPBenchmarkNowNanoseconds’ defined but not used [-Wunused-function]
+   49 | static uint64_t WebPBenchmarkNowNanoseconds(void) {
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+/home/jonas/priv/repos/libwebp-metal/tools/benchmark_platform.h:40:12: warning: ‘WebPBenchmarkUnsetEnvironment’ defined but not used [-Wunused-function]
+   40 | static int WebPBenchmarkUnsetEnvironment(const char* const name) {
+      |            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+[3/12] Building C object CMakeFiles/accelerator_enc_test.dir/src/enc/accelerator_enc.c.o
+[4/12] Linking C executable accelerator_enc_test
+[5/12] Building C object CMakeFiles/cuda_trellis_test.dir/tests/cuda_trellis_test.c.o
+In file included from /home/jonas/priv/repos/libwebp-metal/tests/cuda_trellis_test.c:18:
+/home/jonas/priv/repos/libwebp-metal/tools/benchmark_platform.h:49:17: warning: ‘WebPBenchmarkNowNanoseconds’ defined but not used [-Wunused-function]
+   49 | static uint64_t WebPBenchmarkNowNanoseconds(void) {
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+[6/12] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(502): warning #177-D: function "<unnamed>::AddScoreDev" was declared but never referenced
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(687): warning #177-D: function "<unnamed>::ImportMB" was declared but never referenced
+
+[7/12] Linking CUDA static library libwebp.a
+[8/12] Linking CUDA executable cuda_concurrency_test
+[9/12] Linking CUDA executable cuda_histogram_test
+[10/12] Linking CUDA executable cuda_trellis_test
+[11/12] Linking CUDA executable cuda_near_lossless_test
+[12/12] Linking CUDA executable webp_cuda_batch_benchmark
