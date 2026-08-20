@@ -1,0 +1,135 @@
+{
+  "absent_data_inference_used": false,
+  "audited_main": "92c3b59b2d178c5a03ec20b897252b358f07de81",
+  "deterministic_regression_found": false,
+  "frozen_consequence": {
+    "adaptive_remote_decision_permitted": false,
+    "classification": "fresh-bounded-requalification",
+    "protocol_limit_changes": [],
+    "rationale": "V2 used the same pump, validator, ACK-gated scheduling, deadlines, chunk size, stdout/stderr draining, keepalives, and cleanup/finally protocol as two successful 23+ MB transfers; the observed five-ACK stop is real but does not identify a deterministic source/config regression."
+  },
+  "normalized_state_machine_and_pump_sha256": {
+    "aligned-null-v2": "1435c81604ff485590eb109a7feec4e8edfe332323fdeffb2aed93892f7fba18",
+    "alignment-v3": "28ae6b3d1c38945e6a533d8863f1d9d1e166f4ac4594ed0c52fc8536ee2a3411",
+    "alignment-v4": "1435c81604ff485590eb109a7feec4e8edfe332323fdeffb2aed93892f7fba18"
+  },
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-transport-comparison-v1",
+  "source_differences": [
+    {
+      "difference": "Alignment V3 did not mark its directly spawned Popen as transport_child; Alignment V4 and null V2 did.",
+      "stall_plausibility": "not plausible: it changes only whether the retained child may be stopped after a deadline and does not alter writes, reads, ACKs, buffering, scheduling, or deadline extension",
+      "variants": [
+        "alignment-v3",
+        "alignment-v4/aligned-null-v2"
+      ]
+    }
+  ],
+  "status": "PASS_NO_DETERMINISTIC_V2_TRANSPORT_REGRESSION_FOUND",
+  "variants": {
+    "aligned-null-v2": {
+      "admission_source_sha256": "22cd0170a1224ee82b2bc35e6f1102e388308212bfc0dfb91d56e8d242a8175a",
+      "channel_stdout_bytes": 3941,
+      "cleanup_footer_verified": false,
+      "declaration_accepted": true,
+      "execute_source_sha256": "926444c592943da0b5194532bdd8cac729fb18bbc349ac4e9c03f8b88a0dade0",
+      "frozen_deadlines_seconds": {
+        "CONNECT_CHANNEL_READY_TIMEOUT_SECONDS": 45,
+        "REMOTE_TRANSACTION_TIMEOUT_SECONDS": 1800,
+        "REQUEST_PROGRESS_TIMEOUT_SECONDS": 15,
+        "RESPONSE_PROGRESS_TIMEOUT_SECONDS": 15,
+        "SILENT_OPERATOR_TIMEOUT_SECONDS": 900
+      },
+      "progress_sha256": "167dff4f23670e9510f022cf8cc65d8425bd9050ec54e042d8864a02c93322a4",
+      "remote_cleanup_absence_proved": false,
+      "remote_connection_established": true,
+      "request_bytes_acknowledged": 327680,
+      "request_chunk_bytes": 65536,
+      "request_chunks_acknowledged": 5,
+      "request_chunks_planned": 364,
+      "request_payload_bytes": 23820500,
+      "scheduling": {
+        "cleanup": "same-transaction finally; absent cleanup footer never implies cleanup",
+        "client": "one selector concurrently drains stdout/stderr and ACK-gates one nonblocking stdin frame",
+        "deadline_progress": "only stdin bytes written, request ACK state advancement, response payload bytes, or bounded refusal drain",
+        "keepalive_is_data_progress": false,
+        "remote": "READY then declaration ACK then exact sequential read/chunk ACK; response only after EOF and request-complete"
+      },
+      "status": "refused",
+      "timeout_deadline_kind": "request-chunk-progress",
+      "timeout_phase": "REQUEST_CHUNK",
+      "transfer_sha256": "e92b3a313dc388dd7a2a640d2a99575c8992c2807442ababe4f8481a7ca90178",
+      "transport_source_sha256": "10d6c108b70eabcbeb3c5cb170446c626fef99309d007f58d8b076ad83af778d",
+      "transport_stderr_bytes": 0
+    },
+    "alignment-v3": {
+      "admission_source_sha256": "b44722a174f9c0b7692730190a61c4dfbf9eae97af9e5558e76baeb6ea5d3f0c",
+      "channel_stdout_bytes": 207175,
+      "cleanup_footer_verified": true,
+      "declaration_accepted": true,
+      "execute_source_sha256": "d3d91d07443b331adf84c9e30bd289b635c45cc21c163aaff6e4c24d0b531bac",
+      "frozen_deadlines_seconds": {
+        "CONNECT_CHANNEL_READY_TIMEOUT_SECONDS": 45,
+        "REMOTE_TRANSACTION_TIMEOUT_SECONDS": 1800,
+        "REQUEST_PROGRESS_TIMEOUT_SECONDS": 15,
+        "RESPONSE_PROGRESS_TIMEOUT_SECONDS": 15,
+        "SILENT_OPERATOR_TIMEOUT_SECONDS": 900
+      },
+      "progress_sha256": "7c6caac56ff736439f196013b10dd7525abf92e94a9eb40f243cfa5e672da9d9",
+      "remote_cleanup_absence_proved": true,
+      "remote_connection_established": true,
+      "request_bytes_acknowledged": 23193668,
+      "request_chunk_bytes": 65536,
+      "request_chunks_acknowledged": 354,
+      "request_chunks_planned": 354,
+      "request_payload_bytes": 23193668,
+      "scheduling": {
+        "cleanup": "same-transaction finally; absent cleanup footer never implies cleanup",
+        "client": "one selector concurrently drains stdout/stderr and ACK-gates one nonblocking stdin frame",
+        "deadline_progress": "only stdin bytes written, request ACK state advancement, response payload bytes, or bounded refusal drain",
+        "keepalive_is_data_progress": false,
+        "remote": "READY then declaration ACK then exact sequential read/chunk ACK; response only after EOF and request-complete"
+      },
+      "status": "complete",
+      "timeout_deadline_kind": null,
+      "timeout_phase": null,
+      "transfer_sha256": "cf0be2de840a76fb5744cb27976c746d9d4eed29ef914c981fae8a1778230378",
+      "transport_source_sha256": "1fc788fdc814b46128ddcdd98c22906f902e101b547478f309999d2d1604daad",
+      "transport_stderr_bytes": 0
+    },
+    "alignment-v4": {
+      "admission_source_sha256": "3dffd05715a2877c24635eaba75b368fedbebaa4577654afd4dafdcdf41fd1d6",
+      "channel_stdout_bytes": 208686,
+      "cleanup_footer_verified": true,
+      "declaration_accepted": true,
+      "execute_source_sha256": "20ab574013f1a064baf8eefc9055541845b43c6cc4b92d673c641f205b4c18d5",
+      "frozen_deadlines_seconds": {
+        "CONNECT_CHANNEL_READY_TIMEOUT_SECONDS": 45,
+        "REMOTE_TRANSACTION_TIMEOUT_SECONDS": 1800,
+        "REQUEST_PROGRESS_TIMEOUT_SECONDS": 15,
+        "RESPONSE_PROGRESS_TIMEOUT_SECONDS": 15,
+        "SILENT_OPERATOR_TIMEOUT_SECONDS": 900
+      },
+      "progress_sha256": "91f114a3a6762f1705030939f491d97a20ed23e1edc4f74dd5110fa8f52164fd",
+      "remote_cleanup_absence_proved": true,
+      "remote_connection_established": true,
+      "request_bytes_acknowledged": 23342945,
+      "request_chunk_bytes": 65536,
+      "request_chunks_acknowledged": 357,
+      "request_chunks_planned": 357,
+      "request_payload_bytes": 23342945,
+      "scheduling": {
+        "cleanup": "same-transaction finally; absent cleanup footer never implies cleanup",
+        "client": "one selector concurrently drains stdout/stderr and ACK-gates one nonblocking stdin frame",
+        "deadline_progress": "only stdin bytes written, request ACK state advancement, response payload bytes, or bounded refusal drain",
+        "keepalive_is_data_progress": false,
+        "remote": "READY then declaration ACK then exact sequential read/chunk ACK; response only after EOF and request-complete"
+      },
+      "status": "complete",
+      "timeout_deadline_kind": null,
+      "timeout_phase": null,
+      "transfer_sha256": "7113a69cf93b593829fe65d7d136d0fa882b41209e2e874326d18bdf0cf0a4c0",
+      "transport_source_sha256": "e2bdd726ac1c546ef57658d1ef9bcc07a7e17bd0a2628f07900c162fafeb5db8",
+      "transport_stderr_bytes": 0
+    }
+  }
+}
