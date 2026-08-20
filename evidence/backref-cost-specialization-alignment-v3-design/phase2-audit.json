@@ -1,0 +1,234 @@
+{
+  "schema": "libwebp-backref-cost-specialization-alignment-v3-phase2-audit-v1",
+  "phase": "2",
+  "status": "REFUSED",
+  "result": "FAIL_CLOSED_REFUSAL_NO_HOST_CONTACT",
+  "auditor": "scripts/audit_backref_cost_specialization_alignment_v3_phase2.py",
+  "audit_command": "PYTHONPATH=scripts python3 scripts/audit_backref_cost_specialization_alignment_v3_phase2.py",
+  "base_commit": "c208d6ed33b0ee5e84ba02e78696879266658e7e",
+  "phase1a_commit": "f6735570eb2a81faa60544b289fb0207b8cde873",
+  "phase1b_commit": "3b28d9066d94d9397b2b36a09540547adee9efa5",
+  "audited_head": "3b28d9066d94d9397b2b36a09540547adee9efa5",
+  "ancestry": {
+    "main_ref": "c208d6ed33b0ee5e84ba02e78696879266658e7e",
+    "main_matches_exact_base": true,
+    "phase1a_parent": [
+      "c208d6ed33b0ee5e84ba02e78696879266658e7e"
+    ],
+    "phase1a_parent_is_exact_base": true,
+    "phase1b_parent": [
+      "f6735570eb2a81faa60544b289fb0207b8cde873"
+    ],
+    "phase1b_parent_is_exact_phase1a": true,
+    "base_is_ancestor_of_phase1b": true,
+    "current_head_is_phase1b_or_phase2_child": true
+  },
+  "phase1b_additions_only": {
+    "diff_entry_count": 30,
+    "all_entries_added_and_allowlisted": true,
+    "frozen_phase1a_artifacts_modified": false
+  },
+  "frozen_hashes": {
+    "manifest": {
+      "working_tree_sha256": "80676d5adabdd3cb9e7df1b559f17d61c94f7fcfe2a3bd78698316d4257acdea",
+      "phase1a_blob_sha256": "80676d5adabdd3cb9e7df1b559f17d61c94f7fcfe2a3bd78698316d4257acdea",
+      "authorization_sha256": "80676d5adabdd3cb9e7df1b559f17d61c94f7fcfe2a3bd78698316d4257acdea"
+    },
+    "protocol": {
+      "working_tree_sha256": "a12f023f692d317cf1f969570967d77c2307b70b33e7b31f3feea4df0f853179",
+      "phase1a_blob_sha256": "a12f023f692d317cf1f969570967d77c2307b70b33e7b31f3feea4df0f853179",
+      "authorization_sha256": "a12f023f692d317cf1f969570967d77c2307b70b33e7b31f3feea4df0f853179"
+    },
+    "schemas": {
+      "working_tree_sha256": "6ae1d89c572a950bb96a9ee785df8be501a0223ae7e79b4fab735305b0ffd4e5",
+      "phase1a_blob_sha256": "6ae1d89c572a950bb96a9ee785df8be501a0223ae7e79b4fab735305b0ffd4e5",
+      "authorization_sha256": "6ae1d89c572a950bb96a9ee785df8be501a0223ae7e79b4fab735305b0ffd4e5"
+    },
+    "transport": {
+      "working_tree_sha256": "1fc788fdc814b46128ddcdd98c22906f902e101b547478f309999d2d1604daad",
+      "phase1a_blob_sha256": "1fc788fdc814b46128ddcdd98c22906f902e101b547478f309999d2d1604daad",
+      "authorization_sha256": "1fc788fdc814b46128ddcdd98c22906f902e101b547478f309999d2d1604daad"
+    }
+  },
+  "hash_index": {
+    "schema": "libwebp-backref-cost-specialization-alignment-v3-phase1b-hash-index-v1",
+    "index_sha256": "e249dd079ec95aba2e0b19e59e7df1098b64316ac1ae1c3cd3422a2a912ba1a5",
+    "file_count": 28,
+    "total_bytes": 361702,
+    "channel_stdout_bytes": 207175,
+    "channel_stdout_sha256": "c99e0f1c93a93f8f138a92a4ac032523141c094678ec282554d9fd00ad38c02",
+    "framed_response_bytes": 18697,
+    "framed_response_sha256": "0ddf376e747b810f5ce7f5c19eab6a749f64f626fe79387ade876b3ff935db90",
+    "transport_stderr_bytes": 0,
+    "transport_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+  },
+  "raw_channel_replay": {
+    "frame_count": 360,
+    "frame_kind_counts": {
+      "ready": 1,
+      "request-ack": 355,
+      "request-complete": 1,
+      "response-declaration": 1,
+      "response-chunk": 1,
+      "response-complete": 1
+    },
+    "sequence_contiguous": true,
+    "request_ack_index_min": 0,
+    "request_ack_index_max": 354,
+    "request_declaration_accepted": true,
+    "request_payload_bytes": 23193668,
+    "request_payload_sha256": "3fbc67b87403b668f2f030da59ee6f6ecdc1f31dda74a8da10aed82b28d31e7e",
+    "request_chunk_bytes": 65536,
+    "request_chunk_count": 354,
+    "request_chunks_acked": 354,
+    "request_bytes_acked": 23193668,
+    "request_declaration_sha256": "466f7f08b445cdc75bf16d75147d205e6d998ea7e9ea5c14451434164756ec94",
+    "request_wire_bytes": 23256455,
+    "request_wire_sha256": "048e5ee16ba982b3f9086c97b28607842237412de7d19d996b2044b823be488d",
+    "response_chunk_count": 1,
+    "response_chunk_bytes": [
+      18697
+    ],
+    "response_bytes": 18697,
+    "response_sha256": "0ddf376e747b810f5ce7f5c19eab6a749f64f626fe79387ade876b3ff935db90",
+    "response_matches_persisted": true,
+    "ready_remote_process_pid": 33772
+  },
+  "archive_and_source_admission": {
+    "response_frame_count": 8,
+    "response_bulk_chunk_count": 1,
+    "archive_bytes": 14363,
+    "archive_sha256": "2543b1755322546409c68198572419ea948e1ff006da8455da040b237bb39bb1",
+    "archive_inspect_status": "accepted",
+    "archive_extract_status": "accepted",
+    "archive_member_count": 11,
+    "archived_artifact_index_rows": 10,
+    "compact_full_source_admission_equal": true,
+    "source_commit": "f6735570eb2a81faa60544b289fb0207b8cde873",
+    "source_tree": "3f40974572234b4a08da1bbb426b52c3ab6fb216",
+    "source_map_entry_count": 66,
+    "source_map_sha256": "3f67633b725b012cd5a52a4010cfd82e79c467edf1c0e304b0d0a497f1100d88",
+    "source_bundle_sha256": "65fb19802bf2503870befcb9348f3961ebb1802ec1e7c36bfd83dc97f48ba5d8"
+  },
+  "alignment": {
+    "all_six_private_addresses_distinct": true,
+    "all_entry_mod_16384_zero": true,
+    "entry_spacing_16384": true,
+    "dp_to_push_displacement_49152": true,
+    "section_executable_pure_instructions": true,
+    "section_size_bytes": 83212,
+    "body_bytes": 5624,
+    "padding_bytes": 77588,
+    "baseline_layout_canonical_instructions_equal": true,
+    "hint_body_distinct": true,
+    "timed_recorder_free": true,
+    "timed_runner_bytes": 687448,
+    "timed_runner_sha256": "992ec45ac5958454ef5125837bbee47215d43781b0f87db3c5aef30e6d939f97"
+  },
+  "payload": {
+    "bytes": 2097152,
+    "sha256": "25309a36ead04a05c8169e7cdc40a5ac8f47d406819c322461f6006cc1cd6845",
+    "generator_fixture_manifest_agree": true,
+    "stale_identity_negatives": true
+  },
+  "toolchain": {
+    "manifest_actual_fixture_agree": true,
+    "required_executable_count": 8,
+    "required_metadata_count": 4,
+    "xcrun_required": false,
+    "stale_identity_negatives": true
+  },
+  "local_test_results": {
+    "protocol": "PASS",
+    "streaming": "PASS",
+    "admission": "PASS",
+    "archive": "PASS",
+    "process_ownership": "PASS",
+    "payload_identity": "PASS",
+    "toolchain_identity": "PASS",
+    "experiment_codegen_correctness_sanitizers": "PASS",
+    "experiment_codegen_boundary_correctness_encodes": 36,
+    "experiment_sanitizer_configurations": 2
+  },
+  "safety": {
+    "phase1_rehearsal_remote_contacts": 1,
+    "phase1_rehearsal_attempts": 1,
+    "phase1_rehearsal_retry_count": 0,
+    "phase1_rehearsal_rerun_count": 0,
+    "prior_cycle_paths_contacted": false,
+    "post_run_remote_cleanup_operations": 0,
+    "discovered_pid_signals": 0,
+    "remote_discovered_pid_signals": 0,
+    "local_exact_identity_conflicts": [],
+    "remote_exact_identity_conflicts": [],
+    "settings_changed": false,
+    "lease_state": "not-attempted",
+    "timed_binary_invoked": false
+  },
+  "authority": {
+    "phase1b_envelope_authorization_status": "AUTHORIZED",
+    "phase1b_envelope_phase2_authority": "ALIGNMENT_V3_DIAGNOSTIC_ONLY",
+    "phase1b_envelope_timed_execution_authorized": true,
+    "independent_timed_prerequisites": {
+      "correctness_before_first_profile": false,
+      "coarse_timer_record_accounting": false,
+      "all_timed_children_serial_and_directly_owned": false
+    },
+    "authority": "NONE",
+    "timed_execution_authorized": false,
+    "refusal_reasons": [
+      "rehearsal did not run the mandatory 24 correctness encodes before timing",
+      "rehearsal records timer_accounting_validation=not-run-in-rehearsal",
+      "rehearsal had no timed children, so serial/direct ownership was not proven"
+    ]
+  },
+  "host_contact": {
+    "remote_host": "pandocs-agent",
+    "phase2_contact_attempted": false,
+    "phase2_ssh_process_created": false,
+    "phase2_lease_attempted": false,
+    "phase2_timed_command_invoked": false,
+    "phase2_retry_count": 0,
+    "phase2_rerun_count": 0,
+    "reason": "independent authority is NONE; no host contact is permitted"
+  },
+  "raw_counts": {
+    "timed_phase2_processes": 0,
+    "timed_phase2_samples": 0,
+    "timed_phase2_correctness_encodes": 0,
+    "timed_phase2_work_rows": 0,
+    "timed_phase2_stage_rows": 0,
+    "phase1_rehearsal_encoder_workloads": 0,
+    "phase1_rehearsal_performance_samples": 0,
+    "phase1_rehearsal_profile_commands_constructed": 36,
+    "phase1_rehearsal_request_bytes": 23193668,
+    "phase1_rehearsal_request_chunks_written": 354,
+    "phase1_rehearsal_request_chunks_acknowledged": 354,
+    "phase1_rehearsal_channel_stdout_bytes": 207175,
+    "phase1_rehearsal_response_bytes": 18697,
+    "phase1_rehearsal_archive_bytes": 14363,
+    "phase1_rehearsal_source_paths": 66,
+    "phase1_rehearsal_evidence_files": 28,
+    "phase1_rehearsal_evidence_bytes": 361702
+  },
+  "evidence_paths": {
+    "phase1b_authorization": "evidence/backref-cost-specialization-alignment-v3-design/phase1b-authorization.json",
+    "phase1b_hash_index": "evidence/backref-cost-specialization-alignment-v3-design/phase1b-rehearsal-hashes.json",
+    "rehearsal_root": "evidence/backref-cost-specialization-alignment-v3-design/rehearsal",
+    "ready": "evidence/backref-cost-specialization-alignment-v3-design/rehearsal/return-protocol/ready.json",
+    "request_declaration": "evidence/backref-cost-specialization-alignment-v3-design/rehearsal/return-protocol/request-declaration.json",
+    "request_progress": "evidence/backref-cost-specialization-alignment-v3-design/rehearsal/return-protocol/request-progress.json",
+    "source_admission": "evidence/backref-cost-specialization-alignment-v3-design/rehearsal/return-protocol/source-admission.json",
+    "source_admission_details": "evidence/backref-cost-specialization-alignment-v3-design/rehearsal/source-admission-details.json",
+    "framed_response": "evidence/backref-cost-specialization-alignment-v3-design/rehearsal/return-protocol/framed-response.bin",
+    "channel_stdout": "evidence/backref-cost-specialization-alignment-v3-design/rehearsal/return-protocol/channel-stdout.bin",
+    "cleanup_footer": "evidence/backref-cost-specialization-alignment-v3-design/rehearsal/return-protocol/cleanup-footer.json",
+    "build_identity": "evidence/backref-cost-specialization-alignment-v3-design/rehearsal/build-identity.json",
+    "codegen": "evidence/backref-cost-specialization-alignment-v3-design/rehearsal/codegen.json",
+    "request_size_freeze": "evidence/backref-cost-specialization-alignment-v3-design/request-channel-size-freeze.json",
+    "source_control_freeze": "evidence/backref-cost-specialization-alignment-v3-design/source-admission-control-freeze.json",
+    "payload_agreement": "evidence/backref-cost-specialization-alignment-v3-design/representative-payload-agreement.json",
+    "toolchain_agreement": "evidence/backref-cost-specialization-alignment-v3-design/toolchain-identity-agreement.json"
+  },
+  "next_credible_lead": "A new independently frozen Phase 2 handoff must first prove correctness-before-timing, timer accounting, and serial directly-owned timed children; only then may the exact one-session timed command be reconsidered."
+}
