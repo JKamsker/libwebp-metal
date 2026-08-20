@@ -1,0 +1,9 @@
+Internal ctest changing into directory: /tmp/libwebp-issue19-sanitize.QiC6bg
+Test project /tmp/libwebp-issue19-sanitize.QiC6bg
+    Start 4: lossy_decimate_conformance_selftest
+1/1 Test #4: lossy_decimate_conformance_selftest ...   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.02 sec
+{"fixture":"/tmp/libwebp-issue19-full-v2.QZnS4A/graphic-small-m4-q75.wpd","backend":"loopback","injection":"none","schema":1,"abi":12,"streaming":false,"result":1,"exact":true,"transport_deserialize_ns":21641294,"accelerator_callback_ns":675853,"accelerator_execution_ns":0,"result_transfer_ns":0,"result_compare_ns":12233022,"cpu_replay_tokenization_ns":0,"total_ns":34550169}

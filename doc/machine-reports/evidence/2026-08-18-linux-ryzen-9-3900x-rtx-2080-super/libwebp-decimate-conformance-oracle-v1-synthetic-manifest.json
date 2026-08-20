@@ -1,0 +1,247 @@
+{
+  "fixtures": [
+    {
+      "encoded_bytes": 74,
+      "encoded_sha256": "69a690ebd0a24782e6d5769cc7857c44a9723f823fc5d6e00c9b0f57c12c05f7",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m3-q0.wpd",
+      "fixture_sha256": "9b57f943c29ae2e95f82ba50bb058f4d770cc57bd5367a62dddb5f6f761771f0",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 3,
+      "quality": 0
+    },
+    {
+      "encoded_bytes": 474,
+      "encoded_sha256": "fab0709f2a9611a5cff36bf7aa97e15931cc0eecff6263063bdb082026f58c57",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m3-q100.wpd",
+      "fixture_sha256": "e65497cd0e12f9a42f6ae13cf07054ae55c06d206ee929c2d5d10659604e0e7b",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 3,
+      "quality": 100
+    },
+    {
+      "encoded_bytes": 74,
+      "encoded_sha256": "69a690ebd0a24782e6d5769cc7857c44a9723f823fc5d6e00c9b0f57c12c05f7",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m4-q0.wpd",
+      "fixture_sha256": "0265e750555de3e69706e39bcfa48d26ab9ea0c5e53ea841f541e71eb304a6b9",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 4,
+      "quality": 0
+    },
+    {
+      "encoded_bytes": 474,
+      "encoded_sha256": "fab0709f2a9611a5cff36bf7aa97e15931cc0eecff6263063bdb082026f58c57",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m4-q100.wpd",
+      "fixture_sha256": "21848badd08a3d545b665efdb1204954f4c0eac4d73901db45846cd5599481df",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 4,
+      "quality": 100
+    },
+    {
+      "encoded_bytes": 72,
+      "encoded_sha256": "7d63d9fcde0de43a09ffac9798056280b040ccf7e13ee27655cd582bb2505ae9",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m5-q0.wpd",
+      "fixture_sha256": "b9b22b52a9efbe27e65892d3a04f3dbf23498a2ce0adb66cfde2381a2b97d0b5",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 5,
+      "quality": 0
+    },
+    {
+      "encoded_bytes": 472,
+      "encoded_sha256": "16ec1ac2d24af8f6112c0e1aeb4c04b74401106144b7c025e48bc8a39f085f8f",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m5-q100.wpd",
+      "fixture_sha256": "c1bb418aec244a9872050b3f9a10df21c8461074c02929a1785dad95508e5dde",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 5,
+      "quality": 100
+    },
+    {
+      "encoded_bytes": 72,
+      "encoded_sha256": "848b600a04290504f66e899520830299f3c2dfbc49c11073ee10ba06113eace1",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m6-q0.wpd",
+      "fixture_sha256": "72af11126566deeb48b9bed375f31db860b5116da8f4fe32859a01a4139f9b73",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 6,
+      "quality": 0
+    },
+    {
+      "encoded_bytes": 470,
+      "encoded_sha256": "5819bcc1607286b356d9154025044c592a8767a7300430ad2a8035b0fbec4ec4",
+      "fixture": "libwebp-hash-combined-input-graphic-tiny-17x13-m6-q100.wpd",
+      "fixture_sha256": "e97eb33c108b515cc11c4636f2e75f84a2ba8d610e2f94431576aea95748835e",
+      "input": "/home/jonas/priv/repos/libwebp-metal/doc/machine-reports/evidence/2026-08-18-linux-ryzen-9-3900x-rtx-2080-super/libwebp-hash-combined-input-graphic-tiny-17x13.ppm",
+      "input_sha256": "b8f5004a40d18349d642a4ba44253b4ed62b657f4157616577b3964c28105d49",
+      "method": 6,
+      "quality": 100
+    },
+    {
+      "encoded_bytes": 62,
+      "encoded_sha256": "29a536db8b89e3aa1524db24ff9a2535976407344d44c2b0e39770c12b246c58",
+      "fixture": "tie-flat-33x31-m3-q0.wpd",
+      "fixture_sha256": "370c14712e61a02f5b30f9a491731f4bcac7f2a220c22aae5bc04933eb3a3f7f",
+      "input": "generated:tie-flat-33x31.ppm",
+      "input_sha256": "8de0dc3940f0a3918eae7e544a58c841b44dc5109b75263dab5fc705f24cc82c",
+      "method": 3,
+      "quality": 0
+    },
+    {
+      "encoded_bytes": 54,
+      "encoded_sha256": "dcbe7573c38535387b888157e1224db7289d6613518673ee2a6c111ee7ae874f",
+      "fixture": "tie-flat-33x31-m3-q100.wpd",
+      "fixture_sha256": "f1cd2a2292a1a40ac2058b0e3cea41dcd51df7ae10cbad413ea19120965aecd7",
+      "input": "generated:tie-flat-33x31.ppm",
+      "input_sha256": "8de0dc3940f0a3918eae7e544a58c841b44dc5109b75263dab5fc705f24cc82c",
+      "method": 3,
+      "quality": 100
+    },
+    {
+      "encoded_bytes": 62,
+      "encoded_sha256": "29a536db8b89e3aa1524db24ff9a2535976407344d44c2b0e39770c12b246c58",
+      "fixture": "tie-flat-33x31-m4-q0.wpd",
+      "fixture_sha256": "741668d4f63d4e2cf1e8965a8a3b5c950e6d0ba1fac65ecce8ca2718fe70f087",
+      "input": "generated:tie-flat-33x31.ppm",
+      "input_sha256": "8de0dc3940f0a3918eae7e544a58c841b44dc5109b75263dab5fc705f24cc82c",
+      "method": 4,
+      "quality": 0
+    },
+    {
+      "encoded_bytes": 54,
+      "encoded_sha256": "dcbe7573c38535387b888157e1224db7289d6613518673ee2a6c111ee7ae874f",
+      "fixture": "tie-flat-33x31-m4-q100.wpd",
+      "fixture_sha256": "9f1831b734cbdc9840c3eb868ba1c31a0b929daafb990c48f2d2e4e73f911a5c",
+      "input": "generated:tie-flat-33x31.ppm",
+      "input_sha256": "8de0dc3940f0a3918eae7e544a58c841b44dc5109b75263dab5fc705f24cc82c",
+      "method": 4,
+      "quality": 100
+    },
+    {
+      "encoded_bytes": 62,
+      "encoded_sha256": "29a536db8b89e3aa1524db24ff9a2535976407344d44c2b0e39770c12b246c58",
+      "fixture": "tie-flat-33x31-m5-q0.wpd",
+      "fixture_sha256": "1652b20849f311114d32bc6d1bcf6b5ad7eb27a1e52d41194b131d38695ce789",
+      "input": "generated:tie-flat-33x31.ppm",
+      "input_sha256": "8de0dc3940f0a3918eae7e544a58c841b44dc5109b75263dab5fc705f24cc82c",
+      "method": 5,
+      "quality": 0
+    },
+    {
+      "encoded_bytes": 54,
+      "encoded_sha256": "dcbe7573c38535387b888157e1224db7289d6613518673ee2a6c111ee7ae874f",
+      "fixture": "tie-flat-33x31-m5-q100.wpd",
+      "fixture_sha256": "c38a468494ec974a06f8962bc609a6c115c35ed5e879e400038e7f591685bbc1",
+      "input": "generated:tie-flat-33x31.ppm",
+      "input_sha256": "8de0dc3940f0a3918eae7e544a58c841b44dc5109b75263dab5fc705f24cc82c",
+      "method": 5,
+      "quality": 100
+    },
+    {
+      "encoded_bytes": 62,
+      "encoded_sha256": "29a536db8b89e3aa1524db24ff9a2535976407344d44c2b0e39770c12b246c58",
+      "fixture": "tie-flat-33x31-m6-q0.wpd",
+      "fixture_sha256": "5d9ccc1b93e60cb75fff00ca83a51c3d670074c3546396d0106eaa43b9230bbe",
+      "input": "generated:tie-flat-33x31.ppm",
+      "input_sha256": "8de0dc3940f0a3918eae7e544a58c841b44dc5109b75263dab5fc705f24cc82c",
+      "method": 6,
+      "quality": 0
+    },
+    {
+      "encoded_bytes": 54,
+      "encoded_sha256": "dcbe7573c38535387b888157e1224db7289d6613518673ee2a6c111ee7ae874f",
+      "fixture": "tie-flat-33x31-m6-q100.wpd",
+      "fixture_sha256": "e694adf7913593d69de6267dde86f083a035cac856a4a8371b1f8ee3fe50de83",
+      "input": "generated:tie-flat-33x31.ppm",
+      "input_sha256": "8de0dc3940f0a3918eae7e544a58c841b44dc5109b75263dab5fc705f24cc82c",
+      "method": 6,
+      "quality": 100
+    },
+    {
+      "encoded_bytes": 3028,
+      "encoded_sha256": "08cac10414fb352510cba1deca44d50c58de3ff4117e27115b6cf5e2cde05acf",
+      "fixture": "coefficient-extreme-257x255-m3-q0.wpd",
+      "fixture_sha256": "08c85733963a59b2e22bb9630a1bfe806b97f48ed0f0afdfce19fde733f6bb5f",
+      "input": "generated:coefficient-extreme-257x255.ppm",
+      "input_sha256": "4aebb453b19aecacb179b7dd82e68337a80af09405ad0e7d1310b85a42d3ac65",
+      "method": 3,
+      "quality": 0
+    },
+    {
+      "encoded_bytes": 22280,
+      "encoded_sha256": "5267537015fe801ce39f186481f58be9aef33d8765d4977b7fa4be475c09ef3c",
+      "fixture": "coefficient-extreme-257x255-m3-q100.wpd",
+      "fixture_sha256": "0fdb4e4e2b702460d32c709c9bfbce9be27f71ac4ea3f6f613751946cba5bfea",
+      "input": "generated:coefficient-extreme-257x255.ppm",
+      "input_sha256": "4aebb453b19aecacb179b7dd82e68337a80af09405ad0e7d1310b85a42d3ac65",
+      "method": 3,
+      "quality": 100
+    },
+    {
+      "encoded_bytes": 3028,
+      "encoded_sha256": "08cac10414fb352510cba1deca44d50c58de3ff4117e27115b6cf5e2cde05acf",
+      "fixture": "coefficient-extreme-257x255-m4-q0.wpd",
+      "fixture_sha256": "5599f833d4962310a984b46569e72cec600fb1dd94bd82af396cdbcbde9b48a5",
+      "input": "generated:coefficient-extreme-257x255.ppm",
+      "input_sha256": "4aebb453b19aecacb179b7dd82e68337a80af09405ad0e7d1310b85a42d3ac65",
+      "method": 4,
+      "quality": 0
+    },
+    {
+      "encoded_bytes": 22280,
+      "encoded_sha256": "5267537015fe801ce39f186481f58be9aef33d8765d4977b7fa4be475c09ef3c",
+      "fixture": "coefficient-extreme-257x255-m4-q100.wpd",
+      "fixture_sha256": "8ddfa18c1fcca7025c99ed0023a07b8b32837ca84649014c9b32587af9a180ef",
+      "input": "generated:coefficient-extreme-257x255.ppm",
+      "input_sha256": "4aebb453b19aecacb179b7dd82e68337a80af09405ad0e7d1310b85a42d3ac65",
+      "method": 4,
+      "quality": 100
+    },
+    {
+      "encoded_bytes": 3030,
+      "encoded_sha256": "bcb64d2f8e6cac87a2820930432d30085172a919a74893271350b75a68bf32a0",
+      "fixture": "coefficient-extreme-257x255-m5-q0.wpd",
+      "fixture_sha256": "547a23d8667d17baf44c93a3072d0ec19c1820567a62994b549f22e66341512d",
+      "input": "generated:coefficient-extreme-257x255.ppm",
+      "input_sha256": "4aebb453b19aecacb179b7dd82e68337a80af09405ad0e7d1310b85a42d3ac65",
+      "method": 5,
+      "quality": 0
+    },
+    {
+      "encoded_bytes": 22280,
+      "encoded_sha256": "5267537015fe801ce39f186481f58be9aef33d8765d4977b7fa4be475c09ef3c",
+      "fixture": "coefficient-extreme-257x255-m5-q100.wpd",
+      "fixture_sha256": "aa5be1f4e1ebf7d96c9af7347835d6621760768a601bbe93584726612e90c3b9",
+      "input": "generated:coefficient-extreme-257x255.ppm",
+      "input_sha256": "4aebb453b19aecacb179b7dd82e68337a80af09405ad0e7d1310b85a42d3ac65",
+      "method": 5,
+      "quality": 100
+    },
+    {
+      "encoded_bytes": 3028,
+      "encoded_sha256": "08cac10414fb352510cba1deca44d50c58de3ff4117e27115b6cf5e2cde05acf",
+      "fixture": "coefficient-extreme-257x255-m6-q0.wpd",
+      "fixture_sha256": "a94dec87021805f7e670b18522a07ca4c9e75ba3f364939cf6947a01951af463",
+      "input": "generated:coefficient-extreme-257x255.ppm",
+      "input_sha256": "4aebb453b19aecacb179b7dd82e68337a80af09405ad0e7d1310b85a42d3ac65",
+      "method": 6,
+      "quality": 0
+    },
+    {
+      "encoded_bytes": 22280,
+      "encoded_sha256": "5267537015fe801ce39f186481f58be9aef33d8765d4977b7fa4be475c09ef3c",
+      "fixture": "coefficient-extreme-257x255-m6-q100.wpd",
+      "fixture_sha256": "0d545b28b2646d9ccea79242fe1d1e2a76f21653bc7dd4a3aeedb9ed5188b5c6",
+      "input": "generated:coefficient-extreme-257x255.ppm",
+      "input_sha256": "4aebb453b19aecacb179b7dd82e68337a80af09405ad0e7d1310b85a42d3ac65",
+      "method": 6,
+      "quality": 100
+    }
+  ],
+  "generator": "generate_lossy_decimate_fixtures.py",
+  "schema": "webp-lossy-decimate-fixture-manifest",
+  "version": 1
+}

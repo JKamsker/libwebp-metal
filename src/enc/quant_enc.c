@@ -21,6 +21,7 @@
 #include "src/dsp/quant.h"
 #include "src/enc/accelerator_enc.h"
 #include "src/enc/cost_enc.h"
+#include "src/enc/lossy_decimate_fixture.h"
 #include "src/enc/vp8i_enc.h"
 #include "src/webp/types.h"
 
@@ -961,6 +962,7 @@ static void StoreMaxDelta(VP8SegmentInfo* const dqm, const int16_t DCs[16]) {
   const int v2 = abs(DCs[4]);
   int max_v = (v1 > v0) ? v1 : v0;
   max_v = (v2 > max_v) ? v2 : max_v;
+  WebPDecimateFixtureCaptureNoteMaxDelta(max_v);
   if (max_v > dqm->max_edge) dqm->max_edge = max_v;
 }
 

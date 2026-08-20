@@ -1770,15 +1770,30 @@ __global__ void __launch_bounds__(kDecimateThreads) DecimateKernel(
         }
       }
     }
+    w.rd.reserved[0] = 0;
+    w.rd.reserved[1] = 0;
   }
   __syncthreads();
   // Result struct store in parallel words.
   {
+    constexpr int kModesI4Word =
+        (int)(offsetof(DeviceResult, modes_i4) / sizeof(uint32_t));
+    constexpr int kModesI4Words =
+        (int)(sizeof(w.rd.modes_i4) / sizeof(uint32_t));
+    constexpr int kLastWord = (int)(sizeof(DeviceResult) / sizeof(uint32_t)) - 1;
     const uint32_t* const src32 = (const uint32_t*)&w.rd;
     uint32_t* const dst32 = (uint32_t*)&v.results[mb_index];
     for (int i = tid; i < (int)(sizeof(DeviceResult) / 4);
          i += (int)blockDim.x) {
-      dst32[i] = src32[i];
+      // modes_i4 is inactive for an I16 winner. Canonicalize it so every
+      // named result byte is portable and comparable with the CPU oracle.
+      uint32_t value = (!w.rd.is_i4 && i >= kModesI4Word &&
+                        i < kModesI4Word + kModesI4Words)
+                           ? 0u
+                           : src32[i];
+      // DeviceResult has two compiler padding bytes after max_delta.
+      if (i == kLastWord) value &= 0x0000ffffu;
+      dst32[i] = value;
     }
   }
   __syncthreads();
@@ -1863,6 +1878,10 @@ struct DecimateState {
   unsigned long long* phase_cycles_dev = nullptr;
   cudaEvent_t timing_begin = nullptr;
   cudaEvent_t timing_end = nullptr;
+  cudaEvent_t timing_transfer_begin = nullptr;
+  cudaEvent_t timing_transfer_end = nullptr;
+  uint64_t last_execution_ns = 0;
+  uint64_t last_result_transfer_ns = 0;
 };
 
 DecimateState g_decimate_state;
@@ -1989,6 +2008,12 @@ void DecimateReleaseAll(DecimateState* state) {
   if (state->timing_end != nullptr) {
     (void)cudaEventDestroy(state->timing_end);
   }
+  if (state->timing_transfer_begin != nullptr) {
+    (void)cudaEventDestroy(state->timing_transfer_begin);
+  }
+  if (state->timing_transfer_end != nullptr) {
+    (void)cudaEventDestroy(state->timing_transfer_end);
+  }
   for (int i = 0; i < kMaxDecimateBands; ++i) {
     if (state->band_events[i] != nullptr) {
       (void)cudaEventDestroy(state->band_events[i]);
@@ -2045,7 +2070,9 @@ bool DecimateInitialize(DecimateState* state) {
       (void)cudaGetLastError();
     }
     if (cudaEventCreate(&state->timing_begin) != cudaSuccess ||
-        cudaEventCreate(&state->timing_end) != cudaSuccess) {
+        cudaEventCreate(&state->timing_end) != cudaSuccess ||
+        cudaEventCreate(&state->timing_transfer_begin) != cudaSuccess ||
+        cudaEventCreate(&state->timing_transfer_end) != cudaSuccess) {
       DecimateReleaseAll(state);
       return false;
     }
@@ -2289,6 +2316,7 @@ void DecimateReportTiming(DecimateState* state, int mb_w, int mb_h) {
   float ms = 0.f;
   if (cudaEventElapsedTime(&ms, state->timing_begin, state->timing_end) ==
       cudaSuccess) {
+    state->last_execution_ns = (uint64_t)(ms * 1000000.f + .5f);
     fprintf(stderr, "decimate GPU wall: %.2f ms (%dx%d MBs)\n", ms, mb_w,
             mb_h);
   }
@@ -2308,6 +2336,16 @@ void DecimateReportTiming(DecimateState* state, int mb_w, int mb_h) {
       }
       fprintf(stderr, "\n");
     }
+  }
+}
+
+void DecimateAccumulateResultTransferTiming(DecimateState* state) {
+  float ms = 0.f;
+  if (state->timing && state->timing_transfer_begin != nullptr &&
+      state->timing_transfer_end != nullptr &&
+      cudaEventElapsedTime(&ms, state->timing_transfer_begin,
+                           state->timing_transfer_end) == cudaSuccess) {
+    state->last_result_transfer_ns += (uint64_t)(ms * 1000000.f + .5f);
   }
 }
 
@@ -2390,6 +2428,10 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
       bool injected_failure = false;
       cudaError_t error = cudaStreamWaitEvent(
           state->copy_stream, state->band_events[band], 0);
+      if (state->timing && error == cudaSuccess) {
+        error = cudaEventRecord(state->timing_transfer_begin,
+                                state->copy_stream);
+      }
       if (error == cudaSuccess) {
         error = cudaMemcpyAsync(
             staging + state->pending_host_off_results +
@@ -2443,6 +2485,12 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
         }
       }
       if (error == cudaSuccess) {
+        if (state->timing) {
+          error = cudaEventRecord(state->timing_transfer_end,
+                                  state->copy_stream);
+        }
+      }
+      if (error == cudaSuccess) {
         error = cudaStreamSynchronize(state->copy_stream);
       }
       if (error != cudaSuccess) {
@@ -2452,6 +2500,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
         if (!injected_failure) state->quarantined = true;
         break;
       }
+      DecimateAccumulateResultTransferTiming(state);
       memcpy(request->results + mb_start,
              staging + state->pending_host_off_results +
                  mb_start * sizeof(DeviceResult),
@@ -2645,6 +2694,8 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     const int effective_band_count =
         (request->mb_h + rows_per_band - 1) / rows_per_band;
     if (state->timing) {
+      state->last_execution_ns = 0;
+      state->last_result_transfer_ns = 0;
       (void)cudaEventRecord(state->timing_begin, state->stream);
     }
     for (int d = 0; d <= last_diagonal && error == cudaSuccess; ++d) {
@@ -2704,6 +2755,9 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
             : -1;
     int copy_step = 0;
     bool injected_failure = false;
+    if (state->timing && error == cudaSuccess) {
+      error = cudaEventRecord(state->timing_transfer_begin, state->stream);
+    }
 #define DOWNLOAD_STAGED(host_offset, device_ptr, bytes)                    \
   if (error == cudaSuccess) {                                               \
     error = cudaMemcpyAsync(state->host_staging + (host_offset),            \
@@ -2719,6 +2773,9 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     DOWNLOAD_STAGED(layout.host_off_recon_u, view.recon_u, recon_uv_bytes);
     DOWNLOAD_STAGED(layout.host_off_recon_v, view.recon_v, recon_uv_bytes);
 #undef DOWNLOAD_STAGED
+    if (state->timing && error == cudaSuccess) {
+      error = cudaEventRecord(state->timing_transfer_end, state->stream);
+    }
     if (error == cudaSuccess) error = cudaStreamSynchronize(state->stream);
     if (error != cudaSuccess) {
       (void)cudaStreamSynchronize(state->stream);
@@ -2730,6 +2787,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
       result = WEBP_ACCELERATOR_ERROR;
       break;
     }
+    DecimateAccumulateResultTransferTiming(state);
     memcpy(request->results,
            state->host_staging + layout.host_off_results, results_bytes);
     CommitPlaneRows(request->recon_y, (size_t)request->recon_y_stride,
@@ -2754,6 +2812,22 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
   } while (0);
   UnlockDecimate(&g_decimate_mutex);
   return result;
+}
+
+extern "C" uint64_t WebPCUDAGetLastDecimateExecutionNanoseconds(void) {
+  uint64_t value;
+  LockDecimate(&g_decimate_mutex);
+  value = g_decimate_state.last_execution_ns;
+  UnlockDecimate(&g_decimate_mutex);
+  return value;
+}
+
+extern "C" uint64_t WebPCUDAGetLastDecimateResultTransferNanoseconds(void) {
+  uint64_t value;
+  LockDecimate(&g_decimate_mutex);
+  value = g_decimate_state.last_result_transfer_ns;
+  UnlockDecimate(&g_decimate_mutex);
+  return value;
 }
 
 // Called from the CUDA backend's process-start prewarm thread: creating the

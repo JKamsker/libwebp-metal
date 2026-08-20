@@ -51,12 +51,17 @@ jobs:
           -DWEBP_ENABLE_METAL=${{ matrix.metal }}
           -DWEBP_BUILD_ANIM_UTILS=OFF
           -DWEBP_BUILD_EXTRAS=OFF
+          -DWEBP_BUILD_DECIMATE_CONFORMANCE=ON
           -DWEBP_BUILD_GIF2WEBP=OFF
           -DWEBP_BUILD_IMG2WEBP=OFF
           -DWEBP_BUILD_VWEBP=OFF
           -DWEBP_BUILD_WEBPMUX=OFF
       - name: Build installable targets
         run: cmake --build build --parallel 2
+      - name: Portable lossy-decimate conformance self-test
+        run: >-
+          ctest --test-dir build --output-on-failure
+          -R '^lossy_decimate_conformance_selftest$'
       - name: Lossless round-trip smoke test
         env:
           WEBP_METAL: "0"

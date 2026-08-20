@@ -807,3 +807,29 @@ Both gains are noise under the strict 1.5 ms/image gate, so the source was
 restored. Exact patch, full parent/candidate SASS, profile, raw rows, tests,
 and summary are archived under `libwebp-i4-vector-rowio-*`. RTX 2080 SUPER
 only; no Ampere+ behavior, threshold, or performance claim changed.
+
+## Portable lossy-decimate conformance target
+
+GitHub issue #19 is implemented as an opt-in, backend-neutral conformance
+surface rather than a performance candidate. WPDCRD schema 1 serializes the
+complete ABI-12 lossy-decimate request and CPU-golden result/reconstruction
+bytes without C layout or endian dependencies. The standalone runner covers
+loopback transport and transactional decline/error/timeout, whole and banded
+CUDA execution, a dependency-free FPGA decline skeleton, coverage reporting,
+and split execution/result-transfer diagnostics.
+
+On the native-sm_75 RTX 2080 SUPER build, 132 fixtures (48,968 macroblocks)
+covered methods 3--6, qualities 0/25/75/98/100, tiny/odd/aligned inputs, all
+segments, all I4/I16/UV prediction modes, zero/nonzero contexts, diffusion,
+band boundaries, flat ties, and signed coefficient extremes. All 132 whole
+and all 132 streaming CUDA submissions matched every semantic result and
+reconstruction byte. A separate 90-cell methods 2--6, qualities 25/75/98
+tiny/odd matrix matched CPU/CUDA SHA-256 and byte counts, while the expanded
+end-to-end test retained exact methods 3--6 bitstreams and forced fallbacks.
+
+The first expanded oracle run retained a useful audit failure: 38 method-5 or
+no-diffusion cases recorded an inactive/discarded CPU diffusion tail. Capture
+now records the state actually published to neighboring macroblocks; both the
+94/132 initial rows and 132/132 corrected rows are archived. This work makes
+no speed or cross-hardware claim and changes no Turing/Ampere+ threshold.
+Artifacts use the `libwebp-decimate-conformance-*` prefix.

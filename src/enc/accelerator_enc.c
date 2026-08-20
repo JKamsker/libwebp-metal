@@ -13,6 +13,9 @@
 #if defined(WEBP_USE_CUDA)
 #include "src/enc/cuda_enc.h"
 #endif
+#if defined(WEBP_USE_FPGA_EXPERIMENTAL)
+#include "src/enc/fpga_enc.h"
+#endif
 
 #define WEBP_ACCELERATOR_REQUIRED_PROPERTIES                  \
   (WEBP_ACCELERATOR_PROPERTY_SYNCHRONOUS |                    \
@@ -85,7 +88,7 @@ static size_t GetBackends(const WebPEncoderAccelerator** backends,
                           size_t capacity) {
   size_t count = 0;
 #if !defined(WEBP_ACCELERATOR_TESTING) && !defined(WEBP_USE_METAL) && \
-    !defined(WEBP_USE_CUDA)
+    !defined(WEBP_USE_CUDA) && !defined(WEBP_USE_FPGA_EXPERIMENTAL)
   (void)backends;
   (void)capacity;
 #endif
@@ -99,6 +102,9 @@ static size_t GetBackends(const WebPEncoderAccelerator** backends,
 #endif
 #if defined(WEBP_USE_CUDA)
   if (count < capacity) backends[count++] = WebPGetCUDAEncoderAccelerator();
+#endif
+#if defined(WEBP_USE_FPGA_EXPERIMENTAL)
+  if (count < capacity) backends[count++] = WebPGetFPGAEncoderAccelerator();
 #endif
 #endif
   return count;

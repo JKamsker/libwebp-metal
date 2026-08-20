@@ -37,7 +37,9 @@ libwebpencode_la_SOURCES += webp_enc.c
 
 # CUDA is currently an opt-in CMake backend. Keep its private implementation in
 # release archives without asking portable Autotools builds to compile .cu.
-EXTRA_DIST = cuda_decimate_dsp.cuh cuda_decimate_enc.cu cuda_enc.cu cuda_enc.h
+EXTRA_DIST = cuda_decimate_dsp.cuh cuda_decimate_enc.cu cuda_enc.cu cuda_enc.h \
+             fpga_enc.c fpga_enc.h lossy_decimate_fixture.c \
+             lossy_decimate_fixture.h
 
 if ENABLE_METAL
 libwebpencode_la_SOURCES += metal_enc.c

@@ -2243,3 +2243,31 @@ under `libwebp-i4-vector-rowio-*` includes the exact patch, complete
 parent/candidate sm_75 SASS, profile/resource counts, all timing rows, tests,
 and computed summary. This result is RTX 2080 SUPER-only and changes no
 Ampere+ behavior, threshold, or performance claim.
+
+## Portable lossy-decimate CUDA/FPGA conformance
+
+Issue #19 added an opt-in WPDCRD schema-1/ABI-12 fixture generator and
+standalone loopback/CUDA/FPGA runner. The native-sm_75 validation corpus held
+132 CPU-golden fixtures and 48,968 macroblocks spanning methods 3--6,
+qualities 0/25/75/98/100, graphic/photo/texture content, tiny/odd/aligned
+geometry, synthetic flat ties, high contrast, all segment IDs, and every
+I4/I16/UV prediction mode. It included 8,570 zero-nz and 40,398 nonzero-nz
+macroblocks, the complete `0x01ffffff` nonzero-bit union, signed coefficient
+extrema -434/619, 120 diffusion cases, 80 banded cases, and 96 partial edges.
+
+All 132 whole-pass and all 132 streaming CUDA submissions matched every
+result/reconstruction byte. Event timing separated wavefront execution from
+result transfer. The focused end-to-end test matched methods 3--6 across
+qualities 75/99, one/two passes, padded strides, all band remainders, and
+forced collect/download fallback. A 90-cell methods 2--6, qualities 25/75/98
+matrix over graphic/photo/texture at 17x13 and 257x255 matched CPU/CUDA output
+SHA-256 and byte counts exactly.
+
+The archived 94/132 initial oracle rows exposed that method 5's final CPU
+score contains a second diffusion value that is intentionally discarded after
+the earlier state has been published. Corrected capture records the published
+neighbor state and canonical zeros for inactive bytes; corrected reruns are
+132/132 exact. The default CPU build contains neither harness nor FPGA object.
+Raw artifacts use `libwebp-decimate-conformance-*`. This is a conformance
+result, not a speed claim; native architecture configuration and the retained
+Turing/Ampere+ dispatch split are unchanged.

@@ -1,7 +1,7 @@
 // Copyright 2026
 //
-// Byte-parity coverage for CUDA lossy decimation with method-5 selected-mode
-// trellis and method-6 all-candidate trellis.
+// End-to-end bitstream parity coverage for CUDA lossy decimation across basic
+// search, selected-mode trellis, and all-candidate trellis.
 
 #if !defined(_WIN32)
 #define _POSIX_C_SOURCE 200809L
@@ -136,7 +136,7 @@ static int CheckBandRemainders(void) {
     int ok;
     if (rgba == NULL) return 0;
     FillRGBA(rgba, rgba_size);
-    ok = CheckCase(rgba, 2, 75, 1, -1, -1, width, height);
+    ok = CheckCase(rgba, 3, 75, 1, -1, -1, width, height);
     free(rgba);
     if (!ok) return 0;
   }
@@ -251,7 +251,7 @@ int main(void) {
   }
 #endif
   FillRGBA(rgba, rgba_size);
-  for (method = 5; method <= 6; ++method) {
+  for (method = 3; method <= 6; ++method) {
     if (!CheckCase(rgba, method, 75, 1, -1, -1, kWidth, kHeight) ||
         !CheckCase(rgba, method, 99, 1, -1, -1, kWidth, kHeight) ||
         !CheckCase(rgba, method, 75, 2, -1, -1, kWidth, kHeight) ||
@@ -270,7 +270,7 @@ int main(void) {
     return 1;
   }
 #endif
-  puts("PASS: CUDA trellis, padded strides, all band remainders, and "
-       "transactional fallbacks are byte-exact");
+  puts("PASS: CUDA basic/trellis bitstreams, padded strides, all band "
+       "remainders, and transactional fallbacks are byte-exact");
   return 0;
 }

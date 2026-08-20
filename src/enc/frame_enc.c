@@ -21,6 +21,7 @@
 #include "src/dsp/dsp.h"
 #include "src/enc/accelerator_enc.h"
 #include "src/enc/cost_enc.h"
+#include "src/enc/lossy_decimate_fixture.h"
 #include "src/enc/vp8i_enc.h"
 #include "src/enc/profile_enc.h"
 #include "src/utils/bit_writer_utils.h"
@@ -740,11 +741,50 @@ static int TryAcceleratedDecimate(VP8Encoder* const enc,
   request->phase = WEBP_ACCELERATOR_DECIMATE_BEGIN;
   request->band_count = pass->band_count;
   request->band_index = 0;
+  // A fixture capture deep-copies the complete semantic request before a
+  // backend can mutate outputs. CPU fallback records the golden response.
+  WebPDecimateFixtureCaptureBegin(request);
   if (WebPAccelerateLossyDecimate(request) != WEBP_ACCELERATOR_SUCCESS) {
     AcceleratedDecimateClear(pass);
     return 0;
   }
   return 1;
+}
+
+static void CaptureCPUDecimateResult(const VP8EncIterator* const it,
+                                     const VP8ModeScore* const info) {
+  WebPAcceleratorDecimateResult result;
+  memset(&result, 0, sizeof(result));
+  memcpy(result.y_dc_levels, info->y_dc_levels, sizeof(result.y_dc_levels));
+  memcpy(result.y_ac_levels, info->y_ac_levels, sizeof(result.y_ac_levels));
+  memcpy(result.uv_levels, info->uv_levels, sizeof(result.uv_levels));
+  result.nz = info->nz;
+  result.distortion = (uint32_t)info->D;
+  result.header_bits = (uint32_t)info->H;
+  result.is_i4 = (uint8_t)(it->mb->type == 0);
+  result.mode_i16 = (uint8_t)info->mode_i16;
+  result.mode_uv = (uint8_t)info->mode_uv;
+  if (result.is_i4) {
+    memcpy(result.modes_i4, info->modes_i4, sizeof(result.modes_i4));
+  }
+  if (it->top_derr != NULL) {
+    int ch;
+    // Capture the diffusion state actually published to the next
+    // macroblocks. Method 5 re-quantizes chroma after StoreDiffusionErrors(),
+    // so info->derr then contains an intentionally discarded second value.
+    for (ch = 0; ch < 2; ++ch) {
+      result.derr[ch][0] = it->left_derr[ch][0];
+      result.derr[ch][1] = it->top_derr[it->x][ch][0];
+      result.derr[ch][2] = (int8_t)(it->left_derr[ch][1] +
+                                    it->top_derr[it->x][ch][1]);
+    }
+  }
+  if (WebPDecimateFixtureCaptureTakeMaxDelta(&result.max_delta)) {
+    result.store_max_delta = 1;
+  }
+  WebPDecimateFixtureCaptureRecord(
+      it->y * it->enc->mb_w + it->x, &result, it->yuv_out + Y_OFF_ENC,
+      it->yuv_out + U_OFF_ENC, it->yuv_out + V_OFF_ENC, BPS);
 }
 
 static int RecordTokens(VP8EncIterator* const it, const VP8ModeScore* const rd,
@@ -1327,7 +1367,9 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
                             accel_pass.recon_uv_stride,
                             !accel_pass.record_pipeline, !skip_recon);
         } else {
+          WebPDecimateFixtureCaptureResetDecision();
           VP8Decimate(&it, &info, rd_opt);
+          CaptureCPUDecimateResult(&it, &info);
         }
         WebPProfileStageEnd(WEBP_PROFILE_LOSSY_DECIMATE, decimate_start);
       }
@@ -1370,6 +1412,7 @@ int VP8EncTokenLoop(VP8Encoder* const enc) {
         !AcceleratedDecimateSyncRecorder(&accel_pass)) {
       ok = WebPEncodingSetError(enc->pic, VP8_ENC_ERROR_OUT_OF_MEMORY);
     }
+    WebPDecimateFixtureCaptureFinish(ok);
     AcceleratedDecimateClear(&accel_pass);
     if (!ok) break;
 

@@ -36,6 +36,8 @@ option(WEBP_ENABLE_SIMD "Enable any SIMD optimization."
 option(WEBP_ENABLE_METAL "Enable Metal encoder acceleration on Apple platforms."
        ${APPLE})
 option(WEBP_ENABLE_CUDA "Enable CUDA encoder acceleration." OFF)
+option(WEBP_ENABLE_FPGA_EXPERIMENTAL
+       "Enable the dependency-free experimental FPGA decline skeleton." OFF)
 option(WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT
        "Build the internal encoder stage profiling experiment." OFF)
 option(WEBP_BUILD_METAL_CROSSOVER_EXPERIMENT
@@ -48,6 +50,8 @@ option(WEBP_BUILD_CUDA_BENCHMARK
        "Build non-installed CUDA benchmark and concurrency tools." OFF)
 option(WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS
        "Build the non-installed CUDA acceleration experiment lab." OFF)
+option(WEBP_BUILD_DECIMATE_CONFORMANCE
+       "Build portable lossy-decimate fixture and conformance tools." OFF)
 option(WEBP_ENABLE_METAL_PREDICTOR_EXPERIMENT
        "Build the opt-in experimental Metal predictor-residual stage." OFF)
 option(WEBP_BUILD_PREDICTOR_BOUNDARY_EXPERIMENT
@@ -473,6 +477,14 @@ parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_COMMON_SRCS" "COMMON")
 parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_ENC_SRCS" "ENC")
 parse_makefile_am(${WEBP_SRC_DIR}/utils "WEBP_UTILS_DEC_SRCS" "decode_[^ ]*")
 
+if(WEBP_ENABLE_FPGA_EXPERIMENTAL OR WEBP_BUILD_DECIMATE_CONFORMANCE)
+  list(APPEND WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/fpga_enc.c)
+endif()
+if(WEBP_BUILD_DECIMATE_CONFORMANCE)
+  list(APPEND WEBP_ENC_SRCS
+       ${WEBP_SRC_DIR}/enc/lossy_decimate_fixture.c)
+endif()
+
 if(NOT WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT)
   list(REMOVE_ITEM WEBP_ENC_SRCS ${WEBP_SRC_DIR}/enc/profile_enc.c)
 endif()
@@ -690,6 +702,13 @@ if(WEBP_ENABLE_CUDA)
     endif()
   endforeach()
 endif()
+if(WEBP_ENABLE_FPGA_EXPERIMENTAL)
+  target_compile_definitions(webpencode PRIVATE WEBP_USE_FPGA_EXPERIMENTAL=1)
+endif()
+if(WEBP_BUILD_DECIMATE_CONFORMANCE)
+  target_compile_definitions(webpencode
+                             PRIVATE WEBP_DECIMATE_FIXTURE_CAPTURE=1)
+endif()
 add_library(webpdsp OBJECT ${WEBP_DSP_COMMON_SRCS} ${WEBP_DSP_DEC_SRCS}
                            ${WEBP_DSP_ENC_SRCS})
 target_include_directories(webpdsp PRIVATE ${CMAKE_CURRENT_BINARY_DIR}
@@ -790,6 +809,25 @@ if(WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS)
   set_target_properties(
     cuda_acceleration_experiments
     PROPERTIES CUDA_STANDARD 11 CUDA_STANDARD_REQUIRED ON)
+endif()
+
+if(WEBP_BUILD_DECIMATE_CONFORMANCE)
+  add_executable(lossy_decimate_conformance
+                 ${CMAKE_CURRENT_SOURCE_DIR}/tools/lossy_decimate_conformance.c)
+  target_link_libraries(lossy_decimate_conformance PRIVATE webp)
+  target_include_directories(
+    lossy_decimate_conformance
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+            ${CMAKE_CURRENT_SOURCE_DIR})
+  if(WEBP_ENABLE_CUDA AND WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+    target_compile_definitions(
+      lossy_decimate_conformance
+      PRIVATE WEBP_CUDA_ENABLE_LOSSY_DECIMATE=1)
+  endif()
+  if(BUILD_TESTING)
+    add_test(NAME lossy_decimate_conformance_selftest
+             COMMAND lossy_decimate_conformance --selftest)
+  endif()
 endif()
 
 if(WEBP_BUILD_CACHE_SIZE_SERIAL_SWEEP_EXPERIMENT)

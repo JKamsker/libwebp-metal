@@ -6,12 +6,13 @@
 #define WEBP_ENC_CUDA_ENC_H_
 
 #include "src/enc/accelerator_enc.h"
+#include "src/webp/types.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-const WebPEncoderAccelerator* WebPGetCUDAEncoderAccelerator(void);
+WEBP_EXTERN const WebPEncoderAccelerator* WebPGetCUDAEncoderAccelerator(void);
 
 #if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
 // Whole-pass lossy macroblock decimation, implemented in
@@ -24,6 +25,10 @@ void WebPCUDALossyDecimatePrewarm(void);
 WebPAcceleratorResult WebPCUDALossyDecimateFlush(void);
 void WebPCUDALossyDecimateEndEncode(void);
 void WebPCUDALossyDecimateTrim(void);
+// Last timing-enabled pass, split at CUDA events around the kernel wavefront
+// and result downloads. Returns zero when timing is disabled or unavailable.
+WEBP_EXTERN uint64_t WebPCUDAGetLastDecimateExecutionNanoseconds(void);
+WEBP_EXTERN uint64_t WebPCUDAGetLastDecimateResultTransferNanoseconds(void);
 #endif
 
 // Internal benchmark instrumentation. Stage bits are set only after a CUDA

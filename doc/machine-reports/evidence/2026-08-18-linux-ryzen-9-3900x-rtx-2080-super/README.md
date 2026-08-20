@@ -316,6 +316,15 @@ SASS, resource and instruction counts, 24 exact order-reversed timing rows,
 candidate/restored focused tests, and decision summary. The candidate was
 removed after gains of only 0.101 ms/image PNG and 0.389 ms/image JPEG.
 
+The `libwebp-decimate-conformance-*` files preserve the portable issue #19
+validation. They include schema-1 fixture manifests, the initial 94/132 oracle
+failure and corrected 132/132 whole/streaming CUDA rows, split execution and
+result-transfer timing, full prediction/segment/context coverage, the 90-cell
+tiny/odd SHA-256 and byte-count matrix, loopback/FPGA transactional self-test,
+end-to-end methods 3--6 fallback test, native CMake cache, binary hashes, and
+the audit summary. Fixtures are reproducibly generated from the manifest and
+are not duplicated as 74 MB of repository artifacts.
+
 Inspect the sampling archives with:
 
 ```sh

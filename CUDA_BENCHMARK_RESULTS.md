@@ -2074,6 +2074,24 @@ the 1.5 ms/image gate, so the source was restored. Raw artifacts use the
 `libwebp-i4-clip-minmax-*` prefix. This is Turing-only evidence; Ampere+
 behavior and thresholds remain unchanged.
 
+## Portable lossy-decimate conformance (non-benchmark validation)
+
+The issue #19 harness passed 132/132 CPU-golden fixtures through CUDA WHOLE
+and 132/132 through BEGIN/COLLECT with byte-exact macroblock results and padded
+reconstruction planes. Coverage included all prediction modes and segments,
+8,570 zero-nz plus 40,398 nonzero-nz macroblocks, diffusion and no-diffusion,
+partial edges, band boundaries, and flat tie/high-contrast synthetic inputs.
+Every row reports fixture deserialization, synchronous callback, CUDA
+wavefront execution, result transfer, comparison, CPU replay/tokenization,
+and total time separately.
+
+These timings validate accounting boundaries only: fixture sizes differ and
+the first callback includes cold initialization, so they are not a retained
+speed result. The exact end-to-end checks covered methods 3--6 at qualities
+75/99, passes/fallbacks/padded strides, plus 90 tiny/odd cells at methods 2--6
+and qualities 25/75/98 with matching SHA-256 and byte counts. Raw artifacts
+use `libwebp-decimate-conformance-*`; architecture thresholds are unchanged.
+
 ## Vectorized I4 transform-row I/O rejection
 
 The retained native-sm_75 phase trace measured I4 at 63.8% of photo-medium
