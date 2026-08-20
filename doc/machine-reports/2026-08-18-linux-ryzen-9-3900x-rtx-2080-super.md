@@ -2703,3 +2703,48 @@ use `libwebp-two-slot-*`, `libwebp-one-slot-*`, and
 `libwebp-inprocess-two-worker-*`. This is Turing-only evidence. Ampere+
 defaults, the 64/4,000 vs 784/12,544 macroblock split, frozen publication
 corpus, and generator are unchanged.
+
+
+## Line-resolved decimate counters and static raster-commit rejection
+
+At retained parent `8c8cbd79140feffd992390c9b719d7dca9045360`, a separate
+Release build used `-DCMAKE_CUDA_ARCHITECTURES=native` and `-lineinfo` to
+capture full Nsight Compute source counters. The method-4/quality-75
+photo-medium command encoded a 206,128-byte output with SHA-256
+`33a12dd7db111a5d8c1ec8b872a9e951bf7edb643d54cbf702f92d5acc924480`.
+
+The sampled 50-CTA by 256-thread diagonal took 117.79 us. Its 103 registers
+per thread and 23.39 KiB shared memory each capped residency at two CTAs/SM;
+theoretical occupancy was 50% and achieved occupancy 26.04%. Schedulers
+averaged 2.08 active but only 0.12 eligible warps, leaving no eligible warp in
+89.34% of cycles. CTA barriers consumed 11.12 of 19.55 warp cycles per
+instruction (57.0%). DRAM throughput was only 0.79%, with 93.89% L1/TEX and
+86.89% L2 hit rates.
+
+The source view counted 334,803 excess shared wavefronts out of 846,791
+(40%). Its largest sites were scalar 4x4 SSE/Hadamard loads and basic
+quantization, which the existing cooperative-metric, vector-row-I/O,
+eight-lane-quantization, fused-register, shared-matrix, and uniform-AC
+experiments already rejected. No repeated shared-layout candidate was opened.
+
+The largest individual not-issued barrier attribution was the raster-order I4
+commit loop at 901 samples, ahead of the transform/quantization barrier at 770
+and metric barrier at 644. The one pre-Ampere candidate replaced
+`i4_ready[]`/`i4_next_commit` with the exact static raster ranges produced by
+the ten dependency diagonals. Ampere+ retained the original scan. Registers
+and stack stayed at 103/352 bytes; shared memory fell 23,392 to 23,376 bytes.
+
+Candidate and restored native builds passed all seven focused CTests. Two
+order-reversed process pairs per format produced 24 exact timing rows:
+
+| Format | Parent | Static commit | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 34.662 ms/image | 35.642 ms/image | -0.980 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 35.022 ms/image | 34.589 ms/image | 0.434 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+The candidate was removed because PNG regressed and JPEG was noise under the
+1.5 ms/image gate. The compressed raw report, source/SASS CSV, exact patch,
+resources, build/test transcripts, and timing rows use the
+`libwebp-decimate-source-counters-*` and `libwebp-raster-commit-*` prefixes.
+This is Turing-only evidence. The 784/12,544 pre-Ampere and 64/4,000 Ampere+
+decimate thresholds, frozen corpus, and generator remain unchanged.

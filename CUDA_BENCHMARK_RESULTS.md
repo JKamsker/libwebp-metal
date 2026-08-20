@@ -2376,3 +2376,29 @@ Source was restored. Evidence uses `libwebp-cross-image-capacity-*`,
 `libwebp-two-slot-*`, `libwebp-one-slot-*`, and
 `libwebp-inprocess-two-worker-*`. This is RTX 2080 SUPER-only; Ampere+ remains
 unchanged and no cross-hardware win is claimed.
+
+
+## Turing DecimateKernel source counters and static commit screen
+
+The retained native-sm_75 method-4/quality-75 photo profile captured one
+50-CTA `DecimateKernel` launch at 117.79 us. Nsight Compute measured 89.34%
+of scheduler cycles with no eligible warp and 57.0% of warp cycles per
+instruction stalled at CTA barriers. Memory was not limiting: DRAM throughput
+was 0.79%, with 93.89% L1/TEX and 86.89% L2 hit rates. Although 40% of shared
+wavefronts were excess, their leading SSE/Hadamard/quantization sites have
+already failed exact layout and cooperation experiments.
+
+The largest distinct barrier attribution selected a pre-Ampere static
+raster-commit schedule. Two order-reversed native processes per format, one
+warmup and three measured batch-24 samples each, produced:
+
+| Format | Parent | Candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 34.662 ms/image | 35.642 ms/image | -0.980 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 35.022 ms/image | 34.589 ms/image | 0.434 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+All 24 rows were exact. The candidate was rejected and removed because PNG
+regressed and JPEG was below 1.5 ms/image. Candidate and restored source both
+passed 7/7 focused CTests. Raw evidence uses
+`libwebp-decimate-source-counters-*` and `libwebp-raster-commit-*`; Ampere+
+and architecture thresholds remain unchanged.

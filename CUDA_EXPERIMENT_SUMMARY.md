@@ -1182,3 +1182,36 @@ explicit prepare/GPU/finalize ownership boundary described in the async design;
 raw concurrent `WebPEncode` and same-context stream duplication should not be
 retried. Source is restored. Architecture thresholds/defaults and frozen
 corpus inputs are unchanged.
+
+
+## Turing line-resolved raster-commit rejection
+
+A native-sm_75 Release build with `-lineinfo` enabled full Nsight Compute
+source counters on a retained method-4/quality-75 photo diagonal. The sampled
+50-CTA launch took 117.79 us. Schedulers had 2.08 active but only 0.12 eligible
+warps on average, with no eligible warp in 89.34% of cycles; CTA barriers
+accounted for 11.12 of 19.55 warp cycles per instruction (57.0%). DRAM
+throughput was only 0.79%, and L1/L2 hit rates were 93.89%/86.89%.
+
+The 40% excess shared wavefronts mapped primarily to scalar 4x4 SSE/Hadamard
+and basic quantization sites already covered by rejected exact experiments.
+The largest distinct not-issued barrier attribution was instead the
+raster-order I4 commit loop (901 samples). A single Turing-only candidate
+replaced the shared readiness scan with the exact static commit range for each
+of the ten dependency diagonals; Ampere+ retained the original path. It kept
+103 registers and reduced shared memory by 16 bytes.
+
+The candidate and restored native trees passed 7/7 focused CTests. All 24
+order-reversed timing rows were exact:
+
+| Format | Parent | Static commit | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 34.662 ms/image | 35.642 ms/image | -0.980 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 35.022 ms/image | 34.589 ms/image | 0.434 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+PNG regressed and JPEG stayed far below the 1.5 ms/image gate, so the source
+was restored. The raw `.ncu-rep`, source/SASS counters, exact patch, build and
+resource reports, tests, and timings use the
+`libwebp-decimate-source-counters-*` and `libwebp-raster-commit-*` prefixes.
+This is RTX 2080 SUPER-only evidence; architecture thresholds, Ampere+
+behavior, and the frozen publication corpus/generator are unchanged.
