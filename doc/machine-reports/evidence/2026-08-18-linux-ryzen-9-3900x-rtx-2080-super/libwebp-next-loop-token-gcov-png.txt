@@ -1,0 +1,552 @@
+        -:    0:Source:/home/jonas/priv/repos/libwebp-metal/src/utils/bit_writer_utils.c
+        -:    0:Graph:build-cuda-token-gcov/CMakeFiles/webputils.dir/src/utils/bit_writer_utils.c.gcno
+        -:    0:Data:build-cuda-token-gcov/CMakeFiles/webputils.dir/src/utils/bit_writer_utils.c.gcda
+        -:    0:Runs:1
+        -:    1:// Copyright 2011 Google Inc. All Rights Reserved.
+        -:    2://
+        -:    3:// Use of this source code is governed by a BSD-style license
+        -:    4:// that can be found in the COPYING file in the root of the source
+        -:    5:// tree. An additional intellectual property rights grant can be found
+        -:    6:// in the file PATENTS. All contributing project authors may
+        -:    7:// be found in the AUTHORS file in the root of the source tree.
+        -:    8:// -----------------------------------------------------------------------------
+        -:    9://
+        -:   10:// Bit writing and boolean coder
+        -:   11://
+        -:   12:// Author: Skal (pascal.massimino@gmail.com)
+        -:   13://         Vikas Arora (vikaas.arora@gmail.com)
+        -:   14:
+        -:   15:#include "src/utils/bit_writer_utils.h"
+        -:   16:
+        -:   17:#include <assert.h>
+        -:   18:#include <stdlib.h>
+        -:   19:#include <string.h>  // for memcpy()
+        -:   20:
+        -:   21:#include "src/utils/bounds_safety.h"
+        -:   22:#include "src/utils/endian_inl_utils.h"
+        -:   23:#include "src/utils/utils.h"
+        -:   24:#include "src/webp/types.h"
+        -:   25:
+        -:   26:WEBP_ASSUME_UNSAFE_INDEXABLE_ABI
+        -:   27:
+        -:   28://------------------------------------------------------------------------------
+        -:   29:// VP8BitWriter
+        -:   30:
+function BitWriterResize called 1592336 returned 100% blocks executed 90%
+  1592336:   31:static int BitWriterResize(VP8BitWriter* const bw, size_t extra_size) {
+  1592336:   32:  uint8_t* new_buf;
+  1592336:   33:  size_t new_size;
+  1592336:   34:  const uint64_t needed_size_64b = (uint64_t)bw->pos + extra_size;
+  1592336:   35:  const size_t needed_size = (size_t)needed_size_64b;
+  1592336:   36:  if (needed_size_64b != needed_size) {
+        -:   37:    bw->error = 1;
+        -:   38:    return 0;
+        -:   39:  }
+  1592336:   40:  if (needed_size <= bw->max_pos) return 1;
+branch  0 taken 1584 (fallthrough)
+branch  1 taken 1590752
+        -:   41:  // If the following line wraps over 32bit, the test just after will catch it.
+     1584:   42:  new_size = 2 * bw->max_pos;
+     1584:   43:  if (new_size < needed_size) new_size = needed_size;
+     1584:   44:  if (new_size < 1024) new_size = 1024;
+     1584:   45:  new_buf = (uint8_t*)WebPSafeMalloc(1ULL, new_size);
+call    0 returned 1584
+     1584:   46:  if (new_buf == NULL) {
+branch  0 taken 0 (fallthrough)
+branch  1 taken 1584
+    #####:   47:    bw->error = 1;
+    #####:   48:    return 0;
+        -:   49:  }
+     1584:   50:  if (bw->pos > 0) {
+branch  0 taken 720 (fallthrough)
+branch  1 taken 864
+      720:   51:    assert(bw->buf != NULL);
+      720:   52:    WEBP_UNSAFE_MEMCPY(new_buf, bw->buf, bw->pos);
+        -:   53:  }
+     1584:   54:  WebPSafeFree(bw->buf);
+call    0 returned 1584
+     1584:   55:  bw->buf = WEBP_UNSAFE_FORGE_BIDI_INDEXABLE(uint8_t*, new_buf, new_size);
+     1584:   56:  bw->max_pos = new_size;
+     1584:   57:  return 1;
+        -:   58:}
+        -:   59:
+function Flush called 1602496 returned 100% blocks executed 100%
+  1602496:   60:static void Flush(VP8BitWriter* const bw) {
+  1602496:   61:  const int s = 8 + bw->nb_bits;
+  1602496:   62:  const int32_t bits = bw->value >> s;
+  1602496:   63:  assert(bw->nb_bits >= 0);
+  1602496:   64:  bw->value -= bits << s;
+  1602496:   65:  bw->nb_bits -= 8;
+  1602496:   66:  if ((bits & 0xff) != 0xff) {
+branch  0 taken 1591472 (fallthrough)
+branch  1 taken 11024
+  1591472:   67:    size_t pos = bw->pos;
+  1591472:   68:    if (!BitWriterResize(bw, bw->run + 1)) {
+call    0 returned 1591472
+branch  1 taken 1591472 (fallthrough)
+branch  2 taken 0
+        -:   69:      return;
+        -:   70:    }
+  1591472:   71:    if (bits & 0x100) {  // overflow -> propagate carry over pending 0xff's
+branch  0 taken 255216 (fallthrough)
+branch  1 taken 1336256
+   255216:   72:      if (pos > 0) bw->buf[pos - 1]++;
+branch  0 taken 255216 (fallthrough)
+branch  1 taken 0
+        -:   73:    }
+  1591472:   74:    if (bw->run > 0) {
+branch  0 taken 9792 (fallthrough)
+branch  1 taken 1581680
+     9792:   75:      const int value = (bits & 0x100) ? 0x00 : 0xff;
+branch  0 taken 8864 (fallthrough)
+branch  1 taken 928
+    20832:   76:      for (; bw->run > 0; --bw->run) bw->buf[pos++] = value;
+branch  0 taken 11040
+branch  1 taken 9792 (fallthrough)
+        -:   77:    }
+  1591472:   78:    bw->buf[pos++] = bits & 0xff;
+  1591472:   79:    bw->pos = pos;
+        -:   80:  } else {
+    11024:   81:    bw->run++;  // delay writing of bytes 0xff, pending eventual carry.
+        -:   82:  }
+        -:   83:}
+        -:   84:
+        -:   85://------------------------------------------------------------------------------
+        -:   86:// renormalization
+        -:   87:
+        -:   88:static const uint8_t kNorm[128] = {  // renorm_sizes[i] = 8 - log2(i)
+        -:   89:    7, 6, 6, 5, 5, 5, 5, 4, 4, 4, 4, 4, 4, 4, 4, 3, 3, 3, 3, 3, 3, 3,
+        -:   90:    3, 3, 3, 3, 3, 3, 3, 3, 3, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2,
+        -:   91:    2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1,
+        -:   92:    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        -:   93:    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
+        -:   94:    1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0};
+        -:   95:
+        -:   96:// range = ((range + 1) << kVP8Log2Range[range]) - 1
+        -:   97:static const uint8_t kNewRange[128] = {
+        -:   98:    127, 127, 191, 127, 159, 191, 223, 127, 143, 159, 175, 191, 207, 223, 239,
+        -:   99:    127, 135, 143, 151, 159, 167, 175, 183, 191, 199, 207, 215, 223, 231, 239,
+        -:  100:    247, 127, 131, 135, 139, 143, 147, 151, 155, 159, 163, 167, 171, 175, 179,
+        -:  101:    183, 187, 191, 195, 199, 203, 207, 211, 215, 219, 223, 227, 231, 235, 239,
+        -:  102:    243, 247, 251, 127, 129, 131, 133, 135, 137, 139, 141, 143, 145, 147, 149,
+        -:  103:    151, 153, 155, 157, 159, 161, 163, 165, 167, 169, 171, 173, 175, 177, 179,
+        -:  104:    181, 183, 185, 187, 189, 191, 193, 195, 197, 199, 201, 203, 205, 207, 209,
+        -:  105:    211, 213, 215, 217, 219, 221, 223, 225, 227, 229, 231, 233, 235, 237, 239,
+        -:  106:    241, 243, 245, 247, 249, 251, 253, 127};
+        -:  107:
+function VP8PutBit called 15954064 returned 100% blocks executed 100%
+ 15954064:  108:int VP8PutBit(VP8BitWriter* const bw, int bit, int prob) {
+ 15954064:  109:  const int split = (bw->range * prob) >> 8;
+ 15954064:  110:  if (bit) {
+branch  0 taken 11010368 (fallthrough)
+branch  1 taken 4943696
+ 11010368:  111:    bw->value += split + 1;
+ 11010368:  112:    bw->range -= split + 1;
+        -:  113:  } else {
+  4943696:  114:    bw->range = split;
+        -:  115:  }
+ 15954064:  116:  if (bw->range < 127) {  // emit 'shift' bits out and renormalize
+branch  0 taken 8950944 (fallthrough)
+branch  1 taken 7003120
+  8950944:  117:    const int shift = kNorm[bw->range];
+  8950944:  118:    bw->range = kNewRange[bw->range];
+  8950944:  119:    bw->value <<= shift;
+  8950944:  120:    bw->nb_bits += shift;
+  8950944:  121:    if (bw->nb_bits > 0) Flush(bw);
+branch  0 taken 1583872 (fallthrough)
+branch  1 taken 7367072
+call    2 returned 1583872
+        -:  122:  }
+ 15954064:  123:  return bit;
+        -:  124:}
+        -:  125:
+function VP8PutTokenPage called 19088 returned 100% blocks executed 100%
+    19088:  126:void VP8PutTokenPage(VP8BitWriter* const bw, const uint16_t* const tokens,
+        -:  127:                     int num_tokens, int first_token,
+        -:  128:                     const uint8_t* const probas) {
+    19088:  129:  int range = bw->range;
+    19088:  130:  int value = bw->value;
+    19088:  131:  int nb_bits = bw->nb_bits;
+    19088:  132:  int run = bw->run;
+    19088:  133:  uint8_t* buf = bw->buf;
+    19088:  134:  size_t pos = bw->pos;
+    19088:  135:  size_t max_pos = bw->max_pos;
+    19088:  136:  assert(first_token >= 0);
+    19088:  137:  assert(first_token <= num_tokens);
+292190336:  138:  while (num_tokens-- > first_token) {
+branch  0 taken 292171248
+branch  1 taken 19088 (fallthrough)
+292171248:  139:    const uint16_t token = tokens[num_tokens];
+292171248:  140:    const int bit = (token >> 15) & 1;
+584342496:  141:    const int prob = (token & (1u << 14))
+        -:  142:                         ? token & 0xffu
+292171248:  143:                         : probas[token & 0x3fffu];
+branch  0 taken 52011456 (fallthrough)
+branch  1 taken 240159792
+292171248:  144:    const int split = (range * prob) >> 8;
+292171248:  145:    if (bit) {
+branch  0 taken 160385888 (fallthrough)
+branch  1 taken 131785360
+160385888:  146:      value += split + 1;
+160385888:  147:      range -= split + 1;
+        -:  148:    } else {
+        -:  149:      range = split;
+        -:  150:    }
+292171248:  151:    if (range < 127) {
+branch  0 taken 156736192 (fallthrough)
+branch  1 taken 135435056
+156736192:  152:      const int shift = kNorm[range];
+156736192:  153:      range = kNewRange[range];
+156736192:  154:      value <<= shift;
+156736192:  155:      nb_bits += shift;
+156736192:  156:      if (nb_bits > 0) {
+branch  0 taken 24159824 (fallthrough)
+branch  1 taken 132576368
+ 24159824:  157:        const int s = 8 + nb_bits;
+ 24159824:  158:        const int32_t bits = value >> s;
+ 24159824:  159:        const size_t pending = (size_t)run + 1;
+ 24159824:  160:        assert(nb_bits >= 0);
+ 24159824:  161:        if ((bits & 0xff) == 0xff) {
+branch  0 taken 91392 (fallthrough)
+branch  1 taken 24068432
+    91392:  162:          value -= bits << s;
+    91392:  163:          nb_bits -= 8;
+    91392:  164:          ++run;
+ 24068432:  165:        } else if (pos <= max_pos && pending <= max_pos - pos) {
+branch  0 taken 24068432 (fallthrough)
+branch  1 taken 0
+branch  2 taken 24067920 (fallthrough)
+branch  3 taken 512
+ 24067920:  166:          value -= bits << s;
+ 24067920:  167:          nb_bits -= 8;
+ 24067920:  168:          if ((bits & 0x100) && pos > 0) buf[pos - 1]++;
+branch  0 taken 3906080 (fallthrough)
+branch  1 taken 20161840
+branch  2 taken 3906080 (fallthrough)
+branch  3 taken 0
+ 24067920:  169:          if (run > 0) {
+branch  0 taken 90976 (fallthrough)
+branch  1 taken 23976944
+    90976:  170:            const int fill = (bits & 0x100) ? 0x00 : 0xff;
+branch  0 taken 76528 (fallthrough)
+branch  1 taken 14448
+   182352:  171:            for (; run > 0; --run) buf[pos++] = fill;
+branch  0 taken 91376
+branch  1 taken 90976 (fallthrough)
+        -:  172:          }
+ 24067920:  173:          buf[pos++] = bits & 0xff;
+        -:  174:        } else {
+        -:  175:          // Preserve the original allocation, overflow, and error path. The
+        -:  176:          // common case above has enough room and avoids round-tripping the
+        -:  177:          // page-local writer state through the structure for every byte.
+      512:  178:          bw->range = range;
+      512:  179:          bw->value = value;
+      512:  180:          bw->nb_bits = nb_bits;
+      512:  181:          bw->run = run;
+      512:  182:          bw->pos = pos;
+      512:  183:          Flush(bw);
+call    0 returned 512
+      512:  184:          range = bw->range;
+      512:  185:          value = bw->value;
+      512:  186:          nb_bits = bw->nb_bits;
+      512:  187:          run = bw->run;
+      512:  188:          buf = bw->buf;
+      512:  189:          pos = bw->pos;
+      512:  190:          max_pos = bw->max_pos;
+        -:  191:        }
+        -:  192:      }
+        -:  193:    }
+        -:  194:  }
+    19088:  195:  bw->range = range;
+    19088:  196:  bw->value = value;
+    19088:  197:  bw->nb_bits = nb_bits;
+    19088:  198:  bw->run = run;
+    19088:  199:  bw->pos = pos;
+    19088:  200:}
+        -:  201:
+function VP8PutBitUniform called 135536 returned 100% blocks executed 100%
+   135536:  202:int VP8PutBitUniform(VP8BitWriter* const bw, int bit) {
+   135536:  203:  const int split = bw->range >> 1;
+   135536:  204:  if (bit) {
+branch  0 taken 65168 (fallthrough)
+branch  1 taken 70368
+    65168:  205:    bw->value += split + 1;
+    65168:  206:    bw->range -= split + 1;
+        -:  207:  } else {
+    70368:  208:    bw->range = split;
+        -:  209:  }
+   135536:  210:  if (bw->range < 127) {
+branch  0 taken 135440 (fallthrough)
+branch  1 taken 96
+   135440:  211:    bw->range = kNewRange[bw->range];
+   135440:  212:    bw->value <<= 1;
+   135440:  213:    bw->nb_bits += 1;
+   135440:  214:    if (bw->nb_bits > 0) Flush(bw);
+branch  0 taken 17248 (fallthrough)
+branch  1 taken 118192
+call    2 returned 17248
+        -:  215:  }
+   135536:  216:  return bit;
+        -:  217:}
+        -:  218:
+function VP8PutBits called 16496 returned 100% blocks executed 100%
+    16496:  219:void VP8PutBits(VP8BitWriter* const bw, uint32_t value, int nb_bits) {
+    16496:  220:  uint32_t mask;
+    16496:  221:  assert(nb_bits > 0 && nb_bits < 32);
+   149984:  222:  for (mask = 1u << (nb_bits - 1); mask; mask >>= 1) {
+branch  0 taken 133488
+branch  1 taken 16496 (fallthrough)
+   133488:  223:    VP8PutBitUniform(bw, value & mask);
+call    0 returned 133488
+        -:  224:  }
+    16496:  225:}
+        -:  226:
+function VP8PutSignedBits called 992 returned 100% blocks executed 100%
+      992:  227:void VP8PutSignedBits(VP8BitWriter* const bw, int value, int nb_bits) {
+      992:  228:  if (!VP8PutBitUniform(bw, value != 0)) return;
+call    0 returned 992
+branch  1 taken 688 (fallthrough)
+branch  2 taken 304
+      688:  229:  if (value < 0) {
+branch  0 taken 144 (fallthrough)
+branch  1 taken 544
+      144:  230:    VP8PutBits(bw, ((-value) << 1) | 1, nb_bits + 1);
+call    0 returned 144
+        -:  231:  } else {
+      544:  232:    VP8PutBits(bw, value << 1, nb_bits + 1);
+call    0 returned 544
+        -:  233:  }
+        -:  234:}
+        -:  235:
+        -:  236://------------------------------------------------------------------------------
+        -:  237:
+function VP8BitWriterInit called 864 returned 100% blocks executed 100%
+      864:  238:int VP8BitWriterInit(VP8BitWriter* const bw, size_t expected_size) {
+      864:  239:  bw->range = 255 - 1;
+      864:  240:  bw->value = 0;
+      864:  241:  bw->run = 0;
+      864:  242:  bw->nb_bits = -8;
+      864:  243:  bw->pos = 0;
+      864:  244:  bw->max_pos = 0;
+      864:  245:  bw->error = 0;
+      864:  246:  bw->buf = NULL;
+      864:  247:  return (expected_size > 0) ? BitWriterResize(bw, expected_size) : 1;
+branch  0 taken 864 (fallthrough)
+branch  1 taken 0
+call    2 returned 864
+        -:  248:}
+        -:  249:
+function VP8BitWriterFinish called 864 returned 100% blocks executed 100%
+      864:  250:uint8_t* VP8BitWriterFinish(VP8BitWriter* const bw) {
+      864:  251:  VP8PutBits(bw, 0, 9 - bw->nb_bits);
+call    0 returned 864
+      864:  252:  bw->nb_bits = 0;  // pad with zeroes
+      864:  253:  Flush(bw);
+call    0 returned 864
+      864:  254:  return bw->buf;
+        -:  255:}
+        -:  256:
+function VP8BitWriterAppend called 0 returned 0% blocks executed 0%
+    #####:  257:int VP8BitWriterAppend(VP8BitWriter* const bw, const uint8_t* data,
+        -:  258:                       size_t size) {
+    #####:  259:  assert(data != NULL);
+    #####:  260:  if (bw->nb_bits != -8) return 0;  // Flush() must have been called
+branch  0 never executed (fallthrough)
+branch  1 never executed
+    #####:  261:  if (!BitWriterResize(bw, size)) return 0;
+call    0 never executed
+branch  1 never executed
+branch  2 never executed (fallthrough)
+    #####:  262:  WEBP_UNSAFE_MEMCPY(bw->buf + bw->pos, data, size);
+    #####:  263:  bw->pos += size;
+    #####:  264:  return 1;
+        -:  265:}
+        -:  266:
+function VP8BitWriterWipeOut called 864 returned 100% blocks executed 100%
+      864:  267:void VP8BitWriterWipeOut(VP8BitWriter* const bw) {
+      864:  268:  if (bw != NULL) {
+branch  0 taken 864 (fallthrough)
+branch  1 taken 0
+      864:  269:    WebPSafeFree(bw->buf);
+call    0 returned 864
+      864:  270:    WEBP_UNSAFE_MEMSET(bw, 0, sizeof(*bw));
+        -:  271:  }
+      864:  272:}
+        -:  273:
+        -:  274://------------------------------------------------------------------------------
+        -:  275:// VP8LBitWriter
+        -:  276:
+        -:  277:// This is the minimum amount of size the memory buffer is guaranteed to grow
+        -:  278:// when extra space is needed.
+        -:  279:#define MIN_EXTRA_SIZE (32768ULL)
+        -:  280:
+        -:  281:// Returns 1 on success.
+function VP8LBitWriterResize called 0 returned 0% blocks executed 0%
+    #####:  282:static int VP8LBitWriterResize(VP8LBitWriter* const bw, size_t extra_size) {
+    #####:  283:  uint8_t* WEBP_BIDI_INDEXABLE allocated_buf;
+    #####:  284:  size_t allocated_size;
+    #####:  285:  const size_t max_bytes = bw->end - bw->buf;
+    #####:  286:  const size_t current_size = bw->cur - bw->buf;
+    #####:  287:  const uint64_t size_required_64b = (uint64_t)current_size + extra_size;
+    #####:  288:  const size_t size_required = (size_t)size_required_64b;
+    #####:  289:  if (size_required != size_required_64b) {
+        -:  290:    bw->error = 1;
+        -:  291:    return 0;
+        -:  292:  }
+    #####:  293:  if (max_bytes > 0 && size_required <= max_bytes) return 1;
+branch  0 never executed (fallthrough)
+branch  1 never executed
+    #####:  294:  allocated_size = (3 * max_bytes) >> 1;
+    #####:  295:  if (allocated_size < size_required) allocated_size = size_required;
+        -:  296:  // make allocated size multiple of 1k
+    #####:  297:  allocated_size = (((allocated_size >> 10) + 1) << 10);
+    #####:  298:  allocated_buf = (uint8_t*)WEBP_UNSAFE_FORGE_BIDI_INDEXABLE(
+call    0 never executed
+        -:  299:      void*, WebPSafeMalloc(1ULL, allocated_size), allocated_size);
+    #####:  300:  if (allocated_buf == NULL) {
+branch  0 never executed (fallthrough)
+branch  1 never executed
+    #####:  301:    bw->error = 1;
+    #####:  302:    return 0;
+        -:  303:  }
+    #####:  304:  if (current_size > 0) {
+branch  0 never executed (fallthrough)
+branch  1 never executed
+    #####:  305:    WEBP_UNSAFE_MEMCPY(allocated_buf, bw->buf, current_size);
+        -:  306:  }
+    #####:  307:  WebPSafeFree(bw->buf);
+call    0 never executed
+    #####:  308:  bw->buf = allocated_buf;
+    #####:  309:  bw->end = allocated_buf + allocated_size;
+    #####:  310:  bw->cur = allocated_buf + current_size;
+    #####:  311:  return 1;
+        -:  312:}
+        -:  313:
+function VP8LBitWriterInit called 0 returned 0% blocks executed 0%
+    #####:  314:int VP8LBitWriterInit(VP8LBitWriter* const bw, size_t expected_size) {
+    #####:  315:  WEBP_UNSAFE_MEMSET(bw, 0, sizeof(*bw));
+call    0 never executed
+    #####:  316:  return VP8LBitWriterResize(bw, expected_size);
+call    0 never executed
+        -:  317:}
+        -:  318:
+function VP8LBitWriterClone called 0 returned 0% blocks executed 0%
+    #####:  319:int VP8LBitWriterClone(const VP8LBitWriter* const src,
+        -:  320:                       VP8LBitWriter* const dst) {
+    #####:  321:  const size_t current_size = src->cur - src->buf;
+    #####:  322:  assert(src->cur >= src->buf && src->cur <= src->end);
+    #####:  323:  if (!VP8LBitWriterResize(dst, current_size)) return 0;
+call    0 never executed
+branch  1 never executed (fallthrough)
+branch  2 never executed
+    #####:  324:  WEBP_UNSAFE_MEMCPY(dst->buf, src->buf, current_size);
+    #####:  325:  dst->bits = src->bits;
+    #####:  326:  dst->used = src->used;
+    #####:  327:  dst->error = src->error;
+    #####:  328:  dst->cur = dst->buf + current_size;
+    #####:  329:  return 1;
+        -:  330:}
+        -:  331:
+function VP8LBitWriterWipeOut called 0 returned 0% blocks executed 0%
+    #####:  332:void VP8LBitWriterWipeOut(VP8LBitWriter* const bw) {
+    #####:  333:  if (bw != NULL) {
+branch  0 never executed (fallthrough)
+branch  1 never executed
+    #####:  334:    WebPSafeFree(bw->buf);
+call    0 never executed
+    #####:  335:    WEBP_UNSAFE_MEMSET(bw, 0, sizeof(*bw));
+        -:  336:  }
+    #####:  337:}
+        -:  338:
+function VP8LBitWriterReset called 0 returned 0% blocks executed 0%
+    #####:  339:void VP8LBitWriterReset(const VP8LBitWriter* const bw_init,
+        -:  340:                        VP8LBitWriter* const bw) {
+    #####:  341:  bw->bits = bw_init->bits;
+    #####:  342:  bw->used = bw_init->used;
+    #####:  343:  bw->cur = bw->buf + (bw_init->cur - bw_init->buf);
+    #####:  344:  assert(bw->cur <= bw->end);
+    #####:  345:  bw->error = bw_init->error;
+    #####:  346:}
+        -:  347:
+function VP8LBitWriterSwap called 0 returned 0% blocks executed 0%
+    #####:  348:void VP8LBitWriterSwap(VP8LBitWriter* const src, VP8LBitWriter* const dst) {
+    #####:  349:  const VP8LBitWriter tmp = *src;
+    #####:  350:  *src = *dst;
+    #####:  351:  *dst = tmp;
+    #####:  352:}
+        -:  353:
+function VP8LPutBitsFlushBits called 0 returned 0% blocks executed 0%
+    #####:  354:void VP8LPutBitsFlushBits(VP8LBitWriter* const bw, int* used,
+        -:  355:                          vp8l_atype_t* bits) {
+        -:  356:  // If needed, make some room by flushing some bits out.
+    #####:  357:  if (bw->cur + VP8L_WRITER_BYTES > bw->end) {
+branch  0 never executed (fallthrough)
+branch  1 never executed
+    #####:  358:    const uint64_t extra_size = (bw->end - bw->buf) + MIN_EXTRA_SIZE;
+    #####:  359:    if (!CheckSizeOverflow(extra_size) ||
+branch  0 never executed (fallthrough)
+branch  1 never executed
+    #####:  360:        !VP8LBitWriterResize(bw, (size_t)extra_size)) {
+call    0 never executed
+    #####:  361:      bw->cur = bw->buf;
+    #####:  362:      bw->error = 1;
+    #####:  363:      return;
+        -:  364:    }
+        -:  365:  }
+    #####:  366:  *(vp8l_wtype_t*)bw->cur = (vp8l_wtype_t)WSWAP((vp8l_wtype_t)*bits);
+    #####:  367:  bw->cur += VP8L_WRITER_BYTES;
+    #####:  368:  *bits >>= VP8L_WRITER_BITS;
+    #####:  369:  *used -= VP8L_WRITER_BITS;
+        -:  370:}
+        -:  371:
+        -:  372:#if VP8L_WRITER_BITS == 16
+        -:  373:void VP8LPutBitsInternal(VP8LBitWriter* const bw, uint32_t bits, int n_bits) {
+        -:  374:  vp8l_atype_t lbits = bw->bits;
+        -:  375:  int used = bw->used;
+        -:  376:  assert(n_bits <= VP8L_WRITER_MAX_BITS);
+        -:  377:  if (n_bits == 0) return;
+        -:  378:  // Special case of overflow handling for 32bit accumulator (2-steps flush).
+        -:  379:  if (used + n_bits >= VP8L_WRITER_MAX_BITS) {
+        -:  380:    // Fill up all the VP8L_WRITER_MAX_BITS so it can be flushed out below.
+        -:  381:    const int shift = VP8L_WRITER_MAX_BITS - used;
+        -:  382:    lbits |= (vp8l_atype_t)bits << used;
+        -:  383:    used = VP8L_WRITER_MAX_BITS;
+        -:  384:    n_bits -= shift;
+        -:  385:    if (shift >= (int)sizeof(bits) * 8) {
+        -:  386:      // Undefined behavior.
+        -:  387:      assert(shift == (int)sizeof(bits) * 8);
+        -:  388:      bits = 0;
+        -:  389:    } else {
+        -:  390:      bits >>= shift;
+        -:  391:    }
+        -:  392:    assert(n_bits <= VP8L_WRITER_MAX_BITS);
+        -:  393:  }
+        -:  394:  // If needed, make some room by flushing some bits out.
+        -:  395:  while (used >= VP8L_WRITER_BITS) {
+        -:  396:    VP8LPutBitsFlushBits(bw, &used, &lbits);
+        -:  397:  }
+        -:  398:  bw->bits = lbits | ((vp8l_atype_t)bits << used);
+        -:  399:  bw->used = used + n_bits;
+        -:  400:}
+        -:  401:#endif  // VP8L_WRITER_BITS == 16
+        -:  402:
+function VP8LBitWriterFinish called 0 returned 0% blocks executed 0%
+    #####:  403:uint8_t* VP8LBitWriterFinish(VP8LBitWriter* const bw) {
+        -:  404:  // flush leftover bits
+    #####:  405:  if (VP8LBitWriterResize(bw, (bw->used + 7) >> 3)) {
+call    0 never executed
+branch  1 never executed (fallthrough)
+branch  2 never executed
+    #####:  406:    while (bw->used > 0) {
+branch  0 never executed
+branch  1 never executed (fallthrough)
+    #####:  407:      *bw->cur++ = (uint8_t)bw->bits;
+    #####:  408:      bw->bits >>= 8;
+    #####:  409:      bw->used -= 8;
+        -:  410:    }
+    #####:  411:    bw->used = 0;
+        -:  412:  }
+    #####:  413:  return bw->buf;
+        -:  414:}
+        -:  415:
+        -:  416://------------------------------------------------------------------------------

@@ -1,0 +1,1880 @@
+ Percent |	Source code & Disassembly of webp_cuda_batch_benchmark for cycles:u (2164 samples, percent: local period)
+-------------------------------------------------------------------------------------------------------------------------
+         :
+         :
+         :
+         : 3     Disassembly of section .text:
+         :
+         : 5     0000000000094880 <VP8RecordCoeffTokens>:
+         : 6     b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+         : 7     }
+         : 8     }
+         :
+         : 10    int VP8RecordCoeffTokens(int ctx, const struct VP8Residual* const res,
+         : 11    VP8TBuffer* const tokens) {
+    0.27 :   94880:  endbr64
+    0.00 :   94884:  push   %r15
+    0.00 :   94886:  movslq %edi,%rax
+    0.06 :   94889:  mov    %rsi,%r9
+    0.36 :   9488c:  push   %r14
+    0.16 :   9488e:  push   %r13
+    0.00 :   94890:  push   %r12
+    0.26 :   94892:  push   %rbp
+    0.05 :   94893:  push   %rbx
+    0.03 :   94894:  mov    %rdx,%rbx
+    0.00 :   94897:  sub    $0x48,%rsp
+         : 23    const int16_t* const coeffs = res->coeffs;
+         : 24    const int coeff_type = res->coeff_type;
+         : 25    const int last = res->last;
+         : 26    int n = res->first;
+         : 27    uint32_t base_id = TOKEN_ID(coeff_type, n, ctx);
+    0.12 :   9489b:  mov    0x10(%rsi),%ecx
+         : 29    int n = res->first;
+    0.00 :   9489e:  movslq (%rsi),%r14
+         : 31    const int last = res->last;
+    0.00 :   948a1:  mov    0x4(%rsi),%edi
+         : 33    const int16_t* const coeffs = res->coeffs;
+    0.78 :   948a4:  mov    0x8(%rsi),%r8
+         : 35    uint32_t base_id = TOKEN_ID(coeff_type, n, ctx);
+    0.18 :   948a8:  shl    $0x3,%ecx
+         : 37    int n = res->first;
+    0.00 :   948ab:  mov    %r14,%rdx
+         : 39    uint32_t base_id = TOKEN_ID(coeff_type, n, ctx);
+    0.00 :   948ae:  mov    %ecx,0x38(%rsp)
+    0.00 :   948b2:  add    %r14d,%ecx
+    0.00 :   948b5:  lea    (%rcx,%rcx,2),%ecx
+         : 43    const int last = res->last;
+    0.00 :   948b8:  mov    %edi,0xc(%rsp)
+         : 45    // should be stats[VP8EncBands[n]], but it's equivalent for n=0 or 1
+         : 46    proba_t* s = res->stats[n][ctx];
+         : 47    if (!AddToken(tokens, last >= 0, base_id + 0, s + 0)) {
+    0.00 :   948bc:  not    %edi
+         : 49    uint32_t base_id = TOKEN_ID(coeff_type, n, ctx);
+    0.18 :   948be:  add    %eax,%ecx
+         : 51    if (!AddToken(tokens, last >= 0, base_id + 0, s + 0)) {
+    0.00 :   948c0:  mov    %edi,%ebp
+         : 53    uint32_t base_id = TOKEN_ID(coeff_type, n, ctx);
+    0.00 :   948c2:  lea    (%rcx,%rcx,4),%esi
+         : 55    if (!AddToken(tokens, last >= 0, base_id + 0, s + 0)) {
+    0.00 :   948c5:  shr    $0x1f,%ebp
+         : 57    uint32_t base_id = TOKEN_ID(coeff_type, n, ctx);
+    0.05 :   948c8:  lea    (%rcx,%rsi,2),%r15d
+         : 59    proba_t* s = res->stats[n][ctx];
+    0.19 :   948cc:  mov    %r14,%rcx
+    0.00 :   948cf:  lea    (%rax,%rax,4),%rsi
+         : 62    if (!AddToken(tokens, last >= 0, base_id + 0, s + 0)) {
+    0.00 :   948d3:  mov    %ebp,%r12d
+         : 64    proba_t* s = res->stats[n][ctx];
+    0.23 :   948d6:  shl    $0x5,%rcx
+    0.00 :   948da:  lea    (%rax,%rsi,2),%rax
+    0.00 :   948de:  add    %r14,%rcx
+    0.00 :   948e1:  shl    $0x2,%rax
+    0.00 :   948e5:  lea    (%rax,%rcx,4),%r13
+         : 70    if (b->left > 0 || TBufferNewPage(b)) {
+    0.32 :   948e9:  mov    0x18(%rbx),%ecx
+         : 72    proba_t* s = res->stats[n][ctx];
+    0.05 :   948ec:  add    0x20(%r9),%r13
+         : 74    if (b->left > 0 || TBufferNewPage(b)) {
+    0.10 :   948f0:  test   %ecx,%ecx
+    0.16 :   948f2:  jle    95130 <VP8RecordCoeffTokens+0x8b0>
+         : 77    b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   948f8:  mov    0x10(%rbx),%rax
+         : 79    const int slot = --b->left;
+    0.15 :   948fc:  sub    $0x1,%ecx
+         : 81    b->tokens[slot] = (bit << 15) | proba_idx;
+    0.05 :   948ff:  shl    $0xf,%ebp
+         : 83    const int slot = --b->left;
+    0.00 :   94902:  mov    %ecx,0x18(%rbx)
+         : 85    b->tokens[slot] = (bit << 15) | proba_idx;
+    0.12 :   94905:  or     %r15d,%ebp
+    0.17 :   94908:  movslq %ecx,%rcx
+    0.09 :   9490b:  mov    %bp,(%rax,%rcx,2)
+         :
+         : 90    int VP8RecordCoeffs(int ctx, const VP8Residual* const res);
+         :
+         : 92    // Record proba context used.
+         : 93    static WEBP_INLINE int VP8RecordStats(int bit, proba_t* const stats) {
+         : 94    proba_t p = *stats;
+    1.36 :   9490f:  mov    0x0(%r13),%eax
+         : 96    // An overflow is inbound. Note we handle this at 0xfffe0000u instead of
+         : 97    // 0xffff0000u to make sure p + 1u does not overflow.
+         : 98    if (p >= 0xfffe0000u) {
+    0.16 :   94913:  cmp    $0xfffdffff,%eax
+    0.00 :   94918:  jbe    94924 <VP8RecordCoeffTokens+0xa4>
+         : 101   p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   9491a:  add    $0x1,%eax
+    0.00 :   9491d:  shr    $1,%eax
+    0.00 :   9491f:  and    $0x7fff7fff,%eax
+         : 105   if (!AddToken(tokens, last >= 0, base_id + 0, s + 0)) {
+    0.00 :   94924:  mov    0xc(%rsp),%r10d
+         : 107   }
+         : 108   // record bit count (lower 16 bits) and increment total count (upper 16 bits).
+         : 109   p += 0x00010000u + bit;
+    0.29 :   94929:  lea    0x10000(%r12,%rax,1),%eax
+    0.20 :   94931:  mov    %eax,0x0(%r13)
+         : 112   return 0;
+    0.14 :   94935:  xor    %eax,%eax
+         : 114   if (!AddToken(tokens, last >= 0, base_id + 0, s + 0)) {
+    0.00 :   94937:  test   %r10d,%r10d
+    0.00 :   9493a:  js     94a09 <VP8RecordCoeffTokens+0x189>
+         : 117   }
+         :
+         : 119   while (n < 16) {
+    0.00 :   94940:  cmp    $0xf,%edx
+    0.00 :   94943:  jg     94a04 <VP8RecordCoeffTokens+0x184>
+    0.00 :   94949:  lea    0x96630(%rip),%rax        # 12af80 <VP8EncBands>
+    0.00 :   94950:  lea    (%r8,%r14,2),%rcx
+    0.00 :   94954:  lea    0x1(%r14,%rax,1),%r8
+    0.05 :   94959:  mov    %edx,%r14d
+    0.00 :   9495c:  nopl   0x0(%rax)
+         : 127   const int c = coeffs[n++];
+    1.51 :   94960:  movswl (%rcx),%r12d
+    0.17 :   94964:  add    $0x1,%r14d
+         : 130   if (b->left > 0 || TBufferNewPage(b)) {
+    0.13 :   94968:  mov    0x18(%rbx),%esi
+         : 132   const int sign = c < 0;
+         : 133   const uint32_t v = sign ? -c : c;
+         : 134   if (!AddToken(tokens, v != 0, base_id + 1, s + 1)) {
+    1.45 :   9496b:  lea    0x1(%r15),%r11d
+         : 136   const uint32_t v = sign ? -c : c;
+    0.41 :   9496f:  mov    %r12d,%ebp
+    0.25 :   94972:  neg    %ebp
+    0.99 :   94974:  cmovs  %r12d,%ebp
+         : 140   if (!AddToken(tokens, v != 0, base_id + 1, s + 1)) {
+    0.69 :   94978:  test   %ebp,%ebp
+    1.91 :   9497a:  setne  %dl
+    0.56 :   9497d:  setne  %r10b
+    0.20 :   94981:  movzbl %dl,%edx
+         : 145   if (b->left > 0 || TBufferNewPage(b)) {
+    0.55 :   94984:  test   %esi,%esi
+    0.19 :   94986:  jle    94b50 <VP8RecordCoeffTokens+0x2d0>
+         : 148   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   9498c:  mov    0x10(%rbx),%rax
+         : 150   const int slot = --b->left;
+    0.25 :   94990:  sub    $0x1,%esi
+         : 152   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.51 :   94993:  shl    $0xf,%r10d
+         : 154   const int slot = --b->left;
+    1.15 :   94997:  mov    %esi,0x18(%rbx)
+         : 156   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.86 :   9499a:  or     %r11d,%r10d
+    1.29 :   9499d:  movslq %esi,%rsi
+    0.15 :   949a0:  mov    %r10w,(%rax,%rsi,2)
+         : 160   proba_t p = *stats;
+    3.80 :   949a5:  mov    0x4(%r13),%eax
+         : 162   if (p >= 0xfffe0000u) {
+    1.00 :   949a9:  cmp    $0xfffdffff,%eax
+    0.36 :   949ae:  jbe    949ba <VP8RecordCoeffTokens+0x13a>
+         : 165   p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   949b0:  add    $0x1,%eax
+    0.00 :   949b3:  shr    $1,%eax
+    0.00 :   949b5:  and    $0x7fff7fff,%eax
+         : 169   p += 0x00010000u + bit;
+    0.00 :   949ba:  lea    0x10000(%rdx,%rax,1),%eax
+    0.63 :   949c1:  mov    %eax,0x4(%r13)
+         : 172   if (!AddToken(tokens, v != 0, base_id + 1, s + 1)) {
+    1.35 :   949c5:  test   %ebp,%ebp
+    0.56 :   949c7:  jne    94a20 <VP8RecordCoeffTokens+0x1a0>
+         : 175   base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 0);  // ctx=0
+    0.00 :   949c9:  movzbl (%r8),%edx
+    4.73 :   949cd:  mov    0x38(%rsp),%edi
+         : 178   while (n < 16) {
+    0.29 :   949d1:  add    $0x2,%rcx
+    0.40 :   949d5:  add    $0x1,%r8
+         : 181   base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 0);  // ctx=0
+    0.00 :   949d9:  mov    %rdx,%rax
+    0.00 :   949dc:  add    %edi,%edx
+    0.05 :   949de:  mov    %edx,%r15d
+    0.76 :   949e1:  shl    $0x5,%r15d
+    0.08 :   949e5:  add    %edx,%r15d
+         : 187   s = res->stats[VP8EncBands[n]][0];
+    0.83 :   949e8:  mov    %rax,%rdx
+    0.00 :   949eb:  shl    $0x5,%rdx
+    0.05 :   949ef:  add    %rdx,%rax
+    0.15 :   949f2:  mov    0x20(%r9),%rdx
+    0.19 :   949f6:  lea    (%rdx,%rax,4),%r13
+         : 193   while (n < 16) {
+    1.16 :   949fa:  cmp    $0x10,%r14d
+    0.18 :   949fe:  jne    94960 <VP8RecordCoeffTokens+0xe0>
+         : 196   base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 2);  // ctx=2
+         : 197   s = res->stats[VP8EncBands[n]][2];
+         : 198   }
+         : 199   AddConstantToken(tokens, sign, 128);
+         : 200   if (n == 16 || !AddToken(tokens, n <= last, base_id + 0, s + 0)) {
+         : 201   return 1;  // EOB
+    0.00 :   94a04:  mov    $0x1,%eax
+         : 203   }
+         : 204   }
+         : 205   return 1;
+         : 206   }
+    0.66 :   94a09:  add    $0x48,%rsp
+    0.28 :   94a0d:  pop    %rbx
+    1.37 :   94a0e:  pop    %rbp
+    0.00 :   94a0f:  pop    %r12
+    0.41 :   94a11:  pop    %r13
+    0.25 :   94a13:  pop    %r14
+    0.41 :   94a15:  pop    %r15
+    0.07 :   94a17:  ret
+    0.00 :   94a18:  nopl   0x0(%rax,%rax,1)
+         : 216   if (!AddToken(tokens, v > 1, base_id + 2, s + 2)) {
+    0.00 :   94a20:  cmp    $0x1,%ebp
+         : 218   if (b->left > 0 || TBufferNewPage(b)) {
+    0.60 :   94a23:  mov    0x18(%rbx),%esi
+         : 220   if (!AddToken(tokens, v > 1, base_id + 2, s + 2)) {
+    1.78 :   94a26:  lea    0x2(%r15),%r11d
+    0.29 :   94a2a:  seta   %dl
+    0.05 :   94a2d:  seta   %r10b
+    0.00 :   94a31:  movzbl %dl,%edx
+         : 225   if (b->left > 0 || TBufferNewPage(b)) {
+    0.33 :   94a34:  test   %esi,%esi
+    0.10 :   94a36:  jle    94d50 <VP8RecordCoeffTokens+0x4d0>
+         : 228   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94a3c:  mov    0x10(%rbx),%rax
+         : 230   const int slot = --b->left;
+    0.42 :   94a40:  sub    $0x1,%esi
+         : 232   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.07 :   94a43:  shl    $0xf,%r10d
+         : 234   const int slot = --b->left;
+    0.54 :   94a47:  mov    %esi,0x18(%rbx)
+         : 236   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.68 :   94a4a:  or     %r11d,%r10d
+    0.18 :   94a4d:  movslq %esi,%rsi
+    0.53 :   94a50:  mov    %r10w,(%rax,%rsi,2)
+         : 240   proba_t p = *stats;
+    3.29 :   94a55:  mov    0x8(%r13),%eax
+         : 242   if (p >= 0xfffe0000u) {
+    0.12 :   94a59:  cmp    $0xfffdffff,%eax
+    0.25 :   94a5e:  jbe    94a6a <VP8RecordCoeffTokens+0x1ea>
+         : 245   p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   94a60:  add    $0x1,%eax
+    0.00 :   94a63:  shr    $1,%eax
+    0.00 :   94a65:  and    $0x7fff7fff,%eax
+         : 249   p += 0x00010000u + bit;
+    0.00 :   94a6a:  lea    0x10000(%rdx,%rax,1),%eax
+    0.35 :   94a71:  mov    %eax,0x8(%r13)
+         : 252   if (!AddToken(tokens, v > 1, base_id + 2, s + 2)) {
+    0.00 :   94a75:  cmp    $0x1,%ebp
+    0.19 :   94a78:  jne    94bd8 <VP8RecordCoeffTokens+0x358>
+         : 255   base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 1);  // ctx=1
+    0.00 :   94a7e:  movzbl (%r8),%edx
+    4.86 :   94a82:  mov    0x38(%rsp),%edi
+    0.56 :   94a86:  mov    %rdx,%rax
+    0.24 :   94a89:  add    %edi,%edx
+    0.00 :   94a8b:  lea    0x1(%rdx,%rdx,2),%edx
+    0.36 :   94a8f:  lea    (%rdx,%rdx,4),%esi
+    0.89 :   94a92:  lea    (%rdx,%rsi,2),%r15d
+         : 263   s = res->stats[VP8EncBands[n]][1];
+    0.57 :   94a96:  mov    %rax,%rdx
+    0.00 :   94a99:  shl    $0x5,%rdx
+    0.00 :   94a9d:  add    %rdx,%rax
+    0.00 :   94aa0:  mov    0x20(%r9),%rdx
+    0.42 :   94aa4:  lea    0x2c(%rdx,%rax,4),%r13
+         : 269   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   94aa9:  mov    0x18(%rbx),%edx
+         : 271   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   94aac:  test   %edx,%edx
+    0.00 :   94aae:  jle    94cca <VP8RecordCoeffTokens+0x44a>
+         : 274   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   94ab4:  mov    0x10(%rbx),%rax
+         : 276   const int sign = c < 0;
+    0.83 :   94ab8:  shr    $0x1f,%r12d
+         : 278   const int slot = --b->left;
+    1.00 :   94abc:  sub    $0x1,%edx
+         : 280   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.11 :   94abf:  shl    $0xf,%r12d
+         : 282   const int slot = --b->left;
+    0.06 :   94ac3:  mov    %edx,0x18(%rbx)
+         : 284   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.23 :   94ac6:  movslq %edx,%rdx
+    0.16 :   94ac9:  or     $0x4080,%r12w
+    0.11 :   94acf:  mov    %r12w,(%rax,%rdx,2)
+         : 288   if (n == 16 || !AddToken(tokens, n <= last, base_id + 0, s + 0)) {
+    3.92 :   94ad4:  cmp    $0x10,%r14d
+    0.56 :   94ad8:  je     94a04 <VP8RecordCoeffTokens+0x184>
+    0.00 :   94ade:  cmp    %r14d,0xc(%rsp)
+         : 292   if (b->left > 0 || TBufferNewPage(b)) {
+    0.20 :   94ae3:  mov    0x18(%rbx),%edx
+         : 294   if (n == 16 || !AddToken(tokens, n <= last, base_id + 0, s + 0)) {
+    1.58 :   94ae6:  setge  %bpl
+    0.00 :   94aea:  setge  %r12b
+    0.06 :   94aee:  movzbl %bpl,%ebp
+         : 298   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   94af2:  test   %edx,%edx
+    0.00 :   94af4:  jle    94de0 <VP8RecordCoeffTokens+0x560>
+         : 301   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94afa:  mov    0x10(%rbx),%rax
+         : 303   const int slot = --b->left;
+    0.80 :   94afe:  sub    $0x1,%edx
+         : 305   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.58 :   94b01:  shl    $0xf,%r12d
+         : 307   const int slot = --b->left;
+    0.16 :   94b05:  mov    %edx,0x18(%rbx)
+         : 309   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.54 :   94b08:  or     %r15d,%r12d
+    0.00 :   94b0b:  movslq %edx,%rdx
+    0.20 :   94b0e:  mov    %r12w,(%rax,%rdx,2)
+         : 313   proba_t p = *stats;
+    3.45 :   94b13:  mov    0x0(%r13),%eax
+         : 315   if (p >= 0xfffe0000u) {
+    0.45 :   94b17:  cmp    $0xfffdffff,%eax
+    0.43 :   94b1c:  jbe    94b28 <VP8RecordCoeffTokens+0x2a8>
+         : 318   p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   94b1e:  add    $0x1,%eax
+    0.00 :   94b21:  shr    $1,%eax
+    0.00 :   94b23:  and    $0x7fff7fff,%eax
+         : 322   p += 0x00010000u + bit;
+    0.00 :   94b28:  lea    0x10000(%rbp,%rax,1),%eax
+    0.12 :   94b2f:  mov    %eax,0x0(%r13)
+         : 325   if (n == 16 || !AddToken(tokens, n <= last, base_id + 0, s + 0)) {
+    0.40 :   94b33:  cmp    %r14d,0xc(%rsp)
+    0.26 :   94b38:  jl     94a04 <VP8RecordCoeffTokens+0x184>
+         : 328   while (n < 16) {
+    0.00 :   94b3e:  add    $0x2,%rcx
+    0.15 :   94b42:  add    $0x1,%r8
+    0.00 :   94b46:  jmp    94960 <VP8RecordCoeffTokens+0xe0>
+    0.00 :   94b4b:  nopl   0x0(%rax,%rax,1)
+         : 333   if (!b->error) {
+    0.00 :   94b50:  mov    0x20(%rbx),%edi
+    0.00 :   94b53:  test   %edi,%edi
+    0.00 :   94b55:  jne    94d30 <VP8RecordCoeffTokens+0x4b0>
+         : 337   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   94b5b:  movslq 0x1c(%rbx),%rax
+         : 339   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   94b5f:  mov    $0x1,%edi
+    0.00 :   94b64:  mov    %r9,0x28(%rsp)
+    0.00 :   94b69:  mov    %r8,0x20(%rsp)
+         : 343   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   94b6e:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   94b73:  mov    %rcx,0x18(%rsp)
+    0.00 :   94b78:  mov    %edx,0x10(%rsp)
+    0.00 :   94b7c:  mov    %r10b,0x3f(%rsp)
+    0.00 :   94b81:  mov    %r11d,0x30(%rsp)
+         : 349   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   94b86:  call   74050 <WebPSafeMalloc>
+         : 351   if (page == NULL) {
+    0.00 :   94b8b:  mov    0x10(%rsp),%edx
+    0.00 :   94b8f:  mov    0x18(%rsp),%rcx
+    0.00 :   94b94:  test   %rax,%rax
+    0.00 :   94b97:  mov    0x20(%rsp),%r8
+    0.00 :   94b9c:  mov    0x28(%rsp),%r9
+    0.00 :   94ba1:  je     94d30 <VP8RecordCoeffTokens+0x4b0>
+         : 358   *b->last_page = page;
+    0.00 :   94ba7:  mov    0x8(%rbx),%rsi
+         : 360   page->next = NULL;
+    0.00 :   94bab:  movq   $0x0,(%rax)
+         : 362   b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   94bb2:  movzbl 0x3f(%rsp),%r10d
+    0.00 :   94bb8:  mov    0x30(%rsp),%r11d
+         : 365   *b->last_page = page;
+    0.00 :   94bbd:  mov    %rax,(%rsi)
+         : 367   b->left = b->page_size;
+    0.00 :   94bc0:  mov    0x1c(%rbx),%esi
+         : 369   b->last_page = &page->next;
+    0.00 :   94bc3:  mov    %rax,0x8(%rbx)
+         : 371   b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   94bc7:  add    $0x8,%rax
+    0.00 :   94bcb:  mov    %rax,0x10(%rbx)
+    0.00 :   94bcf:  jmp    94990 <VP8RecordCoeffTokens+0x110>
+    0.00 :   94bd4:  nopl   0x0(%rax)
+         : 376   if (!AddToken(tokens, v > 4, base_id + 3, s + 3)) {
+    0.00 :   94bd8:  cmp    $0x4,%ebp
+         : 378   if (b->left > 0 || TBufferNewPage(b)) {
+    1.46 :   94bdb:  mov    0x18(%rbx),%esi
+         : 380   if (!AddToken(tokens, v > 4, base_id + 3, s + 3)) {
+    1.40 :   94bde:  lea    0x3(%r15),%r11d
+    0.29 :   94be2:  seta   %dl
+    0.05 :   94be5:  seta   %r10b
+    0.00 :   94be9:  movzbl %dl,%edx
+         : 385   if (b->left > 0 || TBufferNewPage(b)) {
+    0.15 :   94bec:  test   %esi,%esi
+    0.00 :   94bee:  jle    95110 <VP8RecordCoeffTokens+0x890>
+         : 388   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94bf4:  mov    0x10(%rbx),%rax
+         : 390   const int slot = --b->left;
+    0.51 :   94bf8:  sub    $0x1,%esi
+         : 392   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94bfb:  shl    $0xf,%r10d
+         : 394   const int slot = --b->left;
+    0.30 :   94bff:  mov    %esi,0x18(%rbx)
+         : 396   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.73 :   94c02:  or     %r11d,%r10d
+    0.05 :   94c05:  movslq %esi,%rsi
+    0.00 :   94c08:  mov    %r10w,(%rax,%rsi,2)
+         : 400   proba_t p = *stats;
+    1.26 :   94c0d:  mov    0xc(%r13),%eax
+         : 402   if (p >= 0xfffe0000u) {
+    0.23 :   94c11:  cmp    $0xfffdffff,%eax
+    0.15 :   94c16:  jbe    94c22 <VP8RecordCoeffTokens+0x3a2>
+         : 405   p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   94c18:  add    $0x1,%eax
+    0.00 :   94c1b:  shr    $1,%eax
+    0.00 :   94c1d:  and    $0x7fff7fff,%eax
+         : 409   p += 0x00010000u + bit;
+    0.00 :   94c22:  lea    0x10000(%rdx,%rax,1),%eax
+    0.02 :   94c29:  mov    %eax,0xc(%r13)
+         : 412   if (!AddToken(tokens, v > 4, base_id + 3, s + 3)) {
+    0.05 :   94c2d:  cmp    $0x4,%ebp
+    0.28 :   94c30:  ja     94e50 <VP8RecordCoeffTokens+0x5d0>
+         : 415   if (AddToken(tokens, v != 2, base_id + 4, s + 4)) {
+    0.00 :   94c36:  cmp    $0x2,%ebp
+         : 417   if (b->left > 0 || TBufferNewPage(b)) {
+    0.19 :   94c39:  mov    0x18(%rbx),%esi
+         : 419   if (AddToken(tokens, v != 2, base_id + 4, s + 4)) {
+    0.61 :   94c3c:  lea    0x4(%r15),%r11d
+    0.45 :   94c40:  setne  %dl
+    0.00 :   94c43:  setne  %r10b
+    0.00 :   94c47:  movzbl %dl,%edx
+         : 424   if (b->left > 0 || TBufferNewPage(b)) {
+    0.06 :   94c4a:  test   %esi,%esi
+    0.03 :   94c4c:  jle    95458 <VP8RecordCoeffTokens+0xbd8>
+         : 427   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94c52:  mov    0x10(%rbx),%rax
+         : 429   const int slot = --b->left;
+    0.26 :   94c56:  sub    $0x1,%esi
+         : 431   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94c59:  shl    $0xf,%r10d
+         : 433   const int slot = --b->left;
+    0.26 :   94c5d:  mov    %esi,0x18(%rbx)
+         : 435   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.18 :   94c60:  or     %r11d,%r10d
+    0.14 :   94c63:  movslq %esi,%rsi
+    0.00 :   94c66:  mov    %r10w,(%rax,%rsi,2)
+         : 439   proba_t p = *stats;
+    0.92 :   94c6b:  mov    0x10(%r13),%eax
+         : 441   if (p >= 0xfffe0000u) {
+    0.03 :   94c6f:  cmp    $0xfffdffff,%eax
+    0.13 :   94c74:  jbe    94c80 <VP8RecordCoeffTokens+0x400>
+         : 444   p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   94c76:  add    $0x1,%eax
+    0.00 :   94c79:  shr    $1,%eax
+    0.00 :   94c7b:  and    $0x7fff7fff,%eax
+         : 448   p += 0x00010000u + bit;
+    0.00 :   94c80:  lea    0x10000(%rdx,%rax,1),%eax
+    0.00 :   94c87:  mov    %eax,0x10(%r13)
+         : 451   if (AddToken(tokens, v != 2, base_id + 4, s + 4)) {
+    0.00 :   94c8b:  cmp    $0x2,%ebp
+    0.00 :   94c8e:  jne    950a8 <VP8RecordCoeffTokens+0x828>
+         : 454   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   94c94:  mov    0x18(%rbx),%edx
+         : 456   base_id = TOKEN_ID(coeff_type, VP8EncBands[n], 2);  // ctx=2
+    2.39 :   94c97:  movzbl (%r8),%esi
+    0.22 :   94c9b:  mov    0x38(%rsp),%edi
+    0.31 :   94c9f:  mov    %rsi,%rax
+    0.00 :   94ca2:  add    %edi,%esi
+    0.00 :   94ca4:  lea    0x2(%rsi,%rsi,2),%esi
+    0.47 :   94ca8:  lea    (%rsi,%rsi,4),%edi
+    0.56 :   94cab:  lea    (%rsi,%rdi,2),%r15d
+         : 464   s = res->stats[VP8EncBands[n]][2];
+    0.84 :   94caf:  mov    %rax,%rsi
+    0.14 :   94cb2:  shl    $0x5,%rsi
+    0.00 :   94cb6:  add    %rsi,%rax
+    0.05 :   94cb9:  mov    0x20(%r9),%rsi
+    0.00 :   94cbd:  lea    0x58(%rsi,%rax,4),%r13
+         : 470   if (b->left > 0 || TBufferNewPage(b)) {
+    0.06 :   94cc2:  test   %edx,%edx
+    0.00 :   94cc4:  jg     94ab4 <VP8RecordCoeffTokens+0x234>
+         : 473   if (!b->error) {
+    0.00 :   94cca:  mov    0x20(%rbx),%edx
+    0.00 :   94ccd:  test   %edx,%edx
+    0.00 :   94ccf:  jne    94d40 <VP8RecordCoeffTokens+0x4c0>
+         : 477   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   94cd1:  movslq 0x1c(%rbx),%rax
+         : 479   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   94cd5:  mov    $0x1,%edi
+    0.00 :   94cda:  mov    %r9,0x20(%rsp)
+    0.00 :   94cdf:  mov    %r8,0x18(%rsp)
+         : 483   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   94ce4:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   94ce9:  mov    %rcx,0x10(%rsp)
+         : 486   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   94cee:  call   74050 <WebPSafeMalloc>
+         : 488   if (page == NULL) {
+    0.00 :   94cf3:  mov    0x10(%rsp),%rcx
+    0.00 :   94cf8:  mov    0x18(%rsp),%r8
+    0.00 :   94cfd:  test   %rax,%rax
+    0.00 :   94d00:  mov    0x20(%rsp),%r9
+    0.00 :   94d05:  je     94d40 <VP8RecordCoeffTokens+0x4c0>
+         : 494   *b->last_page = page;
+    0.00 :   94d07:  mov    0x8(%rbx),%rdx
+         : 496   page->next = NULL;
+    0.00 :   94d0b:  movq   $0x0,(%rax)
+         : 498   *b->last_page = page;
+    0.00 :   94d12:  mov    %rax,(%rdx)
+         : 500   b->left = b->page_size;
+    0.00 :   94d15:  mov    0x1c(%rbx),%edx
+         : 502   b->last_page = &page->next;
+    0.00 :   94d18:  mov    %rax,0x8(%rbx)
+         : 504   b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   94d1c:  add    $0x8,%rax
+    0.00 :   94d20:  mov    %rax,0x10(%rbx)
+         : 507   return 1;
+    0.00 :   94d24:  jmp    94ab8 <VP8RecordCoeffTokens+0x238>
+    0.00 :   94d29:  nopl   0x0(%rax)
+         : 510   b->error = 1;
+    0.00 :   94d30:  movl   $0x1,0x20(%rbx)
+         : 512   return 0;
+    0.00 :   94d37:  jmp    949a5 <VP8RecordCoeffTokens+0x125>
+    0.00 :   94d3c:  nopl   0x0(%rax)
+         : 515   b->error = 1;
+    0.00 :   94d40:  movl   $0x1,0x20(%rbx)
+         : 517   return 0;
+    0.00 :   94d47:  jmp    94ad4 <VP8RecordCoeffTokens+0x254>
+    0.00 :   94d4c:  nopl   0x0(%rax)
+         : 520   if (!b->error) {
+    0.00 :   94d50:  mov    0x20(%rbx),%esi
+    0.00 :   94d53:  test   %esi,%esi
+    0.00 :   94d55:  jne    94dd0 <VP8RecordCoeffTokens+0x550>
+         : 524   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   94d57:  movslq 0x1c(%rbx),%rax
+         : 526   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   94d5b:  mov    $0x1,%edi
+    0.00 :   94d60:  mov    %r9,0x28(%rsp)
+    0.00 :   94d65:  mov    %r8,0x20(%rsp)
+         : 530   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   94d6a:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   94d6f:  mov    %rcx,0x18(%rsp)
+    0.00 :   94d74:  mov    %edx,0x10(%rsp)
+    0.00 :   94d78:  mov    %r10b,0x3f(%rsp)
+    0.00 :   94d7d:  mov    %r11d,0x30(%rsp)
+         : 536   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   94d82:  call   74050 <WebPSafeMalloc>
+         : 538   if (page == NULL) {
+    0.00 :   94d87:  mov    0x10(%rsp),%edx
+    0.00 :   94d8b:  mov    0x18(%rsp),%rcx
+    0.00 :   94d90:  test   %rax,%rax
+    0.00 :   94d93:  mov    0x20(%rsp),%r8
+    0.00 :   94d98:  mov    0x28(%rsp),%r9
+    0.00 :   94d9d:  je     94dd0 <VP8RecordCoeffTokens+0x550>
+         : 545   *b->last_page = page;
+    0.00 :   94d9f:  mov    0x8(%rbx),%rsi
+         : 547   page->next = NULL;
+    0.00 :   94da3:  movq   $0x0,(%rax)
+         : 549   b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   94daa:  movzbl 0x3f(%rsp),%r10d
+    0.00 :   94db0:  mov    0x30(%rsp),%r11d
+         : 552   *b->last_page = page;
+    0.00 :   94db5:  mov    %rax,(%rsi)
+         : 554   b->left = b->page_size;
+    0.00 :   94db8:  mov    0x1c(%rbx),%esi
+         : 556   b->last_page = &page->next;
+    0.00 :   94dbb:  mov    %rax,0x8(%rbx)
+         : 558   b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   94dbf:  add    $0x8,%rax
+    0.00 :   94dc3:  mov    %rax,0x10(%rbx)
+    0.00 :   94dc7:  jmp    94a40 <VP8RecordCoeffTokens+0x1c0>
+    0.00 :   94dcc:  nopl   0x0(%rax)
+         : 563   b->error = 1;
+    0.00 :   94dd0:  movl   $0x1,0x20(%rbx)
+         : 565   return 0;
+    0.00 :   94dd7:  jmp    94a55 <VP8RecordCoeffTokens+0x1d5>
+    0.00 :   94ddc:  nopl   0x0(%rax)
+         : 568   if (!b->error) {
+    0.00 :   94de0:  mov    0x20(%rbx),%eax
+    0.00 :   94de3:  test   %eax,%eax
+    0.00 :   94de5:  jne    94e40 <VP8RecordCoeffTokens+0x5c0>
+         : 572   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   94de7:  movslq 0x1c(%rbx),%rax
+         : 574   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   94deb:  mov    $0x1,%edi
+    0.00 :   94df0:  mov    %r9,0x20(%rsp)
+    0.00 :   94df5:  mov    %r8,0x18(%rsp)
+         : 578   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   94dfa:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   94dff:  mov    %rcx,0x10(%rsp)
+         : 581   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   94e04:  call   74050 <WebPSafeMalloc>
+         : 583   if (page == NULL) {
+    0.00 :   94e09:  mov    0x10(%rsp),%rcx
+    0.00 :   94e0e:  mov    0x18(%rsp),%r8
+    0.00 :   94e13:  test   %rax,%rax
+    0.00 :   94e16:  mov    0x20(%rsp),%r9
+    0.00 :   94e1b:  je     94e40 <VP8RecordCoeffTokens+0x5c0>
+         : 589   *b->last_page = page;
+    0.00 :   94e1d:  mov    0x8(%rbx),%rdx
+         : 591   page->next = NULL;
+    0.00 :   94e21:  movq   $0x0,(%rax)
+         : 593   *b->last_page = page;
+    0.00 :   94e28:  mov    %rax,(%rdx)
+         : 595   b->left = b->page_size;
+    0.00 :   94e2b:  mov    0x1c(%rbx),%edx
+         : 597   b->last_page = &page->next;
+    0.00 :   94e2e:  mov    %rax,0x8(%rbx)
+         : 599   b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   94e32:  add    $0x8,%rax
+    0.00 :   94e36:  mov    %rax,0x10(%rbx)
+         : 602   return 1;
+    0.00 :   94e3a:  jmp    94afe <VP8RecordCoeffTokens+0x27e>
+    0.00 :   94e3f:  nop
+         : 605   b->error = 1;
+    0.00 :   94e40:  movl   $0x1,0x20(%rbx)
+         : 607   return 0;
+    0.00 :   94e47:  jmp    94b13 <VP8RecordCoeffTokens+0x293>
+    0.00 :   94e4c:  nopl   0x0(%rax)
+         : 610   } else if (!AddToken(tokens, v > 10, base_id + 6, s + 6)) {
+    0.00 :   94e50:  cmp    $0xa,%ebp
+         : 612   if (b->left > 0 || TBufferNewPage(b)) {
+    1.49 :   94e53:  mov    0x18(%rbx),%esi
+         : 614   } else if (!AddToken(tokens, v > 10, base_id + 6, s + 6)) {
+    0.87 :   94e56:  lea    0x6(%r15),%r11d
+    0.00 :   94e5a:  seta   %dl
+    0.00 :   94e5d:  seta   %r10b
+    0.00 :   94e61:  movzbl %dl,%edx
+         : 619   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   94e64:  test   %esi,%esi
+    0.00 :   94e66:  jle    953d0 <VP8RecordCoeffTokens+0xb50>
+         : 622   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94e6c:  mov    0x10(%rbx),%rax
+         : 624   const int slot = --b->left;
+    0.29 :   94e70:  sub    $0x1,%esi
+         : 626   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94e73:  shl    $0xf,%r10d
+         : 628   const int slot = --b->left;
+    0.00 :   94e77:  mov    %esi,0x18(%rbx)
+         : 630   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.12 :   94e7a:  or     %r11d,%r10d
+    0.00 :   94e7d:  movslq %esi,%rsi
+    0.00 :   94e80:  mov    %r10w,(%rax,%rsi,2)
+         : 634   proba_t p = *stats;
+    0.83 :   94e85:  mov    0x18(%r13),%eax
+         : 636   if (p >= 0xfffe0000u) {
+    0.06 :   94e89:  cmp    $0xfffdffff,%eax
+    0.01 :   94e8e:  jbe    94e9a <VP8RecordCoeffTokens+0x61a>
+         : 639   p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   94e90:  add    $0x1,%eax
+    0.00 :   94e93:  shr    $1,%eax
+    0.00 :   94e95:  and    $0x7fff7fff,%eax
+         : 643   p += 0x00010000u + bit;
+    0.00 :   94e9a:  lea    0x10000(%rdx,%rax,1),%eax
+    0.00 :   94ea1:  mov    %eax,0x18(%r13)
+         : 646   } else if (!AddToken(tokens, v > 10, base_id + 6, s + 6)) {
+    0.00 :   94ea5:  cmp    $0xa,%ebp
+    0.00 :   94ea8:  ja     94f40 <VP8RecordCoeffTokens+0x6c0>
+         : 649   if (!AddToken(tokens, v > 6, base_id + 7, s + 7)) {
+    0.00 :   94eae:  cmp    $0x6,%ebp
+         : 651   if (b->left > 0 || TBufferNewPage(b)) {
+    0.01 :   94eb1:  mov    0x18(%rbx),%edx
+         : 653   if (!AddToken(tokens, v > 6, base_id + 7, s + 7)) {
+    0.23 :   94eb4:  lea    0x7(%r15),%r11d
+    0.00 :   94eb8:  seta   %r10b
+    0.00 :   94ebc:  seta   %r15b
+    0.00 :   94ec0:  movzbl %r10b,%r10d
+         : 658   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   94ec4:  test   %edx,%edx
+    0.05 :   94ec6:  jle    95500 <VP8RecordCoeffTokens+0xc80>
+         : 661   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94ecc:  mov    0x10(%rbx),%rax
+         : 663   const int slot = --b->left;
+    0.00 :   94ed0:  sub    $0x1,%edx
+         : 665   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94ed3:  shl    $0xf,%r15d
+         : 667   const int slot = --b->left;
+    0.05 :   94ed7:  mov    %edx,0x18(%rbx)
+         : 669   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.09 :   94eda:  or     %r11d,%r15d
+    0.00 :   94edd:  movslq %edx,%rdx
+    0.00 :   94ee0:  mov    %r15w,(%rax,%rdx,2)
+         : 673   proba_t p = *stats;
+    0.17 :   94ee5:  mov    0x1c(%r13),%eax
+         : 675   if (p >= 0xfffe0000u) {
+    0.00 :   94ee9:  cmp    $0xfffdffff,%eax
+    0.00 :   94eee:  jbe    94efa <VP8RecordCoeffTokens+0x67a>
+         : 678   p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   94ef0:  add    $0x1,%eax
+    0.00 :   94ef3:  shr    $1,%eax
+    0.00 :   94ef5:  and    $0x7fff7fff,%eax
+         : 682   p += 0x00010000u + bit;
+    0.00 :   94efa:  lea    0x10000(%r10,%rax,1),%eax
+    0.00 :   94f02:  mov    %eax,0x1c(%r13)
+         : 685   if (!AddToken(tokens, v > 6, base_id + 7, s + 7)) {
+    0.03 :   94f06:  cmp    $0x6,%ebp
+    0.00 :   94f09:  ja     95150 <VP8RecordCoeffTokens+0x8d0>
+         : 688   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   94f0f:  mov    0x18(%rbx),%edx
+         : 690   AddConstantToken(tokens, v == 6, 159);
+    0.19 :   94f12:  sete   %bpl
+         : 692   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   94f16:  test   %edx,%edx
+    0.00 :   94f18:  jle    95337 <VP8RecordCoeffTokens+0xab7>
+         : 695   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   94f1e:  mov    0x10(%rbx),%rax
+         : 697   const int slot = --b->left;
+    0.00 :   94f22:  sub    $0x1,%edx
+         : 699   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   94f25:  shl    $0xf,%ebp
+    0.00 :   94f28:  movslq %edx,%rsi
+    0.00 :   94f2b:  or     $0x409f,%bp
+         : 703   const int slot = --b->left;
+    0.13 :   94f30:  mov    %edx,0x18(%rbx)
+         : 705   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.03 :   94f33:  mov    %bp,(%rax,%rsi,2)
+    0.15 :   94f37:  jmp    94c97 <VP8RecordCoeffTokens+0x417>
+    0.00 :   94f3c:  nopl   0x0(%rax)
+         : 709   uint32_t residue = v - 3;
+    0.00 :   94f40:  lea    -0x3(%rbp),%esi
+         : 711   if (b->left > 0 || TBufferNewPage(b)) {
+    0.06 :   94f43:  mov    0x18(%rbx),%eax
+         : 713   AddToken(tokens, 0, base_id + 8, s + 8);
+    0.04 :   94f46:  lea    0x8(%r15),%edx
+         : 715   if (residue < (8 << 1)) {  // VP8Cat3  (3b)
+    0.00 :   94f4a:  cmp    $0xf,%esi
+    0.00 :   94f4d:  jbe    95580 <VP8RecordCoeffTokens+0xd00>
+         : 718   } else if (residue < (8 << 2)) {  // VP8Cat4  (4b)
+    0.00 :   94f53:  cmp    $0x1f,%esi
+    0.00 :   94f56:  jbe    95283 <VP8RecordCoeffTokens+0xa03>
+         : 721   } else if (residue < (8 << 3)) {  // VP8Cat5  (5b)
+    0.00 :   94f5c:  cmp    $0x3f,%esi
+    0.00 :   94f5f:  ja     95606 <VP8RecordCoeffTokens+0xd86>
+         : 724   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   94f65:  test   %eax,%eax
+    0.00 :   94f67:  jle    95a20 <VP8RecordCoeffTokens+0x11a0>
+         : 727   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94f6d:  mov    0x10(%rbx),%rsi
+         : 729   const int slot = --b->left;
+    0.00 :   94f71:  sub    $0x1,%eax
+         : 731   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94f74:  or     $0x8000,%dx
+         : 733   const int slot = --b->left;
+    0.00 :   94f79:  mov    %eax,0x18(%rbx)
+         : 735   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94f7c:  cltq
+    0.00 :   94f7e:  mov    %dx,(%rsi,%rax,2)
+         : 738   proba_t p = *stats;
+    0.00 :   94f82:  mov    0x20(%r13),%eax
+         : 740   if (p >= 0xfffe0000u) {
+    0.00 :   94f86:  cmp    $0xfffdffff,%eax
+    0.00 :   94f8b:  ja     956af <VP8RecordCoeffTokens+0xe2f>
+         : 743   p += 0x00010000u + bit;
+    0.00 :   94f91:  add    $0x10001,%eax
+         : 745   AddToken(tokens, 0, base_id + 10, s + 9);
+    0.00 :   94f96:  add    $0xa,%r15d
+    0.00 :   94f9a:  mov    %eax,0x20(%r13)
+         : 748   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   94f9e:  mov    0x18(%rbx),%eax
+    0.00 :   94fa1:  test   %eax,%eax
+    0.00 :   94fa3:  jle    959b4 <VP8RecordCoeffTokens+0x1134>
+         : 752   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94fa9:  mov    0x10(%rbx),%rdx
+         : 754   const int slot = --b->left;
+    0.00 :   94fad:  sub    $0x1,%eax
+    0.00 :   94fb0:  mov    %eax,0x18(%rbx)
+         : 757   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   94fb3:  cltq
+    0.00 :   94fb5:  mov    %r15w,(%rdx,%rax,2)
+         : 760   proba_t p = *stats;
+    0.00 :   94fba:  mov    0x24(%r13),%eax
+         : 762   if (p >= 0xfffe0000u) {
+    0.00 :   94fbe:  cmp    $0xfffdffff,%eax
+    0.00 :   94fc3:  ja     95691 <VP8RecordCoeffTokens+0xe11>
+         : 765   residue -= (8 << 2);
+    0.00 :   94fc9:  lea    -0x23(%rbp),%r10d
+         : 767   tab = VP8Cat5;
+    0.00 :   94fcd:  lea    0x97b6f(%rip),%rbp        # 12cb43 <VP8Cat5>
+         : 769   p += 0x00010000u + bit;
+    0.00 :   94fd4:  add    $0x10000,%eax
+         : 771   mask = 1 << 4;
+    0.00 :   94fd9:  mov    $0x10,%r15d
+         : 773   *stats = p;
+    0.00 :   94fdf:  mov    %eax,0x24(%r13)
+         : 775   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   94fe3:  mov    0x18(%rbx),%edx
+    0.00 :   94fe6:  mov    %r14d,0x18(%rsp)
+    0.06 :   94feb:  mov    %rbx,%r14
+    0.00 :   94fee:  mov    %rbp,%rbx
+    0.00 :   94ff1:  mov    %r15d,%ebp
+    0.00 :   94ff4:  mov    %r12d,0x20(%rsp)
+    0.06 :   94ff9:  mov    %r8,%r15
+    0.00 :   94ffc:  mov    %r10d,%r12d
+    0.00 :   94fff:  mov    %rcx,0x28(%rsp)
+    0.00 :   95004:  mov    %r9,0x30(%rsp)
+    0.00 :   95009:  jmp    95038 <VP8RecordCoeffTokens+0x7b8>
+    0.00 :   9500b:  nopl   0x0(%rax,%rax,1)
+         : 788   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   95010:  mov    0x10(%r14),%rax
+    0.07 :   95014:  shl    $0xf,%r13d
+         : 791   const int slot = --b->left;
+    0.02 :   95018:  sub    $0x1,%edx
+         : 793   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   9501b:  or     %r11d,%r13d
+    0.00 :   9501e:  movslq %edx,%rsi
+         : 796   const int slot = --b->left;
+    0.00 :   95021:  mov    %edx,0x18(%r14)
+         : 798   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   95025:  or     $0x4000,%r13w
+         : 800   while (mask) {
+    0.00 :   9502b:  sar    $1,%ebp
+         : 802   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   9502d:  mov    %r13w,(%rax,%rsi,2)
+         : 804   while (mask) {
+    0.00 :   95032:  je     953b0 <VP8RecordCoeffTokens+0xb30>
+         : 806   AddConstantToken(tokens, !!(residue & mask), *tab++);
+    0.00 :   95038:  add    $0x1,%rbx
+    0.00 :   9503c:  test   %r12d,%ebp
+    0.00 :   9503f:  movzbl -0x1(%rbx),%r11d
+    0.00 :   95044:  setne  %r13b
+         : 811   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   95048:  test   %edx,%edx
+    0.00 :   9504a:  jg     95010 <VP8RecordCoeffTokens+0x790>
+         : 814   if (!b->error) {
+    0.00 :   9504c:  mov    0x20(%r14),%ecx
+    0.00 :   95050:  mov    %r11b,0x10(%rsp)
+    0.00 :   95055:  test   %ecx,%ecx
+    0.00 :   95057:  jne    953a0 <VP8RecordCoeffTokens+0xb20>
+         : 819   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   9505d:  movslq 0x1c(%r14),%rax
+         : 821   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95061:  mov    $0x1,%edi
+         : 823   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95066:  lea    0x8(%rax,%rax,1),%rsi
+         : 825   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   9506b:  call   74050 <WebPSafeMalloc>
+         : 827   if (page == NULL) {
+    0.00 :   95070:  movzbl 0x10(%rsp),%r11d
+    0.00 :   95076:  test   %rax,%rax
+    0.00 :   95079:  je     9539a <VP8RecordCoeffTokens+0xb1a>
+         : 831   *b->last_page = page;
+    0.00 :   9507f:  mov    0x8(%r14),%rdx
+         : 833   page->next = NULL;
+    0.00 :   95083:  movq   $0x0,(%rax)
+         : 835   *b->last_page = page;
+    0.00 :   9508a:  mov    %rax,(%rdx)
+         : 837   b->left = b->page_size;
+    0.00 :   9508d:  mov    0x1c(%r14),%edx
+         : 839   b->last_page = &page->next;
+    0.00 :   95091:  mov    %rax,0x8(%r14)
+         : 841   b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95095:  add    $0x8,%rax
+    0.00 :   95099:  mov    %rax,0x10(%r14)
+         : 844   return 1;
+    0.00 :   9509d:  jmp    95014 <VP8RecordCoeffTokens+0x794>
+    0.00 :   950a2:  nopw   0x0(%rax,%rax,1)
+         : 847   AddToken(tokens, v == 4, base_id + 5, s + 5);
+    0.00 :   950a8:  add    $0x5,%r15d
+         : 849   if (b->left > 0 || TBufferNewPage(b)) {
+    1.43 :   950ac:  mov    0x18(%rbx),%edx
+         : 851   AddToken(tokens, v == 4, base_id + 5, s + 5);
+    1.05 :   950af:  cmp    $0x4,%ebp
+    0.06 :   950b2:  sete   %r10b
+    0.00 :   950b6:  sete   %bpl
+    0.00 :   950ba:  movzbl %r10b,%r10d
+         : 856   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   950be:  test   %edx,%edx
+    0.00 :   950c0:  jle    95309 <VP8RecordCoeffTokens+0xa89>
+         : 859   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   950c6:  mov    0x10(%rbx),%rax
+         : 861   const int slot = --b->left;
+    0.38 :   950ca:  sub    $0x1,%edx
+         : 863   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   950cd:  shl    $0xf,%ebp
+         : 865   const int slot = --b->left;
+    0.10 :   950d0:  mov    %edx,0x18(%rbx)
+         : 867   b->tokens[slot] = (bit << 15) | proba_idx;
+    0.39 :   950d3:  or     %r15d,%ebp
+    0.00 :   950d6:  movslq %edx,%rdx
+    0.06 :   950d9:  mov    %bp,(%rax,%rdx,2)
+         : 871   proba_t p = *stats;
+    1.33 :   950dd:  mov    0x14(%r13),%eax
+         : 873   if (p >= 0xfffe0000u) {
+    0.14 :   950e1:  cmp    $0xfffdffff,%eax
+    0.11 :   950e6:  jbe    950f2 <VP8RecordCoeffTokens+0x872>
+         : 876   p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   950e8:  add    $0x1,%eax
+    0.00 :   950eb:  shr    $1,%eax
+    0.00 :   950ed:  and    $0x7fff7fff,%eax
+         : 880   p += 0x00010000u + bit;
+    0.00 :   950f2:  lea    0x10000(%r10,%rax,1),%eax
+    0.00 :   950fa:  mov    %eax,0x14(%r13)
+         : 883   if (b->left > 0 || TBufferNewPage(b)) {
+    0.05 :   950fe:  mov    0x18(%rbx),%edx
+         : 885   return bit;
+    0.44 :   95101:  jmp    94c97 <VP8RecordCoeffTokens+0x417>
+    0.00 :   95106:  cs nopw 0x0(%rax,%rax,1)
+         : 888   if (!b->error) {
+    0.00 :   95110:  mov    0x20(%rbx),%eax
+    0.00 :   95113:  test   %eax,%eax
+    0.00 :   95115:  je     951a8 <VP8RecordCoeffTokens+0x928>
+         : 892   b->error = 1;
+    0.00 :   9511b:  movl   $0x1,0x20(%rbx)
+         : 894   return 0;
+    0.00 :   95122:  jmp    94c0d <VP8RecordCoeffTokens+0x38d>
+    0.00 :   95127:  nopw   0x0(%rax,%rax,1)
+         : 897   if (!b->error) {
+    0.00 :   95130:  mov    0x20(%rbx),%r11d
+    0.00 :   95134:  test   %r11d,%r11d
+    0.00 :   95137:  je     95228 <VP8RecordCoeffTokens+0x9a8>
+         : 901   b->error = 1;
+    0.00 :   9513d:  movl   $0x1,0x20(%rbx)
+         : 903   return 0;
+    0.00 :   95144:  jmp    9490f <VP8RecordCoeffTokens+0x8f>
+    0.00 :   95149:  nopl   0x0(%rax)
+         : 906   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   95150:  mov    0x18(%rbx),%edx
+         : 908   AddConstantToken(tokens, v >= 9, 165);
+    0.34 :   95153:  cmp    $0x8,%ebp
+    0.00 :   95156:  seta   %r13b
+         : 911   if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   9515a:  test   %edx,%edx
+    0.00 :   9515c:  jle    95320 <VP8RecordCoeffTokens+0xaa0>
+         : 914   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   95162:  mov    0x10(%rbx),%rsi
+    0.05 :   95166:  mov    %r13d,%eax
+         : 917   const int slot = --b->left;
+    0.00 :   95169:  sub    $0x1,%edx
+    0.00 :   9516c:  not    %ebp
+         : 920   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   9516e:  shl    $0xf,%eax
+    0.09 :   95171:  movslq %edx,%rdi
+         : 923   const int slot = --b->left;
+    0.00 :   95174:  mov    %edx,0x18(%rbx)
+         : 925   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   95177:  and    $0x1,%ebp
+    0.00 :   9517a:  or     $0x40a5,%ax
+    0.00 :   9517e:  mov    %ax,(%rsi,%rdi,2)
+         : 929   if (b->left > 0 || TBufferNewPage(b)) {
+    0.05 :   95182:  test   %edx,%edx
+    0.00 :   95184:  jle    95792 <VP8RecordCoeffTokens+0xf12>
+         : 932   const int slot = --b->left;
+    0.00 :   9518a:  sub    $0x1,%edx
+         : 934   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   9518d:  shl    $0xf,%ebp
+    0.00 :   95190:  movslq %edx,%rax
+    0.00 :   95193:  or     $0x4091,%bp
+         : 938   const int slot = --b->left;
+    0.00 :   95198:  mov    %edx,0x18(%rbx)
+         : 940   b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   9519b:  mov    %bp,(%rsi,%rax,2)
+    0.00 :   9519f:  jmp    94c97 <VP8RecordCoeffTokens+0x417>
+    0.00 :   951a4:  nopl   0x0(%rax)
+         : 944   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   951a8:  movslq 0x1c(%rbx),%rax
+         : 946   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   951ac:  mov    $0x1,%edi
+    0.00 :   951b1:  mov    %r9,0x28(%rsp)
+    0.00 :   951b6:  mov    %r8,0x20(%rsp)
+         : 950   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   951bb:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   951c0:  mov    %rcx,0x18(%rsp)
+    0.00 :   951c5:  mov    %edx,0x10(%rsp)
+    0.00 :   951c9:  mov    %r10b,0x3f(%rsp)
+    0.00 :   951ce:  mov    %r11d,0x30(%rsp)
+         : 956   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   951d3:  call   74050 <WebPSafeMalloc>
+         : 958   if (page == NULL) {
+    0.00 :   951d8:  mov    0x10(%rsp),%edx
+    0.00 :   951dc:  mov    0x18(%rsp),%rcx
+    0.00 :   951e1:  test   %rax,%rax
+    0.00 :   951e4:  mov    0x20(%rsp),%r8
+    0.00 :   951e9:  mov    0x28(%rsp),%r9
+    0.00 :   951ee:  je     9511b <VP8RecordCoeffTokens+0x89b>
+         : 965   *b->last_page = page;
+    0.00 :   951f4:  mov    0x8(%rbx),%rsi
+         : 967   page->next = NULL;
+    0.00 :   951f8:  movq   $0x0,(%rax)
+         : 969   b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   951ff:  movzbl 0x3f(%rsp),%r10d
+    0.00 :   95205:  mov    0x30(%rsp),%r11d
+         : 972   *b->last_page = page;
+    0.00 :   9520a:  mov    %rax,(%rsi)
+         : 974   b->left = b->page_size;
+    0.00 :   9520d:  mov    0x1c(%rbx),%esi
+         : 976   b->last_page = &page->next;
+    0.00 :   95210:  mov    %rax,0x8(%rbx)
+         : 978   b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95214:  add    $0x8,%rax
+    0.00 :   95218:  mov    %rax,0x10(%rbx)
+    0.00 :   9521c:  jmp    94bf8 <VP8RecordCoeffTokens+0x378>
+    0.00 :   95221:  nopl   0x0(%rax)
+         : 983   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95228:  movslq 0x1c(%rbx),%rax
+         : 985   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   9522c:  mov    $0x1,%edi
+    0.00 :   95231:  mov    %r9,0x20(%rsp)
+    0.00 :   95236:  mov    %r8,0x10(%rsp)
+         : 989   const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   9523b:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   95240:  mov    %r14d,0x18(%rsp)
+         : 992   page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95245:  call   74050 <WebPSafeMalloc>
+         : 994   if (page == NULL) {
+    0.00 :   9524a:  mov    0x10(%rsp),%r8
+    0.00 :   9524f:  mov    0x18(%rsp),%edx
+    0.00 :   95253:  test   %rax,%rax
+    0.00 :   95256:  mov    0x20(%rsp),%r9
+    0.00 :   9525b:  je     9513d <VP8RecordCoeffTokens+0x8bd>
+         : 1000  *b->last_page = page;
+    0.00 :   95261:  mov    0x8(%rbx),%rcx
+         : 1002  page->next = NULL;
+    0.00 :   95265:  movq   $0x0,(%rax)
+         : 1004  *b->last_page = page;
+    0.00 :   9526c:  mov    %rax,(%rcx)
+         : 1006  b->left = b->page_size;
+    0.00 :   9526f:  mov    0x1c(%rbx),%ecx
+         : 1008  b->last_page = &page->next;
+    0.00 :   95272:  mov    %rax,0x8(%rbx)
+         : 1010  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95276:  add    $0x8,%rax
+    0.00 :   9527a:  mov    %rax,0x10(%rbx)
+         : 1013  return 1;
+    0.00 :   9527e:  jmp    948fc <VP8RecordCoeffTokens+0x7c>
+         : 1015  if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   95283:  test   %eax,%eax
+    0.00 :   95285:  jle    95afe <VP8RecordCoeffTokens+0x127e>
+         : 1018  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   9528b:  mov    0x10(%rbx),%rsi
+         : 1020  const int slot = --b->left;
+    0.00 :   9528f:  sub    $0x1,%eax
+    0.00 :   95292:  mov    %eax,0x18(%rbx)
+         : 1023  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   95295:  cltq
+    0.00 :   95297:  mov    %dx,(%rsi,%rax,2)
+         : 1026  proba_t p = *stats;
+    0.00 :   9529b:  mov    0x20(%r13),%eax
+         : 1028  if (p >= 0xfffe0000u) {
+    0.00 :   9529f:  cmp    $0xfffdffff,%eax
+    0.00 :   952a4:  ja     956a0 <VP8RecordCoeffTokens+0xe20>
+         : 1031  p += 0x00010000u + bit;
+    0.00 :   952aa:  add    $0x10000,%eax
+         : 1033  AddToken(tokens, 1, base_id + 9, s + 9);
+    0.00 :   952af:  add    $0x9,%r15d
+    0.00 :   952b3:  mov    %eax,0x20(%r13)
+         : 1036  if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   952b7:  mov    0x18(%rbx),%eax
+    0.00 :   952ba:  test   %eax,%eax
+    0.00 :   952bc:  jle    95a94 <VP8RecordCoeffTokens+0x1214>
+         : 1040  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   952c2:  mov    0x10(%rbx),%rdx
+         : 1042  const int slot = --b->left;
+    0.00 :   952c6:  sub    $0x1,%eax
+         : 1044  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   952c9:  or     $0x8000,%r15w
+         : 1046  const int slot = --b->left;
+    0.00 :   952cf:  mov    %eax,0x18(%rbx)
+         : 1048  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   952d2:  cltq
+    0.00 :   952d4:  mov    %r15w,(%rdx,%rax,2)
+         : 1051  proba_t p = *stats;
+    0.00 :   952d9:  mov    0x24(%r13),%eax
+         : 1053  if (p >= 0xfffe0000u) {
+    0.00 :   952dd:  cmp    $0xfffdffff,%eax
+    0.00 :   952e2:  jbe    952ee <VP8RecordCoeffTokens+0xa6e>
+         : 1056  p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   952e4:  add    $0x1,%eax
+    0.00 :   952e7:  shr    $1,%eax
+    0.00 :   952e9:  and    $0x7fff7fff,%eax
+         : 1060  residue -= (8 << 1);
+    0.00 :   952ee:  lea    -0x13(%rbp),%r10d
+         : 1062  p += 0x00010000u + bit;
+    0.00 :   952f2:  add    $0x10001,%eax
+         : 1064  tab = VP8Cat4;
+    0.00 :   952f7:  lea    0x9784a(%rip),%rbp        # 12cb48 <VP8Cat4>
+         : 1066  mask = 1 << 3;
+    0.00 :   952fe:  mov    $0x8,%r15d
+    0.00 :   95304:  jmp    94fdf <VP8RecordCoeffTokens+0x75f>
+         : 1069  if (!b->error) {
+    0.00 :   95309:  mov    0x20(%rbx),%eax
+    0.00 :   9530c:  test   %eax,%eax
+    0.00 :   9530e:  je     956cd <VP8RecordCoeffTokens+0xe4d>
+         : 1073  b->error = 1;
+    0.00 :   95314:  movl   $0x1,0x20(%rbx)
+         : 1075  return 0;
+    0.00 :   9531b:  jmp    950dd <VP8RecordCoeffTokens+0x85d>
+         : 1077  if (!b->error) {
+    0.00 :   95320:  mov    0x20(%rbx),%esi
+    0.00 :   95323:  test   %esi,%esi
+    0.00 :   95325:  je     95733 <VP8RecordCoeffTokens+0xeb3>
+         : 1081  b->error = 1;
+    0.00 :   9532b:  movl   $0x1,0x20(%rbx)
+         : 1083  return 0;
+    0.00 :   95332:  jmp    94c97 <VP8RecordCoeffTokens+0x417>
+         : 1085  if (!b->error) {
+    0.00 :   95337:  mov    0x20(%rbx),%edi
+    0.00 :   9533a:  test   %edi,%edi
+    0.00 :   9533c:  jne    9532b <VP8RecordCoeffTokens+0xaab>
+         : 1089  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   9533e:  movslq 0x1c(%rbx),%rax
+         : 1091  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95342:  mov    $0x1,%edi
+    0.00 :   95347:  mov    %r9,0x20(%rsp)
+    0.00 :   9534c:  mov    %r8,0x18(%rsp)
+         : 1095  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95351:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   95356:  mov    %rcx,0x10(%rsp)
+         : 1098  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   9535b:  call   74050 <WebPSafeMalloc>
+         : 1100  if (page == NULL) {
+    0.00 :   95360:  mov    0x10(%rsp),%rcx
+    0.00 :   95365:  mov    0x18(%rsp),%r8
+    0.00 :   9536a:  test   %rax,%rax
+    0.00 :   9536d:  mov    0x20(%rsp),%r9
+    0.00 :   95372:  je     95bc8 <VP8RecordCoeffTokens+0x1348>
+         : 1106  *b->last_page = page;
+    0.00 :   95378:  mov    0x8(%rbx),%rdx
+         : 1108  page->next = NULL;
+    0.00 :   9537c:  movq   $0x0,(%rax)
+         : 1110  *b->last_page = page;
+    0.00 :   95383:  mov    %rax,(%rdx)
+         : 1112  b->left = b->page_size;
+    0.00 :   95386:  mov    0x1c(%rbx),%edx
+         : 1114  b->last_page = &page->next;
+    0.00 :   95389:  mov    %rax,0x8(%rbx)
+         : 1116  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   9538d:  add    $0x8,%rax
+    0.00 :   95391:  mov    %rax,0x10(%rbx)
+         : 1119  return 1;
+    0.00 :   95395:  jmp    94f22 <VP8RecordCoeffTokens+0x6a2>
+         : 1121  if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   9539a:  mov    0x18(%r14),%edx
+    0.00 :   9539e:  xchg   %ax,%ax
+         : 1124  while (mask) {
+    0.00 :   953a0:  sar    $1,%ebp
+         : 1126  b->error = 1;
+    0.00 :   953a2:  movl   $0x1,0x20(%r14)
+         : 1128  while (mask) {
+    0.00 :   953aa:  jne    95038 <VP8RecordCoeffTokens+0x7b8>
+    0.00 :   953b0:  mov    %r14,%rbx
+    0.00 :   953b3:  mov    0x20(%rsp),%r12d
+    0.00 :   953b8:  mov    0x28(%rsp),%rcx
+    0.00 :   953bd:  mov    %r15,%r8
+    0.00 :   953c0:  mov    0x30(%rsp),%r9
+    0.00 :   953c5:  mov    0x18(%rsp),%r14d
+    0.00 :   953ca:  jmp    94c97 <VP8RecordCoeffTokens+0x417>
+    0.00 :   953cf:  nop
+         : 1138  if (!b->error) {
+    0.00 :   953d0:  mov    0x20(%rbx),%eax
+    0.00 :   953d3:  test   %eax,%eax
+    0.00 :   953d5:  jne    954e0 <VP8RecordCoeffTokens+0xc60>
+         : 1142  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   953db:  movslq 0x1c(%rbx),%rax
+         : 1144  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   953df:  mov    $0x1,%edi
+    0.00 :   953e4:  mov    %r9,0x28(%rsp)
+    0.00 :   953e9:  mov    %r8,0x20(%rsp)
+         : 1148  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   953ee:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   953f3:  mov    %rcx,0x18(%rsp)
+    0.00 :   953f8:  mov    %edx,0x10(%rsp)
+    0.00 :   953fc:  mov    %r10b,0x3f(%rsp)
+    0.00 :   95401:  mov    %r11d,0x30(%rsp)
+         : 1154  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95406:  call   74050 <WebPSafeMalloc>
+         : 1156  if (page == NULL) {
+    0.00 :   9540b:  mov    0x10(%rsp),%edx
+    0.00 :   9540f:  mov    0x18(%rsp),%rcx
+    0.00 :   95414:  test   %rax,%rax
+    0.00 :   95417:  mov    0x20(%rsp),%r8
+    0.00 :   9541c:  mov    0x28(%rsp),%r9
+    0.00 :   95421:  je     954e0 <VP8RecordCoeffTokens+0xc60>
+         : 1163  *b->last_page = page;
+    0.00 :   95427:  mov    0x8(%rbx),%rsi
+         : 1165  page->next = NULL;
+    0.00 :   9542b:  movq   $0x0,(%rax)
+         : 1167  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95432:  movzbl 0x3f(%rsp),%r10d
+    0.00 :   95438:  mov    0x30(%rsp),%r11d
+         : 1170  *b->last_page = page;
+    0.00 :   9543d:  mov    %rax,(%rsi)
+         : 1172  b->left = b->page_size;
+    0.00 :   95440:  mov    0x1c(%rbx),%esi
+         : 1174  b->last_page = &page->next;
+    0.00 :   95443:  mov    %rax,0x8(%rbx)
+         : 1176  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95447:  add    $0x8,%rax
+    0.00 :   9544b:  mov    %rax,0x10(%rbx)
+    0.00 :   9544f:  jmp    94e70 <VP8RecordCoeffTokens+0x5f0>
+    0.00 :   95454:  nopl   0x0(%rax)
+         : 1181  if (!b->error) {
+    0.00 :   95458:  mov    0x20(%rbx),%eax
+    0.00 :   9545b:  test   %eax,%eax
+    0.00 :   9545d:  jne    954f0 <VP8RecordCoeffTokens+0xc70>
+         : 1185  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95463:  movslq 0x1c(%rbx),%rax
+         : 1187  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95467:  mov    $0x1,%edi
+    0.00 :   9546c:  mov    %r9,0x28(%rsp)
+    0.00 :   95471:  mov    %r8,0x20(%rsp)
+         : 1191  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95476:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   9547b:  mov    %rcx,0x18(%rsp)
+    0.00 :   95480:  mov    %edx,0x10(%rsp)
+    0.00 :   95484:  mov    %r10b,0x3f(%rsp)
+    0.00 :   95489:  mov    %r11d,0x30(%rsp)
+         : 1197  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   9548e:  call   74050 <WebPSafeMalloc>
+         : 1199  if (page == NULL) {
+    0.00 :   95493:  mov    0x10(%rsp),%edx
+    0.00 :   95497:  mov    0x18(%rsp),%rcx
+    0.00 :   9549c:  test   %rax,%rax
+    0.00 :   9549f:  mov    0x20(%rsp),%r8
+    0.00 :   954a4:  mov    0x28(%rsp),%r9
+    0.00 :   954a9:  je     954f0 <VP8RecordCoeffTokens+0xc70>
+         : 1206  *b->last_page = page;
+    0.00 :   954ab:  mov    0x8(%rbx),%rsi
+         : 1208  page->next = NULL;
+    0.00 :   954af:  movq   $0x0,(%rax)
+         : 1210  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   954b6:  movzbl 0x3f(%rsp),%r10d
+    0.00 :   954bc:  mov    0x30(%rsp),%r11d
+         : 1213  *b->last_page = page;
+    0.00 :   954c1:  mov    %rax,(%rsi)
+         : 1215  b->left = b->page_size;
+    0.00 :   954c4:  mov    0x1c(%rbx),%esi
+         : 1217  b->last_page = &page->next;
+    0.00 :   954c7:  mov    %rax,0x8(%rbx)
+         : 1219  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   954cb:  add    $0x8,%rax
+    0.00 :   954cf:  mov    %rax,0x10(%rbx)
+    0.00 :   954d3:  jmp    94c56 <VP8RecordCoeffTokens+0x3d6>
+    0.00 :   954d8:  nopl   0x0(%rax,%rax,1)
+         : 1224  b->error = 1;
+    0.00 :   954e0:  movl   $0x1,0x20(%rbx)
+         : 1226  return 0;
+    0.00 :   954e7:  jmp    94e85 <VP8RecordCoeffTokens+0x605>
+    0.00 :   954ec:  nopl   0x0(%rax)
+         : 1229  b->error = 1;
+    0.00 :   954f0:  movl   $0x1,0x20(%rbx)
+         : 1231  return 0;
+    0.00 :   954f7:  jmp    94c6b <VP8RecordCoeffTokens+0x3eb>
+    0.00 :   954fc:  nopl   0x0(%rax)
+         : 1234  if (!b->error) {
+    0.00 :   95500:  mov    0x20(%rbx),%eax
+    0.00 :   95503:  test   %eax,%eax
+    0.00 :   95505:  jne    95573 <VP8RecordCoeffTokens+0xcf3>
+         : 1238  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95507:  movslq 0x1c(%rbx),%rax
+         : 1240  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   9550b:  mov    $0x1,%edi
+    0.00 :   95510:  mov    %r9,0x28(%rsp)
+    0.00 :   95515:  mov    %r8,0x20(%rsp)
+         : 1244  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   9551a:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   9551f:  mov    %rcx,0x18(%rsp)
+    0.00 :   95524:  mov    %r10d,0x10(%rsp)
+    0.00 :   95529:  mov    %r11d,0x30(%rsp)
+         : 1249  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   9552e:  call   74050 <WebPSafeMalloc>
+         : 1251  if (page == NULL) {
+    0.00 :   95533:  mov    0x10(%rsp),%r10d
+    0.00 :   95538:  mov    0x18(%rsp),%rcx
+    0.00 :   9553d:  test   %rax,%rax
+    0.00 :   95540:  mov    0x20(%rsp),%r8
+    0.00 :   95545:  mov    0x28(%rsp),%r9
+    0.00 :   9554a:  je     95573 <VP8RecordCoeffTokens+0xcf3>
+         : 1258  *b->last_page = page;
+    0.00 :   9554c:  mov    0x8(%rbx),%rdx
+         : 1260  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95550:  mov    0x30(%rsp),%r11d
+         : 1262  page->next = NULL;
+    0.00 :   95555:  movq   $0x0,(%rax)
+         : 1264  *b->last_page = page;
+    0.00 :   9555c:  mov    %rax,(%rdx)
+         : 1266  b->left = b->page_size;
+    0.00 :   9555f:  mov    0x1c(%rbx),%edx
+         : 1268  b->last_page = &page->next;
+    0.00 :   95562:  mov    %rax,0x8(%rbx)
+         : 1270  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95566:  add    $0x8,%rax
+    0.00 :   9556a:  mov    %rax,0x10(%rbx)
+    0.00 :   9556e:  jmp    94ed0 <VP8RecordCoeffTokens+0x650>
+         : 1274  b->error = 1;
+    0.00 :   95573:  movl   $0x1,0x20(%rbx)
+         : 1276  return 0;
+    0.00 :   9557a:  jmp    94ee5 <VP8RecordCoeffTokens+0x665>
+    0.00 :   9557f:  nop
+         : 1279  if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   95580:  test   %eax,%eax
+    0.00 :   95582:  jle    95866 <VP8RecordCoeffTokens+0xfe6>
+         : 1282  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   95588:  mov    0x10(%rbx),%rsi
+         : 1284  const int slot = --b->left;
+    0.00 :   9558c:  sub    $0x1,%eax
+    0.00 :   9558f:  mov    %eax,0x18(%rbx)
+         : 1287  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   95592:  cltq
+    0.00 :   95594:  mov    %dx,(%rsi,%rax,2)
+         : 1290  proba_t p = *stats;
+    0.00 :   95598:  mov    0x20(%r13),%eax
+         : 1292  if (p >= 0xfffe0000u) {
+    0.00 :   9559c:  cmp    $0xfffdffff,%eax
+    0.00 :   955a1:  jbe    955ad <VP8RecordCoeffTokens+0xd2d>
+         : 1295  p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   955a3:  add    $0x1,%eax
+    0.00 :   955a6:  shr    $1,%eax
+    0.00 :   955a8:  and    $0x7fff7fff,%eax
+         : 1299  p += 0x00010000u + bit;
+    0.00 :   955ad:  add    $0x10000,%eax
+         : 1301  AddToken(tokens, 0, base_id + 9, s + 9);
+    0.00 :   955b2:  add    $0x9,%r15d
+    0.00 :   955b6:  mov    %eax,0x20(%r13)
+         : 1304  if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   955ba:  mov    0x18(%rbx),%eax
+    0.04 :   955bd:  test   %eax,%eax
+    0.00 :   955bf:  jle    957fc <VP8RecordCoeffTokens+0xf7c>
+         : 1308  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   955c5:  mov    0x10(%rbx),%rdx
+         : 1310  const int slot = --b->left;
+    0.00 :   955c9:  sub    $0x1,%eax
+    0.00 :   955cc:  mov    %eax,0x18(%rbx)
+         : 1313  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   955cf:  cltq
+    0.00 :   955d1:  mov    %r15w,(%rdx,%rax,2)
+         : 1316  proba_t p = *stats;
+    0.00 :   955d6:  mov    0x24(%r13),%eax
+         : 1318  if (p >= 0xfffe0000u) {
+    0.00 :   955da:  cmp    $0xfffdffff,%eax
+    0.00 :   955df:  jbe    955eb <VP8RecordCoeffTokens+0xd6b>
+         : 1321  p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   955e1:  add    $0x1,%eax
+    0.00 :   955e4:  shr    $1,%eax
+    0.00 :   955e6:  and    $0x7fff7fff,%eax
+         : 1325  residue -= (8 << 0);
+    0.00 :   955eb:  lea    -0xb(%rbp),%r10d
+         : 1327  p += 0x00010000u + bit;
+    0.00 :   955ef:  add    $0x10000,%eax
+         : 1329  tab = VP8Cat3;
+    0.00 :   955f4:  lea    0x97551(%rip),%rbp        # 12cb4c <VP8Cat3>
+         : 1331  mask = 1 << 2;
+    0.00 :   955fb:  mov    $0x4,%r15d
+    0.00 :   95601:  jmp    94fdf <VP8RecordCoeffTokens+0x75f>
+         : 1334  if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   95606:  test   %eax,%eax
+    0.00 :   95608:  jle    958d8 <VP8RecordCoeffTokens+0x1058>
+         : 1337  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   9560e:  mov    0x10(%rbx),%rsi
+         : 1339  const int slot = --b->left;
+    0.00 :   95612:  sub    $0x1,%eax
+         : 1341  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   95615:  or     $0x8000,%dx
+         : 1343  const int slot = --b->left;
+    0.00 :   9561a:  mov    %eax,0x18(%rbx)
+         : 1345  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   9561d:  cltq
+    0.00 :   9561f:  mov    %dx,(%rsi,%rax,2)
+         : 1348  proba_t p = *stats;
+    0.00 :   95623:  mov    0x20(%r13),%eax
+         : 1350  if (p >= 0xfffe0000u) {
+    0.00 :   95627:  cmp    $0xfffdffff,%eax
+    0.00 :   9562c:  ja     956be <VP8RecordCoeffTokens+0xe3e>
+         : 1353  p += 0x00010000u + bit;
+    0.00 :   95632:  add    $0x10001,%eax
+         : 1355  AddToken(tokens, 1, base_id + 10, s + 9);
+    0.00 :   95637:  add    $0xa,%r15d
+    0.00 :   9563b:  mov    %eax,0x20(%r13)
+         : 1358  if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   9563f:  mov    0x18(%rbx),%eax
+    0.00 :   95642:  test   %eax,%eax
+    0.00 :   95644:  jle    9594a <VP8RecordCoeffTokens+0x10ca>
+         : 1362  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   9564a:  mov    0x10(%rbx),%rdx
+         : 1364  const int slot = --b->left;
+    0.00 :   9564e:  sub    $0x1,%eax
+         : 1366  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   95651:  or     $0x8000,%r15w
+         : 1368  const int slot = --b->left;
+    0.00 :   95657:  mov    %eax,0x18(%rbx)
+         : 1370  b->tokens[slot] = (bit << 15) | proba_idx;
+    0.00 :   9565a:  cltq
+    0.00 :   9565c:  mov    %r15w,(%rdx,%rax,2)
+         : 1373  proba_t p = *stats;
+    0.00 :   95661:  mov    0x24(%r13),%eax
+         : 1375  if (p >= 0xfffe0000u) {
+    0.00 :   95665:  cmp    $0xfffdffff,%eax
+    0.00 :   9566a:  jbe    95676 <VP8RecordCoeffTokens+0xdf6>
+         : 1378  p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   9566c:  add    $0x1,%eax
+    0.00 :   9566f:  shr    $1,%eax
+    0.00 :   95671:  and    $0x7fff7fff,%eax
+         : 1382  residue -= (8 << 3);
+    0.00 :   95676:  lea    -0x43(%rbp),%r10d
+         : 1384  p += 0x00010000u + bit;
+    0.00 :   9567a:  add    $0x10001,%eax
+         : 1386  tab = VP8Cat6;
+    0.00 :   9567f:  lea    0x974b2(%rip),%rbp        # 12cb38 <VP8Cat6>
+         : 1388  mask = 1 << 10;
+    0.00 :   95686:  mov    $0x400,%r15d
+    0.00 :   9568c:  jmp    94fdf <VP8RecordCoeffTokens+0x75f>
+         : 1391  p = ((p + 1u) >> 1) & 0x7fff7fffu;  // -> divide the stats by 2.
+    0.00 :   95691:  add    $0x1,%eax
+    0.00 :   95694:  shr    $1,%eax
+    0.00 :   95696:  and    $0x7fff7fff,%eax
+    0.00 :   9569b:  jmp    94fc9 <VP8RecordCoeffTokens+0x749>
+    0.00 :   956a0:  add    $0x1,%eax
+    0.00 :   956a3:  shr    $1,%eax
+    0.00 :   956a5:  and    $0x7fff7fff,%eax
+    0.00 :   956aa:  jmp    952aa <VP8RecordCoeffTokens+0xa2a>
+    0.00 :   956af:  add    $0x1,%eax
+    0.00 :   956b2:  shr    $1,%eax
+    0.00 :   956b4:  and    $0x7fff7fff,%eax
+    0.00 :   956b9:  jmp    94f91 <VP8RecordCoeffTokens+0x711>
+    0.00 :   956be:  add    $0x1,%eax
+    0.00 :   956c1:  shr    $1,%eax
+    0.00 :   956c3:  and    $0x7fff7fff,%eax
+    0.00 :   956c8:  jmp    95632 <VP8RecordCoeffTokens+0xdb2>
+         : 1408  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   956cd:  movslq 0x1c(%rbx),%rax
+         : 1410  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   956d1:  mov    $0x1,%edi
+    0.00 :   956d6:  mov    %r9,0x28(%rsp)
+    0.00 :   956db:  mov    %r8,0x20(%rsp)
+         : 1414  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   956e0:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   956e5:  mov    %rcx,0x18(%rsp)
+    0.00 :   956ea:  mov    %r10d,0x10(%rsp)
+         : 1418  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   956ef:  call   74050 <WebPSafeMalloc>
+         : 1420  if (page == NULL) {
+    0.00 :   956f4:  mov    0x10(%rsp),%r10d
+    0.00 :   956f9:  mov    0x18(%rsp),%rcx
+    0.00 :   956fe:  test   %rax,%rax
+    0.00 :   95701:  mov    0x20(%rsp),%r8
+    0.00 :   95706:  mov    0x28(%rsp),%r9
+    0.00 :   9570b:  je     95314 <VP8RecordCoeffTokens+0xa94>
+         : 1427  *b->last_page = page;
+    0.00 :   95711:  mov    0x8(%rbx),%rdx
+         : 1429  page->next = NULL;
+    0.00 :   95715:  movq   $0x0,(%rax)
+         : 1431  *b->last_page = page;
+    0.00 :   9571c:  mov    %rax,(%rdx)
+         : 1433  b->left = b->page_size;
+    0.00 :   9571f:  mov    0x1c(%rbx),%edx
+         : 1435  b->last_page = &page->next;
+    0.00 :   95722:  mov    %rax,0x8(%rbx)
+         : 1437  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95726:  add    $0x8,%rax
+    0.00 :   9572a:  mov    %rax,0x10(%rbx)
+         : 1440  return 1;
+    0.00 :   9572e:  jmp    950ca <VP8RecordCoeffTokens+0x84a>
+         : 1442  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95733:  movslq 0x1c(%rbx),%rax
+         : 1444  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95737:  mov    $0x1,%edi
+    0.00 :   9573c:  mov    %r9,0x20(%rsp)
+    0.00 :   95741:  mov    %r8,0x18(%rsp)
+         : 1448  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95746:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   9574b:  mov    %rcx,0x10(%rsp)
+         : 1451  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95750:  call   74050 <WebPSafeMalloc>
+         : 1453  if (page == NULL) {
+    0.00 :   95755:  mov    0x10(%rsp),%rcx
+    0.00 :   9575a:  mov    0x18(%rsp),%r8
+    0.00 :   9575f:  test   %rax,%rax
+    0.00 :   95762:  mov    0x20(%rsp),%r9
+         : 1458  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95767:  mov    %rax,%rsi
+         : 1460  if (page == NULL) {
+    0.00 :   9576a:  je     95bd0 <VP8RecordCoeffTokens+0x1350>
+         : 1462  page->next = NULL;
+    0.00 :   95770:  movq   $0x0,(%rax)
+         : 1464  *b->last_page = page;
+    0.00 :   95777:  mov    0x8(%rbx),%rax
+         : 1466  b->left = b->page_size;
+    0.00 :   9577b:  mov    0x1c(%rbx),%edx
+         : 1468  *b->last_page = page;
+    0.00 :   9577e:  mov    %rsi,(%rax)
+         : 1470  b->last_page = &page->next;
+    0.00 :   95781:  mov    %rsi,0x8(%rbx)
+         : 1472  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95785:  add    $0x8,%rsi
+    0.00 :   95789:  mov    %rsi,0x10(%rbx)
+         : 1475  return 1;
+    0.00 :   9578d:  jmp    95166 <VP8RecordCoeffTokens+0x8e6>
+         : 1477  if (!b->error) {
+    0.00 :   95792:  mov    0x20(%rbx),%eax
+    0.00 :   95795:  test   %eax,%eax
+    0.00 :   95797:  jne    9532b <VP8RecordCoeffTokens+0xaab>
+         : 1481  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   9579d:  movslq 0x1c(%rbx),%rax
+         : 1483  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   957a1:  mov    $0x1,%edi
+    0.00 :   957a6:  mov    %r9,0x20(%rsp)
+    0.00 :   957ab:  mov    %r8,0x18(%rsp)
+         : 1487  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   957b0:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   957b5:  mov    %rcx,0x10(%rsp)
+         : 1490  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   957ba:  call   74050 <WebPSafeMalloc>
+         : 1492  if (page == NULL) {
+    0.00 :   957bf:  mov    0x10(%rsp),%rcx
+    0.00 :   957c4:  mov    0x18(%rsp),%r8
+    0.00 :   957c9:  test   %rax,%rax
+    0.00 :   957cc:  mov    0x20(%rsp),%r9
+         : 1497  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   957d1:  mov    %rax,%rsi
+         : 1499  if (page == NULL) {
+    0.00 :   957d4:  je     95bc8 <VP8RecordCoeffTokens+0x1348>
+         : 1501  page->next = NULL;
+    0.00 :   957da:  movq   $0x0,(%rax)
+         : 1503  *b->last_page = page;
+    0.00 :   957e1:  mov    0x8(%rbx),%rax
+         : 1505  b->left = b->page_size;
+    0.00 :   957e5:  mov    0x1c(%rbx),%edx
+         : 1507  *b->last_page = page;
+    0.00 :   957e8:  mov    %rsi,(%rax)
+         : 1509  b->last_page = &page->next;
+    0.00 :   957eb:  mov    %rsi,0x8(%rbx)
+         : 1511  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   957ef:  add    $0x8,%rsi
+    0.00 :   957f3:  mov    %rsi,0x10(%rbx)
+         : 1514  return 1;
+    0.00 :   957f7:  jmp    9518a <VP8RecordCoeffTokens+0x90a>
+         : 1516  if (!b->error) {
+    0.00 :   957fc:  mov    0x20(%rbx),%eax
+    0.00 :   957ff:  test   %eax,%eax
+    0.00 :   95801:  jne    95b68 <VP8RecordCoeffTokens+0x12e8>
+         : 1520  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95807:  movslq 0x1c(%rbx),%rax
+         : 1522  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   9580b:  mov    $0x1,%edi
+    0.00 :   95810:  mov    %r9,0x20(%rsp)
+    0.00 :   95815:  mov    %r8,0x18(%rsp)
+         : 1526  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   9581a:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   9581f:  mov    %rcx,0x10(%rsp)
+         : 1529  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95824:  call   74050 <WebPSafeMalloc>
+         : 1531  if (page == NULL) {
+    0.00 :   95829:  mov    0x10(%rsp),%rcx
+    0.00 :   9582e:  mov    0x18(%rsp),%r8
+    0.00 :   95833:  test   %rax,%rax
+    0.00 :   95836:  mov    0x20(%rsp),%r9
+         : 1536  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   9583b:  mov    %rax,%rdx
+         : 1538  if (page == NULL) {
+    0.00 :   9583e:  je     95b68 <VP8RecordCoeffTokens+0x12e8>
+         : 1540  page->next = NULL;
+    0.00 :   95844:  movq   $0x0,(%rax)
+         : 1542  *b->last_page = page;
+    0.00 :   9584b:  mov    0x8(%rbx),%rax
+    0.00 :   9584f:  mov    %rdx,(%rax)
+         : 1545  b->left = b->page_size;
+    0.00 :   95852:  mov    0x1c(%rbx),%eax
+         : 1547  b->last_page = &page->next;
+    0.00 :   95855:  mov    %rdx,0x8(%rbx)
+         : 1549  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95859:  add    $0x8,%rdx
+    0.00 :   9585d:  mov    %rdx,0x10(%rbx)
+         : 1552  return 1;
+    0.00 :   95861:  jmp    955c9 <VP8RecordCoeffTokens+0xd49>
+         : 1554  if (!b->error) {
+    0.00 :   95866:  mov    0x20(%rbx),%eax
+    0.00 :   95869:  test   %eax,%eax
+    0.00 :   9586b:  jne    95b74 <VP8RecordCoeffTokens+0x12f4>
+         : 1558  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95871:  movslq 0x1c(%rbx),%rax
+         : 1560  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95875:  mov    $0x1,%edi
+    0.00 :   9587a:  mov    %r9,0x28(%rsp)
+    0.00 :   9587f:  mov    %r8,0x20(%rsp)
+         : 1564  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95884:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   95889:  mov    %rcx,0x18(%rsp)
+    0.00 :   9588e:  mov    %edx,0x10(%rsp)
+         : 1568  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95892:  call   74050 <WebPSafeMalloc>
+         : 1570  if (page == NULL) {
+    0.00 :   95897:  mov    0x18(%rsp),%rcx
+    0.00 :   9589c:  mov    0x20(%rsp),%r8
+    0.00 :   958a1:  test   %rax,%rax
+    0.00 :   958a4:  mov    0x28(%rsp),%r9
+         : 1575  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   958a9:  mov    %rax,%rsi
+         : 1577  if (page == NULL) {
+    0.00 :   958ac:  je     95b74 <VP8RecordCoeffTokens+0x12f4>
+         : 1579  page->next = NULL;
+    0.00 :   958b2:  movq   $0x0,(%rax)
+         : 1581  *b->last_page = page;
+    0.00 :   958b9:  mov    0x8(%rbx),%rax
+         : 1583  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   958bd:  mov    0x10(%rsp),%edx
+         : 1585  *b->last_page = page;
+    0.00 :   958c1:  mov    %rsi,(%rax)
+         : 1587  b->left = b->page_size;
+    0.00 :   958c4:  mov    0x1c(%rbx),%eax
+         : 1589  b->last_page = &page->next;
+    0.00 :   958c7:  mov    %rsi,0x8(%rbx)
+         : 1591  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   958cb:  add    $0x8,%rsi
+    0.00 :   958cf:  mov    %rsi,0x10(%rbx)
+    0.00 :   958d3:  jmp    9558c <VP8RecordCoeffTokens+0xd0c>
+         : 1595  if (!b->error) {
+    0.00 :   958d8:  mov    0x20(%rbx),%edi
+    0.00 :   958db:  test   %edi,%edi
+    0.00 :   958dd:  jne    95bb0 <VP8RecordCoeffTokens+0x1330>
+         : 1599  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   958e3:  movslq 0x1c(%rbx),%rax
+         : 1601  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   958e7:  mov    $0x1,%edi
+    0.00 :   958ec:  mov    %r9,0x28(%rsp)
+    0.00 :   958f1:  mov    %r8,0x20(%rsp)
+         : 1605  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   958f6:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   958fb:  mov    %rcx,0x18(%rsp)
+    0.00 :   95900:  mov    %edx,0x10(%rsp)
+         : 1609  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95904:  call   74050 <WebPSafeMalloc>
+         : 1611  if (page == NULL) {
+    0.00 :   95909:  mov    0x18(%rsp),%rcx
+    0.00 :   9590e:  mov    0x20(%rsp),%r8
+    0.00 :   95913:  test   %rax,%rax
+    0.00 :   95916:  mov    0x28(%rsp),%r9
+         : 1616  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   9591b:  mov    %rax,%rsi
+         : 1618  if (page == NULL) {
+    0.00 :   9591e:  je     95bb0 <VP8RecordCoeffTokens+0x1330>
+         : 1620  page->next = NULL;
+    0.00 :   95924:  movq   $0x0,(%rax)
+         : 1622  *b->last_page = page;
+    0.00 :   9592b:  mov    0x8(%rbx),%rax
+         : 1624  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   9592f:  mov    0x10(%rsp),%edx
+         : 1626  *b->last_page = page;
+    0.00 :   95933:  mov    %rsi,(%rax)
+         : 1628  b->left = b->page_size;
+    0.00 :   95936:  mov    0x1c(%rbx),%eax
+         : 1630  b->last_page = &page->next;
+    0.00 :   95939:  mov    %rsi,0x8(%rbx)
+         : 1632  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   9593d:  add    $0x8,%rsi
+    0.00 :   95941:  mov    %rsi,0x10(%rbx)
+    0.00 :   95945:  jmp    95612 <VP8RecordCoeffTokens+0xd92>
+         : 1636  if (!b->error) {
+    0.00 :   9594a:  mov    0x20(%rbx),%esi
+    0.00 :   9594d:  test   %esi,%esi
+    0.00 :   9594f:  jne    95b98 <VP8RecordCoeffTokens+0x1318>
+         : 1640  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95955:  movslq 0x1c(%rbx),%rax
+         : 1642  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95959:  mov    $0x1,%edi
+    0.00 :   9595e:  mov    %r9,0x20(%rsp)
+    0.00 :   95963:  mov    %r8,0x18(%rsp)
+         : 1646  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95968:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   9596d:  mov    %rcx,0x10(%rsp)
+         : 1649  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95972:  call   74050 <WebPSafeMalloc>
+         : 1651  if (page == NULL) {
+    0.00 :   95977:  mov    0x10(%rsp),%rcx
+    0.00 :   9597c:  mov    0x18(%rsp),%r8
+    0.00 :   95981:  test   %rax,%rax
+    0.00 :   95984:  mov    0x20(%rsp),%r9
+         : 1656  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95989:  mov    %rax,%rdx
+         : 1658  if (page == NULL) {
+    0.00 :   9598c:  je     95b98 <VP8RecordCoeffTokens+0x1318>
+         : 1660  page->next = NULL;
+    0.00 :   95992:  movq   $0x0,(%rax)
+         : 1662  *b->last_page = page;
+    0.00 :   95999:  mov    0x8(%rbx),%rax
+    0.00 :   9599d:  mov    %rdx,(%rax)
+         : 1665  b->left = b->page_size;
+    0.00 :   959a0:  mov    0x1c(%rbx),%eax
+         : 1667  b->last_page = &page->next;
+    0.00 :   959a3:  mov    %rdx,0x8(%rbx)
+         : 1669  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   959a7:  add    $0x8,%rdx
+    0.00 :   959ab:  mov    %rdx,0x10(%rbx)
+         : 1672  return 1;
+    0.00 :   959af:  jmp    9564e <VP8RecordCoeffTokens+0xdce>
+         : 1674  if (!b->error) {
+    0.00 :   959b4:  mov    0x20(%rbx),%r10d
+    0.00 :   959b8:  test   %r10d,%r10d
+    0.00 :   959bb:  jne    95ba4 <VP8RecordCoeffTokens+0x1324>
+         : 1678  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   959c1:  movslq 0x1c(%rbx),%rax
+         : 1680  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   959c5:  mov    $0x1,%edi
+    0.00 :   959ca:  mov    %r9,0x20(%rsp)
+    0.00 :   959cf:  mov    %r8,0x18(%rsp)
+         : 1684  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   959d4:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   959d9:  mov    %rcx,0x10(%rsp)
+         : 1687  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   959de:  call   74050 <WebPSafeMalloc>
+         : 1689  if (page == NULL) {
+    0.00 :   959e3:  mov    0x10(%rsp),%rcx
+    0.00 :   959e8:  mov    0x18(%rsp),%r8
+    0.00 :   959ed:  test   %rax,%rax
+    0.00 :   959f0:  mov    0x20(%rsp),%r9
+         : 1694  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   959f5:  mov    %rax,%rdx
+         : 1696  if (page == NULL) {
+    0.00 :   959f8:  je     95ba4 <VP8RecordCoeffTokens+0x1324>
+         : 1698  page->next = NULL;
+    0.00 :   959fe:  movq   $0x0,(%rax)
+         : 1700  *b->last_page = page;
+    0.00 :   95a05:  mov    0x8(%rbx),%rax
+    0.00 :   95a09:  mov    %rdx,(%rax)
+         : 1703  b->left = b->page_size;
+    0.00 :   95a0c:  mov    0x1c(%rbx),%eax
+         : 1705  b->last_page = &page->next;
+    0.00 :   95a0f:  mov    %rdx,0x8(%rbx)
+         : 1707  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95a13:  add    $0x8,%rdx
+    0.00 :   95a17:  mov    %rdx,0x10(%rbx)
+         : 1710  return 1;
+    0.00 :   95a1b:  jmp    94fad <VP8RecordCoeffTokens+0x72d>
+         : 1712  if (!b->error) {
+    0.00 :   95a20:  mov    0x20(%rbx),%r11d
+    0.00 :   95a24:  test   %r11d,%r11d
+    0.00 :   95a27:  jne    95b8c <VP8RecordCoeffTokens+0x130c>
+         : 1716  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95a2d:  movslq 0x1c(%rbx),%rax
+         : 1718  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95a31:  mov    $0x1,%edi
+    0.00 :   95a36:  mov    %r9,0x28(%rsp)
+    0.00 :   95a3b:  mov    %r8,0x20(%rsp)
+         : 1722  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95a40:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   95a45:  mov    %rcx,0x18(%rsp)
+    0.00 :   95a4a:  mov    %edx,0x10(%rsp)
+         : 1726  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95a4e:  call   74050 <WebPSafeMalloc>
+         : 1728  if (page == NULL) {
+    0.00 :   95a53:  mov    0x18(%rsp),%rcx
+    0.00 :   95a58:  mov    0x20(%rsp),%r8
+    0.00 :   95a5d:  test   %rax,%rax
+    0.00 :   95a60:  mov    0x28(%rsp),%r9
+         : 1733  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95a65:  mov    %rax,%rsi
+         : 1735  if (page == NULL) {
+    0.00 :   95a68:  je     95b8c <VP8RecordCoeffTokens+0x130c>
+         : 1737  page->next = NULL;
+    0.00 :   95a6e:  movq   $0x0,(%rax)
+         : 1739  *b->last_page = page;
+    0.00 :   95a75:  mov    0x8(%rbx),%rax
+         : 1741  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95a79:  mov    0x10(%rsp),%edx
+         : 1743  *b->last_page = page;
+    0.00 :   95a7d:  mov    %rsi,(%rax)
+         : 1745  b->left = b->page_size;
+    0.00 :   95a80:  mov    0x1c(%rbx),%eax
+         : 1747  b->last_page = &page->next;
+    0.00 :   95a83:  mov    %rsi,0x8(%rbx)
+         : 1749  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95a87:  add    $0x8,%rsi
+    0.00 :   95a8b:  mov    %rsi,0x10(%rbx)
+    0.00 :   95a8f:  jmp    94f71 <VP8RecordCoeffTokens+0x6f1>
+         : 1753  if (!b->error) {
+    0.00 :   95a94:  mov    0x20(%rbx),%eax
+    0.00 :   95a97:  test   %eax,%eax
+    0.00 :   95a99:  jne    95bbc <VP8RecordCoeffTokens+0x133c>
+         : 1757  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95a9f:  movslq 0x1c(%rbx),%rax
+         : 1759  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95aa3:  mov    $0x1,%edi
+    0.00 :   95aa8:  mov    %r9,0x20(%rsp)
+    0.00 :   95aad:  mov    %r8,0x18(%rsp)
+         : 1763  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95ab2:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   95ab7:  mov    %rcx,0x10(%rsp)
+         : 1766  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95abc:  call   74050 <WebPSafeMalloc>
+         : 1768  if (page == NULL) {
+    0.00 :   95ac1:  mov    0x10(%rsp),%rcx
+    0.00 :   95ac6:  mov    0x18(%rsp),%r8
+    0.00 :   95acb:  test   %rax,%rax
+    0.00 :   95ace:  mov    0x20(%rsp),%r9
+         : 1773  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95ad3:  mov    %rax,%rdx
+         : 1775  if (page == NULL) {
+    0.00 :   95ad6:  je     95bbc <VP8RecordCoeffTokens+0x133c>
+         : 1777  page->next = NULL;
+    0.00 :   95adc:  movq   $0x0,(%rax)
+         : 1779  *b->last_page = page;
+    0.00 :   95ae3:  mov    0x8(%rbx),%rax
+    0.00 :   95ae7:  mov    %rdx,(%rax)
+         : 1782  b->left = b->page_size;
+    0.00 :   95aea:  mov    0x1c(%rbx),%eax
+         : 1784  b->last_page = &page->next;
+    0.00 :   95aed:  mov    %rdx,0x8(%rbx)
+         : 1786  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95af1:  add    $0x8,%rdx
+    0.00 :   95af5:  mov    %rdx,0x10(%rbx)
+         : 1789  return 1;
+    0.00 :   95af9:  jmp    952c6 <VP8RecordCoeffTokens+0xa46>
+         : 1791  if (!b->error) {
+    0.00 :   95afe:  mov    0x20(%rbx),%eax
+    0.00 :   95b01:  test   %eax,%eax
+    0.00 :   95b03:  jne    95b80 <VP8RecordCoeffTokens+0x1300>
+         : 1795  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95b05:  movslq 0x1c(%rbx),%rax
+         : 1797  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95b09:  mov    $0x1,%edi
+    0.00 :   95b0e:  mov    %r9,0x28(%rsp)
+    0.00 :   95b13:  mov    %r8,0x20(%rsp)
+         : 1801  const size_t size = sizeof(*page) + b->page_size * sizeof(token_t);
+    0.00 :   95b18:  lea    0x8(%rax,%rax,1),%rsi
+    0.00 :   95b1d:  mov    %rcx,0x18(%rsp)
+    0.00 :   95b22:  mov    %edx,0x10(%rsp)
+         : 1805  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95b26:  call   74050 <WebPSafeMalloc>
+         : 1807  if (page == NULL) {
+    0.00 :   95b2b:  mov    0x18(%rsp),%rcx
+    0.00 :   95b30:  mov    0x20(%rsp),%r8
+    0.00 :   95b35:  test   %rax,%rax
+    0.00 :   95b38:  mov    0x28(%rsp),%r9
+         : 1812  page = (VP8Tokens*)WebPSafeMalloc(1ULL, size);
+    0.00 :   95b3d:  mov    %rax,%rsi
+         : 1814  if (page == NULL) {
+    0.00 :   95b40:  je     95b80 <VP8RecordCoeffTokens+0x1300>
+         : 1816  page->next = NULL;
+    0.00 :   95b42:  movq   $0x0,(%rax)
+         : 1818  *b->last_page = page;
+    0.00 :   95b49:  mov    0x8(%rbx),%rax
+         : 1820  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95b4d:  mov    0x10(%rsp),%edx
+         : 1822  *b->last_page = page;
+    0.00 :   95b51:  mov    %rsi,(%rax)
+         : 1824  b->left = b->page_size;
+    0.00 :   95b54:  mov    0x1c(%rbx),%eax
+         : 1826  b->last_page = &page->next;
+    0.00 :   95b57:  mov    %rsi,0x8(%rbx)
+         : 1828  b->tokens = (token_t*)TOKEN_DATA(page);
+    0.00 :   95b5b:  add    $0x8,%rsi
+    0.00 :   95b5f:  mov    %rsi,0x10(%rbx)
+    0.00 :   95b63:  jmp    9528f <VP8RecordCoeffTokens+0xa0f>
+         : 1832  b->error = 1;
+    0.00 :   95b68:  movl   $0x1,0x20(%rbx)
+         : 1834  return 0;
+    0.00 :   95b6f:  jmp    955d6 <VP8RecordCoeffTokens+0xd56>
+         : 1836  b->error = 1;
+    0.00 :   95b74:  movl   $0x1,0x20(%rbx)
+         : 1838  return 0;
+    0.00 :   95b7b:  jmp    95598 <VP8RecordCoeffTokens+0xd18>
+         : 1840  b->error = 1;
+    0.00 :   95b80:  movl   $0x1,0x20(%rbx)
+         : 1842  return 0;
+    0.00 :   95b87:  jmp    9529b <VP8RecordCoeffTokens+0xa1b>
+         : 1844  b->error = 1;
+    0.00 :   95b8c:  movl   $0x1,0x20(%rbx)
+         : 1846  return 0;
+    0.00 :   95b93:  jmp    94f82 <VP8RecordCoeffTokens+0x702>
+         : 1848  b->error = 1;
+    0.00 :   95b98:  movl   $0x1,0x20(%rbx)
+         : 1850  return 0;
+    0.00 :   95b9f:  jmp    95661 <VP8RecordCoeffTokens+0xde1>
+         : 1852  b->error = 1;
+    0.00 :   95ba4:  movl   $0x1,0x20(%rbx)
+         : 1854  return 0;
+    0.00 :   95bab:  jmp    94fba <VP8RecordCoeffTokens+0x73a>
+         : 1856  b->error = 1;
+    0.00 :   95bb0:  movl   $0x1,0x20(%rbx)
+         : 1858  return 0;
+    0.00 :   95bb7:  jmp    95623 <VP8RecordCoeffTokens+0xda3>
+         : 1860  b->error = 1;
+    0.00 :   95bbc:  movl   $0x1,0x20(%rbx)
+         : 1862  return 0;
+    0.00 :   95bc3:  jmp    952d9 <VP8RecordCoeffTokens+0xa59>
+         : 1864  if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   95bc8:  mov    0x18(%rbx),%edx
+    0.00 :   95bcb:  jmp    9532b <VP8RecordCoeffTokens+0xaab>
+    0.00 :   95bd0:  mov    0x18(%rbx),%edx
+         : 1868  b->error = 1;
+    0.00 :   95bd3:  movl   $0x1,0x20(%rbx)
+         : 1870  if (b->left > 0 || TBufferNewPage(b)) {
+    0.00 :   95bda:  test   %edx,%edx
+    0.00 :   95bdc:  jle    9532b <VP8RecordCoeffTokens+0xaab>
+    0.00 :   95be2:  not    %ebp
+         : 1874  b->tokens[slot] = (bit << 15) | FIXED_PROBA_BIT | proba;
+    0.00 :   95be4:  mov    0x10(%rbx),%rsi
+    0.00 :   95be8:  and    $0x1,%ebp
+    0.00 :   95beb:  jmp    9518a <VP8RecordCoeffTokens+0x90a>

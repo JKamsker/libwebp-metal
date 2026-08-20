@@ -1,0 +1,93 @@
+Functions sorted by metric: Exclusive Total CPU Time
+
+Excl. Total   Incl. Total    Name
+CPU           CPU
+ sec.      %   sec.      %
+6.394 100.00  6.394 100.00   <Total>
+2.031  31.77  2.091  32.71   VP8RecordCoeffTokens
+1.461  22.85  1.461  22.85   inflate_fast
+0.630   9.86  0.630   9.86   VP8PutTokenPage
+0.320   5.01  0.320   5.01   png_read_filter_row_paeth_multibyte_pixel
+0.300   4.69  0.300   4.69   adler32_z
+0.290   4.54  0.290   4.54   PackRGB_C
+0.250   3.91  0.370   5.79   <static>@0x396586 (<libcuda.so.595.84>)
+0.210   3.29  0.210   3.29   png_read_filter_row_up
+0.120   1.88  1.901  29.73   inflate
+0.120   1.88  0.120   1.88   png_read_filter_row_sub
+0.100   1.56  0.100   1.56   crc32_z
+0.080   1.25  0.080   1.25   <static>@0x1881e1 (<libc.so.6>)
+0.080   1.25  0.080   1.25   SetResidualCoeffs_SSE2
+0.060   0.94  0.100   1.56   <static>@0xaab1b (<libc.so.6>)
+0.040   0.63  0.040   0.63   <static>@0x7ffc04f846f0 ([vdso])
+0.040   0.63  2.212  34.59   RecordTokensFromResults
+0.040   0.63  0.640  10.02   main
+0.030   0.47  0.030   0.47   VP8PutBit
+0.030   0.47  0.030   0.47   madvise
+0.020   0.31  0.250   3.91   <static>@0x2067e0 (<libcuda.so.595.84>)
+0.020   0.31  0.340   5.32   <static>@0x223510 (<libcuda.so.595.84>)
+0.020   0.31  0.110   1.72   <static>@0x245ece (<libcuda.so.595.84>)
+0.020   0.31  0.020   0.31   ImportBlock
+0.020   0.31  0.020   0.31   ioctl
+0.010   0.16  0.010   0.16   <static>@0x2b195 (<ld-linux-x86-64.so.2>)
+0.010   0.16  0.010   0.16   <static>@0xa8e24 (<libc.so.6>)
+0.010   0.16  0.040   0.63   VP8CodeIntraModes
+0.010   0.16  0.030   0.47   VP8IteratorImport
+0.010   0.16  0.010   0.16   __vdso_clock_gettime
+0.010   0.16  0.020   0.31   pthread_create
+0.      0.    0.340   5.32   (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+0.      0.    0.040   0.63   (anonymous namespace)::CUDARGBToYUV(void*, WebPAcceleratorRGBToYUVRequest const*)
+0.      0.    0.040   0.63   (anonymous namespace)::CUDARGBToYUVLocked(void*, WebPAcceleratorRGBToYUVRequest const*)
+0.      0.    0.010   0.16   (anonymous namespace)::Initialize((anonymous namespace)::CudaState*)
+0.      0.    0.010   0.16   <static>@0x164dc0 (<libcuda.so.595.84>)
+0.      0.    0.350   5.48   <static>@0x1d0f96 (<libcuda.so.595.84>)
+0.      0.    0.370   5.79   <static>@0x21b7b (<libcudart.so.12.0.146>)
+0.      0.    0.640  10.02   <static>@0x2a145 (<libc.so.6>)
+0.      0.    0.020   0.31   <static>@0x317126 (<libcuda.so.595.84>)
+0.      0.    0.360   5.63   <static>@0x36ab16 (<libcuda.so.595.84>)
+0.      0.    0.020   0.31   <static>@0x4c9dc (<libgp-collector.so>)
+0.      0.    5.754  89.98   <static>@0x5115c (<libgp-collector.so>)
+0.      0.    0.010   0.16   <static>@0x723d8 (<libcudart.so.12.0.146>)
+0.      0.    5.754  89.98   <static>@0x9c526 (<libc.so.6>)
+0.      0.    0.010   0.16   <static>@0xa1eb6 (<libc.so.6>)
+0.      0.    0.370   5.79   <static>@0xf360 (<libcudart.so.12.0.146>)
+0.      0.    5.754  89.98   Execute
+0.      0.    0.040   0.63   ImportYUVAFromRGBA
+0.      0.    2.992  46.79   PredecodeInput
+0.      0.    0.010   0.16   ReadFunc
+0.      0.    2.992  46.79   ReadPNG
+0.      0.    0.020   0.31   Reset
+0.      0.    5.754  89.98   ThreadLoop
+0.      0.    0.020   0.31   VP8BitWriterWipeOut
+0.      0.    0.650  10.17   VP8EmitTokens
+0.      0.    0.490   7.67   VP8EncTokenLoop
+0.      0.    0.060   0.94   VP8EncWrite
+0.      0.    0.340   5.32   WebPAccelerateLossyDecimate
+0.      0.    0.040   0.63   WebPAccelerateRGBToYUV
+0.      0.    0.010   0.16   WebPCUDAIsPreAmpereDevice
+0.      0.    0.340   5.32   WebPCUDALossyDecimate
+0.      0.    0.590   9.23   WebPEncode
+0.      0.    0.040   0.63   WebPPictureARGBToYUVADithered
+0.      0.    0.290   4.54   WebPPictureImportRGB
+0.      0.    0.010   0.16   __device_stub__ZN53_GLOBAL__N__e8a64b43_20_cuda_decimate_enc_cu_08a8e32714DecimateKernelENS_10DeviceViewENS_20DecimateKernelParamsEPh((anonymous namespace)::DeviceView&, (anonymous namespace)::DecimateKernelParams&, unsigned char*)
+0.      0.    0.640  10.02   __libc_start_main
+0.      0.    0.010   0.16   _dl_allocate_tls
+0.      0.    0.050   0.78   clock_gettime
+0.      0.    0.010   0.16   cuDevicePrimaryCtxRetain
+0.      0.    0.010   0.16   cuInit
+0.      0.    0.010   0.16   cuLaunchKernel
+0.      0.    0.340   5.32   cuMemcpyDtoHAsync_v2
+0.      0.    0.010   0.16   cuMemcpyHtoDAsync_v2
+0.      0.    0.010   0.16   cudaGetDeviceCount
+0.      0.    0.010   0.16   cudaLaunchKernel
+0.      0.    0.350   5.48   cudaMemcpyAsync
+0.      0.    0.010   0.16   cudaSetDevice
+0.      0.    0.040   0.63   free
+0.      0.    0.060   0.94   malloc
+0.      0.    0.100   1.56   png_calculate_crc
+0.      0.    0.030   0.47   png_combine_row
+0.      0.    2.011  31.46   png_read_IDAT_data
+0.      0.    2.702  42.25   png_read_row
+0.      0.    2.702  42.25   png_read_rows
+0.      0.    0.020   0.31   updatewindow.isra.0
+
+Print limit set to 120

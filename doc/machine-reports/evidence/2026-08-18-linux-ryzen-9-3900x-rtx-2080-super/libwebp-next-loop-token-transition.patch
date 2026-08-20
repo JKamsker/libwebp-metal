@@ -1,0 +1,87 @@
+diff --git a/src/utils/bit_writer_utils.c b/src/utils/bit_writer_utils.c
+index 5e0a05e1..e812ede4 100644
+--- a/src/utils/bit_writer_utils.c
++++ b/src/utils/bit_writer_utils.c
+@@ -105,6 +105,47 @@ static const uint8_t kNewRange[128] = {
+     211, 213, 215, 217, 219, 221, 223, 225, 227, 229, 231, 233, 235, 237, 239,
+     241, 243, 245, 247, 249, 251, 253, 127};
+ 
++#if defined(__GNUC__) || defined(__clang__)
++// One exact transition for each normalized range, probability and coded bit.
++// Bits 0..7 hold the next normalized range, bits 8..10 the normalization
++// shift, and bits 16..23 the value increment. The table replaces the serial
++// multiply, bit decision and two normalization lookups in VP8PutTokenPage().
++static uint32_t kTokenTransitions[128 * 256 * 2];
++static int kTokenTransitionsState;
++
++static void InitTokenTransitions(void) {
++  int expected = 0;
++  if (__atomic_load_n(&kTokenTransitionsState, __ATOMIC_ACQUIRE) == 2) return;
++  if (__atomic_compare_exchange_n(&kTokenTransitionsState, &expected, 1, 0,
++                                  __ATOMIC_ACQ_REL, __ATOMIC_ACQUIRE)) {
++    int range;
++    for (range = 127; range <= 254; ++range) {
++      int prob;
++      for (prob = 0; prob <= 255; ++prob) {
++        const int split = (range * prob) >> 8;
++        int bit;
++        for (bit = 0; bit <= 1; ++bit) {
++          const int add = bit ? split + 1 : 0;
++          int next_range = bit ? range - add : split;
++          int shift = 0;
++          if (next_range < 127) {
++            shift = kNorm[next_range];
++            next_range = kNewRange[next_range];
++          }
++          kTokenTransitions[(((range - 127) * 256 + prob) * 2) + bit] =
++              (uint32_t)next_range | ((uint32_t)shift << 8) |
++              ((uint32_t)add << 16);
++        }
++      }
++    }
++    __atomic_store_n(&kTokenTransitionsState, 2, __ATOMIC_RELEASE);
++  } else {
++    while (__atomic_load_n(&kTokenTransitionsState, __ATOMIC_ACQUIRE) != 2) {
++    }
++  }
++}
++#endif
++
+ int VP8PutBit(VP8BitWriter* const bw, int bit, int prob) {
+   const int split = (bw->range * prob) >> 8;
+   if (bit) {
+@@ -141,6 +182,16 @@ void VP8PutTokenPage(VP8BitWriter* const bw, const uint16_t* const tokens,
+     const int prob = (token & (1u << 14))
+                          ? token & 0xffu
+                          : probas[token & 0x3fffu];
++#if defined(__GNUC__) || defined(__clang__)
++    const uint32_t transition =
++        kTokenTransitions[(((range - 127) * 256 + prob) * 2) + bit];
++    const int shift = (transition >> 8) & 7;
++    value += transition >> 16;
++    range = transition & 0xff;
++    value <<= shift;
++    nb_bits += shift;
++    if (shift != 0) {
++#else
+     const int split = (range * prob) >> 8;
+     if (bit) {
+       value += split + 1;
+@@ -153,6 +204,7 @@ void VP8PutTokenPage(VP8BitWriter* const bw, const uint16_t* const tokens,
+       range = kNewRange[range];
+       value <<= shift;
+       nb_bits += shift;
++#endif
+       if (nb_bits > 0) {
+         const int s = 8 + nb_bits;
+         const int32_t bits = value >> s;
+@@ -236,6 +288,9 @@ void VP8PutSignedBits(VP8BitWriter* const bw, int value, int nb_bits) {
+ //------------------------------------------------------------------------------
+ 
+ int VP8BitWriterInit(VP8BitWriter* const bw, size_t expected_size) {
++#if defined(__GNUC__) || defined(__clang__)
++  InitTokenTransitions();
++#endif
+   bw->range = 255 - 1;
+   bw->value = 0;
+   bw->run = 0;

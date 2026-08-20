@@ -2402,3 +2402,36 @@ regressed and JPEG was below 1.5 ms/image. Candidate and restored source both
 passed 7/7 focused CTests. Raw evidence uses
 `libwebp-decimate-source-counters-*` and `libwebp-raster-commit-*`; Ampere+
 and architecture thresholds remain unchanged.
+
+
+## Boolean-coder transition-table rejection
+
+At retained parent `735de11509a65cc223342dcb5bebc2f7e04af778`, a native
+batch-24 file-I/O refresh measured exact PNG/JPEG medians of 35.850/34.327
+ms/image. Stage profiling placed accelerated decimation at 18.655/18.877
+ms/image and token emission at 3.868/4.079. Since the remaining leading
+decimate sites were exhausted, token emission was the largest distinct target.
+
+A 24K-sample, zero-loss `perf` capture across all eight token workers put
+`VP8PutTokenPage` at 35.41% of cycles and `VP8RecordCoeffTokens` at
+12.46%. Source annotation localized the page cost to the arithmetic-coder
+transition chain. Coverage counted 292.2 million tokens; dynamic
+probabilities (82.20%), bit ones (54.89%), and normalization (53.65%) showed
+that no simple branch had gate-sized coverage.
+
+The selected candidate used one exact 256-KiB table lookup per token to
+replace the range/probability multiply, bit/range decision, and both
+normalization lookups. Generated code shrank from 764 to 708 bytes. Two
+order-balanced processes per format, each with one warmup and three measured
+batch-24 file-I/O samples, produced:
+
+| Format | Parent | Candidate | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 35.380 ms/image | 35.117 ms/image | 0.263 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 34.541 ms/image | 35.848 ms/image | -1.308 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+All 24 rows were exact, but PNG was below the 1.5 ms/image gate and JPEG
+regressed. The source was restored and 7/7 focused CTests passed. Raw evidence
+uses `libwebp-next-loop-*` and `libwebp-token-transition-*`. The retained
+eight-partition control remained best; no CUDA architecture threshold,
+Ampere+ behavior, frozen corpus input, or generator changed.

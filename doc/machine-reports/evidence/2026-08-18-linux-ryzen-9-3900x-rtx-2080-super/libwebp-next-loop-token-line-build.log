@@ -1,0 +1,81 @@
+[0/1] Re-running CMake...
+-- Adding -lm flag.
+-- TIFF is disabled when statically linking.
+-- Could NOT find GIF (missing: GIF_LIBRARY GIF_INCLUDE_DIR) 
+-- Performing Test WEBP_HAVE_FLAG_AVX2
+-- Performing Test WEBP_HAVE_FLAG_AVX2 - Failed
+-- Performing Test WEBP_HAVE_FLAG_AVX2
+-- Performing Test WEBP_HAVE_FLAG_AVX2 - Success
+-- Performing Test WEBP_HAVE_FLAG_SSE41
+-- Performing Test WEBP_HAVE_FLAG_SSE41 - Failed
+-- Performing Test WEBP_HAVE_FLAG_SSE41
+-- Performing Test WEBP_HAVE_FLAG_SSE41 - Success
+-- Performing Test WEBP_HAVE_FLAG_SSE2
+-- Performing Test WEBP_HAVE_FLAG_SSE2 - Success
+-- Performing Test WEBP_HAVE_FLAG_MIPS32
+-- Performing Test WEBP_HAVE_FLAG_MIPS32 - Failed
+-- Performing Test WEBP_HAVE_FLAG_MIPS32
+-- Performing Test WEBP_HAVE_FLAG_MIPS32 - Failed
+-- Performing Test WEBP_HAVE_FLAG_MIPS_DSP_R2
+-- Performing Test WEBP_HAVE_FLAG_MIPS_DSP_R2 - Failed
+-- Performing Test WEBP_HAVE_FLAG_MIPS_DSP_R2
+-- Performing Test WEBP_HAVE_FLAG_MIPS_DSP_R2 - Failed
+-- Performing Test HAS_COMPILE_FLAG
+-- Performing Test HAS_COMPILE_FLAG - Failed
+-- Performing Test WEBP_HAVE_FLAG_NEON
+-- Performing Test WEBP_HAVE_FLAG_NEON - Failed
+-- Performing Test WEBP_HAVE_FLAG_NEON
+-- Performing Test WEBP_HAVE_FLAG_NEON - Failed
+-- Performing Test WEBP_HAVE_FLAG_MSA
+-- Performing Test WEBP_HAVE_FLAG_MSA - Failed
+-- Performing Test WEBP_HAVE_FLAG_MSA
+-- Performing Test WEBP_HAVE_FLAG_MSA - Failed
+-- Performing Test HAS_COMPILE_FLAG
+-- Performing Test HAS_COMPILE_FLAG - Failed
+-- Performing Test WEBP_HAVE_FLAG_VSX
+-- Performing Test WEBP_HAVE_FLAG_VSX - Failed
+-- Performing Test WEBP_HAVE_FLAG_VSX
+-- Performing Test WEBP_HAVE_FLAG_VSX - Failed
+-- Performing Test HAS_COMPILE_FLAG
+-- Performing Test HAS_COMPILE_FLAG - Failed
+-- Configuring done (0.7s)
+-- Generating done (0.0s)
+-- Build files have been written to: /home/jonas/priv/repos/libwebp-metal/build-cuda-token-lineprofile
+[1/32] Building C object CMakeFiles/webpencode.dir/src/enc/filter_enc.c.o
+[2/32] Building C object CMakeFiles/webpencode.dir/src/enc/picture_enc.c.o
+[3/32] Building C object CMakeFiles/webpencode.dir/src/enc/accelerator_enc.c.o
+[4/32] Building C object CMakeFiles/webpencode.dir/src/enc/picture_psnr_enc.c.o
+[5/32] Building C object CMakeFiles/webpencode.dir/src/enc/alpha_enc.c.o
+[6/32] Building C object CMakeFiles/webpencode.dir/src/enc/cost_enc.c.o
+[7/32] Building C object CMakeFiles/webpencode.dir/src/enc/picture_rescale_enc.c.o
+[8/32] Building C object CMakeFiles/webpencode.dir/src/enc/analysis_enc.c.o
+[9/32] Building C object CMakeFiles/webpencode.dir/src/enc/syntax_enc.c.o
+[10/32] Building C object CMakeFiles/webpencode.dir/src/enc/tree_enc.c.o
+[11/32] Building C object CMakeFiles/webpencode.dir/src/enc/picture_csp_enc.c.o
+[12/32] Building C object CMakeFiles/webpencode.dir/src/enc/picture_tools_enc.c.o
+[13/32] Building C object CMakeFiles/webpencode.dir/src/enc/iterator_enc.c.o
+[14/32] Building C object CMakeFiles/webpencode.dir/src/enc/token_enc.c.o
+[15/32] Building C object CMakeFiles/webpencode.dir/src/enc/webp_enc.c.o
+[16/32] Building C object CMakeFiles/webpdsp.dir/src/dsp/cost.c.o
+[17/32] Building C object CMakeFiles/webpdsp.dir/src/dsp/cost_sse2.c.o
+[18/32] Building C object CMakeFiles/webpencode.dir/src/enc/backward_references_enc.c.o
+[19/32] Building C object CMakeFiles/webpencode.dir/src/enc/frame_enc.c.o
+[20/32] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc_sse41.c.o
+[21/32] Building C object CMakeFiles/webpencode.dir/src/enc/histogram_enc.c.o
+[22/32] Building C object CMakeFiles/webputils.dir/src/utils/bit_writer_utils.c.o
+[23/32] Building C object CMakeFiles/webpencode.dir/src/enc/predictor_enc.c.o
+[24/32] Building C object CMakeFiles/webp_cuda_batch_benchmark.dir/tools/cuda_batch_benchmark.c.o
+[25/32] Building C object CMakeFiles/webpencode.dir/src/enc/vp8l_enc.c.o
+[26/32] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc.c.o
+[27/32] Building C object CMakeFiles/webpencode.dir/src/enc/quant_enc.c.o
+[28/32] Building C object CMakeFiles/webpdsp.dir/src/dsp/enc_sse2.c.o
+[29/32] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_enc.cu.o
+[30/32] Building CUDA object CMakeFiles/webpencode.dir/src/enc/cuda_decimate_enc.cu.o
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(502): warning #177-D: function "<unnamed>::AddScoreDev" was declared but never referenced
+
+Remark: The warnings can be suppressed with "-diag-suppress <warning-number>"
+
+/home/jonas/priv/repos/libwebp-metal/src/enc/cuda_decimate_enc.cu(687): warning #177-D: function "<unnamed>::ImportMB" was declared but never referenced
+
+[31/32] Linking CUDA static library libwebp.a
+[32/32] Linking CUDA executable webp_cuda_batch_benchmark

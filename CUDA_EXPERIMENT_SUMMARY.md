@@ -123,6 +123,7 @@ that hardware and workload.
 | Precomputed coefficient-token band offsets | Coverage of the profiled token recorder counted 117.4 million coefficient iterations: 40.0% zero, 28.9% magnitude one, and only 0.16% above ten. Retained sm_75 assembly recomputed `band * 33` separately for token IDs and statistics pointers at every context transition. A 17-entry exact offset table replaced both chains with one 16-bit load; generated size fell 4,976 to 4,944 bytes, 7/7 CTests passed, and all 48 timing outputs were exact. PNG moved 40.240 to 40.356 ms/image; JPEG moved 40.321 to 39.851. | Rejected and removed. PNG regressed 0.116 ms/image and JPEG's 0.471 ms gain is below 1.5 ms/image. The cache-resident lookup does not provide a two-format material win and duplicates `VP8EncBands` policy. RTX 2080 SUPER only; no Ampere+ claim. Raw `.gcda`/`.gcno`, annotated coverage, exact patch, disassemblies, caches, tests, and timings are archived. |
 | Fixed-bit coefficient-token prefix | The coverage profile showed zero and magnitude-one coefficients comprise 68.9% of loop iterations. A branch-first coding tree passed constant 0/1 values into the first two `AddToken` sites, removing duplicated `setcc`, shift, and dependent bit-add instructions from each selected path while preserving token/statistics order and allocation failure. All 7 CTests and 48 timing outputs were exact, but generated size rose 4,976 to 5,344 bytes. PNG moved 40.260 to 40.920 ms/image and JPEG 40.036 to 40.589. | Rejected and removed. Duplicated page/statistics paths increased code by 368 bytes and regressed PNG/JPEG by 0.660/0.554 ms/image. Keep the compact dynamic-bit form. RTX 2080 SUPER only; no Ampere+ claim. Exact patch, disassemblies, caches, tests, and raw timings are archived. |
 | No-run token-byte fast flush | Coverage of 441.5 million coded tokens observed 36.43 million real byte flushes; 99.62% had no pending `0xff` run, and only 768 needed buffer growth. A direct `run == 0 && pos < max_pos` arm skipped pending-capacity arithmetic and the later run branch while preserving the existing run/resize path. It shrank `VP8PutTokenPage` from 764 to 719 bytes; 7/7 CTests and all 48 outputs were exact. PNG moved 40.144 to 40.213 ms/image and JPEG 40.027 to 40.105. | Rejected and removed. Despite the skew and smaller code, PNG/JPEG regressed 0.069/0.078 ms/image. The compiler already overlaps the pending-capacity work effectively. RTX 2080 SUPER only; no Ampere+ claim. Raw coverage, exact patch, disassemblies, caches, tests, and timings are archived. |
+| Dense boolean-coder transition table | A retained native profile put `VP8PutTokenPage` at 35.41% of sampled cycles across all eight emit workers. Coverage counted 292.2 million tokens: dynamic probability 82.20%, bit one 54.89%, and normalization 53.65%, ruling out another dominant branch. One exact 65,536-entry table packed value increment, shift, and next range, replacing the split multiply, bit/range decision, and both normalization lookups. The function shrank 764 to 708 bytes but added 256 KiB BSS; the focused bit-writer test and all 24 timing hashes/byte counts were exact. PNG moved 35.380 to 35.117 ms/image and JPEG 34.541 to 35.848. | Rejected and removed. PNG's 0.263 ms/image gain is noise and JPEG regressed 1.308 ms/image. The L2-resident random transition load is worse than the compact arithmetic chain on Zen 2. Restored source passed 7/7 CTests. Do not retry a dense whole-transition table without a materially different cache/data-layout profile. RTX 2080 SUPER only; no architecture policy changed. |
 
 All original and follow-up benchmark rows produced stable expected checksums.
 The historical color rows remain raw evidence, but their ratios are not matched
@@ -1215,3 +1216,36 @@ resource reports, tests, and timings use the
 `libwebp-decimate-source-counters-*` and `libwebp-raster-commit-*` prefixes.
 This is RTX 2080 SUPER-only evidence; architecture thresholds, Ampere+
 behavior, and the frozen publication corpus/generator are unchanged.
+
+
+## Dense boolean-coder transition-table rejection
+
+A retained native stage refresh still put decimation first at 18.655
+ms/image PNG and 18.877 JPEG, but its leading I4 sites were already exhausted.
+Token emission was the largest distinct boundary at 3.868/4.079 ms/image.
+Whole-process cycle sampling across all eight emit workers then attributed
+35.41% to `VP8PutTokenPage`, ahead of coefficient recording at 12.46%.
+
+Line annotation mapped the page coder's cost to its serial probability,
+split, bit/range, and normalization chain. Coverage of 292,171,248 tokens
+found no dominant branch: 82.20% used dynamic probabilities, 54.89% coded a
+one bit, and 53.65% normalized. A single coarse candidate therefore
+precomputed the complete range/probability/bit transition rather than adding
+another branch specialization. Its 65,536 32-bit entries packed the exact
+value increment, shift, and next range.
+
+The lookup reduced `VP8PutTokenPage` from 764 to 708 bytes but added 256 KiB
+of BSS. Its focused bit-writer test passed, and all 24 order-balanced timing
+rows retained exact aggregate outputs:
+
+| Format | Parent | Transition table | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 35.380 ms/image | 35.117 ms/image | 0.263 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 34.541 ms/image | 35.848 ms/image | -1.308 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+PNG was noise and JPEG regressed, so the candidate was removed before the
+broad correctness matrix. The restored native source passed all seven focused
+CTests. Raw end-to-end/stage/partition profiles, compressed `gprofng` and
+`perf` data, gcov counts, exact patch, disassemblies, tests, and timing rows
+use `libwebp-next-loop-*` and `libwebp-token-transition-*`. Architecture
+thresholds/defaults and the frozen publication corpus/generator are unchanged.

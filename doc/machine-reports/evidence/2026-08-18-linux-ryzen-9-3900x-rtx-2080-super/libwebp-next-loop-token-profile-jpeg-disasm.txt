@@ -1,0 +1,1205 @@
+Source file: (unknown)
+Object file: webp_cuda_batch_benchmark (found as /tmp/libwebp-next-loop-token-profile-jpeg.er/archives/webp_cuda_batch_benchmark_pjIFA7kx_R0)
+Load Object: webp_cuda_batch_benchmark (found as /tmp/libwebp-next-loop-token-profile-jpeg.er/archives/webp_cuda_batch_benchmark_pjIFA7kx_R0)
+
+   Excl. Total   Incl. Total
+   CPU           CPU
+    sec.      %   sec.      %
+                                        <Function: VP8RecordCoeffTokens>
+   0.      0.    0.      0.             [?]    94880:  endbr64
+   0.      0.    0.      0.             [?]    94884:  push   %r15
+   0.      0.    0.      0.             [?]    94886:  movslq %edi,%rax
+   0.      0.    0.      0.             [?]    94889:  mov    %rsi,%r9
+   0.      0.    0.      0.             [?]    9488c:  push   %r14
+   0.      0.    0.      0.             [?]    9488e:  push   %r13
+   0.      0.    0.      0.             [?]    94890:  push   %r12
+   0.      0.    0.      0.             [?]    94892:  push   %rbp
+   0.      0.    0.      0.             [?]    94893:  push   %rbx
+   0.      0.    0.      0.             [?]    94894:  mov    %rdx,%rbx
+   0.      0.    0.      0.             [?]    94897:  sub    $0x48,%rsp
+   0.      0.    0.      0.             [?]    9489b:  mov    0x10(%rsi),%ecx
+   0.      0.    0.      0.             [?]    9489e:  movslq (%rsi),%r14
+   0.      0.    0.      0.             [?]    948a1:  mov    0x4(%rsi),%edi
+   0.010   0.    0.010   0.             [?]    948a4:  mov    0x8(%rsi),%r8
+   0.      0.    0.      0.             [?]    948a8:  shl    $0x3,%ecx
+   0.      0.    0.      0.             [?]    948ab:  mov    %r14,%rdx
+   0.      0.    0.      0.             [?]    948ae:  mov    %ecx,0x38(%rsp)
+   0.      0.    0.      0.             [?]    948b2:  add    %r14d,%ecx
+   0.      0.    0.      0.             [?]    948b5:  lea    (%rcx,%rcx,2),%ecx
+   0.      0.    0.      0.             [?]    948b8:  mov    %edi,0xc(%rsp)
+   0.      0.    0.      0.             [?]    948bc:  not    %edi
+   0.      0.    0.      0.             [?]    948be:  add    %eax,%ecx
+   0.      0.    0.      0.             [?]    948c0:  mov    %edi,%ebp
+   0.      0.    0.      0.             [?]    948c2:  lea    (%rcx,%rcx,4),%esi
+   0.      0.    0.      0.             [?]    948c5:  shr    $0x1f,%ebp
+   0.      0.    0.      0.             [?]    948c8:  lea    (%rcx,%rsi,2),%r15d
+   0.010   0.    0.010   0.             [?]    948cc:  mov    %r14,%rcx
+   0.      0.    0.      0.             [?]    948cf:  lea    (%rax,%rax,4),%rsi
+   0.      0.    0.      0.             [?]    948d3:  mov    %ebp,%r12d
+   0.      0.    0.      0.             [?]    948d6:  shl    $0x5,%rcx
+   0.      0.    0.      0.             [?]    948da:  lea    (%rax,%rsi,2),%rax
+   0.      0.    0.      0.             [?]    948de:  add    %r14,%rcx
+   0.      0.    0.      0.             [?]    948e1:  shl    $0x2,%rax
+   0.      0.    0.      0.             [?]    948e5:  lea    (%rax,%rcx,4),%r13
+   0.      0.    0.      0.             [?]    948e9:  mov    0x18(%rbx),%ecx
+   0.      0.    0.      0.             [?]    948ec:  add    0x20(%r9),%r13
+   0.      0.    0.      0.             [?]    948f0:  test   %ecx,%ecx
+   0.      0.    0.      0.             [?]    948f2:  jle    .+0x83e [ 0x95130 ]
+   0.      0.    0.      0.             [?]    948f8:  mov    0x10(%rbx),%rax
+   0.      0.    0.      0.             [?]    948fc:  sub    $0x1,%ecx
+   0.      0.    0.      0.             [?]    948ff:  shl    $0xf,%ebp
+   0.      0.    0.      0.             [?]    94902:  mov    %ecx,0x18(%rbx)
+   0.      0.    0.      0.             [?]    94905:  or     %r15d,%ebp
+   0.      0.    0.      0.             [?]    94908:  movslq %ecx,%rcx
+   0.      0.    0.      0.             [?]    9490b:  mov    %bp,(%rax,%rcx,2)
+   0.010   0.    0.010   0.             [?]    9490f:  mov    0x0(%r13),%eax
+   0.010   0.    0.010   0.             [?]    94913:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    94918:  jbe    .+0xc [ 0x94924 ]
+   0.      0.    0.      0.             [?]    9491a:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    9491d:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    9491f:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    94924:  mov    0xc(%rsp),%r10d
+   0.      0.    0.      0.             [?]    94929:  lea    0x10000(%r12,%rax,1),%eax
+   0.      0.    0.      0.             [?]    94931:  mov    %eax,0x0(%r13)
+   0.      0.    0.      0.             [?]    94935:  xor    %eax,%eax
+   0.      0.    0.      0.             [?]    94937:  test   %r10d,%r10d
+   0.      0.    0.      0.             [?]    9493a:  js     .+0xcf [ 0x94a09 ]
+   0.      0.    0.      0.             [?]    94940:  cmp    $0xf,%edx
+   0.      0.    0.      0.             [?]    94943:  jg     .+0xc1 [ 0x94a04 ]
+   0.      0.    0.      0.             [?]    94949:  lea    0x96630(%rip),%rax        # 0x96637
+   0.      0.    0.      0.             [?]    94950:  lea    (%r8,%r14,2),%rcx
+   0.      0.    0.      0.             [?]    94954:  lea    0x1(%r14,%rax,1),%r8
+   0.      0.    0.      0.             [?]    94959:  mov    %edx,%r14d
+   0.      0.    0.      0.             [?]    9495c:  nopl   0x0(%rax)
+   0.010   0.    0.010   0.             [?]    94960:  movswl (%rcx),%r12d
+   0.010   0.    0.010   0.             [?]    94964:  add    $0x1,%r14d
+   0.      0.    0.      0.             [?]    94968:  mov    0x18(%rbx),%esi
+   0.010   0.    0.010   0.             [?]    9496b:  lea    0x1(%r15),%r11d
+   0.010   0.    0.010   0.             [?]    9496f:  mov    %r12d,%ebp
+   0.010   0.    0.010   0.             [?]    94972:  neg    %ebp
+   0.020   0.    0.020   0.             [?]    94974:  cmovs  %r12d,%ebp
+   0.010   0.    0.010   0.             [?]    94978:  test   %ebp,%ebp
+   0.      0.    0.      0.             [?]    9497a:  setne  %dl
+   0.020   0.    0.020   0.             [?]    9497d:  setne  %r10b
+   0.      0.    0.      0.             [?]    94981:  movzbl %dl,%edx
+   0.010   0.    0.010   0.             [?]    94984:  test   %esi,%esi
+   0.010   0.    0.010   0.             [?]    94986:  jle    .+0x1ca [ 0x94b50 ]
+   0.      0.    0.      0.             [?]    9498c:  mov    0x10(%rbx),%rax
+   0.010   0.    0.010   0.             [?]    94990:  sub    $0x1,%esi
+   0.      0.    0.      0.             [?]    94993:  shl    $0xf,%r10d
+   0.020   0.    0.020   0.             [?]    94997:  mov    %esi,0x18(%rbx)
+   0.020   0.    0.020   0.             [?]    9499a:  or     %r11d,%r10d
+   0.030   0.    0.030   0.             [?]    9499d:  movslq %esi,%rsi
+## 0.080   0.    0.080   0.             [?]    949a0:  mov    %r10w,(%rax,%rsi,2)
+   0.060   0.    0.060   0.             [?]    949a5:  mov    0x4(%r13),%eax
+   0.010   0.    0.010   0.             [?]    949a9:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    949ae:  jbe    .+0xc [ 0x949ba ]
+   0.      0.    0.      0.             [?]    949b0:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    949b3:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    949b5:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    949ba:  lea    0x10000(%rdx,%rax,1),%eax
+   0.010   0.    0.010   0.             [?]    949c1:  mov    %eax,0x4(%r13)
+   0.010   0.    0.010   0.             [?]    949c5:  test   %ebp,%ebp
+   0.      0.    0.      0.             [?]    949c7:  jne    .+0x59 [ 0x94a20 ]
+   0.      0.    0.      0.             [?]    949c9:  movzbl (%r8),%edx
+   0.050   0.    0.050   0.             [?]    949cd:  mov    0x38(%rsp),%edi
+   0.010   0.    0.010   0.             [?]    949d1:  add    $0x2,%rcx
+   0.      0.    0.      0.             [?]    949d5:  add    $0x1,%r8
+   0.      0.    0.      0.             [?]    949d9:  mov    %rdx,%rax
+   0.      0.    0.      0.             [?]    949dc:  add    %edi,%edx
+   0.      0.    0.      0.             [?]    949de:  mov    %edx,%r15d
+   0.      0.    0.      0.             [?]    949e1:  shl    $0x5,%r15d
+   0.      0.    0.      0.             [?]    949e5:  add    %edx,%r15d
+   0.010   0.    0.010   0.             [?]    949e8:  mov    %rax,%rdx
+   0.      0.    0.      0.             [?]    949eb:  shl    $0x5,%rdx
+   0.      0.    0.      0.             [?]    949ef:  add    %rdx,%rax
+   0.      0.    0.      0.             [?]    949f2:  mov    0x20(%r9),%rdx
+   0.      0.    0.      0.             [?]    949f6:  lea    (%rdx,%rax,4),%r13
+   0.010   0.    0.010   0.             [?]    949fa:  cmp    $0x10,%r14d
+   0.010   0.    0.010   0.             [?]    949fe:  jne    .-0x9e [ 0x94960 ]
+   0.      0.    0.      0.             [?]    94a04:  mov    $0x1,%eax
+   0.010   0.    0.010   0.             [?]    94a09:  add    $0x48,%rsp
+   0.010   0.    0.010   0.             [?]    94a0d:  pop    %rbx
+   0.      0.    0.      0.             [?]    94a0e:  pop    %rbp
+   0.      0.    0.      0.             [?]    94a0f:  pop    %r12
+   0.      0.    0.      0.             [?]    94a11:  pop    %r13
+   0.      0.    0.      0.             [?]    94a13:  pop    %r14
+   0.      0.    0.      0.             [?]    94a15:  pop    %r15
+   0.      0.    0.      0.             [?]    94a17:  ret
+   0.      0.    0.      0.             [?]    94a18:  nopl   0x0(%rax,%rax,1)
+   0.      0.    0.      0.             [?]    94a20:  cmp    $0x1,%ebp
+   0.010   0.    0.010   0.             [?]    94a23:  mov    0x18(%rbx),%esi
+   0.030   0.    0.030   0.             [?]    94a26:  lea    0x2(%r15),%r11d
+   0.010   0.    0.010   0.             [?]    94a2a:  seta   %dl
+   0.      0.    0.      0.             [?]    94a2d:  seta   %r10b
+   0.      0.    0.      0.             [?]    94a31:  movzbl %dl,%edx
+   0.      0.    0.      0.             [?]    94a34:  test   %esi,%esi
+   0.010   0.    0.010   0.             [?]    94a36:  jle    .+0x31a [ 0x94d50 ]
+   0.      0.    0.      0.             [?]    94a3c:  mov    0x10(%rbx),%rax
+   0.      0.    0.      0.             [?]    94a40:  sub    $0x1,%esi
+   0.010   0.    0.010   0.             [?]    94a43:  shl    $0xf,%r10d
+   0.      0.    0.      0.             [?]    94a47:  mov    %esi,0x18(%rbx)
+   0.020   0.    0.020   0.             [?]    94a4a:  or     %r11d,%r10d
+   0.      0.    0.      0.             [?]    94a4d:  movslq %esi,%rsi
+   0.020   0.    0.020   0.             [?]    94a50:  mov    %r10w,(%rax,%rsi,2)
+   0.050   0.    0.050   0.             [?]    94a55:  mov    0x8(%r13),%eax
+   0.      0.    0.      0.             [?]    94a59:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    94a5e:  jbe    .+0xc [ 0x94a6a ]
+   0.      0.    0.      0.             [?]    94a60:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    94a63:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    94a65:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    94a6a:  lea    0x10000(%rdx,%rax,1),%eax
+   0.      0.    0.      0.             [?]    94a71:  mov    %eax,0x8(%r13)
+   0.      0.    0.      0.             [?]    94a75:  cmp    $0x1,%ebp
+   0.010   0.    0.010   0.             [?]    94a78:  jne    .+0x160 [ 0x94bd8 ]
+   0.      0.    0.      0.             [?]    94a7e:  movzbl (%r8),%edx
+## 0.080   0.    0.080   0.             [?]    94a82:  mov    0x38(%rsp),%edi
+   0.010   0.    0.010   0.             [?]    94a86:  mov    %rdx,%rax
+   0.010   0.    0.010   0.             [?]    94a89:  add    %edi,%edx
+   0.      0.    0.      0.             [?]    94a8b:  lea    0x1(%rdx,%rdx,2),%edx
+   0.020   0.    0.020   0.             [?]    94a8f:  lea    (%rdx,%rdx,4),%esi
+   0.      0.    0.      0.             [?]    94a92:  lea    (%rdx,%rsi,2),%r15d
+   0.      0.    0.      0.             [?]    94a96:  mov    %rax,%rdx
+   0.      0.    0.      0.             [?]    94a99:  shl    $0x5,%rdx
+   0.      0.    0.      0.             [?]    94a9d:  add    %rdx,%rax
+   0.      0.    0.      0.             [?]    94aa0:  mov    0x20(%r9),%rdx
+   0.      0.    0.      0.             [?]    94aa4:  lea    0x2c(%rdx,%rax,4),%r13
+   0.      0.    0.      0.             [?]    94aa9:  mov    0x18(%rbx),%edx
+   0.      0.    0.      0.             [?]    94aac:  test   %edx,%edx
+   0.      0.    0.      0.             [?]    94aae:  jle    .+0x21c [ 0x94cca ]
+   0.      0.    0.      0.             [?]    94ab4:  mov    0x10(%rbx),%rax
+   0.030   0.    0.030   0.             [?]    94ab8:  shr    $0x1f,%r12d
+   0.      0.    0.      0.             [?]    94abc:  sub    $0x1,%edx
+   0.      0.    0.      0.             [?]    94abf:  shl    $0xf,%r12d
+   0.      0.    0.      0.             [?]    94ac3:  mov    %edx,0x18(%rbx)
+   0.010   0.    0.010   0.             [?]    94ac6:  movslq %edx,%rdx
+   0.      0.    0.      0.             [?]    94ac9:  or     $0x4080,%r12w
+## 0.090   0.    0.090   0.             [?]    94acf:  mov    %r12w,(%rax,%rdx,2)
+## 0.080   0.    0.080   0.             [?]    94ad4:  cmp    $0x10,%r14d
+   0.      0.    0.      0.             [?]    94ad8:  je     .-0xd4 [ 0x94a04 ]
+   0.      0.    0.      0.             [?]    94ade:  cmp    %r14d,0xc(%rsp)
+   0.010   0.    0.010   0.             [?]    94ae3:  mov    0x18(%rbx),%edx
+   0.030   0.    0.030   0.             [?]    94ae6:  setge  %bpl
+   0.      0.    0.      0.             [?]    94aea:  setge  %r12b
+   0.      0.    0.      0.             [?]    94aee:  movzbl %bpl,%ebp
+   0.      0.    0.      0.             [?]    94af2:  test   %edx,%edx
+   0.      0.    0.      0.             [?]    94af4:  jle    .+0x2ec [ 0x94de0 ]
+   0.      0.    0.      0.             [?]    94afa:  mov    0x10(%rbx),%rax
+   0.      0.    0.      0.             [?]    94afe:  sub    $0x1,%edx
+   0.010   0.    0.010   0.             [?]    94b01:  shl    $0xf,%r12d
+   0.      0.    0.      0.             [?]    94b05:  mov    %edx,0x18(%rbx)
+   0.010   0.    0.010   0.             [?]    94b08:  or     %r15d,%r12d
+   0.      0.    0.      0.             [?]    94b0b:  movslq %edx,%rdx
+## 0.080   0.    0.080   0.             [?]    94b0e:  mov    %r12w,(%rax,%rdx,2)
+   0.050   0.    0.050   0.             [?]    94b13:  mov    0x0(%r13),%eax
+   0.      0.    0.      0.             [?]    94b17:  cmp    $0xfffdffff,%eax
+   0.020   0.    0.020   0.             [?]    94b1c:  jbe    .+0xc [ 0x94b28 ]
+   0.      0.    0.      0.             [?]    94b1e:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    94b21:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    94b23:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    94b28:  lea    0x10000(%rbp,%rax,1),%eax
+   0.      0.    0.      0.             [?]    94b2f:  mov    %eax,0x0(%r13)
+   0.020   0.    0.020   0.             [?]    94b33:  cmp    %r14d,0xc(%rsp)
+   0.      0.    0.      0.             [?]    94b38:  jl     .-0x134 [ 0x94a04 ]
+   0.      0.    0.      0.             [?]    94b3e:  add    $0x2,%rcx
+   0.      0.    0.      0.             [?]    94b42:  add    $0x1,%r8
+   0.      0.    0.      0.             [?]    94b46:  jmp    .-0x1e6 [ 0x94960 ]
+   0.      0.    0.      0.             [?]    94b4b:  nopl   0x0(%rax,%rax,1)
+   0.      0.    0.      0.             [?]    94b50:  mov    0x20(%rbx),%edi
+   0.      0.    0.      0.             [?]    94b53:  test   %edi,%edi
+   0.      0.    0.      0.             [?]    94b55:  jne    .+0x1db [ 0x94d30 ]
+   0.      0.    0.      0.             [?]    94b5b:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    94b5f:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    94b64:  mov    %r9,0x28(%rsp)
+   0.      0.    0.      0.             [?]    94b69:  mov    %r8,0x20(%rsp)
+   0.      0.    0.      0.             [?]    94b6e:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    94b73:  mov    %rcx,0x18(%rsp)
+   0.      0.    0.      0.             [?]    94b78:  mov    %edx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    94b7c:  mov    %r10b,0x3f(%rsp)
+   0.      0.    0.      0.             [?]    94b81:  mov    %r11d,0x30(%rsp)
+   0.      0.    0.010   0.             [?]    94b86:  call   WebPSafeMalloc [ 0x74050, .-0x20b36]
+   0.      0.    0.      0.             [?]    94b8b:  mov    0x10(%rsp),%edx
+   0.      0.    0.      0.             [?]    94b8f:  mov    0x18(%rsp),%rcx
+   0.      0.    0.      0.             [?]    94b94:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    94b97:  mov    0x20(%rsp),%r8
+   0.      0.    0.      0.             [?]    94b9c:  mov    0x28(%rsp),%r9
+   0.      0.    0.      0.             [?]    94ba1:  je     .+0x18f [ 0x94d30 ]
+   0.      0.    0.      0.             [?]    94ba7:  mov    0x8(%rbx),%rsi
+   0.      0.    0.      0.             [?]    94bab:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    94bb2:  movzbl 0x3f(%rsp),%r10d
+   0.      0.    0.      0.             [?]    94bb8:  mov    0x30(%rsp),%r11d
+   0.      0.    0.      0.             [?]    94bbd:  mov    %rax,(%rsi)
+   0.      0.    0.      0.             [?]    94bc0:  mov    0x1c(%rbx),%esi
+   0.      0.    0.      0.             [?]    94bc3:  mov    %rax,0x8(%rbx)
+   0.      0.    0.      0.             [?]    94bc7:  add    $0x8,%rax
+   0.      0.    0.      0.             [?]    94bcb:  mov    %rax,0x10(%rbx)
+   0.      0.    0.      0.             [?]    94bcf:  jmp    .-0x23f [ 0x94990 ]
+   0.      0.    0.      0.             [?]    94bd4:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    94bd8:  cmp    $0x4,%ebp
+   0.      0.    0.      0.             [?]    94bdb:  mov    0x18(%rbx),%esi
+   0.020   0.    0.020   0.             [?]    94bde:  lea    0x3(%r15),%r11d
+   0.      0.    0.      0.             [?]    94be2:  seta   %dl
+   0.      0.    0.      0.             [?]    94be5:  seta   %r10b
+   0.      0.    0.      0.             [?]    94be9:  movzbl %dl,%edx
+   0.      0.    0.      0.             [?]    94bec:  test   %esi,%esi
+   0.      0.    0.      0.             [?]    94bee:  jle    .+0x522 [ 0x95110 ]
+   0.      0.    0.      0.             [?]    94bf4:  mov    0x10(%rbx),%rax
+   0.020   0.    0.020   0.             [?]    94bf8:  sub    $0x1,%esi
+   0.      0.    0.      0.             [?]    94bfb:  shl    $0xf,%r10d
+   0.      0.    0.      0.             [?]    94bff:  mov    %esi,0x18(%rbx)
+   0.010   0.    0.010   0.             [?]    94c02:  or     %r11d,%r10d
+   0.010   0.    0.010   0.             [?]    94c05:  movslq %esi,%rsi
+   0.060   0.    0.060   0.             [?]    94c08:  mov    %r10w,(%rax,%rsi,2)
+   0.020   0.    0.020   0.             [?]    94c0d:  mov    0xc(%r13),%eax
+   0.      0.    0.      0.             [?]    94c11:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    94c16:  jbe    .+0xc [ 0x94c22 ]
+   0.      0.    0.      0.             [?]    94c18:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    94c1b:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    94c1d:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    94c22:  lea    0x10000(%rdx,%rax,1),%eax
+   0.      0.    0.      0.             [?]    94c29:  mov    %eax,0xc(%r13)
+   0.      0.    0.      0.             [?]    94c2d:  cmp    $0x4,%ebp
+   0.010   0.    0.010   0.             [?]    94c30:  ja     .+0x220 [ 0x94e50 ]
+   0.      0.    0.      0.             [?]    94c36:  cmp    $0x2,%ebp
+   0.      0.    0.      0.             [?]    94c39:  mov    0x18(%rbx),%esi
+   0.      0.    0.      0.             [?]    94c3c:  lea    0x4(%r15),%r11d
+   0.      0.    0.      0.             [?]    94c40:  setne  %dl
+   0.      0.    0.      0.             [?]    94c43:  setne  %r10b
+   0.      0.    0.      0.             [?]    94c47:  movzbl %dl,%edx
+   0.      0.    0.      0.             [?]    94c4a:  test   %esi,%esi
+   0.      0.    0.      0.             [?]    94c4c:  jle    .+0x80c [ 0x95458 ]
+   0.      0.    0.      0.             [?]    94c52:  mov    0x10(%rbx),%rax
+   0.      0.    0.      0.             [?]    94c56:  sub    $0x1,%esi
+   0.      0.    0.      0.             [?]    94c59:  shl    $0xf,%r10d
+   0.      0.    0.      0.             [?]    94c5d:  mov    %esi,0x18(%rbx)
+   0.010   0.    0.010   0.             [?]    94c60:  or     %r11d,%r10d
+   0.      0.    0.      0.             [?]    94c63:  movslq %esi,%rsi
+   0.040   0.    0.040   0.             [?]    94c66:  mov    %r10w,(%rax,%rsi,2)
+   0.010   0.    0.010   0.             [?]    94c6b:  mov    0x10(%r13),%eax
+   0.      0.    0.      0.             [?]    94c6f:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    94c74:  jbe    .+0xc [ 0x94c80 ]
+   0.      0.    0.      0.             [?]    94c76:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    94c79:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    94c7b:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    94c80:  lea    0x10000(%rdx,%rax,1),%eax
+   0.      0.    0.      0.             [?]    94c87:  mov    %eax,0x10(%r13)
+   0.      0.    0.      0.             [?]    94c8b:  cmp    $0x2,%ebp
+   0.      0.    0.      0.             [?]    94c8e:  jne    .+0x41a [ 0x950a8 ]
+   0.      0.    0.      0.             [?]    94c94:  mov    0x18(%rbx),%edx
+   0.020   0.    0.020   0.             [?]    94c97:  movzbl (%r8),%esi
+   0.      0.    0.      0.             [?]    94c9b:  mov    0x38(%rsp),%edi
+   0.      0.    0.      0.             [?]    94c9f:  mov    %rsi,%rax
+   0.      0.    0.      0.             [?]    94ca2:  add    %edi,%esi
+   0.      0.    0.      0.             [?]    94ca4:  lea    0x2(%rsi,%rsi,2),%esi
+   0.010   0.    0.010   0.             [?]    94ca8:  lea    (%rsi,%rsi,4),%edi
+   0.010   0.    0.010   0.             [?]    94cab:  lea    (%rsi,%rdi,2),%r15d
+   0.010   0.    0.010   0.             [?]    94caf:  mov    %rax,%rsi
+   0.      0.    0.      0.             [?]    94cb2:  shl    $0x5,%rsi
+   0.      0.    0.      0.             [?]    94cb6:  add    %rsi,%rax
+   0.      0.    0.      0.             [?]    94cb9:  mov    0x20(%r9),%rsi
+   0.      0.    0.      0.             [?]    94cbd:  lea    0x58(%rsi,%rax,4),%r13
+   0.      0.    0.      0.             [?]    94cc2:  test   %edx,%edx
+   0.      0.    0.      0.             [?]    94cc4:  jg     .-0x210 [ 0x94ab4 ]
+   0.      0.    0.      0.             [?]    94cca:  mov    0x20(%rbx),%edx
+   0.      0.    0.      0.             [?]    94ccd:  test   %edx,%edx
+   0.      0.    0.      0.             [?]    94ccf:  jne    .+0x71 [ 0x94d40 ]
+   0.      0.    0.      0.             [?]    94cd1:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    94cd5:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    94cda:  mov    %r9,0x20(%rsp)
+   0.      0.    0.      0.             [?]    94cdf:  mov    %r8,0x18(%rsp)
+   0.      0.    0.      0.             [?]    94ce4:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    94ce9:  mov    %rcx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    94cee:  call   WebPSafeMalloc [ 0x74050, .-0x20c9e]
+   0.      0.    0.      0.             [?]    94cf3:  mov    0x10(%rsp),%rcx
+   0.      0.    0.      0.             [?]    94cf8:  mov    0x18(%rsp),%r8
+   0.      0.    0.      0.             [?]    94cfd:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    94d00:  mov    0x20(%rsp),%r9
+   0.      0.    0.      0.             [?]    94d05:  je     .+0x3b [ 0x94d40 ]
+   0.      0.    0.      0.             [?]    94d07:  mov    0x8(%rbx),%rdx
+   0.      0.    0.      0.             [?]    94d0b:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    94d12:  mov    %rax,(%rdx)
+   0.      0.    0.      0.             [?]    94d15:  mov    0x1c(%rbx),%edx
+   0.      0.    0.      0.             [?]    94d18:  mov    %rax,0x8(%rbx)
+   0.      0.    0.      0.             [?]    94d1c:  add    $0x8,%rax
+   0.      0.    0.      0.             [?]    94d20:  mov    %rax,0x10(%rbx)
+   0.      0.    0.      0.             [?]    94d24:  jmp    .-0x26c [ 0x94ab8 ]
+   0.      0.    0.      0.             [?]    94d29:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    94d30:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    94d37:  jmp    .-0x392 [ 0x949a5 ]
+   0.      0.    0.      0.             [?]    94d3c:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    94d40:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    94d47:  jmp    .-0x273 [ 0x94ad4 ]
+   0.      0.    0.      0.             [?]    94d4c:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    94d50:  mov    0x20(%rbx),%esi
+   0.      0.    0.      0.             [?]    94d53:  test   %esi,%esi
+   0.      0.    0.      0.             [?]    94d55:  jne    .+0x7b [ 0x94dd0 ]
+   0.      0.    0.      0.             [?]    94d57:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    94d5b:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    94d60:  mov    %r9,0x28(%rsp)
+   0.      0.    0.      0.             [?]    94d65:  mov    %r8,0x20(%rsp)
+   0.      0.    0.      0.             [?]    94d6a:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    94d6f:  mov    %rcx,0x18(%rsp)
+   0.      0.    0.      0.             [?]    94d74:  mov    %edx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    94d78:  mov    %r10b,0x3f(%rsp)
+   0.      0.    0.      0.             [?]    94d7d:  mov    %r11d,0x30(%rsp)
+   0.      0.    0.010   0.             [?]    94d82:  call   WebPSafeMalloc [ 0x74050, .-0x20d32]
+   0.      0.    0.      0.             [?]    94d87:  mov    0x10(%rsp),%edx
+   0.      0.    0.      0.             [?]    94d8b:  mov    0x18(%rsp),%rcx
+   0.      0.    0.      0.             [?]    94d90:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    94d93:  mov    0x20(%rsp),%r8
+   0.      0.    0.      0.             [?]    94d98:  mov    0x28(%rsp),%r9
+   0.      0.    0.      0.             [?]    94d9d:  je     .+0x33 [ 0x94dd0 ]
+   0.      0.    0.      0.             [?]    94d9f:  mov    0x8(%rbx),%rsi
+   0.      0.    0.      0.             [?]    94da3:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    94daa:  movzbl 0x3f(%rsp),%r10d
+   0.      0.    0.      0.             [?]    94db0:  mov    0x30(%rsp),%r11d
+   0.      0.    0.      0.             [?]    94db5:  mov    %rax,(%rsi)
+   0.      0.    0.      0.             [?]    94db8:  mov    0x1c(%rbx),%esi
+   0.      0.    0.      0.             [?]    94dbb:  mov    %rax,0x8(%rbx)
+   0.      0.    0.      0.             [?]    94dbf:  add    $0x8,%rax
+   0.      0.    0.      0.             [?]    94dc3:  mov    %rax,0x10(%rbx)
+   0.      0.    0.      0.             [?]    94dc7:  jmp    .-0x387 [ 0x94a40 ]
+   0.      0.    0.      0.             [?]    94dcc:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    94dd0:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    94dd7:  jmp    .-0x382 [ 0x94a55 ]
+   0.      0.    0.      0.             [?]    94ddc:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    94de0:  mov    0x20(%rbx),%eax
+   0.      0.    0.      0.             [?]    94de3:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    94de5:  jne    .+0x5b [ 0x94e40 ]
+   0.      0.    0.      0.             [?]    94de7:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    94deb:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    94df0:  mov    %r9,0x20(%rsp)
+   0.      0.    0.      0.             [?]    94df5:  mov    %r8,0x18(%rsp)
+   0.      0.    0.      0.             [?]    94dfa:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    94dff:  mov    %rcx,0x10(%rsp)
+   0.      0.    0.020   0.             [?]    94e04:  call   WebPSafeMalloc [ 0x74050, .-0x20db4]
+   0.      0.    0.      0.             [?]    94e09:  mov    0x10(%rsp),%rcx
+   0.      0.    0.      0.             [?]    94e0e:  mov    0x18(%rsp),%r8
+   0.      0.    0.      0.             [?]    94e13:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    94e16:  mov    0x20(%rsp),%r9
+   0.      0.    0.      0.             [?]    94e1b:  je     .+0x25 [ 0x94e40 ]
+   0.      0.    0.      0.             [?]    94e1d:  mov    0x8(%rbx),%rdx
+   0.      0.    0.      0.             [?]    94e21:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    94e28:  mov    %rax,(%rdx)
+   0.      0.    0.      0.             [?]    94e2b:  mov    0x1c(%rbx),%edx
+   0.      0.    0.      0.             [?]    94e2e:  mov    %rax,0x8(%rbx)
+   0.      0.    0.      0.             [?]    94e32:  add    $0x8,%rax
+   0.      0.    0.      0.             [?]    94e36:  mov    %rax,0x10(%rbx)
+   0.      0.    0.      0.             [?]    94e3a:  jmp    .-0x33c [ 0x94afe ]
+   0.      0.    0.      0.             [?]    94e3f:  nop
+   0.      0.    0.      0.             [?]    94e40:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    94e47:  jmp    .-0x334 [ 0x94b13 ]
+   0.      0.    0.      0.             [?]    94e4c:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    94e50:  cmp    $0xa,%ebp
+   0.010   0.    0.010   0.             [?]    94e53:  mov    0x18(%rbx),%esi
+   0.      0.    0.      0.             [?]    94e56:  lea    0x6(%r15),%r11d
+   0.      0.    0.      0.             [?]    94e5a:  seta   %dl
+   0.      0.    0.      0.             [?]    94e5d:  seta   %r10b
+   0.      0.    0.      0.             [?]    94e61:  movzbl %dl,%edx
+   0.      0.    0.      0.             [?]    94e64:  test   %esi,%esi
+   0.      0.    0.      0.             [?]    94e66:  jle    .+0x56a [ 0x953d0 ]
+   0.      0.    0.      0.             [?]    94e6c:  mov    0x10(%rbx),%rax
+   0.      0.    0.      0.             [?]    94e70:  sub    $0x1,%esi
+   0.      0.    0.      0.             [?]    94e73:  shl    $0xf,%r10d
+   0.      0.    0.      0.             [?]    94e77:  mov    %esi,0x18(%rbx)
+   0.      0.    0.      0.             [?]    94e7a:  or     %r11d,%r10d
+   0.      0.    0.      0.             [?]    94e7d:  movslq %esi,%rsi
+   0.      0.    0.      0.             [?]    94e80:  mov    %r10w,(%rax,%rsi,2)
+   0.      0.    0.      0.             [?]    94e85:  mov    0x18(%r13),%eax
+   0.      0.    0.      0.             [?]    94e89:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    94e8e:  jbe    .+0xc [ 0x94e9a ]
+   0.      0.    0.      0.             [?]    94e90:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    94e93:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    94e95:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    94e9a:  lea    0x10000(%rdx,%rax,1),%eax
+   0.      0.    0.      0.             [?]    94ea1:  mov    %eax,0x18(%r13)
+   0.      0.    0.      0.             [?]    94ea5:  cmp    $0xa,%ebp
+   0.      0.    0.      0.             [?]    94ea8:  ja     .+0x98 [ 0x94f40 ]
+   0.      0.    0.      0.             [?]    94eae:  cmp    $0x6,%ebp
+   0.      0.    0.      0.             [?]    94eb1:  mov    0x18(%rbx),%edx
+   0.010   0.    0.010   0.             [?]    94eb4:  lea    0x7(%r15),%r11d
+   0.      0.    0.      0.             [?]    94eb8:  seta   %r10b
+   0.      0.    0.      0.             [?]    94ebc:  seta   %r15b
+   0.      0.    0.      0.             [?]    94ec0:  movzbl %r10b,%r10d
+   0.      0.    0.      0.             [?]    94ec4:  test   %edx,%edx
+   0.      0.    0.      0.             [?]    94ec6:  jle    .+0x63a [ 0x95500 ]
+   0.      0.    0.      0.             [?]    94ecc:  mov    0x10(%rbx),%rax
+   0.      0.    0.      0.             [?]    94ed0:  sub    $0x1,%edx
+   0.      0.    0.      0.             [?]    94ed3:  shl    $0xf,%r15d
+   0.      0.    0.      0.             [?]    94ed7:  mov    %edx,0x18(%rbx)
+   0.      0.    0.      0.             [?]    94eda:  or     %r11d,%r15d
+   0.      0.    0.      0.             [?]    94edd:  movslq %edx,%rdx
+   0.      0.    0.      0.             [?]    94ee0:  mov    %r15w,(%rax,%rdx,2)
+   0.      0.    0.      0.             [?]    94ee5:  mov    0x1c(%r13),%eax
+   0.      0.    0.      0.             [?]    94ee9:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    94eee:  jbe    .+0xc [ 0x94efa ]
+   0.      0.    0.      0.             [?]    94ef0:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    94ef3:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    94ef5:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    94efa:  lea    0x10000(%r10,%rax,1),%eax
+   0.      0.    0.      0.             [?]    94f02:  mov    %eax,0x1c(%r13)
+   0.      0.    0.      0.             [?]    94f06:  cmp    $0x6,%ebp
+   0.      0.    0.      0.             [?]    94f09:  ja     .+0x247 [ 0x95150 ]
+   0.      0.    0.      0.             [?]    94f0f:  mov    0x18(%rbx),%edx
+   0.010   0.    0.010   0.             [?]    94f12:  sete   %bpl
+   0.      0.    0.      0.             [?]    94f16:  test   %edx,%edx
+   0.      0.    0.      0.             [?]    94f18:  jle    .+0x41f [ 0x95337 ]
+   0.      0.    0.      0.             [?]    94f1e:  mov    0x10(%rbx),%rax
+   0.      0.    0.      0.             [?]    94f22:  sub    $0x1,%edx
+   0.      0.    0.      0.             [?]    94f25:  shl    $0xf,%ebp
+   0.      0.    0.      0.             [?]    94f28:  movslq %edx,%rsi
+   0.      0.    0.      0.             [?]    94f2b:  or     $0x409f,%bp
+   0.      0.    0.      0.             [?]    94f30:  mov    %edx,0x18(%rbx)
+   0.020   0.    0.020   0.             [?]    94f33:  mov    %bp,(%rax,%rsi,2)
+   0.      0.    0.      0.             [?]    94f37:  jmp    .-0x2a0 [ 0x94c97 ]
+   0.      0.    0.      0.             [?]    94f3c:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    94f40:  lea    -0x3(%rbp),%esi
+   0.      0.    0.      0.             [?]    94f43:  mov    0x18(%rbx),%eax
+   0.      0.    0.      0.             [?]    94f46:  lea    0x8(%r15),%edx
+   0.      0.    0.      0.             [?]    94f4a:  cmp    $0xf,%esi
+   0.      0.    0.      0.             [?]    94f4d:  jbe    .+0x633 [ 0x95580 ]
+   0.      0.    0.      0.             [?]    94f53:  cmp    $0x1f,%esi
+   0.      0.    0.      0.             [?]    94f56:  jbe    .+0x32d [ 0x95283 ]
+   0.      0.    0.      0.             [?]    94f5c:  cmp    $0x3f,%esi
+   0.      0.    0.      0.             [?]    94f5f:  ja     .+0x6a7 [ 0x95606 ]
+   0.      0.    0.      0.             [?]    94f65:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    94f67:  jle    .+0xab9 [ 0x95a20 ]
+   0.      0.    0.      0.             [?]    94f6d:  mov    0x10(%rbx),%rsi
+   0.      0.    0.      0.             [?]    94f71:  sub    $0x1,%eax
+   0.      0.    0.      0.             [?]    94f74:  or     $0x8000,%dx
+   0.      0.    0.      0.             [?]    94f79:  mov    %eax,0x18(%rbx)
+   0.      0.    0.      0.             [?]    94f7c:  cltq
+   0.      0.    0.      0.             [?]    94f7e:  mov    %dx,(%rsi,%rax,2)
+   0.      0.    0.      0.             [?]    94f82:  mov    0x20(%r13),%eax
+   0.      0.    0.      0.             [?]    94f86:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    94f8b:  ja     .+0x724 [ 0x956af ]
+   0.      0.    0.      0.             [?]    94f91:  add    $0x10001,%eax
+   0.      0.    0.      0.             [?]    94f96:  add    $0xa,%r15d
+   0.      0.    0.      0.             [?]    94f9a:  mov    %eax,0x20(%r13)
+   0.      0.    0.      0.             [?]    94f9e:  mov    0x18(%rbx),%eax
+   0.      0.    0.      0.             [?]    94fa1:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    94fa3:  jle    .+0xa11 [ 0x959b4 ]
+   0.      0.    0.      0.             [?]    94fa9:  mov    0x10(%rbx),%rdx
+   0.      0.    0.      0.             [?]    94fad:  sub    $0x1,%eax
+   0.      0.    0.      0.             [?]    94fb0:  mov    %eax,0x18(%rbx)
+   0.      0.    0.      0.             [?]    94fb3:  cltq
+   0.      0.    0.      0.             [?]    94fb5:  mov    %r15w,(%rdx,%rax,2)
+   0.      0.    0.      0.             [?]    94fba:  mov    0x24(%r13),%eax
+   0.      0.    0.      0.             [?]    94fbe:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    94fc3:  ja     .+0x6ce [ 0x95691 ]
+   0.      0.    0.      0.             [?]    94fc9:  lea    -0x23(%rbp),%r10d
+   0.      0.    0.      0.             [?]    94fcd:  lea    0x97b6f(%rip),%rbp        # 0x97b76
+   0.      0.    0.      0.             [?]    94fd4:  add    $0x10000,%eax
+   0.      0.    0.      0.             [?]    94fd9:  mov    $0x10,%r15d
+   0.      0.    0.      0.             [?]    94fdf:  mov    %eax,0x24(%r13)
+   0.      0.    0.      0.             [?]    94fe3:  mov    0x18(%rbx),%edx
+   0.      0.    0.      0.             [?]    94fe6:  mov    %r14d,0x18(%rsp)
+   0.      0.    0.      0.             [?]    94feb:  mov    %rbx,%r14
+   0.      0.    0.      0.             [?]    94fee:  mov    %rbp,%rbx
+   0.      0.    0.      0.             [?]    94ff1:  mov    %r15d,%ebp
+   0.      0.    0.      0.             [?]    94ff4:  mov    %r12d,0x20(%rsp)
+   0.      0.    0.      0.             [?]    94ff9:  mov    %r8,%r15
+   0.      0.    0.      0.             [?]    94ffc:  mov    %r10d,%r12d
+   0.      0.    0.      0.             [?]    94fff:  mov    %rcx,0x28(%rsp)
+   0.      0.    0.      0.             [?]    95004:  mov    %r9,0x30(%rsp)
+   0.      0.    0.      0.             [?]    95009:  jmp    .+0x2f [ 0x95038 ]
+   0.      0.    0.      0.             [?]    9500b:  nopl   0x0(%rax,%rax,1)
+   0.      0.    0.      0.             [?]    95010:  mov    0x10(%r14),%rax
+   0.      0.    0.      0.             [?]    95014:  shl    $0xf,%r13d
+   0.010   0.    0.010   0.             [?]    95018:  sub    $0x1,%edx
+   0.      0.    0.      0.             [?]    9501b:  or     %r11d,%r13d
+   0.      0.    0.      0.             [?]    9501e:  movslq %edx,%rsi
+   0.      0.    0.      0.             [?]    95021:  mov    %edx,0x18(%r14)
+   0.      0.    0.      0.             [?]    95025:  or     $0x4000,%r13w
+   0.      0.    0.      0.             [?]    9502b:  sar    $1,%ebp
+   0.      0.    0.      0.             [?]    9502d:  mov    %r13w,(%rax,%rsi,2)
+   0.      0.    0.      0.             [?]    95032:  je     .+0x37e [ 0x953b0 ]
+   0.      0.    0.      0.             [?]    95038:  add    $0x1,%rbx
+   0.      0.    0.      0.             [?]    9503c:  test   %r12d,%ebp
+   0.      0.    0.      0.             [?]    9503f:  movzbl -0x1(%rbx),%r11d
+   0.      0.    0.      0.             [?]    95044:  setne  %r13b
+   0.      0.    0.      0.             [?]    95048:  test   %edx,%edx
+   0.      0.    0.      0.             [?]    9504a:  jg     .-0x3a [ 0x95010 ]
+   0.      0.    0.      0.             [?]    9504c:  mov    0x20(%r14),%ecx
+   0.      0.    0.      0.             [?]    95050:  mov    %r11b,0x10(%rsp)
+   0.      0.    0.      0.             [?]    95055:  test   %ecx,%ecx
+   0.      0.    0.      0.             [?]    95057:  jne    .+0x349 [ 0x953a0 ]
+   0.      0.    0.      0.             [?]    9505d:  movslq 0x1c(%r14),%rax
+   0.      0.    0.      0.             [?]    95061:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    95066:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    9506b:  call   WebPSafeMalloc [ 0x74050, .-0x2101b]
+   0.      0.    0.      0.             [?]    95070:  movzbl 0x10(%rsp),%r11d
+   0.      0.    0.      0.             [?]    95076:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    95079:  je     .+0x321 [ 0x9539a ]
+   0.      0.    0.      0.             [?]    9507f:  mov    0x8(%r14),%rdx
+   0.      0.    0.      0.             [?]    95083:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    9508a:  mov    %rax,(%rdx)
+   0.      0.    0.      0.             [?]    9508d:  mov    0x1c(%r14),%edx
+   0.      0.    0.      0.             [?]    95091:  mov    %rax,0x8(%r14)
+   0.      0.    0.      0.             [?]    95095:  add    $0x8,%rax
+   0.      0.    0.      0.             [?]    95099:  mov    %rax,0x10(%r14)
+   0.      0.    0.      0.             [?]    9509d:  jmp    .-0x89 [ 0x95014 ]
+   0.      0.    0.      0.             [?]    950a2:  nopw   0x0(%rax,%rax,1)
+   0.      0.    0.      0.             [?]    950a8:  add    $0x5,%r15d
+   0.030   0.    0.030   0.             [?]    950ac:  mov    0x18(%rbx),%edx
+   0.010   0.    0.010   0.             [?]    950af:  cmp    $0x4,%ebp
+   0.      0.    0.      0.             [?]    950b2:  sete   %r10b
+   0.      0.    0.      0.             [?]    950b6:  sete   %bpl
+   0.      0.    0.      0.             [?]    950ba:  movzbl %r10b,%r10d
+   0.      0.    0.      0.             [?]    950be:  test   %edx,%edx
+   0.      0.    0.      0.             [?]    950c0:  jle    .+0x249 [ 0x95309 ]
+   0.      0.    0.      0.             [?]    950c6:  mov    0x10(%rbx),%rax
+   0.      0.    0.      0.             [?]    950ca:  sub    $0x1,%edx
+   0.      0.    0.      0.             [?]    950cd:  shl    $0xf,%ebp
+   0.      0.    0.      0.             [?]    950d0:  mov    %edx,0x18(%rbx)
+   0.      0.    0.      0.             [?]    950d3:  or     %r15d,%ebp
+   0.      0.    0.      0.             [?]    950d6:  movslq %edx,%rdx
+   0.      0.    0.      0.             [?]    950d9:  mov    %bp,(%rax,%rdx,2)
+   0.010   0.    0.010   0.             [?]    950dd:  mov    0x14(%r13),%eax
+   0.      0.    0.      0.             [?]    950e1:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    950e6:  jbe    .+0xc [ 0x950f2 ]
+   0.      0.    0.      0.             [?]    950e8:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    950eb:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    950ed:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    950f2:  lea    0x10000(%r10,%rax,1),%eax
+   0.      0.    0.      0.             [?]    950fa:  mov    %eax,0x14(%r13)
+   0.      0.    0.      0.             [?]    950fe:  mov    0x18(%rbx),%edx
+   0.030   0.    0.030   0.             [?]    95101:  jmp    .-0x46a [ 0x94c97 ]
+   0.      0.    0.      0.             [?]    95106:  cs nopw 0x0(%rax,%rax,1)
+   0.      0.    0.      0.             [?]    95110:  mov    0x20(%rbx),%eax
+   0.      0.    0.      0.             [?]    95113:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    95115:  je     .+0x93 [ 0x951a8 ]
+   0.      0.    0.      0.             [?]    9511b:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    95122:  jmp    .-0x515 [ 0x94c0d ]
+   0.      0.    0.      0.             [?]    95127:  nopw   0x0(%rax,%rax,1)
+   0.      0.    0.      0.             [?]    95130:  mov    0x20(%rbx),%r11d
+   0.      0.    0.      0.             [?]    95134:  test   %r11d,%r11d
+   0.      0.    0.      0.             [?]    95137:  je     .+0xf1 [ 0x95228 ]
+   0.      0.    0.      0.             [?]    9513d:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    95144:  jmp    .-0x835 [ 0x9490f ]
+   0.      0.    0.      0.             [?]    95149:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    95150:  mov    0x18(%rbx),%edx
+   0.      0.    0.      0.             [?]    95153:  cmp    $0x8,%ebp
+   0.      0.    0.      0.             [?]    95156:  seta   %r13b
+   0.      0.    0.      0.             [?]    9515a:  test   %edx,%edx
+   0.      0.    0.      0.             [?]    9515c:  jle    .+0x1c4 [ 0x95320 ]
+   0.      0.    0.      0.             [?]    95162:  mov    0x10(%rbx),%rsi
+   0.      0.    0.      0.             [?]    95166:  mov    %r13d,%eax
+   0.      0.    0.      0.             [?]    95169:  sub    $0x1,%edx
+   0.      0.    0.      0.             [?]    9516c:  not    %ebp
+   0.      0.    0.      0.             [?]    9516e:  shl    $0xf,%eax
+   0.      0.    0.      0.             [?]    95171:  movslq %edx,%rdi
+   0.      0.    0.      0.             [?]    95174:  mov    %edx,0x18(%rbx)
+   0.010   0.    0.010   0.             [?]    95177:  and    $0x1,%ebp
+   0.      0.    0.      0.             [?]    9517a:  or     $0x40a5,%ax
+   0.      0.    0.      0.             [?]    9517e:  mov    %ax,(%rsi,%rdi,2)
+   0.030   0.    0.030   0.             [?]    95182:  test   %edx,%edx
+   0.      0.    0.      0.             [?]    95184:  jle    .+0x60e [ 0x95792 ]
+   0.      0.    0.      0.             [?]    9518a:  sub    $0x1,%edx
+   0.      0.    0.      0.             [?]    9518d:  shl    $0xf,%ebp
+   0.      0.    0.      0.             [?]    95190:  movslq %edx,%rax
+   0.      0.    0.      0.             [?]    95193:  or     $0x4091,%bp
+   0.      0.    0.      0.             [?]    95198:  mov    %edx,0x18(%rbx)
+   0.      0.    0.      0.             [?]    9519b:  mov    %bp,(%rsi,%rax,2)
+   0.      0.    0.      0.             [?]    9519f:  jmp    .-0x508 [ 0x94c97 ]
+   0.      0.    0.      0.             [?]    951a4:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    951a8:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    951ac:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    951b1:  mov    %r9,0x28(%rsp)
+   0.      0.    0.      0.             [?]    951b6:  mov    %r8,0x20(%rsp)
+   0.      0.    0.      0.             [?]    951bb:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    951c0:  mov    %rcx,0x18(%rsp)
+   0.      0.    0.      0.             [?]    951c5:  mov    %edx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    951c9:  mov    %r10b,0x3f(%rsp)
+   0.      0.    0.      0.             [?]    951ce:  mov    %r11d,0x30(%rsp)
+   0.      0.    0.010   0.             [?]    951d3:  call   WebPSafeMalloc [ 0x74050, .-0x21183]
+   0.      0.    0.      0.             [?]    951d8:  mov    0x10(%rsp),%edx
+   0.      0.    0.      0.             [?]    951dc:  mov    0x18(%rsp),%rcx
+   0.      0.    0.      0.             [?]    951e1:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    951e4:  mov    0x20(%rsp),%r8
+   0.      0.    0.      0.             [?]    951e9:  mov    0x28(%rsp),%r9
+   0.      0.    0.      0.             [?]    951ee:  je     .-0xd3 [ 0x9511b ]
+   0.      0.    0.      0.             [?]    951f4:  mov    0x8(%rbx),%rsi
+   0.      0.    0.      0.             [?]    951f8:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    951ff:  movzbl 0x3f(%rsp),%r10d
+   0.      0.    0.      0.             [?]    95205:  mov    0x30(%rsp),%r11d
+   0.      0.    0.      0.             [?]    9520a:  mov    %rax,(%rsi)
+   0.      0.    0.      0.             [?]    9520d:  mov    0x1c(%rbx),%esi
+   0.      0.    0.      0.             [?]    95210:  mov    %rax,0x8(%rbx)
+   0.      0.    0.      0.             [?]    95214:  add    $0x8,%rax
+   0.      0.    0.      0.             [?]    95218:  mov    %rax,0x10(%rbx)
+   0.      0.    0.      0.             [?]    9521c:  jmp    .-0x624 [ 0x94bf8 ]
+   0.      0.    0.      0.             [?]    95221:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    95228:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    9522c:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    95231:  mov    %r9,0x20(%rsp)
+   0.      0.    0.      0.             [?]    95236:  mov    %r8,0x10(%rsp)
+   0.      0.    0.      0.             [?]    9523b:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    95240:  mov    %r14d,0x18(%rsp)
+   0.      0.    0.      0.             [?]    95245:  call   WebPSafeMalloc [ 0x74050, .-0x211f5]
+   0.      0.    0.      0.             [?]    9524a:  mov    0x10(%rsp),%r8
+   0.      0.    0.      0.             [?]    9524f:  mov    0x18(%rsp),%edx
+   0.      0.    0.      0.             [?]    95253:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    95256:  mov    0x20(%rsp),%r9
+   0.      0.    0.      0.             [?]    9525b:  je     .-0x11e [ 0x9513d ]
+   0.      0.    0.      0.             [?]    95261:  mov    0x8(%rbx),%rcx
+   0.      0.    0.      0.             [?]    95265:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    9526c:  mov    %rax,(%rcx)
+   0.      0.    0.      0.             [?]    9526f:  mov    0x1c(%rbx),%ecx
+   0.      0.    0.      0.             [?]    95272:  mov    %rax,0x8(%rbx)
+   0.      0.    0.      0.             [?]    95276:  add    $0x8,%rax
+   0.      0.    0.      0.             [?]    9527a:  mov    %rax,0x10(%rbx)
+   0.      0.    0.      0.             [?]    9527e:  jmp    .-0x982 [ 0x948fc ]
+   0.      0.    0.      0.             [?]    95283:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    95285:  jle    .+0x879 [ 0x95afe ]
+   0.      0.    0.      0.             [?]    9528b:  mov    0x10(%rbx),%rsi
+   0.      0.    0.      0.             [?]    9528f:  sub    $0x1,%eax
+   0.      0.    0.      0.             [?]    95292:  mov    %eax,0x18(%rbx)
+   0.      0.    0.      0.             [?]    95295:  cltq
+   0.      0.    0.      0.             [?]    95297:  mov    %dx,(%rsi,%rax,2)
+   0.      0.    0.      0.             [?]    9529b:  mov    0x20(%r13),%eax
+   0.      0.    0.      0.             [?]    9529f:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    952a4:  ja     .+0x3fc [ 0x956a0 ]
+   0.      0.    0.      0.             [?]    952aa:  add    $0x10000,%eax
+   0.      0.    0.      0.             [?]    952af:  add    $0x9,%r15d
+   0.      0.    0.      0.             [?]    952b3:  mov    %eax,0x20(%r13)
+   0.      0.    0.      0.             [?]    952b7:  mov    0x18(%rbx),%eax
+   0.      0.    0.      0.             [?]    952ba:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    952bc:  jle    .+0x7d8 [ 0x95a94 ]
+   0.      0.    0.      0.             [?]    952c2:  mov    0x10(%rbx),%rdx
+   0.      0.    0.      0.             [?]    952c6:  sub    $0x1,%eax
+   0.      0.    0.      0.             [?]    952c9:  or     $0x8000,%r15w
+   0.      0.    0.      0.             [?]    952cf:  mov    %eax,0x18(%rbx)
+   0.      0.    0.      0.             [?]    952d2:  cltq
+   0.      0.    0.      0.             [?]    952d4:  mov    %r15w,(%rdx,%rax,2)
+   0.      0.    0.      0.             [?]    952d9:  mov    0x24(%r13),%eax
+   0.      0.    0.      0.             [?]    952dd:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    952e2:  jbe    .+0xc [ 0x952ee ]
+   0.      0.    0.      0.             [?]    952e4:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    952e7:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    952e9:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    952ee:  lea    -0x13(%rbp),%r10d
+   0.      0.    0.      0.             [?]    952f2:  add    $0x10001,%eax
+   0.      0.    0.      0.             [?]    952f7:  lea    0x9784a(%rip),%rbp        # 0x97851
+   0.      0.    0.      0.             [?]    952fe:  mov    $0x8,%r15d
+   0.      0.    0.      0.             [?]    95304:  jmp    .-0x325 [ 0x94fdf ]
+   0.      0.    0.      0.             [?]    95309:  mov    0x20(%rbx),%eax
+   0.      0.    0.      0.             [?]    9530c:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    9530e:  je     .+0x3bf [ 0x956cd ]
+   0.      0.    0.      0.             [?]    95314:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    9531b:  jmp    .-0x23e [ 0x950dd ]
+   0.      0.    0.      0.             [?]    95320:  mov    0x20(%rbx),%esi
+   0.      0.    0.      0.             [?]    95323:  test   %esi,%esi
+   0.      0.    0.      0.             [?]    95325:  je     .+0x40e [ 0x95733 ]
+   0.      0.    0.      0.             [?]    9532b:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    95332:  jmp    .-0x69b [ 0x94c97 ]
+   0.      0.    0.      0.             [?]    95337:  mov    0x20(%rbx),%edi
+   0.      0.    0.      0.             [?]    9533a:  test   %edi,%edi
+   0.      0.    0.      0.             [?]    9533c:  jne    .-0x11 [ 0x9532b ]
+   0.      0.    0.      0.             [?]    9533e:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    95342:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    95347:  mov    %r9,0x20(%rsp)
+   0.      0.    0.      0.             [?]    9534c:  mov    %r8,0x18(%rsp)
+   0.      0.    0.      0.             [?]    95351:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    95356:  mov    %rcx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    9535b:  call   WebPSafeMalloc [ 0x74050, .-0x2130b]
+   0.      0.    0.      0.             [?]    95360:  mov    0x10(%rsp),%rcx
+   0.      0.    0.      0.             [?]    95365:  mov    0x18(%rsp),%r8
+   0.      0.    0.      0.             [?]    9536a:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    9536d:  mov    0x20(%rsp),%r9
+   0.      0.    0.      0.             [?]    95372:  je     .+0x856 [ 0x95bc8 ]
+   0.      0.    0.      0.             [?]    95378:  mov    0x8(%rbx),%rdx
+   0.      0.    0.      0.             [?]    9537c:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    95383:  mov    %rax,(%rdx)
+   0.      0.    0.      0.             [?]    95386:  mov    0x1c(%rbx),%edx
+   0.      0.    0.      0.             [?]    95389:  mov    %rax,0x8(%rbx)
+   0.      0.    0.      0.             [?]    9538d:  add    $0x8,%rax
+   0.      0.    0.      0.             [?]    95391:  mov    %rax,0x10(%rbx)
+   0.      0.    0.      0.             [?]    95395:  jmp    .-0x473 [ 0x94f22 ]
+   0.      0.    0.      0.             [?]    9539a:  mov    0x18(%r14),%edx
+   0.      0.    0.      0.             [?]    9539e:  xchg   %ax,%ax
+   0.      0.    0.      0.             [?]    953a0:  sar    $1,%ebp
+   0.      0.    0.      0.             [?]    953a2:  movl   $0x1,0x20(%r14)
+   0.      0.    0.      0.             [?]    953aa:  jne    .-0x372 [ 0x95038 ]
+   0.      0.    0.      0.             [?]    953b0:  mov    %r14,%rbx
+   0.      0.    0.      0.             [?]    953b3:  mov    0x20(%rsp),%r12d
+   0.      0.    0.      0.             [?]    953b8:  mov    0x28(%rsp),%rcx
+   0.      0.    0.      0.             [?]    953bd:  mov    %r15,%r8
+   0.      0.    0.      0.             [?]    953c0:  mov    0x30(%rsp),%r9
+   0.      0.    0.      0.             [?]    953c5:  mov    0x18(%rsp),%r14d
+   0.      0.    0.      0.             [?]    953ca:  jmp    .-0x733 [ 0x94c97 ]
+   0.      0.    0.      0.             [?]    953cf:  nop
+   0.      0.    0.      0.             [?]    953d0:  mov    0x20(%rbx),%eax
+   0.      0.    0.      0.             [?]    953d3:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    953d5:  jne    .+0x10b [ 0x954e0 ]
+   0.      0.    0.      0.             [?]    953db:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    953df:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    953e4:  mov    %r9,0x28(%rsp)
+   0.      0.    0.      0.             [?]    953e9:  mov    %r8,0x20(%rsp)
+   0.      0.    0.      0.             [?]    953ee:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    953f3:  mov    %rcx,0x18(%rsp)
+   0.      0.    0.      0.             [?]    953f8:  mov    %edx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    953fc:  mov    %r10b,0x3f(%rsp)
+   0.      0.    0.      0.             [?]    95401:  mov    %r11d,0x30(%rsp)
+   0.      0.    0.      0.             [?]    95406:  call   WebPSafeMalloc [ 0x74050, .-0x213b6]
+   0.      0.    0.      0.             [?]    9540b:  mov    0x10(%rsp),%edx
+   0.      0.    0.      0.             [?]    9540f:  mov    0x18(%rsp),%rcx
+   0.      0.    0.      0.             [?]    95414:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    95417:  mov    0x20(%rsp),%r8
+   0.      0.    0.      0.             [?]    9541c:  mov    0x28(%rsp),%r9
+   0.      0.    0.      0.             [?]    95421:  je     .+0xbf [ 0x954e0 ]
+   0.      0.    0.      0.             [?]    95427:  mov    0x8(%rbx),%rsi
+   0.      0.    0.      0.             [?]    9542b:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    95432:  movzbl 0x3f(%rsp),%r10d
+   0.      0.    0.      0.             [?]    95438:  mov    0x30(%rsp),%r11d
+   0.      0.    0.      0.             [?]    9543d:  mov    %rax,(%rsi)
+   0.      0.    0.      0.             [?]    95440:  mov    0x1c(%rbx),%esi
+   0.      0.    0.      0.             [?]    95443:  mov    %rax,0x8(%rbx)
+   0.      0.    0.      0.             [?]    95447:  add    $0x8,%rax
+   0.      0.    0.      0.             [?]    9544b:  mov    %rax,0x10(%rbx)
+   0.      0.    0.      0.             [?]    9544f:  jmp    .-0x5df [ 0x94e70 ]
+   0.      0.    0.      0.             [?]    95454:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    95458:  mov    0x20(%rbx),%eax
+   0.      0.    0.      0.             [?]    9545b:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    9545d:  jne    .+0x93 [ 0x954f0 ]
+   0.      0.    0.      0.             [?]    95463:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    95467:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    9546c:  mov    %r9,0x28(%rsp)
+   0.      0.    0.      0.             [?]    95471:  mov    %r8,0x20(%rsp)
+   0.      0.    0.      0.             [?]    95476:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    9547b:  mov    %rcx,0x18(%rsp)
+   0.      0.    0.      0.             [?]    95480:  mov    %edx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    95484:  mov    %r10b,0x3f(%rsp)
+   0.      0.    0.      0.             [?]    95489:  mov    %r11d,0x30(%rsp)
+   0.      0.    0.      0.             [?]    9548e:  call   WebPSafeMalloc [ 0x74050, .-0x2143e]
+   0.      0.    0.      0.             [?]    95493:  mov    0x10(%rsp),%edx
+   0.      0.    0.      0.             [?]    95497:  mov    0x18(%rsp),%rcx
+   0.      0.    0.      0.             [?]    9549c:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    9549f:  mov    0x20(%rsp),%r8
+   0.      0.    0.      0.             [?]    954a4:  mov    0x28(%rsp),%r9
+   0.      0.    0.      0.             [?]    954a9:  je     .+0x47 [ 0x954f0 ]
+   0.      0.    0.      0.             [?]    954ab:  mov    0x8(%rbx),%rsi
+   0.      0.    0.      0.             [?]    954af:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    954b6:  movzbl 0x3f(%rsp),%r10d
+   0.      0.    0.      0.             [?]    954bc:  mov    0x30(%rsp),%r11d
+   0.      0.    0.      0.             [?]    954c1:  mov    %rax,(%rsi)
+   0.      0.    0.      0.             [?]    954c4:  mov    0x1c(%rbx),%esi
+   0.      0.    0.      0.             [?]    954c7:  mov    %rax,0x8(%rbx)
+   0.      0.    0.      0.             [?]    954cb:  add    $0x8,%rax
+   0.      0.    0.      0.             [?]    954cf:  mov    %rax,0x10(%rbx)
+   0.      0.    0.      0.             [?]    954d3:  jmp    .-0x87d [ 0x94c56 ]
+   0.      0.    0.      0.             [?]    954d8:  nopl   0x0(%rax,%rax,1)
+   0.      0.    0.      0.             [?]    954e0:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    954e7:  jmp    .-0x662 [ 0x94e85 ]
+   0.      0.    0.      0.             [?]    954ec:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    954f0:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    954f7:  jmp    .-0x88c [ 0x94c6b ]
+   0.      0.    0.      0.             [?]    954fc:  nopl   0x0(%rax)
+   0.      0.    0.      0.             [?]    95500:  mov    0x20(%rbx),%eax
+   0.      0.    0.      0.             [?]    95503:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    95505:  jne    .+0x6e [ 0x95573 ]
+   0.      0.    0.      0.             [?]    95507:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    9550b:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    95510:  mov    %r9,0x28(%rsp)
+   0.      0.    0.      0.             [?]    95515:  mov    %r8,0x20(%rsp)
+   0.      0.    0.      0.             [?]    9551a:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    9551f:  mov    %rcx,0x18(%rsp)
+   0.      0.    0.      0.             [?]    95524:  mov    %r10d,0x10(%rsp)
+   0.      0.    0.      0.             [?]    95529:  mov    %r11d,0x30(%rsp)
+   0.      0.    0.      0.             [?]    9552e:  call   WebPSafeMalloc [ 0x74050, .-0x214de]
+   0.      0.    0.      0.             [?]    95533:  mov    0x10(%rsp),%r10d
+   0.      0.    0.      0.             [?]    95538:  mov    0x18(%rsp),%rcx
+   0.      0.    0.      0.             [?]    9553d:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    95540:  mov    0x20(%rsp),%r8
+   0.      0.    0.      0.             [?]    95545:  mov    0x28(%rsp),%r9
+   0.      0.    0.      0.             [?]    9554a:  je     .+0x29 [ 0x95573 ]
+   0.      0.    0.      0.             [?]    9554c:  mov    0x8(%rbx),%rdx
+   0.      0.    0.      0.             [?]    95550:  mov    0x30(%rsp),%r11d
+   0.      0.    0.      0.             [?]    95555:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    9555c:  mov    %rax,(%rdx)
+   0.      0.    0.      0.             [?]    9555f:  mov    0x1c(%rbx),%edx
+   0.      0.    0.      0.             [?]    95562:  mov    %rax,0x8(%rbx)
+   0.      0.    0.      0.             [?]    95566:  add    $0x8,%rax
+   0.      0.    0.      0.             [?]    9556a:  mov    %rax,0x10(%rbx)
+   0.      0.    0.      0.             [?]    9556e:  jmp    .-0x69e [ 0x94ed0 ]
+   0.      0.    0.      0.             [?]    95573:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    9557a:  jmp    .-0x695 [ 0x94ee5 ]
+   0.      0.    0.      0.             [?]    9557f:  nop
+   0.      0.    0.      0.             [?]    95580:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    95582:  jle    .+0x2e4 [ 0x95866 ]
+   0.      0.    0.      0.             [?]    95588:  mov    0x10(%rbx),%rsi
+   0.      0.    0.      0.             [?]    9558c:  sub    $0x1,%eax
+   0.      0.    0.      0.             [?]    9558f:  mov    %eax,0x18(%rbx)
+   0.      0.    0.      0.             [?]    95592:  cltq
+   0.      0.    0.      0.             [?]    95594:  mov    %dx,(%rsi,%rax,2)
+   0.      0.    0.      0.             [?]    95598:  mov    0x20(%r13),%eax
+   0.      0.    0.      0.             [?]    9559c:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    955a1:  jbe    .+0xc [ 0x955ad ]
+   0.      0.    0.      0.             [?]    955a3:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    955a6:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    955a8:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    955ad:  add    $0x10000,%eax
+   0.      0.    0.      0.             [?]    955b2:  add    $0x9,%r15d
+   0.      0.    0.      0.             [?]    955b6:  mov    %eax,0x20(%r13)
+   0.      0.    0.      0.             [?]    955ba:  mov    0x18(%rbx),%eax
+   0.      0.    0.      0.             [?]    955bd:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    955bf:  jle    .+0x23d [ 0x957fc ]
+   0.      0.    0.      0.             [?]    955c5:  mov    0x10(%rbx),%rdx
+   0.      0.    0.      0.             [?]    955c9:  sub    $0x1,%eax
+   0.      0.    0.      0.             [?]    955cc:  mov    %eax,0x18(%rbx)
+   0.      0.    0.      0.             [?]    955cf:  cltq
+   0.      0.    0.      0.             [?]    955d1:  mov    %r15w,(%rdx,%rax,2)
+   0.      0.    0.      0.             [?]    955d6:  mov    0x24(%r13),%eax
+   0.      0.    0.      0.             [?]    955da:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    955df:  jbe    .+0xc [ 0x955eb ]
+   0.      0.    0.      0.             [?]    955e1:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    955e4:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    955e6:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    955eb:  lea    -0xb(%rbp),%r10d
+   0.      0.    0.      0.             [?]    955ef:  add    $0x10000,%eax
+   0.      0.    0.      0.             [?]    955f4:  lea    0x97551(%rip),%rbp        # 0x97558
+   0.      0.    0.      0.             [?]    955fb:  mov    $0x4,%r15d
+   0.      0.    0.      0.             [?]    95601:  jmp    .-0x622 [ 0x94fdf ]
+   0.      0.    0.      0.             [?]    95606:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    95608:  jle    .+0x2d0 [ 0x958d8 ]
+   0.      0.    0.      0.             [?]    9560e:  mov    0x10(%rbx),%rsi
+   0.      0.    0.      0.             [?]    95612:  sub    $0x1,%eax
+   0.      0.    0.      0.             [?]    95615:  or     $0x8000,%dx
+   0.      0.    0.      0.             [?]    9561a:  mov    %eax,0x18(%rbx)
+   0.      0.    0.      0.             [?]    9561d:  cltq
+   0.      0.    0.      0.             [?]    9561f:  mov    %dx,(%rsi,%rax,2)
+   0.      0.    0.      0.             [?]    95623:  mov    0x20(%r13),%eax
+   0.      0.    0.      0.             [?]    95627:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    9562c:  ja     .+0x92 [ 0x956be ]
+   0.      0.    0.      0.             [?]    95632:  add    $0x10001,%eax
+   0.      0.    0.      0.             [?]    95637:  add    $0xa,%r15d
+   0.      0.    0.      0.             [?]    9563b:  mov    %eax,0x20(%r13)
+   0.      0.    0.      0.             [?]    9563f:  mov    0x18(%rbx),%eax
+   0.      0.    0.      0.             [?]    95642:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    95644:  jle    .+0x306 [ 0x9594a ]
+   0.      0.    0.      0.             [?]    9564a:  mov    0x10(%rbx),%rdx
+   0.      0.    0.      0.             [?]    9564e:  sub    $0x1,%eax
+   0.      0.    0.      0.             [?]    95651:  or     $0x8000,%r15w
+   0.      0.    0.      0.             [?]    95657:  mov    %eax,0x18(%rbx)
+   0.      0.    0.      0.             [?]    9565a:  cltq
+   0.      0.    0.      0.             [?]    9565c:  mov    %r15w,(%rdx,%rax,2)
+   0.      0.    0.      0.             [?]    95661:  mov    0x24(%r13),%eax
+   0.      0.    0.      0.             [?]    95665:  cmp    $0xfffdffff,%eax
+   0.      0.    0.      0.             [?]    9566a:  jbe    .+0xc [ 0x95676 ]
+   0.      0.    0.      0.             [?]    9566c:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    9566f:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    95671:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    95676:  lea    -0x43(%rbp),%r10d
+   0.      0.    0.      0.             [?]    9567a:  add    $0x10001,%eax
+   0.      0.    0.      0.             [?]    9567f:  lea    0x974b2(%rip),%rbp        # 0x974b9
+   0.      0.    0.      0.             [?]    95686:  mov    $0x400,%r15d
+   0.      0.    0.      0.             [?]    9568c:  jmp    .-0x6ad [ 0x94fdf ]
+   0.      0.    0.      0.             [?]    95691:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    95694:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    95696:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    9569b:  jmp    .-0x6d2 [ 0x94fc9 ]
+   0.      0.    0.      0.             [?]    956a0:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    956a3:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    956a5:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    956aa:  jmp    .-0x400 [ 0x952aa ]
+   0.      0.    0.      0.             [?]    956af:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    956b2:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    956b4:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    956b9:  jmp    .-0x728 [ 0x94f91 ]
+   0.      0.    0.      0.             [?]    956be:  add    $0x1,%eax
+   0.      0.    0.      0.             [?]    956c1:  shr    $1,%eax
+   0.      0.    0.      0.             [?]    956c3:  and    $0x7fff7fff,%eax
+   0.      0.    0.      0.             [?]    956c8:  jmp    .-0x96 [ 0x95632 ]
+   0.      0.    0.      0.             [?]    956cd:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    956d1:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    956d6:  mov    %r9,0x28(%rsp)
+   0.      0.    0.      0.             [?]    956db:  mov    %r8,0x20(%rsp)
+   0.      0.    0.      0.             [?]    956e0:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    956e5:  mov    %rcx,0x18(%rsp)
+   0.      0.    0.      0.             [?]    956ea:  mov    %r10d,0x10(%rsp)
+   0.      0.    0.      0.             [?]    956ef:  call   WebPSafeMalloc [ 0x74050, .-0x2169f]
+   0.      0.    0.      0.             [?]    956f4:  mov    0x10(%rsp),%r10d
+   0.      0.    0.      0.             [?]    956f9:  mov    0x18(%rsp),%rcx
+   0.      0.    0.      0.             [?]    956fe:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    95701:  mov    0x20(%rsp),%r8
+   0.      0.    0.      0.             [?]    95706:  mov    0x28(%rsp),%r9
+   0.      0.    0.      0.             [?]    9570b:  je     .-0x3f7 [ 0x95314 ]
+   0.      0.    0.      0.             [?]    95711:  mov    0x8(%rbx),%rdx
+   0.      0.    0.      0.             [?]    95715:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    9571c:  mov    %rax,(%rdx)
+   0.      0.    0.      0.             [?]    9571f:  mov    0x1c(%rbx),%edx
+   0.      0.    0.      0.             [?]    95722:  mov    %rax,0x8(%rbx)
+   0.      0.    0.      0.             [?]    95726:  add    $0x8,%rax
+   0.      0.    0.      0.             [?]    9572a:  mov    %rax,0x10(%rbx)
+   0.      0.    0.      0.             [?]    9572e:  jmp    .-0x664 [ 0x950ca ]
+   0.      0.    0.      0.             [?]    95733:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    95737:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    9573c:  mov    %r9,0x20(%rsp)
+   0.      0.    0.      0.             [?]    95741:  mov    %r8,0x18(%rsp)
+   0.      0.    0.      0.             [?]    95746:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    9574b:  mov    %rcx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    95750:  call   WebPSafeMalloc [ 0x74050, .-0x21700]
+   0.      0.    0.      0.             [?]    95755:  mov    0x10(%rsp),%rcx
+   0.      0.    0.      0.             [?]    9575a:  mov    0x18(%rsp),%r8
+   0.      0.    0.      0.             [?]    9575f:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    95762:  mov    0x20(%rsp),%r9
+   0.      0.    0.      0.             [?]    95767:  mov    %rax,%rsi
+   0.      0.    0.      0.             [?]    9576a:  je     .+0x466 [ 0x95bd0 ]
+   0.      0.    0.      0.             [?]    95770:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    95777:  mov    0x8(%rbx),%rax
+   0.      0.    0.      0.             [?]    9577b:  mov    0x1c(%rbx),%edx
+   0.      0.    0.      0.             [?]    9577e:  mov    %rsi,(%rax)
+   0.      0.    0.      0.             [?]    95781:  mov    %rsi,0x8(%rbx)
+   0.      0.    0.      0.             [?]    95785:  add    $0x8,%rsi
+   0.      0.    0.      0.             [?]    95789:  mov    %rsi,0x10(%rbx)
+   0.      0.    0.      0.             [?]    9578d:  jmp    .-0x627 [ 0x95166 ]
+   0.      0.    0.      0.             [?]    95792:  mov    0x20(%rbx),%eax
+   0.      0.    0.      0.             [?]    95795:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    95797:  jne    .-0x46c [ 0x9532b ]
+   0.      0.    0.      0.             [?]    9579d:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    957a1:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    957a6:  mov    %r9,0x20(%rsp)
+   0.      0.    0.      0.             [?]    957ab:  mov    %r8,0x18(%rsp)
+   0.      0.    0.      0.             [?]    957b0:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    957b5:  mov    %rcx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    957ba:  call   WebPSafeMalloc [ 0x74050, .-0x2176a]
+   0.      0.    0.      0.             [?]    957bf:  mov    0x10(%rsp),%rcx
+   0.      0.    0.      0.             [?]    957c4:  mov    0x18(%rsp),%r8
+   0.      0.    0.      0.             [?]    957c9:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    957cc:  mov    0x20(%rsp),%r9
+   0.      0.    0.      0.             [?]    957d1:  mov    %rax,%rsi
+   0.      0.    0.      0.             [?]    957d4:  je     .+0x3f4 [ 0x95bc8 ]
+   0.      0.    0.      0.             [?]    957da:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    957e1:  mov    0x8(%rbx),%rax
+   0.      0.    0.      0.             [?]    957e5:  mov    0x1c(%rbx),%edx
+   0.      0.    0.      0.             [?]    957e8:  mov    %rsi,(%rax)
+   0.      0.    0.      0.             [?]    957eb:  mov    %rsi,0x8(%rbx)
+   0.      0.    0.      0.             [?]    957ef:  add    $0x8,%rsi
+   0.      0.    0.      0.             [?]    957f3:  mov    %rsi,0x10(%rbx)
+   0.      0.    0.      0.             [?]    957f7:  jmp    .-0x66d [ 0x9518a ]
+   0.      0.    0.      0.             [?]    957fc:  mov    0x20(%rbx),%eax
+   0.      0.    0.      0.             [?]    957ff:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    95801:  jne    .+0x367 [ 0x95b68 ]
+   0.      0.    0.      0.             [?]    95807:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    9580b:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    95810:  mov    %r9,0x20(%rsp)
+   0.      0.    0.      0.             [?]    95815:  mov    %r8,0x18(%rsp)
+   0.      0.    0.      0.             [?]    9581a:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    9581f:  mov    %rcx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    95824:  call   WebPSafeMalloc [ 0x74050, .-0x217d4]
+   0.      0.    0.      0.             [?]    95829:  mov    0x10(%rsp),%rcx
+   0.      0.    0.      0.             [?]    9582e:  mov    0x18(%rsp),%r8
+   0.      0.    0.      0.             [?]    95833:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    95836:  mov    0x20(%rsp),%r9
+   0.      0.    0.      0.             [?]    9583b:  mov    %rax,%rdx
+   0.      0.    0.      0.             [?]    9583e:  je     .+0x32a [ 0x95b68 ]
+   0.      0.    0.      0.             [?]    95844:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    9584b:  mov    0x8(%rbx),%rax
+   0.      0.    0.      0.             [?]    9584f:  mov    %rdx,(%rax)
+   0.      0.    0.      0.             [?]    95852:  mov    0x1c(%rbx),%eax
+   0.      0.    0.      0.             [?]    95855:  mov    %rdx,0x8(%rbx)
+   0.      0.    0.      0.             [?]    95859:  add    $0x8,%rdx
+   0.      0.    0.      0.             [?]    9585d:  mov    %rdx,0x10(%rbx)
+   0.      0.    0.      0.             [?]    95861:  jmp    .-0x298 [ 0x955c9 ]
+   0.      0.    0.      0.             [?]    95866:  mov    0x20(%rbx),%eax
+   0.      0.    0.      0.             [?]    95869:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    9586b:  jne    .+0x309 [ 0x95b74 ]
+   0.      0.    0.      0.             [?]    95871:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    95875:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    9587a:  mov    %r9,0x28(%rsp)
+   0.      0.    0.      0.             [?]    9587f:  mov    %r8,0x20(%rsp)
+   0.      0.    0.      0.             [?]    95884:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    95889:  mov    %rcx,0x18(%rsp)
+   0.      0.    0.      0.             [?]    9588e:  mov    %edx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    95892:  call   WebPSafeMalloc [ 0x74050, .-0x21842]
+   0.      0.    0.      0.             [?]    95897:  mov    0x18(%rsp),%rcx
+   0.      0.    0.      0.             [?]    9589c:  mov    0x20(%rsp),%r8
+   0.      0.    0.      0.             [?]    958a1:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    958a4:  mov    0x28(%rsp),%r9
+   0.      0.    0.      0.             [?]    958a9:  mov    %rax,%rsi
+   0.      0.    0.      0.             [?]    958ac:  je     .+0x2c8 [ 0x95b74 ]
+   0.      0.    0.      0.             [?]    958b2:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    958b9:  mov    0x8(%rbx),%rax
+   0.      0.    0.      0.             [?]    958bd:  mov    0x10(%rsp),%edx
+   0.      0.    0.      0.             [?]    958c1:  mov    %rsi,(%rax)
+   0.      0.    0.      0.             [?]    958c4:  mov    0x1c(%rbx),%eax
+   0.      0.    0.      0.             [?]    958c7:  mov    %rsi,0x8(%rbx)
+   0.      0.    0.      0.             [?]    958cb:  add    $0x8,%rsi
+   0.      0.    0.      0.             [?]    958cf:  mov    %rsi,0x10(%rbx)
+   0.      0.    0.      0.             [?]    958d3:  jmp    .-0x347 [ 0x9558c ]
+   0.      0.    0.      0.             [?]    958d8:  mov    0x20(%rbx),%edi
+   0.      0.    0.      0.             [?]    958db:  test   %edi,%edi
+   0.      0.    0.      0.             [?]    958dd:  jne    .+0x2d3 [ 0x95bb0 ]
+   0.      0.    0.      0.             [?]    958e3:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    958e7:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    958ec:  mov    %r9,0x28(%rsp)
+   0.      0.    0.      0.             [?]    958f1:  mov    %r8,0x20(%rsp)
+   0.      0.    0.      0.             [?]    958f6:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    958fb:  mov    %rcx,0x18(%rsp)
+   0.      0.    0.      0.             [?]    95900:  mov    %edx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    95904:  call   WebPSafeMalloc [ 0x74050, .-0x218b4]
+   0.      0.    0.      0.             [?]    95909:  mov    0x18(%rsp),%rcx
+   0.      0.    0.      0.             [?]    9590e:  mov    0x20(%rsp),%r8
+   0.      0.    0.      0.             [?]    95913:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    95916:  mov    0x28(%rsp),%r9
+   0.      0.    0.      0.             [?]    9591b:  mov    %rax,%rsi
+   0.      0.    0.      0.             [?]    9591e:  je     .+0x292 [ 0x95bb0 ]
+   0.      0.    0.      0.             [?]    95924:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    9592b:  mov    0x8(%rbx),%rax
+   0.      0.    0.      0.             [?]    9592f:  mov    0x10(%rsp),%edx
+   0.      0.    0.      0.             [?]    95933:  mov    %rsi,(%rax)
+   0.      0.    0.      0.             [?]    95936:  mov    0x1c(%rbx),%eax
+   0.      0.    0.      0.             [?]    95939:  mov    %rsi,0x8(%rbx)
+   0.      0.    0.      0.             [?]    9593d:  add    $0x8,%rsi
+   0.      0.    0.      0.             [?]    95941:  mov    %rsi,0x10(%rbx)
+   0.      0.    0.      0.             [?]    95945:  jmp    .-0x333 [ 0x95612 ]
+   0.      0.    0.      0.             [?]    9594a:  mov    0x20(%rbx),%esi
+   0.      0.    0.      0.             [?]    9594d:  test   %esi,%esi
+   0.      0.    0.      0.             [?]    9594f:  jne    .+0x249 [ 0x95b98 ]
+   0.      0.    0.      0.             [?]    95955:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    95959:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    9595e:  mov    %r9,0x20(%rsp)
+   0.      0.    0.      0.             [?]    95963:  mov    %r8,0x18(%rsp)
+   0.      0.    0.      0.             [?]    95968:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    9596d:  mov    %rcx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    95972:  call   WebPSafeMalloc [ 0x74050, .-0x21922]
+   0.      0.    0.      0.             [?]    95977:  mov    0x10(%rsp),%rcx
+   0.      0.    0.      0.             [?]    9597c:  mov    0x18(%rsp),%r8
+   0.      0.    0.      0.             [?]    95981:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    95984:  mov    0x20(%rsp),%r9
+   0.      0.    0.      0.             [?]    95989:  mov    %rax,%rdx
+   0.      0.    0.      0.             [?]    9598c:  je     .+0x20c [ 0x95b98 ]
+   0.      0.    0.      0.             [?]    95992:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    95999:  mov    0x8(%rbx),%rax
+   0.      0.    0.      0.             [?]    9599d:  mov    %rdx,(%rax)
+   0.      0.    0.      0.             [?]    959a0:  mov    0x1c(%rbx),%eax
+   0.      0.    0.      0.             [?]    959a3:  mov    %rdx,0x8(%rbx)
+   0.      0.    0.      0.             [?]    959a7:  add    $0x8,%rdx
+   0.      0.    0.      0.             [?]    959ab:  mov    %rdx,0x10(%rbx)
+   0.      0.    0.      0.             [?]    959af:  jmp    .-0x361 [ 0x9564e ]
+   0.      0.    0.      0.             [?]    959b4:  mov    0x20(%rbx),%r10d
+   0.      0.    0.      0.             [?]    959b8:  test   %r10d,%r10d
+   0.      0.    0.      0.             [?]    959bb:  jne    .+0x1e9 [ 0x95ba4 ]
+   0.      0.    0.      0.             [?]    959c1:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    959c5:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    959ca:  mov    %r9,0x20(%rsp)
+   0.      0.    0.      0.             [?]    959cf:  mov    %r8,0x18(%rsp)
+   0.      0.    0.      0.             [?]    959d4:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    959d9:  mov    %rcx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    959de:  call   WebPSafeMalloc [ 0x74050, .-0x2198e]
+   0.      0.    0.      0.             [?]    959e3:  mov    0x10(%rsp),%rcx
+   0.      0.    0.      0.             [?]    959e8:  mov    0x18(%rsp),%r8
+   0.      0.    0.      0.             [?]    959ed:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    959f0:  mov    0x20(%rsp),%r9
+   0.      0.    0.      0.             [?]    959f5:  mov    %rax,%rdx
+   0.      0.    0.      0.             [?]    959f8:  je     .+0x1ac [ 0x95ba4 ]
+   0.      0.    0.      0.             [?]    959fe:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    95a05:  mov    0x8(%rbx),%rax
+   0.      0.    0.      0.             [?]    95a09:  mov    %rdx,(%rax)
+   0.      0.    0.      0.             [?]    95a0c:  mov    0x1c(%rbx),%eax
+   0.      0.    0.      0.             [?]    95a0f:  mov    %rdx,0x8(%rbx)
+   0.      0.    0.      0.             [?]    95a13:  add    $0x8,%rdx
+   0.      0.    0.      0.             [?]    95a17:  mov    %rdx,0x10(%rbx)
+   0.      0.    0.      0.             [?]    95a1b:  jmp    .-0xa6e [ 0x94fad ]
+   0.      0.    0.      0.             [?]    95a20:  mov    0x20(%rbx),%r11d
+   0.      0.    0.      0.             [?]    95a24:  test   %r11d,%r11d
+   0.      0.    0.      0.             [?]    95a27:  jne    .+0x165 [ 0x95b8c ]
+   0.      0.    0.      0.             [?]    95a2d:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    95a31:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    95a36:  mov    %r9,0x28(%rsp)
+   0.      0.    0.      0.             [?]    95a3b:  mov    %r8,0x20(%rsp)
+   0.      0.    0.      0.             [?]    95a40:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    95a45:  mov    %rcx,0x18(%rsp)
+   0.      0.    0.      0.             [?]    95a4a:  mov    %edx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    95a4e:  call   WebPSafeMalloc [ 0x74050, .-0x219fe]
+   0.      0.    0.      0.             [?]    95a53:  mov    0x18(%rsp),%rcx
+   0.      0.    0.      0.             [?]    95a58:  mov    0x20(%rsp),%r8
+   0.      0.    0.      0.             [?]    95a5d:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    95a60:  mov    0x28(%rsp),%r9
+   0.      0.    0.      0.             [?]    95a65:  mov    %rax,%rsi
+   0.      0.    0.      0.             [?]    95a68:  je     .+0x124 [ 0x95b8c ]
+   0.      0.    0.      0.             [?]    95a6e:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    95a75:  mov    0x8(%rbx),%rax
+   0.      0.    0.      0.             [?]    95a79:  mov    0x10(%rsp),%edx
+   0.      0.    0.      0.             [?]    95a7d:  mov    %rsi,(%rax)
+   0.      0.    0.      0.             [?]    95a80:  mov    0x1c(%rbx),%eax
+   0.      0.    0.      0.             [?]    95a83:  mov    %rsi,0x8(%rbx)
+   0.      0.    0.      0.             [?]    95a87:  add    $0x8,%rsi
+   0.      0.    0.      0.             [?]    95a8b:  mov    %rsi,0x10(%rbx)
+   0.      0.    0.      0.             [?]    95a8f:  jmp    .-0xb1e [ 0x94f71 ]
+   0.      0.    0.      0.             [?]    95a94:  mov    0x20(%rbx),%eax
+   0.      0.    0.      0.             [?]    95a97:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    95a99:  jne    .+0x123 [ 0x95bbc ]
+   0.      0.    0.      0.             [?]    95a9f:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    95aa3:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    95aa8:  mov    %r9,0x20(%rsp)
+   0.      0.    0.      0.             [?]    95aad:  mov    %r8,0x18(%rsp)
+   0.      0.    0.      0.             [?]    95ab2:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    95ab7:  mov    %rcx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    95abc:  call   WebPSafeMalloc [ 0x74050, .-0x21a6c]
+   0.      0.    0.      0.             [?]    95ac1:  mov    0x10(%rsp),%rcx
+   0.      0.    0.      0.             [?]    95ac6:  mov    0x18(%rsp),%r8
+   0.      0.    0.      0.             [?]    95acb:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    95ace:  mov    0x20(%rsp),%r9
+   0.      0.    0.      0.             [?]    95ad3:  mov    %rax,%rdx
+   0.      0.    0.      0.             [?]    95ad6:  je     .+0xe6 [ 0x95bbc ]
+   0.      0.    0.      0.             [?]    95adc:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    95ae3:  mov    0x8(%rbx),%rax
+   0.      0.    0.      0.             [?]    95ae7:  mov    %rdx,(%rax)
+   0.      0.    0.      0.             [?]    95aea:  mov    0x1c(%rbx),%eax
+   0.      0.    0.      0.             [?]    95aed:  mov    %rdx,0x8(%rbx)
+   0.      0.    0.      0.             [?]    95af1:  add    $0x8,%rdx
+   0.      0.    0.      0.             [?]    95af5:  mov    %rdx,0x10(%rbx)
+   0.      0.    0.      0.             [?]    95af9:  jmp    .-0x833 [ 0x952c6 ]
+   0.      0.    0.      0.             [?]    95afe:  mov    0x20(%rbx),%eax
+   0.      0.    0.      0.             [?]    95b01:  test   %eax,%eax
+   0.      0.    0.      0.             [?]    95b03:  jne    .+0x7d [ 0x95b80 ]
+   0.      0.    0.      0.             [?]    95b05:  movslq 0x1c(%rbx),%rax
+   0.      0.    0.      0.             [?]    95b09:  mov    $0x1,%edi
+   0.      0.    0.      0.             [?]    95b0e:  mov    %r9,0x28(%rsp)
+   0.      0.    0.      0.             [?]    95b13:  mov    %r8,0x20(%rsp)
+   0.      0.    0.      0.             [?]    95b18:  lea    0x8(%rax,%rax,1),%rsi
+   0.      0.    0.      0.             [?]    95b1d:  mov    %rcx,0x18(%rsp)
+   0.      0.    0.      0.             [?]    95b22:  mov    %edx,0x10(%rsp)
+   0.      0.    0.      0.             [?]    95b26:  call   WebPSafeMalloc [ 0x74050, .-0x21ad6]
+   0.      0.    0.      0.             [?]    95b2b:  mov    0x18(%rsp),%rcx
+   0.      0.    0.      0.             [?]    95b30:  mov    0x20(%rsp),%r8
+   0.      0.    0.      0.             [?]    95b35:  test   %rax,%rax
+   0.      0.    0.      0.             [?]    95b38:  mov    0x28(%rsp),%r9
+   0.      0.    0.      0.             [?]    95b3d:  mov    %rax,%rsi
+   0.      0.    0.      0.             [?]    95b40:  je     .+0x40 [ 0x95b80 ]
+   0.      0.    0.      0.             [?]    95b42:  movq   $0x0,(%rax)
+   0.      0.    0.      0.             [?]    95b49:  mov    0x8(%rbx),%rax
+   0.      0.    0.      0.             [?]    95b4d:  mov    0x10(%rsp),%edx
+   0.      0.    0.      0.             [?]    95b51:  mov    %rsi,(%rax)
+   0.      0.    0.      0.             [?]    95b54:  mov    0x1c(%rbx),%eax
+   0.      0.    0.      0.             [?]    95b57:  mov    %rsi,0x8(%rbx)
+   0.      0.    0.      0.             [?]    95b5b:  add    $0x8,%rsi
+   0.      0.    0.      0.             [?]    95b5f:  mov    %rsi,0x10(%rbx)
+   0.      0.    0.      0.             [?]    95b63:  jmp    .-0x8d4 [ 0x9528f ]
+   0.      0.    0.      0.             [?]    95b68:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    95b6f:  jmp    .-0x599 [ 0x955d6 ]
+   0.      0.    0.      0.             [?]    95b74:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    95b7b:  jmp    .-0x5e3 [ 0x95598 ]
+   0.      0.    0.      0.             [?]    95b80:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    95b87:  jmp    .-0x8ec [ 0x9529b ]
+   0.      0.    0.      0.             [?]    95b8c:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    95b93:  jmp    .-0xc11 [ 0x94f82 ]
+   0.      0.    0.      0.             [?]    95b98:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    95b9f:  jmp    .-0x53e [ 0x95661 ]
+   0.      0.    0.      0.             [?]    95ba4:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    95bab:  jmp    .-0xbf1 [ 0x94fba ]
+   0.      0.    0.      0.             [?]    95bb0:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    95bb7:  jmp    .-0x594 [ 0x95623 ]
+   0.      0.    0.      0.             [?]    95bbc:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    95bc3:  jmp    .-0x8ea [ 0x952d9 ]
+   0.      0.    0.      0.             [?]    95bc8:  mov    0x18(%rbx),%edx
+   0.      0.    0.      0.             [?]    95bcb:  jmp    .-0x8a0 [ 0x9532b ]
+   0.      0.    0.      0.             [?]    95bd0:  mov    0x18(%rbx),%edx
+   0.      0.    0.      0.             [?]    95bd3:  movl   $0x1,0x20(%rbx)
+   0.      0.    0.      0.             [?]    95bda:  test   %edx,%edx
+   0.      0.    0.      0.             [?]    95bdc:  jle    .-0x8b1 [ 0x9532b ]
+   0.      0.    0.      0.             [?]    95be2:  not    %ebp
+   0.      0.    0.      0.             [?]    95be4:  mov    0x10(%rbx),%rsi
+   0.      0.    0.      0.             [?]    95be8:  and    $0x1,%ebp
+   0.      0.    0.      0.             [?]    95beb:  jmp    .-0xa61 [ 0x9518a ]

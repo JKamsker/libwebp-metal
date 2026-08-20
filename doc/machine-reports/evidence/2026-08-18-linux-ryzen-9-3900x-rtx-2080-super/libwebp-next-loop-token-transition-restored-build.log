@@ -1,0 +1,10 @@
+[1/10] Linking C executable accelerator_enc_test
+[2/10] Building C object CMakeFiles/bit_writer_utils_test.dir/src/utils/bit_writer_utils.c.o
+[3/10] Building C object CMakeFiles/webputils.dir/src/utils/bit_writer_utils.c.o
+[4/10] Linking C executable bit_writer_utils_test
+[5/10] Linking CUDA static library libwebp.a
+[6/10] Linking CUDA executable cuda_histogram_test
+[7/10] Linking CUDA executable cuda_near_lossless_test
+[8/10] Linking CUDA executable webp_cuda_batch_benchmark
+[9/10] Linking CUDA executable cuda_trellis_test
+[10/10] Linking CUDA executable cuda_concurrency_test

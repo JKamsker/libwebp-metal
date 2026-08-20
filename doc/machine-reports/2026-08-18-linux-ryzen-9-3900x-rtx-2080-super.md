@@ -2748,3 +2748,56 @@ resources, build/test transcripts, and timing rows use the
 `libwebp-decimate-source-counters-*` and `libwebp-raster-commit-*` prefixes.
 This is Turing-only evidence. The 784/12,544 pre-Ampere and 64/4,000 Ampere+
 decimate thresholds, frozen corpus, and generator remain unchanged.
+
+
+## Retained token profile and dense-transition rejection
+
+At parent `735de11509a65cc223342dcb5bebc2f7e04af778`, native batch-24
+file-I/O rows retained the exact aggregate PNG output
+`455f70a1e139f043` / 6,441,688 bytes and JPEG output
+`0c4b078d5c4d3173` / 6,400,792. The current stage profile measured:
+
+| Format | total | encode loop | decimate | emit tokens | write | import |
+|---|---:|---:|---:|---:|---:|---:|
+| PNG | 28.266 | 24.793 | 18.655 | 3.868 | 2.059 | 1.356 |
+| JPEG | 28.493 | 24.995 | 18.877 | 4.079 | 2.062 | 1.363 |
+
+The leading decimate/I4 sites were already covered by exact rejected
+experiments, so the 3.9--4.1 ms token boundary was the largest distinct
+target. Whole-process `gprofng` attributed about 30% exclusively to
+coefficient recording, but a zero-loss 24K-cycle `perf` profile across all
+eight emit workers put `VP8PutTokenPage` first at 35.41%, versus 12.46% for
+`VP8RecordCoeffTokens`.
+
+Line-resolved annotation placed the page cycles in the serial probability,
+split, bit/range, and normalization chain. A no-source-change gcov build
+counted 292,171,248 page tokens: 82.20% dynamic probabilities, 54.89% one
+bits, and 53.65% normalization. Buffer growth occurred only 512 times among
+24,068,432 ordinary non-0xff flushes. The distributions ruled out another
+branchy common-case specialization.
+
+One coarse candidate generated a thread-safe 65,536-entry table indexed by
+normalized range, probability, and bit. Each 32-bit entry packed the exact
+value increment, normalization shift, and next range. It replaced the split
+multiply, bit/range decision, and two normalization loads with one lookup,
+shrinking the function from 764 to 708 bytes at a 256-KiB BSS cost.
+
+Two order-balanced native processes per format produced 24 exact timing rows:
+
+| Format | Parent | Transition table | Gain | Hash / bytes |
+|---|---:|---:|---:|---|
+| PNG lossy | 35.380 ms/image | 35.117 ms/image | 0.263 ms/image | `455f70a1e139f043` / 6,441,688 |
+| JPEG lossy | 34.541 ms/image | 35.848 ms/image | -1.308 ms/image | `0c4b078d5c4d3173` / 6,400,792 |
+
+The dense random lookup was noise on PNG and materially slower on JPEG, so it
+was removed before broad validation. The focused bit-writer test passed on
+the candidate; the restored native tree passed all seven focused CTests.
+Fresh 1/2/4/8-partition controls also confirmed that the retained eight
+partitions remain fastest, especially for JPEG.
+
+Raw retained profiles, coverage, compressed `gprofng` and `perf` captures,
+exact patch, disassemblies, tests, and timing rows use
+`libwebp-next-loop-*` and `libwebp-token-transition-*`. This is Ryzen 9
+3900X / RTX 2080 SUPER evidence only. Ampere+ behavior, the 784/12,544
+pre-Ampere and 64/4,000 Ampere+ thresholds, frozen corpus, and generator are
+unchanged.

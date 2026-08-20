@@ -1,0 +1,88 @@
+Functions sorted by metric: Exclusive Total CPU Time
+
+Excl. Total   Incl. Total    Name
+CPU           CPU
+ sec.      %   sec.      %
+6.765 100.00  6.765 100.00   <Total>
+2.402  35.50  2.412  35.65   decode_mcu
+2.001  29.59  2.091  30.92   VP8RecordCoeffTokens
+0.650   9.62  0.650   9.62   VP8PutTokenPage
+0.520   7.69  0.520   7.69   <static>@0x10d265 (<webp_cuda_batch_benchmark>)
+0.230   3.40  0.370   5.47   <static>@0x396586 (<libcuda.so.595.84>)
+0.220   3.25  0.220   3.25   PackRGB_C
+0.130   1.92  2.962  43.79   decompress_onepass
+0.090   1.33  0.100   1.48   <static>@0xaab1b (<libc.so.6>)
+0.080   1.18  2.222  32.84   RecordTokensFromResults
+0.050   0.74  0.050   0.74   <static>@0x1881e1 (<libc.so.6>)
+0.050   0.74  0.050   0.74   SetResidualCoeffs_SSE2
+0.040   0.59  0.340   5.03   <static>@0x223510 (<libcuda.so.595.84>)
+0.040   0.59  0.630   9.32   main
+0.030   0.44  0.220   3.25   <static>@0x2067e0 (<libcuda.so.595.84>)
+0.030   0.44  0.030   0.44   <static>@0x7fffcebf96f0 ([vdso])
+0.030   0.44  0.030   0.44   jsimd_ycc_rgb_convert
+0.020   0.30  0.100   1.48   <static>@0x245ece (<libcuda.so.595.84>)
+0.020   0.30  0.020   0.30   HasAlpha32b_SSE2
+0.020   0.30  0.020   0.30   pthread_create
+0.010   0.15  0.010   0.15   <static>@0x11fbb2 (<webp_cuda_batch_benchmark>)
+0.010   0.15  0.010   0.15   <static>@0x98cd5 (<libc.so.6>)
+0.010   0.15  0.010   0.15   Flush
+0.010   0.15  0.020   0.30   VP8PutBit
+0.010   0.15  0.010   0.15   __vdso_clock_gettime
+0.010   0.15  0.050   0.74   clock_gettime
+0.010   0.15  0.010   0.15   ioctl
+0.010   0.15  0.010   0.15   jpeg_fill_bit_buffer
+0.010   0.15  0.010   0.15   jsimd_idct_islow
+0.010   0.15  0.010   0.15   madvise
+0.010   0.15  3.012  44.53   process_data_simple_main
+0.      0.    0.350   5.18   (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+0.      0.    0.050   0.74   (anonymous namespace)::CUDARGBToYUV(void*, WebPAcceleratorRGBToYUVRequest const*)
+0.      0.    0.050   0.74   (anonymous namespace)::CUDARGBToYUVLocked(void*, WebPAcceleratorRGBToYUVRequest const*)
+0.      0.    0.010   0.15   (anonymous namespace)::Initialize((anonymous namespace)::CudaState*)
+0.      0.    0.350   5.18   <static>@0x1d0f96 (<libcuda.so.595.84>)
+0.      0.    0.370   5.47   <static>@0x21b7b (<libcudart.so.12.0.146>)
+0.      0.    0.630   9.32   <static>@0x2a145 (<libc.so.6>)
+0.      0.    0.020   0.30   <static>@0x317126 (<libcuda.so.595.84>)
+0.      0.    0.360   5.33   <static>@0x36ab16 (<libcuda.so.595.84>)
+0.      0.    0.020   0.30   <static>@0x4c9dc (<libgp-collector.so>)
+0.      0.    6.014  88.91   <static>@0x5115c (<libgp-collector.so>)
+0.      0.    0.010   0.15   <static>@0x723d8 (<libcudart.so.12.0.146>)
+0.      0.    6.014  88.91   <static>@0x9c526 (<libc.so.6>)
+0.      0.    0.010   0.15   <static>@0xa1eb6 (<libc.so.6>)
+0.      0.    0.370   5.47   <static>@0xf360 (<libcudart.so.12.0.146>)
+0.      0.    6.004  88.76   Execute
+0.      0.    0.070   1.04   ImportYUVAFromRGBA
+0.      0.    3.242  47.93   PredecodeInput
+0.      0.    3.242  47.93   ReadJPEG
+0.      0.    0.020   0.30   Reset
+0.      0.    6.014  88.91   ThreadLoop
+0.      0.    0.010   0.15   VP8BitWriterWipeOut
+0.      0.    0.020   0.30   VP8CodeIntraModes
+0.      0.    0.650   9.62   VP8EmitTokens
+0.      0.    0.480   7.10   VP8EncTokenLoop
+0.      0.    0.030   0.44   VP8EncWrite
+0.      0.    0.350   5.18   WebPAccelerateLossyDecimate
+0.      0.    0.050   0.74   WebPAccelerateRGBToYUV
+0.      0.    0.010   0.15   WebPCUDAIsPreAmpereDevice
+0.      0.    0.350   5.18   WebPCUDALossyDecimate
+0.      0.    0.580   8.58   WebPEncode
+0.      0.    0.070   1.04   WebPPictureARGBToYUVADithered
+0.      0.    0.220   3.25   WebPPictureImportRGB
+0.      0.    0.630   9.32   __libc_start_main
+0.      0.    0.010   0.15   cuDevicePrimaryCtxRetain
+0.      0.    0.010   0.15   cuInit
+0.      0.    0.340   5.03   cuMemcpyDtoHAsync_v2
+0.      0.    0.010   0.15   cuMemcpyHtoDAsync_v2
+0.      0.    0.010   0.15   cuStreamSynchronize
+0.      0.    0.010   0.15   cudaGetDeviceCount
+0.      0.    0.350   5.18   cudaMemcpyAsync
+0.      0.    0.010   0.15   cudaSetDevice
+0.      0.    0.010   0.15   cudaStreamSynchronize
+0.      0.    0.010   0.15   free
+0.      0.    0.010   0.15   getenv
+0.      0.    0.010   0.15   jinit_memory_mgr
+0.      0.    0.010   0.15   jpeg_CreateDecompress
+0.      0.    3.012  44.53   jpeg_read_scanlines
+0.      0.    0.090   1.33   malloc
+0.      0.    0.010   0.15   pthread_cond_wait
+
+Print limit set to 120

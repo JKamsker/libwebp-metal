@@ -1,0 +1,316 @@
+ Percent |	Source code & Disassembly of webp_cuda_batch_benchmark for cycles:u (7738 samples, percent: local period)
+-------------------------------------------------------------------------------------------------------------------------
+         :
+         :
+         :
+         : 3     Disassembly of section .text:
+         :
+         : 5     000000000009d430 <VP8PutTokenPage>:
+         : 6     return bit;
+         : 7     }
+         :
+         : 9     void VP8PutTokenPage(VP8BitWriter* const bw, const uint16_t* const tokens,
+         : 10    int num_tokens, int first_token,
+         : 11    const uint8_t* const probas) {
+    0.00 :   9d430:  endbr64
+    0.00 :   9d434:  push   %r15
+    0.00 :   9d436:  mov    %rdi,%r10
+    0.00 :   9d439:  mov    %edx,%eax
+    0.00 :   9d43b:  mov    %ecx,%r9d
+    0.00 :   9d43e:  push   %r14
+    0.00 :   9d440:  push   %r13
+    0.00 :   9d442:  push   %r12
+    0.00 :   9d444:  push   %rbp
+    0.00 :   9d445:  push   %rbx
+    0.00 :   9d446:  sub    $0x38,%rsp
+         : 23    int range = bw->range;
+    0.00 :   9d44a:  movdqu (%rdi),%xmm0
+         : 25    int value = bw->value;
+         : 26    int nb_bits = bw->nb_bits;
+         : 27    int run = bw->run;
+         : 28    uint8_t* buf = bw->buf;
+    0.06 :   9d44e:  mov    0x10(%rdi),%rdi
+         : 30    size_t pos = bw->pos;
+    0.00 :   9d452:  mov    0x18(%r10),%r15
+         : 32    size_t max_pos = bw->max_pos;
+    0.00 :   9d456:  mov    0x20(%r10),%r11
+    0.00 :   9d45a:  pshufd $0xff,%xmm0,%xmm1
+         : 35    uint8_t* buf = bw->buf;
+    0.00 :   9d45f:  mov    %rdi,(%rsp)
+    0.00 :   9d463:  movd   %xmm1,%r13d
+    0.00 :   9d468:  movdqa %xmm0,%xmm1
+    0.00 :   9d46c:  punpckhdq %xmm0,%xmm1
+    0.00 :   9d470:  movd   %xmm1,%edx
+    0.00 :   9d474:  pshufd $0x55,%xmm0,%xmm1
+         : 42    assert(first_token >= 0);
+         : 43    assert(first_token <= num_tokens);
+         : 44    while (num_tokens-- > first_token) {
+    0.00 :   9d479:  cmp    %ecx,%eax
+    0.00 :   9d47b:  jle    9d621 <VP8PutTokenPage+0x1f1>
+    0.00 :   9d481:  lea    -0x1(%rax),%ecx
+    0.00 :   9d484:  movd   %xmm1,%r12d
+    0.00 :   9d489:  movd   %xmm0,%ebx
+    0.00 :   9d48d:  sub    %r9d,%eax
+    0.00 :   9d490:  movslq %ecx,%rcx
+    0.00 :   9d493:  sub    $0x1,%eax
+    0.00 :   9d496:  add    %rcx,%rcx
+    0.00 :   9d499:  add    %rax,%rax
+    0.00 :   9d49c:  lea    -0x2(%rsi,%rcx,1),%r14
+    0.00 :   9d4a1:  lea    (%rsi,%rcx,1),%rbp
+    0.00 :   9d4a5:  sub    %rax,%r14
+         : 58    } else {
+         : 59    range = split;
+         : 60    }
+         : 61    if (range < 127) {
+         : 62    const int shift = kNorm[range];
+         : 63    range = kNewRange[range];
+    0.00 :   9d4a8:  mov    %r10,%rax
+    0.00 :   9d4ab:  mov    %r15,%r10
+    0.00 :   9d4ae:  mov    %r14,%r15
+    0.00 :   9d4b1:  mov    %rax,%r14
+    0.00 :   9d4b4:  nopl   0x0(%rax)
+         : 69    const uint16_t token = tokens[num_tokens];
+    0.00 :   9d4b8:  movzwl 0x0(%rbp),%eax
+         : 71    const int bit = (token >> 15) & 1;
+    4.46 :   9d4bc:  mov    %eax,%ecx
+    0.00 :   9d4be:  shr    $0xf,%cx
+         : 74    : probas[token & 0x3fffu];
+    1.39 :   9d4c2:  test   $0x40,%ah
+    0.28 :   9d4c5:  je     9d650 <VP8PutTokenPage+0x220>
+    0.00 :   9d4cb:  movzbl %al,%eax
+         : 78    const int split = (range * prob) >> 8;
+    2.79 :   9d4ce:  imul   %ebx,%eax
+    3.75 :   9d4d1:  sar    $0x8,%eax
+         : 81    if (bit) {
+    5.22 :   9d4d4:  test   %cx,%cx
+    0.00 :   9d4d7:  je     9d640 <VP8PutTokenPage+0x210>
+         : 84    value += split + 1;
+    0.00 :   9d4dd:  add    $0x1,%eax
+   10.05 :   9d4e0:  add    %eax,%r12d
+         : 87    range -= split + 1;
+    2.62 :   9d4e3:  sub    %eax,%ebx
+         : 89    if (range < 127) {
+    1.36 :   9d4e5:  cmp    $0x7e,%ebx
+    9.59 :   9d4e8:  jg     9d5f0 <VP8PutTokenPage+0x1c0>
+         : 92    const int shift = kNorm[range];
+    0.01 :   9d4ee:  movslq %ebx,%rbx
+    5.20 :   9d4f1:  lea    0x90668(%rip),%rax        # 12db60 <kNorm>
+    1.44 :   9d4f8:  movzbl (%rax,%rbx,1),%ecx
+         : 96    range = kNewRange[range];
+   14.10 :   9d4fc:  lea    0x905dd(%rip),%rax        # 12dae0 <kNewRange>
+    0.06 :   9d503:  movzbl (%rax,%rbx,1),%ebx
+         : 99    value <<= shift;
+         : 100   nb_bits += shift;
+    3.24 :   9d507:  add    %ecx,%r13d
+         : 102   value <<= shift;
+    0.00 :   9d50a:  shl    %cl,%r12d
+         : 104   if (nb_bits > 0) {
+    0.01 :   9d50d:  test   %r13d,%r13d
+    0.76 :   9d510:  jle    9d5f0 <VP8PutTokenPage+0x1c0>
+         : 107   const int s = 8 + nb_bits;
+    0.00 :   9d516:  lea    0x8(%r13),%ecx
+         : 109   const int32_t bits = value >> s;
+    4.35 :   9d51a:  mov    %r12d,%r9d
+    0.00 :   9d51d:  sar    %cl,%r9d
+         : 112   const size_t pending = (size_t)run + 1;
+         : 113   assert(nb_bits >= 0);
+         : 114   if ((bits & 0xff) == 0xff) {
+    0.31 :   9d520:  movzbl %r9b,%eax
+    0.68 :   9d524:  cmp    $0xff,%eax
+    0.45 :   9d529:  je     9d660 <VP8PutTokenPage+0x230>
+         : 118   value -= bits << s;
+         : 119   nb_bits -= 8;
+         : 120   ++run;
+         : 121   } else if (pos <= max_pos && pending <= max_pos - pos) {
+    0.00 :   9d52f:  cmp    %r10,%r11
+    0.12 :   9d532:  jb     9d590 <VP8PutTokenPage+0x160>
+    0.02 :   9d534:  mov    %r11,%rsi
+         : 125   const size_t pending = (size_t)run + 1;
+    0.00 :   9d537:  movslq %edx,%rax
+         : 127   } else if (pos <= max_pos && pending <= max_pos - pos) {
+    0.00 :   9d53a:  sub    %r10,%rsi
+         : 129   const size_t pending = (size_t)run + 1;
+    0.00 :   9d53d:  add    $0x1,%rax
+         : 131   } else if (pos <= max_pos && pending <= max_pos - pos) {
+    0.02 :   9d541:  cmp    %rax,%rsi
+    0.31 :   9d544:  jb     9d590 <VP8PutTokenPage+0x160>
+         : 134   value -= bits << s;
+    0.00 :   9d546:  mov    %r9d,%eax
+         : 136   nb_bits -= 8;
+    0.37 :   9d549:  sub    $0x8,%r13d
+         : 138   value -= bits << s;
+    0.27 :   9d54d:  shl    %cl,%eax
+    0.00 :   9d54f:  sub    %eax,%r12d
+         : 141   if ((bits & 0x100) && pos > 0) buf[pos - 1]++;
+    0.04 :   9d552:  test   $0x100,%r9d
+    0.08 :   9d559:  je     9d680 <VP8PutTokenPage+0x250>
+    0.00 :   9d55f:  test   %r10,%r10
+    0.71 :   9d562:  je     9d6a8 <VP8PutTokenPage+0x278>
+    0.04 :   9d568:  mov    (%rsp),%rax
+    0.13 :   9d56c:  addb   $0x1,-0x1(%rax,%r10,1)
+         : 148   if (run > 0) {
+    0.33 :   9d572:  test   %edx,%edx
+    0.00 :   9d574:  jg     9d728 <VP8PutTokenPage+0x2f8>
+         : 151   const int fill = (bits & 0x100) ? 0x00 : 0xff;
+         : 152   for (; run > 0; --run) buf[pos++] = fill;
+         : 153   }
+         : 154   buf[pos++] = bits & 0xff;
+    0.00 :   9d57a:  add    %r10,%rax
+    0.00 :   9d57d:  add    $0x1,%r10
+    0.00 :   9d581:  jmp    9d68f <VP8PutTokenPage+0x25f>
+    0.00 :   9d586:  cs nopw 0x0(%rax,%rax,1)
+         : 159   } else {
+         : 160   // Preserve the original allocation, overflow, and error path. The
+         : 161   // common case above has enough room and avoids round-tripping the
+         : 162   // page-local writer state through the structure for every byte.
+         : 163   bw->range = range;
+    0.00 :   9d590:  movd   %edx,%xmm1
+    0.00 :   9d594:  movd   %r13d,%xmm2
+    0.00 :   9d599:  movd   %ebx,%xmm0
+         : 167   bw->value = value;
+         : 168   bw->nb_bits = nb_bits;
+         : 169   bw->run = run;
+         : 170   bw->pos = pos;
+         : 171   Flush(bw);
+    0.00 :   9d59d:  mov    %r14,%rdi
+         : 173   bw->range = range;
+    0.00 :   9d5a0:  movd   %r12d,%xmm3
+         : 175   bw->pos = pos;
+    0.00 :   9d5a5:  mov    %r10,0x18(%r14)
+         : 177   bw->range = range;
+    0.00 :   9d5a9:  punpckldq %xmm2,%xmm1
+    0.00 :   9d5ad:  punpckldq %xmm3,%xmm0
+    0.00 :   9d5b1:  mov    %r8,0x8(%rsp)
+    0.00 :   9d5b6:  punpcklqdq %xmm1,%xmm0
+    0.00 :   9d5ba:  movups %xmm0,(%r14)
+         : 183   Flush(bw);
+    0.00 :   9d5be:  call   9d230 <Flush>
+         : 185   range = bw->range;
+         : 186   value = bw->value;
+         : 187   nb_bits = bw->nb_bits;
+         : 188   run = bw->run;
+         : 189   buf = bw->buf;
+    0.00 :   9d5c3:  mov    0x10(%r14),%rax
+         : 191   range = bw->range;
+    0.00 :   9d5c7:  mov    (%r14),%ebx
+         : 193   value = bw->value;
+    0.00 :   9d5ca:  mov    0x4(%r14),%r12d
+         : 195   nb_bits = bw->nb_bits;
+    0.00 :   9d5ce:  mov    0xc(%r14),%r13d
+         : 197   run = bw->run;
+    0.00 :   9d5d2:  mov    0x8(%r14),%edx
+         : 199   pos = bw->pos;
+    0.00 :   9d5d6:  mov    0x18(%r14),%r10
+         : 201   buf = bw->buf;
+    0.00 :   9d5da:  mov    %rax,(%rsp)
+         : 203   max_pos = bw->max_pos;
+    0.00 :   9d5de:  mov    0x20(%r14),%r11
+    0.00 :   9d5e2:  mov    0x8(%rsp),%r8
+    0.00 :   9d5e7:  nopw   0x0(%rax,%rax,1)
+         : 207   while (num_tokens-- > first_token) {
+    0.05 :   9d5f0:  sub    $0x2,%rbp
+    3.95 :   9d5f4:  cmp    %rbp,%r15
+    0.78 :   9d5f7:  jne    9d4b8 <VP8PutTokenPage+0x88>
+    0.00 :   9d5fd:  movd   %edx,%xmm1
+    0.00 :   9d601:  movd   %r13d,%xmm4
+    0.00 :   9d606:  movd   %ebx,%xmm0
+    0.00 :   9d60a:  mov    %r10,%r15
+    0.00 :   9d60d:  movd   %r12d,%xmm5
+    0.00 :   9d612:  punpckldq %xmm4,%xmm1
+    0.00 :   9d616:  mov    %r14,%r10
+    0.00 :   9d619:  punpckldq %xmm5,%xmm0
+    0.00 :   9d61d:  punpcklqdq %xmm1,%xmm0
+         : 220   }
+         : 221   bw->range = range;
+         : 222   bw->value = value;
+         : 223   bw->nb_bits = nb_bits;
+         : 224   bw->run = run;
+         : 225   bw->pos = pos;
+    0.02 :   9d621:  mov    %r15,0x18(%r10)
+         : 227   bw->range = range;
+    0.00 :   9d625:  movups %xmm0,(%r10)
+         : 229   }
+    0.00 :   9d629:  add    $0x38,%rsp
+    0.00 :   9d62d:  pop    %rbx
+    0.00 :   9d62e:  pop    %rbp
+    0.00 :   9d62f:  pop    %r12
+    0.00 :   9d631:  pop    %r13
+    0.05 :   9d633:  pop    %r14
+    0.00 :   9d635:  pop    %r15
+    0.00 :   9d637:  ret
+    0.00 :   9d638:  nopl   0x0(%rax,%rax,1)
+         : 239   range = split;
+    0.00 :   9d640:  mov    %eax,%ebx
+    5.38 :   9d642:  jmp    9d4e5 <VP8PutTokenPage+0xb5>
+    0.00 :   9d647:  nopw   0x0(%rax,%rax,1)
+         : 243   : probas[token & 0x3fffu];
+    0.00 :   9d650:  and    $0x3fff,%eax
+    2.28 :   9d655:  movzbl (%r8,%rax,1),%eax
+   10.08 :   9d65a:  jmp    9d4ce <VP8PutTokenPage+0x9e>
+    0.00 :   9d65f:  nop
+         : 248   value -= bits << s;
+    0.00 :   9d660:  shl    %cl,%r9d
+         : 250   while (num_tokens-- > first_token) {
+    0.00 :   9d663:  sub    $0x2,%rbp
+         : 252   nb_bits -= 8;
+    0.00 :   9d667:  sub    $0x8,%r13d
+         : 254   ++run;
+    0.00 :   9d66b:  add    $0x1,%edx
+         : 256   value -= bits << s;
+    0.00 :   9d66e:  sub    %r9d,%r12d
+         : 258   while (num_tokens-- > first_token) {
+    0.00 :   9d671:  cmp    %rbp,%r15
+    0.00 :   9d674:  jne    9d4b8 <VP8PutTokenPage+0x88>
+    0.00 :   9d67a:  jmp    9d5fd <VP8PutTokenPage+0x1cd>
+    0.00 :   9d67c:  nopl   0x0(%rax)
+         : 263   if (run > 0) {
+    0.00 :   9d680:  test   %edx,%edx
+    0.42 :   9d682:  jg     9d6c0 <VP8PutTokenPage+0x290>
+         : 266   buf[pos++] = bits & 0xff;
+    0.14 :   9d684:  mov    (%rsp),%rax
+    0.51 :   9d688:  add    %r10,%rax
+    0.00 :   9d68b:  add    $0x1,%r10
+         : 270   while (num_tokens-- > first_token) {
+    0.00 :   9d68f:  sub    $0x2,%rbp
+         : 272   buf[pos++] = bits & 0xff;
+    0.02 :   9d693:  mov    %r9b,(%rax)
+         : 274   while (num_tokens-- > first_token) {
+    1.64 :   9d696:  cmp    %rbp,%r15
+    0.00 :   9d699:  jne    9d4b8 <VP8PutTokenPage+0x88>
+    0.00 :   9d69f:  jmp    9d5fd <VP8PutTokenPage+0x1cd>
+    0.00 :   9d6a4:  nopl   0x0(%rax)
+         : 279   if (run > 0) {
+    0.00 :   9d6a8:  test   %edx,%edx
+    0.00 :   9d6aa:  jg     9d728 <VP8PutTokenPage+0x2f8>
+    0.00 :   9d6ac:  mov    (%rsp),%rax
+    0.00 :   9d6b0:  mov    $0x1,%r10d
+    0.00 :   9d6b6:  jmp    9d68f <VP8PutTokenPage+0x25f>
+    0.00 :   9d6b8:  nopl   0x0(%rax,%rax,1)
+    0.00 :   9d6c0:  mov    $0xff,%esi
+         : 287   for (; run > 0; --run) buf[pos++] = fill;
+    0.01 :   9d6c5:  mov    (%rsp),%rax
+    0.00 :   9d6c9:  lea    -0x1(%rdx),%ecx
+    0.00 :   9d6cc:  mov    %r8,0x28(%rsp)
+    0.00 :   9d6d1:  lea    0x1(%rcx),%rdx
+    0.00 :   9d6d5:  mov    %r11,0x20(%rsp)
+    0.00 :   9d6da:  lea    (%rax,%r10,1),%rdi
+    0.00 :   9d6de:  mov    %r9d,0x1c(%rsp)
+    0.00 :   9d6e3:  mov    %rcx,0x10(%rsp)
+    0.00 :   9d6e8:  mov    %r10,0x8(%rsp)
+    0.00 :   9d6ed:  call   4130 <memset@plt>
+    0.02 :   9d6f2:  mov    0x8(%rsp),%r10
+         : 299   buf[pos++] = bits & 0xff;
+    0.00 :   9d6f7:  mov    (%rsp),%rax
+    0.00 :   9d6fb:  xor    %edx,%edx
+    0.00 :   9d6fd:  mov    0x10(%rsp),%rcx
+    0.00 :   9d702:  mov    0x28(%rsp),%r8
+    0.00 :   9d707:  mov    0x20(%rsp),%r11
+    0.00 :   9d70c:  mov    0x1c(%rsp),%r9d
+    0.00 :   9d711:  lea    0x1(%r10,%rcx,1),%r10
+    0.00 :   9d716:  add    %r10,%rax
+    0.00 :   9d719:  add    $0x1,%r10
+    0.00 :   9d71d:  jmp    9d68f <VP8PutTokenPage+0x25f>
+    0.00 :   9d722:  nopw   0x0(%rax,%rax,1)
+         : 311   if (run > 0) {
+    0.00 :   9d728:  xor    %esi,%esi
+    0.02 :   9d72a:  jmp    9d6c5 <VP8PutTokenPage+0x295>
