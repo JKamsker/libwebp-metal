@@ -1,0 +1,167 @@
+{
+  "acceptance_freeze": {
+    "attribution_absolute_mean_effect_percent_min": 0.2,
+    "attribution_absolute_whole_delta_fraction_min": 0.2,
+    "b_to_l_absolute_mean_percent_max": 0.75,
+    "b_to_l_ci_endpoint_absolute_percent_max": 1.5,
+    "b_to_l_ci_must_include_zero": true,
+    "b_to_l_paired_row_absolute_percent_max": 3.0,
+    "direction_consistent_repetitions_min": 3,
+    "direction_consistent_repetitions_total": 4,
+    "inconclusive_outcome_required": true,
+    "primary_reproduction_cell": "graphic-m4",
+    "production_paired_regression_percent_max": 0.5,
+    "repeatability_max_ratio": 2.0,
+    "required_stage_share_range_exclusive_max": 0.1,
+    "resolved_effect_floor_percent": 0.1,
+    "top_level_multiplicity": "Bonferroni family-wise 95% over 9 buckets"
+  },
+  "alignment_freeze": {
+    "body_bytes": 3600,
+    "boundary_bytes": 16384,
+    "dp_to_push_displacement_bytes": 32768,
+    "inter_entry_padding_bytes": 46844,
+    "linker_map_extract_sha256": "e7da85c45193832577fea6f698543317e09bc961c150a0b4735fa4c30058de0a",
+    "local_reference_runner_bytes": 642880,
+    "section_size_bytes": 50444
+  },
+  "authority_before_rehearsal": "NONE",
+  "base_commit": "5de7b3848adfdb5d1058a061979535f05f976e5b",
+  "checks": {
+    "alignment_modulo": "PASS_ALL_FOUR_ZERO_MOD_16384",
+    "b_l_push_and_dp_canonical_instruction_identity": "PASS",
+    "clock_overhead_distribution": "PASS_4096_READS_P50_P95_P99_MAX",
+    "cmake_integration": "PASS",
+    "conditional_authority_state_machine": "PASS_ZERO_WORKLOAD_TO_ONE_PIPELINE_ONLY",
+    "correctness_fallback_determinism_immutability": "PASS",
+    "duplex_stdout_stderr_backpressure": "PASS",
+    "dynamic_gate_a_16_correctness_before_timing": "PASS_STRUCTURAL_AND_FIXTURES",
+    "dynamic_gate_b_timer_accounting_before_timing": "PASS_STRUCTURAL_AND_FIXTURES",
+    "dynamic_gate_c_direct_child_online_ownership": "PASS_SYNTHETIC_FAILURE_MATRIX",
+    "early_return_fault_skip_repeat_schema": "PASS",
+    "exactly_one_selected_dp": "PASS",
+    "four_private_symbols_distinct": "PASS_NO_DEDUPLICATION",
+    "global_experiment_mutual_exclusion": "PASS_45_GUARDS",
+    "h_candidate_absent": "PASS",
+    "integrated_exact_child_cleanup_absence": "PASS",
+    "ledger_reconciliation_and_residual": "PASS_ZERO_RESIDUAL_CLOCK_COUNT_FORMULA",
+    "local_correctness_encodes": 2,
+    "mach_o_section": "PASS___TEXT___br_null_v1_EXECUTABLE_PURE_INSTRUCTIONS",
+    "malformed_duplicate_order_corruption_truncation_negatives": "PASS_REJECTED",
+    "nested_timer_non_additivity": "PASS_EXPLICIT",
+    "observe_only_process_ownership": "PASS",
+    "ordinary_build_default_omission": "PASS",
+    "payload_manifest_generator_fixture_agreement": "PASS",
+    "public_api_abi_equal": "PASS",
+    "python_syntax_and_json": "PASS",
+    "recorder_build_distinct": "PASS",
+    "request_declaration_fixed_chunks_and_ordered_acks": "PASS",
+    "runtime_truth_table": "PASS_ABSENT_B_EXACT_B_L_OTHER_INVALID_H_INVALID",
+    "sanitizer_boundary_encodes": 24,
+    "sanitizer_configurations": 2,
+    "selector_once_before_mutation": "PASS",
+    "single_ssh_ready_before_request": "PASS",
+    "source_admission_compact_and_full_map_equivalence": "PASS_66_PATHS",
+    "stale_predecessor_identity_negatives": "PASS_REJECTED",
+    "timed_recorder_free": "PASS",
+    "timeout_boundary_fixtures": "PASS",
+    "toolchain_manifest_actual_fixture_agreement": "PASS_8_EXECUTABLES_4_METADATA",
+    "top_level_partition_non_overlapping": "PASS",
+    "unix_make_integration": "PASS",
+    "v1_v2_v4_provenance_and_raw_hash_audit": "PASS",
+    "v2_request_write_state_and_exact_shape_audited": "PASS_NO_ESTABLISHED_CONTACT_INFERRED",
+    "zero_accepted_samples_on_admission_failure": "PASS"
+  },
+  "commands": [
+    "python3 -m py_compile scripts/*aligned_null_stage_attribution_v1*.py",
+    "PYTHONPATH=scripts python3 scripts/test_backref_cost_aligned_null_stage_attribution_v1_payload_identity.py",
+    "PYTHONPATH=scripts python3 scripts/test_backref_cost_aligned_null_stage_attribution_v1_toolchain_identity.py",
+    "PYTHONPATH=scripts python3 scripts/test_backref_cost_aligned_null_stage_attribution_v1_process_ownership.py",
+    "PYTHONPATH=scripts python3 scripts/test_backref_cost_aligned_null_stage_attribution_v1_archive.py",
+    "PYTHONPATH=scripts python3 scripts/test_backref_cost_aligned_null_stage_attribution_v1_streaming.py",
+    "PYTHONPATH=scripts python3 scripts/test_backref_cost_aligned_null_stage_attribution_v1_admission.py",
+    "PYTHONPATH=scripts python3 scripts/test_backref_cost_aligned_null_stage_attribution_v1_experiment.py",
+    "PYTHONPATH=scripts python3 scripts/test_backref_cost_aligned_null_stage_attribution_v1_protocol.py",
+    "PYTHONPATH=scripts python3 scripts/test_experiment_guards.py"
+  ],
+  "design_decision": "B_L_ONLY_FOUR_BODY_16K_ALIGNMENT_WITH_COMPLETE_STAGE_LEDGER",
+  "frozen_inventory": {
+    "bootstrap_resamples": 100000,
+    "bootstrap_seed": "0x4e554c31",
+    "cases": [
+      "photo-large",
+      "graphic-large"
+    ],
+    "correctness_encodes": 16,
+    "direct_runner_children": 59,
+    "methods": [
+      4,
+      6
+    ],
+    "profile_processes": 32,
+    "profile_repetitions": 4,
+    "retained_encodes_per_profile": 4,
+    "retained_timing_rows": 128,
+    "runner_rows": 160,
+    "stage_rows": 160,
+    "timer_accounting_children": 2,
+    "timer_validation_clock_children": 1,
+    "untimed_work_rows": 8,
+    "variant_order": [
+      [
+        "B",
+        "L"
+      ],
+      [
+        "L",
+        "B"
+      ],
+      [
+        "B",
+        "L"
+      ],
+      [
+        "L",
+        "B"
+      ]
+    ],
+    "variants": [
+      "B",
+      "L"
+    ],
+    "warmups": 32,
+    "warmups_per_profile": 1
+  },
+  "identity_freeze": {
+    "payload_bytes": 2097152,
+    "payload_sha256": "bb4dcf19e6e6bd255aed0e16428e4cbc944b99b4ce78df08968cbe3ab5684386",
+    "required_executables": 8,
+    "required_metadata": 4,
+    "sdk": "macosx26.2",
+    "toolchain_identity_canonical_sha256": "b8f40a6d750d17127cedc304c9cf0c957b69a8606f3f62dc6d9606cf97597979",
+    "xcode": "26.3",
+    "xcrun_required": false
+  },
+  "local_synchronous_rehearsal": "NOT_YET_ATTEMPTED_PHASE_1A",
+  "next_action": "Commit Phase 1A, then perform exactly one synchronous untimed zero-workload zero-lease SSH rehearsal with no retry.",
+  "performance_samples": 0,
+  "phase": "1A",
+  "production_promotion": "NOT_EVALUATED",
+  "remote_contacts": 0,
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v1-phase1-local-validation-v1",
+  "status": "PASS",
+  "timed_execution_authorized": false,
+  "transport_freeze": {
+    "archive_cap_bytes": 786432,
+    "channel_stdout_margin_bytes": 2985,
+    "control_payload_cap_bytes": 8192,
+    "framed_response_cap_bytes_exclusive": 1048576,
+    "frozen_source_identity_paths": 66,
+    "request_cap_bytes": 33554432,
+    "request_chunk_bytes": 65536,
+    "request_chunk_count_worst_case": 482,
+    "request_margin_bytes": 2000645,
+    "request_worst_case_bytes": 31553787,
+    "response_chunk_bytes": 262144
+  }
+}
