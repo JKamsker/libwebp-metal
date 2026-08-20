@@ -1,0 +1,17 @@
+{"operation":"webp_transcode","sequence":0,"backend":"nvdec","decline_reason":"none","decoded_format":"nvdec-nv12","nvdec_decode_status":0,"nvdec_decode_status_result":801,"nvdec_error_concealed":false,"width":1600,"height":1200,"method":4,"quality":75,"parse_ns":181,"decode_ns":243010609,"device_handoff_ns":1036576,"webp_encode_ns":31848488,"metadata_ns":8756,"total_ns":274921584,"images_per_second":3.637401,"decoded_host_to_device_bytes":0,"decoded_device_to_host_bytes":0,"decoded_device_to_device_bytes":5760000,"verification_psnr_db":99.000000,"output_bytes":36630}
+Canvas size: 1600 x 1200
+Features present: ICC profile EXIF metadata XMP metadata
+Size of the ICC profile data: 18826
+Size of the EXIF metadata: 1496
+Size of the XMP metadata: 3279
+Canvas size: 1600 x 1200
+Features present: ICC profile EXIF metadata XMP metadata
+Size of the ICC profile data: 18826
+Size of the EXIF metadata: 1496
+Size of the XMP metadata: 3279
+c4263964c86d26bbacaa40d02578cf82bc673bcc5f0c9f4887e8ad9f4c8b1090  /tmp/issue16-metadata-all-input-icc.bin
+5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  /tmp/issue16-metadata-all-input-exif.bin
+f251be89fd442bd9d701360730aea163cc8e2076ff03528f59267dc2c4f8b60a  /tmp/issue16-metadata-all-input-xmp.bin
+c4263964c86d26bbacaa40d02578cf82bc673bcc5f0c9f4887e8ad9f4c8b1090  /tmp/issue16-metadata-all-output-icc.bin
+5aec868f669e384a22372a4e8a1a6cd7d44c64cd451f960ca69cc170d1e13acf  /tmp/issue16-metadata-all-output-exif.bin
+f251be89fd442bd9d701360730aea163cc8e2076ff03528f59267dc2c4f8b60a  /tmp/issue16-metadata-all-output-xmp.bin

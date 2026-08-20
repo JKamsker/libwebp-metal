@@ -1,0 +1,14 @@
+profile_base_commit=374ee38ab20af1f3f2f02c371aa90fc59cfab75d
+profile_base_subject=test: add portable lossy decimate conformance
+video_codec_sdk_commit=aa3544dcea2fe63122e4feb83bf805ea40e58dbe
+video_codec_sdk_subject=ReadMe file updates for nvEncDXGIOutputDuplicationSample (#3)
+NVIDIA GeForce RTX 2080 SUPER, GPU-c9b87f27-4e34-6c63-966c-7f9cbef56a05, 595.84, 7.5
+nvcc: NVIDIA (R) Cuda compiler driver
+Copyright (c) 2005-2023 NVIDIA Corporation
+Built on Fri_Jan__6_16:45:21_PST_2023
+Cuda compilation tools, release 12.0, V12.0.140
+Build cuda_12.0.r12.0/compiler.32267302_0
+cmake version 3.28.3
+Linux dev-build-server 6.8.0-137-generic #137-Ubuntu SMP PREEMPT_DYNAMIC Fri Jul 17 20:28:23 UTC 2026 x86_64 x86_64 x86_64 GNU/Linux
+native_cache_architecture=CMAKE_CUDA_ARCHITECTURES:UNINITIALIZED=native
+compute_sanitizer_note=2022.4.1 could not instrument this CUDA 12/driver 595 target (terminated before first instrumented API call)

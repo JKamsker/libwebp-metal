@@ -833,3 +833,54 @@ now records the state actually published to neighboring macroblocks; both the
 94/132 initial rows and 132/132 corrected rows are archived. This work makes
 no speed or cross-hardware claim and changes no Turing/Ampere+ threshold.
 Artifacts use the `libwebp-decimate-conformance-*` prefix.
+
+## Opt-in NVDEC WebP input path (issue #16, Turing validation)
+
+This is a private transcoding feature and device-input boundary, not another
+residual micro-specialization and not a default encoder change. Profiling at
+base `374ee38ab20af1f3f2f02c371aa90fc59cfab75d` preceded source changes. The
+native-sm_75 CPU-decode/CUDA-encode batch measured 39.677 ms/image; direct
+stage rows measured 34.923 ms in the encoder, including 11.713 ms analysis and
+19.612 ms decimation. The roughly 4.75 ms input-decode/preparation remainder
+identified a distinct WebP-input bottleneck.
+
+The opt-in tool now validates a single opaque `VP8 ` payload, decodes to an
+NVDEC NV12 surface, splits chroma on-device, and transactionally copies the
+planes into backend-owned device memory before unmapping. Both CUDA lossy
+analysis and decimation must consume the handoff or the complete image is
+discarded and CPU-decoded again. CPU-only, Metal, default CUDA, and
+CUDA-without-Video-Codec-SDK configurations retain no SDK dependency.
+
+Four order-balanced warm process pairs per content type (40 rows per backend,
+three warmups per process) measured:
+
+| 1600x1200 WebP | CPU decode | NVDEC | Gain | CPU / NVDEC images/s |
+|---|---:|---:|---:|---:|
+| Graphic | 27.627 ms | 24.689 ms | 2.938 ms | 36.20 / 40.50 |
+| Photo | 42.628 ms | 29.986 ms | 12.642 ms | 23.46 / 33.35 |
+| Texture | 152.499 ms | 95.013 ms | 57.486 ms | 6.56 / 10.52 |
+
+Eight fresh-process cold rows per backend exposed decoder/parser creation
+cost: graphic regressed 19.845 ms (171.063 to 190.908), photo regressed
+7.537 ms (182.777 to 190.315), and texture gained 46.968 ms (298.034 to
+251.066). The retained claim is therefore warm-session throughput, not cold
+single-image latency.
+
+All 189 CPU/NVDEC method/quality/geometry pairs matched SHA-256 and byte counts:
+36 used direct NVDEC, 126 tiny/odd cases retried after unsupported sequence
+geometry, and 27 method 0--2 cases retried after a required CUDA stage declined.
+The separate uploaded-YUV test matched 114/114 direct or transactional-retry
+bitstreams across methods 0--6, qualities 0/25/75/98/100, tiny, odd,
+realistic, and repeated encodes. Nine direct corpus verification rows were
+byte-identical (reported 99 dB), with zero decoded H2D/D2H bytes and exactly
+5,760,000 decoded D2D bytes per 1600x1200 image (two complete plane copies).
+Alpha-plane and 18,826-byte ICCP, 1,496-byte EXIF, and 3,279-byte XMP payload
+hashes matched; parser/decoder/map/allocation/handoff/device
+fallbacks matched the CPU reference; truncated input did not replace an
+existing output; and 32 transcodes across eight concurrent processes were
+exact.
+
+Raw artifacts use `libwebp-nvdec-*`. This host has no RTX 5070 Ti access, so
+issue #16's required Blackwell cold/warm measurements remain open and no
+cross-hardware claim is made. Turing/Ampere+ decimation thresholds and their
+architecture split are unchanged.

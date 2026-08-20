@@ -1,0 +1,1 @@
+PASS: 114 device-resident YUV handoffs/fallbacks are byte-exact across methods, qualities, tiny, odd, realistic, and repeated encodes

@@ -2074,6 +2074,60 @@ the 1.5 ms/image gate, so the source was restored. Raw artifacts use the
 `libwebp-i4-clip-minmax-*` prefix. This is Turing-only evidence; Ampere+
 behavior and thresholds remain unchanged.
 
+## NVDEC WebP input path (RTX 2080 SUPER)
+
+Issue #16 was profiled before implementation at base
+`374ee38ab20af1f3f2f02c371aa90fc59cfab75d`. The existing native-sm_75
+CPU-decode/CUDA-encode batch median was 39.677 ms/image. Encoder-stage rows
+measured 34.923 ms total, 11.713 ms lossy analysis, 22.882 ms encode loop, and
+19.612 ms lossy decimation, leaving input CPU decode/preparation as the next
+distinct transcoding boundary.
+
+The final warm protocol used four fresh order-balanced process pairs per
+content type. Each process discarded three warmups and retained ten rows, for
+40 rows per backend and content type:
+
+| 1600x1200 input | CPU total | NVDEC total | Gain | CPU images/s | NVDEC images/s |
+|---|---:|---:|---:|---:|---:|
+| Graphic | 27.627 ms | 24.689 ms | 2.938 ms | 36.20 | 40.50 |
+| Photo | 42.628 ms | 29.986 ms | 12.642 ms | 23.46 | 33.35 |
+| Texture | 152.499 ms | 95.013 ms | 57.486 ms | 6.56 | 10.52 |
+
+The final cold protocol used eight fresh order-balanced processes per backend:
+
+| 1600x1200 input | CPU cold | NVDEC cold | Gain | CPU images/s | NVDEC images/s |
+|---|---:|---:|---:|---:|---:|
+| Graphic | 171.063 ms | 190.908 ms | -19.845 ms | 5.85 | 5.24 |
+| Photo | 182.777 ms | 190.315 ms | -7.537 ms | 5.47 | 5.25 |
+| Texture | 298.034 ms | 251.066 ms | 46.968 ms | 3.36 | 3.98 |
+
+Cold NVDEC decoder/parser creation dominates the graphic and photo cases, so
+the performance result is explicitly limited to persistent warm sessions.
+There is no cold single-image win claim.
+
+Correctness exceeded the issue's decoded-quality criterion. The nine final
+direct verification rows produced byte-identical CPU/NVDEC output (99 dB),
+with graphic/photo/texture SHA-256 values `dedeac1e...358b`,
+`85b869d6...75b2`, and `13dcd63b...ee9` and byte counts 12,986, 239,436,
+and 1,167,310. Every direct row reported zero decoded H2D/D2H bytes and
+5,760,000 decoded D2D bytes, covering the decoder-to-analysis and
+analysis-to-decimation-arena plane copies. A 189-pair matrix spanning methods 0--6,
+qualities 25/75/98, 17x13, 257x255, and 1600x1200 inputs had zero hash or byte
+mismatches across 36 direct NVDEC and 153 transactional CPU retries.
+
+The device-YUV boundary separately passed 114 exact direct/fallback cases.
+Five focused CTests (policy, external YUV, existing concurrency, trellis, and
+near-lossless) passed; the pre-existing silent `cuda_histogram_test` failure
+was unchanged. Alpha, ICCP/EXIF/XMP, malformed output transaction, injected
+failures, device absence, repetition, and eight-process concurrency are
+archived under `libwebp-nvdec-*`. Compute Sanitizer 2022.4.1 could not
+instrument the newer CUDA/driver target and is recorded as unavailable, not
+as a pass.
+
+These results are RTX 2080 SUPER-only. Required RTX 5070 Ti measurements are
+not available, issue #16 remains open, and no Blackwell/cross-hardware result
+is claimed. The Turing/Ampere+ threshold split is unchanged.
+
 ## Portable lossy-decimate conformance (non-benchmark validation)
 
 The issue #19 harness passed 132/132 CPU-golden fixtures through CUDA WHOLE

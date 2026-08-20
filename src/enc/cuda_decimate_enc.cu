@@ -1882,6 +1882,19 @@ struct DecimateState {
   cudaEvent_t timing_transfer_end = nullptr;
   uint64_t last_execution_ns = 0;
   uint64_t last_result_transfer_ns = 0;
+  bool external_yuv_valid = false;
+  const uint8_t* external_device_y = nullptr;
+  const uint8_t* external_device_u = nullptr;
+  const uint8_t* external_device_v = nullptr;
+  size_t external_device_y_stride = 0;
+  size_t external_device_uv_stride = 0;
+  const uint8_t* external_host_y = nullptr;
+  const uint8_t* external_host_u = nullptr;
+  const uint8_t* external_host_v = nullptr;
+  int external_host_y_stride = 0;
+  int external_host_uv_stride = 0;
+  int external_width = 0;
+  int external_height = 0;
 };
 
 DecimateState g_decimate_state;
@@ -2612,6 +2625,21 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     const size_t off_preds = layout.off_preds;
     const size_t off_left_nz8 = layout.off_left_nz8;
     const size_t off_results = layout.off_results;
+    const size_t uv_width = ((size_t)request->width + 1u) / 2u;
+    const size_t uv_height = ((size_t)request->height + 1u) / 2u;
+    const bool use_external_yuv =
+        state->external_yuv_valid &&
+        state->external_host_y == request->y &&
+        state->external_host_u == request->u &&
+        state->external_host_v == request->v &&
+        state->external_host_y_stride == request->y_stride &&
+        state->external_host_uv_stride == request->uv_stride &&
+        state->external_width == request->width &&
+        state->external_height == request->height;
+    if (state->external_yuv_valid && !use_external_yuv) {
+      result = WEBP_ACCELERATOR_ERROR;
+      break;
+    }
     if (!DecimateEnsureArena(state, layout.arena_bytes) ||
         !DecimateEnsureHostStaging(state, layout.host_bytes)) {
       break;
@@ -2623,9 +2651,30 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
     error = cudaMemcpyAsync(arena + (offset), (ptr), (bytes),               \
                             cudaMemcpyHostToDevice, state->stream);         \
   }
-    UPLOAD(off_src_y, request->y, src_y_bytes);
-    UPLOAD(off_src_u, request->u, src_uv_bytes);
-    UPLOAD(off_src_v, request->v, src_uv_bytes);
+    if (use_external_yuv) {
+      error = cudaMemcpy2DAsync(
+          arena + off_src_y, (size_t)request->y_stride,
+          state->external_device_y, state->external_device_y_stride,
+          (size_t)request->width, (size_t)request->height,
+          cudaMemcpyDeviceToDevice, state->stream);
+      if (error == cudaSuccess) {
+        error = cudaMemcpy2DAsync(
+            arena + off_src_u, (size_t)request->uv_stride,
+            state->external_device_u, state->external_device_uv_stride,
+            uv_width, uv_height, cudaMemcpyDeviceToDevice, state->stream);
+      }
+      if (error == cudaSuccess) {
+        error = cudaMemcpy2DAsync(
+            arena + off_src_v, (size_t)request->uv_stride,
+            state->external_device_v, state->external_device_uv_stride,
+            uv_width, uv_height, cudaMemcpyDeviceToDevice, state->stream);
+      }
+      state->external_yuv_valid = false;
+    } else {
+      UPLOAD(off_src_y, request->y, src_y_bytes);
+      UPLOAD(off_src_u, request->u, src_uv_bytes);
+      UPLOAD(off_src_v, request->v, src_uv_bytes);
+    }
     UPLOAD(off_segments, request->segments, mb_count);
     UPLOAD(off_seg_params, request->segment_params, 4 * sizeof(DeviceSegment));
     UPLOAD(off_level_costs, request->level_costs, level_cost_bytes);
@@ -2814,6 +2863,48 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimate(
   return result;
 }
 
+extern "C" WebPAcceleratorResult WebPCUDARegisterDecimateExternalYUV420(
+    const uint8_t* device_y, size_t device_y_stride,
+    const uint8_t* device_u, const uint8_t* device_v,
+    size_t device_uv_stride, const uint8_t* host_y, int host_y_stride,
+    const uint8_t* host_u, const uint8_t* host_v, int host_uv_stride,
+    int width, int height) {
+  const size_t uv_width = width > 0 ? ((size_t)width + 1u) / 2u : 0u;
+  WebPAcceleratorResult result = WEBP_ACCELERATOR_ERROR;
+  if (device_y == nullptr || device_u == nullptr || device_v == nullptr ||
+      host_y == nullptr || host_u == nullptr || host_v == nullptr ||
+      width <= 0 || height <= 0 || device_y_stride < (size_t)width ||
+      device_uv_stride < uv_width || host_y_stride < width ||
+      host_uv_stride < (int)uv_width) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  LockDecimate(&g_decimate_mutex);
+  if (!g_decimate_state.external_yuv_valid) {
+    g_decimate_state.external_device_y = device_y;
+    g_decimate_state.external_device_u = device_u;
+    g_decimate_state.external_device_v = device_v;
+    g_decimate_state.external_device_y_stride = device_y_stride;
+    g_decimate_state.external_device_uv_stride = device_uv_stride;
+    g_decimate_state.external_host_y = host_y;
+    g_decimate_state.external_host_u = host_u;
+    g_decimate_state.external_host_v = host_v;
+    g_decimate_state.external_host_y_stride = host_y_stride;
+    g_decimate_state.external_host_uv_stride = host_uv_stride;
+    g_decimate_state.external_width = width;
+    g_decimate_state.external_height = height;
+    g_decimate_state.external_yuv_valid = true;
+    result = WEBP_ACCELERATOR_SUCCESS;
+  }
+  UnlockDecimate(&g_decimate_mutex);
+  return result;
+}
+
+extern "C" void WebPCUDAClearDecimateExternalYUV420(void) {
+  LockDecimate(&g_decimate_mutex);
+  g_decimate_state.external_yuv_valid = false;
+  UnlockDecimate(&g_decimate_mutex);
+}
+
 extern "C" uint64_t WebPCUDAGetLastDecimateExecutionNanoseconds(void) {
   uint64_t value;
   LockDecimate(&g_decimate_mutex);
@@ -2866,6 +2957,7 @@ extern "C" WebPAcceleratorResult WebPCUDALossyDecimateFlush(void) {
 
 extern "C" void WebPCUDALossyDecimateEndEncode(void) {
   LockDecimate(&g_decimate_mutex);
+  g_decimate_state.external_yuv_valid = false;
   if (g_decimate_state.available) {
     cudaError_t error = cudaSetDevice(g_decimate_state.device);
     if (error == cudaSuccess && g_decimate_state.stream != nullptr) {

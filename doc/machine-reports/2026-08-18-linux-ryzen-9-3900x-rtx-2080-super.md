@@ -2271,3 +2271,113 @@ neighbor state and canonical zeros for inactive bytes; corrected reruns are
 Raw artifacts use `libwebp-decimate-conformance-*`. This is a conformance
 result, not a speed claim; native architecture configuration and the retained
 Turing/Ampere+ dispatch split are unchanged.
+
+## NVDEC-backed lossy WebP input path
+
+Issue #16 began with a retained-source profile at
+`374ee38ab20af1f3f2f02c371aa90fc59cfab75d`, before its source changes. The
+native-sm_75 CPU-decode/CUDA-encode batch median was 39.677 ms/image on the
+1600x1200 graphic WebP. The direct stage profiler measured 34.923 ms total,
+11.713 ms lossy analysis, 22.882 ms lossy encode loop, and 19.612 ms lossy
+decimation. That isolated input CPU decode/preparation at roughly 4.75 ms and
+selected a device-native input boundary rather than another exhausted I4
+residual specialization.
+
+The private opt-in `webp_cuda_transcode` tool strictly parses one complete
+RIFF object and accepts only one opaque lossy `VP8 ` payload with matching
+container and key-frame dimensions. NVDEC produces NV12; a GPU kernel splits
+the chroma plane, and the encoder copies Y/U/V device-to-device into
+backend-owned storage before unmapping the decoder surface. Host placeholder
+identity binds the transaction. Both lossy analysis and decimation must report
+CUDA success or the candidate output is discarded and the complete image is
+CPU-decoded and encoded again. ICCP/EXIF/XMP payloads are copied byte-for-byte;
+alpha, lossless, animation, multiple-image, geometry, capability, device, and
+runtime failures decline with stable reasons.
+
+The Video Codec SDK headers came from official SDK sample commit
+`aa3544dcea2fe63122e4feb83bf805ea40e58dbe`; the driver supplied
+`libnvcuvid`. The build used CUDA 12.0, driver 595.84, and exactly
+`-DCMAKE_CUDA_ARCHITECTURES=native`. Default CPU and policy-only CPU builds,
+CUDA with the transcoder tests but NVDEC disabled, and explicit NVDEC without
+the SDK were all exercised. The first three built without an SDK dependency;
+the last failed configuration with the intended diagnostic.
+
+### Warm throughput
+
+For each 1600x1200 graphic, photo, and texture WebP, four fresh process pairs
+alternated CPU/NVDEC order. Each process discarded three warmups and retained
+ten measurements, yielding 40 rows per backend and content type.
+
+| Input | CPU median | NVDEC median | Gain | CPU images/s | NVDEC images/s |
+|---|---:|---:|---:|---:|---:|
+| Graphic | 27.627 ms | 24.689 ms | 2.938 ms | 36.20 | 40.50 |
+| Photo | 42.628 ms | 29.986 ms | 12.642 ms | 23.46 | 33.35 |
+| Texture | 152.499 ms | 95.013 ms | 57.486 ms | 6.56 | 10.52 |
+
+The graphic gain clears 1.5 ms despite having little CPU decode work; photo
+and texture benefit substantially more. Texture's NVDEC encode phase was
+slower than the CPU-order counterpart, but its decode reduction still yielded
+the 57.486 ms end-to-end gain.
+
+### Cold process latency
+
+Eight fresh, order-balanced processes per backend included all CUDA and
+NVDEC initialization:
+
+| Input | CPU median | NVDEC median | Gain | CPU images/s | NVDEC images/s |
+|---|---:|---:|---:|---:|---:|
+| Graphic | 171.063 ms | 190.908 ms | -19.845 ms | 5.85 | 5.24 |
+| Photo | 182.777 ms | 190.315 ms | -7.537 ms | 5.47 | 5.25 |
+| Texture | 298.034 ms | 251.066 ms | 46.968 ms | 3.36 | 3.98 |
+
+NVDEC parser/decoder creation costs roughly 160 ms on this Turing driver, so
+graphic and photo cold single-image processes regress. The measured result is
+therefore retained only as a warm persistent-session throughput path. The
+tool reports cold behavior rather than hiding it.
+
+### Correctness, lifetime, and fallback
+
+Nine direct `--verify` rows (three per content type) matched CPU-reference
+dimensions and produced byte-identical decoded output and bitstreams, reported
+as 99 dB. Direct rows transferred exactly 5,760,000 decoded-plane bytes D2D
+(decoder-to-analysis plus analysis-to-decimation-arena) and zero decoded-plane
+bytes H2D or D2H. Output hashes and counts were:
+
+| Input | SHA-256 | Bytes |
+|---|---|---:|
+| Graphic | `dedeac1e41c28bf952817345714618c0b11a09fef298e730c2646a0e9abf358b` | 12,986 |
+| Photo | `85b869d6a504aeea38cc15445d7c0d0318dc945290f365f4065abf7ef77375b2` | 239,436 |
+| Texture | `13dcd63ba540b6aedd7c0b253d1c843da2974175fd5d9e377ce4df6b38d38ee9` | 1,167,310 |
+
+The 189-pair CPU/NVDEC matrix covered graphic/photo/texture at 17x13,
+257x255, and 1600x1200, methods 0--6, and qualities 25/75/98. All hashes and
+byte counts matched: 36 medium method-3--6 cases stayed direct, 126 tiny/odd
+cases retried after NVDEC sequence geometry declined, and 27 medium method-0--2
+cases retried after a required CUDA encoder stage declined. A separate
+device-upload test exercised qualities 0/25/75/98/100 and produced 114/114
+exact direct or transactional-retry bitstreams, including eight repetitions.
+
+Injected parser, decoder, map, allocation, and handoff failures plus an absent
+device all matched the CPU reference hash. The alpha plane's decoded PGM hash
+matched exactly, as did the 18,826-byte ICCP, 1,496-byte EXIF, and 3,279-byte
+XMP payloads. Truncated RIFF input
+returned failure without changing a pre-existing destination. Eight concurrent
+processes completed 32 verified photo transcodes; every row stayed on NVDEC,
+reported no host round trip, and produced the same hash and byte count.
+
+Five focused tests passed: policy, external device YUV, existing CUDA
+concurrency, trellis, and near-lossless. The established silent
+`cuda_histogram_test` failure reproduced unchanged. Compute Sanitizer 2022.4.1
+could not instrument this CUDA 12/driver 595 combination and terminated before
+its first instrumented API call; the failure is archived and not represented
+as a sanitizer pass. On this VP8/Turing route `cuvidGetDecodeStatus` likewise
+returns `CUDA_ERROR_NOT_SUPPORTED` (801); the tool records that diagnostic and
+rejects an unconcealed hard error only when the query itself succeeds, matching
+the official SDK sample policy.
+
+Raw inputs, outputs, JSONL rows, parity table, configuration/build/test logs,
+and protocol are archived under `libwebp-nvdec-*`. No RTX 5070 Ti was
+available. Issue #16's second-hardware acceptance item remains open, and this
+report makes no Blackwell or cross-hardware claim. Existing warm/cold
+decimation thresholds remain pre-Ampere 784/12,544 and Ampere+ 64/4,000
+macroblocks; the architecture split was not changed.

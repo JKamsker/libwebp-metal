@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /tmp/libwebp-issue16-policy-final.DHttiz
+Test project /tmp/libwebp-issue16-policy-final.DHttiz
+    Start 4: cuda_transcode_policy_test
+1/1 Test #4: cuda_transcode_policy_test .......   Passed    0.00 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.00 sec

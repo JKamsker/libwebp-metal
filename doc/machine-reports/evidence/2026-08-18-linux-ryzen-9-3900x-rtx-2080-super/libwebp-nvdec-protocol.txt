@@ -1,0 +1,79 @@
+Issue #16 NVDEC validation protocol, 2026-08-20 UTC
+
+Profile-before-source base:
+  374ee38ab20af1f3f2f02c371aa90fc59cfab75d
+  native RTX 2080 SUPER build, method 4, quality 75, 1600x1200 graphic WebP
+  prechange stage rows: libwebp-nvdec-prechange-stage-profile.jsonl
+  prechange batch rows: libwebp-nvdec-prechange-benchmark.jsonl
+
+NVDEC build:
+  VIDEO_CODEC_SDK_ROOT=/tmp/nvidia-video-sdk.OjSbu7
+  cmake -S . -B /tmp/libwebp-issue16-profile.EfoCMR -G Ninja \
+    -DCMAKE_BUILD_TYPE=Release -DWEBP_ENABLE_CUDA=ON \
+    -DWEBP_BUILD_CUDA_TRANSCODER=ON -DWEBP_ENABLE_NVDEC=ON \
+    -DWEBP_BUILD_LIBWEBPMUX=ON -DBUILD_TESTING=ON \
+    -DCMAKE_CUDA_ARCHITECTURES=native
+
+Warm protocol, independently for graphic/photo/texture 1600x1200 inputs:
+  four fresh order-balanced process pairs
+  pair 0/2: CPU then NVDEC; pair 1/3: NVDEC then CPU
+  each process: --method 4 --quality 75 --warmups 3 --samples 10
+  40 retained rows per backend and content type
+
+Cold protocol, independently for graphic/photo/texture 1600x1200 inputs:
+  eight fresh order-balanced process pairs
+  pair 0/2/4/6: CPU then NVDEC; pair 1/3/5/7: NVDEC then CPU
+  each process: --method 4 --quality 75 --samples 1
+  eight retained rows per backend and content type
+
+Verification protocol:
+  --backend nvdec --method 4 --quality 75 --warmups 1 --samples 3 --verify
+  graphic/photo/texture; decoded dimensions must match and PSNR >=40 dB
+  actual CPU/NVDEC output was byte-identical in all nine rows (reported as
+  99 dB), with zero decoded H2D/D2H transfer and 5,760,000 decoded D2D bytes
+  (decoder-to-analysis plus analysis-to-decimation-arena plane copies).
+
+Exact parity matrix:
+  graphic/photo/texture x tiny 17x13 and odd 257x255 x methods 0..6 x
+  qualities 25/75/98, plus graphic/photo/texture 1600x1200 x methods 0..6 x
+  qualities 25/75/98 = 189 CPU/NVDEC pairs. Each row records both full JSON
+  results, SHA-256, and byte count in libwebp-nvdec-parity.tsv. Results:
+  189 exact, 36 direct NVDEC, 126 unsupported-sequence CPU retries, and 27
+  required-CUDA-stage CPU retries.
+
+Device handoff test:
+  cuda_external_yuv_test covers methods 0..6, qualities 0/25/75/98/100,
+  17x13, 257x255, and 1600x1200 planes plus eight repetitions. It compares
+  every direct or transactional-retry bitstream byte with a normal encode:
+  114/114 exact.
+
+Fallback and container protocol:
+  injected parser, decoder, map, allocation, and handoff failures plus device
+  999 all produced the CPU reference SHA-256 and byte count. Alpha-only PGM
+  hashes matched. The 18,826-byte ICCP, 1,496-byte EXIF, and 3,279-byte XMP
+  payload hashes matched. Truncated RIFF
+  failed and left the pre-existing destination hash unchanged. Eight parallel
+  processes ran four retained verified photo transcodes apiece; all 32 stayed
+  on NVDEC and all eight output SHA-256 values matched.
+
+Build isolation:
+  default CPU build: transcoder OFF, built webp
+  CPU policy build: transcoder ON, NVDEC OFF, policy CTest passed
+  CUDA no-SDK build: transcoder ON, NVDEC OFF, native architecture, policy and
+  external-YUV CTests passed
+  NVDEC ON without SDK environment: configuration failed with the expected
+  nvcuvid.h/libnvcuvid diagnostic
+  NVDEC ON with persistent CUDA buffers OFF: configuration failed with the
+  expected lifetime-requirement diagnostic
+
+Known unrelated test state:
+  policy, external YUV, CUDA concurrency, trellis, and near-lossless tests
+  passed 5/5. cuda_histogram_test retained its pre-existing silent failure.
+  Compute Sanitizer 2022.4.1 could not instrument the CUDA 12/driver 595
+  target and terminated before its first instrumented API call; this is
+  preserved as unavailable evidence, not reported as a sanitizer pass.
+
+Hardware scope:
+  Ryzen 9 3900X, RTX 2080 SUPER, driver 595.84, compute capability 7.5.
+  There was no RTX 5070 Ti runner or host available, so no Blackwell or
+  cross-hardware result is claimed.

@@ -235,6 +235,14 @@ struct CudaState {
   int resident_height = 0;
   size_t resident_y_size = 0;
   size_t resident_uv_size = 0;
+  bool external_yuv_valid = false;
+  const uint8_t* external_host_y = nullptr;
+  const uint8_t* external_host_u = nullptr;
+  const uint8_t* external_host_v = nullptr;
+  int external_host_y_stride = 0;
+  int external_host_uv_stride = 0;
+  int external_width = 0;
+  int external_height = 0;
   bool fused_lossy_analysis_valid = false;
   uint64_t fused_lossy_analysis_generation = 0;
   const uint8_t* fused_lossy_y = nullptr;
@@ -2403,6 +2411,7 @@ void ReleaseStagingBuffers(CudaState* state) {
   state->resident_lossless_generation = 0;
   state->resident_yuv_valid = false;
   state->resident_yuv_generation = 0;
+  state->external_yuv_valid = false;
   state->fused_lossy_analysis_valid = false;
   state->fused_lossy_analysis_generation = 0;
 #if defined(WEBP_CUDA_ENABLE_STREAM_ORDERED_ALLOCATIONS)
@@ -3760,6 +3769,7 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
   bool verbose;
   bool timing;
   bool use_resident_yuv;
+  bool use_external_yuv;
   const uint8_t* device_y;
   const uint8_t* device_u;
   const uint8_t* device_v;
@@ -3825,7 +3835,7 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
             static_cast<uint32_t>(request->quality)};
 
 #if defined(WEBP_CUDA_HAS_FUSED_LOSSY_ANALYSIS)
-  if (state->fused_lossy_analysis_valid &&
+  if (!state->external_yuv_valid && state->fused_lossy_analysis_valid &&
       request->handoff_generation != 0 &&
       state->fused_lossy_analysis_generation ==
           request->handoff_generation &&
@@ -3863,8 +3873,22 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
   if (error != cudaSuccess) {
     return ReportError(state, "select device", error, true);
   }
+  use_external_yuv =
+      state->external_yuv_valid && state->external_host_y == request->y &&
+      state->external_host_u == request->u &&
+      state->external_host_v == request->v &&
+      state->external_host_y_stride == request->y_stride &&
+      state->external_host_uv_stride == request->uv_stride &&
+      state->external_width == request->width &&
+      state->external_height == request->height;
+  // An active external handoff is an exact one-encode transaction. Never
+  // silently upload the placeholder host planes if its identity changed.
+  if (state->external_yuv_valid && !use_external_yuv) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
   use_resident_yuv =
-      request->handoff_generation != 0 && state->resident_yuv_valid &&
+      !use_external_yuv && request->handoff_generation != 0 &&
+      state->resident_yuv_valid &&
       state->resident_yuv_generation == request->handoff_generation &&
       state->resident_y == request->y &&
       state->resident_u == request->u && state->resident_v == request->v &&
@@ -3873,7 +3897,12 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
       state->resident_width == request->width &&
       state->resident_height == request->height &&
       state->resident_y_size == y_bytes && state->resident_uv_size == uv_bytes;
-  if (use_resident_yuv) {
+  if (use_external_yuv) {
+    device_y = state->analysis_y;
+    device_u = state->analysis_u;
+    device_v = state->analysis_v;
+    error = cudaSuccess;
+  } else if (use_resident_yuv) {
     state->resident_yuv_valid = false;
     state->resident_yuv_generation = 0;
     device_y = reinterpret_cast<const uint8_t*>(state->transform);
@@ -3913,7 +3942,7 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
   timing = verbose && EnsureTimingEvents(state);
 
   error = cudaSuccess;
-  if (!use_resident_yuv) {
+  if (!use_external_yuv && !use_resident_yuv) {
     error = cudaMemcpy2DAsync(state->analysis_y, request->width, request->y,
                               request->y_stride, request->width,
                               request->height, cudaMemcpyHostToDevice,
@@ -3964,7 +3993,8 @@ WebPAcceleratorResult CUDALossyAnalysisLocked(
     fprintf(stderr,
             "WebP-CUDA: lossy analysis %ux%u macroblocks in %.3f ms%s\n",
             mb_width, mb_height, elapsed_ms,
-            use_resident_yuv ? " (resident YUV)" : "");
+            use_external_yuv ? " (external device YUV)"
+                             : (use_resident_yuv ? " (resident YUV)" : ""));
   }
 #if !defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
   ReleaseStagingBuffers(state);
@@ -3985,6 +4015,131 @@ WebPAcceleratorResult CUDALossyAnalysis(
 }
 
 #endif  // WEBP_CUDA_ENABLE_LOSSY_ANALYSIS
+
+WebPAcceleratorResult RegisterExternalYUV420(
+    const void* device_y, size_t device_y_stride, const void* device_u,
+    size_t device_u_stride, const void* device_v, size_t device_v_stride,
+    const uint8_t* host_y, int host_y_stride, const uint8_t* host_u,
+    const uint8_t* host_v, int host_uv_stride, int width, int height,
+    uint64_t* device_to_device_bytes) {
+#if defined(WEBP_CUDA_ENABLE_LOSSY_ANALYSIS) && \
+    defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE) && \
+    defined(WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+  CudaState* const state = &g_cuda_state;
+  WebPAcceleratorResult result = WEBP_ACCELERATOR_ERROR;
+  const size_t uv_width = width > 0 ? ((size_t)width + 1u) / 2u : 0u;
+  const size_t uv_height = height > 0 ? ((size_t)height + 1u) / 2u : 0u;
+  size_t y_bytes = 0, uv_bytes = 0;
+  cudaError_t error = cudaSuccess;
+  if (device_to_device_bytes != nullptr) *device_to_device_bytes = 0;
+  if (device_y == nullptr || device_u == nullptr || device_v == nullptr ||
+      host_y == nullptr || host_u == nullptr || host_v == nullptr ||
+      width <= 0 || height <= 0 || host_y_stride < width ||
+      host_uv_stride < (int)uv_width || device_y_stride < (size_t)width ||
+      device_u_stride < uv_width || device_v_stride < uv_width ||
+      (size_t)width > std::numeric_limits<size_t>::max() / (size_t)height ||
+      uv_width > std::numeric_limits<size_t>::max() / uv_height) {
+    return WEBP_ACCELERATOR_ERROR;
+  }
+  y_bytes = (size_t)width * (size_t)height;
+  uv_bytes = uv_width * uv_height;
+  LockCudaMutex(&g_cuda_mutex);
+  do {
+    if (state->external_yuv_valid || state->quarantined) break;
+    if (Initialize(state) != WEBP_ACCELERATOR_SUCCESS) {
+      result = WEBP_ACCELERATOR_NOT_RUN;
+      break;
+    }
+    error = cudaSetDevice(state->device);
+    if (error == cudaSuccess) {
+      error = EnsureDeviceBuffer(&state->analysis_y,
+                                 &state->analysis_y_capacity, y_bytes,
+                                 state->stream);
+    }
+    if (error == cudaSuccess) {
+      error = EnsureDeviceBuffer(&state->analysis_u,
+                                 &state->analysis_u_capacity, uv_bytes,
+                                 state->stream);
+    }
+    if (error == cudaSuccess) {
+      error = EnsureDeviceBuffer(&state->analysis_v,
+                                 &state->analysis_v_capacity, uv_bytes,
+                                 state->stream);
+    }
+    if (error == cudaSuccess) {
+      error = cudaMemcpy2DAsync(state->analysis_y, (size_t)width, device_y,
+                                device_y_stride, (size_t)width,
+                                (size_t)height, cudaMemcpyDeviceToDevice,
+                                state->stream);
+    }
+    if (error == cudaSuccess) {
+      error = cudaMemcpy2DAsync(state->analysis_u, uv_width, device_u,
+                                device_u_stride, uv_width, uv_height,
+                                cudaMemcpyDeviceToDevice, state->stream);
+    }
+    if (error == cudaSuccess) {
+      error = cudaMemcpy2DAsync(state->analysis_v, uv_width, device_v,
+                                device_v_stride, uv_width, uv_height,
+                                cudaMemcpyDeviceToDevice, state->stream);
+    }
+    if (error == cudaSuccess) error = cudaStreamSynchronize(state->stream);
+    if (error != cudaSuccess) {
+      (void)cudaStreamSynchronize(state->stream);
+      result = ReportError(state, "register external YUV", error, true);
+      break;
+    }
+    result = WebPCUDARegisterDecimateExternalYUV420(
+        state->analysis_y, (size_t)width, state->analysis_u,
+        state->analysis_v, uv_width, host_y, host_y_stride, host_u, host_v,
+        host_uv_stride, width, height);
+    if (result != WEBP_ACCELERATOR_SUCCESS) break;
+    state->external_host_y = host_y;
+    state->external_host_u = host_u;
+    state->external_host_v = host_v;
+    state->external_host_y_stride = host_y_stride;
+    state->external_host_uv_stride = host_uv_stride;
+    state->external_width = width;
+    state->external_height = height;
+    state->external_yuv_valid = true;
+    if (device_to_device_bytes != nullptr) {
+      // The decoder planes are first copied into analysis-owned tight planes;
+      // decimation then copies those same planes into its request arena.
+      *device_to_device_bytes =
+          2u * ((uint64_t)y_bytes + 2u * (uint64_t)uv_bytes);
+    }
+  } while (0);
+  UnlockCudaMutex(&g_cuda_mutex);
+  if (result != WEBP_ACCELERATOR_SUCCESS) {
+    WebPCUDAClearDecimateExternalYUV420();
+  }
+  return result;
+#else
+  (void)device_y;
+  (void)device_y_stride;
+  (void)device_u;
+  (void)device_u_stride;
+  (void)device_v;
+  (void)device_v_stride;
+  (void)host_y;
+  (void)host_y_stride;
+  (void)host_u;
+  (void)host_v;
+  (void)host_uv_stride;
+  (void)width;
+  (void)height;
+  if (device_to_device_bytes != nullptr) *device_to_device_bytes = 0;
+  return WEBP_ACCELERATOR_NOT_RUN;
+#endif
+}
+
+void ClearExternalYUV420(void) {
+  LockCudaMutex(&g_cuda_mutex);
+  g_cuda_state.external_yuv_valid = false;
+  UnlockCudaMutex(&g_cuda_mutex);
+#if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
+  WebPCUDAClearDecimateExternalYUV420();
+#endif
+}
 
 #if defined(WEBP_CUDA_ENABLE_LOSSY_DECIMATE)
 WebPAcceleratorResult CUDALossyDecimate(
@@ -4008,6 +4163,7 @@ void CUDAEndEncode(void* context) {
   state->resident_lossless_generation = 0;
   state->resident_yuv_valid = false;
   state->resident_yuv_generation = 0;
+  state->external_yuv_valid = false;
   state->fused_lossy_analysis_valid = false;
   state->fused_lossy_analysis_generation = 0;
   UnlockCudaMutex(&g_cuda_mutex);
@@ -4101,6 +4257,22 @@ constexpr uint32_t kCUDAProperties =
     ;
 
 }  // namespace
+
+extern "C" WebPAcceleratorResult WebPCUDARegisterExternalYUV420(
+    const void* device_y, size_t device_y_stride, const void* device_u,
+    size_t device_u_stride, const void* device_v, size_t device_v_stride,
+    const uint8_t* host_y, int host_y_stride, const uint8_t* host_u,
+    const uint8_t* host_v, int host_uv_stride, int width, int height,
+    uint64_t* device_to_device_bytes) {
+  return RegisterExternalYUV420(
+      device_y, device_y_stride, device_u, device_u_stride, device_v,
+      device_v_stride, host_y, host_y_stride, host_u, host_v, host_uv_stride,
+      width, height, device_to_device_bytes);
+}
+
+extern "C" void WebPCUDAClearExternalYUV420(void) {
+  ClearExternalYUV420();
+}
 
 static const WebPEncoderAccelerator kCUDAEncoderAccelerator = {
     WEBP_ENCODER_ACCELERATOR_ABI_VERSION,

@@ -1,0 +1,42 @@
+-- Adding -lm flag.
+-- TIFF is disabled when statically linking.
+-- Could NOT find GIF (missing: GIF_LIBRARY GIF_INCLUDE_DIR) 
+-- Performing Test WEBP_HAVE_FLAG_AVX2
+-- Performing Test WEBP_HAVE_FLAG_AVX2 - Failed
+-- Performing Test WEBP_HAVE_FLAG_AVX2
+-- Performing Test WEBP_HAVE_FLAG_AVX2 - Success
+-- Performing Test WEBP_HAVE_FLAG_SSE41
+-- Performing Test WEBP_HAVE_FLAG_SSE41 - Failed
+-- Performing Test WEBP_HAVE_FLAG_SSE41
+-- Performing Test WEBP_HAVE_FLAG_SSE41 - Success
+-- Performing Test WEBP_HAVE_FLAG_SSE2
+-- Performing Test WEBP_HAVE_FLAG_SSE2 - Success
+-- Performing Test WEBP_HAVE_FLAG_MIPS32
+-- Performing Test WEBP_HAVE_FLAG_MIPS32 - Failed
+-- Performing Test WEBP_HAVE_FLAG_MIPS32
+-- Performing Test WEBP_HAVE_FLAG_MIPS32 - Failed
+-- Performing Test WEBP_HAVE_FLAG_MIPS_DSP_R2
+-- Performing Test WEBP_HAVE_FLAG_MIPS_DSP_R2 - Failed
+-- Performing Test WEBP_HAVE_FLAG_MIPS_DSP_R2
+-- Performing Test WEBP_HAVE_FLAG_MIPS_DSP_R2 - Failed
+-- Performing Test HAS_COMPILE_FLAG
+-- Performing Test HAS_COMPILE_FLAG - Failed
+-- Performing Test WEBP_HAVE_FLAG_NEON
+-- Performing Test WEBP_HAVE_FLAG_NEON - Failed
+-- Performing Test WEBP_HAVE_FLAG_NEON
+-- Performing Test WEBP_HAVE_FLAG_NEON - Failed
+-- Performing Test WEBP_HAVE_FLAG_MSA
+-- Performing Test WEBP_HAVE_FLAG_MSA - Failed
+-- Performing Test WEBP_HAVE_FLAG_MSA
+-- Performing Test WEBP_HAVE_FLAG_MSA - Failed
+-- Performing Test HAS_COMPILE_FLAG
+-- Performing Test HAS_COMPILE_FLAG - Failed
+-- Performing Test WEBP_HAVE_FLAG_VSX
+-- Performing Test WEBP_HAVE_FLAG_VSX - Failed
+-- Performing Test WEBP_HAVE_FLAG_VSX
+-- Performing Test WEBP_HAVE_FLAG_VSX - Failed
+-- Performing Test HAS_COMPILE_FLAG
+-- Performing Test HAS_COMPILE_FLAG - Failed
+-- Configuring done (0.7s)
+-- Generating done (0.0s)
+-- Build files have been written to: /tmp/libwebp-issue16-profile.EfoCMR

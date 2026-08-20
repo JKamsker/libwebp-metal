@@ -48,6 +48,11 @@ option(WEBP_BUILD_METAL_ABLATION_EXPERIMENT
        "Build the non-installed Metal ablation benchmark tool." OFF)
 option(WEBP_BUILD_CUDA_BENCHMARK
        "Build non-installed CUDA benchmark and concurrency tools." OFF)
+option(WEBP_BUILD_CUDA_TRANSCODER
+       "Build private CUDA transcoder policy tests and optional tools." OFF)
+option(WEBP_ENABLE_NVDEC
+       "Build the NVDEC WebP transcoder (requires Video Codec SDK headers)."
+       OFF)
 option(WEBP_BUILD_CUDA_ACCELERATION_EXPERIMENTS
        "Build the non-installed CUDA acceleration experiment lab." OFF)
 option(WEBP_BUILD_DECIMATE_CONFORMANCE
@@ -483,6 +488,79 @@ endif()
 if(WEBP_BUILD_DECIMATE_CONFORMANCE)
   list(APPEND WEBP_ENC_SRCS
        ${WEBP_SRC_DIR}/enc/lossy_decimate_fixture.c)
+endif()
+
+if(WEBP_BUILD_CUDA_TRANSCODER)
+  add_executable(
+    cuda_transcode_policy_test
+    ${CMAKE_CURRENT_SOURCE_DIR}/tests/cuda_transcode_policy_test.c
+    ${CMAKE_CURRENT_SOURCE_DIR}/tools/cuda_transcode_common.c)
+  target_include_directories(
+    cuda_transcode_policy_test
+    PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_SOURCE_DIR})
+  if(BUILD_TESTING)
+    add_test(NAME cuda_transcode_policy_test
+             COMMAND cuda_transcode_policy_test)
+  endif()
+
+  if(WEBP_ENABLE_CUDA AND WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+    add_executable(cuda_external_yuv_test
+                   ${CMAKE_CURRENT_SOURCE_DIR}/tests/cuda_external_yuv_test.cu)
+    target_include_directories(
+      cuda_external_yuv_test
+      PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+              ${CMAKE_CURRENT_SOURCE_DIR})
+    target_link_libraries(cuda_external_yuv_test PRIVATE webp CUDA::cudart)
+    set_target_properties(
+      cuda_external_yuv_test
+      PROPERTIES CUDA_STANDARD 11 CUDA_STANDARD_REQUIRED ON)
+    if(BUILD_TESTING)
+      add_test(NAME cuda_external_yuv_test COMMAND cuda_external_yuv_test)
+      set_tests_properties(cuda_external_yuv_test PROPERTIES SKIP_RETURN_CODE
+                                                             77)
+    endif()
+  endif()
+
+  if(WEBP_ENABLE_NVDEC)
+    if(NOT WEBP_ENABLE_CUDA)
+      message(FATAL_ERROR "WEBP_ENABLE_NVDEC requires WEBP_ENABLE_CUDA=ON")
+    endif()
+    if(NOT WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS)
+      message(
+        FATAL_ERROR
+          "WEBP_ENABLE_NVDEC requires WEBP_CUDA_ENABLE_PERSISTENT_BUFFERS=ON"
+      )
+    endif()
+    if(NOT WEBP_BUILD_LIBWEBPMUX)
+      message(FATAL_ERROR
+              "WEBP_ENABLE_NVDEC requires WEBP_BUILD_LIBWEBPMUX=ON")
+    endif()
+    find_path(
+      WEBP_NVCUVID_INCLUDE_DIR nvcuvid.h
+      HINTS ENV VIDEO_CODEC_SDK_ROOT ENV NVIDIA_VIDEO_CODEC_SDK_ROOT
+      PATH_SUFFIXES Interface Samples/NvCodec/NvDecoder)
+    find_library(WEBP_NVCUVID_LIBRARY NAMES nvcuvid)
+    if(NOT WEBP_NVCUVID_INCLUDE_DIR OR NOT WEBP_NVCUVID_LIBRARY)
+      message(
+        FATAL_ERROR
+          "WEBP_ENABLE_NVDEC requires nvcuvid.h from the NVIDIA Video Codec SDK and libnvcuvid"
+      )
+    endif()
+    add_executable(
+      webp_cuda_transcode
+      ${CMAKE_CURRENT_SOURCE_DIR}/tools/nvdec_webp_transcode.cu
+      ${CMAKE_CURRENT_SOURCE_DIR}/tools/cuda_transcode_common.c)
+    target_include_directories(
+      webp_cuda_transcode
+      PRIVATE ${CMAKE_CURRENT_BINARY_DIR} ${CMAKE_CURRENT_BINARY_DIR}/src
+              ${CMAKE_CURRENT_SOURCE_DIR} ${WEBP_NVCUVID_INCLUDE_DIR})
+    target_link_libraries(
+      webp_cuda_transcode PRIVATE webp libwebpmux CUDA::cuda_driver
+                                  CUDA::cudart ${WEBP_NVCUVID_LIBRARY})
+    set_target_properties(
+      webp_cuda_transcode
+      PROPERTIES CUDA_STANDARD 11 CUDA_STANDARD_REQUIRED ON)
+  endif()
 endif()
 
 if(NOT WEBP_BUILD_ENCODER_STAGE_PROFILE_EXPERIMENT)

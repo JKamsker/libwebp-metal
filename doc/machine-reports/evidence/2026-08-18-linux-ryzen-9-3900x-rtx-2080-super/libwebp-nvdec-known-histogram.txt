@@ -1,0 +1,13 @@
+Internal ctest changing into directory: /tmp/libwebp-issue16-profile.EfoCMR
+Test project /tmp/libwebp-issue16-profile.EfoCMR
+    Start 7: cuda_histogram_test
+1/1 Test #7: cuda_histogram_test ..............***Failed    0.05 sec
+
+
+0% tests passed, 1 tests failed out of 1
+
+Total Test time (real) =   0.05 sec
+
+The following tests FAILED:
+	  7 - cuda_histogram_test (Failed)
+histogram_exit=8

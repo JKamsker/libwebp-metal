@@ -193,6 +193,24 @@ transcript. The earlier parent and candidate failures under
 `libwebp-hash-combined-test-cuda-*` demonstrate that the stale resident-pixel
 bug predated the rejected matcher.
 
+The `libwebp-nvdec-*` files preserve issue #16's opt-in NVDEC WebP input path.
+The prechange stage and batch rows were captured at base
+`374ee38ab20af1f3f2f02c371aa90fc59cfab75d` before source changes. Native
+configuration requested `CMAKE_CUDA_ARCHITECTURES=native`; default CPU,
+CPU-policy, CUDA-without-SDK, expected missing-SDK, and expected
+no-persistent-buffer configure/build logs prove dependency and lifetime
+isolation. The final set includes 240 order-balanced warm
+rows, 48 cold rows, nine verified direct rows, and a 189-pair SHA-256/byte
+matrix spanning methods 0--6, qualities 25/75/98, tiny, odd, realistic, direct,
+and transactional-fallback cases. The 114-case device-YUV test, injected
+fallback/alpha/metadata/malformed transcript, and 32-row concurrent-process
+run cover lifetime and retry behavior. Input/output WebPs and independently
+extractable byte-exact ICCP, EXIF, and XMP payloads are included for checksum
+verification. Compute Sanitizer 2022.4.1
+could not instrument this newer CUDA/driver combination; its explicit failure
+is archived and is not counted as a pass. See `libwebp-nvdec-protocol.txt` for
+the exact protocol and hardware scope.
+
 The `libwebp-lossy-retained-profile-*` files contain the current native-sm_75
 stage records, summary, and direct per-phase device timing for medium graphic,
 photo, and texture inputs. `libwebp-token-record-inline-*` preserves every raw
