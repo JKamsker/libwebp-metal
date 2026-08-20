@@ -1,0 +1,48 @@
+FORMAT=png CONTENT=graphic
+decimate GPU wall: 27.23 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.5% i16-num 12.9% i16-sel 25.0% i4 36.9% uv-num 7.4% uv-sel 11.7% recon 0.7%
+decimate I4 transform cycles: forward 9732467 quantize 38115554 inverse 15159275
+decimate GPU wall: 26.42 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.5% i16-num 12.9% i16-sel 25.0% i4 36.9% uv-num 7.4% uv-sel 11.7% recon 0.7%
+decimate I4 transform cycles: forward 9731522 quantize 38133576 inverse 15170547
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":52205159,"ns_per_image":52205159.000,"images_per_second":19.155195,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"89f47b56944cfe79","output_bytes":12648}
+FORMAT=png CONTENT=photo
+decimate GPU wall: 27.88 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.8% i16-num 9.3% i16-sel 9.4% i4 64.3% uv-num 4.9% uv-sel 7.9% recon 0.5%
+decimate I4 transform cycles: forward 22410532 quantize 90699328 inverse 34260436
+decimate GPU wall: 27.08 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.8% i16-num 9.3% i16-sel 9.4% i4 64.3% uv-num 4.9% uv-sel 7.9% recon 0.5%
+decimate I4 transform cycles: forward 22407149 quantize 90815718 inverse 34555771
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":52201001,"ns_per_image":52201001.000,"images_per_second":19.156721,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"13085afa0c135d5c","output_bytes":206128}
+FORMAT=png CONTENT=texture
+decimate GPU wall: 26.61 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.8% i16-sel 8.4% i4 66.0% uv-num 5.8% uv-sel 5.6% recon 0.5%
+decimate I4 transform cycles: forward 22363170 quantize 92002173 inverse 34221336
+decimate GPU wall: 25.86 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.8% i16-sel 8.4% i4 66.1% uv-num 5.8% uv-sel 5.6% recon 0.5%
+decimate I4 transform cycles: forward 22386601 quantize 91482546 inverse 35744059
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":117200109,"ns_per_image":117200109.000,"images_per_second":8.532415,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"48ed500df8ed450e","output_bytes":1193792}
+FORMAT=jpeg CONTENT=graphic
+decimate GPU wall: 27.89 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.4% i16-num 12.8% i16-sel 24.8% i4 37.2% uv-num 7.3% uv-sel 11.7% recon 0.7%
+decimate I4 transform cycles: forward 9832161 quantize 38351404 inverse 15254541
+decimate GPU wall: 26.44 ms (100x75 MBs)
+decimate phases (% of block cycles): import 5.4% i16-num 12.8% i16-sel 24.8% i4 37.2% uv-num 7.3% uv-sel 11.7% recon 0.7%
+decimate I4 transform cycles: forward 9818443 quantize 38353081 inverse 15226911
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":43756528,"ns_per_image":43756528.000,"images_per_second":22.853733,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"bf7e3f8f6c993c5d","output_bytes":12790}
+FORMAT=jpeg CONTENT=photo
+decimate GPU wall: 27.49 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.8% i16-num 9.5% i16-sel 9.1% i4 64.0% uv-num 5.1% uv-sel 8.0% recon 0.5%
+decimate I4 transform cycles: forward 22766532 quantize 90357520 inverse 33947135
+decimate GPU wall: 26.67 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.8% i16-num 9.5% i16-sel 9.1% i4 64.0% uv-num 5.1% uv-sel 8.0% recon 0.5%
+decimate I4 transform cycles: forward 22762771 quantize 90225417 inverse 33899546
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":53439965,"ns_per_image":53439965.000,"images_per_second":18.712587,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"6434bad02bda2ff2","output_bytes":195908}
+FORMAT=jpeg CONTENT=texture
+decimate GPU wall: 23.97 ms (100x75 MBs)
+decimate phases (% of block cycles): import 4.0% i16-num 9.8% i16-sel 8.4% i4 66.0% uv-num 5.8% uv-sel 5.6% recon 0.5%
+decimate I4 transform cycles: forward 22345119 quantize 91935750 inverse 34475062
+decimate GPU wall: 23.15 ms (100x75 MBs)
+decimate phases (% of block cycles): import 3.9% i16-num 9.8% i16-sel 8.4% i4 66.1% uv-num 5.8% uv-sel 5.6% recon 0.5%
+decimate I4 transform cycles: forward 22368789 quantize 91501355 inverse 35159090
+{"operation":"decode_encode_batch","variant":"cuda","mode":"lossy","batch_size":1,"input_count":1,"include_file_io":false,"force_cuda":true,"batch_aware":false,"batch_pixels":1920000,"method":4,"quality":75,"near_lossless":40,"sequence":0,"elapsed_ns":113812853,"ns_per_image":113812853.000,"images_per_second":8.786354,"resident_lossless_handoffs":0,"resident_lossless_handoff_observed":false,"output_hash":"4ed79faf688a568b","output_bytes":1194466}

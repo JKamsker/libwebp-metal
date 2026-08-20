@@ -1,0 +1,5 @@
+d4165fe198f39e5eedb68be25b0f37a805c357be
+879bdc145c8a9124bb322ba13082f58364c60b5102aa767c80f5b0b20ef946b7  /tmp/libwebp-token-stats-split-candidate-20260820/webp_cuda_batch_benchmark
+CMAKE_BUILD_TYPE:STRING=Release
+CMAKE_CUDA_ARCHITECTURES:UNINITIALIZED=native
+NVIDIA GeForce RTX 2080 SUPER, 7.5, 595.84

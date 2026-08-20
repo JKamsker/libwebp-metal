@@ -2248,3 +2248,27 @@ transactional fallbacks, concurrency, and near-lossless focused tests passed
 for both candidate and restored source. Both gains are below 1.5 ms/image, so
 the source was restored; raw artifacts use `libwebp-token-stats-split-*`.
 This is a native-sm_75 result and changes no Ampere+ setting or claim.
+
+## Output-write bound and I4 transform split
+
+Current-source gprofng profiles used the frozen six-image sets, forced CUDA,
+method 4, quality 75, batch 24, one warmup, and three retained samples.
+`VP8EncWrite` was 0.010 seconds inclusive out of 1.271 sampled PNG CPU seconds
+and 0.010 out of 1.251 JPEG seconds; `WebPMemoryWrite` had no exclusive
+samples. The cold `cwebp` final-write interval is not a repeated-batch target.
+
+A removable native-sm_75 clock probe split each active mode-0 four-lane I4
+numeric chain. Median cycle shares were:
+
+| Content | Forward | Basic quantization | Inverse |
+|---|---:|---:|---:|
+| Graphic | 15.4--15.5% | 60.5% | 24.0--24.1% |
+| Photo | 15.2--15.5% | 61.4--61.5% | 23.1--23.3% |
+| Texture | 15.0% | 61.5--61.6% | 23.4--23.5% |
+
+The diagnostic and restored builds passed the focused trellis/fallback test.
+Because the measured quantization bottleneck has already rejected four
+distinct exact implementations—8-lane width, fused registers, shared matrix,
+and uniform AC—no repeated variant was created. Source is restored; raw
+artifacts use `libwebp-output-write-profile-*` and
+`libwebp-i4-transform-split-*`. No Ampere+ setting or claim changed.

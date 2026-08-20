@@ -990,3 +990,27 @@ was restored. The profile, exact patch, native build identities, raw rows,
 candidate/restored tests, and decision are archived under
 `libwebp-token-stats-split-*`. This is RTX 2080 SUPER-only evidence; no
 Ampere+ behavior, architecture threshold, or cross-hardware claim changed.
+
+## Repeated-workload write bound and I4 quantization subdivision
+
+The cold `cwebp` stage refresh showed up to 11.0 ms in final write on texture,
+but a direct retained-binary gprofng profile of the mandatory repeated
+24-image workload ruled that lead out before source changes. PNG accumulated
+1.271 seconds of sampled CPU time and JPEG 1.251 seconds; `VP8EncWrite` held
+only 0.010 seconds inclusive in each (0.79%/0.80%), and `WebPMemoryWrite` had
+no exclusive samples. No output-allocation/copy candidate was justified.
+
+A temporary native-sm_75 cycle probe then subdivided the separate retained
+25--27% I4 transform/quantization interval. Across both decoded input formats,
+basic quantization consumed 60.5% of that interval on graphic and 61.4--61.6%
+on photo/texture; forward transform held 15.0--15.5% and inverse transform
+23.1--24.1%. The probe and restored tree passed the trellis, padded-stride,
+band-remainder, and transactional-fallback test.
+
+The measured sub-bottleneck does not open a new candidate: this exact kernel
+has already rejected eight-lane quantization, fused register handoff, shared
+segment matrices, and uniform-AC caching, all with exact outputs and gains
+below 1.5 ms/image. The diagnostic was removed. Raw gprofng archives and
+rows use `libwebp-output-write-profile-*`; probe patch, cycles, native build
+identity, tests, and decision use `libwebp-i4-transform-split-*`. RTX 2080
+SUPER only; Ampere+ behavior and architecture thresholds are unchanged.

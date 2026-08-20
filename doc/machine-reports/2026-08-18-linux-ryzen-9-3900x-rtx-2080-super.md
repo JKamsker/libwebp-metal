@@ -2509,3 +2509,31 @@ focused tests passed. Raw profile, patch, build identity, rows, tests, and
 decision use the `libwebp-token-stats-split-*` prefix. This measurement is
 RTX 2080 SUPER-only and leaves the pre-Ampere 784/12,544 and Ampere+ 64/4,000
 warm/cold macroblock thresholds unchanged.
+
+## Repeated output-write bound and I4 numeric subdivision
+
+The current retained executable was sampled directly under the required
+forced-CUDA batch-24 method-4/quality-75 workload. Across the frozen PNG set,
+gprofng accumulated 1.271 CPU seconds and attributed only 0.010 seconds
+inclusive (0.79%) to `VP8EncWrite`; JPEG accumulated 1.251 seconds with the
+same 0.010 seconds inclusive (0.80%). `WebPMemoryWrite` had no exclusive
+samples. Thus the much larger cold-process `cwebp` write-stage number does not
+support an output writer candidate for the repeated performance gate.
+
+The next removable native-sm_75 clock probe split the independently profiled
+I4 transform/quantization interval. Across PNG/JPEG decoded graphic, photo,
+and texture inputs, forward transform represented 15.0--15.5%, basic
+quantization 60.5--61.6%, and inverse transform 23.1--24.1%. Quantization is
+the clear local sub-bottleneck, but the retained history already tested its
+distinct implementation choices: eight-lane distribution, forward/quantize/
+inverse register fusion, shared segment matrices, and uniform-AC scalar
+caching. Each was exact and below 1.5 ms/image, so none was repeated.
+
+The instrumented and restored trees both passed the trellis test, including
+padded strides, every band remainder, and transactional fallback. Source is
+clean. Full sampling archives, function reports, and benchmark rows use
+`libwebp-output-write-profile-*`; the exact diagnostic patch, raw cycle rows,
+native build identity, tests, and computed summary use
+`libwebp-i4-transform-split-*`. This is RTX 2080 SUPER-only evidence and
+leaves the pre-Ampere 784/12,544 and Ampere+ 64/4,000 warm/cold macroblock
+thresholds unchanged.

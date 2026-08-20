@@ -1,0 +1,1 @@
+[1/1] Linking CUDA executable cuda_trellis_test

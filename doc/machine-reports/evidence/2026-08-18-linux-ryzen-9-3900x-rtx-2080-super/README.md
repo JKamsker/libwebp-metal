@@ -386,6 +386,17 @@ rows, focused test status, generated-code sizes and identities, and decision.
 The wider common path regressed PNG by 2.966 ms/image and JPEG by 0.924, so
 the candidate was removed.
 
+The `libwebp-output-write-profile-*` files preserve the complete current-head
+PNG/JPEG gprofng experiments, function tables, batch rows, and decision that
+bound final write to about 0.8% inclusive CPU time in the repeated workload.
+
+The `libwebp-i4-transform-split-*` files preserve the exact removable
+native-sm_75 cycle-probe patch, six-content raw profile, build identity,
+instrumented/restored trellis tests, source-restore record, and computed
+summary. Basic quantization occupied 60.5--61.6% of the numeric interval, but
+all distinct exact quantizer mappings in scope were already exhausted; the
+probe was removed without creating a repeated candidate.
+
 The `libwebp-token-stats-split-*` files preserve the refreshed stage profile,
 the exact rejected token-generation/adaptive-statistics overlap patch, native
 build identities, all 40 exact order-reversed timing rows, candidate/restored
