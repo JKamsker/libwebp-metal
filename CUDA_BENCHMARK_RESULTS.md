@@ -2558,6 +2558,36 @@ registered focused tests. Evidence uses
 behavior, and the frozen corpus/generator are unchanged.
 
 
+## Pre-Ampere full-warp-paired I16 residual rejection
+
+The clean native build at `36500ab759b3bb4239dbe0ada672614d99a64374`
+measured exact file-I/O batch medians of 29.055 ms/image PNG and 27.629 JPEG.
+The measured stage profile put decimate/collect/replay at 18.756/18.665
+ms/image. Realistic I4 remained dominant, while graphic-medium exposed I16
+selection at 25.2% of block cycles.
+
+A pre-Ampere-only candidate used two full CTA warps per I16 mode, deriving
+each eight-block half's exact contexts from the completed non-zero bitmap.
+This distinct mapping avoided the earlier half-warp experiment's masked
+shuffle path and reduced the native kernel from 103 to 100 registers. An exact
+medium phase screen cut graphic/photo device wall by about 5 ms, but five
+order-balanced full-corpus process pairs measured only:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 29.019 ms/image | 29.176 ms/image | 0.322 ms/image |
+| JPEG | 27.523 ms/image | 27.262 ms/image | 0.340 ms/image |
+
+All 60 timing rows retained their reference hashes and byte counts. The
+candidate also passed 7/7 focused tests, the methods 2--6 / qualities
+25/75/98 graphic/photo/texture tiny/odd matrix, and 20 PNG/JPEG fallback
+cells spanning bands 0/1/3/5/7 with token recording inline and pipelined.
+Both gains miss the 1.5 ms/image gate, so the candidate was removed and the
+restored source passed 7/7 tests. Evidence uses
+`libwebp-i16-full-warp-pair-*`; Ampere+ behavior, architecture
+thresholds/defaults, and the frozen corpus/generator are unchanged.
+
+
 ## Coefficient-token zero-pair feasibility screen
 
 The clean native build at `792e2592cdbda92f19a22ad3f2c6a4cfd50619bc`

@@ -3006,3 +3006,43 @@ build/test logs use `libwebp-token-zero-pair-*` in the adjacent evidence
 directory. This is RTX 2080 SUPER-only evidence; the 784/12,544 pre-Ampere and
 64/4,000 Ampere+ thresholds, architecture split, frozen corpus, and generator
 are unchanged.
+
+
+## Pre-Ampere full-warp-paired I16 residual rejection
+
+At clean parent `36500ab759b3bb4239dbe0ada672614d99a64374`, the native
+Release file-I/O refresh measured exact medians of 29.055 ms/image PNG and
+27.629 JPEG. Excluding the warmup batch, stage records assigned
+18.756/18.665 ms/image to decimate/collect/replay and 3.015/2.974 to token
+emission. Device timing retained 63--65% realistic I4 shares but put
+graphic-medium I16 selection at 25.2% of block cycles.
+
+The pre-Ampere candidate assigned two full residual-cost warps to each I16
+mode. The two warps processed eight AC blocks apiece with exact incoming
+contexts derived from the already-complete non-zero bitmap. Ampere+ retained
+the original four-warp mapping. Unlike the earlier masked half-warp attempt,
+native resources improved from 103 to 100 registers; shared memory changed
+from 23,392 to 23,456 bytes and the 352-byte stack was unchanged.
+
+A single exact medium phase screen moved graphic/photo/texture device wall
+from 25.88/26.27/20.55 ms to 20.83/20.99/19.91. Five order-balanced
+full-corpus process pairs per format then produced 30 exact rows per format:
+
+| Format | Control pooled median | Candidate pooled median | Paired-median gain |
+|---|---:|---:|---:|
+| PNG | 29.019 ms/image | 29.176 ms/image | 0.322 ms/image |
+| JPEG | 27.523 ms/image | 27.262 ms/image | 0.340 ms/image |
+
+The candidate passed 7/7 focused tests. CPU/CUDA hashes and byte counts were
+exact for methods 2--6 and qualities 25/75/98 over six
+graphic/photo/texture 17x13 and 257x255 fixtures. Twenty PNG/JPEG forced
+fallback cells covered bands 0/1/3/5/7 with token recording both inline and
+pipelined; all matched the CPU references.
+
+Both paired gains are far below 1.5 ms/image, and pooled PNG regressed. The
+candidate was removed; the restored kernel returned to 103 registers / 23,392
+shared bytes and passed 7/7 tests. Raw profiles, phase traces, resources,
+patch, exactness/fallback matrices, tests, and timings use
+`libwebp-i16-full-warp-pair-*` in the adjacent evidence directory. This is
+RTX 2080 SUPER-only evidence; the 784/12,544 pre-Ampere and 64/4,000 Ampere+
+thresholds, architecture split, frozen corpus, and generator are unchanged.

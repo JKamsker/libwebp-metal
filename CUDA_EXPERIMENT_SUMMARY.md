@@ -128,6 +128,7 @@ that hardware and workload.
 | Pre-Ampere pinned decimate-result staging | A refreshed native profile kept decimation first at 18.927/18.666 ms/image PNG/JPEG. Streaming conformance isolated 1.534--1.536 ms per 1600x1200 image in four pageable result/Y/U/V downloads per band. One Turing-only candidate used page-locked staging with ordinary-allocation fallback; Ampere+ stayed unchanged. It cut transfer-event time to about 0.733 ms, but callback wall by only 0.05--0.08 ms because copies already overlap later diagonals and encoder-owned outputs still require a host copy. All 12 timing outputs and 48 conformance outputs were exact; candidate/restored builds passed 7/7 CTests. PNG moved 35.695 to 35.976 ms/image and JPEG 36.239 to 35.385. | Rejected and removed. PNG regressed 0.281 ms/image and JPEG gained only 0.854, below the two-format 1.5 ms/image gate. Do not infer end-to-end gain from CUDA event transfer time when existing stream overlap and host commit remain. RTX 2080 SUPER only; no Ampere+ or threshold change. |
 | I4-first / I16-pruning feasibility | A fresh native-sm_75 trace kept I4 at 63--65% of photo/texture block cycles. Exact medium-fixture outcomes were 191/7,500 I4 for graphic, 4,101/7,500 for photo, and 7,500/7,500 for texture. This screened reversing the luma order so final I4 winners could avoid I16. | Rejected before source change. I4's exact raster search consumes the completed I16 score as its per-block abort threshold; reversing it forces extra work on the 97.45%-I16 graphic case. Final-mode coverage cannot certify an I16 skip, and the request exposes neither an exact content discriminator nor a strong pre-quantization I16 lower bound. Do not replace exact proof with a segment/content heuristic. RTX 2080 SUPER only; no architecture policy changed. |
 | Coefficient-token zero-pair feasibility | A fresh whole-thread profile again selected `VP8RecordCoeffTokens`: 0.520 seconds PNG and 0.460 JPEG over 72 full-corpus encodes (7.222/6.389 ms/image). A counter-only probe found disjoint zero pairs covered 29.366%/28.794% of coefficient iterations, permitting at most one fewer store per pair, or 14.683%/14.397% of coefficient iterations. On the critical texture-medium path the maximum fell to 4.138%/4.124%. | Rejected before a representation candidate. Even pretending pair packing deletes the same fraction of the entire recorder—not merely one store while preserving statistics—bounds the full-corpus benefit at 1.060 ms/image PNG and 0.920 JPEG, below the two-format gate. The probe was removed and restored source passed 7/7 tests. Do not retry zero-pair token packing without a different representation/profile that removes additional work. RTX 2080 SUPER only; no architecture policy changed. |
+| Pre-Ampere full-warp-paired I16 residual costs | A fresh native profile measured 18.756/18.665 ms/image in decimate/collect/replay and put I16 selection at 25.2% of graphic-medium block cycles. Unlike the earlier half-warp mapping, one pre-Ampere candidate used all eight existing CTA warps as two full residual-cost warps per I16 mode. Exact contexts came from the completed non-zero bitmap. Registers fell 103 to 100; shared memory rose 23,392 to 23,456 bytes. A medium phase screen cut graphic/photo device wall by about 5 ms. All 60 full-corpus timing rows, the methods 2--6 / qualities 25/75/98 tiny/odd matrix, and 20 PNG/JPEG fallback cells were exact; candidate and restored builds passed 7/7 tests. | Rejected and removed. Five order-balanced full-corpus pairs yielded paired-median gains of only 0.322 ms/image PNG and 0.340 JPEG; pooled PNG regressed 29.019 to 29.176 ms/image. The local I16 phase gain is hidden by the end-to-end GPU/host schedule. Do not retry full-warp I16 block pairing without a new critical-path profile. RTX 2080 SUPER only; Ampere+ and architecture thresholds/defaults are unchanged. |
 
 All original and follow-up benchmark rows produced stable expected checksums.
 The historical color rows remain raw evidence, but their ratios are not matched
@@ -1439,3 +1440,37 @@ hashes, probe patch, restored build/tests, annotated disassembly, and
 compressed `gprofng` experiments use `libwebp-token-zero-pair-*`.
 Architecture thresholds/defaults, Ampere+ behavior, and the frozen
 corpus/generator are unchanged.
+
+
+## Pre-Ampere full-warp-paired I16 residual rejection
+
+At clean parent `36500ab759b3bb4239dbe0ada672614d99a64374`, the native
+file-I/O batch refresh measured exact medians of 29.055 ms/image PNG and
+27.629 JPEG. Measured stage averages after the warmup batch put
+decimate/collect/replay at 18.756/18.665 ms/image and token emission at
+3.015/2.974. Device timing kept realistic I4 at 63--65% of block cycles but
+exposed the distinct graphic path: I16 selection reached 25.2% there.
+
+The candidate assigned the eight existing CTA warps as two full residual-cost
+warps per I16 mode. Each processed eight AC blocks using exact incoming
+contexts derived from the completed mode non-zero bitmap. This avoided the
+partial-warp masks and shuffles of the earlier rejected half-warp mapping. It
+was pre-Ampere-only; Ampere+ retained the original mapping. Native resources
+moved from 103 to 100 registers and from 23,392 to 23,456 shared bytes, with
+the 352-byte stack unchanged. One exact medium phase screen cut
+graphic/photo/texture wall from 25.88/26.27/20.55 ms to
+20.83/20.99/19.91.
+
+Five order-balanced process pairs per format produced 30 exact rows per
+format. Paired-median gains were only 0.322 ms/image PNG and 0.340 JPEG;
+pooled medians moved 29.019 to 29.176 PNG and 27.523 to 27.262 JPEG. The local
+phase win therefore did not survive the overlapped end-to-end schedule.
+
+The candidate nevertheless passed the complete exactness gate: 7/7 focused
+tests; methods 2--6 and qualities 25/75/98 over graphic/photo/texture 17x13
+and 257x255 inputs; and PNG/JPEG collection failures at bands 0/1/3/5/7 with
+token recording both inline and pipelined. It was removed because both gains
+miss the 1.5 ms/image gate. The restored native kernel returned to 103
+registers / 23,392 shared bytes and passed 7/7 tests. Evidence uses
+`libwebp-i16-full-warp-pair-*`; architecture thresholds/defaults, Ampere+
+behavior, and the frozen corpus/generator are unchanged.
