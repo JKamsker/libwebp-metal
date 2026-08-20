@@ -1,0 +1,437 @@
+{
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-phase2-refusal-audit-v1",
+  "record_kind": "phase2_frozen_executor_auditor_refusal",
+  "experiment_id": "BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V3",
+  "phase": "2",
+  "role": "Luna/max frozen executor/auditor",
+  "decision": "REFUSED_ZERO_ACCEPTED_PERFORMANCE_EVIDENCE",
+  "stage_result": "REFUSED",
+  "authority": "NONE",
+  "audit_scope": {
+    "local_worktree_only": true,
+    "phase1_work_performed": false,
+    "phase3_work_performed": false,
+    "phase1_files_modified": false,
+    "phase1_timing_rows_loaded": false,
+    "prior_cycle_timing_rows_loaded": false,
+    "prior_cycle_paths_contacted": false,
+    "phase2_remote_host_contacted": false,
+    "phase2_ssh_sessions": 0,
+    "phase2_benchmark_commands": 0,
+    "phase2_lease_attempts": 0,
+    "phase2_retries": 0,
+    "phase2_reruns": 0,
+    "method": "Read-only Git ancestry, filesystem, SHA-256, JSON, local frame/chain/archive parsing, frozen source/schema inspection, and the Phase-1B success gate reconstructed locally. No Phase-2 command, SSH, host inspection, lease, workload, benchmark, or evaluation command was executed.",
+    "remote_commands_executed": []
+  },
+  "ancestry": {
+    "expected_main_commit": "92c3b59b2d178c5a03ec20b897252b358f07de81",
+    "expected_main_tree": "6bf2a478b733d5e80ac2656448fe48c8c0964d9a",
+    "phase1a_commit": "3b81544df3305601e8c0817e554833f0824ad634",
+    "phase1a_parent": "92c3b59b2d178c5a03ec20b897252b358f07de81",
+    "phase1a_tree": "5e51c6925729f994dcc9987c583a9f1d02acb721",
+    "phase1b_commit": "b2bca487bdab0d996e03ee9def8dce1d11e7cd0e",
+    "phase1b_parent": "3b81544df3305601e8c0817e554833f0824ad634",
+    "phase1b_tree": "bd96b57638cfd2ae3fa4ae741aa9c5f5ca3bd4a9",
+    "audited_head": "b2bca487bdab0d996e03ee9def8dce1d11e7cd0e",
+    "branch": "codex/backref-cost-aligned-null-stage-attribution-v3",
+    "exact_main_ancestor_verified": true,
+    "phase1a_parent_verified": true,
+    "phase1b_single_parent_verified": true,
+    "phase1b_parent_matches_phase1a": true,
+    "phase1b_additions_only": true,
+    "phase1a_changed_path_count": 52,
+    "phase1b_delta_path_count": 30,
+    "phase1b_delta_status_counts": {
+      "A": 30,
+      "M": 0,
+      "D": 0,
+      "R": 0
+    },
+    "phase1b_overlap_with_phase1a_paths": [],
+    "tracked_worktree_status_before_audit": "CLEAN"
+  },
+  "frozen_hash_audit": {
+    "protocol_sha256": "e21257f4aa4f9e4f9f0a8bee35aafdacf0c8f6402a18a4565232d9368747fa6b",
+    "manifest_sha256": "c3067e6506fb642f6afac48f1ce1549875066ad7dbfdf4302fa55b620bcaf426",
+    "schema_catalog_sha256": "0e2263476886040acfd4cabbfd8d85ebc104720205dd65f46c8b472ef7c2588a",
+    "transport_source_sha256": "68f401540130cea715e4cd58c901592c0ddcda919d08dc53181cdf53bafdf1a1",
+    "identity_source_sha256": "d1b4e786d25aca43c25d8c5e1736445c95f93e8e6f153537e60193125fabda46",
+    "payload_source_sha256": "448e6bd791ca2feb15be5451d7bfeb74a653b8e06c94331228f69bbda340fa94",
+    "toolchain_source_sha256": "7d9c269a9dea669ea07bdcc14b00c850c813925126b62a973a7b66a031c85ef7",
+    "execute_source_sha256": "5255d2440fd351937faa85278fd4c872e92e745757a3bf5e46aaae0f8fc77019",
+    "phase1_local_codegen_sha256": "94587998a468cf2fb897a42f260bb0b8fd5dbb6062ac6c1f3d33bc886fc94c1e",
+    "phase1_local_validation_sha256": "26aabf8659d1094ea230a07ebfeaeaf532278f50b38dcbbf3a46e2bfa5e69b7c",
+    "transport_comparison_sha256": "07be38b90396db2ee5a927eba78df8c2f1dc0f87c2df9a38792e00432ac92825",
+    "phase1b_hash_index_sha256": "cbbba015577acdc361880988a4fcc4238a90300dc358cd5b883b8a9f7494fb4d",
+    "phase1b_authorization_sha256": "c769d839a484467959555785753b0d81d97351328e188974abb3c51ad10139b7",
+    "manifest_frozen_artifact_count": 71,
+    "manifest_frozen_artifacts_missing": 0,
+    "manifest_frozen_artifact_hash_mismatches": 0,
+    "schema_catalog_count": 49,
+    "schema_catalog_unique_count": 49,
+    "manifest_schema_value_count_excluding_catalog_path": 19,
+    "manifest_schema_values_all_in_catalog": true,
+    "source_admission_map_entry_count": 72,
+    "source_admission_map_hash": "f62396024aaf3b7449212b3dc2dbdb0356eca6966f11d9bb6cbc6bbbda166e15",
+    "source_admission_bundle_hash": "394bb7e363c2ebebc6f4ee3211ba565656dbb66b5075c9750b4f3b7f1c32bef6",
+    "source_map_current_file_hash_mismatches": 0,
+    "phase1b_rehearsal_hash_index": {
+      "file_count": 28,
+      "total_bytes": 644419,
+      "entries_checked": 28,
+      "missing": 0,
+      "size_or_sha256_mismatches": 0
+    },
+    "four_body_expected_receipt_sha256": "4f9462508d4f02b4e141d55d5944a2ba9778f3a98740520b4b4e8bb52c9a4951",
+    "four_body_actual_receipt_sha256": "4f9462508d4f02b4e141d55d5944a2ba9778f3a98740520b4b4e8bb52c9a4951",
+    "four_body_expected_actual_byte_equal": true,
+    "frozen_four_body_binary_sha256": "262f23ba84c979fbb62d868f534feca20c428063aaab4804990f01311e04ae42",
+    "frozen_linker_map_sha256": "cb7969b484a94b88781ed7fc74dad8caf0c8bbc559d8a35376b2e4ec3663e849",
+    "frozen_linker_map_extract_sha256": "c03ddb8450a8c29d122aeda275cca60bec2dc86eab7c7ed0446b49a5fa34494b",
+    "frozen_payload_sha256": "b3a92758ab1edc807a9fa081c9c4ceabcf9aafefdb33dcf7646afb468842d424"
+  },
+  "transport_comparison_audit": {
+    "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/transport-comparison.json",
+    "status": "PASS_NO_DETERMINISTIC_V2_TRANSPORT_REGRESSION_FOUND",
+    "audited_main": "92c3b59b2d178c5a03ec20b897252b358f07de81",
+    "absent_data_inference_used": false,
+    "deterministic_v2_transport_regression_found": false,
+    "frozen_consequence": "fresh-bounded-requalification",
+    "protocol_limit_changes": [],
+    "historical_request_counts": {
+      "alignment_v3_bytes": 23193668,
+      "alignment_v3_chunks": 354,
+      "alignment_v4_bytes": 23342945,
+      "alignment_v4_chunks": 357,
+      "aligned_null_v2_bytes": 327680,
+      "aligned_null_v2_chunks": 5,
+      "aligned_null_v2_planned_bytes": 23820500,
+      "aligned_null_v2_planned_chunks": 364,
+      "request_chunk_bytes": 65536,
+      "request_progress_timeout_seconds": 15
+    },
+    "normalized_state_machine_and_pump_sha256": {
+      "aligned-null-v2": "1435c81604ff485590eb109a7feec4e8edfe332323fdeffb2aed93892f7fba18",
+      "alignment-v3": "28ae6b3d1c38945e6a533d8863f1d9d1e166f4ac4594ed0c52fc8536ee2a3411",
+      "alignment-v4": "1435c81604ff485590eb109a7feec4e8edfe332323fdeffb2aed93892f7fba18"
+    },
+    "source_difference": "Alignment V3 did not mark its directly spawned Popen as transport_child; Alignment V4 and aligned-null V2 did. The difference changes only post-deadline stop eligibility, not writes, reads, ACKs, buffering, scheduling, or deadline extension."
+  },
+  "phase1b_authority_reconstruction": {
+    "success_gate_reexecuted_locally": true,
+    "success_gate_result": false,
+    "gate_outcomes": {
+      "READY authenticated remote channel": true,
+      "alignment build frozen": false,
+      "all source receipts identify Phase 1A": true,
+      "archive accepted": true,
+      "cleanup and absence proved": true,
+      "integrity completed": true,
+      "lease was not attempted": true,
+      "observe-only process isolation": true,
+      "operator completed": true,
+      "request declaration chunks and ACKs complete": true,
+      "request progress chain complete": true,
+      "response channel complete": true,
+      "source admission verified": true,
+      "transport complete and capped": true,
+      "zero workloads and samples": true
+    },
+    "refusal_reasons": [
+      "alignment build frozen"
+    ],
+    "phase1b_authorization_status": "REFUSED",
+    "phase1b_authorization_phase2_authority": "NONE",
+    "phase1b_aggregate_verification_flags_are_false_on_refusal": true,
+    "phase1b_gate_outcomes_are_the_authoritative_individual_receipt_results": true
+  },
+  "alignment_build_gate": {
+    "status": "FAIL",
+    "reason": "The rehearsal Unix-make timed binary and codegen receipt do not exactly match the frozen Phase-1A receipt.",
+    "frozen_reference": {
+      "timed_runner_bytes": 643024,
+      "timed_runner_sha256": "262f23ba84c979fbb62d868f534feca20c428063aaab4804990f01311e04ae42",
+      "linker_map_bytes": 69697,
+      "linker_map_sha256": "cb7969b484a94b88781ed7fc74dad8caf0c8bbc559d8a35376b2e4ec3663e849",
+      "linker_map_extract_sha256": "c03ddb8450a8c29d122aeda275cca60bec2dc86eab7c7ed0446b49a5fa34494b",
+      "push_b_instruction_words_sha256": "fe242531aaa01f152c2fc3df9aa11f0c62b8b3a274e32d36200153f01b85f48d",
+      "push_l_instruction_words_sha256": "11b8f81fa59c92aca5d20068d15ec6c66eb268e7047401ae09545322ef2c386d",
+      "dp_b_canonical_instructions_sha256": "1b60e5c8e811ca09374e23e65e08d766242137d1ae73125628eafbc298402efc",
+      "dp_b_instruction_words_sha256": "9165f610f8936727ed6888db7e0f1ebe7a3a34eaae59a9a541558de91c10ee93",
+      "dp_l_canonical_instructions_sha256": "1b60e5c8e811ca09374e23e65e08d766242137d1ae73125628eafbc298402efc",
+      "dp_l_instruction_words_sha256": "a97ec8f4c288a37ca7f6520995e95ddb256cbe7af110c0a5ae96b2ab3dc31f86"
+    },
+    "rehearsal_receipt": {
+      "build_identity_sha256": "2cd969ef7f29c9c9d82fd41a3b9e4a1109469ac39d0196d54680f2e60eaf6371",
+      "codegen_sha256": "194c6a894dfb81383d5022c501e5a66a12985a13c4bbe36dfec22f62e9765d5e",
+      "timed_runner_bytes": 653712,
+      "timed_runner_sha256": "1ca731d0411a15eb2626e02adb7bca789a628f4d0d9c6c57e3fa4352a958a920",
+      "linker_map_bytes": 69803,
+      "linker_map_sha256": "a057f30e69ddf0d0e9336142275b36c86952a89b1589d2007d5c4f422c4814b8",
+      "linker_map_extract_sha256": "22c341b93a3a2f32b8f0b3ea2b2bfff2a1cc6fb70c2fe8dc714e9f7cff52c791",
+      "disassembly_sha256": "cde88bc8dd50509b71814e02a2f3fb2b992135bb857fcc53668820f2fd9fc7c7",
+      "push_b_instruction_words_sha256": "8d38f4a2e6cf88da60a436d8ecba94fff456b665be79d953f43dd121142beaab",
+      "push_l_instruction_words_sha256": "6214f7038f6ef8f2d55a2805eb68233b173cc9b005c03ab2f4fdfebdec3b752a",
+      "dp_b_canonical_instructions_sha256": "7c234bd7c38accc78d0cc30d7b49941459cfeea92abdd0e24b9833142874141b",
+      "dp_b_instruction_words_sha256": "72e9f913e7e63026679e1962d81b63976014e036d084215606f73c2eeb56d9ee",
+      "dp_l_canonical_instructions_sha256": "7c234bd7c38accc78d0cc30d7b49941459cfeea92abdd0e24b9833142874141b",
+      "dp_l_instruction_words_sha256": "34897d54929c47bc442a6bc3700d9a0688a8cfe84991eb2df96f8622f82536fb"
+    },
+    "matching_geometry": {
+      "four_body_identity_domain_sha256": "9a73edd37188799e4e7d9b6a532e13daf90d9195874d208308fcdcbff954f14e",
+      "symbol_addresses_same": true,
+      "all_four_addresses_distinct": true,
+      "entry_modulo_16384": 0,
+      "inter_entry_spacing_bytes": 16384,
+      "dp_to_push_displacement_bytes": 32768,
+      "section_size_bytes": 50444,
+      "body_bytes": 3600,
+      "padding_bytes": 46844,
+      "timed_recorder_free": true,
+      "within_rehearsal_b_l_canonical_instruction_identity": true
+    }
+  },
+  "rehearsal_audit": {
+    "sole_rehearsal_attempts": 1,
+    "single_noninteractive_remote_session_count": 1,
+    "connection_attempts": 1,
+    "retry_count": 0,
+    "rerun_count": 0,
+    "source_commit": "3b81544df3305601e8c0817e554833f0824ad634",
+    "source_tree": "5e51c6925729f994dcc9987c583a9f1d02acb721",
+    "transaction_nonce": "d5c781eeb2b0225224adf5ecd392368f00b59b7fc1e257372cd634aacc6b1737",
+    "request_declaration_sha256": "69305c8d441d7b31bbb393a2563bd577c56ba1f36e777a2a0555a46739dc8507",
+    "request_payload_sha256": "d13eb1ea2b9609485990848025aea4195d064a2a6c2a0e26945a9c1b2126855a",
+    "raw_request_counts": {
+      "declarations": 1,
+      "request_payload_bytes": 23869976,
+      "request_chunk_bytes": 65536,
+      "request_chunks_planned": 365,
+      "request_chunks_written": 365,
+      "request_chunks_acknowledged": 365,
+      "request_bytes_acknowledged": 23869976,
+      "request_channel_wire_bytes": 23934714,
+      "request_channel_wire_sha256": "c8cdcc013225beae21ed6e85309b1cea545d9a6c7e1395280369011af6dd0aa7",
+      "last_fully_acknowledged_chunk": 365
+    },
+    "progress_chain": {
+      "path": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/rehearsal/return-protocol/request-progress-chain.json",
+      "sha256": "52f637b9428e98706e2032aec1228e84a3b151a2c679c3195b95f755dfd0689c",
+      "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v3-request-progress-chain-v1",
+      "status": "complete",
+      "row_cap": 512,
+      "rows_recorded": 365,
+      "rows_reconstructed": 365,
+      "remote_ack_frames_reconstructed": 365,
+      "ack_digest_recomputations_failed": 0,
+      "chain_link_failures": 0,
+      "range_or_cumulative_failures": 0,
+      "timestamp_order_or_latency_failures": 0,
+      "last_fully_acknowledged_chunk": 365,
+      "first_prior_ack_digest": "8481cabccb2c27abd5143a1ceff7ed124755cfa359fd5a04fc4fb91f0b2d23b1",
+      "last_ack_digest": "16a26c38b9ee1efd367726a4f34f3eb8ef93b1e01813f3d20f058c91a8d46766",
+      "max_ack_latency_ns": 154921833,
+      "min_ack_latency_ns": 46666542,
+      "timestamps_used_in_performance_statistics": false
+    },
+    "raw_channels": {
+      "channel_stdout_bytes": 214981,
+      "channel_stdout_sha256": "f8cb61198e22dbedd6d4703ca8c9f7b22ff53fe09ff4bad82e14833a73a007bf",
+      "channel_frames": 371,
+      "channel_request_ack_frames": 366,
+      "transport_stderr_bytes": 0,
+      "transport_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "response_and_archive": {
+      "framed_response_bytes": 18659,
+      "framed_response_sha256": "261d534f32ee280e0713246c0b784dcef29f4b341cd9000bd4213e2b531e174b",
+      "archive_bytes": 14265,
+      "archive_sha256": "9033f14cc8350fbcdc81eccdaf072b295f99d79189539812ede9553e6a2510ac",
+      "response_parse_status": "PASS",
+      "response_frame_order_status": "PASS",
+      "archive_member_count": 10,
+      "archive_inventory_hashes_match_returned_evidence": true,
+      "integrity_footer_status": "complete",
+      "cleanup_footer_last": true
+    },
+    "source_toolchain_device_resource_process": {
+      "source_admission_status": "verified",
+      "source_map_entry_count": 72,
+      "source_commit_matches_phase1a": true,
+      "source_tree_matches_phase1a": true,
+      "toolchain_xcode": "26.3",
+      "toolchain_sdk": "macosx26.2",
+      "toolchain_executable_count": 8,
+      "toolchain_metadata_count": 4,
+      "xcrun_required": false,
+      "metal_enabled": false,
+      "cuda_workloads": 0,
+      "resource_settings_changed": false,
+      "remote_process_isolation_status": "verified",
+      "discovered_pid_signals": 0,
+      "exact_identity_conflicts": [],
+      "archive_and_cleanup_exact_child_receipt": true,
+      "remote_cleanup_absence_proved": true
+    },
+    "zero_workload_counts": {
+      "encoder_workloads": 0,
+      "correctness_encodes": 0,
+      "untimed_counter_workloads": 0,
+      "profiler_workloads": 0,
+      "runner_children": 0,
+      "performance_samples": 0,
+      "timer_validation_children": 0,
+      "benchmark_lease_acquisition_attempted": false,
+      "timed_binary_invoked": false
+    }
+  },
+  "frozen_design_audit": {
+    "candidate_variants": [
+      "B",
+      "L"
+    ],
+    "h_candidate_present": false,
+    "append_hint_or_pop_tail_candidate_present": false,
+    "production_promotion_authorized": false,
+    "four_body_identity": {
+      "entry_count": 4,
+      "ordered_entries": [
+        "PushInterval/B",
+        "PushIntervalLayoutClone/L",
+        "BackwardReferencesHashChainDistanceOnly/B",
+        "BackwardReferencesHashChainDistanceOnlyLayoutClone/L"
+      ],
+      "section": "__TEXT,__br_null_v3",
+      "section_size_bytes": 50444,
+      "body_bytes": 3600,
+      "padding_bytes": 46844,
+      "alignment_boundary_bytes": 16384,
+      "inter_entry_spacing_bytes": 16384,
+      "dp_to_corresponding_push_displacement_bytes": 32768,
+      "expected_actual_receipt_equal": true,
+      "distinct_addresses": true,
+      "no_deduplicate": true
+    },
+    "semantic_work_and_isolation": {
+      "phase1_local_validation_status": "PASS",
+      "pass_labeled_check_fields": 44,
+      "total_check_fields": 47,
+      "b_l_normalized_work_equal": true,
+      "normalized_work_sha256": "2191c66b70ce05335fe5138bf3ef938409ef0837b1c38934eb5e17ccf68eebb0",
+      "normalized_semantic_sha256": "8a434e0b87a4bfb63eaa95eb615d3ed2113b2a4f2949f7dc806b35ccaf57599b",
+      "local_bitstream_sha256": "a3073eda31e5f94a3529661f8e11da82328a414b5b226722eab10256abab6c9a",
+      "timed_recorder_free": true,
+      "selector_once_before_mutation": true,
+      "runtime_truth_table": {
+        "absent": 0,
+        "B": 0,
+        "L": 1,
+        "H": -1,
+        "other_invalid": true
+      },
+      "public_api_abi_equal": true,
+      "default_build_omission": true,
+      "mutual_exclusion_guard_count": 46,
+      "stale_identity_negative_matrix": "PASS"
+    },
+    "ledger": {
+      "top_level_bucket_count": 9,
+      "nested_descriptive_timer_count": 7,
+      "top_level_partition_non_overlapping": true,
+      "nested_timers_non_additive": true,
+      "residual_zero_required": true,
+      "clock": "mach_continuous_time",
+      "clock_reads_formula": "2 + 2 * sum(all emitted stage calls)",
+      "clock_overhead_reads": 4096,
+      "zero_samples_on_gate_failure": true
+    },
+    "frozen_inventory": {
+      "cases": [
+        "photo-large",
+        "graphic-large"
+      ],
+      "methods": [
+        4,
+        6
+      ],
+      "variants": [
+        "B",
+        "L"
+      ],
+      "variant_order": [
+        [
+          "B",
+          "L"
+        ],
+        [
+          "L",
+          "B"
+        ],
+        [
+          "B",
+          "L"
+        ],
+        [
+          "L",
+          "B"
+        ]
+      ],
+      "profile_processes": 32,
+      "correctness_encodes": 16,
+      "warmups": 32,
+      "retained_timing_rows": 128,
+      "runner_rows": 160,
+      "stage_rows": 160,
+      "untimed_work_rows": 8,
+      "direct_runner_children": 59,
+      "paired_rows_per_statistic": 16,
+      "bootstrap_resamples": 100000,
+      "bootstrap_seed": "0x4e554c33"
+    },
+    "dynamic_authority_contract": {
+      "correctness_before_timing": true,
+      "timer_accounting_before_timing": true,
+      "direct_serial_child_ownership_before_timing": true,
+      "one_exclusive_lease": true,
+      "one_synchronous_pipeline": true,
+      "phase2_rows_present": 0
+    }
+  },
+  "raw_benchmark_counts": {
+    "phase2_request_sessions": 0,
+    "phase2_request_declarations": 0,
+    "phase2_request_chunks": 0,
+    "phase2_request_bytes": 0,
+    "phase2_benchmark_lease_attempts": 0,
+    "phase2_correctness_encodes": 0,
+    "phase2_untimed_work_rows": 0,
+    "phase2_runner_children": 0,
+    "phase2_timed_workloads": 0,
+    "phase2_timing_rows": 0,
+    "phase2_performance_samples": 0,
+    "phase2_profiler_invocations": 0,
+    "phase2_cuda_workloads": 0
+  },
+  "evidence_paths": {
+    "phase2_machine_audit": "evidence/backref-cost-aligned-null-stage-attribution-v3-execution-20260820/phase2-refusal-audit.json",
+    "phase2_human_audit": "evidence/backref-cost-aligned-null-stage-attribution-v3-execution-20260820/phase2-refusal-audit.md",
+    "phase1b_authorization": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/phase1b-authorization.json",
+    "phase1b_hash_index": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/phase1b-rehearsal-hashes.json",
+    "transport_comparison": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/transport-comparison.json",
+    "four_body_expected_receipt": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/four-body-expected-receipt.json",
+    "four_body_actual_receipt": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/four-body-actual-receipt.json",
+    "progress_chain": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/rehearsal/return-protocol/request-progress-chain.json",
+    "raw_rehearsal_directory": "evidence/backref-cost-aligned-null-stage-attribution-v3-design/rehearsal"
+  },
+  "pr_ci": {
+    "branch": "codex/backref-cost-aligned-null-stage-attribution-v3",
+    "phase2_commit": null,
+    "pushed": false,
+    "pr_opened": false,
+    "ci_run": false,
+    "status": "unchanged_by_phase2; no push or PR action was authorized"
+  },
+  "blocker": "The sole Phase-1B rehearsal completed transport and zero-workload receipts, but its Unix-make timed binary/codegen identity is not exactly the frozen Phase-1A identity. The mismatch is an immutable alignment-build gate failure; Phase 2 cannot obtain authority and must not repair or rerun it.",
+  "next_lead": "Future Phase-1 owner must produce a fresh independently hashed rehearsal whose Unix-make timed binary and codegen receipts exactly match a newly frozen Phase-1A identity before any Phase-2 authority is reconsidered."
+}

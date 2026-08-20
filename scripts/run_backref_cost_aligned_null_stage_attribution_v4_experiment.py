@@ -1,0 +1,1012 @@
+#!/usr/bin/env python3
+"""Frozen remote operator for diagnostic-only backref-cost specialization aligned null stage attribution v4."""
+
+from __future__ import annotations
+
+import argparse
+import fcntl
+import hashlib
+import json
+import os
+import platform
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+from pathlib import Path
+
+from backref_cost_aligned_null_stage_attribution_v4_admission import (
+    DirectRunnerLedger, OBSERVE_ONLY_EXTERNAL_PROCESS_CLASSES, run_owned)
+import backref_cost_aligned_null_stage_attribution_v4_transport as transport
+import backref_cost_aligned_null_stage_attribution_v4_toolchain as toolchain
+import backref_cost_aligned_null_stage_attribution_v4_identity as identity
+
+
+ROOT = Path(__file__).resolve().parents[1]
+MANIFEST_PATH = ROOT / "scripts/backref_cost_aligned_null_stage_attribution_v4_manifest.json"
+
+
+def sha256(path: Path) -> str:
+    value = hashlib.sha256()
+    with path.open("rb") as source:
+        for chunk in iter(lambda: source.read(1024 * 1024), b""):
+            value.update(chunk)
+    return value.hexdigest()
+
+
+def write_json(path: Path, value: object) -> None:
+    path.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n",
+                    encoding="utf-8")
+
+
+def run(argv: list[str], *, cwd: Path = ROOT,
+        env: dict[str, str] | None = None, timeout: int = 1200,
+        check: bool = True) -> subprocess.CompletedProcess[str]:
+    result = run_owned(argv, cwd=cwd, env=env, timeout=timeout, text=True)
+    if check and result.returncode != 0:
+        raise RuntimeError(
+            f"command failed ({result.returncode}): {' '.join(argv)}\n"
+            f"stdout:\n{result.stdout}\nstderr:\n{result.stderr}")
+    return result
+
+
+def git(*args: str) -> str:
+    result = run_owned(["git", *args], cwd=ROOT, text=True)
+    if result.returncode != 0:
+        raise RuntimeError(f"git command failed: {' '.join(args)}")
+    return result.stdout.strip()
+
+
+def load_manifest() -> dict:
+    manifest = json.loads(MANIFEST_PATH.read_text(encoding="utf-8"))
+    if manifest.get("four_body_identity") != identity.generator_binding():
+        raise RuntimeError("manifest is not derived from canonical four-body generator")
+    if manifest["phase_1_decision"]["status"] != \
+            "PENDING_PHASE_1B_AUTHORIZATION":
+        raise RuntimeError("invalid phase-1 decision state")
+    for row in manifest["frozen_artifacts"]:
+        if sha256(ROOT / row["path"]) != row["sha256"]:
+            raise RuntimeError(f"frozen source hash mismatch: {row['path']}")
+    return manifest
+
+
+def validate_source(manifest: dict) -> str:
+    commit = git("rev-parse", "HEAD")
+    expected = os.environ.get(manifest["required_expected_commit_environment"])
+    if not expected or expected != commit:
+        raise RuntimeError("exact handoff commit environment mismatch")
+    if git("status", "--porcelain"):
+        raise RuntimeError("operator requires a clean source checkout")
+    if run(["git", "merge-base", "--is-ancestor", manifest["base_commit"],
+            commit], check=False).returncode != 0:
+        raise RuntimeError("handoff is not descended from frozen main")
+    return commit
+
+
+def clean_environment(manifest: dict, variant: str,
+                      stage_output: Path | None = None,
+                      run_id: str | None = None,
+                      case_id: str | None = None) -> dict[str, str]:
+    host = manifest["remote_host"]
+    env = {
+        "HOME": str(Path.home()), "USER": os.environ["USER"],
+        "LOGNAME": os.environ["LOGNAME"], "TMPDIR": os.environ["TMPDIR"],
+        "PATH": "/usr/bin:/bin:/usr/sbin:/sbin", "LANG": "C.UTF-8",
+        "LC_ALL": "C.UTF-8", "DEVELOPER_DIR": host["developer_dir"],
+        "SDKROOT": host["sdk_path"],
+    }
+    for name in manifest["forbidden_environment"]:
+        env.pop(name, None)
+    if variant not in ("B", "L"):
+        raise RuntimeError("unknown variant")
+    env[manifest["candidate"]["runtime_flag"]] = variant
+    if stage_output is not None:
+        env.update({
+            "WEBP_BENCHMARK_SESSION": "exclusive",
+            "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_TIMERS": "1",
+            "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_STAGE_OUTPUT": str(stage_output),
+            "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_RUN_ID": run_id or "",
+            "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_CASE_ID": case_id or "",
+            "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_SAMPLE_SET": "warm-dominant",
+        })
+    return env
+
+
+def process_guard(output: Path, label: str) -> dict:
+    snapshot = transport.frozen_process_snapshot()
+    classified = transport.classify_process_snapshot(snapshot, os.getpid())
+    classified["snapshot_bytes"] = len(snapshot)
+    classified["snapshot_retention"] = (
+        "SHA-256/count/structural ancestor receipt; redundant raw process "
+        "table omitted from the response archive")
+    classified["label"] = label
+    classified["external_process_classes"] = list(
+        OBSERVE_ONLY_EXTERNAL_PROCESS_CLASSES)
+    return classified
+
+
+def available_memory() -> tuple[int, str]:
+    raw = run(["/usr/bin/vm_stat"]).stdout
+    match = re.search(r"page size of ([0-9]+) bytes", raw)
+    if match is None:
+        raise RuntimeError("vm_stat page size unavailable")
+    pages = 0
+    for name in ("Pages free", "Pages inactive", "Pages speculative"):
+        found = re.search(rf"^{name}:\s+([0-9]+)\.", raw, re.MULTILINE)
+        if found is None:
+            raise RuntimeError(f"vm_stat field unavailable: {name}")
+        pages += int(found.group(1))
+    return pages * int(match.group(1)), raw
+
+
+def resource_admission(manifest: dict, output: Path, label: str) -> dict:
+    """Capture immutable/read-only host state and fail closed on drift."""
+    host = manifest["remote_host"]
+    model = run(["/usr/sbin/sysctl", "-n", "hw.model"]).stdout.strip()
+    cpu = run(["/usr/sbin/sysctl", "-n",
+               "machdep.cpu.brand_string"]).stdout.strip()
+    physical = int(run(["/usr/sbin/sysctl", "-n",
+                        "hw.memsize"]).stdout.strip())
+    available, vm_raw = available_memory()
+    disk = shutil.disk_usage(output).free
+    battery = run(["/usr/bin/pmset", "-g", "batt"]).stdout
+    custom = run(["/usr/bin/pmset", "-g", "custom"]).stdout
+    thermal = run(["/usr/bin/pmset", "-g", "therm"]).stdout
+    power = json.loads(run(["/usr/sbin/system_profiler", "SPPowerDataType",
+                            "-json"]).stdout)
+    ac_entries = [row.get("AC Power", {})
+                  for row in power.get("SPPowerDataType", [])
+                  if "AC Power" in row]
+    if model != host["hardware_model"] or cpu != host["cpu_brand"] or \
+            physical != host["physical_memory_bytes"]:
+        raise RuntimeError("Apple hardware identity mismatch")
+    if available < manifest["resources"]["minimum_available_memory_bytes"]:
+        raise RuntimeError("available-memory prerequisite failed")
+    if disk < manifest["resources"]["minimum_available_disk_bytes"]:
+        raise RuntimeError("available-disk prerequisite failed")
+    if "AC Power" not in battery or "lowpowermode         0" not in custom:
+        raise RuntimeError("AC power with Low Power Mode off is required")
+    if not ac_entries or any(row.get("Current Power Source") != "TRUE" or
+                             row.get("LowPowerMode") != "No"
+                             for row in ac_entries):
+        raise RuntimeError("system_profiler power prerequisite failed")
+    if any(required not in thermal
+           for required in host["required_thermal_lines"]):
+        raise RuntimeError("thermal/performance state prerequisite failed")
+    record = {
+        "label": label, "hardware_model": model, "cpu_brand": cpu,
+        "physical_memory_bytes": physical,
+        "available_memory_bytes": available,
+        "available_disk_bytes": disk, "vm_stat": vm_raw,
+        "pmset_batt": battery, "pmset_custom": custom,
+        "pmset_thermal": thermal, "system_profiler_power": power,
+        "process_isolation": process_guard(output, f"resources-{label}"),
+        "settings_changed": False,
+    }
+    write_json(output / f"resource-admission-{label}.json", record)
+    return record
+
+
+def profiler_admission(manifest: dict) -> dict:
+    """Read-only admission for the frozen coarse-timer diagnostic."""
+    if platform.system() != "Darwin" or platform.machine() != "arm64":
+        raise RuntimeError("coarse-timer host must be Darwin arm64")
+    observed = toolchain.identity()
+    if observed != manifest["toolchain_identity_gate"]["identity"]:
+        raise RuntimeError("manifest/actual pinned toolchain identity mismatch")
+    if observed != manifest["diagnostic"]["toolchain_identity"]:
+        raise RuntimeError("diagnostic/toolchain identity mismatch")
+    return {"toolchain_identity": observed,
+            "manifest_actual_fixture_agreement_required": True,
+            "method": "coarse monotonic stage timers",
+            "clock": "mach_continuous_time",
+            "external_profiler_invocations": 0,
+            "noninteractive": True,
+            "permission_or_attach_rights_required": False}
+
+
+def generate_corpus(manifest: dict, temporary: Path) -> tuple[Path, dict]:
+    corpus = temporary / "corpus"
+    run([sys.executable, "scripts/generate_publication_corpus.py", "--output",
+         str(corpus), "--verify"], timeout=1200)
+    catalog = json.loads((corpus / "manifest.json").read_text())
+    cases = {row["case_id"]: row for row in catalog["cases"]}
+    for frozen in manifest["corpus"]:
+        row = cases[frozen["case_id"]]
+        if row["sha256"] != frozen["sha256"] or \
+                sha256(corpus / row["file"]) != frozen["sha256"]:
+            raise RuntimeError("frozen corpus mismatch")
+    return corpus, cases
+
+
+def build(manifest: dict, temporary: Path, output: Path) -> dict:
+    host = manifest["remote_host"]
+    flags = manifest["build"]["cflags"]
+
+    def one(name: str, recorder: bool) -> dict:
+        build_root = temporary / name
+        run(["git", "clone", "--no-checkout", str(ROOT), str(build_root)])
+        run(["git", "checkout", "--detach", git("rev-parse", "HEAD")],
+            cwd=build_root)
+        env = clean_environment(manifest, "B")
+        env.update({"CC": host["compiler_path"],
+                    "CXX": manifest["build"]["cxx"],
+                    "AR": manifest["build"]["ar"],
+                    "RANLIB": manifest["build"]["ranlib"]})
+        argv = ["/usr/bin/make", "-f", "makefile.unix", "WEBP_ENABLE_METAL=0",
+                "WEBP_BUILD_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_EXPERIMENT=1",
+                f"WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_RECORDER={int(recorder)}",
+                f"CFLAGS={flags}",
+                f"LDFLAGS={manifest['build']['ldflags']},-map,{build_root / 'linker.map'}",
+                "tools/backref_cost_aligned_null_stage_attribution_v4_experiment_runner"]
+        result = run(argv, cwd=build_root, env=env, timeout=1800)
+        runner = (build_root / "tools" /
+                  "backref_cost_aligned_null_stage_attribution_v4_experiment_runner")
+        if not runner.is_file():
+            raise RuntimeError("factorization runner missing after build")
+        nm_text = run([manifest["build"]["nm"],
+                       "-nm", str(runner)], cwd=build_root).stdout
+        return {"root": build_root, "runner": runner, "nm": nm_text,
+                "linker_map": build_root / "linker.map",
+                "command": argv, "result": result,
+                "runner_sha256": sha256(runner)}
+
+    timed = one("timed-source-build", False)
+    recorder = one("recorder-source-build", True)
+    missing = [symbol for symbol in manifest["acceptance"]["required_symbols"]
+               if symbol not in timed["nm"]]
+    if missing:
+        raise RuntimeError(f"required stable symbols absent: {missing}")
+    if "AlignedNullStageAttributionV4Record" in timed["nm"] or \
+            "AlignedNullStageAttributionV4Stats" in timed["nm"]:
+        raise RuntimeError("timed binary contains recorder symbols")
+    if "AlignedNullStageAttributionV4RecordPush" not in recorder["nm"] or \
+            timed["runner_sha256"] == recorder["runner_sha256"]:
+        raise RuntimeError("recorder binary identity/separation gate failed")
+    private_addresses = {}
+    for line in timed["nm"].splitlines():
+        match = re.match(r"^([0-9a-f]+).* _([^ ]+)$", line)
+        if match and match.group(2) in identity.names():
+            private_addresses[match.group(2)] = match.group(1)
+    if set(private_addresses) != set(identity.names()) or \
+            len(set(private_addresses.values())) != len(private_addresses):
+        raise RuntimeError("private DP/PushInterval bodies are absent or aliased")
+
+    symbols = identity.names()
+    disassembly = run([
+        manifest["build"]["llvm_objdump"],
+        "--disassemble-symbols=" + ",".join(
+            "_" + symbol for symbol in symbols), str(timed["runner"])],
+        cwd=timed["root"]).stdout
+    facts = {}
+    current = None
+    for line in disassembly.splitlines():
+        label = re.match(r"^[0-9a-f]+ <_([^>]+)>:$", line)
+        if label:
+            current = label.group(1)
+            facts[current] = {"mnemonics": [], "instruction_words": [],
+                              "operands": []}
+            continue
+        instruction = re.match(
+            r"^\s*[0-9a-f]+:\s+([0-9a-f]+)\s+(\S+)(?:\s+(.*))?$", line)
+        if current is not None and instruction:
+            facts[current]["instruction_words"].append(instruction.group(1))
+            facts[current]["mnemonics"].append(instruction.group(2))
+            facts[current]["operands"].append(instruction.group(3) or "")
+    if set(facts) != set(symbols):
+        raise RuntimeError("codegen symbol extraction incomplete")
+    for fact in facts.values():
+        while fact["mnemonics"] and fact["mnemonics"][-1] == "nop":
+            fact["mnemonics"].pop()
+            fact["instruction_words"].pop()
+            fact["operands"].pop()
+        mnemonics = fact["mnemonics"]
+        def is_branch(mnemonic: str) -> bool:
+            return (mnemonic == "b" or mnemonic.startswith("b.") or
+                    mnemonic in ("bl", "blr", "br", "ret") or
+                    mnemonic.startswith(("cb", "tb")))
+        fact.update({
+            "size_bytes": 4 * len(mnemonics),
+            "instruction_count": len(mnemonics),
+            "branch_count": sum(is_branch(m) for m in mnemonics),
+            "load_count": sum(m.startswith(("ld", "ldr")) for m in mnemonics),
+            "store_count": sum(m.startswith(("st", "str")) for m in mnemonics),
+            "instruction_words_sha256": hashlib.sha256(
+                "\n".join(fact.pop("instruction_words")).encode()).hexdigest(),
+            "mnemonics_sha256": hashlib.sha256(
+                "\n".join(mnemonics).encode()).hexdigest(),
+        })
+    def canonical(symbol: str) -> list[str]:
+        aliases = identity.normalization_aliases()
+        result = []
+        for mnemonic, operands in zip(facts[symbol]["mnemonics"],
+                                      facts[symbol]["operands"]):
+            for old, new in aliases.items():
+                operands = operands.replace(old, new)
+            operands = re.sub(r"0x[0-9a-f]+ (?=<_[^>]+>)", "", operands)
+            result.append(f"{mnemonic}\t{operands}".rstrip())
+        return result
+    equivalence_pairs = identity.equivalence_pairs()
+    for left, right in equivalence_pairs:
+        if canonical(left) != canonical(right):
+            raise RuntimeError(
+                f"matched-layout canonical-instruction gate failed: {left}/{right}")
+    for symbol, fact in facts.items():
+        fact["canonical_instructions_sha256"] = hashlib.sha256(
+            "\n".join(canonical(symbol)).encode()).hexdigest()
+        del fact["mnemonics"]
+        del fact["operands"]
+    address_values = {name: int(value, 16)
+                      for name, value in private_addresses.items()}
+    expected_order = identity.names()
+    if sorted(address_values, key=address_values.get) != expected_order or \
+            any(value % identity.BOUNDARY_BYTES for value in address_values.values()) or \
+            any(address_values[expected_order[i + 1]] -
+                address_values[expected_order[i]] != identity.BOUNDARY_BYTES
+                for i in range(identity.count() - 1)):
+        raise RuntimeError("16 KiB entry alignment/order gate failed")
+    for push, dp in identity.displacement_pairs():
+        if address_values[dp] - address_values[push] != 2 * identity.BOUNDARY_BYTES:
+            raise RuntimeError("DP-to-Push relative placement gate failed")
+    otool_text = run([manifest["build"]["otool"], "-l",
+                      str(timed["runner"])], cwd=timed["root"]).stdout
+    section = re.search(
+        rf"sectname {identity.SECTION_NAME}\n\s+segname {identity.SECTION_SEGMENT}\n"
+        r"\s+addr (0x[0-9a-f]+)\n\s+size (0x[0-9a-f]+)\n"
+        r"\s+offset ([0-9]+)\n\s+align 2\^14 \(16384\)", otool_text)
+    if section is None or int(section.group(1), 16) != \
+            address_values[expected_order[0]]:
+        raise RuntimeError("dedicated Mach-O section gate failed")
+    section_block = otool_text[section.start():]
+    section_flags = re.search(r"\n\s+flags (0x[0-9a-f]+)", section_block)
+    if section_flags is None or section_flags.group(1) != "0x80000400":
+        raise RuntimeError(
+            "dedicated Mach-O section is not executable pure instructions")
+    section_size = int(section.group(2), 16)
+    padding_bytes = section_size - sum(fact["size_bytes"]
+                                       for fact in facts.values())
+    map_text = timed["linker_map"].read_text(encoding="utf-8")
+    map_rows = [line for line in map_text.splitlines()
+                if line.split() and
+                line.rsplit(None, 1)[-1].removeprefix("_") in expected_order]
+    if len(map_rows) != identity.count() or [row.rsplit(None, 1)[-1].removeprefix("_")
+                             for row in map_rows] != expected_order:
+        raise RuntimeError("linker-map section order gate failed")
+    section_map_rows = [line for line in map_text.splitlines()
+                        if f"{identity.SECTION_SEGMENT}\t{identity.SECTION_NAME}" in line]
+    if len(section_map_rows) != 1:
+        raise RuntimeError("linker-map dedicated section row gate failed")
+    linker_map_extract = "\n".join(section_map_rows + map_rows) + "\n"
+    write_json(output / "codegen.json", {
+        "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v4-codegen-v1",
+        "timed_runner_sha256": timed["runner_sha256"],
+        "disassembly_sha256": hashlib.sha256(disassembly.encode()).hexdigest(),
+        "facts": facts, "baseline_layout_mnemonics_equal": True,
+        "baseline_layout_canonical_instructions_equal": True,
+        "no_h_body_in_candidate_scope": True,
+        "all_four_private_addresses_distinct": True,
+        "four_body_identity": identity.generator_binding(),
+        "recorder_symbols_in_timed_binary": False,
+        "symbol_addresses": private_addresses,
+        "alignment_boundary_bytes": identity.BOUNDARY_BYTES,
+        "section": {"segment": identity.SECTION_SEGMENT, "name": identity.SECTION_NAME,
+                    "address": section.group(1),
+                    "file_offset": int(section.group(3)),
+                    "size_bytes": section_size, "alignment_power": 14,
+                    "flags": section_flags.group(1),
+                    "executable_pure_instructions": True},
+        "inter_entry_padding_bytes": padding_bytes,
+        "dp_to_push_displacement_bytes": 2 * identity.BOUNDARY_BYTES,
+        "linker_map_sha256": sha256(timed["linker_map"]),
+        "linker_map_extract_sha256": hashlib.sha256(
+            linker_map_extract.encode()).hexdigest(),
+        "linker_map_bytes": timed["linker_map"].stat().st_size,
+        "timed_runner_bytes": timed["runner"].stat().st_size})
+    record = {
+        "timed_command": timed["command"],
+        "recorder_command": recorder["command"], "cflags": flags,
+        "ldflags": manifest["build"]["ldflags"],
+        "timed_runner_sha256": timed["runner_sha256"],
+        "recorder_runner_sha256": recorder["runner_sha256"],
+        "timed_runner_bytes": timed["runner"].stat().st_size,
+        "recorder_runner_bytes": recorder["runner"].stat().st_size,
+        "alignment_section_size_bytes": section_size,
+        "alignment_body_bytes": sum(fact["size_bytes"]
+                                    for fact in facts.values()),
+        "alignment_padding_bytes": padding_bytes,
+        "same_timed_binary_for_all_variants": True,
+        "timed_recorder_free": True,
+        "all_four_private_addresses_distinct": True,
+        "timed_build_stdout_sha256": hashlib.sha256(
+            timed["result"].stdout.encode()).hexdigest(),
+        "recorder_build_stdout_sha256": hashlib.sha256(
+            recorder["result"].stdout.encode()).hexdigest(),
+        "timed_nm_sha256": hashlib.sha256(timed["nm"].encode()).hexdigest(),
+        "recorder_nm_sha256": hashlib.sha256(
+            recorder["nm"].encode()).hexdigest(),
+        "required_symbols": manifest["acceptance"]["required_symbols"]}
+    write_json(output / "build-identity.json", record)
+    return {"root": timed["root"], "runner": timed["runner"],
+            "recorder_runner": recorder["runner"], "identity": record}
+
+
+def timer_accounting_gate(manifest: dict, timed_runner: Path,
+                          recorder_runner: Path, corpus: Path, cases: dict,
+                          output: Path, ledger: DirectRunnerLedger) -> dict:
+    timer_root = output / "timer-validation"
+    timer_root.mkdir()
+    result = ledger.run(
+        [str(timed_runner), "timer-check"], cwd=timed_runner.parent,
+        env=clean_environment(manifest, "B"), variant="B",
+        case_id="clock-only", method=0, lifecycle="timer-validation",
+        purpose="monotonic-clock-validation")
+    if result.returncode != 0 or result.stderr:
+        raise RuntimeError("monotonic timer child failed")
+    rows = [json.loads(line) for line in result.stdout.splitlines()
+            if line.strip()]
+    if len(rows) != 1:
+        raise RuntimeError("timer validation emitted an unexpected inventory")
+    record = rows[0]
+    if record.get("schema") != \
+            "libwebp-backref-cost-aligned-null-stage-attribution-v4-timer-check-v1" or \
+            not record.get("monotonic") or \
+            record.get("clock_reads") != 4096 or \
+            record.get("positive_deltas", 0) <= 0 or \
+            record.get("mean_read_delta_ns", 10**18) > \
+            manifest["acceptance"]["maximum_mean_clock_read_delta_ns"]:
+        raise RuntimeError("coarse timer overhead/monotonicity gate failed")
+    write_json(timer_root / "clock.json", record)
+    accounting = []
+    case_id = manifest["corpus"][0]["case_id"]
+    source = corpus / cases[case_id]["file"]
+    for variant in ("B", "L"):
+        stage_path = timer_root / f"{variant}-stage.jsonl"
+        env = clean_environment(manifest, variant, stage_path,
+                                f"timer-validation-{variant}", case_id)
+        env["WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_SAMPLE_SET"] = \
+            "timer-validation"
+        result = ledger.run(
+            [str(recorder_runner), "timer-accounting-check", str(source),
+             case_id, "4", variant], cwd=recorder_runner.parent, env=env,
+            variant=variant, case_id=case_id, method=4,
+            lifecycle="timer-validation", purpose="coarse-timer-accounting")
+        if result.returncode != 0 or result.stderr:
+            raise RuntimeError("timer-accounting child failed")
+        emitted = [json.loads(line) for line in result.stdout.splitlines()
+                   if line.strip()]
+        stages = [json.loads(line) for line in stage_path.read_text().splitlines()
+                  if line.strip()]
+        if len(emitted) != 2 or len(stages) != 1:
+            raise RuntimeError("timer-accounting row inventory mismatch")
+        output_row = emitted[1]
+        stage = stages[0]
+        selected = (output_row["baseline_dp_calls"] +
+                    output_row["layout_clone_dp_calls"])
+        expected = {"B": "baseline_dp_calls",
+                    "L": "layout_clone_dp_calls"}[variant]
+        nested = stage.get("stages", {})
+        required = manifest["acceptance"]["required_timer_stages"]
+        if emitted[0].get("schema") != \
+                "libwebp-backref-cost-aligned-null-stage-attribution-v4-output-v1" or \
+                output_row.get("schema") != \
+                "libwebp-backref-cost-aligned-null-stage-attribution-v4-timer-accounting-output-v1" or \
+                stage.get("schema") != \
+                "libwebp-backref-cost-aligned-null-stage-attribution-v4-stage-ledger-v1" or \
+                stage.get("sample_role") != "timer-validation" or \
+                stage.get("backend") != variant or \
+                stage.get("ledger_valid") is not True or \
+                stage.get("reconciliation_delta_ns") != 0 or \
+                stage.get("clock_reads") != stage.get("expected_clock_reads") or \
+                any(name not in stage.get("top_level_ledger", {})
+                    for name in manifest["acceptance"]["required_top_level_buckets"]) or \
+                any(name not in nested for name in required) or \
+                output_row[expected] != selected or selected <= 0 or \
+                output_row["selector_evaluations"] != selected or \
+                output_row["exact_activations"] != selected or \
+                output_row["per_pixel_clock_calls"] != 0 or \
+                nested["backref_cost_dp_total"]["calls"] != \
+                nested["backref_cost_dp_setup"]["calls"] or \
+                nested["backref_cost_dp_total"]["calls"] != \
+                nested["backref_cost_dp_steady"]["calls"] or \
+                nested["backref_cost_dp_total"]["calls"] <= 0 or \
+                nested["backref_cost_dp_setup"]["ns"] + \
+                nested["backref_cost_dp_steady"]["ns"] > \
+                nested["backref_cost_dp_total"]["ns"] or \
+                nested["backref_cost_dp_total"]["ns"] + \
+                nested["backref_cost_traceback"]["ns"] + \
+                nested["backref_cost_materialize"]["ns"] > \
+                nested["lossless_backward_refs"]["ns"]:
+            raise RuntimeError("coarse timer accounting invariant failed")
+        write_json(timer_root / f"{variant}-output.json", output_row)
+        accounting.append({"variant": variant, "output": output_row,
+                           "stage": stage})
+    summary = {
+        "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v4-timer-accounting-summary-v1",
+        "status": "PASS", "clock": record, "clock_children": 1,
+        "accounting_children": 2, "accounting_rows": 2,
+        "stage_rows": 2, "performance_rows": 0,
+        "schema_and_file_separation": True,
+        "one_selected_dp_body_per_encode": True,
+        "counter_reset_scope": "one-encode", "per_pixel_clock_calls": 0,
+        "rows": accounting,
+    }
+    write_json(timer_root / "summary.json", summary)
+    return summary
+
+
+def frozen_profile_plan(manifest: dict, runner: Path, corpus: Path,
+                        cases: dict, output: Path) -> list[dict]:
+    rows = []
+    ordinal = 0
+    for case in manifest["corpus"]:
+        case_id = case["case_id"]
+        source = corpus / cases[case_id]["file"]
+        for method in manifest["protocol"]["methods"]:
+            for repetition, variants in enumerate(
+                    manifest["protocol"]["variant_order"]):
+                for variant in variants:
+                    profile_id = f"p{ordinal:02d}-{case_id}-m{method}-{variant}-r{repetition}"
+                    stages = output / "stages" / f"{profile_id}.jsonl"
+                    runner_stdout = output / "runner" / f"{profile_id}.jsonl"
+                    runner_stderr = output / "runner" / f"{profile_id}.stderr"
+                    env = clean_environment(manifest, variant, stages,
+                                            profile_id, case_id)
+                    command = [str(runner), "profile", str(source), case_id,
+                               str(method), variant, "1", "4"]
+                    rows.append({"ordinal": ordinal, "profile_id": profile_id,
+                                 "case_id": case_id, "method": method,
+                                 "variant": variant, "repetition": repetition,
+                                 "stages": str(stages),
+                                 "runner_stdout": str(runner_stdout),
+                                 "runner_stderr": str(runner_stderr),
+                                 "command": command, "env": env,
+                                 "cwd": str(runner.parent)})
+                    ordinal += 1
+    if len(rows) != manifest["protocol"]["profile_processes"]:
+        raise RuntimeError("profile plan inventory mismatch")
+    write_json(output / "profile-plan.json", rows)
+    return rows
+
+
+def correctness_gate(manifest: dict, runner: Path, corpus: Path, cases: dict,
+                     output: Path, ledger: DirectRunnerLedger) -> list[dict]:
+    rows = []
+    root = output / "correctness-files"
+    root.mkdir()
+    for case in manifest["corpus"]:
+        case_id = case["case_id"]
+        source = corpus / cases[case_id]["file"]
+        input_sha_before = sha256(source)
+        for method in manifest["protocol"]["methods"]:
+            products = {}
+            for variant in ("B", "L"):
+                for repeat in range(2):
+                    destination = root / f"{case_id}-m{method}-{variant}-{repeat}.webp"
+                    argv = [str(runner), "correctness", str(source), str(method),
+                            variant, str(destination)]
+                    result = ledger.run(
+                        argv, cwd=runner.parent,
+                        env=clean_environment(manifest, variant),
+                        variant=variant, case_id=case_id, method=method,
+                        lifecycle=f"repeat-{repeat}",
+                        purpose="correctness-before-timing")
+                    if result.returncode != 0 or result.stdout or result.stderr:
+                        raise RuntimeError("correctness child failed")
+                    products[(variant, repeat)] = sha256(destination)
+            hashes = set(products.values())
+            if len(hashes) != 1:
+                raise RuntimeError("bitstream correctness/determinism mismatch")
+            input_sha_after = sha256(source)
+            if input_sha_before != input_sha_after or \
+                    input_sha_after != case["sha256"]:
+                raise RuntimeError("correctness input was mutated")
+            rows.append({"case_id": case_id, "method": method,
+                         "bitstream_sha256": hashes.pop(),
+                         "bitstream_bytes": destination.stat().st_size,
+                         "all_variants_equal": True,
+                         "repeat_deterministic": True,
+                         "decoded_rgb_equal": True,
+                         "input_sha256_before": input_sha_before,
+                         "input_sha256_after": input_sha_after,
+                         "input_immutable": True})
+            for variant in ("B", "L"):
+                for repeat in range(2):
+                    (root / f"{case_id}-m{method}-{variant}-{repeat}.webp").unlink()
+    root.rmdir()
+    write_json(output / "correctness.json", rows)
+    return rows
+
+
+def work_counter_gate(manifest: dict, runner: Path, corpus: Path,
+                      cases: dict, output: Path,
+                      ledger: DirectRunnerLedger) -> list[dict]:
+    rows = []
+    for case in manifest["corpus"]:
+        source = corpus / cases[case["case_id"]]["file"]
+        for method in manifest["protocol"]["methods"]:
+            values = {}
+            for variant in ("B", "L"):
+                result = ledger.run(
+                    [str(runner), "work", str(source), case["case_id"],
+                     str(method), variant], cwd=runner.parent,
+                    env=clean_environment(manifest, variant), variant=variant,
+                    case_id=case["case_id"], method=method,
+                    lifecycle="untimed-work", purpose="work-counter")
+                if result.returncode != 0 or result.stderr:
+                    raise RuntimeError("work-counter child failed")
+                emitted = [json.loads(line)
+                           for line in result.stdout.splitlines()
+                           if line.strip()]
+                if len(emitted) != 1:
+                    raise RuntimeError("work counter inventory mismatch")
+                values[variant] = emitted[0]
+            if any(row.get("schema") !=
+                   "libwebp-backref-cost-aligned-null-stage-attribution-v4-work-v1"
+                   for row in values.values()):
+                raise RuntimeError("work counter schema mismatch")
+            for variant, value in values.items():
+                selected = (value["baseline_dp_calls"] +
+                            value["layout_clone_dp_calls"])
+                expected = {"B": "baseline_dp_calls",
+                            "L": "layout_clone_dp_calls"}[variant]
+                if value["selector_evaluations"] <= 0 or \
+                        value["selector_evaluations"] != selected or \
+                        value["exact_activations"] != selected or \
+                        value[expected] != selected:
+                    raise RuntimeError("selector/selected-DP work invariant failed")
+                for field in ("baseline_dp_calls", "layout_clone_dp_calls"):
+                    if field != expected and value[field] != 0:
+                        raise RuntimeError("more than one DP body was selected")
+                rows.append(value)
+            common = (
+                "push_calls", "short_push_calls", "cache_segments",
+                "overlap_scans", "disjoint_prefix_scans", "insert_calls",
+                "null_hint_insert_calls", "position_backward_steps",
+                "interval_updates", "interval_pops", "max_live_intervals",
+                "bitstream_bytes", "bitstream_fnv1a64")
+            if any(values["B"][field] != values["L"][field]
+                   for field in common):
+                raise RuntimeError("algorithm/work preservation gate failed")
+            zero_hint = ("append_hint_fast_paths", "append_hint_branch_checks",
+                         "append_hint_loads", "append_hint_start_loads",
+                         "append_hint_update_checks", "append_hint_updates",
+                         "pop_tail_branch_checks", "pop_tail_updates")
+            if any(values[v][field] != 0 for v in ("B", "L")
+                   for field in zero_hint) or \
+                    values["B"]["position_forward_steps"] != \
+                    values["L"]["position_forward_steps"]:
+                raise RuntimeError("B/L exact-work boundary gate failed")
+    with (output / "work-metrics.jsonl").open("w", encoding="utf-8") as stream:
+        for row in rows:
+            stream.write(json.dumps(row, sort_keys=True) + "\n")
+    write_json(output / "work-metric-summary.json", {
+        "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v4-work-summary-v1",
+        "rows": len(rows), "baseline_layout_work_equal": True,
+        "common_algorithm_work_equal_all_variants": True,
+        "no_h_variant_present": True})
+    return rows
+
+
+def execute_profiles(manifest: dict, plan: list[dict], output: Path,
+                     ledger: DirectRunnerLedger) -> list[dict]:
+    results = []
+    for row in plan:
+        before = process_guard(output, f"before-{row['profile_id']}")
+        result = ledger.run(
+            row["command"], cwd=Path(row["cwd"]), env=row["env"],
+            variant=row["variant"], case_id=row["case_id"],
+            method=row["method"], lifecycle=f"profile-r{row['repetition']}",
+            purpose="one-warmup-four-retained")
+        if result.returncode != 0:
+            raise RuntimeError("profile child failed")
+        Path(row["runner_stdout"]).write_text(result.stdout, encoding="utf-8")
+        Path(row["runner_stderr"]).write_text(result.stderr, encoding="utf-8")
+        with (output / "commands.jsonl").open("a", encoding="utf-8") as log:
+            log.write(json.dumps({**row, "exit_code": result.returncode,
+                                  "stdout_bytes": len(result.stdout.encode()),
+                                  "stdout_sha256": hashlib.sha256(
+                                      result.stdout.encode()).hexdigest(),
+                                  "stderr_bytes": len(result.stderr.encode()),
+                                  "stderr_sha256": hashlib.sha256(
+                                      result.stderr.encode()).hexdigest()},
+                                 sort_keys=True) + "\n")
+        outputs = [json.loads(line) for line in result.stdout.splitlines()
+                   if line.strip()]
+        stages = [json.loads(line) for line in Path(row["stages"]).read_text().splitlines()
+                  if line.strip()]
+        retained = [item for item in stages if item.get("sample_role") == "warm"]
+        if len(outputs) != 5 or len(stages) != 5 or len(retained) != 4:
+            raise RuntimeError("stage record inventory mismatch")
+        if any(item.get("schema") != "libwebp-backref-cost-aligned-null-stage-attribution-v4-output-v1"
+               for item in outputs):
+            raise RuntimeError("runner output schema mismatch")
+        for item in stages:
+            if item.get("schema") != \
+                    "libwebp-backref-cost-aligned-null-stage-attribution-v4-stage-ledger-v1" or \
+                    item.get("ledger_valid") is not True or \
+                    item.get("reconciliation_delta_ns") != 0 or \
+                    item.get("clock_reads") != item.get("expected_clock_reads"):
+                raise RuntimeError("top-level ledger reconciliation invalid")
+            if any(name not in item.get("top_level_ledger", {})
+                   for name in manifest["acceptance"]["required_top_level_buckets"]):
+                raise RuntimeError("required top-level ledger bucket missing")
+            if any(name not in item["stages"]
+                   for name in manifest["acceptance"]["required_timer_stages"]):
+                raise RuntimeError("required timer stage missing")
+            nested = item["stages"]
+            dp_total_calls = nested["backref_cost_dp_total"]["calls"]
+            setup_calls = nested["backref_cost_dp_setup"]["calls"]
+            steady_calls = nested["backref_cost_dp_steady"]["calls"]
+            if dp_total_calls != setup_calls or dp_total_calls != steady_calls or \
+                    dp_total_calls <= 0 or item.get("backend") != row["variant"]:
+                raise RuntimeError("DP timer/variant identity invariant failed")
+            if nested["backref_cost_dp_setup"]["ns"] + \
+                    nested["backref_cost_dp_steady"]["ns"] > \
+                    nested["backref_cost_dp_total"]["ns"]:
+                raise RuntimeError("DP timer nesting/accounting invalid")
+            if nested["backref_cost_dp_total"]["ns"] + \
+                    nested["backref_cost_traceback"]["ns"] + \
+                    nested["backref_cost_materialize"]["ns"] > \
+                    nested["lossless_backward_refs"]["ns"]:
+                raise RuntimeError("backward-reference timer accounting invalid")
+        after = process_guard(output, f"after-{row['profile_id']}")
+        results.append({"profile_id": row["profile_id"],
+                        "output_records": len(outputs),
+                        "stage_records": len(stages),
+                        "retained_stage_records": len(retained),
+                        "process_before": before, "process_after": after})
+    write_json(output / "profile-completeness.json", results)
+    return results
+
+
+def write_index(manifest: dict, output: Path) -> None:
+    rows = [{"path": path.relative_to(output).as_posix(),
+             "bytes": path.stat().st_size, "sha256": sha256(path)}
+            for path in sorted(output.rglob("*"))
+            if path.is_file() and path.name != "artifact-hashes.json"]
+    write_json(output / "artifact-hashes.json", {
+        "schema": manifest["schemas"]["artifact_hashes"], "artifacts": rows})
+
+
+def admit_representative_payload(path: Path, expected_minimum: int) -> dict:
+    """Admit request direction/hash without duplicating request bytes in return."""
+    source_raw = os.environ.get(
+        "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_REHEARSAL_PAYLOAD")
+    expected_sha = os.environ.get(
+        "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_REHEARSAL_PAYLOAD_SHA256")
+    expected_size_raw = os.environ.get(
+        "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_REHEARSAL_PAYLOAD_BYTES")
+    if not source_raw or not expected_sha or not expected_size_raw:
+        raise RuntimeError("framed rehearsal payload declaration is absent")
+    source = Path(source_raw)
+    expected_size = int(expected_size_raw)
+    if not source.is_absolute() or source.is_symlink() or not source.is_file():
+        raise RuntimeError("framed rehearsal payload is not a regular absolute file")
+    if source.stat().st_size != expected_size or expected_size < expected_minimum:
+        raise RuntimeError("framed rehearsal payload size/margin mismatch")
+    if sha256(source) != expected_sha:
+        raise RuntimeError("framed rehearsal payload digest mismatch")
+    return {"returned_path": None, "bytes": expected_size,
+            "sha256": expected_sha,
+            "generator": "client sha256(domain || uint64_be_counter) blocks",
+            "framed_stdin": True,
+            "returned_payload_bytes": 0,
+            "compaction": "request bytes represented by exact size/SHA-256 only",
+            "minimum_expected_run_archive_bytes": expected_minimum,
+            "finite_margin_ratio": expected_size / expected_minimum}
+
+
+def operator(mode: str, output: Path) -> None:
+    if mode == "run" and os.environ.get("WEBP_BENCHMARK_SESSION") != "exclusive":
+        raise RuntimeError("run requires WEBP_BENCHMARK_SESSION=exclusive")
+    if mode == "rehearse" and "WEBP_BENCHMARK_SESSION" in os.environ:
+        raise RuntimeError("rehearse requires WEBP_BENCHMARK_SESSION unset")
+    if not output.is_absolute() or output.exists():
+        raise RuntimeError("output must be a new absolute path")
+    output.mkdir(parents=True)
+    for directory in ("stages", "runner"):
+        (output / directory).mkdir()
+    manifest = load_manifest()
+    commit = validate_source(manifest)
+    source_tree = git("rev-parse", "HEAD^{tree}")
+    lease_path = Path(os.path.expanduser(manifest["resources"]["lease_path"]))
+    lease_record = {"schema": manifest["schemas"]["lease"],
+                    "acquisition_attempted": False, "acquired": False,
+                    "released": False, "path": str(lease_path)}
+    admitted = profiler_admission(manifest)
+    write_json(output / "diagnostic-admission.json", admitted)
+    resource_admission(manifest, output, "admission")
+    with tempfile.TemporaryDirectory(prefix="backref-aligned-null-stage-v2-") as raw:
+        temporary = Path(raw)
+        corpus, cases = generate_corpus(manifest, temporary)
+        built = build(manifest, temporary, output)
+        plan = frozen_profile_plan(manifest, built["runner"], corpus, cases,
+                                   output)
+        if mode == "rehearse":
+            # Deliberately no encoder correctness/profile workload in rehearsal.
+            payload = admit_representative_payload(
+                output / "representative-incompressible.bin",
+                manifest["return_contract"]["maximum_expected_run_archive_bytes"])
+            write_json(output / "rehearsal.json", {
+                "schema": manifest["schemas"]["rehearsal"], "status": "PASS",
+                "source_commit": commit, "source_tree": source_tree,
+                "profile_commands_constructed": len(plan),
+                "profiler_invocations": 0, "encoder_workloads": 0,
+                "performance_samples": 0, "benchmark_lease_attempted": False,
+                "timer_validation": "not-run-in-zero-workload-rehearsal",
+                "timer_accounting_validation": "not-run-in-rehearsal",
+                "correctness_encodes": 0, "runner_children": 0,
+                "direct_child_receipts": 0,
+                "profiler_workloads": 0,
+                "representative_payload": payload,
+                "phase_2_fail_closed_prerequisites": [
+                    "bitstream/pixel correctness before first profile",
+                    "coarse monotonic timer records pass schema/count/accounting",
+                    "all timed children remain serial and directly owned"],
+            })
+        else:
+            ledger = DirectRunnerLedger(
+                output / "direct-child-receipts.jsonl",
+                (built["runner"], built["recorder_runner"]))
+            write_json(output / "performance-evidence-status.json", {
+                "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v4-performance-evidence-status-v1",
+                "status": "NOT_ADMITTED", "accepted_performance_rows": 0,
+                "partial_promotion_forbidden": True})
+            lease_path.parent.mkdir(parents=True, exist_ok=True)
+            with lease_path.open("a+") as lease:
+                lease_record["acquisition_attempted"] = True
+                write_json(output / "lease-record.json", lease_record)
+                try:
+                    fcntl.flock(lease, fcntl.LOCK_EX | fcntl.LOCK_NB)
+                except BlockingIOError as error:
+                    raise RuntimeError("exclusive benchmark lease held") from error
+                lease_record["acquired"] = True
+                write_json(output / "lease-record.json", lease_record)
+                try:
+                    correctness = correctness_gate(
+                        manifest, built["runner"], corpus, cases, output,
+                        ledger)
+                    if len(correctness) != 4:
+                        raise RuntimeError("correctness inventory mismatch")
+                    timer_validation = timer_accounting_gate(
+                        manifest, built["runner"], built["recorder_runner"],
+                        corpus, cases, output, ledger)
+                    if timer_validation.get("status") != "PASS" or \
+                            len(ledger.receipts) != 19:
+                        raise RuntimeError("dynamic timer/ownership admission failed")
+                    write_json(output / "dynamic-admission.json", {
+                        "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v4-dynamic-admission-v1",
+                        "status": "PASS_BEFORE_FIRST_PERFORMANCE_SAMPLE",
+                        "gate_a_correctness_encodes": 16,
+                        "gate_a_aggregate_cells": 4,
+                        "gate_b_clock_children": 1,
+                        "gate_b_timer_accounting_children": 2,
+                        "gate_b_timer_accounting_rows": 2,
+                        "gate_c_direct_children_so_far": 19,
+                        "gate_c_online_invariant_continues_for_every_future_child": True,
+                        "performance_rows_before_admission": 0,
+                        "conditional_authority_consumed_by_this_pipeline": True})
+                    counter_checks = work_counter_gate(
+                        manifest, built["recorder_runner"], corpus, cases,
+                        output, ledger)
+                    if len(counter_checks) != 8:
+                        raise RuntimeError("work counter inventory mismatch")
+                    process_guard(output, "pre-profiles")
+                    resource_admission(manifest, output, "pre-profiles")
+                    profiles = execute_profiles(manifest, plan, output, ledger)
+                    if len(profiles) != 32:
+                        raise RuntimeError("profile completeness inventory mismatch")
+                    ownership = ledger.finalize(59)
+                    write_json(output / "direct-child-summary.json", ownership)
+                    process_guard(output, "post-profiles")
+                    resource_admission(manifest, output, "post-profiles")
+                    if sum(path.stat().st_size for path in output.rglob("*")
+                           if path.is_file()) > \
+                            manifest["resources"]["maximum_output_bytes"]:
+                        raise RuntimeError("maximum evidence size exceeded")
+                    write_json(output / "performance-evidence-status.json", {
+                        "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v4-performance-evidence-status-v1",
+                        "status": "COMPLETE_ADMITTED_RAW_EVIDENCE",
+                        "accepted_performance_rows": 128,
+                        "runner_rows": 160, "stage_rows": 160,
+                        "profile_children": 32,
+                        "partial_promotion_forbidden": True})
+                finally:
+                    fcntl.flock(lease, fcntl.LOCK_UN)
+                    lease_record["released"] = True
+                    write_json(output / "lease-record.json", lease_record)
+    write_json(output / "operator-status.json", {
+        "schema": manifest["schemas"]["operator_status"], "status": "complete",
+        "mode": mode, "source_commit": commit, "source_tree": source_tree,
+        "benchmark_lease_acquisition_attempted":
+            lease_record["acquisition_attempted"],
+        "production_promotion_authorized": False})
+    write_index(manifest, output)
+
+
+def controlled(mode: str, output: Path) -> None:
+    try:
+        operator(mode, output)
+    except Exception as error:
+        manifest = json.loads(MANIFEST_PATH.read_text())
+        process_refusal = error.diagnostic if isinstance(
+            error, transport.ProcessRefusal) else None
+        process_refusal_sha256 = hashlib.sha256(
+            transport.canonical_json(process_refusal)).hexdigest() \
+            if process_refusal is not None else None
+        output.mkdir(parents=True, exist_ok=True)
+        lease = output / "lease-record.json"
+        if mode == "run" and not lease.exists():
+            write_json(lease, {"schema": manifest["schemas"]["lease"],
+                               "acquisition_attempted": False,
+                               "acquired": False, "released": False})
+        write_json(output / "refusal.json", {
+            "schema": manifest["schemas"]["refusal"], "status": "refused",
+            "error_type": type(error).__name__, "reason": str(error),
+            "controlled_exit": True, "process_refusal": process_refusal,
+            "process_refusal_sha256": process_refusal_sha256})
+        write_json(output / "performance-evidence-status.json", {
+            "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v4-performance-evidence-status-v1",
+            "status": "REFUSED_ZERO_ACCEPTED_PERFORMANCE_EVIDENCE",
+            "accepted_performance_rows": 0,
+            "partial_raw_rows_must_not_be_promoted": True,
+            "retry_forbidden": True})
+        write_json(output / "operator-status.json", {
+            "schema": manifest["schemas"]["operator_status"],
+            "status": "refused", "mode": mode, "controlled_exit": True,
+            "process_refusal": process_refusal,
+            "process_refusal_sha256": process_refusal_sha256,
+            "benchmark_lease_acquisition_attempted": bool(
+                lease.exists() and json.loads(
+                    lease.read_text(encoding="utf-8")).get(
+                        "acquisition_attempted"))})
+        write_index(manifest, output)
+        raise RuntimeError("controlled attribution refusal; indexed evidence retained") from error
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="command", required=True)
+    sub.add_parser("validate")
+    for name in ("rehearse", "run"):
+        child = sub.add_parser(name)
+        child.add_argument("output", type=Path)
+    fixture = sub.add_parser("refusal-fixture")
+    fixture.add_argument("output", type=Path)
+    fixture.add_argument("fixture", choices=(
+        "missing", "wrong", "timeout", "missing-artifact",
+        "truncated-archive", "corrupt-archive"))
+    args = parser.parse_args()
+    try:
+        if args.command == "validate":
+            manifest = load_manifest()
+            commit = validate_source(manifest)
+            print(json.dumps({"status": "PASS", "source_commit": commit,
+                              "manifest_sha256": sha256(MANIFEST_PATH)}))
+        elif args.command in ("rehearse", "run"):
+            controlled(args.command, args.output)
+        else:
+            # The executor's archive/refusal path needs a deterministic early refusal.
+            if "WEBP_BENCHMARK_SESSION" in os.environ:
+                raise RuntimeError("refusal fixture requires session unset")
+            manifest = load_manifest()
+            args.output.mkdir(parents=True)
+            write_json(args.output / "refusal.json", {
+                "schema": manifest["schemas"]["refusal"], "status": "refused",
+                "reason": f"frozen {args.fixture} diagnostic fixture",
+                "controlled_exit": True})
+            write_json(args.output / "operator-status.json", {
+                "schema": manifest["schemas"]["operator_status"],
+                "status": "refused", "controlled_exit": True,
+                "benchmark_lease_acquisition_attempted": False})
+            write_index(manifest, args.output)
+        return 0
+    except Exception as error:
+        print(f"ERROR: {error}", file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

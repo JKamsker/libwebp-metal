@@ -397,6 +397,9 @@
 #elif defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V3_EXPERIMENT)
 #define WEBP_BACKREF_ALIGNMENT_ENTRY \
   WEBP_BACKREF_ALIGNED_NULL_STAGE_ATTRIBUTION_V3_ENTRY
+#elif defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_EXPERIMENT)
+#define WEBP_BACKREF_ALIGNMENT_ENTRY \
+  WEBP_BACKREF_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_ENTRY
 #else
 #define WEBP_BACKREF_ALIGNMENT_ENTRY
 #endif
@@ -1348,6 +1351,8 @@ PushInterval(
 #include "src/enc/backref_cost_aligned_null_stage_attribution_v2_layout_clone_enc.inc"
 #elif defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V3_EXPERIMENT)
 #include "src/enc/backref_cost_aligned_null_stage_attribution_v3_layout_clone_enc.inc"
+#elif defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V4_EXPERIMENT)
+#include "src/enc/backref_cost_aligned_null_stage_attribution_v4_layout_clone_enc.inc"
 #endif
 // The production-shaped candidate is deliberately a separate always-on hot
 // path. Its append hint is the exact v3 PushInterval-local algorithm, with the
