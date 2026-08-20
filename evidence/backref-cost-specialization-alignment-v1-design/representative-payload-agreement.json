@@ -1,0 +1,14 @@
+{
+  "fixture_path": "evidence/backref-cost-specialization-alignment-v1-design/representative-payload-fixture.json",
+  "generator_file_sha256": "d0fbc13459b6504eb916b9ddce6a07ca003a98a37200b2579289762960a558c8",
+  "generator_path": "scripts/backref_cost_specialization_alignment_v1_payload.py",
+  "generator_recomputation_sha256": "6d464de5123e056c63990cbcfda55cd6c68d5a70434fd340704fb5fa054f2eb3",
+  "independent_fixture_sha256_value": "6d464de5123e056c63990cbcfda55cd6c68d5a70434fd340704fb5fa054f2eb3",
+  "manifest_sha256_value": "6d464de5123e056c63990cbcfda55cd6c68d5a70434fd340704fb5fa054f2eb3",
+  "negative_stale_v2_test": "PASS_REJECTED",
+  "negative_stale_v3_test": "PASS_REJECTED",
+  "negative_stale_v4_test": "PASS_REJECTED",
+  "payload_bytes": 2097152,
+  "schema": "libwebp-backref-cost-specialization-alignment-v1-payload-agreement-v1",
+  "status": "PASS"
+}

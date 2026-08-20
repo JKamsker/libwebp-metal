@@ -1,0 +1,19 @@
+{
+  "artifacts": [
+    {
+      "bytes": 0,
+      "path": "return-protocol/framed-stdout.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 72,
+      "path": "return-protocol/transport-stderr.bin",
+      "sha256": "b55b3aefda3b130f6a9cd98371a45350571eb8151512cd6bfb9ea0515eb2d924"
+    }
+  ],
+  "file_count": 2,
+  "schema": "libwebp-backref-cost-specialization-alignment-v1-phase1b-hash-index-v1",
+  "source_commit": "67b53054e327729f5e7b7d8f04d384a0ddf4e6c6",
+  "source_tree": "ecadc04a1bc975fa27f561b8022abe98b6f8c45e",
+  "total_bytes": 72
+}
