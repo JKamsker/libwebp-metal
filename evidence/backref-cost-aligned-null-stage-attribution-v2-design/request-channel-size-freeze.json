@@ -1,0 +1,2008 @@
+{
+  "all_controls_fit": true,
+  "base_bundle_observation": {
+    "bytes": 21574210,
+    "commit": "fb297dd1097f6fc5a2f2d4d453da3c24b235d7d1",
+    "remote_contacts": 0,
+    "sha256": "b8b51b17875e07b2e090e3a8c2eb647db80cab9428e416e475160162c46f44bb"
+  },
+  "base_bundle_to_cap_margin_bytes": 7785918,
+  "bootstrap_source_bytes": 14277,
+  "bootstrap_source_cap_bytes": 24576,
+  "bootstrap_source_margin_bytes": 10299,
+  "business_request_cap_bytes": 32505856,
+  "business_request_margin_bytes": 1037783,
+  "business_request_worst_case_bytes": 31468073,
+  "cap_change_from_v2": "outer request is newly explicit and capped at 32 MiB; this narrows V2's 64 MiB per-frame request cap, preserves the exact 2 MiB rehearsal payload, and has conservative measured source-bundle margin without changing workloads, response caps, timeouts, or scientific thresholds",
+  "channel_stdout_margin_bytes": 2985,
+  "control_payload_cap_bytes": 8192,
+  "control_payload_sizes": [
+    {
+      "bytes": 603,
+      "kind": "ready"
+    },
+    {
+      "bytes": 359,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 357,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 358,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 358,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 358,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 358,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 358,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 358,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 358,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 358,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 359,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 359,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 359,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 359,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 359,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 359,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 360,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 361,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 362,
+      "kind": "request-ack"
+    },
+    {
+      "bytes": 448,
+      "kind": "request-complete"
+    },
+    {
+      "bytes": 388,
+      "kind": "response-declaration"
+    },
+    {
+      "bytes": 356,
+      "kind": "response-complete"
+    }
+  ],
+  "encoded_channel_stdout_worst_case_bytes": 1307735,
+  "maximum_channel_stdout_bytes": 1310720,
+  "maximum_control_payload_observed_bytes": 603,
+  "production_encoder": "build_channel_request + encode_frame + fixed chunk iterators",
+  "request_cap_bytes": 33554432,
+  "request_channel_wire_bytes": 31639794,
+  "request_chunk_bytes": 65536,
+  "request_chunk_count": 482,
+  "request_components": [
+    {
+      "bytes": 83280,
+      "name": "transport-source",
+      "offset": 0,
+      "sha256": "10d6c108b70eabcbeb3c5cb170446c626fef99309d007f58d8b076ad83af778d"
+    },
+    {
+      "bytes": 3228,
+      "name": "payload-source",
+      "offset": 83280,
+      "sha256": "3e55c419cba7a2dcd67d4896ae08595722d5281348fe0ea98f9b480210fa747f"
+    },
+    {
+      "bytes": 31468073,
+      "name": "business-request",
+      "offset": 86508,
+      "sha256": "edf6c3bdfa42d5b15e1f782a4763c71ea487a748c763af50766ce64f4aba3635"
+    }
+  ],
+  "request_declaration_cap_bytes": 8192,
+  "request_declaration_encoded_frame_bytes": 1016,
+  "request_declaration_margin_bytes": 7335,
+  "request_declaration_payload_bytes": 857,
+  "request_margin_bytes": 1999851,
+  "request_worst_case_bytes": 31554581,
+  "response_business_cap_bytes_exclusive": 1048576,
+  "response_chunk_bytes": 262144,
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v2-request-size-freeze-v1",
+  "source_bundle_cap_bytes": 29360128,
+  "status": "PASS"
+}

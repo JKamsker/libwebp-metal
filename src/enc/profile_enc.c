@@ -31,7 +31,8 @@
     !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT) && \
     !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT) && \
     !defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT) && \
-    !defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+    !defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT) && \
+    !defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_EXPERIMENT)
 #define WEBP_USE_ENCODER_STAGE_PROFILE_EXPERIMENT 1
 #endif
 #include "src/enc/profile_enc.h"
@@ -198,6 +199,20 @@
   "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_CASE_ID"
 #define WEBP_FACTORIZATION_SAMPLE_SET_ENV \
   "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_SAMPLE_SET"
+#elif defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_EXPERIMENT)
+#include "src/enc/backref_cost_aligned_null_stage_attribution_v2_experiment_enc.h"
+#define WEBP_FACTORIZATION_VARIANT_ENV \
+  "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_VARIANT"
+#define WEBP_FACTORIZATION_TIMERS_ENV \
+  "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_TIMERS"
+#define WEBP_FACTORIZATION_STAGE_OUTPUT_ENV \
+  "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_STAGE_OUTPUT"
+#define WEBP_FACTORIZATION_RUN_ID_ENV \
+  "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_RUN_ID"
+#define WEBP_FACTORIZATION_CASE_ID_ENV \
+  "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_CASE_ID"
+#define WEBP_FACTORIZATION_SAMPLE_SET_ENV \
+  "WEBP_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_SAMPLE_SET"
 #endif
 
 #include <stdio.h>
@@ -240,7 +255,7 @@ typedef struct {
   uint64_t total_start_ns;
   uint64_t elapsed_ns[WEBP_PROFILE_STAGE_COUNT];
   uint32_t calls[WEBP_PROFILE_STAGE_COUNT];
-#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
   uint64_t ledger_ns[8];
   uint64_t ledger_last_ns;
   uint32_t ledger_clock_reads;
@@ -287,7 +302,7 @@ static const char* const kStageNames[WEBP_PROFILE_STAGE_COUNT] = {
     "lossy_alpha",
     "lossy_write"};
 
-#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
 enum {
   WEBP_NULL_LEDGER_PREP_SETUP = 0,
   WEBP_NULL_LEDGER_ANALYSIS_TRANSFORMS,
@@ -405,7 +420,7 @@ static uint64_t ProfileNowNs(void) {
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
 uint64_t WebPProfileClockNowForValidation(void) { return ProfileNowNs(); }
 #endif
 
@@ -572,11 +587,11 @@ void WebPProfileBeginSession(const WebPConfig* config,
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
   {
     const char* const variant = getenv(WEBP_FACTORIZATION_VARIANT_ENV);
     if (variant == NULL ||
-#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
         (strcmp(variant, "B") != 0 && strcmp(variant, "L") != 0)) {
 #else
         (strcmp(variant, "B") != 0 && strcmp(variant, "L") != 0 &&
@@ -608,7 +623,7 @@ void WebPProfileBeginSession(const WebPConfig* config,
   ctx->height = picture != NULL ? picture->height : 0;
   ctx->encode_index = process_encode_index++;
   ctx->total_start_ns = ProfileNowNs();
-#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
   ctx->ledger_last_ns = ctx->total_start_ns;
   ctx->ledger_clock_reads = 1;
 #endif
@@ -804,7 +819,7 @@ void WebPProfileEndSession(int ok, int error_code) {
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V3_EXPERIMENT) || \
     defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V4_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
   const char* const output_path = getenv(WEBP_FACTORIZATION_STAGE_OUTPUT_ENV);
   const char* const run_id = getenv(WEBP_FACTORIZATION_RUN_ID_ENV);
   const char* const case_id = getenv(WEBP_FACTORIZATION_CASE_ID_ENV);
@@ -817,7 +832,7 @@ void WebPProfileEndSession(int ok, int error_code) {
   const char* const backend = getenv("WEBP_STAGE_PROFILE_BACKEND");
   const char* const sample_set = getenv("WEBP_STAGE_PROFILE_SAMPLE_SET");
 #endif
-#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
   const uint64_t end_ns = ctx->active ? ProfileNowNs() : 0;
   const uint64_t total_ns = ctx->active ? end_ns - ctx->total_start_ns : 0;
 #else
@@ -914,15 +929,20 @@ void WebPProfileEndSession(int ok, int error_code) {
   FILE* out;
   int i;
   if (!ctx->active) return;
-#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
   ++ctx->ledger_clock_reads;
   NullLedgerAccumulate(ctx, end_ns);
   if (ctx->ledger_stack_depth != 0) ctx->ledger_error = 1;
 #endif
   ctx->active = 0;
-#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2_EXPERIMENT)
+  record_schema =
+      "libwebp-backref-cost-aligned-null-stage-attribution-v2-stage-ledger-v1";
+#else
   record_schema =
       "libwebp-backref-cost-aligned-null-stage-attribution-v1-stage-ledger-v1";
+#endif
   if (sample_set != NULL && strcmp(sample_set, "timer-validation") == 0) {
     sample_role = "timer-validation";
   } else if (sample_set != NULL &&
@@ -939,7 +959,7 @@ void WebPProfileEndSession(int ok, int error_code) {
         "libwebp-backref-cost-specialization-alignment-v4-timer-accounting-stage-v1";
   } else
 #endif
-#if !defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+#if !defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
   if (sample_set != NULL && (strcmp(sample_set, "warm") == 0 ||
                              strcmp(sample_set, "warm-dominant") == 0)) {
     sample_role = (ctx->encode_index == 0) ? "warmup" : "warm";
@@ -1023,7 +1043,7 @@ void WebPProfileEndSession(int ok, int error_code) {
       first = 0;
     }
   }
-#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
   {
     uint64_t ledger_sum = 0;
     uint64_t nested_call_sum = 0;
@@ -1072,7 +1092,7 @@ void WebPProfileEndSession(int ok, int error_code) {
 uint64_t WebPProfileStageBegin(WebPProfileStage stage) {
   WebPProfileContext* const ctx = &profile_context;
   if (!ctx->active) return 0;
-#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
   {
     const uint64_t now_ns = ProfileNowNs();
     ++ctx->ledger_clock_reads;
@@ -1098,7 +1118,7 @@ void WebPProfileStageEnd(WebPProfileStage stage, uint64_t start_ns) {
       stage >= WEBP_PROFILE_STAGE_COUNT) {
     return;
   }
-#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V1_EXPERIMENT)
+#if defined(WEBP_USE_BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_EXPERIMENT)
   {
     const uint64_t now_ns = ProfileNowNs();
     ++ctx->ledger_clock_reads;

@@ -1,0 +1,39 @@
+{
+  "artifacts": [
+    {
+      "bytes": 3941,
+      "path": "return-protocol/channel-stdout.bin",
+      "sha256": "3ba246053af24c88a41ad5e9706092c0bdded26f525644692f30f97da6db8953"
+    },
+    {
+      "bytes": 635,
+      "path": "return-protocol/ready.json",
+      "sha256": "c58106834d9749f5e9a0bb93baf6a4863336f2ee5359b0fc411aabdda5b4ee56"
+    },
+    {
+      "bytes": 1024,
+      "path": "return-protocol/request-declaration.json",
+      "sha256": "3ae27d868c46aa964498062a49a4e89b42800a6b6f79119be41c9e4773b9f7fd"
+    },
+    {
+      "bytes": 562,
+      "path": "return-protocol/request-progress.json",
+      "sha256": "167dff4f23670e9510f022cf8cc65d8425bd9050ec54e042d8864a02c93322a4"
+    },
+    {
+      "bytes": 0,
+      "path": "return-protocol/transport-stderr.bin",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "bytes": 2126,
+      "path": "transfer-cleanup.json",
+      "sha256": "e92b3a313dc388dd7a2a640d2a99575c8992c2807442ababe4f8481a7ca90178"
+    }
+  ],
+  "file_count": 6,
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v2-phase1b-hash-index-v1",
+  "source_commit": "b9a26a196c65dc56e4c9eaac337c156568e855a5",
+  "source_tree": "907795e6cf91786da93254d3a1bf1678ef49d4ca",
+  "total_bytes": 8288
+}

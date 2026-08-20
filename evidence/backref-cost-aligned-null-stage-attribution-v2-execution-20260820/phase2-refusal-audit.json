@@ -1,0 +1,403 @@
+{
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v2-phase2-refusal-audit-v1",
+  "record_kind": "phase2_frozen_executor_auditor_refusal",
+  "experiment_id": "BACKREF_COST_ALIGNED_NULL_STAGE_ATTRIBUTION_V2",
+  "phase": "2",
+  "role": "Phase 2 frozen executor/auditor",
+  "branch": "codex/backref-cost-aligned-null-stage-attribution-v2-four-body-refreeze",
+  "audit_scope": {
+    "local_worktree_only": true,
+    "phase1_work_performed": false,
+    "phase3_work_performed": false,
+    "phase1_files_modified": false,
+    "phase1_commits_modified": false,
+    "phase1_timing_rows_loaded": false,
+    "v1_timing_rows_loaded": false,
+    "v4_timing_rows_loaded": false,
+    "v1_or_v4_rows_pooled_relabelled_or_reused": false,
+    "method": "Read-only Git ancestry, filesystem, SHA-256, JSON, and source/schema inspection; no Phase 2 workload or dynamic validation command was executed."
+  },
+  "ancestry": {
+    "expected_main_commit": "fb297dd1097f6fc5a2f2d4d453da3c24b235d7d1",
+    "expected_main_tree": "6845d6d64edc8d099c38309953da225bc6291363",
+    "phase1a_commit": "b9a26a196c65dc56e4c9eaac337c156568e855a5",
+    "phase1a_parent": "fb297dd1097f6fc5a2f2d4d453da3c24b235d7d1",
+    "phase1a_tree": "907795e6cf91786da93254d3a1bf1678ef49d4ca",
+    "phase1b_commit": "d72feabc06cdd076ad858400bed8243991a185e7",
+    "phase1b_parent": "b9a26a196c65dc56e4c9eaac337c156568e855a5",
+    "phase1b_tree": "a48a21becc34d71f5e3a84eb317d23716cd0b244",
+    "audited_head": "d72feabc06cdd076ad858400bed8243991a185e7",
+    "exact_main_ancestor_verified": true,
+    "phase1a_parent_verified": true,
+    "phase1b_single_parent_verified": true,
+    "branch_head_verified": true,
+    "tracked_worktree_status": "CLEAN",
+    "ignored_build_outputs_observed_but_not_touched": true
+  },
+  "phase1b_additions_only_audit": {
+    "status": "PASS",
+    "phase1a_changed_path_count": 51,
+    "phase1b_delta_path_count": 8,
+    "phase1b_delta_status_counts": {
+      "A": 8,
+      "M": 0,
+      "D": 0,
+      "R": 0
+    },
+    "phase1a_paths_modified_by_phase1b": 0,
+    "phase1b_paths_are_additions_only": true,
+    "authorization_parent_matches_phase1a": true,
+    "source_commit_in_phase1b_records": "b9a26a196c65dc56e4c9eaac337c156568e855a5",
+    "source_tree_in_phase1b_records": "907795e6cf91786da93254d3a1bf1678ef49d4ca",
+    "recorded_branch_label": "codex/backref-cost-aligned-null-stage-attribution-v2",
+    "recorded_branch_label_matches_audited_ref": false,
+    "branch_label_effect": "metadata anomaly only; not used to grant authority"
+  },
+  "frozen_hash_and_schema_audit": {
+    "status": "PASS_LOCAL_STATIC_HASH_CHECKS",
+    "manifest_sha256": "0609dda754e819a2f96d577169435bec3f42af4c5d754e850774cde782eaa396",
+    "protocol_sha256": "8d6059a65644c464cba47d17cd34c95f71ddf74d8f5b256b6dfe808818900595",
+    "schema_catalog_sha256": "61090f0812ecceaa1baf258e53f78918647ab3f8fe9f0f6cd6ade62f757cc055",
+    "transport_source_sha256": "10d6c108b70eabcbeb3c5cb170446c626fef99309d007f58d8b076ad83af778d",
+    "phase1b_rehearsal_hash_index_sha256": "eaa1dce49e4692a727d40b6fedc4b6c5c74f7da34908c1e78a3ff9352d778110",
+    "four_body_expected_receipt_sha256": "00a47a1e9e4d012ae45f89b173ec16c4c8c63965d15418debd410b288afeba81",
+    "four_body_actual_receipt_sha256": "00a47a1e9e4d012ae45f89b173ec16c4c8c63965d15418debd410b288afeba81",
+    "four_body_expected_actual_byte_equal": true,
+    "schema_catalog_ids": 47,
+    "schema_catalog_unique_ids": 47,
+    "manifest_schema_id_references": 17,
+    "manifest_schema_ids_all_in_catalog": true,
+    "manifest_identity_paths": 71,
+    "phase1b_rehearsal_hash_index_files": 6,
+    "phase1b_rehearsal_hash_index_bytes": 8288,
+    "phase1b_rehearsal_hash_index_file_hashes_match": true
+  },
+  "premise_audit": {
+    "alignment_v4": {
+      "status": "PASS_ALIGNMENT_V4_PREMISE_FROZEN",
+      "domains_passed": 11,
+      "domains_total": 12,
+      "graphic_m4_whole_mean_percent": -0.6199563389094708,
+      "graphic_m4_whole_ci95_percent": [
+        -1.0795343104954225,
+        -0.21412171812593112
+      ],
+      "graphic_m4_dp_total_null_passed": true,
+      "graphic_m4_dp_steady_null_passed": true,
+      "timing_rows_loaded_into_v2": 0,
+      "samples_pooled_reused_or_relabelled": false,
+      "attribution_suitable_v4_timers": [],
+      "v4_timers_are_nested_descriptive_non_additive": true
+    },
+    "aligned_null_stage_attribution_v1": {
+      "gate_count": 14,
+      "passed_gate_count": 13,
+      "failed_gates": [
+        "alignment build frozen"
+      ],
+      "stale_expected_private_address_count": 6,
+      "stale_expected_section_size_bytes": 83212,
+      "valid_receipt_private_address_count": 4,
+      "valid_receipt_section_size_bytes": 50444,
+      "phase2_raw_timing_rows": 0,
+      "phase2_raw_stage_rows": 0,
+      "bootstrap_resamples_executed": 0,
+      "timing_rows_loaded_into_v2": 0,
+      "status": "PASS_SOLE_STALE_SIX_BODY_GATE_ZERO_ROWS"
+    }
+  },
+  "frozen_design_audit": {
+    "candidate_scope": {
+      "variants": [
+        "B",
+        "L"
+      ],
+      "h_body_present": false,
+      "append_hint_or_pop_tail_candidate_present": false,
+      "production_promotion": "FORBIDDEN",
+      "threshold_or_policy_changes": 0,
+      "selector_evaluated_once_before_mutation": true,
+      "one_selected_body_per_encode": true,
+      "timed_recorder_branch_present": false,
+      "separate_untimed_recorder": true,
+      "default_build_option_off": true,
+      "public_abi_isolation_recorded_pass": true
+    },
+    "four_body_identity": {
+      "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v2-four-body-domain-v1",
+      "domain_sha256": "7a0fca915408074524f833c4e8b196e9deac09ba145eaf724f067d47daad6bd0",
+      "ordered_entries": [
+        {
+          "ordinal": 0,
+          "symbol": "PushInterval",
+          "variant": "B",
+          "role": "push_interval",
+          "pair_ordinal": 0
+        },
+        {
+          "ordinal": 1,
+          "symbol": "PushIntervalLayoutClone",
+          "variant": "L",
+          "role": "push_interval",
+          "pair_ordinal": 0
+        },
+        {
+          "ordinal": 2,
+          "symbol": "BackwardReferencesHashChainDistanceOnly",
+          "variant": "B",
+          "role": "dp",
+          "pair_ordinal": 1
+        },
+        {
+          "ordinal": 3,
+          "symbol": "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+          "variant": "L",
+          "role": "dp",
+          "pair_ordinal": 1
+        }
+      ],
+      "section": "__TEXT,__br_null_v2",
+      "section_size_bytes": 50444,
+      "body_bytes": 3600,
+      "padding_bytes": 46844,
+      "alignment_boundary_bytes": 16384,
+      "entry_modulo": 0,
+      "inter_entry_spacing_bytes": 16384,
+      "dp_to_corresponding_push_displacement_bytes": 32768,
+      "addresses_distinct": true,
+      "no_deduplicate": true,
+      "expected_actual_receipt_equality": true,
+      "b_l_canonical_semantic_and_branch_load_store_identity": true,
+      "expected_binary_bytes": 643488,
+      "expected_binary_sha256": "edb1601a77cc3312687fc66fce3d3c65eb9f22fecba359e49a58f4ed45828cb4"
+    },
+    "inventory": {
+      "cases": [
+        "photo-large",
+        "graphic-large"
+      ],
+      "methods": [
+        4,
+        6
+      ],
+      "variant_order_by_repetition": [
+        [
+          "B",
+          "L"
+        ],
+        [
+          "L",
+          "B"
+        ],
+        [
+          "B",
+          "L"
+        ],
+        [
+          "L",
+          "B"
+        ]
+      ],
+      "profile_processes": 32,
+      "correctness_encodes": 16,
+      "warmups": 32,
+      "retained_timing_rows": 128,
+      "runner_rows": 160,
+      "stage_rows": 160,
+      "untimed_work_rows": 8,
+      "direct_runner_children": 59,
+      "timer_validation_clock_children": 1,
+      "timer_accounting_children": 2,
+      "paired_rows_per_statistic": 16,
+      "bootstrap_resamples": 100000,
+      "bootstrap_seed": "0x4e554c32",
+      "dynamic_phase2_rows_present": 0
+    },
+    "ledger": {
+      "top_level_bucket_count": 9,
+      "top_level_buckets": [
+        "pre_lossless_setup_input",
+        "analysis_transforms",
+        "backward_reference_generation",
+        "histogram_construction",
+        "entropy_huffman_preparation",
+        "bitstream_serialization",
+        "container_output_finalization",
+        "allocation_cleanup_orchestration",
+        "residual_unattributed"
+      ],
+      "residual_is_zero_required_for_success": true,
+      "required_timer_stage_count": 11,
+      "nested_descriptive_timer_count": 7,
+      "clock": "mach_continuous_time converted with mach_timebase_info",
+      "clock_reads_formula": "2 + 2 * sum(all emitted stage calls)",
+      "top_level_partition_non_overlapping": true,
+      "nested_timers_non_additive": true,
+      "early_fault_skip_repeat_boundary_fixtures_recorded_pass": true,
+      "clock_overhead_reads": 4096,
+      "dynamic_timer_rows_present": 0
+    },
+    "semantic_work_and_local_validation": {
+      "phase1_local_validation_status": "PASS",
+      "pass_labeled_check_fields": 44,
+      "count_fields": {
+        "local_correctness_encodes": 2,
+        "sanitizer_boundary_encodes": 24,
+        "sanitizer_configurations": 2
+      },
+      "b_l_normalized_work_equal": true,
+      "local_bitstream_hash": "a3073eda31e5f94a3529661f8e11da82328a414b5b226722eab10256abab6c9a",
+      "timed_recorder_free": true,
+      "recorder_runner_sha256": "a06af2530aed4c36b8095dace0222f1a30effbf57b64fee91f3e4d8d136f9046",
+      "runtime_truth_table": {
+        "absent": 0,
+        "B": 0,
+        "L": 1,
+        "H": -1,
+        "other_invalid": true
+      },
+      "zero_accepted_samples_on_admission_failure": true,
+      "local_timed_test_binary_bytes": 648400,
+      "local_timed_test_binary_sha256": "f840c5ef0d59e6bad0a2baad56cde40efb49956b173361d8971689cbf3875171",
+      "local_timed_test_binary_note": "separate temporary-build artifact; canonical four-body receipt remains 643488 bytes and is expected/actual equal"
+    }
+  },
+  "negative_fixture_audit": {
+    "four_body_domain_mutations": [
+      "stale predecessor six-body domain",
+      "missing",
+      "extra",
+      "duplicate",
+      "reordered",
+      "wrong role"
+    ],
+    "four_body_receipt_mutations": [
+      "wrong count",
+      "wrong address",
+      "wrong spacing",
+      "wrong modulus",
+      "wrong canonical generator binding",
+      "wrong facts",
+      "wrong section",
+      "wrong padding",
+      "missing binary digest",
+      "wrong source-tree binding",
+      "wrong build binding",
+      "wrong manifest binding"
+    ],
+    "payload_stale_predecessor_digests_rejected": 6,
+    "toolchain_stale_identity_xcrun_and_predecessor_digests_rejected": 6,
+    "protocol_streaming_fixture_set": 11,
+    "v1_stale_six_body_expectation_rejected": true,
+    "recorded_status": "PASS_REJECTED_NEGATIVE_MATRIX"
+  },
+  "phase1b_rehearsal_audit": {
+    "source": "evidence/backref-cost-aligned-null-stage-attribution-v2-design/rehearsal/",
+    "attempts": 1,
+    "remote_contacts": 1,
+    "single_ssh_session": 1,
+    "ready_reached": true,
+    "request_declaration_accepted": true,
+    "request_bytes_declared": 23820500,
+    "request_chunk_bytes": 65536,
+    "request_chunks_planned": 364,
+    "request_chunks_acknowledged": 5,
+    "request_bytes_acknowledged": 327680,
+    "request_complete_ack_verified": false,
+    "response_bytes": 0,
+    "channel_stdout_bytes": 3941,
+    "transport_stderr_bytes": 0,
+    "timed_binary_invoked": false,
+    "encoder_workloads": 0,
+    "correctness_encodes": 0,
+    "untimed_work_rows": 0,
+    "timer_validation_children": 0,
+    "direct_runner_children": 0,
+    "benchmark_lease_attempts": 0,
+    "performance_samples": 0,
+    "profiler_workloads": 0,
+    "retries": 0,
+    "reruns": 0,
+    "command_exit_code": 1,
+    "missing_success_receipts": 21,
+    "refusal_reason_count": 22,
+    "cleanup_footer_verified": false,
+    "remote_cleanup_absence_proved": false,
+    "remote_cleanup_state": "unknown-after-refusal",
+    "post_run_remote_cleanup_operations": 0,
+    "authority_envelope_status": "REFUSED",
+    "phase2_authority": "NONE"
+  },
+  "conditional_authority_audit": {
+    "phase1b_authorization_path": "evidence/backref-cost-aligned-null-stage-attribution-v2-design/phase1b-authorization.json",
+    "phase1b_gate_outcomes_recorded": 0,
+    "phase1b_refusal_reasons": 22,
+    "pipeline_invocation_authorized": false,
+    "timed_execution_authorized": false,
+    "phase2_authority": "NONE",
+    "zero_samples_on_failed_authority_gate": true,
+    "do_not_retry": true,
+    "do_not_override": true,
+    "do_not_reinterpret": true
+  },
+  "phase2_contact_and_work_record": {
+    "host_device_runner_remote_contact": 0,
+    "ssh_invocations": 0,
+    "ping_invocations": 0,
+    "nc_invocations": 0,
+    "benchmark_invocations": 0,
+    "lease_acquisition_attempts": 0,
+    "remote_transaction_invocations": 0,
+    "remote_cleanup_operations": 0,
+    "remote_children_created": 0,
+    "runner_or_workload_children_created": 0,
+    "correctness_encodes": 0,
+    "timer_validation_children": 0,
+    "work_rows": 0,
+    "stage_rows": 0,
+    "timing_rows": 0,
+    "performance_samples": 0,
+    "profiler_workloads": 0,
+    "cuda_invocations": 0,
+    "alternate_or_local_timing_invocations": 0,
+    "phase2_archives_created_or_extracted": 0,
+    "phase2_retries": 0,
+    "phase2_reruns": 0,
+    "code_protocol_threshold_manifest_edits": 0,
+    "preexisting_user_or_unrelated_pids_signalled": 0
+  },
+  "decision": {
+    "status": "REFUSED_ZERO_ACCEPTED_PERFORMANCE_EVIDENCE",
+    "authority": "NONE",
+    "whole_encode_reproduction": "NOT_EVALUATED",
+    "stage_attribution": "NOT_AVAILABLE",
+    "top_level_statistics": "NOT_AVAILABLE",
+    "nested_timer_statistics": "NOT_AVAILABLE",
+    "production_promotion": "FORBIDDEN",
+    "phase3_consequence_evaluation": "NOT_PERFORMED_BY_PHASE2",
+    "decision_basis": "The sole Phase 1 untimed rehearsal did not complete the declared request and supplied no cleanup/absence proof; the immutable Phase 1B authority envelope is REFUSED/NONE."
+  },
+  "blocker": {
+    "status": "BLOCKED_BY_PHASE1B_REHEARSAL_AUTHORITY_REFUSAL",
+    "primary": "request chunk progress stopped at 5/364 and remote exact-child cleanup/absence remained unknown",
+    "safety_consequence": "No second contact, retry, follow-up cleanup, lease, benchmark, runner, device, or alternate/local timing is permitted in Phase 2.",
+    "one_next_credible_lead": "A future fresh Phase-1 owner must establish one complete independently hashed rehearsal with request/response/archive/integrity/cleanup-footer and exact-child absence proof before a later Phase-2 executor can reconsider authority; this Phase 2 audit must not repair or retry the transaction."
+  },
+  "evidence_references": [
+    "evidence/backref-cost-aligned-null-stage-attribution-v2-design/phase1b-authorization.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v2-design/phase1b-rehearsal-hashes.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v2-design/rehearsal/return-protocol/ready.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v2-design/rehearsal/return-protocol/request-declaration.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v2-design/rehearsal/return-protocol/request-progress.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v2-design/rehearsal/transfer-cleanup.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v2-design/phase1-prior-evidence-audit.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v2-design/phase1-local-codegen.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v2-design/phase1-local-untimed-experiment.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v2-design/phase1-local-validation.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v2-design/four-body-expected-receipt.json",
+    "evidence/backref-cost-aligned-null-stage-attribution-v2-design/four-body-actual-receipt.json",
+    "scripts/backref_cost_aligned_null_stage_attribution_v2_manifest.json",
+    "scripts/backref_cost_aligned_null_stage_attribution_v2_schemas.json",
+    "doc/backref-cost-aligned-null-stage-attribution-v2-protocol-20260820.md"
+  ]
+}
