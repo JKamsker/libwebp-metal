@@ -1,0 +1,10 @@
+{
+  "domain": "libwebp-backref-cost-specialization-alignment-v2-rehearsal\\0",
+  "payload_bytes": 2097152,
+  "schema": "libwebp-backref-cost-specialization-alignment-v2-payload-fixture-v1",
+  "sha256": "2e2ea6d7479bc385057e7a55154e220e67d28e7861c8b54fae5ea8549bbca607",
+  "stale_alignment_v1_sha256": "6d464de5123e056c63990cbcfda55cd6c68d5a70434fd340704fb5fa054f2eb3",
+  "stale_v2_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+  "stale_v3_sha256": "8fb97e16b8be09e7dc0c20b0b26387a0f8301d0aa738fa7ade4a6a97d15afeb8",
+  "stale_v4_sha256": "d34b944ec0b8eead809367d456785cf37d325459bca34506bec74af5efba4db0"
+}

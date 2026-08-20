@@ -76,7 +76,8 @@ typedef enum {
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT) || \
     defined(                                                       \
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT)
 void WebPProfileBeginSession(const WebPConfig* config,
                              const WebPPicture* picture);
 void WebPProfileEndSession(int ok, int error_code);
@@ -107,7 +108,8 @@ void WebPProfileMarkMetalHash(void);
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT) || \
     defined(                                                       \
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT)
 uint64_t WebPProfileClockNowForValidation(void);
 #endif
 #else
@@ -146,7 +148,8 @@ uint64_t WebPProfileClockNowForValidation(void);
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V3_EXPERIMENT) || \
     defined(                                                       \
         WEBP_USE_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V4_EXPERIMENT) || \
-    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT)
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT) || \
+    defined(WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V2_EXPERIMENT)
 #if defined(_MSC_VER)
 #define WEBP_PROFILE_NOINLINE __declspec(noinline)
 #elif defined(__GNUC__) || defined(__clang__)
