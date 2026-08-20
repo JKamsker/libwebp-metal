@@ -1,0 +1,1276 @@
+{
+  "acceptance": {
+    "alignment_normalization": {
+      "b_l_canonical_instruction_identity_required": true,
+      "body_bytes": 5624,
+      "boundary_bytes": 16384,
+      "distinct_addresses_required": true,
+      "dp_to_corresponding_push_displacement_bytes": 49152,
+      "entry_modulo_required": 0,
+      "exact_base_v4_static_runner_bytes": 592688,
+      "inter_entry_padding_bytes": 77588,
+      "inter_entry_spacing_bytes": 16384,
+      "local_reference_binary_delta_bytes": 83528,
+      "local_reference_timed_runner_bytes": 676216,
+      "no_deduplicate_required": true,
+      "remote_binary_size_rule": "record exact timed/recorder bytes in rehearsal and require Phase 2 to preserve the frozen section/body/padding values; total bytes are receipt-frozen because debug paths are build-root dependent",
+      "section": "__TEXT,__br_align_v1",
+      "section_size_bytes": 83212
+    },
+    "build_identity": "one recorder-free timed runner serves B/L/H; a distinct recorder runner serves untimed work only; frozen clang/SDK/flags and all six private DP/PushInterval symbols are mandatory",
+    "codegen_symbols": [
+      "BackwardReferencesHashChainDistanceOnly",
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+      "BackwardReferencesHashChainDistanceOnlySpecialized",
+      "PushInterval",
+      "PushIntervalLayoutClone",
+      "PushIntervalSpecialized"
+    ],
+    "correctness_required": true,
+    "diagnostic_only": true,
+    "diagnostic_success": "all correctness, schema, count, order, hash, resource, work, codegen, repeatability and transport gates pass; this can pass even when production promotion fails",
+    "mandatory_b_to_l_null_control": {
+      "failure_consequence": "diagnostic invalid; do not interpret L-to-H or B-to-H and do not authorize a production claim",
+      "justification": "V4's unnormalized B-to-L DP means ranged from -0.77% to +4.20%; a page-offset-normalized exact-work null must be much tighter. The 0.75/1.50/3.00% hierarchy remains above coarse-clock quantization and permits ordinary paired process noise without accepting the V4-scale placement shift.",
+      "metrics": [
+        "backref_cost_dp_total",
+        "backref_cost_dp_steady",
+        "whole_encode"
+      ],
+      "per_cell_absolute_mean_percent_max": 0.75,
+      "per_cell_bootstrap_95_ci_endpoint_absolute_percent_max": 1.5,
+      "per_cell_bootstrap_95_ci_must_include_zero": true,
+      "per_paired_row_absolute_percent_max": 3.0
+    },
+    "maximum_material_regression_percent": 0.5,
+    "maximum_mean_clock_read_delta_ns": 10000,
+    "per_profile": "five runner output records, five stage records, four retained records, exact schemas, and zero stderr",
+    "production_promotion": "H may be proposed only if B->H DP steady and whole-encode mean are negative in all four required cells, each upper 95% bootstrap CI is <=0, no paired row regresses by more than +0.50%, and correctness/work gates pass; otherwise retain diagnostic only",
+    "repeatability": "for each case/method/variant, three retained-total medians have max/min <=2.0 and each major stage-share range <=0.10 absolute",
+    "repeatability_max_ratio": 2.0,
+    "required_symbols": [
+      "WebPEncode",
+      "VP8LEncodeStream",
+      "VP8LHashChainFill",
+      "VP8LGetBackwardReferences",
+      "VP8LBackwardReferencesTraceBackwards",
+      "BackwardReferencesHashChainDistanceOnly",
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+      "BackwardReferencesHashChainDistanceOnlySpecialized",
+      "PushInterval",
+      "PushIntervalLayoutClone",
+      "PushIntervalSpecialized",
+      "InsertInterval",
+      "CostManagerInit",
+      "CostModelBuild",
+      "TraceBackwards",
+      "BackwardReferencesHashChainFollowChosenPath",
+      "EncodeImageInternal",
+      "GetHuffBitLengthsAndCodes",
+      "StoreImageToBitMask"
+    ],
+    "required_timer_stages": [
+      "lossless_analyze",
+      "lossless_hash_chain",
+      "lossless_backward_refs",
+      "lossless_histogram",
+      "lossless_huffman",
+      "lossless_bitstream",
+      "backref_cost_dp_total",
+      "backref_cost_dp_setup",
+      "backref_cost_dp_steady",
+      "backref_cost_traceback",
+      "backref_cost_materialize"
+    ],
+    "resolved_effect_floor_percent": 0.1,
+    "resources": "AC power, LPM off, no thermal warning, >=4 GiB free memory, >=8 GiB disk, output <=2 GiB, one directly owned child",
+    "timer_accounting": "on every successful timed encode DP total.calls == DP setup.calls == DP steady.calls > 0, backend equals the frozen B/L/H launch, setup+steady <= DP total, and DP total+traceback+materialize <= backward refs",
+    "timer_boundaries": "DP total is immediately around exactly one selected DP body including cleanup; setup starts before allocation and ends only after successful CostManagerInit; steady covers only initial literal plus pixel DP loop; traceback and materialization are separately timed; no per-pixel or PushInterval clock",
+    "work_counters": {
+      "cell_keys": [
+        "case_id",
+        "method",
+        "variant"
+      ],
+      "fields": [
+        "selector_evaluations",
+        "baseline_dp_calls",
+        "layout_clone_dp_calls",
+        "hint_dp_calls",
+        "exact_activations",
+        "push_calls",
+        "short_push_calls",
+        "cache_segments",
+        "overlap_scans",
+        "disjoint_prefix_scans",
+        "insert_calls",
+        "null_hint_insert_calls",
+        "position_backward_steps",
+        "position_forward_steps",
+        "append_hint_fast_paths",
+        "append_hint_branch_checks",
+        "append_hint_loads",
+        "append_hint_start_loads",
+        "append_hint_update_checks",
+        "append_hint_updates",
+        "pop_tail_branch_checks",
+        "pop_tail_updates",
+        "interval_updates",
+        "interval_pops",
+        "max_live_intervals",
+        "bitstream_bytes",
+        "bitstream_fnv1a64"
+      ],
+      "rows": 12,
+      "rules": "B and L are exactly equal for all work and have zero hint/pop activity; B/L/H common push/cache/overlap/disjoint/insert/backward/update/pop/live/bitstream work is equal; H differs only in intended append-hint/pop-tail positioning fields, has exact activation, positive hint activity, and zero forward positioning in every active cell"
+    }
+  },
+  "admission_identity_paths": [
+    "scripts/backref_cost_specialization_alignment_v1_manifest.json",
+    "CMakeLists.txt",
+    "makefile.unix",
+    "src/enc/backward_references_cost_enc.c",
+    "src/enc/backward_references_cost_distance_only_enc.inc",
+    "src/enc/backward_references_enc.c",
+    "src/enc/profile_enc.c",
+    "src/enc/profile_enc.h",
+    "src/enc/vp8l_enc.c",
+    "src/enc/backref_cost_specialization_alignment_v1_experiment_enc.c",
+    "src/enc/backref_cost_specialization_alignment_v1_experiment_enc.h",
+    "src/enc/backref_cost_alignment_v1_layout_clone_enc.inc",
+    "tools/backref_cost_specialization_alignment_v1_experiment_runner.c",
+    "scripts/backref_cost_specialization_alignment_v1_paths.py",
+    "scripts/backref_cost_specialization_alignment_v1_admission.py",
+    "scripts/backref_cost_specialization_alignment_v1_transport.py",
+    "scripts/backref_cost_specialization_alignment_v1_payload.py",
+    "scripts/execute_backref_cost_specialization_alignment_v1.py",
+    "scripts/backref_cost_specialization_alignment_v1_schemas.json",
+    "scripts/backref_cost_specialization_alignment_v1_archive.py",
+    "scripts/run_backref_cost_specialization_alignment_v1_experiment.py",
+    "scripts/evaluate_backref_cost_specialization_alignment_v1.py",
+    "doc/backref-cost-specialization-alignment-v1-protocol-20260820.md",
+    "scripts/test_backref_cost_specialization_alignment_v1_admission.py",
+    "scripts/test_backref_cost_specialization_alignment_v1_archive.py",
+    "scripts/test_backref_cost_specialization_alignment_v1_experiment.py",
+    "scripts/test_backref_cost_specialization_alignment_v1_process_ownership.py",
+    "scripts/test_backref_cost_specialization_alignment_v1_protocol.py",
+    "scripts/test_backref_cost_specialization_alignment_v1_streaming.py",
+    "scripts/test_backref_cost_specialization_alignment_v1_payload_identity.py",
+    "scripts/test_experiment_guards.py",
+    "doc/experiment-guard-matrix.md",
+    "evidence/backref-cost-specialization-alignment-v1-design/phase1-prior-evidence-audit.json",
+    "evidence/backref-cost-specialization-alignment-v1-design/phase1-local-codegen.json",
+    "evidence/backref-cost-specialization-alignment-v1-design/phase1-local-validation.json",
+    "evidence/backref-cost-specialization-alignment-v1-design/representative-payload-fixture.json",
+    "evidence/backref-cost-specialization-alignment-v1-design/representative-payload-agreement.json",
+    "scripts/backref_cost_specialization_alignment_v1_toolchain.py",
+    "scripts/test_backref_cost_specialization_alignment_v1_toolchain_identity.py",
+    "evidence/backref-cost-specialization-alignment-v1-design/toolchain-identity-fixture.json",
+    "evidence/backref-cost-specialization-alignment-v1-design/toolchain-identity-agreement.json",
+    "scripts/freeze_backref_cost_specialization_alignment_v1_phase1.py",
+    "scripts/record_backref_cost_specialization_alignment_v1_phase1b.py",
+    "evidence/backref-cost-specialization-alignment-v1-design/linker-map.txt",
+    "evidence/backref-cost-specialization-alignment-v1-design/linker-map-extract.txt",
+    "evidence/backref-cost-specialization-alignment-v1-design/v4-static-audit-linker-map.txt"
+  ],
+  "base_commit": "adf680e69b9eeeef636e62e0e0eb0c8fdace4013",
+  "build": {
+    "ar": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+    "cflags": "-O3 -g -DNDEBUG -fno-omit-frame-pointer",
+    "cxx": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+    "identity_rule": "one recorder-free Mach-O serves B/L/H; -no_deduplicate preserves six bodies; __TEXT,__br_align_v1 contains Push B/L/H then DP B/L/H at exact 16 KiB entry spacing; linker map, section flags, body facts, normalized instructions, padding and binary bytes are frozen",
+    "ld": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld",
+    "ldflags": "-Wl,-no_deduplicate",
+    "llvm_objdump": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump",
+    "metal": false,
+    "nm": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm",
+    "otool": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/otool",
+    "ranlib": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+    "sdk": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+    "system": "makefile.unix"
+  },
+  "candidate": {
+    "build_flag": "WEBP_BUILD_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT",
+    "compile_macro": "WEBP_USE_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_EXPERIMENT",
+    "equivalence": {
+      "algorithm": "B is the original baseline; L is its separately named exact-work clone; H is the append-hint specialization. All six DP/Push entries are distinct, no-deduplicate, and page-offset normalized in one executable section.",
+      "alignment_boundary_bytes": 16384,
+      "baseline": "production PushInterval at exact merged V3 main adf680e69b9eeeef636e62e0e0eb0c8fdace4013",
+      "entry_order": [
+        "Push-B",
+        "Push-L",
+        "Push-H",
+        "DP-B",
+        "DP-L",
+        "DP-H"
+      ],
+      "preserved": [
+        "integer costs",
+        "strict comparisons and ties",
+        "interval ordering",
+        "update order",
+        "traceback",
+        "reference order",
+        "cache choice",
+        "immutable inputs",
+        "transactional allocation fallback"
+      ],
+      "section": "__TEXT,__br_align_v1",
+      "single_binary_identity": true,
+      "source_commit": "adf680e69b9eeeef636e62e0e0eb0c8fdace4013"
+    },
+    "runner": "tools/backref_cost_specialization_alignment_v1_experiment_runner.c",
+    "runner_target": "backref_cost_specialization_alignment_v1_experiment_runner",
+    "runtime_flag": "WEBP_BACKREF_COST_SPECIALIZATION_ALIGNMENT_V1_VARIANT",
+    "runtime_values": [
+      "B",
+      "L",
+      "H"
+    ],
+    "source": "src/enc/backref_cost_specialization_alignment_v1_experiment_enc.c"
+  },
+  "corpus": [
+    {
+      "case_id": "photo-large",
+      "category": "photo",
+      "file": "photo-large.ppm",
+      "height": 2000,
+      "sha256": "b18f3f3e0b3324ae5c8e42f5eac831a8ba350e64c181340aa65410649b2e4612",
+      "width": 3000
+    },
+    {
+      "case_id": "graphic-large",
+      "category": "graphic",
+      "file": "graphic-large.ppm",
+      "height": 2000,
+      "sha256": "26d81b74583a1b379282c6cf45bb8eeb2b352958b221a5ebf7ea8421c575e5cc",
+      "width": 3000
+    }
+  ],
+  "diagnostic": {
+    "clock": "mach_continuous_time converted with mach_timebase_info",
+    "external_profiler_invocations": 0,
+    "fallback": null,
+    "primary": "coarse monotonic stage timers",
+    "record_command_template": [
+      "/usr/bin/env",
+      "FROZEN_ENV...",
+      "RUNNER",
+      "profile",
+      "INPUT",
+      "CASE",
+      "METHOD",
+      "VARIANT",
+      "1",
+      "4"
+    ],
+    "selection": {
+      "coarse_timers": "selected: in-process, noninteractive, no attach rights, and availability can be validated without encoder execution",
+      "sample": "rejected: PID attachment and task-port permission are unnecessary risks",
+      "xctrace": "rejected: v1 never established noninteractive launch permission and prompting cannot be rehearsed safely"
+    },
+    "toolchain_gate": "manifest == actual-file recomputation == independent fixture; no xcrun or xcode-select discovery",
+    "toolchain_identity": {
+      "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+      "executables": {
+        "ar": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+          "sha256": "e914ec3c1eb8ca99c7d5f2f9bd82ac3458d0ab14556a8a3441b28f37baaa77c9",
+          "version": {
+            "arguments": [],
+            "output_lines": [],
+            "output_sha256": null,
+            "returncode": null,
+            "version_source": "Xcode bundle metadata; ar has no standalone version query"
+          }
+        },
+        "clang": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+              "Thread model: posix",
+              "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+            ],
+            "output_sha256": "6245580a5236b07a40ed12d781b8de4fd917816b89b392e680687166f647a901",
+            "returncode": 0
+          }
+        },
+        "clang++": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+          "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+              "Thread model: posix",
+              "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+            ],
+            "output_sha256": "6245580a5236b07a40ed12d781b8de4fd917816b89b392e680687166f647a901",
+            "returncode": 0
+          }
+        },
+        "ld": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld",
+          "sha256": "3f4c03061fd7d1e895413133794632131c962c3df56266913741eb0733335166",
+          "version": {
+            "arguments": [
+              "-v"
+            ],
+            "output_lines": [
+              "@(#)PROGRAM:ld PROJECT:ld-1230.1",
+              "BUILD 10:14:01 Jan  9 2026",
+              "configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em armv8m.main armv8.1m.main",
+              "will use ld-classic for: armv6 armv7 armv7s i386 armv6m armv7k armv7m armv7em",
+              "LTO support using: LLVM version 17.0.0 (static support for 29, runtime is 29)",
+              "TAPI support using: Apple TAPI version 17.0.0 (tapi-1700.3.8)"
+            ],
+            "output_sha256": "2f92cfd28b4018cf1f10109b596753516da901dde9bb9db5c753c16d51203ed6",
+            "returncode": 0
+          }
+        },
+        "llvm-objdump": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump",
+          "sha256": "fa24edaea7afab86d88b9706e1b952f32abc819bd62f8f9bf8dafb5ae01ba159",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "Apple LLVM version 17.0.0",
+              "  Optimized build.",
+              "",
+              "",
+              "  Registered Targets:",
+              "    aarch64    - AArch64 (little endian)",
+              "    aarch64_32 - AArch64 (little endian ILP32)",
+              "    aarch64_be - AArch64 (big endian)",
+              "    arm        - ARM",
+              "    arm64      - ARM64 (little endian)",
+              "    arm64_32   - ARM64 (little endian ILP32)",
+              "    armeb      - ARM (big endian)",
+              "    thumb      - Thumb",
+              "    thumbeb    - Thumb (big endian)",
+              "    x86        - 32-bit X86: Pentium-Pro and above",
+              "    x86-64     - 64-bit X86: EM64T and AMD64"
+            ],
+            "output_sha256": "ae22f35526e555c21ee08130898b7515d118f32ca500c9580ba132c327eb60cd",
+            "returncode": 0
+          }
+        },
+        "nm": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-nm",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm",
+          "sha256": "a42f25b6363f3d43b911733a276a46bdbed894f1ef8e764cb7461ebdb37a15e7",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "llvm-nm, compatible with GNU nm",
+              "Apple LLVM version 17.0.0",
+              "  Optimized build."
+            ],
+            "output_sha256": "20384fe0739a6ed54aac86eaeed689fb86e8d58cdb6824550305171821fbbb4d",
+            "returncode": 0
+          }
+        },
+        "otool": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-otool",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/otool",
+          "sha256": "135b0722e199cae05a160853c36ff577c482f6e621fcd755e949c45aef14c436",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "llvm-otool(1): Apple Inc. version cctools-1030.6.3",
+              "otool(1): Apple Inc. version cctools-1030.6.3",
+              "disassembler: LLVM version 17.0.0"
+            ],
+            "output_sha256": "dbe8f8a7f13442ec7a5ca76c5981568d3ef2863c5f68a70c1ed71acd5b61684d",
+            "returncode": 0
+          }
+        },
+        "ranlib": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+          "sha256": "779903653ff38059513ef4f34846ab8b53f71f9cb7c066b29a47e520527b6cfa",
+          "version": {
+            "arguments": [
+              "-V"
+            ],
+            "output_lines": [
+              "Apple Inc. version cctools-1030.6.3",
+              "error: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: no archives specified",
+              "Usage: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib [-sactfqLT] [-] archive [...]"
+            ],
+            "output_sha256": "d498dee5d1ba26aace88be9c733100c05e4f1b29b0d3967446e7798576dcf459",
+            "returncode": 1
+          }
+        }
+      },
+      "metadata": {
+        "sdk-settings-json": {
+          "bytes": 7627,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.json",
+          "sha256": "95882a9cea02396e76f3e406a5728269b2a1a11bcd241430a84c9e63d09a6cd3"
+        },
+        "sdk-settings-plist": {
+          "bytes": 5346,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.plist",
+          "sha256": "03cb7d21a91023f6dff9ea019a3710061e2eb570bdb260faf4daa74151abf15d"
+        },
+        "toolchain-info-plist": {
+          "bytes": 95,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/ToolchainInfo.plist",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/ToolchainInfo.plist",
+          "sha256": "b2e3b746c87ddfd6d2145656d87569054807e2196d6f46ef09dec3923ed31541"
+        },
+        "xcode-version-plist": {
+          "bytes": 523,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/version.plist",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/version.plist",
+          "sha256": "79504c54fc47124dbc5945b628d9c9071923a57c0cd109ff5afdd7884c1c889c"
+        }
+      },
+      "required_executable_names": [
+        "clang",
+        "clang++",
+        "nm",
+        "ar",
+        "ranlib",
+        "llvm-objdump",
+        "ld",
+        "otool"
+      ],
+      "required_metadata_names": [
+        "xcode-version-plist",
+        "toolchain-info-plist",
+        "sdk-settings-json",
+        "sdk-settings-plist"
+      ],
+      "schema": "libwebp-backref-cost-specialization-alignment-v1-toolchain-identity-v1",
+      "sdk": {
+        "canonical_name": "macosx26.2",
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+        "display_name": "macOS 26.2",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "version": "26.2"
+      },
+      "stale_v2_xcrun_rejected": true,
+      "stale_v2_xcrun_sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152",
+      "stale_v3_identity_canonical_sha256": "735eb9be26c9b7118819b502bf0e24b6d87e8da945d81858c22bebdf889ce077",
+      "stale_v4_identity_canonical_sha256": "703ceac0715a267f5519726ed3309a86ff6cbee57562c6b051c6d33c78b6c1ad",
+      "xcode": {
+        "bundle_version": "24587",
+        "product_build_version": "17C529",
+        "short_version": "26.3",
+        "toolchain_identifier": "com.apple.dt.toolchain.XcodeDefault"
+      },
+      "xcrun_required": false
+    }
+  },
+  "execution_modes": {
+    "rehearse": "exactly one synchronous remote pandocs-agent transaction, WEBP_BENCHMARK_SESSION absent, source/toolchain/device/resource/process/build/plan/archive/integrity/extraction/cleanup/absence gates only; zero encoder workload, timing samples, and lease attempts",
+    "run": "Phase 2 only, exact exclusive session, one lease and 36 serial directly spawned coarse-timer processes",
+    "validate": "local, WEBP_BENCHMARK_SESSION absent, hashes and contracts only"
+  },
+  "experiment_id": "backref_cost_specialization_alignment_v1",
+  "forbidden_environment": [
+    "CUDA_VISIBLE_DEVICES",
+    "MallocNanoZone",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V10_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V11_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V12_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V13_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V14_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V15_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V16_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V1_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V3_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V4_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V5_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V6_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V7_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V8_EXPERIMENT",
+    "WEBP_BACKREF_COST_ATTRIBUTION_V9_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V1_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SEARCH_V3_EXPERIMENT",
+    "WEBP_BACKREF_COST_INTERVAL_SPECIALIZATION_V1_EXPERIMENT",
+    "WEBP_BACKREF_COST_TRACEBACK_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_AB_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V2_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V3_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V4_EXPERIMENT",
+    "WEBP_BACKREF_COST_WORKSPACE_REMOTE_V5_EXPERIMENT",
+    "WEBP_ENCODER_STAGE_PROFILE_EXPERIMENT",
+    "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V1_VARIANT",
+    "WEBP_BACKREF_COST_SPECIALIZATION_FACTORIZATION_V2_VARIANT"
+  ],
+  "frozen_artifact_set": {
+    "hashed_members_field": "frozen_artifacts",
+    "identity_rule": "admission identity paths equal self_manifest plus every frozen_artifacts path",
+    "payload_identity_required_members": [
+      "scripts/backref_cost_specialization_alignment_v1_payload.py",
+      "scripts/backref_cost_specialization_alignment_v1_manifest.json",
+      "evidence/backref-cost-specialization-alignment-v1-design/representative-payload-fixture.json",
+      "evidence/backref-cost-specialization-alignment-v1-design/representative-payload-agreement.json"
+    ],
+    "self_manifest": "scripts/backref_cost_specialization_alignment_v1_manifest.json",
+    "toolchain_identity_required_members": [
+      "scripts/backref_cost_specialization_alignment_v1_toolchain.py",
+      "scripts/test_backref_cost_specialization_alignment_v1_toolchain_identity.py",
+      "evidence/backref-cost-specialization-alignment-v1-design/toolchain-identity-fixture.json",
+      "evidence/backref-cost-specialization-alignment-v1-design/toolchain-identity-agreement.json"
+    ]
+  },
+  "frozen_artifacts": [
+    {
+      "path": "CMakeLists.txt",
+      "sha256": "5e7cd27e24ccd4ea2c7377587e84dec5a14ada1ea2b420bb380e5a9e442d4b61"
+    },
+    {
+      "path": "makefile.unix",
+      "sha256": "957a858498f7af93dab4031a0c50806d55a5df5993e9ec103e6d6e1b6447f734"
+    },
+    {
+      "path": "src/enc/backward_references_cost_enc.c",
+      "sha256": "92336f7a4c8f5ba5e46b1bd11fd574726bc3df0b2f53948792f1aa4352aba809"
+    },
+    {
+      "path": "src/enc/backward_references_cost_distance_only_enc.inc",
+      "sha256": "47b44223d37b3d0f9367e7cfe435655e12747fbb6bd9999b772a7dd7bb1de78e"
+    },
+    {
+      "path": "src/enc/backward_references_enc.c",
+      "sha256": "825ba66a874f6abd4801a9f7c21f9354df01e97e901b2e745dec1946cafbcd03"
+    },
+    {
+      "path": "src/enc/profile_enc.c",
+      "sha256": "7b80836602f054adbdfc0d3650fb662249f8c816fc82c94d82c9fb2524c72e89"
+    },
+    {
+      "path": "src/enc/profile_enc.h",
+      "sha256": "7907ef1fb374f21e53f1eed2564f5a4e3e88424c3d0bb81cb4e28b2819bf4eb7"
+    },
+    {
+      "path": "src/enc/vp8l_enc.c",
+      "sha256": "63ffd19018b9b9767cdf3a1f6b8721e3ad195af0e7373d219d29b110fb67d1e0"
+    },
+    {
+      "path": "src/enc/backref_cost_specialization_alignment_v1_experiment_enc.c",
+      "sha256": "a3579ca26b2fa88004b89ccf78027314240a0984d3bf6199aa51f443fb9d702f"
+    },
+    {
+      "path": "src/enc/backref_cost_specialization_alignment_v1_experiment_enc.h",
+      "sha256": "cebed7f0131b06b1a77a7d9b6b9e15d8b8a82f0db5ce6d9ad646f731f07cb48d"
+    },
+    {
+      "path": "src/enc/backref_cost_alignment_v1_layout_clone_enc.inc",
+      "sha256": "94f40cdc33843d927b243f96e007f4a1d9975dd7fa2478c6b8c396261cf8cbd1"
+    },
+    {
+      "path": "tools/backref_cost_specialization_alignment_v1_experiment_runner.c",
+      "sha256": "821ddf8de1e84eff9cab51bb68b30f43210690ccd83a7a3579ed6a80f42eaedf"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v1_paths.py",
+      "sha256": "67ebce8c2ecf7ce75abb2326d1554249e1ed7a0d951cd0c9bdf2d43bbca4ea00"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v1_admission.py",
+      "sha256": "8b9022d9fd8cc1c1da144473eb61c38944165108a0ea713dc7b9be4ae8fdc2b0"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v1_transport.py",
+      "sha256": "94a0b216a6fcceacc5e63d3a3c4f13ffd988b8006034fd1678564d6a3ad28b06"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v1_payload.py",
+      "sha256": "d0fbc13459b6504eb916b9ddce6a07ca003a98a37200b2579289762960a558c8"
+    },
+    {
+      "path": "scripts/execute_backref_cost_specialization_alignment_v1.py",
+      "sha256": "e6e364fdbfed1bd373c5a3d33317c863b11f1d24ebdf97d9cdd841871787377a"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v1_schemas.json",
+      "sha256": "eeb6ff13dc998c9066fd7d524a0fdbb65f42d7ccaa63a11e1b05c669eee192f1"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v1_archive.py",
+      "sha256": "2b8ff5976d7b941c8d11e616c687e5d8f0619c7b837a18930770eb309422de65"
+    },
+    {
+      "path": "scripts/run_backref_cost_specialization_alignment_v1_experiment.py",
+      "sha256": "b70b8440a6012689c1b8a1c8d770c35b327ea23a2627be82d72dc188aba9fda8"
+    },
+    {
+      "path": "scripts/evaluate_backref_cost_specialization_alignment_v1.py",
+      "sha256": "e33bd544a5dbc72f68ee8bb7477055a60a5a9fbde02c0d7664bcf1e692562d91"
+    },
+    {
+      "path": "doc/backref-cost-specialization-alignment-v1-protocol-20260820.md",
+      "sha256": "5faff975747d92e85d2a2ae0476a1268af32062fc8363a307eb3e0377e10694c"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_alignment_v1_admission.py",
+      "sha256": "7c5c39bce697fa6a2bb59b1bf5e28bad64f7ec01332e2de8adc62859a397bfff"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_alignment_v1_archive.py",
+      "sha256": "1e563686a216549fc29aef36c7ef312aac347200b51473e51c6dc01dd15a7cc5"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_alignment_v1_experiment.py",
+      "sha256": "001acff040277363a6a0e2a8e248c2f85d767cd446e4dd36da7d26b9ab3912d1"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_alignment_v1_process_ownership.py",
+      "sha256": "33005ed510c8d331aca8c9b36a3a50b867bd9ac5430db4ac7a81cac1e73223d3"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_alignment_v1_protocol.py",
+      "sha256": "35c2e6390c43dafad2870acc7c943e44339d3cf802d13edccc3c63062b11e6e2"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_alignment_v1_streaming.py",
+      "sha256": "c7baaf80e38a6f443ad7706b55ca993bb0408cb622bd37e954ec9fa6ee89b103"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_alignment_v1_payload_identity.py",
+      "sha256": "b9b507ea847d7a509224f5e52f895aa5e51c5b52513e994a2d23d44e0bc44792"
+    },
+    {
+      "path": "scripts/test_experiment_guards.py",
+      "sha256": "a4fb4f9b12559909a8685d0c99a693c52fab0ca825dd94471c2bf36258068916"
+    },
+    {
+      "path": "doc/experiment-guard-matrix.md",
+      "sha256": "db1507ab1bfc03c9e9d36464ac00214f944dfa2d9c424653723e3dd3094820eb"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v1-design/phase1-prior-evidence-audit.json",
+      "sha256": "8e440763301f0bfe39c9e40ae1bbe7d9459569e8f029591b56140b30c6829763"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v1-design/phase1-local-codegen.json",
+      "sha256": "e8154dc103eb92af4d41156dc97c30f41ee7c033cf053b1cc887067f235f55b5"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v1-design/phase1-local-validation.json",
+      "sha256": "b3e47f33a4351742dbd30ef5305d4c77fb42eb907db4e4de864052d7cf906fca"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v1-design/representative-payload-fixture.json",
+      "sha256": "985e38c11c6247f2a5628083fb13c27785aff2097a3225370bfbe3c73797b8a3"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v1-design/representative-payload-agreement.json",
+      "sha256": "0e3c93b44ff93974a9045424d242c69a208e372e80a575ec137199029f49c3a8"
+    },
+    {
+      "path": "scripts/backref_cost_specialization_alignment_v1_toolchain.py",
+      "sha256": "36beec69e4a7c0bb8bd1bc056aefe9828677ac1ae6415549e48366a12a5e4072"
+    },
+    {
+      "path": "scripts/test_backref_cost_specialization_alignment_v1_toolchain_identity.py",
+      "sha256": "042dedce168139e83e16a036d2d4beaa884fbd5abed14cfef523230e50277bff"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v1-design/toolchain-identity-fixture.json",
+      "sha256": "f05915a49141b80eeed2c8dc258c6f73b44923def67d1e6a54092bf50fb52144"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v1-design/toolchain-identity-agreement.json",
+      "sha256": "15df0864e92c7e5fb8d4783dc7bdcf55b3bcf91fcd66df044bd8a3ed9dd99d25"
+    },
+    {
+      "path": "scripts/freeze_backref_cost_specialization_alignment_v1_phase1.py",
+      "sha256": "177ce9fac18af4882e285530ea27230ebc6251a4d3cb1e29d8ffd74f4f8e2af7"
+    },
+    {
+      "path": "scripts/record_backref_cost_specialization_alignment_v1_phase1b.py",
+      "sha256": "ec4356a586055ffd2794a3f3d1aa773686ae3fa494faf3ac3e862a0763b9d181"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v1-design/linker-map.txt",
+      "sha256": "64279a7e4806d292213c11b553522afffe4f0b29620129c6b9dc790b5cc2d3ea"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v1-design/linker-map-extract.txt",
+      "sha256": "5d1f4185ba24dfb0bd069c183f5bc51f6d782001f56af1a33378ccbd2e92c220"
+    },
+    {
+      "path": "evidence/backref-cost-specialization-alignment-v1-design/v4-static-audit-linker-map.txt",
+      "sha256": "d1eed14eb0d44100c397ad6e4e57f0007c2acd9d4b4c3ed149a82272f4dfe233"
+    }
+  ],
+  "frozen_phase_1_rehearsal_command": "env -u WEBP_BENCHMARK_SESSION EXPECTED_FREEZE_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_specialization_alignment_v1.py rehearse \"$PWD/evidence/backref-cost-specialization-alignment-v1-design/rehearsal\"",
+  "frozen_phase_2_command": "env WEBP_BENCHMARK_SESSION=exclusive EXPECTED_FREEZE_COMMIT=\"$(git rev-parse HEAD)\" python3 scripts/execute_backref_cost_specialization_alignment_v1.py run \"$PWD/evidence/backref-cost-specialization-alignment-v1-execution-20260820\"",
+  "interpretation": {
+    "classification": "If B-to-L fails any fixed null bound, classify the whole diagnostic invalid. Otherwise classify each L-to-H/B-to-H metric as indeterminate-small below 0.10% absolute mean, resolved only when its 95% paired-bootstrap CI excludes zero, or unresolved/mixed otherwise.",
+    "close_family": "diagnostic validity and production promotion are separate decisions; do not weaken thresholds after results",
+    "follow_up": "a later evaluator may propose one new gated experiment but cannot implement it from this evidence",
+    "layout_limit": "B-to-L is a mandatory normalized null control, not an effect estimate. Only after its fixed null bounds pass may L-to-H estimate the append-hint difference and B-to-H report the simultaneous total.",
+    "next_stage": "Phase 3 alone decides consequence or one independently gated next lead",
+    "no_pooling": "no old samples, call-stack claims, relabeling, thresholds, graphic-only path, Metal, or CUDA",
+    "quantify": "report B->L, L->H and B->H for DP total, DP steady and whole encode separately in every photo/graphic method-4/method-6 cell"
+  },
+  "payload_identity_gate": {
+    "agreement_receipt": "evidence/backref-cost-specialization-alignment-v1-design/representative-payload-agreement.json",
+    "fixture": "evidence/backref-cost-specialization-alignment-v1-design/representative-payload-fixture.json",
+    "generator": "scripts/backref_cost_specialization_alignment_v1_payload.py",
+    "negative_stale_v2_sha256": "68358e6f43afbbd3d983f89185dd0da7694a65e5cbc8f31bdc8ef2102b1dc6d0",
+    "negative_stale_v3_sha256": "8fb97e16b8be09e7dc0c20b0b26387a0f8301d0aa738fa7ade4a6a97d15afeb8",
+    "negative_stale_v4_sha256": "d34b944ec0b8eead809367d456785cf37d325459bca34506bec74af5efba4db0",
+    "negative_test": "PASS_REJECTED_V2_V3_AND_V4",
+    "payload_bytes": 2097152,
+    "sha256": "6d464de5123e056c63990cbcfda55cd6c68d5a70434fd340704fb5fa054f2eb3",
+    "status": "PASS_BEFORE_PHASE_1A"
+  },
+  "phase_1_decision": {
+    "phase_1_performance_samples": 0,
+    "phase_2_authority": "NONE",
+    "reason": "Phase 1A freezes local gates and exactly one mandatory synchronous remote untimed zero-workload zero-lease rehearsal; Phase 2 remains forbidden until an additions-only Phase 1B envelope records complete live receipts",
+    "status": "PENDING_PHASE_1B_AUTHORIZATION",
+    "timed_execution_authorized": false
+  },
+  "phase_1_identity_contract": {
+    "authorization_envelope": "evidence/backref-cost-specialization-alignment-v1-design/phase1b-authorization.json",
+    "freeze_commit": "the exact Phase-1B HEAD passed dynamically as EXPECTED_FREEZE_COMMIT",
+    "phase_1b_diff_rule": "additions only at the rehearsal evidence prefix, hash index, and authorization envelope; every source/protocol/manifest/schema/corpus/order/count/timeout artifact remains byte-identical to Phase 1A",
+    "phase_1b_parent_rule": "exactly one parent equal to source_commit",
+    "rehearsal_evidence_prefix": "evidence/backref-cost-specialization-alignment-v1-design/rehearsal/",
+    "rehearsal_hash_index": "evidence/backref-cost-specialization-alignment-v1-design/phase1b-rehearsal-hashes.json",
+    "source_commit": "the exact Phase-1A commit recorded by the Phase-1B envelope"
+  },
+  "process_isolation": {
+    "ancestor_rule": "the self PID must exist and exact PPID edges must form a complete acyclic chain ending at PID 1; every ancestor requires a well-formed nonempty opaque raw_comm and lexical_basename, but no positive ancestor identity allowlist or filesystem identity match exists",
+    "argument_text_collected": false,
+    "conflict_rule": "exact frozen raw_comm and/or exact lexical_basename deny-set membership; no substring, prefix, suffix, argv, source, payload, filesystem, or symlink matching",
+    "denied_identity_sets_source": "DENIED_RAW_COMM_IDENTITIES and DENIED_LEXICAL_BASENAMES in scripts/backref_cost_specialization_alignment_v1_transport.py",
+    "discovery_policy": "read-only observation/refusal; raw snapshots are classified in memory and retained as exact SHA-256/byte-count/structural receipts; discovered PIDs never enter signal APIs",
+    "frozen_fields": [
+      "pid",
+      "ppid",
+      "comm"
+    ],
+    "lexical_basename_semantics": "derived only as raw_comm.rsplit('/', 1)[-1], recorded separately, and never resolved, normalized, statted, or checked against the filesystem",
+    "malformed_rule": "invalid UTF-8, truncation, malformed PID/PPID/remaining-comm structure, control-bearing or empty raw_comm or lexical basename, duplicate PIDs, self-parent edges, missing ancestor parents, ancestor cycles, non-PID1 ppid0, and absent self PID fail closed",
+    "positive_ancestor_identity_sets": null,
+    "raw_comm_semantics": "the complete remaining comm field is a nonempty exact opaque process-table string; slashless, slash-bearing, space-bearing, and path-like strings are valid and never filesystem-canonicalized",
+    "refusal_diagnostic": "bounded libwebp-backref-cost-specialization-alignment-v1-process-refusal-v1 object in the integrity footer with failure_code, PID, PPID, raw_comm, lexical_basename, is_ancestor, is_conflict, and SHA-256; no argv, environment, source, payload, command, or filesystem identity",
+    "resolved_path_api": null,
+    "scope_rule": "every process row is checked for exact denied raw_comm or lexical_basename membership; arbitrary well-formed non-denied ancestors and nonancestors pass, including slash, spaces, path-like values, and benign lexical collisions",
+    "snapshot_command": [
+      "/bin/ps",
+      "-axo",
+      "pid=,ppid=,comm="
+    ],
+    "v9_live_shape_fixture": "/sbin/launchd"
+  },
+  "protocol": {
+    "alignment_boundary_bytes": 16384,
+    "case_order": [
+      "photo-large",
+      "graphic-large"
+    ],
+    "correctness": "before timing, exactly two B, two L and two H encodes per case/method (24 total); exact bitstreams, decoded RGB pixels, repeat determinism, immutable inputs, integer costs, ties, update order and traceback must match",
+    "entry_order": [
+      "PushInterval",
+      "PushIntervalLayoutClone",
+      "PushIntervalSpecialized",
+      "BackwardReferencesHashChainDistanceOnly",
+      "BackwardReferencesHashChainDistanceOnlyLayoutClone",
+      "BackwardReferencesHashChainDistanceOnlySpecialized"
+    ],
+    "lifecycle": "one import, one excluded warmup, then four retained coarse-timer encodes per process",
+    "methods": [
+      4,
+      6
+    ],
+    "pairing": "within each case/method/repetition, retained ordinal 0..3 aligns B, L and H; compute B->L, L->H and B->H as 100*(Y-X)/X for each of 12 paired retained rows per cell and metric",
+    "perturbation": "monotonic clocks occur only at whole stages and DP setup/steady/trace/materialize boundaries; no per-PushInterval clock; timed binaries contain no recorder symbols or work counters",
+    "profile_processes": 36,
+    "profile_repetitions": 3,
+    "purpose": "fresh alignment-normalized B/L/H causal diagnostic; V4 raw evidence is audited but no V4 workload or sample is rerun or pooled",
+    "retained_encodes_per_profile": 4,
+    "retained_stage_records": 144,
+    "runner_output_records": 180,
+    "selected_dp_structure": "a separate recorder build emits exactly 12 untimed work rows, one per case/method/variant; one selector evaluation per selected DP, no opposite body, B/L exact work equality, common B/L/H algorithm work equality, and H-only append-hint activations are mandatory",
+    "serial_rule": "one synchronous directly spawned runner at a time under one exclusive lease; no overlap or retry",
+    "stage_records": 180,
+    "statistics": "for DP total, DP steady and whole encode in every cell/pair report all 12 paired percentages, arithmetic mean, median, sample standard deviation, min/max, sign counts, and deterministic 100000-resample paired bootstrap 95% percentile CI for the mean with seed 0x424c4801; setup is retained and reported but not causal-decision primary",
+    "variant_order": [
+      [
+        "B",
+        "L",
+        "H"
+      ],
+      [
+        "H",
+        "L",
+        "B"
+      ],
+      [
+        "L",
+        "B",
+        "H"
+      ]
+    ],
+    "warmups_per_profile": 1
+  },
+  "protocol_version": 8,
+  "remote_host": {
+    "architecture": "arm64",
+    "compiler_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+    "compiler_version_lines": [
+      "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+      "Thread model: posix",
+      "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+    ],
+    "cpu_brand": "Apple M4",
+    "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+    "hardware_model": "Mac16,10",
+    "permission_rule": "the selected diagnostic uses no attach API, profiler, authentication UI, privacy prompt, or discovered-PID control",
+    "physical_memory_bytes": 25769803776,
+    "required_thermal_lines": [
+      "No thermal warning level has been recorded",
+      "No performance warning level has been recorded",
+      "No CPU power status has been recorded"
+    ],
+    "runner_policy": "Runner.Listener may remain; exact Runner.Worker and frozen runner/benchmark/profiler/CUDA executable basenames fail closed",
+    "safe_root_basename": ".libwebp-metal-backref-cost-specialization-alignment-v1",
+    "sdk_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+    "sdk_version": "26.2",
+    "ssh_alias": "pandocs-agent",
+    "system": "Darwin"
+  },
+  "required_child_commands": {
+    "build": [
+      "/usr/bin/make",
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib"
+    ],
+    "codegen": [
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm",
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump"
+    ],
+    "sdk_identity": [
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.json",
+      "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.plist"
+    ],
+    "timed": [
+      "/usr/bin/env",
+      "RUNNER",
+      "profile",
+      "INPUT",
+      "CASE",
+      "METHOD",
+      "VARIANT",
+      "1",
+      "4"
+    ],
+    "transport": [
+      "/usr/bin/ssh",
+      "pandocs-agent",
+      "python3",
+      "-c",
+      "FROZEN_ALIGNMENT_V1_OPERATOR"
+    ]
+  },
+  "required_expected_commit_environment": "EXPECTED_FREEZE_COMMIT",
+  "resources": {
+    "footer_progress_timeout_seconds": 15,
+    "lease_path": "~/.libwebp-metal-backref-cost-specialization-alignment-v1.lock",
+    "maximum_control_payload_bytes": 8192,
+    "maximum_framed_response_bytes": 1048576,
+    "maximum_output_bytes": 2147483648,
+    "maximum_response_archive_bytes": 786432,
+    "minimum_available_disk_bytes": 8589934592,
+    "minimum_available_memory_bytes": 4294967296,
+    "parallel_profile_processes": 1,
+    "profile_timeout_seconds": 600,
+    "remote_timeout_seconds": 1800,
+    "silent_operator_timeout_seconds": 900,
+    "single_session_transaction_timeout_seconds": 1800,
+    "stream_progress_timeout_seconds": 15
+  },
+  "return_contract": {
+    "attempted_rule": "an acquisition attempt requires an independently transferred and verified lease receipt",
+    "bulk_chunk_bytes": 262144,
+    "cleanup_rule": "the same single remote transaction validates and removes only its exact alignment-v1 child before response emission, proves absence, and places the mandatory cleanup receipt in the preflighted final frame; no follow-up SSH/SCP cleanup exists",
+    "compaction": {
+      "archive_cap_bytes": 786432,
+      "digest_only": [
+        "representative request payload",
+        "process snapshots",
+        "build stdout/stderr",
+        "nm output",
+        "duplicated command stdout/stderr"
+      ],
+      "framed_response_cap_bytes": 1048576,
+      "preserved_raw": [
+        "stages/*.jsonl",
+        "runner/*.jsonl",
+        "runner/*.stderr",
+        "commands.jsonl",
+        "correctness.json",
+        "work-metrics.jsonl",
+        "work-metric-summary.json",
+        "codegen.json",
+        "resource-admission-*.json",
+        "artifact-hashes.json"
+      ]
+    },
+    "control_plane": [
+      "source-admission",
+      "operator-status",
+      "archive-build",
+      "lease-state",
+      "integrity-footer",
+      "cleanup-footer-last"
+    ],
+    "data_plane": "one framed stdout stream returns a compact deterministic tar+gzip archive with full artifact hash index; the declaration carries archive hash/size/count plus member-count and full-inventory digest before ordered chunks",
+    "frame_header_maximum_bytes": 65536,
+    "incremental_pump": "one retained directly-owned SSH Popen uses nonblocking selectors to write framed request chunks while concurrently draining stdout/stderr; REQUEST_WRITE retains request-progress plus absolute bounds until stdin half-close; SILENT_OPERATOR covers the remote build and complete-response preflight; BULK_STREAM starts only after a complete schema-valid size-valid declaration arrives and resets 15 seconds per received byte; FOOTERS separately bounds integrity plus cleanup for 15 seconds; only deadline expiry may stop that retained creation identity",
+    "lease_transfer_states": [
+      "not-attempted",
+      "unavailable-after-attempt",
+      "verified"
+    ],
+    "maximum_control_payload_bytes": 8192,
+    "maximum_expected_run_archive_bytes": 524288,
+    "maximum_expected_run_archive_justification": "Alignment V1 compaction retains raw runner/stage JSONL, correctness/resource/counter records and cryptographic indexes, while omitting the redundant representative request payload, repeated raw process tables, full nm output, build text, and duplicated command stdout/stderr; the 512 KiB expected bound must be proven by deterministic local archive fixtures and the sole rehearsal",
+    "maximum_framed_response_bytes": 1048576,
+    "maximum_response_archive_bytes": 786432,
+    "not_attempted_rule": "when benchmark_lease_acquisition_attempted is false, no lease artifact is requested, copied, or awaited",
+    "online_validation": "the remote encodes and checks every frame, control payload, archive byte, footer, and cleanup receipt before writing its first response byte; reject archive above 786432 bytes, any control above 8192 bytes, or total framed stdout greater than or equal to 1048576 bytes; then verify ordered frames/chunks, archive digest, compact full-inventory digest, integrity footer, cleanup-last receipt, raw stream hashes/counts, and exact-child absence before extraction",
+    "post_run_ssh_cleanup_operations": 0,
+    "remote_interactions_per_transaction": 1,
+    "representative_payload_margin_ratio": 4.0,
+    "representative_rehearsal_payload_bytes": 2097152,
+    "representative_rehearsal_payload_sha256": "6d464de5123e056c63990cbcfda55cd6c68d5a70434fd340704fb5fa054f2eb3",
+    "request_direction_validation": "a 2097152-byte deterministic payload is streamed only client-to-remote; remote admission checks exact size/SHA-256 and returns only its compact receipt, so request capacity and capped response capacity are independently exercised without performance evidence",
+    "single_remote_session": true,
+    "state_machine_fixture_set": [
+      "magic-then-long-bounded-silence",
+      "partial-control-then-silence",
+      "complete-controls-then-silence",
+      "partial-bulk-declaration-then-silence",
+      "complete-valid-declaration-then-15-second-stall",
+      "chunks-with-progress-reset",
+      "chunks-done-then-footer-stall",
+      "refusal-before-bulk",
+      "cleanup-footer-last",
+      "retained-child-only-timeout"
+    ],
+    "timeouts": {
+      "absolute_transaction_seconds": 1800,
+      "footer_progress_seconds": 15,
+      "request_and_bulk_progress_seconds": 15,
+      "server_alive_count_max": 3,
+      "server_alive_interval_seconds": 15,
+      "silent_operator_seconds": 900,
+      "ssh_connect_justification": "overlay first-session admission only",
+      "ssh_connect_seconds": 30
+    },
+    "transport_timeout_derivation": "the 900-second silent operator bound covers two serial builds, 24 untimed correctness encodes, 12 untimed work encodes, and the exact 36-process/180-encode timing inventory using prior approximately 0.94-1.22 second representative evidence plus margin; the 15-second progress bound is over 7x the prior approximately 0.51 second 256 KiB cadence; the 1,800-second absolute bound covers request, operator, stream, and finally"
+  },
+  "schema": "libwebp-backref-cost-specialization-alignment-v1-frozen-protocol-v1",
+  "schemas": {
+    "artifact_hashes": "libwebp-backref-cost-specialization-alignment-v1-artifact-hashes-v1",
+    "catalog": "scripts/backref_cost_specialization_alignment_v1_schemas.json",
+    "cleanup_receipt": "libwebp-backref-cost-specialization-alignment-v1-cleanup-receipt-v1",
+    "frame": "libwebp-backref-cost-specialization-alignment-v1-frame-v1",
+    "integrity_footer": "libwebp-backref-cost-specialization-alignment-v1-integrity-footer-v1",
+    "lease": "libwebp-backref-cost-specialization-alignment-v1-lease-v1",
+    "lease_transfer": "libwebp-backref-cost-specialization-alignment-v1-lease-transfer-v1",
+    "operator_status": "libwebp-backref-cost-specialization-alignment-v1-operator-status-v1",
+    "process_refusal": "libwebp-backref-cost-specialization-alignment-v1-process-refusal-v1",
+    "refusal": "libwebp-backref-cost-specialization-alignment-v1-refusal-v1",
+    "rehearsal": "libwebp-backref-cost-specialization-alignment-v1-rehearsal-v1",
+    "transfer_cleanup": "libwebp-backref-cost-specialization-alignment-v1-transfer-cleanup-v1"
+  },
+  "toolchain_identity_gate": {
+    "agreement_receipt": "evidence/backref-cost-specialization-alignment-v1-design/toolchain-identity-agreement.json",
+    "fixture": "evidence/backref-cost-specialization-alignment-v1-design/toolchain-identity-fixture.json",
+    "generator": "scripts/backref_cost_specialization_alignment_v1_toolchain.py",
+    "identity": {
+      "developer_dir": "/Applications/Xcode-26.3.0.app/Contents/Developer",
+      "executables": {
+        "ar": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ar",
+          "sha256": "e914ec3c1eb8ca99c7d5f2f9bd82ac3458d0ab14556a8a3441b28f37baaa77c9",
+          "version": {
+            "arguments": [],
+            "output_lines": [],
+            "output_sha256": null,
+            "returncode": null,
+            "version_source": "Xcode bundle metadata; ar has no standalone version query"
+          }
+        },
+        "clang": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+              "Thread model: posix",
+              "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+            ],
+            "output_sha256": "6245580a5236b07a40ed12d781b8de4fd917816b89b392e680687166f647a901",
+            "returncode": 0
+          }
+        },
+        "clang++": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/clang++",
+          "sha256": "c9126cf1970fb63c344ecc7b2cde016d0d4c125e07d2d74d0c0b4edaf853e65a",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "Apple clang version 17.0.0 (clang-1700.6.4.2)",
+              "Thread model: posix",
+              "InstalledDir: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin"
+            ],
+            "output_sha256": "6245580a5236b07a40ed12d781b8de4fd917816b89b392e680687166f647a901",
+            "returncode": 0
+          }
+        },
+        "ld": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ld",
+          "sha256": "3f4c03061fd7d1e895413133794632131c962c3df56266913741eb0733335166",
+          "version": {
+            "arguments": [
+              "-v"
+            ],
+            "output_lines": [
+              "@(#)PROGRAM:ld PROJECT:ld-1230.1",
+              "BUILD 10:14:01 Jan  9 2026",
+              "configured to support archs: armv6 armv7 armv7s arm64 arm64e arm64_32 i386 x86_64 x86_64h armv6m armv7k armv7m armv7em armv8m.main armv8.1m.main",
+              "will use ld-classic for: armv6 armv7 armv7s i386 armv6m armv7k armv7m armv7em",
+              "LTO support using: LLVM version 17.0.0 (static support for 29, runtime is 29)",
+              "TAPI support using: Apple TAPI version 17.0.0 (tapi-1700.3.8)"
+            ],
+            "output_sha256": "2f92cfd28b4018cf1f10109b596753516da901dde9bb9db5c753c16d51203ed6",
+            "returncode": 0
+          }
+        },
+        "llvm-objdump": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-objdump",
+          "sha256": "fa24edaea7afab86d88b9706e1b952f32abc819bd62f8f9bf8dafb5ae01ba159",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "Apple LLVM version 17.0.0",
+              "  Optimized build.",
+              "",
+              "",
+              "  Registered Targets:",
+              "    aarch64    - AArch64 (little endian)",
+              "    aarch64_32 - AArch64 (little endian ILP32)",
+              "    aarch64_be - AArch64 (big endian)",
+              "    arm        - ARM",
+              "    arm64      - ARM64 (little endian)",
+              "    arm64_32   - ARM64 (little endian ILP32)",
+              "    armeb      - ARM (big endian)",
+              "    thumb      - Thumb",
+              "    thumbeb    - Thumb (big endian)",
+              "    x86        - 32-bit X86: Pentium-Pro and above",
+              "    x86-64     - 64-bit X86: EM64T and AMD64"
+            ],
+            "output_sha256": "ae22f35526e555c21ee08130898b7515d118f32ca500c9580ba132c327eb60cd",
+            "returncode": 0
+          }
+        },
+        "nm": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-nm",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/nm",
+          "sha256": "a42f25b6363f3d43b911733a276a46bdbed894f1ef8e764cb7461ebdb37a15e7",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "llvm-nm, compatible with GNU nm",
+              "Apple LLVM version 17.0.0",
+              "  Optimized build."
+            ],
+            "output_sha256": "20384fe0739a6ed54aac86eaeed689fb86e8d58cdb6824550305171821fbbb4d",
+            "returncode": 0
+          }
+        },
+        "otool": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/llvm-otool",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/otool",
+          "sha256": "135b0722e199cae05a160853c36ff577c482f6e621fcd755e949c45aef14c436",
+          "version": {
+            "arguments": [
+              "--version"
+            ],
+            "output_lines": [
+              "llvm-otool(1): Apple Inc. version cctools-1030.6.3",
+              "otool(1): Apple Inc. version cctools-1030.6.3",
+              "disassembler: LLVM version 17.0.0"
+            ],
+            "output_sha256": "dbe8f8a7f13442ec7a5ca76c5981568d3ef2863c5f68a70c1ed71acd5b61684d",
+            "returncode": 0
+          }
+        },
+        "ranlib": {
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/libtool",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib",
+          "sha256": "779903653ff38059513ef4f34846ab8b53f71f9cb7c066b29a47e520527b6cfa",
+          "version": {
+            "arguments": [
+              "-V"
+            ],
+            "output_lines": [
+              "Apple Inc. version cctools-1030.6.3",
+              "error: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib: no archives specified",
+              "Usage: /Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/bin/ranlib [-sactfqLT] [-] archive [...]"
+            ],
+            "output_sha256": "d498dee5d1ba26aace88be9c733100c05e4f1b29b0d3967446e7798576dcf459",
+            "returncode": 1
+          }
+        }
+      },
+      "metadata": {
+        "sdk-settings-json": {
+          "bytes": 7627,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.json",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.json",
+          "sha256": "95882a9cea02396e76f3e406a5728269b2a1a11bcd241430a84c9e63d09a6cd3"
+        },
+        "sdk-settings-plist": {
+          "bytes": 5346,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk/SDKSettings.plist",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk/SDKSettings.plist",
+          "sha256": "03cb7d21a91023f6dff9ea019a3710061e2eb570bdb260faf4daa74151abf15d"
+        },
+        "toolchain-info-plist": {
+          "bytes": 95,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/ToolchainInfo.plist",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/ToolchainInfo.plist",
+          "sha256": "b2e3b746c87ddfd6d2145656d87569054807e2196d6f46ef09dec3923ed31541"
+        },
+        "xcode-version-plist": {
+          "bytes": 523,
+          "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/version.plist",
+          "path": "/Applications/Xcode-26.3.0.app/Contents/version.plist",
+          "sha256": "79504c54fc47124dbc5945b628d9c9071923a57c0cd109ff5afdd7884c1c889c"
+        }
+      },
+      "required_executable_names": [
+        "clang",
+        "clang++",
+        "nm",
+        "ar",
+        "ranlib",
+        "llvm-objdump",
+        "ld",
+        "otool"
+      ],
+      "required_metadata_names": [
+        "xcode-version-plist",
+        "toolchain-info-plist",
+        "sdk-settings-json",
+        "sdk-settings-plist"
+      ],
+      "schema": "libwebp-backref-cost-specialization-alignment-v1-toolchain-identity-v1",
+      "sdk": {
+        "canonical_name": "macosx26.2",
+        "canonical_path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX.sdk",
+        "display_name": "macOS 26.2",
+        "path": "/Applications/Xcode-26.3.0.app/Contents/Developer/Platforms/MacOSX.platform/Developer/SDKs/MacOSX26.2.sdk",
+        "version": "26.2"
+      },
+      "stale_v2_xcrun_rejected": true,
+      "stale_v2_xcrun_sha256": "b3f741e4a6af192170bbb662221163e730870944b8ad29bfac455241789b8152",
+      "stale_v3_identity_canonical_sha256": "735eb9be26c9b7118819b502bf0e24b6d87e8da945d81858c22bebdf889ce077",
+      "stale_v4_identity_canonical_sha256": "703ceac0715a267f5519726ed3309a86ff6cbee57562c6b051c6d33c78b6c1ad",
+      "xcode": {
+        "bundle_version": "24587",
+        "product_build_version": "17C529",
+        "short_version": "26.3",
+        "toolchain_identifier": "com.apple.dt.toolchain.XcodeDefault"
+      },
+      "xcrun_required": false
+    },
+    "negative_test": "PASS_REJECTED_STALE_V2_XCRUN_AND_V3_V4_ENVELOPES",
+    "status": "PASS_BEFORE_PHASE_1A",
+    "xcrun_eliminated": true
+  },
+  "transport_repair_audit": {
+    "decision": "retain V15's evidence-supported compact capped stdout response, corrected V14 inventory comparison, and complete-response preflight; use fresh Alignment V1 identities and one 30-second overlay first-session connect admission, separate from unchanged ServerAlive and transaction/progress deadlines, with no retry or alternate data plane",
+    "inference": "V13 full-duplex draining and deadline transitions did not move the V11 effective channel-window boundary; V14's 768 KiB archive, 1 MiB-exclusive response, 8 KiB control, 256 KiB chunk, and 2 MiB request-direction boundaries remain the smallest credible evidence-supported repair after the comparison and preflight fixes",
+    "post_v15_reachability_context": "transient read-only ICMP/TCP context only; not Alignment V1 authority, evidence, source admission, or retry authority",
+    "prior_remote_paths_contacted": false,
+    "shared_boundary": {
+      "chunk_bytes": 524288,
+      "complete_chunks": 3,
+      "partial_fourth_chunk_bytes": 359772
+    },
+    "v11_raw": {
+      "bytes": 1941990,
+      "path": "evidence/backref-cost-attribution-v11-design/rehearsal/return-protocol/framed-stdout.bin",
+      "sha256": "f6cb02af4d445ac355bdf007f8cfc19daf19d98d3e45647e0689f89264f848f4"
+    },
+    "v13_raw": {
+      "bytes": 1942116,
+      "path": "evidence/backref-cost-attribution-v13-design/rehearsal/return-protocol/framed-stdout.bin",
+      "sha256": "edaafe783c94d5cb9dcef376012bb64960730d1f6a92f493f3f60464be41109d"
+    },
+    "v14_local_groundwork": {
+      "audit_finding": "the compact archive boundary is complete and auditable, but execute_backref_cost_attribution_v14.py contains an invalid unary-plus inventory digest comparison that would reject a complete response; merged V15 corrected it and added an end-to-end fixture",
+      "authority": "NONE",
+      "independent_local_gate_status": "REEXECUTED_PASS",
+      "remote_observations": 0
+    },
+    "v15_exact_refusal": {
+      "authority": "NONE",
+      "framed_stdout_bytes": 0,
+      "framed_stdout_path": "evidence/backref-cost-attribution-v15-design/rehearsal/return-protocol/framed-stdout.bin",
+      "framed_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "prior_cycle_remote_paths_contacted": false,
+      "remote_connection_established": false,
+      "required_success_receipts_present": false,
+      "timed_execution_authorized": false,
+      "transport_stderr_bytes": 65,
+      "transport_stderr_exact": "ssh: connect to host 100.85.234.14 port 22: Operation timed out\r\n",
+      "transport_stderr_path": "evidence/backref-cost-attribution-v15-design/rehearsal/return-protocol/transport-stderr.bin",
+      "transport_stderr_sha256": "561ab6a0b87eb9dbd145fcb63a6dddd66c215f13680aa83763b3260d3e904eaa"
+    }
+  }
+}

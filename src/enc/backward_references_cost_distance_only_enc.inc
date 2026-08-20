@@ -1,7 +1,13 @@
 // Intentionally no include guard: the specialization experiment instantiates
 // this private DP body once for the production baseline and once for the
-// always-specialized candidate. The two names below must be macros.
-static WEBP_BACKREF_ATTRIBUTION_NOINLINE int BACKREF_DISTANCE_ONLY_NAME(
+// always-specialized candidate. The two names below must be macros. Alignment
+// v1 additionally defines BACKREF_DISTANCE_ONLY_ATTRIBUTES for only its three
+// diagnostic entry points.
+#if !defined(BACKREF_DISTANCE_ONLY_ATTRIBUTES)
+#define BACKREF_DISTANCE_ONLY_ATTRIBUTES WEBP_BACKREF_ATTRIBUTION_NOINLINE
+#define BACKREF_DISTANCE_ONLY_ATTRIBUTES_WAS_DEFAULT 1
+#endif
+static BACKREF_DISTANCE_ONLY_ATTRIBUTES int BACKREF_DISTANCE_ONLY_NAME(
     int xsize, int ysize, const uint32_t* const argb, int cache_bits,
     const VP8LHashChain* const hash_chain, const VP8LBackwardRefs* const refs,
     uint16_t* const dist_array) {
@@ -107,3 +113,8 @@ Error:
   WebPSafeFree(cost_manager);
   return ok;
 }
+
+#if defined(BACKREF_DISTANCE_ONLY_ATTRIBUTES_WAS_DEFAULT)
+#undef BACKREF_DISTANCE_ONLY_ATTRIBUTES_WAS_DEFAULT
+#undef BACKREF_DISTANCE_ONLY_ATTRIBUTES
+#endif
