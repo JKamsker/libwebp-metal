@@ -134,6 +134,7 @@ that hardware and workload.
 | Pre-Ampere I4 source-transform reuse | A fresh native profile measured a 121.89 us representative decimate launch and correlated 140,800 instructions with the four-lane I4 forward-transform body. One Turing candidate computed the exact source-side horizontal numerators once per block in idle prediction lanes, then let all ten modes subtract their reference terms before the unchanged rounding/vertical pass; Ampere+ compiled the retained path. All 60 timing rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 PNG/JPEG fallback cells were exact; candidate/restored builds passed 7/7 tests. | Rejected and removed. The candidate added 128 shared bytes, increased launch instructions from 3,879,409 to 3,896,209, and regressed the kernel to 123.39 us. Pooled PNG/JPEG medians regressed 29.209 to 29.490 and 27.619 to 27.902 ms/image; paired changes were -0.244/-0.381 ms. Shared publication/address arithmetic costs more than repeated source-row work. Do not retry without a register-only handoff. RTX 2080 SUPER only; Ampere+, thresholds, architecture split, and frozen files are unchanged. |
 | Pre-Ampere packed whole-macroblock prediction fill | Fresh root Nsight correlation measured 136,965 instructions and 186 barrier-stall samples in the retained parallel I16/UV prediction-plane fill. One Turing-only candidate generated four adjacent pixels per lane and used aligned `uchar4` shared stores while preserving every DC/TM/VE/HE formula; Ampere+ compiled the original scalar-per-pixel loop. It removed 42,070 launch instructions with unchanged 103-register / 352-byte-stack / 23,392-byte-shared resources. All 60 timing rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 PNG/JPEG fallback cells were exact; candidate/restored builds passed 7/7 tests. | Rejected and removed. The representative launch stayed flat at 121.79 to 121.86 us and `No Eligible` worsened from 89.78% to 89.90%. Paired-median PNG gain was only 0.544 ms/image and JPEG changed by -0.080 ms/image. Instruction reduction alone does not shorten the barrier-bound setup critical path. RTX 2080 SUPER only; Ampere+, thresholds, architecture split, and frozen files are unchanged. |
 | Pre-Ampere cooperative UV transform/quantization | The retained profile assigned 5.1% of photo block cycles and 252 completion-barrier samples to UV numerical work. The first Turing-only four-lane-per-block build exposed a misaligned `int*` reuse of `i16_tmp`; Nsight reported `LaunchFailed` and exact CPU fallback, so that iteration was corrected with explicit four-byte alignment before measurement. The valid candidate reduced UV numerical share to 3.4%, kernel duration 121.79 to 119.26 us, registers 103 to 102, and `No Eligible` 89.78% to 89.51%, with stack/shared/occupancy unchanged. All 60 timing rows, 15 methods/qualities tiny/odd pairs, and 20 injected-fallback cells were exact; aligned-candidate/restored suites passed 7/7. | Rejected and removed. Despite the local kernel gain, five paired process medians regressed by 0.337 ms/image PNG and 0.200 JPEG. Four-lane UV cooperation does not improve the end-to-end GPU/host critical path. The restored source matches the parent blob. Do not reuse merely type-aligned shared fields through wider pointers, and do not infer process gain from the isolated UV phase. RTX 2080 SUPER only; Ampere+, thresholds, architecture split, and frozen files are unchanged. |
+| Pre-Ampere I4 quantizer-flatness handoff feasibility | A clean retained native-sm_75 refresh measured decimation at 19.177/19.028 ms/image and token emission at 4.038/3.836 for PNG/JPEG. All-thread sampling still put `VP8PutTokenPage` first on the host, but its local and worker-lifecycle avenues were already exhausted. The distinct CUDA flatness handoff was bounded from the measured metric warps: photo/texture residual work already exceeds the entire SSE/flatness warp, and graphic-medium SSE/flatness exceeds residual by only 1.70%. Even charging all of graphic's 37.5% I4 phase to metrics gives an impossible 0.173 ms saving, or 0.058 ms/image over the six-input corpus. | Rejected before source change. Counting non-DC levels in the four-lane quantizer cannot move the photo/texture metric barrier and is over 25x below the 1.5 ms/image gate even under the generous graphic bound. No candidate, architecture-policy change, or frozen-file change was made. Raw stage, `perf`, syscall, hashes, and decision evidence use `libwebp-flatness-handoff-feasibility-*`. RTX 2080 SUPER only. |
 
 All original and follow-up benchmark rows produced stable expected checksums.
 The historical color rows remain raw evidence, but their ratios are not matched
@@ -1663,3 +1664,32 @@ regressed, so the candidate was removed. Restored source matches blob
 `7809e965a02b2eaec04a0e659239e66c6056c025`; raw evidence uses
 `libwebp-uv-coop4-*`. Architecture thresholds/defaults, Ampere+ behavior,
 and the frozen corpus/generator are unchanged.
+
+
+## Pre-Ampere I4 quantizer-flatness handoff feasibility rejection
+
+At clean parent `50ed9f7dfc9feb13568fba2daa26bdb8b0624105`, a refreshed
+native-sm_75 stage profile averaged 19.177/19.028 ms/image in accelerated
+decimation and 4.038/3.836 ms/image in token emission for PNG/JPEG. The three
+batch-24 rows per format retained exact aggregate hashes and byte counts:
+`455f70a1e139f043` / 6,441,688 PNG and `0c4b078d5c4d3173` /
+6,400,792 JPEG. All-thread cycle samples still selected `VP8PutTokenPage` at
+24.16%/25.09%, but all arithmetic-coder avenues and the directly measured
+0.747/0.764 ms/image worker lifecycle are exhausted.
+
+The current CUDA source profile left a distinct possible handoff: count non-DC
+levels in the existing four-lane I4 quantizer and remove the later scalar
+flatness scan. The retained metric-warp profile rules it out before source
+change. Residual already finishes later than the complete SSE/flatness warp on
+photo and texture (306/270 million versus 209/145 million cycles), so deleting
+flatness cannot move their metric barrier. Graphic-medium measured 85.632
+million SSE/flatness cycles versus 84.178 million residual cycles, a maximum
+1.70% metric reduction. Charging the whole 37.5% I4 phase to metrics yields an
+impossible `27.115 * 0.375 * 0.01699 = 0.173 ms` graphic-medium bound. Charging
+that same bound to both graphic inputs is only 0.058 ms/image over the six-input
+corpus.
+
+The bound is far below 1.5 ms/image before the quantizer's added count and
+reduction work, so no candidate was opened. Raw profiles and the decision use
+`libwebp-flatness-handoff-feasibility-*`; architecture thresholds/defaults,
+Ampere+ behavior, and the frozen corpus/generator are unchanged.

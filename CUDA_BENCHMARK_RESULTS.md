@@ -2770,3 +2770,30 @@ Both formats regressed despite the isolated kernel improvement, so the source
 was restored. Evidence uses `libwebp-uv-coop4-*`; the pre-Ampere/Ampere+
 split, 784/12,544 versus 64/4,000 defaults, and frozen publication files are
 unchanged.
+
+
+## Retained bottleneck refresh and I4 flatness-handoff feasibility
+
+At clean `50ed9f7d`, the native stage-profiler build used
+`-DCMAKE_CUDA_ARCHITECTURES=native`. One warmup and three batch-24 PNG/JPEG
+runs produced 95 measured stage records per format:
+
+| Format | Total | Decimate | Emit tokens | Write | Import |
+|---|---:|---:|---:|---:|---:|
+| PNG | 28.786 ms | 19.177 ms | 4.038 ms | 2.230 ms | 1.377 ms |
+| JPEG | 28.084 ms | 19.028 ms | 3.836 ms | 1.836 ms | 1.402 ms |
+
+The batch rows retained exact `455f70a1e139f043` / 6,441,688-byte PNG and
+`0c4b078d5c4d3173` / 6,400,792-byte JPEG aggregates. Six-sample all-thread
+`perf` captures attributed 24.16%/25.09% to `VP8PutTokenPage`; no new host
+scheduling bottleneck displaced its already-exhausted coder loop.
+
+On the device, a proposed quantizer-to-flatness handoff cannot shorten the
+metric barrier on photo or texture because their residual warps already run
+longer than the whole SSE/flatness warp. Graphic-medium has only a 1.70%
+SSE/flatness-over-residual margin. An intentionally impossible bound charging
+all 37.5% I4 time to that margin is 0.173 ms for graphic-medium and 0.058
+ms/image over the six-input corpus. This misses the 1.5 ms/image gate before
+adding quantizer bookkeeping, so no source candidate was opened. Evidence is
+under `libwebp-flatness-handoff-feasibility-*`; architecture policy and frozen
+files are unchanged.

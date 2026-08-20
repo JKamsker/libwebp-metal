@@ -3259,3 +3259,35 @@ was removed. Restored source exactly matches blob
 `libwebp-uv-coop4-*`. This is RTX 2080 SUPER-only evidence; the 784/12,544
 pre-Ampere and 64/4,000 Ampere+ defaults, architecture split, and frozen
 publication corpus/generator are unchanged.
+
+
+## Retained bottleneck refresh and flatness-handoff feasibility
+
+At clean parent `50ed9f7dfc9feb13568fba2daa26bdb8b0624105`, the retained
+stage-profiler binary was native-sm_75. One warmup and three batch-24 samples
+over the six small/medium inputs produced exact PNG/JPEG aggregates and 95
+measured encoder records per format. Average total/decimate/token-emission
+times were 28.786/19.177/4.038 ms PNG and 28.084/19.028/3.836 ms JPEG.
+
+All-thread cycle profiles over six further batches put `VP8PutTokenPage` at
+24.16% PNG and 25.09% JPEG. This did not reopen the exhausted arithmetic-coder
+work, and the directly measured token-worker lifecycle remains bounded at
+0.747/0.764 ms/image. Raw syscall controls are retained only as corroboration;
+their per-thread wait times are not summed into process-wall claims.
+
+The current device source correlation left the scalar I4 flatness scan as a
+distinct potential quantizer handoff. The retained metric-warp totals make its
+critical-path ceiling explicit. Photo/texture residual work already exceeds
+the whole SSE/flatness warp (306/270 million versus 209/145 million cycles),
+so removing flatness cannot move their barrier. Graphic-medium's SSE/flatness
+warp is only 1.70% longer than residual (85.632 versus 84.178 million cycles).
+Charging all of the 37.5% I4 phase to metrics gives an impossible 0.173 ms
+graphic-medium saving; applying it to both graphic fixtures is only 0.058
+ms/image over the six-input corpus.
+
+No source candidate was opened because that ceiling is far below 1.5 ms/image
+before counting any added quantizer reduction work. Raw stage JSONL, compressed
+`perf.data`, reports, syscall controls, hashes, and the decision use
+`libwebp-flatness-handoff-feasibility-*`. This is RTX 2080 SUPER-only evidence;
+the 784/12,544 pre-Ampere and 64/4,000 Ampere+ defaults, architecture split,
+and frozen generator/corpus remain unchanged.

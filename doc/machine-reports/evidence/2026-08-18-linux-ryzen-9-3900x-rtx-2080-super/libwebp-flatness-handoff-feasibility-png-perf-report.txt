@@ -1,0 +1,806 @@
+# To display the perf.data header info, please use --header/--header-only options.
+#
+#
+# Total Lost Samples: 0
+#
+# Samples: 18K of event 'cycles:P'
+# Event count (approx.): 35827805147
+#
+# Overhead  Command          Shared Object              Symbol                                                                                                                                      
+# ........  ...............  .........................  ............................................................................................................................................
+#
+    24.16%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] VP8PutTokenPage
+            |          
+             --24.14%--VP8PutTokenPage
+                       |          
+                        --24.03%--VP8EmitTokens
+                                  |          
+                                  |--20.34%--Execute
+                                  |          ThreadLoop
+                                  |          0x73795969cb83
+                                  |          0x737959729d6b
+                                  |          
+                                   --3.69%--VP8EncTokenLoop
+                                             0xffffffffffffffff
+
+    10.85%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] VP8RecordCoeffTokens
+            |          
+            |--9.75%--VP8RecordCoeffTokens
+            |          |          
+            |          |--8.47%--RecordTokensFromResults
+            |          |          Execute
+            |          |          ThreadLoop
+            |          |          0x73795969cb83
+            |          |          0x737959729d6b
+            |          |          
+            |           --0.32%--0x597c245b7a5f
+            |          
+             --0.23%--clear_page_rep
+                       get_page_from_freelist
+                       __alloc_pages
+                       alloc_pages_mpol
+                       vma_alloc_folio
+                       alloc_anon_folio
+                       do_anonymous_page
+                       handle_pte_fault
+                       __handle_mm_fault
+                       handle_mm_fault
+                       do_user_addr_fault
+                       exc_page_fault
+                       asm_exc_page_fault
+
+     9.04%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] inflate_fast
+            |          
+             --9.03%--inflate_fast
+                       |          
+                       |--8.40%--inflate
+                       |          png_read_IDAT_data
+                       |          png_read_row
+                       |          png_read_rows
+                       |          ReadPNG
+                       |          |          
+                       |          |--8.20%--PredecodeInput
+                       |          |          Execute
+                       |          |          ThreadLoop
+                       |          |          0x73795969cb83
+                       |          |          0x737959729d6b
+                       |          |          
+                       |           --0.20%--main
+                       |                     0x73795962a1c9
+                       |                     __libc_start_main
+                       |                     _start
+                       |          
+                        --0.60%--png_read_IDAT_data
+                                  png_read_row
+                                  png_read_rows
+                                  ReadPNG
+                                  |          
+                                   --0.54%--PredecodeInput
+                                             Execute
+                                             ThreadLoop
+                                             0x73795969cb83
+                                             0x737959729d6b
+
+     2.60%  webp_cuda_batch  libcuda.so.595.84          [.] 0x000000000021e999
+            |
+            ---0x73795401e999
+               |          
+               |--1.41%--0x73795401e99e
+               |          0x73795403e2ee
+               |          |          
+               |           --1.40%--0x737954f79420
+               |                     0x737954f796a2
+               |                     0x73795402c14c
+               |                     0x7379541d300c
+               |                     |          
+               |                      --1.36%--0x7379541d5786
+               |                                0x7379541d586b
+               |                                0x737954f9025d
+               |                                0x737953fd23bc
+               |                                0x737953fd2a69
+               |                                0x737953fd3443
+               |                                0x73795417f6b9
+               |                                cuMemcpyDtoHAsync_v2
+               |                                0x737959e44818
+               |                                0x737959e1782c
+               |                                cudaMemcpyAsync
+               |                                WebPCUDALossyDecimate
+               |                                (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+               |                                WebPAccelerateLossyDecimate
+               |                                VP8EncTokenLoop
+               |                                0xffffffffffffffff
+               |          
+               |--0.37%--0x73795403e2ee
+               |          0x737954f79420
+               |          0x737954f796a2
+               |          0x73795402c14c
+               |          0x7379541d300c
+               |          |          
+               |           --0.37%--0x7379541d5786
+               |                     0x7379541d586b
+               |                     0x737954f9025d
+               |                     0x737953fd23bc
+               |                     0x737953fd2a69
+               |                     0x737953fd3443
+               |                     0x73795417f6b9
+               |                     cuMemcpyDtoHAsync_v2
+               |                     0x737959e44818
+               |                     0x737959e1782c
+               |                     cudaMemcpyAsync
+               |                     WebPCUDALossyDecimate
+               |                     (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+               |                     WebPAccelerateLossyDecimate
+               |                     VP8EncTokenLoop
+               |                     0xffffffffffffffff
+               |          
+                --0.30%--clock_gettime
+                          0x737954102543
+                          0x73795402c18a
+                          0x7379541d300c
+                          |          
+                           --0.26%--0x7379541d5786
+                                     0x7379541d586b
+                                     0x737954f9025d
+                                     0x737953fd23bc
+                                     0x737953fd2a69
+                                     0x737953fd3443
+                                     0x73795417f6b9
+                                     cuMemcpyDtoHAsync_v2
+                                     0x737959e44818
+                                     0x737959e1782c
+                                     cudaMemcpyAsync
+                                     |          
+                                      --0.25%--WebPCUDALossyDecimate
+                                                (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+                                                WebPAccelerateLossyDecimate
+                                                VP8EncTokenLoop
+                                                0xffffffffffffffff
+
+     2.47%  webp_cuda_batch  libcuda.so.595.84          [.] 0x000000000022c140
+            |
+            ---0x73795402c140
+               |          
+               |--0.75%--0x73795401e99e
+               |          0x73795403e2ee
+               |          0x737954f79420
+               |          0x737954f796a2
+               |          0x73795402c14c
+               |          0x7379541d300c
+               |          |          
+               |           --0.70%--0x7379541d5786
+               |                     0x7379541d586b
+               |                     0x737954f9025d
+               |                     0x737953fd23bc
+               |                     0x737953fd2a69
+               |                     0x737953fd3443
+               |                     0x73795417f6b9
+               |                     cuMemcpyDtoHAsync_v2
+               |                     0x737959e44818
+               |                     0x737959e1782c
+               |                     cudaMemcpyAsync
+               |                     |          
+               |                      --0.68%--WebPCUDALossyDecimate
+               |                                (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+               |                                WebPAccelerateLossyDecimate
+               |                                VP8EncTokenLoop
+               |                                0xffffffffffffffff
+               |          
+               |--0.72%--clock_gettime
+               |          0x737954102543
+               |          0x73795402c18a
+               |          0x7379541d300c
+               |          |          
+               |           --0.71%--0x7379541d5786
+               |                     0x7379541d586b
+               |                     0x737954f9025d
+               |                     0x737953fd23bc
+               |                     0x737953fd2a69
+               |                     0x737953fd3443
+               |                     0x73795417f6b9
+               |                     cuMemcpyDtoHAsync_v2
+               |                     0x737959e44818
+               |                     0x737959e1782c
+               |                     cudaMemcpyAsync
+               |                     WebPCUDALossyDecimate
+               |                     (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+               |                     WebPAccelerateLossyDecimate
+               |                     VP8EncTokenLoop
+               |                     0xffffffffffffffff
+               |          
+                --0.31%--0x73795403e2ee
+                          0x737954f79420
+                          0x737954f796a2
+                          0x73795402c14c
+                          0x7379541d300c
+                          |          
+                           --0.29%--0x7379541d5786
+                                     0x7379541d586b
+                                     0x737954f9025d
+                                     0x737953fd23bc
+                                     0x737953fd2a69
+                                     0x737953fd3443
+                                     0x73795417f6b9
+                                     cuMemcpyDtoHAsync_v2
+                                     0x737959e44818
+                                     0x737959e1782c
+                                     cudaMemcpyAsync
+                                     WebPCUDALossyDecimate
+                                     (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+                                     WebPAccelerateLossyDecimate
+                                     VP8EncTokenLoop
+                                     0xffffffffffffffff
+
+     1.93%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] adler32_z
+            |
+            ---adler32_z
+               |          
+               |--1.04%--png_read_rows
+               |          ReadPNG
+               |          PredecodeInput
+               |          Execute
+               |          ThreadLoop
+               |          0x73795969cb83
+               |          0x737959729d6b
+               |          
+                --0.72%--inflate
+                          png_read_IDAT_data
+                          png_read_row
+                          png_read_rows
+                          ReadPNG
+                          |          
+                           --0.70%--PredecodeInput
+                                     Execute
+                                     ThreadLoop
+                                     0x73795969cb83
+                                     0x737959729d6b
+
+     1.91%  webp_cuda_batch  [vdso]                     [.] 0x0000000000000b00
+            |
+            ---0x7fffc03bdb00
+               |          
+               |--1.17%--0x73795401e99e
+               |          0x73795403e2ee
+               |          0x737954f79420
+               |          0x737954f796a2
+               |          0x73795402c14c
+               |          0x7379541d300c
+               |          |          
+               |           --1.15%--0x7379541d5786
+               |                     0x7379541d586b
+               |                     0x737954f9025d
+               |                     0x737953fd23bc
+               |                     0x737953fd2a69
+               |                     0x737953fd3443
+               |                     0x73795417f6b9
+               |                     cuMemcpyDtoHAsync_v2
+               |                     0x737959e44818
+               |                     0x737959e1782c
+               |                     cudaMemcpyAsync
+               |                     WebPCUDALossyDecimate
+               |                     (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+               |                     WebPAccelerateLossyDecimate
+               |                     VP8EncTokenLoop
+               |                     0xffffffffffffffff
+               |          
+                --0.35%--0x73795403e2ee
+                          0x737954f79420
+                          0x737954f796a2
+                          0x73795402c14c
+                          0x7379541d300c
+                          |          
+                           --0.34%--0x7379541d5786
+                                     0x7379541d586b
+                                     0x737954f9025d
+                                     0x737953fd23bc
+                                     0x737953fd2a69
+                                     0x737953fd3443
+                                     0x73795417f6b9
+                                     cuMemcpyDtoHAsync_v2
+                                     0x737959e44818
+                                     0x737959e1782c
+                                     cudaMemcpyAsync
+                                     WebPCUDALossyDecimate
+                                     (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+                                     WebPAccelerateLossyDecimate
+                                     VP8EncTokenLoop
+                                     0xffffffffffffffff
+
+     1.84%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] PackRGB_C
+            |          
+             --0.95%--PackRGB_C
+                       |          
+                        --0.92%--WebPPictureImportRGB
+                                  ReadPNG
+                                  PredecodeInput
+                                  Execute
+                                  ThreadLoop
+                                  0x73795969cb83
+                                  0x737959729d6b
+
+     1.47%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] png_read_filter_row_up
+            |          
+             --1.15%--png_read_filter_row_up
+                       |          
+                        --0.72%--png_read_row
+                                  png_read_rows
+                                  ReadPNG
+                                  |          
+                                   --0.68%--PredecodeInput
+                                             Execute
+                                             ThreadLoop
+                                             0x73795969cb83
+                                             0x737959729d6b
+
+     1.28%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] VP8PutBit
+            |
+            ---VP8PutBit
+               |          
+               |--0.68%--VP8CodeIntraModes
+               |          EncWrite* volatile
+               |          WebPEncode
+               |          main
+               |          0x73795962a1c9
+               |          __libc_start_main
+               |          _start
+               |          
+                --0.50%--0xffffffffffffffff
+
+     1.16%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] png_read_filter_row_paeth_multibyte_pixel
+            |
+            ---png_read_filter_row_paeth_multibyte_pixel
+               |          
+                --1.14%--png_read_row
+                          png_read_rows
+                          ReadPNG
+                          |          
+                           --1.08%--PredecodeInput
+                                     Execute
+                                     ThreadLoop
+                                     0x73795969cb83
+                                     0x737959729d6b
+
+     1.13%  webp_cuda_batch  [kernel.kallsyms]          [k] srso_return_thunk
+            |          
+             --0.83%--osDevReadReg032
+                       _regRead.constprop.0
+                       |          
+                        --0.72%--intrIsVectorPending_TU102
+                                  intrGetPendingLowLatencyHwDisplayIntr_TU102
+                                  kdispApplyAggressiveVblankHandlingWar_IMPL
+                                  _kgspRpcRecvPoll
+                                  _issueRpcAndWait
+                                  |          
+                                  |--0.36%--rpcRmApiAlloc_GSP
+                                  |          |          
+                                  |           --0.22%--_kchannelSendChannelAllocRpc
+                                  |                     kchannelConstruct_IMPL
+                                  |                     __nvoc_ctor_KernelChannel
+                                  |                     __nvoc_objCreate_KernelChannel
+                                  |                     __nvoc_objCreateDynamic
+                                  |                     resservResourceFactory
+                                  |                     _clientAllocResourceHelper
+                                  |                     serverAllocResourceUnderLock
+                                  |                     serverAllocResource
+                                  |                     rmapiAllocWithSecInfo
+                                  |                     rmapiAllocWithSecInfoTls
+                                  |          
+                                   --0.27%--rpcRmApiControl_GSP
+
+     1.07%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] RecordTokensFromResults
+            |          
+             --1.00%--RecordTokensFromResults
+                       |          
+                       |--0.42%--0x100000000
+                       |          
+                        --0.34%--0xffffffffffffffff
+
+     0.93%  webp_cuda_batch  [kernel.kallsyms]          [k] clear_page_rep
+     0.76%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] ImportBlock
+            |
+            ---ImportBlock
+               |          
+                --0.26%--VP8IteratorImport
+                          VP8EncTokenLoop
+                          0xffffffffffffffff
+
+     0.76%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] png_read_filter_row_sub
+            |
+            ---png_read_filter_row_sub
+               |          
+                --0.58%--png_read_row
+                          png_read_rows
+                          ReadPNG
+                          |          
+                           --0.54%--PredecodeInput
+                                     Execute
+                                     ThreadLoop
+                                     0x73795969cb83
+                                     0x737959729d6b
+
+     0.75%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] inflate
+            |
+            ---inflate
+               |          
+                --0.48%--inflate
+                          png_read_IDAT_data
+                          png_read_row
+                          png_read_rows
+                          ReadPNG
+                          |          
+                           --0.45%--PredecodeInput
+                                     Execute
+                                     ThreadLoop
+                                     0x73795969cb83
+                                     0x737959729d6b
+
+     0.63%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415ef9
+            |
+            ---0x737954215ef9
+               |          
+                --0.34%--0x73795401e99e
+                          0x73795403e2ee
+                          0x737954f79420
+                          0x737954f796a2
+                          0x73795402c14c
+                          0x7379541d300c
+                          |          
+                           --0.33%--0x7379541d5786
+                                     0x7379541d586b
+                                     0x737954f9025d
+                                     0x737953fd23bc
+                                     0x737953fd2a69
+                                     0x737953fd3443
+                                     0x73795417f6b9
+                                     cuMemcpyDtoHAsync_v2
+                                     0x737959e44818
+                                     0x737959e1782c
+                                     cudaMemcpyAsync
+                                     WebPCUDALossyDecimate
+                                     (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+                                     WebPAccelerateLossyDecimate
+                                     VP8EncTokenLoop
+                                     0xffffffffffffffff
+
+     0.63%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] HasAlpha32b_SSE2
+            |
+            ---HasAlpha32b_SSE2
+               |          
+                --0.61%--ImportYUVAFromRGBA
+                          WebPPictureARGBToYUVADithered
+                          WebPEncode
+                          main
+                          0x73795962a1c9
+                          __libc_start_main
+                          _start
+
+     0.59%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] crc32_z
+            |
+            ---crc32_z
+               |          
+               |--0.37%--png_calculate_crc
+               |          png_read_IDAT_data
+               |          png_read_row
+               |          png_read_rows
+               |          ReadPNG
+               |          PredecodeInput
+               |          Execute
+               |          ThreadLoop
+               |          0x73795969cb83
+               |          0x737959729d6b
+               |          
+                --0.21%--inflate
+                          png_read_IDAT_data
+                          png_read_row
+                          png_read_rows
+                          ReadPNG
+                          PredecodeInput
+                          Execute
+                          ThreadLoop
+                          0x73795969cb83
+                          0x737959729d6b
+
+     0.58%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415efd
+            |
+            ---0x737954215efd
+               |          
+                --0.37%--0x73795401e99e
+                          0x73795403e2ee
+                          0x737954f79420
+                          0x737954f796a2
+                          0x73795402c14c
+                          0x7379541d300c
+                          |          
+                           --0.35%--0x7379541d5786
+                                     0x7379541d586b
+                                     0x737954f9025d
+                                     0x737953fd23bc
+                                     0x737953fd2a69
+                                     0x737953fd3443
+                                     0x73795417f6b9
+                                     cuMemcpyDtoHAsync_v2
+                                     0x737959e44818
+                                     0x737959e1782c
+                                     cudaMemcpyAsync
+                                     |          
+                                      --0.34%--WebPCUDALossyDecimate
+                                                (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+                                                WebPAccelerateLossyDecimate
+                                                VP8EncTokenLoop
+                                                0xffffffffffffffff
+
+     0.53%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] main
+            |
+            ---main
+               |          
+                --0.52%--0x73795962a1c9
+                          __libc_start_main
+                          _start
+
+     0.51%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] VP8CodeIntraModes
+            |
+            ---VP8CodeIntraModes
+               |          
+                --0.32%--0x597c245b7a9f
+
+     0.48%  webp_cuda_batch  [kernel.kallsyms]          [k] do_anonymous_page
+     0.48%  webp_cuda_batch  [kernel.kallsyms]          [k] os_get_cpu_number
+            |
+            ---osDevReadReg032
+               _regRead.constprop.0
+               crashcatEngineLoadWayfinder_IMPL
+               crashcatEngineGetNextCrashReport_IMPL
+               kgspHealthCheck_TU102
+               _kgspRpcDrainEvents
+               _kgspRpcRecvPoll
+               _issueRpcAndWait
+               |          
+                --0.25%--rpcRmApiControl_GSP
+
+     0.44%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415ef7
+            |
+            ---0x737954215ef7
+               |          
+                --0.23%--0x73795401e99e
+                          0x73795403e2ee
+                          0x737954f79420
+                          0x737954f796a2
+                          0x73795402c14c
+                          0x7379541d300c
+                          |          
+                           --0.22%--0x7379541d5786
+                                     0x7379541d586b
+                                     0x737954f9025d
+                                     0x737953fd23bc
+                                     0x737953fd2a69
+                                     0x737953fd3443
+                                     0x73795417f6b9
+                                     cuMemcpyDtoHAsync_v2
+                                     0x737959e44818
+                                     0x737959e1782c
+                                     cudaMemcpyAsync
+                                     WebPCUDALossyDecimate
+                                     (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+                                     WebPAccelerateLossyDecimate
+                                     VP8EncTokenLoop
+                                     0xffffffffffffffff
+
+     0.40%  webp_cuda_batch  libcuda.so.595.84          [.] 0x000000000021e973
+            |
+            ---0x73795401e973
+
+     0.40%  webp_cuda_batch  [kernel.kallsyms]          [k] srso_safe_ret
+     0.39%  webp_cuda_batch  [kernel.kallsyms]          [k] __handle_mm_fault
+     0.39%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415eff
+            |
+            ---0x737954215eff
+               |          
+                --0.20%--0x73795401e99e
+                          0x73795403e2ee
+                          0x737954f79420
+                          0x737954f796a2
+                          0x73795402c14c
+                          0x7379541d300c
+                          0x7379541d5786
+                          0x7379541d586b
+                          0x737954f9025d
+                          0x737953fd23bc
+                          0x737953fd2a69
+                          0x737953fd3443
+                          0x73795417f6b9
+                          cuMemcpyDtoHAsync_v2
+                          0x737959e44818
+                          0x737959e1782c
+                          cudaMemcpyAsync
+
+     0.37%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415d44
+            |
+            ---0x737954215d44
+               |          
+                --0.25%--0x73795401e99e
+                          0x73795403e2ee
+                          0x737954f79420
+                          0x737954f796a2
+                          0x73795402c14c
+                          0x7379541d300c
+                          0x7379541d5786
+                          0x7379541d586b
+                          0x737954f9025d
+                          0x737953fd23bc
+                          0x737953fd2a69
+                          0x737953fd3443
+                          0x73795417f6b9
+                          cuMemcpyDtoHAsync_v2
+                          0x737959e44818
+                          0x737959e1782c
+                          cudaMemcpyAsync
+                          |          
+                           --0.24%--WebPCUDALossyDecimate
+                                     (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+                                     WebPAccelerateLossyDecimate
+                                     VP8EncTokenLoop
+                                     0xffffffffffffffff
+
+     0.33%  webp_cuda_batch  libcuda.so.595.84          [.] 0x000000000021e97d
+            |
+            ---0x73795401e97d
+
+     0.32%  webp_cuda_batch  webp_cuda_batch_benchmark  [.] SetResidualCoeffs_SSE2
+            |          
+             --0.30%--SetResidualCoeffs_SSE2
+
+     0.32%  webp_cuda_batch  [kernel.kallsyms]          [k] __mod_lruvec_state
+     0.31%  webp_cuda_batch  libcuda.so.595.84          [.] 0x000000000021e98e
+            |
+            ---0x73795401e98e
+
+     0.31%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415efb
+            |
+            ---0x737954215efb
+
+     0.31%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415d40
+            |
+            ---0x737954215d40
+
+     0.30%  webp_cuda_batch  libcuda.so.595.84          [.] 0x000000000021e970
+            |
+            ---0x73795401e970
+               |          
+                --0.23%--0x73795401e99e
+                          0x73795403e2ee
+                          0x737954f79420
+                          0x737954f796a2
+                          0x73795402c14c
+                          0x7379541d300c
+                          |          
+                           --0.22%--0x7379541d5786
+                                     0x7379541d586b
+                                     0x737954f9025d
+                                     0x737953fd23bc
+                                     0x737953fd2a69
+                                     0x737953fd3443
+                                     0x73795417f6b9
+                                     cuMemcpyDtoHAsync_v2
+                                     0x737959e44818
+                                     0x737959e1782c
+                                     cudaMemcpyAsync
+                                     WebPCUDALossyDecimate
+                                     (anonymous namespace)::CUDALossyDecimate(void*, WebPAcceleratorDecimateRequest const*)
+                                     WebPAccelerateLossyDecimate
+                                     VP8EncTokenLoop
+                                     0xffffffffffffffff
+
+     0.29%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415d34
+            |
+            ---0x737954215d34
+
+     0.29%  webp_cuda_batch  libc.so.6                  [.] 0x0000000000188dc5
+            |
+            ---0x737959788dc5
+
+     0.27%  webp_cuda_batch  [kernel.kallsyms]          [k] handle_mm_fault
+     0.26%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415d31
+            |
+            ---0x737954215d31
+
+     0.26%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415ef6
+            |
+            ---0x737954215ef6
+
+     0.25%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415ee7
+            |
+            ---0x737954215ee7
+
+     0.25%  webp_cuda_batch  libc.so.6                  [.] 0x0000000000188dbb
+            |          
+             --0.24%--0x737959788dbb
+
+     0.25%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000220a38
+            |
+            ---0x737954020a38
+               0x7379540afe39
+               0x7379541d302d
+
+     0.25%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415f00
+            |
+            ---0x737954215f00
+
+     0.25%  webp_cuda_batch  [kernel.kallsyms]          [k] do_user_addr_fault
+     0.24%  webp_cuda_batch  libcuda.so.595.84          [.] 0x000000000021e996
+            |
+            ---0x73795401e996
+
+     0.24%  webp_cuda_batch  [kernel.kallsyms]          [k] __mod_memcg_lruvec_state
+     0.23%  webp_cuda_batch  libcuda.so.595.84          [.] 0x000000000021e99f
+            |
+            ---0x73795401e99f
+
+     0.23%  webp_cuda_batch  [kernel.kallsyms]          [k] rmGpuLockIsOwner
+            |
+            ---osDevReadReg032
+               _regRead.constprop.0
+               intrIsVectorPending_TU102
+               intrGetPendingLowLatencyHwDisplayIntr_TU102
+               kdispApplyAggressiveVblankHandlingWar_IMPL
+               _kgspRpcRecvPoll
+               _issueRpcAndWait
+
+     0.23%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415d9f
+            |
+            ---0x737954215d9f
+
+     0.23%  webp_cuda_batch  libc.so.6                  [.] 0x0000000000188db7
+            |
+            ---0x737959788db7
+
+     0.23%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000220a48
+            |          
+             --0.21%--0x737954020a48
+                       0x7379540afe39
+                       0x7379541d302d
+
+     0.22%  webp_cuda_batch  [kernel.kallsyms]          [k] rep_movs_alternative
+     0.22%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415db6
+            |
+            ---0x737954215db6
+
+     0.21%  webp_cuda_batch  [kernel.kallsyms]          [k] rmqueue_bulk
+            |
+            ---rmqueue_bulk
+               __rmqueue_pcplist
+               |          
+                --0.20%--rmqueue
+                          get_page_from_freelist
+                          __alloc_pages
+                          alloc_pages_mpol
+                          vma_alloc_folio
+                          alloc_anon_folio
+                          do_anonymous_page
+                          handle_pte_fault
+                          __handle_mm_fault
+                          handle_mm_fault
+                          do_user_addr_fault
+                          exc_page_fault
+                          asm_exc_page_fault
+
+     0.21%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415d6d
+            |
+            ---0x737954215d6d
+
+     0.20%  webp_cuda_batch  libc.so.6                  [.] 0x0000000000188dc0
+            |
+            ---0x737959788dc0
+
+     0.20%  webp_cuda_batch  [kernel.kallsyms]          [k] mem_cgroup_commit_charge
+     0.20%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000220a2c
+            |
+            ---0x737954020a2c
+
+     0.20%  webp_cuda_batch  libcuda.so.595.84          [.] 0x0000000000415d83
+            |
+            ---0x737954215d83
+
+
+
+#
+# (Cannot load tips.txt file, please install perf!)
+#
