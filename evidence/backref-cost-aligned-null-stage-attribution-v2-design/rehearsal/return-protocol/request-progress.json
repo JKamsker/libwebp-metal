@@ -1,0 +1,13 @@
+{
+  "complete_ack": null,
+  "declaration_accepted": true,
+  "failure": "directly owned transport phase timed out",
+  "request_bytes_acknowledged": 327680,
+  "request_chunks_acknowledged": 5,
+  "request_chunks_planned": 364,
+  "request_payload_bytes": 23820500,
+  "request_payload_sha256": "f3f82834690e36bc3136a0ddaa09cbd73c59d6f33d2a29eabda973d51e8de83f",
+  "schema": "libwebp-backref-cost-aligned-null-stage-attribution-v2-request-progress-v1",
+  "status": "refused",
+  "transaction_nonce": "3694ef7b5d029f68a135848897c90da2e0dacce2d3875ca713706862cab74fb4"
+}
