@@ -1,0 +1,16 @@
+{
+  "cleanup_footer_verified": false,
+  "direct_transport_child_timed_out": true,
+  "failure": "directly owned transport phase timed out",
+  "framed_stdout_bytes": 0,
+  "framed_stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "mode": "rehearse",
+  "post_run_remote_cleanup_operations": 0,
+  "remote_cleanup_state": "unknown-after-truncation",
+  "schema": "libwebp-backref-cost-specialization-alignment-v2-transfer-cleanup-v1",
+  "status": "refused",
+  "timeout_deadline_kind": "request-progress",
+  "timeout_phase": "REQUEST_WRITE",
+  "transport_stderr_bytes": 0,
+  "transport_stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+}

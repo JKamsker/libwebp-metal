@@ -1,0 +1,114 @@
+{
+  "base_commit": "adf680e69b9eeeef636e62e0e0eb0c8fdace4013",
+  "performance_samples_generated": 0,
+  "remote_contacts": 0,
+  "schema": "libwebp-backref-cost-specialization-alignment-v2-prior-evidence-audit-v1",
+  "sources": {
+    "build_identity": {
+      "path": "evidence/backref-cost-specialization-factorization-v4-execution-20260820/build-identity.json",
+      "sha256": "ae0c7177b473be61c2ac1efce0c0594e0dccb60e480bf2242c88c05fd788797f"
+    },
+    "evaluation": {
+      "path": "evidence/backref-cost-specialization-factorization-v4-phase3-evaluation-20260820.json",
+      "sha256": "7e2c05e8d47188ff967a25edfd9bee28c66243a48f147f2566a9d10607603620"
+    },
+    "local_codegen": {
+      "path": "evidence/backref-cost-specialization-factorization-v4-design/phase1-local-codegen.json",
+      "sha256": "959f0f8dda1eb1807bd6f318fe7f9d0952c7ec9030c6f6bbab9a71bdfc3afd4a"
+    },
+    "reconstructed_static_linker_map": {
+      "build_only_no_encoder_workload": true,
+      "bytes": 66687,
+      "path": "evidence/backref-cost-specialization-alignment-v2-design/v4-static-audit-linker-map.txt",
+      "sha256": "d1eed14eb0d44100c397ad6e4e57f0007c2acd9d4b4c3ed149a82272f4dfe233",
+      "source_commit": "adf680e69b9eeeef636e62e0e0eb0c8fdace4013"
+    },
+    "remote_codegen": {
+      "path": "evidence/backref-cost-specialization-factorization-v4-execution-20260820/codegen.json",
+      "sha256": "b715dd33d2ac0c3a43a3b487a5aa14e82ee26b09273b3d9ee0c10771a0dab609"
+    }
+  },
+  "status": "PASS_WITH_V4_RAW_MAP_RECONSTRUCTED",
+  "v4_b_to_l_mean_percent": {
+    "graphic-m4": {
+      "dp_steady": 0.4121997819345828,
+      "dp_total": 0.3995928288236629,
+      "whole_encode": 0.3327690472518563
+    },
+    "graphic-m6": {
+      "dp_steady": -0.009055982943640774,
+      "dp_total": -0.02142064160331604,
+      "whole_encode": -0.808514727303845
+    },
+    "photo-m4": {
+      "dp_steady": 4.200103844867775,
+      "dp_total": 4.02692989381742,
+      "whole_encode": 0.39108222292600564
+    },
+    "photo-m6": {
+      "dp_steady": -0.7485474350992258,
+      "dp_total": -0.7664250981057142,
+      "whole_encode": -1.3459692402371841
+    }
+  },
+  "v4_codegen_crosscheck": {
+    "b_l_dp_mnemonics_equal": true,
+    "b_l_push_mnemonics_equal": true,
+    "distinct_addresses": true,
+    "finding": "B/L bodies were equal in normalized code and work but occupied unequal cache-line and 16 KiB offsets; the exact-base linker map reproduces every committed local address and size.",
+    "local_remote_common_facts_equal": true
+  },
+  "v4_finding": "L-to-H improved DP total/steady in all four cells while B-to-L ranged from -0.77% to +4.20% and whole encode was inconsistent; this is causal-design evidence only and is not pooled or rerun.",
+  "v4_linker_map_rows": [
+    "0x1000361C0\t0x0000050C\t[ 37] _BackwardReferencesHashChainDistanceOnly",
+    "0x1000366CC\t0x0000050C\t[ 37] _BackwardReferencesHashChainDistanceOnlyLayoutClone",
+    "0x100036BD8\t0x0000050C\t[ 37] _BackwardReferencesHashChainDistanceOnlySpecialized",
+    "0x1000381E0\t0x000001FC\t[ 37] _PushInterval",
+    "0x10003883C\t0x000001FC\t[ 37] _PushIntervalLayoutClone",
+    "0x100038A38\t0x000002DC\t[ 37] _PushIntervalSpecialized"
+  ],
+  "v4_raw_indexes": {
+    "artifact-hashes.json": {
+      "mismatches": [],
+      "rows": 123,
+      "sha256": "a979120ca9e9210176fd6ec090d690bc69f8737daef771b3e73e7d2b7b59459a"
+    },
+    "returned-evidence-hashes.json": {
+      "mismatches": [],
+      "rows": 133,
+      "sha256": "6ef2b10b17576a23384a0e644043196007743df73c1b8ba40ac2deb729d89ee9"
+    }
+  },
+  "v4_symbol_address_modulos": {
+    "BackwardReferencesHashChainDistanceOnly": {
+      "address": "00000001000361c0",
+      "mod_16384": 8640,
+      "mod_64": 0
+    },
+    "BackwardReferencesHashChainDistanceOnlyLayoutClone": {
+      "address": "00000001000366cc",
+      "mod_16384": 9932,
+      "mod_64": 12
+    },
+    "BackwardReferencesHashChainDistanceOnlySpecialized": {
+      "address": "0000000100036bd8",
+      "mod_16384": 11224,
+      "mod_64": 24
+    },
+    "PushInterval": {
+      "address": "00000001000381e0",
+      "mod_16384": 480,
+      "mod_64": 32
+    },
+    "PushIntervalLayoutClone": {
+      "address": "000000010003883c",
+      "mod_16384": 2108,
+      "mod_64": 60
+    },
+    "PushIntervalSpecialized": {
+      "address": "0000000100038a38",
+      "mod_16384": 2616,
+      "mod_64": 56
+    }
+  }
+}
