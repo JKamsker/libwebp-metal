@@ -2797,3 +2797,32 @@ ms/image over the six-input corpus. This misses the 1.5 ms/image gate before
 adding quantizer bookkeeping, so no source candidate was opened. Evidence is
 under `libwebp-flatness-handoff-feasibility-*`; architecture policy and frozen
 files are unchanged.
+
+
+## Pre-Ampere speculative I4/I16 overlap screen
+
+The retained profile showed an otherwise idle upper 128-thread team during
+I16, followed by the dominant I4 phase. A Turing-only candidate used that team
+to speculatively calculate an exact raster-prefix of I4 while the lower team
+completed authoritative I16. Original ordered I4 thresholds, header aborts,
+and winner publication remained authoritative; methods 5/6 and Ampere+ kept
+the retained path.
+
+Two order-balanced process pairs (one warmup plus three batch-24 samples per
+arm and pair) measured:
+
+| Format | Control pooled median | Candidate pooled median | Per-pair gains |
+|---|---:|---:|---:|
+| PNG | 36.040 ms/image | 33.861 ms/image | 1.875, 1.818 ms/image |
+| JPEG | 35.013 ms/image | 34.229 ms/image | 0.950, 0.555 ms/image |
+
+All 24 rows had exact expected aggregate hashes and byte counts. The 30-row
+methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA matrix and all 20 injected
+PNG/JPEG fallback cells were also exact. Candidate and restored builds passed
+7/7 tests. Candidate resources were 122 registers / 352 stack bytes / 23,400
+shared bytes versus retained 103 / 352 / 23,392.
+
+JPEG misses 1.5 ms/image in both pairs, so the candidate was removed. Restored
+source matches `7809e965a02b2eaec04a0e659239e66c6056c025`. Evidence uses
+`libwebp-i4-i16-spec-overlap-*`; architecture thresholds/defaults, Ampere+
+behavior, and frozen files are unchanged.

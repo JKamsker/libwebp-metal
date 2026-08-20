@@ -1,0 +1,13 @@
+
+Fatbin elf code:
+================
+arch = sm_75
+code version = [1,7]
+host = linux
+compile_size = 64bit
+
+Resource usage:
+ Common:
+  GLOBAL:149 CONSTANT[3]:100
+ Function _ZN53_GLOBAL__N__e8a64b43_20_cuda_decimate_enc_cu_08a8e32714DecimateKernelENS_10DeviceViewENS_20DecimateKernelParamsEPh:
+  REG:103 STACK:352 SHARED:23392 LOCAL:0 CONSTANT[0]:544 CONSTANT[2]:96 TEXTURE:0 SURFACE:0 SAMPLER:0

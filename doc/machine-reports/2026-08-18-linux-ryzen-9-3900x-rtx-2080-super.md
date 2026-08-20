@@ -3291,3 +3291,37 @@ before counting any added quantizer reduction work. Raw stage JSONL, compressed
 `libwebp-flatness-handoff-feasibility-*`. This is RTX 2080 SUPER-only evidence;
 the 784/12,544 pre-Ampere and 64/4,000 Ampere+ defaults, architecture split,
 and frozen generator/corpus remain unchanged.
+
+
+## Pre-Ampere speculative I4/I16 overlap rejection
+
+At clean parent `1a00edcc`, the native-sm_75 phase profile left the upper
+128-thread team idle during I16 and put subsequent I4 at 63--65% of realistic
+photo/texture block cycles. A Turing-only candidate used the idle team for an
+exact speculative I4 raster-prefix while the lower team completed I16. The
+retained I16 result and original ordered I4 threshold/header decisions stayed
+authoritative. Methods 5/6 disabled speculation and Ampere+ compiled the
+retained implementation.
+
+Two order-balanced pairs, each using one warmup and three measured batch-24
+samples, gave:
+
+| Format | Control pooled median | Candidate pooled median | Per-pair gains |
+|---|---:|---:|---:|
+| PNG | 36.040 ms/image | 33.861 ms/image | 1.875, 1.818 ms/image |
+| JPEG | 35.013 ms/image | 34.229 ms/image | 0.950, 0.555 ms/image |
+
+All 24 screen rows were exact at `455f70a1e139f043` / 6,441,688 bytes PNG
+and `0c4b078d5c4d3173` / 6,400,792 bytes JPEG. The 30-row methods 2--6 /
+qualities 25/75/98 tiny/odd CPU/CUDA matrix and 20 injected fallback cells
+(PNG/JPEG, bands 0/1/3/5/7, inline/pipelined recording) were exact. Candidate
+and restored builds passed 7/7 tests. Corrected candidate resources were
+122 registers / 352 stack bytes / 23,400 shared bytes versus retained
+103 / 352 / 23,392.
+
+JPEG misses the required 1.5 ms/image gate in both pairs, so the source was
+restored. The restored blob is
+`7809e965a02b2eaec04a0e659239e66c6056c025`. Raw evidence uses
+`libwebp-i4-i16-spec-overlap-*`. This is RTX 2080 SUPER-only evidence; the
+784/12,544 pre-Ampere and 64/4,000 Ampere+ defaults, architecture split, and
+frozen publication corpus/generator are unchanged.

@@ -1,0 +1,2 @@
+7bf9db88945ce16f05537a3661dc8d6256c8a2ca3d04ff225ec52bb7d8e849d5  build-cuda-stage-current/webp_cuda_batch_benchmark
+e00dcd242158d5a9e9ab5cf434a1ebd3a9c25a70ed78b5851e5d96a17fbf14e8  /tmp/libwebp-control-build-1a00edcc/webp_cuda_batch_benchmark

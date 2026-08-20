@@ -135,6 +135,7 @@ that hardware and workload.
 | Pre-Ampere packed whole-macroblock prediction fill | Fresh root Nsight correlation measured 136,965 instructions and 186 barrier-stall samples in the retained parallel I16/UV prediction-plane fill. One Turing-only candidate generated four adjacent pixels per lane and used aligned `uchar4` shared stores while preserving every DC/TM/VE/HE formula; Ampere+ compiled the original scalar-per-pixel loop. It removed 42,070 launch instructions with unchanged 103-register / 352-byte-stack / 23,392-byte-shared resources. All 60 timing rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 PNG/JPEG fallback cells were exact; candidate/restored builds passed 7/7 tests. | Rejected and removed. The representative launch stayed flat at 121.79 to 121.86 us and `No Eligible` worsened from 89.78% to 89.90%. Paired-median PNG gain was only 0.544 ms/image and JPEG changed by -0.080 ms/image. Instruction reduction alone does not shorten the barrier-bound setup critical path. RTX 2080 SUPER only; Ampere+, thresholds, architecture split, and frozen files are unchanged. |
 | Pre-Ampere cooperative UV transform/quantization | The retained profile assigned 5.1% of photo block cycles and 252 completion-barrier samples to UV numerical work. The first Turing-only four-lane-per-block build exposed a misaligned `int*` reuse of `i16_tmp`; Nsight reported `LaunchFailed` and exact CPU fallback, so that iteration was corrected with explicit four-byte alignment before measurement. The valid candidate reduced UV numerical share to 3.4%, kernel duration 121.79 to 119.26 us, registers 103 to 102, and `No Eligible` 89.78% to 89.51%, with stack/shared/occupancy unchanged. All 60 timing rows, 15 methods/qualities tiny/odd pairs, and 20 injected-fallback cells were exact; aligned-candidate/restored suites passed 7/7. | Rejected and removed. Despite the local kernel gain, five paired process medians regressed by 0.337 ms/image PNG and 0.200 JPEG. Four-lane UV cooperation does not improve the end-to-end GPU/host critical path. The restored source matches the parent blob. Do not reuse merely type-aligned shared fields through wider pointers, and do not infer process gain from the isolated UV phase. RTX 2080 SUPER only; Ampere+, thresholds, architecture split, and frozen files are unchanged. |
 | Pre-Ampere I4 quantizer-flatness handoff feasibility | A clean retained native-sm_75 refresh measured decimation at 19.177/19.028 ms/image and token emission at 4.038/3.836 for PNG/JPEG. All-thread sampling still put `VP8PutTokenPage` first on the host, but its local and worker-lifecycle avenues were already exhausted. The distinct CUDA flatness handoff was bounded from the measured metric warps: photo/texture residual work already exceeds the entire SSE/flatness warp, and graphic-medium SSE/flatness exceeds residual by only 1.70%. Even charging all of graphic's 37.5% I4 phase to metrics gives an impossible 0.173 ms saving, or 0.058 ms/image over the six-input corpus. | Rejected before source change. Counting non-DC levels in the four-lane quantizer cannot move the photo/texture metric barrier and is over 25x below the 1.5 ms/image gate even under the generous graphic bound. No candidate, architecture-policy change, or frozen-file change was made. Raw stage, `perf`, syscall, hashes, and decision evidence use `libwebp-flatness-handoff-feasibility-*`. RTX 2080 SUPER only. |
+| Pre-Ampere speculative I4/I16 overlap | The retained profile left the upper 128 CTA threads idle while I16 consumed about 18% of representative photo/texture block cycles ahead of the dominant 63--65% I4 phase. One Turing-only candidate let that upper team compute an exact raster-prefix of I4 blocks while the lower team completed authoritative I16; the original ordered I4 thresholds, header aborts, and winner commit remained authoritative, methods 5/6 disabled speculation, and Ampere+ compiled the retained path. The corrected build used 122 registers / 352 stack bytes / 23,400 shared bytes versus 103 / 352 / 23,392 retained. All 24 screen rows, 15 methods 2--6 / qualities 25/75/98 tiny/odd CPU/CUDA pairs, and 20 injected fallback cells were exact; candidate/restored suites passed 7/7. | Rejected and removed. Two order-balanced pairs gained 1.875/1.818 ms/image PNG but only 0.950/0.555 JPEG; pooled medians improved 2.178 PNG and 0.783 JPEG. JPEG therefore decisively misses the two-format 1.5 ms/image gate. The restored source matches parent blob `7809e965a02b2eaec04a0e659239e66c6056c025` and retained resources. Do not add speculative cross-phase work without a profile showing the second format's end-to-end critical path can absorb it. RTX 2080 SUPER only; Ampere+, thresholds/defaults, architecture split, and frozen files are unchanged. |
 
 All original and follow-up benchmark rows produced stable expected checksums.
 The historical color rows remain raw evidence, but their ratios are not matched
@@ -1693,3 +1694,40 @@ The bound is far below 1.5 ms/image before the quantizer's added count and
 reduction work, so no candidate was opened. Raw profiles and the decision use
 `libwebp-flatness-handoff-feasibility-*`; architecture thresholds/defaults,
 Ampere+ behavior, and the frozen corpus/generator are unchanged.
+
+
+## Pre-Ampere speculative I4/I16 overlap rejection
+
+At clean parent `1a00edcc7b2cacd80bb1d228b768c10d0b2d8a3a`, the retained
+native-sm_75 profile showed the upper 128 CTA threads idle during the roughly
+18% I16 phase, followed by I4 at 63--65% of photo/texture block cycles. A
+Turing-only candidate used that idle team to speculatively compute an exact
+raster-prefix of I4 blocks while the lower team completed I16. The original
+I16 score and ordered I4 threshold/header checks stayed authoritative; the
+normal I4 loop consumed only ready results, methods 5/6 retained the original
+trellis path, and Ampere+ compiled the original implementation.
+
+An initial noinline helper exposed 560 stack bytes and about 29.20 ms of
+medium-photo kernel wall. Force-inlining corrected the same candidate to 122
+registers / 352 stack bytes / 23,400 shared bytes, versus retained
+103 / 352 / 23,392. Two order-balanced process pairs, each with one discarded
+warmup and three batch-24 samples, produced:
+
+| Format | Control pooled median | Candidate pooled median | Per-pair gains |
+|---|---:|---:|---:|
+| PNG | 36.040 ms/image | 33.861 ms/image | 1.875, 1.818 ms/image |
+| JPEG | 35.013 ms/image | 34.229 ms/image | 0.950, 0.555 ms/image |
+
+All 24 timing rows retained exact `455f70a1e139f043` / 6,441,688-byte PNG
+and `0c4b078d5c4d3173` / 6,400,792-byte JPEG aggregates. CPU/CUDA output also
+matched across methods 2--6, qualities 25/75/98, six graphic/photo/texture
+17x13 and 257x255 fixtures, and 20 forced-fallback cells spanning PNG/JPEG,
+bands 0/1/3/5/7, and inline/pipelined token recording. Candidate and restored
+builds passed 7/7 focused tests.
+
+JPEG misses the required 1.5 ms/image retention gate in both pairs, so the
+candidate was removed despite PNG clearing it. Restored source matches parent
+blob `7809e965a02b2eaec04a0e659239e66c6056c025`; resources returned to
+103 / 352 / 23,392. Raw evidence uses `libwebp-i4-i16-spec-overlap-*`.
+Architecture thresholds/defaults, Ampere+ behavior, and the frozen
+publication corpus/generator are unchanged.

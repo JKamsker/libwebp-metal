@@ -1,0 +1,2 @@
+Initial noinline diagnostic: DecimateKernel REG:119 STACK:560 SHARED:23400; medium-photo kernel approximately 29.20 ms.
+Corrected forceinline candidate: DecimateKernel REG:122 STACK:352 SHARED:23400; medium-photo kernel approximately 25.33 ms during the screening iteration.
